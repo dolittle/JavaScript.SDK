@@ -1,6 +1,6 @@
 {
-    "name": "@dolittle/sdk.commands.validation",
-    "version": "1.0.1",
+    "name": "@dolittle/sdk.commands",
+    "version": "1.0.2",
     "description": "",
     "author": "",
     "license": "MIT",
