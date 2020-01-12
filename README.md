@@ -6,7 +6,7 @@ The repository holds the SDK for working with Dolittle for JavaScript.
 
 ## Requirements
 
-You'll need to have [Yarn](http://yarnpkg.com/) installed, as we're relying on it.
+This project relies on [NodeJS](https://nodejs.org/en/) and leverages [Yarn](http://yarnpkg.com/).
 The code is written using [TypeScript](http://www.typescriptlang.org) and transpiles
 to JavaScript as part of its building.
 
