@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CommandInputValidatorFor, CommandInputValidationResult, ICommand, ICommandInputValidators } from './index';
+import { CommandInputValidatorFor, CommandInputValidationResult, ICommandInputValidators } from './index';
+import { ICommand } from '@dolittle/sdk.commands';
 import { RuleSetContainerEvaluation } from '@dolittle/rules';
 
 /**

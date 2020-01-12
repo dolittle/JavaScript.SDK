@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ICommand, CommandInputValidatorFor } from '../../index';
+import { CommandInputValidatorFor } from '../../index';
+import { ICommand } from '@dolittle/sdk.commands';
 
 export class MyCommand implements ICommand {
     type: string = '';

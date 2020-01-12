@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ICommand, CommandInputValidationResult } from './index';
+import { CommandInputValidationResult } from './index';
+import { ICommand } from '@dolittle/sdk.commands';
 
 /**
  * Defines the system for working with input validators for commands.
