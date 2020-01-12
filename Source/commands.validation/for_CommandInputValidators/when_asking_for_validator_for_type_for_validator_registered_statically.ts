@@ -6,6 +6,7 @@ import { MyCommand, MyCommandValidationRules } from './given/a_command_and_valid
 import '@dolittle/validation';
 
 describe('when asking for validator for type for validator registered statically', () => {
+        CommandInputValidators.clear();
         CommandInputValidators.register(MyCommand, MyCommandValidationRules);
         const validators = new CommandInputValidators();
 

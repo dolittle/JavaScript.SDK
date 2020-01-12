@@ -7,5 +7,5 @@ describe('when creating instance without any broken rules', () => {
     const result = new CommandInputValidationResult([]);
 
     it('should be considered successful', () => result.isSuccess.should.be.true);
-    it('should have a broken rule', () => result.brokenRules.should.be.lengthOf(1));
+    it('should not have a broken rule', () => result.brokenRules.should.be.empty);
 });

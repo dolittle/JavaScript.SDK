@@ -2,10 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { CommandInputValidators } from '../CommandInputValidators';
-import { MyCommand, MyCommandValidationRules } from './given/a_command_and_validator';
+import { MyCommand } from './given/a_command_and_validator';
 import '@dolittle/validation';
 
 describe('when validating command without any validator registered', () => {
+        CommandInputValidators.clear();
         const validators = new CommandInputValidators();
         const result = validators.validate(new MyCommand());
 

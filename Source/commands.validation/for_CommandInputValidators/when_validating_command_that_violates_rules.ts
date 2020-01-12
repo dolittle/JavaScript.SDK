@@ -6,6 +6,7 @@ import { MyCommand, MyCommandValidationRules } from './given/a_command_and_valid
 import '@dolittle/validation';
 
 describe('when validating command that violates rules', () => {
+        CommandInputValidators.clear();
         CommandInputValidators.register(MyCommand, MyCommandValidationRules);
         const validators = new CommandInputValidators();
         const result = validators.validate(new MyCommand());
