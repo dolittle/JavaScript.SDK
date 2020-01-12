@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "workspaces": [
+    "Source/*"
+  ],
+  "scripts": {
+    "tasks": "gulp --tasks --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "clean": "gulp clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "build": "gulp build --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "test": "gulp test --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "test:run": "gulp test-run --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "test:clean": "gulp test-clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js"
+  },
+  "devDependencies": {
+    "@dolittle/typescript.build": "^5.0.0",
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.6"
+  }
+}

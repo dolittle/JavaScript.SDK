@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        
+        "**/jspm_packages": true,
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.DS_Store": true
+    }
+}
