@@ -19,7 +19,7 @@ export class ArtifactsBuilder {
      * @param {number} generation Optional generation - defaults to 1.
      */
     associateType(type: Function, identifier: ArtifactId, generation: number = 1): ArtifactsBuilder {
-        this._artifactsMap.set(type, {id: identifier, generation: generation});
+        this._artifactsMap.set(type, { id: identifier, generation: generation } as Artifact);
         return this;
     }
 

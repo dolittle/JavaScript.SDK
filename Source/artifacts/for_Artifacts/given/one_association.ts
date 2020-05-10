@@ -15,4 +15,4 @@ const artifacts = new Artifacts(map);
 export default {
     artifacts: artifacts,
     type: MyType
-}
+};
