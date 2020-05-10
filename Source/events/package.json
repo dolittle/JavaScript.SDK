@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,10 +33,10 @@
         "prepublishOnly": "yarn build && yarn test:run && yarn test:clean"
     },
     "dependencies": {
+        "@dolittle/rudiments": "^2.0.15",
+        "@dolittle/runtime.contracts": "^5.1.14",
         "@dolittle/sdk.artifacts": "^1.0.0",
         "@dolittle/sdk.execution": "^1.0.0",
-        "@dolittle/sdk.protobuf": "^1.0.0",
-        "@dolittle/rudiments": "^2.0.15",
-        "@dolittle/runtime.contracts": "^5.1.14"
+        "@dolittle/sdk.protobuf": "^1.0.0"
     }
 }
