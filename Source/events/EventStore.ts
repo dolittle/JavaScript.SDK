@@ -21,8 +21,7 @@ import '@dolittle/sdk.protobuf';
 
 import { artifacts, claims, guids, versions } from '@dolittle/sdk.protobuf';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
-
-
+import { Guid } from '@dolittle/rudiments';
 
 export class EventStore implements IEventStore {
     constructor(
@@ -69,7 +68,9 @@ export class EventStore implements IEventStore {
         } else {
             let artifact: Artifact | undefined;
 
-            if (inputId && inputId instanceof Artifact) {
+            if (inputId && inputId.constructor.name === 'Guid') {
+                artifact = new Artifact(inputId as ArtifactId, 1);
+            } else if (inputId && inputId instanceof Artifact) {
                 artifact = inputId as Artifact;
             } else {
                 if (!inputId) {
