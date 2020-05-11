@@ -16,6 +16,7 @@ declare module '@dolittle/sdk.artifacts' {
 
 /**
  * Convert to protobuf representation
+ * @returns {PbArtifact}
  */
 SdkArtifact.prototype.toProtobuf = function () {
     const artifact = new PbArtifact();
@@ -32,6 +33,7 @@ declare module '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb' 
 
 /**
  * Convert to SDK representation
+ * @returns {SdkArtifact}
  */
 PbArtifact.prototype.toSDK = function () {
     const uuid = this.getId()?.getValue_asU8();
