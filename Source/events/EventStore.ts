@@ -21,8 +21,10 @@ import '@dolittle/sdk.protobuf';
 
 import { artifacts, claims, guids, versions } from '@dolittle/sdk.protobuf';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
-import { Guid } from '@dolittle/rudiments';
 
+/**
+ * Represents an implementation of {IEventStore}
+ */
 export class EventStore implements IEventStore {
     constructor(
         private _eventStoreClient: EventStoreClient,
@@ -30,14 +32,14 @@ export class EventStore implements IEventStore {
         private _executionContextManager: IExecutionContextManager) {
     }
 
-    async commit(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
-    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    /** @inheritdoc */
+    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
+    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
+    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
         const uncommittedEvents: UncommittedEvent[] = [];
         const array = Array.isArray(input);
 
         if (array) {
-
             if (inputId && Array.isArray(inputId)) {
                 if (input.length !== inputId.length) {
                     throw new EventsAndArtifactsAreNotTheSameSize(input.length, inputId.length);
@@ -109,7 +111,7 @@ export class EventStore implements IEventStore {
         return promise;
     }
 
-
+    /** @inheritdoc */
     commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
     commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
     commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
