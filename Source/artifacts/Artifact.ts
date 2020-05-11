@@ -4,6 +4,11 @@
 import { ArtifactId } from './ArtifactId';
 
 export class Artifact {
-    readonly id!: ArtifactId;
-    readonly generation!: number;
+    readonly id: ArtifactId;
+    readonly generation: number;
+
+    constructor(id: ArtifactId, generation: number) {
+        this.id = id;
+        this.generation = generation;
+    }
 }
