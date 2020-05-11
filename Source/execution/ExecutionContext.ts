@@ -7,29 +7,41 @@ import { CorrelationId } from './CorrelationId';
 import { Claims } from './Claims';
 import { Version } from './Version';
 
+/**
+ * Represents the execution context in a running application.
+ */
 export class ExecutionContext {
     private _parent: ExecutionContext | undefined;
 
-    readonly microserviceId: MicroserviceId;
-    readonly tenantId: TenantId;
-    readonly version: Version;
-    readonly environment: string;
-    readonly correlationId: CorrelationId;
-    readonly claims: Claims;
-
-    constructor(microserviceId: MicroserviceId, tenantId: TenantId, version: Version, environment: string, correlationId: CorrelationId, claims: Claims) {
-        this.microserviceId = microserviceId;
-        this.tenantId = tenantId;
-        this.version = version;
-        this.environment = environment;
-        this.correlationId = correlationId;
-        this.claims = claims;
+    /**
+     * Creates an instance of execution context.
+     * @param {MicroserviceId} microserviceId The microservice identifier.
+     * @param {TenantId} tenantId The current tenant identifier.
+     * @param {Version} version The current version of the software.
+     * @param {string} environment The current environment running in.
+     * @param {CorrelationId} correlationId The current correlation id for execution context being performed.
+     * @param {Claims} claims The current claims for the context.
+     */
+    constructor(
+        readonly microserviceId: MicroserviceId,
+        readonly tenantId: TenantId,
+        readonly version: Version,
+        readonly environment: string,
+        readonly correlationId: CorrelationId,
+        readonly claims: Claims) {
     }
 
+    /**
+     * Gets parent execution context
+     */
     get parent(): ExecutionContext | undefined {
         return this._parent;
     }
 
+    /**
+     * Sets parent execution context - should not be used directly, this is for internal use.
+     * @param {ExecutionContext} parent The parent execution context.
+     */
     setParent(parent: ExecutionContext) {
         this._parent = parent;
     }

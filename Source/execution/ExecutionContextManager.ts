@@ -52,21 +52,23 @@ export class ExecutionContextManager implements IExecutionContextManager {
 
     currentFor(tenantId: TenantId, claims?: Claims): ExecutionContext {
         const asyncId = async_hooks.executionAsyncId();
+
+        const current = this.current;
         const executionContext = new ExecutionContext(
             this._microserviceId,
             tenantId,
             this._version,
             this._environment,
-            CorrelationId.create(),
+            current.correlationId,
             claims ?? this._base.claims
         );
+
         this._executionContextByAsyncId.set(asyncId, executionContext);
         return executionContext;
     }
 
     private asyncOperationInit(asyncId: number, type: string, triggerAsyncId: number, resource: object): void {
         let parent: ExecutionContext;
-
 
         if (this._executionContextByAsyncId.has(triggerAsyncId)) {
             parent = this._executionContextByAsyncId.get(triggerAsyncId) || this._base;
