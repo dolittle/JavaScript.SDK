@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { toProtobuf, toSDK } from '../GuidConverters';
+import guids from '../guids';
 
 describe('when converting to and from protobuf', () => {
     const guid = Guid.create();
-    const uuid = toProtobuf(guid);
-    const result = toSDK(uuid);
+    const uuid = guids.toProtobuf(guid);
+    const result = guids.toSDK(uuid);
 
     it('should be the same', () => result.toString().should.equal(guid.toString()));
 });

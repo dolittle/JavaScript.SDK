@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Artifact, ArtifactId } from '@dolittle/sdk.artifacts';
-import '../ArtifactConverters';
+import '../artifacts';
 
 describe('when converting to and from protobuf', () => {
     const artifact = new Artifact(ArtifactId.create(), 42);

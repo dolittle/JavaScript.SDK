@@ -4,9 +4,37 @@
 import { Artifact as SdkArtifact, ArtifactId } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
-import { toProtobuf as guidToProtobuf } from './GuidConverters';
+import guids from './guids';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
+
+/**
+ * Convert to protobuf representation
+ * @returns {PbArtifact}
+ */
+function toProtobuf(input: SdkArtifact): PbArtifact {
+    const artifact = new PbArtifact();
+    artifact.setId(guids.toProtobuf(input.id));
+    artifact.setGeneration(input.generation);
+    return artifact;
+}
+
+/**
+ * Convert to SDK representation
+ * @returns {SdkArtifact}
+ */
+function toSDK(input: PbArtifact): SdkArtifact {
+    const uuid = input.getId()?.getValue_asU8();
+    if (!uuid) {
+        throw new MissingArtifactIdentifier();
+    }
+    return new SdkArtifact(new ArtifactId(uuid), input.getGeneration());
+}
+
+export default {
+    toProtobuf: toProtobuf,
+    toSDK: toSDK
+};
 
 declare module '@dolittle/sdk.artifacts' {
     interface Artifact {
@@ -19,10 +47,7 @@ declare module '@dolittle/sdk.artifacts' {
  * @returns {PbArtifact}
  */
 SdkArtifact.prototype.toProtobuf = function () {
-    const artifact = new PbArtifact();
-    artifact.setId(guidToProtobuf(this.id));
-    artifact.setGeneration(this.generation);
-    return artifact;
+    return toProtobuf(this);
 };
 
 declare module '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb' {
@@ -36,9 +61,5 @@ declare module '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb' 
  * @returns {SdkArtifact}
  */
 PbArtifact.prototype.toSDK = function () {
-    const uuid = this.getId()?.getValue_asU8();
-    if (!uuid) {
-        throw new MissingArtifactIdentifier();
-    }
-    return new SdkArtifact(new ArtifactId(uuid), this.getGeneration());
+    return toSDK(this);
 };

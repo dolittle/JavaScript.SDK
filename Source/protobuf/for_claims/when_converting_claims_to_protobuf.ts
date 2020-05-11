@@ -3,7 +3,7 @@
 
 import { Claims, Claim } from '@dolittle/sdk.execution';
 
-import '../ClaimsConverters';
+import '../claims';
 
 describe('when converting claims to protobuf', () => {
     const claimsArray: Claim[] = [

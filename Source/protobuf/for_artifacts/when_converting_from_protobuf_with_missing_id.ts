@@ -4,7 +4,7 @@
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from '../MissingArtifactIdentifier';
-import '../ArtifactConverters';
+import '../artifacts';
 
 describe('when converting from protobuf with missing id', () => {
     const pbArtifact = new PbArtifact();

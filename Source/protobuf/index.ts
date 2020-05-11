@@ -1,8 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export * from './GuidConverters';
+import guids from './guids';
+import artifacts from './artifacts';
+import versions from './versions';
+import claims from './claims';
 
-import './ArtifactConverters';
-import './ClaimsConverters';
-import './VersionConverters';
+export {
+    guids,
+    artifacts,
+    versions,
+    claims
+};
+
+import './artifacts';
+import './claims';
+import './versions';

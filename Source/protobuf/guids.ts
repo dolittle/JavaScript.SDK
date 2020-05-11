@@ -8,7 +8,7 @@ import { Uuid } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Uuid_pb'
  * Convert to protobuf representation
  * @returns {Uuid}
  */
-export function toProtobuf(guid: Guid): Uuid {
+function toProtobuf(guid: Guid): Uuid {
     const uuid = new Uuid();
     uuid.setValue(new Uint8Array(guid.bytes));
     return uuid;
@@ -18,6 +18,11 @@ export function toProtobuf(guid: Guid): Uuid {
  * Convert to SDK representation
  * @returns {Guid}
  */
-export function toSDK(uuid: Uuid): Guid {
+function toSDK(uuid: Uuid): Guid {
     return new Guid(uuid.getValue_asU8());
 }
+
+export default {
+    toProtobuf: toProtobuf,
+    toSDK: toSDK
+};

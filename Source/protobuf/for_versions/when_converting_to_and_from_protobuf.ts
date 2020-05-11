@@ -3,7 +3,7 @@
 
 import { Version } from '@dolittle/sdk.execution';
 
-import '../VersionConverters';
+import '../versions';
 
 describe('when converting to and from protobuf', () => {
     const version = new Version(42,43,44,45,'alpha');
