@@ -12,6 +12,9 @@ import { TenantId } from './TenantId';
 import { Claims } from './Claims';
 
 
+/**
+ * Represents an implementation of {IExecutionContextManager}.
+ */
 export class ExecutionContextManager implements IExecutionContextManager {
     private _microserviceId: MicroserviceId;
     private _version: Version;
@@ -20,6 +23,12 @@ export class ExecutionContextManager implements IExecutionContextManager {
     private _executionContextByAsyncId: Map<number, ExecutionContext> = new Map();
     private _base: ExecutionContext;
 
+    /**
+     * Creates an instance of execution context manager.
+     * @param {MicroserviceId} microserviceId The unique identifier of the microservice.
+     * @param {Version} version The version of the currently running software.
+     * @param {string} environment The environment the software is running in. (e.g. development, production).
+     */
     constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
         this._microserviceId = microserviceId;
         this._version = version;
@@ -33,6 +42,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
         }).enable();
     }
 
+    /** @inheritdoc */
     get current(): ExecutionContext {
         const asyncId = async_hooks.executionAsyncId();
         let executionContext = this._executionContextByAsyncId.get(asyncId);
@@ -50,6 +60,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
         return executionContext;
     }
 
+    /** @inheritdoc */
     currentFor(tenantId: TenantId, claims?: Claims): ExecutionContext {
         const asyncId = async_hooks.executionAsyncId();
 
