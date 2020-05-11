@@ -17,9 +17,12 @@ import { ExecutionContext as GrpcExecutionContext } from '@dolittle/runtime.cont
 import { UncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
-import { toProtobuf as guidToProtobuf } from '@dolittle/sdk.protobuf';
-
 import '@dolittle/sdk.protobuf';
+
+import { artifacts, claims, guids, versions } from '@dolittle/sdk.protobuf';
+import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
+
+
 
 export class EventStore implements IEventStore {
     constructor(
@@ -115,8 +118,8 @@ export class EventStore implements IEventStore {
 
     private getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, artifact: Artifact, isPublic: boolean) {
         const uncommittedEvent = new UncommittedEvent();
-        uncommittedEvent.setArtifact(artifact.toProtobuf());
-        uncommittedEvent.setEventsourceid(guidToProtobuf(eventSourceId));
+        uncommittedEvent.setArtifact(artifacts.toProtobuf(artifact));
+        uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId));
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -126,11 +129,11 @@ export class EventStore implements IEventStore {
         const executionContext = this._executionContextManager.current;
         const callContext = new CallRequestContext();
         const grpcExecutionContext = new GrpcExecutionContext();
-        grpcExecutionContext.setMicroserviceid(guidToProtobuf(executionContext.microserviceId));
-        grpcExecutionContext.setTenantid(guidToProtobuf(executionContext.tenantId));
-        grpcExecutionContext.setVersion(executionContext.version.toProtobuf());
-        grpcExecutionContext.setCorrelationid(guidToProtobuf(executionContext.correlationId));
-        grpcExecutionContext.setClaimsList(executionContext.claims.toProtobuf());
+        grpcExecutionContext.setMicroserviceid(guids.toProtobuf(executionContext.microserviceId));
+        grpcExecutionContext.setTenantid(guids.toProtobuf(executionContext.tenantId));
+        grpcExecutionContext.setVersion(versions.toProtobuf(executionContext.version));
+        grpcExecutionContext.setCorrelationid(guids.toProtobuf(executionContext.correlationId));
+        grpcExecutionContext.setClaimsList(claims.toProtobuf(executionContext.claims) as PbClaim[]);
         callContext.setExecutioncontext(grpcExecutionContext);
         return callContext;
     }
