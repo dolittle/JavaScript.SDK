@@ -17,6 +17,7 @@ declare module '@dolittle/sdk.execution' {
 
 /**
  * Convert to protobuf representation
+ * @returns {PbClaim}
  */
 SdkClaim.prototype.toProtobuf = function () {
     const claim = new PbClaim();
@@ -28,6 +29,7 @@ SdkClaim.prototype.toProtobuf = function () {
 
 /**
  * Convert to protobuf representation
+ * @returns {PbClaim[]}
  */
 Claims.prototype.toProtobuf = function () {
     const claims: PbClaim[] = [];
@@ -48,6 +50,7 @@ declare module '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb' {
 
 /**
  * Convert to SDK representation
+ * @returns {SdkClaim}
  */
 PbClaim.prototype.toSDK = function() {
     const claim = new SdkClaim();
