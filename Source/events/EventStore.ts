@@ -17,10 +17,15 @@ import { ExecutionContext as GrpcExecutionContext } from '@dolittle/runtime.cont
 import { UncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
+import { toProtobuf as guidToProtobuf } from '@dolittle/sdk.protobuf';
+
 import '@dolittle/sdk.protobuf';
 
 export class EventStore implements IEventStore {
-    constructor(private _eventStoreClient: EventStoreClient, private _artifacts: IArtifacts, private _executionContextManager: IExecutionContextManager) {
+    constructor(
+        private _eventStoreClient: EventStoreClient,
+        private _artifacts: IArtifacts,
+        private _executionContextManager: IExecutionContextManager) {
     }
 
     async commit(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
@@ -82,8 +87,11 @@ export class EventStore implements IEventStore {
         request.setCallcontext(this.getCallContext());
         request.setEventsList(uncommittedEvents);
 
+        console.log('Commit');
+
         const promise: Promise<any> = new Promise((resolve, reject) => {
             this._eventStoreClient.commit(request, response => {
+                console.log('Committed ' + response);
                 if (array) {
                     const committedEvents = new CommittedEvents();
                     resolve(committedEvents);
@@ -108,7 +116,7 @@ export class EventStore implements IEventStore {
     private getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, artifact: Artifact, isPublic: boolean) {
         const uncommittedEvent = new UncommittedEvent();
         uncommittedEvent.setArtifact(artifact.toProtobuf());
-        uncommittedEvent.setEventsourceid(eventSourceId.toProtobuf());
+        uncommittedEvent.setEventsourceid(guidToProtobuf(eventSourceId));
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -118,11 +126,12 @@ export class EventStore implements IEventStore {
         const executionContext = this._executionContextManager.current;
         const callContext = new CallRequestContext();
         const grpcExecutionContext = new GrpcExecutionContext();
-        grpcExecutionContext.setMicroserviceid(executionContext.microserviceId.toProtobuf());
-        grpcExecutionContext.setTenantid(executionContext.tenantId.toProtobuf());
+        grpcExecutionContext.setMicroserviceid(guidToProtobuf(executionContext.microserviceId));
+        grpcExecutionContext.setTenantid(guidToProtobuf(executionContext.tenantId));
         grpcExecutionContext.setVersion(executionContext.version.toProtobuf());
-        grpcExecutionContext.setCorrelationid(executionContext.correlationId.toProtobuf());
+        grpcExecutionContext.setCorrelationid(guidToProtobuf(executionContext.correlationId));
         grpcExecutionContext.setClaimsList(executionContext.claims.toProtobuf());
+        callContext.setExecutioncontext(grpcExecutionContext);
         return callContext;
     }
 }
