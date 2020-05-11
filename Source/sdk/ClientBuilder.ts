@@ -2,11 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Client } from './Client';
-import { ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { ArtifactsBuilder, Artifact } from '@dolittle/sdk.artifacts';
 import { MicroserviceId, ExecutionContextManager, Version } from '@dolittle/sdk.execution';
 import { EventStore } from '@dolittle/sdk.events';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import grpc from 'grpc';
+
+export type ArtifactsBuilderCallback = (builder: ArtifactsBuilder) => void;
 
 export class ClientBuilder {
     private _microserviceId: MicroserviceId;
@@ -15,12 +17,13 @@ export class ClientBuilder {
     private _version: Version;
     private _environment: string;
 
-    readonly artifacts: ArtifactsBuilder = new ArtifactsBuilder();
+    private _artifactsBuilder: ArtifactsBuilder = new ArtifactsBuilder();
 
     constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
         this._microserviceId = microserviceId;
         this._version = version;
         this._environment = environment;
+        this._artifactsBuilder = new ArtifactsBuilder();
     }
 
     static for(microserviceId: MicroserviceId, version: Version = Version.first, environment?: string): ClientBuilder {
@@ -35,6 +38,11 @@ export class ClientBuilder {
         return builder;
     }
 
+    artifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
+        callback(this._artifactsBuilder);
+        return this;
+    }
+
     connectTo(host: string, port: number): ClientBuilder {
         this._host = host;
         this._port = port;
@@ -43,7 +51,7 @@ export class ClientBuilder {
 
     build(): Client {
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
-        const artifacts = this.artifacts.build();
+        const artifacts = this._artifactsBuilder.build();
         return new Client(
             executionContextManager,
             artifacts,

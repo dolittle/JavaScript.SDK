@@ -4,14 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { Uuid } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Uuid_pb';
 
-declare module '@dolittle/rudiments' {
-    interface Guid {
-        toProtobuf(): Uuid;
-    }
-}
-
-Guid.prototype.toProtobuf = function () {
+export function toProtobuf(guid: Guid) {
     const uuid = new Uuid();
-    uuid.setValue(new Uint8Array(this.bytes));
+    uuid.setValue(new Uint8Array(guid.bytes));
     return uuid;
-};
+}

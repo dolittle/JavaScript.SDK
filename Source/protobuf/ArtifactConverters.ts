@@ -4,6 +4,8 @@
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
+import { toProtobuf as guidToProtobuf } from './GuidConverters';
+
 declare module '@dolittle/sdk.artifacts' {
     interface Artifact {
         toProtobuf(): PbArtifact;
@@ -12,7 +14,7 @@ declare module '@dolittle/sdk.artifacts' {
 
 Artifact.prototype.toProtobuf = function () {
     const artifact = new PbArtifact();
-    artifact.setId(this.id.toProtobuf());
+    artifact.setId(guidToProtobuf(this.id));
     artifact.setGeneration(this.generation);
     return artifact;
 };
