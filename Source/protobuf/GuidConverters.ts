@@ -15,7 +15,7 @@ export function toProtobuf(guid: Guid): Uuid {
 }
 
 /**
- * Convert to protobuf representation
+ * Convert to SDK representation
  * @returns {Guid}
  */
 export function toSDK(uuid: Uuid): Guid {
