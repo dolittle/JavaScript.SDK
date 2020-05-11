@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Claim, Claims } from '@dolittle/sdk.execution';
+import { Claim as SdkClaim, Claims } from '@dolittle/sdk.execution';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
 
 declare module '@dolittle/sdk.execution' {
@@ -14,7 +14,11 @@ declare module '@dolittle/sdk.execution' {
     }
 }
 
-Claim.prototype.toProtobuf = function () {
+
+/**
+ * Convert to protobuf representation
+ */
+SdkClaim.prototype.toProtobuf = function () {
     const claim = new PbClaim();
     claim.setKey(this.key);
     claim.setValue(this.value);
@@ -22,6 +26,9 @@ Claim.prototype.toProtobuf = function () {
     return claim;
 };
 
+/**
+ * Convert to protobuf representation
+ */
 Claims.prototype.toProtobuf = function () {
     const claims: PbClaim[] = [];
 
@@ -31,3 +38,22 @@ Claims.prototype.toProtobuf = function () {
 
     return claims;
 };
+
+
+declare module '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb' {
+    interface Claim {
+        toSDK(): SdkClaim;
+    }
+}
+
+/**
+ * Convert to SDK representation
+ */
+PbClaim.prototype.toSDK = function() {
+    const claim = new SdkClaim();
+    claim.key = this.getKey();
+    claim.value = this.getValue();
+    claim.valueType = this.getValuetype();
+    return claim;
+};
+
