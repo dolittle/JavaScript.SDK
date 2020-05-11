@@ -10,6 +10,9 @@ import grpc from 'grpc';
 
 export type ArtifactsBuilderCallback = (builder: ArtifactsBuilder) => void;
 
+/**
+ * Represents a builder for building {Client}.
+ */
 export class ClientBuilder {
     private _microserviceId: MicroserviceId;
     private _host = 'localhost';
@@ -19,6 +22,12 @@ export class ClientBuilder {
 
     private _artifactsBuilder: ArtifactsBuilder = new ArtifactsBuilder();
 
+    /**
+     * Creates an instance of client builder.
+     * @param {MicroserviceId} microserviceId The unique identifier of the microservice.
+     * @param {Version} version The version of the currently running software.
+     * @param {string} environment The environment the software is running in. (e.g. development, production).
+     */
     constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
         this._microserviceId = microserviceId;
         this._version = version;
@@ -26,6 +35,23 @@ export class ClientBuilder {
         this._artifactsBuilder = new ArtifactsBuilder();
     }
 
+    /**
+     * Create a default builder - not specifically targetting a Microservice.
+     * @param {Version} [version] Optional version of the software.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @returns {ClientBuilder} The builder to build a {Client} from.
+     */
+    static default(version: Version = Version.first, environment?: string): ClientBuilder {
+        return ClientBuilder.for(MicroserviceId.empty, version, environment);
+    }
+
+    /**
+     * Create a client builder for a Microservice
+     * @param {MicroserviceId} microserviceId The unique identifier for the microservice.
+     * @param {Version} [version] Optional version of the software.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @returns {ClientBuilder} The builder to build a {Client} from.
+     */
     static for(microserviceId: MicroserviceId, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
             environment = process.env['NODE_ENV'];
@@ -38,17 +64,33 @@ export class ClientBuilder {
         return builder;
     }
 
+    /**
+     * Configure artifacts through the artifacts builder.
+     * @param {ArtifactsBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
     artifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
         callback(this._artifactsBuilder);
         return this;
     }
 
+    /**
+     * Connect to a specific host and port for the Dolittle runtime.
+     * @param {string} host The host name to connect to.
+     * @param {number} port The port to connect to.
+     * @returns {ClientBuilder} The client builder for continuation.
+     * @summary If not used, the default host of 'localhost' and port 50053 will be used.
+     */
     connectTo(host: string, port: number): ClientBuilder {
         this._host = host;
         this._port = port;
         return this;
     }
 
+    /**
+     * Build the {Client}.
+     * @returns {Client}
+     */
     build(): Client {
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
         const artifacts = this._artifactsBuilder.build();
