@@ -34,9 +34,9 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
-    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
+    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
+    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
 
         eventSourceId = Guid.as(eventSourceId);
         const uncommittedEvents: UncommittedEvent[] = [];
@@ -73,7 +73,7 @@ export class EventStore implements IEventStore {
         } else {
             let artifact: Artifact | undefined;
 
-            if (inputId && inputId.constructor.name === 'Guid') {
+            if (inputId && (typeof inputId === 'string' || inputId.constructor.name === 'Guid')) {
                 artifact = new Artifact(inputId as ArtifactId, 1);
             } else if (inputId && inputId instanceof Artifact) {
                 artifact = inputId as Artifact;
