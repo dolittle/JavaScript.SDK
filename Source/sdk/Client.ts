@@ -3,7 +3,6 @@
 
 import { IEventStore } from '@dolittle/sdk.events';
 import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
-import { notApplicable } from '@dolittle/sdk.execution/MicroserviceId';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { ArtifactsBuilder, Artifact } from '@dolittle/sdk.artifacts';
 import { EventStore } from '@dolittle/sdk.events';
@@ -41,7 +40,7 @@ export class Client {
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
     static default(version: Version = Version.first, environment?: string): Client {
-        return Client.for(notApplicable, version, environment).build();
+        return Client.for(Guid.empty, version, environment).build();
     }
 
     /**
