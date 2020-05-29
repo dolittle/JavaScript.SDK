@@ -7,6 +7,7 @@ import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals
 import guids from './guids';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Convert to protobuf representation
@@ -28,7 +29,7 @@ function toSDK(input: PbArtifact): SdkArtifact {
     if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return new SdkArtifact(new ArtifactId(uuid), input.getGeneration());
+    return new SdkArtifact(new Guid(uuid), input.getGeneration());
 }
 
 export default {

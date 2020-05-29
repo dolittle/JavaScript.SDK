@@ -3,9 +3,10 @@
 
 import { Artifact, ArtifactId } from '@dolittle/sdk.artifacts';
 import '../artifacts';
+import { Guid } from '@dolittle/rudiments';
 
 describe('when converting to and from protobuf', () => {
-    const artifact = new Artifact(ArtifactId.create(), 42);
+    const artifact = new Artifact(Guid.create(), 42);
     const result = artifact.toProtobuf().toSDK();
 
     it('should have same identifier as original', () => result.id.toString().should.be.equal(artifact.id.toString()));
