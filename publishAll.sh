@@ -21,6 +21,10 @@ echo "Package Version : " $PACKAGE_VERSION
 
 VERSION=
 
+echo "Build $PACKAGE_VERSION"
+
+yarn build
+
 echo "Publishing $PACKAGE_VERSION"
 
 for f in Source/*; do
