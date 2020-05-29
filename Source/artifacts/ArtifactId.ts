@@ -3,5 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-export class ArtifactId extends Guid {
-}
+/**
+ * Represents the unique identifier for an artifact.
+ */
+export type ArtifactId = Guid | string;

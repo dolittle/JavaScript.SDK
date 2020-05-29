@@ -3,6 +3,7 @@
 
 import { IEventStore } from '@dolittle/sdk.events';
 import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { notApplicable } from '@dolittle/sdk.execution/MicroserviceId';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { ArtifactsBuilder, Artifact } from '@dolittle/sdk.artifacts';
 import { EventStore } from '@dolittle/sdk.events';
@@ -10,6 +11,8 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/Eve
 import grpc from 'grpc';
 
 import '@dolittle/sdk.protobuf';
+import { Guid } from '@dolittle/rudiments';
+
 
 /**
  * Represents the client for working with the Dolittle Runtime
@@ -37,8 +40,8 @@ export class Client {
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static default(version: Version = Version.first, environment?: string): ClientBuilder {
-        return Client.for(MicroserviceId.empty, version, environment);
+    static default(version: Version = Version.first, environment?: string): Client {
+        return Client.for(notApplicable, version, environment).build();
     }
 
     /**
@@ -82,7 +85,7 @@ export class ClientBuilder {
      * @param {string} environment The environment the software is running in. (e.g. development, production).
      */
     constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
-        this._microserviceId = microserviceId;
+        this._microserviceId = Guid.as(microserviceId);
         this._version = version;
         this._environment = environment;
         this._artifactsBuilder = new ArtifactsBuilder();

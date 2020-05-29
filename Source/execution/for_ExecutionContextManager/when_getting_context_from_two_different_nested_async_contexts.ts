@@ -2,18 +2,18 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ExecutionContextManager } from '../ExecutionContextManager';
-import { MicroserviceId } from '../MicroserviceId';
 import { Version } from '../Version';
 import { ExecutionContext } from '../ExecutionContext';
 import { TenantId } from '../TenantId';
+import { Guid } from '@dolittle/rudiments';
 
 
 describe('when getting context from two different nested async contexts', async () => {
-    const microserviceId = MicroserviceId.create();
+    const microserviceId = Guid.parse('c87b335d-be3b-48ca-87c6-f6df2c3939a2');
     const version = new Version(1, 0, 0, 0);
     const environment = 'Development';
-    const firstLevelTenant = TenantId.parse('941b5d80-1fdd-4f1e-996f-dc1126338f3d');
-    const secondLevelTenant = TenantId.parse('11850573-b164-4835-8398-d1a48d9bb9be');
+    const firstLevelTenant = Guid.parse('941b5d80-1fdd-4f1e-996f-dc1126338f3d');
+    const secondLevelTenant = Guid.parse('11850573-b164-4835-8398-d1a48d9bb9be');
 
     const executionContextManager = new ExecutionContextManager(microserviceId, version, environment);
 

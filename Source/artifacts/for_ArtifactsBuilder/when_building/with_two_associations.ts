@@ -3,20 +3,21 @@
 
 import { ArtifactsBuilder } from '../../ArtifactsBuilder';
 import { ArtifactId } from '../../ArtifactId';
+import { Guid } from '@dolittle/rudiments';
 
 class FirstType {}
 
 class SecondType {}
 
 describe('when building with two associations', () => {
-    const firstTypeIdentifier = ArtifactId.create();
-    const secondTypeIdentifier = ArtifactId.create();
+    const firstTypeIdentifier = Guid.as('21ef6f8d-4871-48b0-9567-4d576b6a12da');
+    const secondTypeIdentifier = Guid.as('1c385ede-49ce-4266-a752-e1a85587758e');
     const firstTypeGeneration = 42;
     const secondTypeGeneration = 43;
 
     const builder = new ArtifactsBuilder();
-    builder.associateType(FirstType, firstTypeIdentifier, firstTypeGeneration);
-    builder.associateType(SecondType, secondTypeIdentifier, secondTypeGeneration);
+    builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);
+    builder.associate(SecondType, secondTypeIdentifier, secondTypeGeneration);
     const result = builder.build();
 
     const firstTypeAssociation = result.getFor(FirstType);

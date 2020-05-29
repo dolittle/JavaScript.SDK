@@ -21,6 +21,7 @@ import '@dolittle/sdk.protobuf';
 
 import { artifacts, claims, guids, versions } from '@dolittle/sdk.protobuf';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents an implementation of {IEventStore}
@@ -36,6 +37,8 @@ export class EventStore implements IEventStore {
     async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
     async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
     async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+
+        eventSourceId = Guid.as(eventSourceId);
         const uncommittedEvents: UncommittedEvent[] = [];
         const array = Array.isArray(input);
 
@@ -119,7 +122,7 @@ export class EventStore implements IEventStore {
     }
 
 
-    private getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, artifact: Artifact, isPublic: boolean) {
+    private getUncommittedEventFrom(event: any, eventSourceId: Guid, artifact: Artifact, isPublic: boolean) {
         const uncommittedEvent = new UncommittedEvent();
         uncommittedEvent.setArtifact(artifacts.toProtobuf(artifact));
         uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId));

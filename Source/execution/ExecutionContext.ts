@@ -6,6 +6,7 @@ import { TenantId } from './TenantId';
 import { CorrelationId } from './CorrelationId';
 import { Claims } from './Claims';
 import { Version } from './Version';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents the execution context in a running application.
@@ -23,13 +24,32 @@ export class ExecutionContext {
      * @param {Claims} claims The current claims for the context.
      */
     constructor(
-        readonly microserviceId: MicroserviceId,
-        readonly tenantId: TenantId,
+        private _microserviceId: MicroserviceId,
+        private _tenantId: TenantId,
         readonly version: Version,
         readonly environment: string,
-        readonly correlationId: CorrelationId,
+        private _correlationId: CorrelationId,
         readonly claims: Claims) {
     }
+
+
+    /**
+     * Gets the microservice identifier
+     * @returns {Guid}
+     */
+    get microserviceId(): Guid { return Guid.as(this._microserviceId); }
+
+    /**
+     * Gets the tenant identifier
+     * @returns {Guid}
+     */
+    get tenantId(): Guid { return Guid.as(this._tenantId); }
+
+    /**
+     * Gets the correlation identifier
+     * @returns {Guid}
+     */
+    get correlationId(): Guid { return Guid.as(this._correlationId); }
 
     /**
      * Gets parent execution context

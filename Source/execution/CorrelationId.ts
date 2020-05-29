@@ -6,9 +6,10 @@ import { Guid } from '@dolittle/rudiments';
 /**
  * A unique identifier to allow us to trace actions and their consequences throughout the system.
  */
-export class CorrelationId extends Guid {
-    /**
-     * Represents the system correlation identifier
-     */
-    static readonly system = CorrelationId.parse('868ff40f-a133-4d0f-bfdd-18d726181e01');
-}
+export type CorrelationId = Guid | string;
+
+/**
+ * Represents the system correlation identifier
+ */
+export const system = Guid.parse('868ff40f-a133-4d0f-bfdd-18d726181e01');
+

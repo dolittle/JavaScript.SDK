@@ -5,6 +5,7 @@ import { ArtifactId } from './ArtifactId';
 import { IArtifacts } from './IArtifacts';
 import { Artifact } from './Artifact';
 import { Artifacts } from './Artifacts';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents a builder for building {IArtifacts} instances
@@ -18,8 +19,8 @@ export class ArtifactsBuilder {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associateType(type: Function, identifier: ArtifactId, generation: number = 1): ArtifactsBuilder {
-        this._artifactsMap.set(type, new Artifact(identifier, generation));
+    associate(type: Function, identifier: ArtifactId, generation: number = 1): ArtifactsBuilder {
+        this._artifactsMap.set(type, new Artifact(Guid.as(identifier), generation));
         return this;
     }
 

@@ -7,9 +7,10 @@ import { IExecutionContextManager } from './IExecutionContextManager';
 import { ExecutionContext } from './ExecutionContext';
 import { Version } from './Version';
 import { MicroserviceId } from './MicroserviceId';
-import { CorrelationId } from './CorrelationId';
-import { TenantId } from './TenantId';
+import { system as SystemCorrelation } from './CorrelationId';
+import { TenantId, system as SystemTenant } from './TenantId';
 import { Claims } from './Claims';
+import { Guid } from '@dolittle/rudiments';
 
 
 /**
@@ -34,7 +35,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
         this._version = version;
         this._environment = environment;
 
-        this._base = new ExecutionContext(microserviceId, TenantId.system, version, environment, CorrelationId.system, Claims.empty);
+        this._base = new ExecutionContext(microserviceId, SystemTenant, version, environment, SystemCorrelation, Claims.empty);
 
         async_hooks.createHook({
             init: this.asyncOperationInit.bind(this),
@@ -52,7 +53,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
                 this._base.tenantId,
                 this._version,
                 this._environment,
-                CorrelationId.create(),
+                Guid.create(),
                 this._base.claims
             );
             this._executionContextByAsyncId.set(asyncId, executionContext);
@@ -92,7 +93,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
             parent.tenantId,
             this._version,
             this._environment,
-            CorrelationId.create(),
+            Guid.create(),
             parent.claims
         );
 

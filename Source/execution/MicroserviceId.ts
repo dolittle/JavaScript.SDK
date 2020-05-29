@@ -6,9 +6,10 @@ import { Guid } from '@dolittle/rudiments';
 /**
  * Represents the unique identifier for a Microservice.
  */
-export class MicroserviceId extends Guid {
-    /**
-     * Undefined microservice
-     */
-    static readonly undefined: MicroserviceId = MicroserviceId.parse('687b52c6-c409-44f9-bcda-286b12ca0daa');
-}
+export type MicroserviceId = Guid | string;
+
+
+/**
+ * Represents the identifier for when Microservice is not applicable.
+ */
+export const notApplicable = Guid.empty;

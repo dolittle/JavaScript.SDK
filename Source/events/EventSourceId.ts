@@ -3,5 +3,4 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-export class EventSourceId extends Guid {
-}
+export type EventSourceId = Guid | string;
