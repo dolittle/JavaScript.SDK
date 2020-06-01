@@ -33,7 +33,7 @@
         "prepublishOnly": "yarn build && yarn test:run && yarn test:clean"
     },
     "dependencies": {
-        "@dolittle/rudiments": "^2.0.17",
+        "@dolittle/rudiments": "^2.0.18",
         "@dolittle/runtime.contracts": "^5.1.16",
         "@dolittle/sdk.artifacts": "^1.0.0",
         "@dolittle/sdk.execution": "^1.0.0",
