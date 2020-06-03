@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Artifact } from './Artifact';
+import { ArtifactId } from './ArtifactId';
+import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 
 /**
  * Defines the system for working with {Artifact}
@@ -21,4 +23,13 @@ export interface IArtifacts {
      * @returns {Artifact} The artifact associated.
      */
     getFor(type: Function): Artifact;
+
+    /**
+     * Resolves an artifact from optional input or the given object.
+     * @param object Object to resolve for.
+     * @param [input] Optional input as an artifact or representations of artifats as identifier.
+     * @returns {Artifact} resolved artifacts.
+     * @throws {UnableToResolveArtifact} If not able to resolve artifact.
+     */
+    resolveFrom(object: any, input?: Artifact | ArtifactId | string): Artifact;
 }

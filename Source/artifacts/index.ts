@@ -7,3 +7,4 @@ export { Artifacts } from './Artifacts';
 export { ArtifactsBuilder } from './ArtifactsBuilder';
 export { IArtifacts } from './IArtifacts';
 export { UnknownArtifact } from './UnknownArtifact';
+export { UnableToResolveArtifact } from './UnableToResolveArtifact';

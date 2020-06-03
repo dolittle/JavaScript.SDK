@@ -4,6 +4,8 @@
 import { IArtifacts } from './IArtifacts';
 import { Artifact } from './Artifact';
 import { UnknownArtifact } from './UnknownArtifact';
+import { ArtifactId } from './ArtifactId';
+import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 
 /**
  * Represents an implementation of {IArtifacts}
@@ -37,7 +39,27 @@ export class Artifacts implements IArtifacts {
         }
         return artifact;
     }
+
+    /** @inheritdoc */
+    resolveFrom(object: any, input?: Artifact | ArtifactId | string): Artifact {
+        let artifact: Artifact | undefined;
+
+        if (input && input instanceof Artifact) {
+            artifact = input as Artifact;
+        } else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
+            artifact = new Artifact(input as ArtifactId, 1);
+        } else {
+            if (object) {
+                if (this.hasFor(object.constructor)) {
+                    artifact = this.getFor(object.constructor);
+                }
+            }
+        }
+
+        if (!artifact) {
+            throw new UnableToResolveArtifact(object, input);
+        }
+
+        return artifact;
+    }
 }
-
-
-
