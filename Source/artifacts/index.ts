@@ -3,6 +3,7 @@
 
 export { ArtifactId } from './ArtifactId';
 export { Artifact } from './Artifact';
+export { artifact } from './Artifact';
 export { Artifacts } from './Artifacts';
 export { ArtifactsBuilder } from './ArtifactsBuilder';
 export { IArtifacts } from './IArtifacts';

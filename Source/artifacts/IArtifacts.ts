@@ -3,7 +3,7 @@
 
 import { Artifact } from './Artifact';
 import { ArtifactId } from './ArtifactId';
-import { UnableToResolveArtifact } from './UnableToResolveArtifact';
+import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 
 /**
  * Defines the system for working with {Artifact}
@@ -27,9 +27,17 @@ export interface IArtifacts {
     /**
      * Resolves an artifact from optional input or the given object.
      * @param object Object to resolve for.
-     * @param [input] Optional input as an artifact or representations of artifats as identifier.
+     * @param [input] Optional input as an artifact or representations of artifacts as identifier.
      * @returns {Artifact} resolved artifacts.
      * @throws {UnableToResolveArtifact} If not able to resolve artifact.
      */
     resolveFrom(object: any, input?: Artifact | ArtifactId | string): Artifact;
+
+    /**
+     * Associate a type with a unique artifact identifier and optional generation.
+     * @param {Function} type Type to associate.
+     * @param {ArtifactId} identifier Identifier to associate with.
+     * @param {number} generation Optional generation - defaults to 1.
+     */
+    associate(type: Function, identifier: ArtifactId, generation?: number): void;
 }

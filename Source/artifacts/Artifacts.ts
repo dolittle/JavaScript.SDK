@@ -1,39 +1,52 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from './IArtifacts';
 import { Artifact } from './Artifact';
 import { UnknownArtifact } from './UnknownArtifact';
 import { ArtifactId } from './ArtifactId';
 import { UnableToResolveArtifact } from './UnableToResolveArtifact';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ArtifactAssociation } from './ArtifactAssociation';
+import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
 
 /**
  * Represents an implementation of {IArtifacts}
  */
 export class Artifacts implements IArtifacts {
-    private _associations: Map<Function, Artifact> = new Map();
+    private _registered: ReplaySubject<ArtifactAssociation>;
+    private _associations: BehaviorSubject<Map<Function, Artifact>>;
 
     /**
      * Initializes a new instance of {Artifacts}
      * @param {Map<Function, Artifact>?} associations Known associations
      */
     constructor(associations?: Map<Function, Artifact>) {
+        this._associations = new BehaviorSubject(new Map());
+        this._registered = new ReplaySubject();
+
         if (associations) {
-            this._associations = associations;
+            for (const [key, value] of associations.entries()) {
+                this._registered.next(new ArtifactAssociation(key, value));
+            }
         }
+
+        this._registered.subscribe(association => this.addAssociation(association));
+        ArtifactsFromDecorators.artifacts.subscribe(association => this.addAssociation(association));
     }
 
     /** @inheritdoc */
     hasFor(type: Function): boolean {
-        return this._associations.has(type);
+        return this._associations.value.has(type);
     }
 
     /** @inheritdoc */
     getFor(type: Function): Artifact {
-        if (!this._associations.has(type)) {
+        if (!this._associations.value.has(type)) {
             throw new UnknownArtifact(type);
         }
-        const artifact = this._associations.get(type);
+        const artifact = this._associations.value.get(type);
         if (!artifact) {
             throw new UnknownArtifact(type);
         }
@@ -61,5 +74,16 @@ export class Artifacts implements IArtifacts {
         }
 
         return artifact;
+    }
+
+    /** @inheritdoc */
+    associate(type: Function, identifier: ArtifactId, generation: number = 1): void {
+        this._registered.next(new ArtifactAssociation(type, new Artifact(Guid.as(identifier), generation)));
+    }
+
+    private addAssociation(association: ArtifactAssociation) {
+        const map = new Map(this._associations.value);
+        map.set(association.type, association.artifact);
+        this._associations.next(map);
     }
 }

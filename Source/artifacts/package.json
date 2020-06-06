@@ -33,7 +33,8 @@
         "prepublishOnly": "yarn build && yarn test:run && yarn test:clean"
     },
     "dependencies": {
-        "@dolittle/rudiments": "^2.0.18",
-        "@dolittle/runtime.contracts": "^5.1.16"
+        "@dolittle/rudiments": "2",
+        "@dolittle/runtime.contracts": "5",
+        "rxjs": "^6.5.5"
     }
 }
