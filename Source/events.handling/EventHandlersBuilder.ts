@@ -17,8 +17,7 @@ export class EventHandlersBuilder {
      * @param {...Function[]} types Event handler types
      */
     from(...types: Function[]) {
-        debugger;
-        console.log('Yup');
+        console.log('');
     }
 
     /**
