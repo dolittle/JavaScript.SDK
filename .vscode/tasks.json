@@ -20,7 +20,14 @@
                 "showReuseMessage": true,
                 "clear": false
             }
-            
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "Samples/Basic/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build"
         }
     ]
 }
