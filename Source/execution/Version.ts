@@ -5,7 +5,6 @@
  * Represents a version number adhering to the SemVer 2.0 standard.
  */
 export class Version {
-
     readonly major: number;
     readonly minor: number;
     readonly patch: number;
@@ -37,4 +36,12 @@ export class Version {
      * First version
      */
     static readonly first = new Version(1, 0, 0, 0);
+
+    toString() {
+        let version = `${this.major}.${this.minor}.${this.patch}`;
+        if (this.preReleaseString) {
+            version = `${version}-${this.preReleaseString}.${this.build}`;
+        }
+        return version;
+    }
 }
