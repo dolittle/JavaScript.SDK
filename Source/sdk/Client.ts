@@ -1,46 +1,56 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IEventStore } from '@dolittle/sdk.events';
 import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { ArtifactsBuilder, Artifact } from '@dolittle/sdk.artifacts';
-import { EventStore } from '@dolittle/sdk.events';
+import { ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
+import { IEventHandlers } from '@dolittle/sdk.events.handling';
+import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
 import grpc from 'grpc';
 
 import '@dolittle/sdk.protobuf';
 import { Guid } from '@dolittle/rudiments';
+import { Logger, LoggerOptions } from 'winston';
+import winston from 'winston';
+import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling/Distribution/EventHandlersBuilder';
 
+
+export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
 /**
  * Represents the client for working with the Dolittle Runtime
  */
 export class Client {
-    readonly executionContextManager: IExecutionContextManager;
-    readonly artifacts: IArtifacts;
-    readonly eventStore: IEventStore;
 
     /**
      * Creates an instance of client.
+     * @param {Logger} logger Winston Logger for logging.
      * @param {IExecutionContextManager} executionContextManager The execution context manager.
      * @param {IArtifacts} artifacts All the configured artifacts.
-     * @param {IEventStore} eventStore The eventstore to work with.
+     * @param {IEventStore} eventStore The event store to work with.
      */
-    constructor(executionContextManager: IExecutionContextManager, artifacts: IArtifacts, eventStore: IEventStore) {
+    constructor(
+        readonly logger: Logger,
+        readonly executionContextManager: IExecutionContextManager,
+        readonly artifacts: IArtifacts,
+        readonly eventStore: IEventStore,
+        readonly eventHandlers: IEventHandlers) {
         this.executionContextManager = executionContextManager;
         this.artifacts = artifacts;
         this.eventStore = eventStore;
+        this.eventHandlers = eventHandlers;
     }
 
     /**
-     * Create a default builder - not specifically targetting a Microservice.
+     * Create a default builder - not specifically targeting a Microservice.
      * @param {Version} [version] Optional version of the software.
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static default(version: Version = Version.first, environment?: string): Client {
-        return Client.for(Guid.empty, version, environment).build();
+    static default(microserviceId: MicroserviceId = Guid.empty, version: Version = Version.first, environment?: string): Client {
+        return Client.for(microserviceId, version, environment).build();
     }
 
     /**
@@ -74,8 +84,9 @@ export class ClientBuilder {
     private _port = 50053;
     private _version: Version;
     private _environment: string;
-
-    private _artifactsBuilder: ArtifactsBuilder = new ArtifactsBuilder();
+    private _loggerOptions: LoggerOptions;
+    private _artifactsBuilder: ArtifactsBuilder;
+    private _eventHandlersBuilder: EventHandlersBuilder;
 
     /**
      * Creates an instance of client builder.
@@ -88,6 +99,19 @@ export class ClientBuilder {
         this._version = version;
         this._environment = environment;
         this._artifactsBuilder = new ArtifactsBuilder();
+        this._eventHandlersBuilder = new EventHandlersBuilder();
+        this._loggerOptions = {
+            level: 'info',
+            format: winston.format.prettyPrint(),
+            defaultMeta: {
+                microserviceId: this._microserviceId.toString()
+            },
+            transports: [
+                new winston.transports.Console({
+                    format: winston.format.prettyPrint()
+                })
+            ]
+        };
     }
 
     /**
@@ -97,6 +121,16 @@ export class ClientBuilder {
      */
     artifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
         callback(this._artifactsBuilder);
+        return this;
+    }
+
+    /**
+     * Configure event handlers through the event handlers builder.
+     * @param {EventHandlersBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withEventHandlers(callback: EventHandlersBuilderCallback): ClientBuilder {
+        callback(this._eventHandlersBuilder);
         return this;
     }
 
@@ -114,19 +148,33 @@ export class ClientBuilder {
     }
 
     /**
+     * Configures logging for the SDK
+     * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
+     */
+    configureLogging(callback: LoggingConfigurationCallback) {
+
+        callback(this._loggerOptions);
+    }
+
+    /**
      * Build the {Client}.
      * @returns {Client}
      */
     build(): Client {
+        const logger = winston.createLogger(this._loggerOptions);
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
         const artifacts = this._artifactsBuilder.build();
+        const eventHandlers = this._eventHandlersBuilder.build();
         return new Client(
+            logger,
             executionContextManager,
             artifacts,
             new EventStore(
                 new EventStoreClient(`${this._host}:${this._port}`, grpc.credentials.createInsecure()),
                 artifacts,
-                executionContextManager)
+                executionContextManager,
+                logger),
+            eventHandlers
         );
     }
 }
