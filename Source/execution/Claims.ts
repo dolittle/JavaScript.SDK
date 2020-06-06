@@ -23,6 +23,7 @@ export class Claims implements Iterable<Claim> {
         }
     }
 
+    /** @inheritdoc */
     [Symbol.iterator](): Iterator<any, any, undefined> {
         let position = 0;
         const self = this;
@@ -34,5 +35,13 @@ export class Claims implements Iterable<Claim> {
                 };
             }.bind(this)
         };
+    }
+
+    /**
+     * Convert claims to an array.
+     * @returns {Claims[]} Array of claims.
+     */
+    toArray(): Claim[] {
+        return [...this._claims];
     }
 }
