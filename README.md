@@ -16,7 +16,7 @@ In the [./Samples/Basic](./Samples/Basic) folder you'll find a basic sample show
 
 ## Quickstart
 
-**This quickstart is focused on TypeScript.**
+**This quickstart is assuming TypeScript with decorator support enabled.**
 
 You need to run the Dolittle runtime which also depends on a MongoDB configured in cluster-mode.
 We've put together a [Docker Compose](https://docs.docker.com/compose/) setup that can be found [here](./Samples/Environments).
