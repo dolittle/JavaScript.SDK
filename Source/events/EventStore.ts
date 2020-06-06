@@ -1,6 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import '@dolittle/sdk.protobuf';
+
 import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
@@ -8,20 +10,24 @@ import { IEventStore } from './IEventStore';
 import { CommittedEvent } from './CommittedEvent';
 import { CommittedEvents } from './CommittedEvents';
 import { EventSourceId } from './EventSourceId';
-import { UnknownEventType } from './UnknownEventType';
 import { EventsAndArtifactsAreNotTheSameSize } from './EventsAndArtifactsAreNotTheSameSize';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { CallRequestContext } from '@dolittle/runtime.contracts/Fundamentals/Services/CallContext_pb';
-import { ExecutionContext as GrpcExecutionContext } from '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb';
 import { UncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
-import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
+import { CommitEventsRequest, CommitEventsResponse } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
-import '@dolittle/sdk.protobuf';
-
-import { artifacts, claims, guids, versions } from '@dolittle/sdk.protobuf';
-import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
 import { Guid } from '@dolittle/rudiments';
+import { InconsistentUseOfArrayForEventsAndArtifacts } from './InconsistentUseOfArrayForEventsAndArtifacts';
+
+import { EventConverters } from './EventConverters';
+import { callContexts } from '@dolittle/sdk.protobuf';
+
+import { ServiceError } from 'grpc';
+
+import { Logger } from 'winston';
+
+import { failures } from '@dolittle/sdk.protobuf';
+import { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 
 /**
  * Represents an implementation of {IEventStore}
@@ -30,83 +36,53 @@ export class EventStore implements IEventStore {
     constructor(
         private _eventStoreClient: EventStoreClient,
         private _artifacts: IArtifacts,
-        private _executionContextManager: IExecutionContextManager) {
+        private _executionContextManager: IExecutionContextManager,
+        private _logger: Logger) {
     }
 
     /** @inheritdoc */
     async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
     async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
     async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+        this._logger.debug('Commit:', input);
+        return this.commitInternal(false, input, eventSourceId, inputId);
+    }
 
-        eventSourceId = Guid.as(eventSourceId);
+
+    /** @inheritdoc */
+    commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
+    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
+    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+        this._logger.debug('Commit public:', input);
+        return this.commitInternal(true, input, eventSourceId, inputId);
+    }
+
+    private async commitInternal(isPublic: boolean, input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
         const uncommittedEvents: UncommittedEvent[] = [];
-        const array = Array.isArray(input);
+        const isEventArray = Array.isArray(input);
+        const isArtifactArray = Array.isArray(inputId);
 
-        if (array) {
-            if (inputId && Array.isArray(inputId)) {
-                if (input.length !== inputId.length) {
-                    throw new EventsAndArtifactsAreNotTheSameSize(input.length, inputId.length);
-                }
-            }
+        this.throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray, isArtifactArray, input, inputId);
+
+        if (isEventArray && inputId) {
+            this.throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId, input);
 
             input.forEach((event: any, index: number) => {
-                let artifact: Artifact | undefined;
-
-                if (inputId && Array.isArray(inputId)) {
-                    const artifactOrId = inputId[index];
-                    if (artifactOrId instanceof Artifact) {
-                        artifact = artifact;
-                    }
-                }
-
-                if (!artifact) {
-                    if (this._artifacts.hasFor(event)) {
-                        artifact = this._artifacts.getFor(event.constructor);
-                    }
-                }
-
-                if (!artifact) {
-                    throw new UnknownEventType(input.constructor);
-                }
+                const artifactOrId = (inputId as [])[index];
+                uncommittedEvents.push(EventConverters.getUncommittedEventFrom(event, eventSourceId, this._artifacts.resolveFrom(input, artifactOrId), false));
             });
-
         } else {
-            let artifact: Artifact | undefined;
-
-            if (inputId && (typeof inputId === 'string' || inputId.constructor.name === 'Guid')) {
-                artifact = new Artifact(inputId as ArtifactId, 1);
-            } else if (inputId && inputId instanceof Artifact) {
-                artifact = inputId as Artifact;
-            } else {
-                if (!inputId) {
-                    if (this._artifacts.hasFor(input.constructor)) {
-                        artifact = this._artifacts.getFor(input.constructor);
-                    }
-                }
-            }
-
-            if (!artifact) {
-                throw new UnknownEventType(input.constructor);
-            }
-
-            uncommittedEvents.push(this.getUncommittedEventFrom(input, eventSourceId, artifact, false));
+            uncommittedEvents.push(EventConverters.getUncommittedEventFrom(input, eventSourceId, this._artifacts.resolveFrom(input, inputId as any), false));
         }
 
         const request = new CommitEventsRequest();
-        request.setCallcontext(this.getCallContext());
+        request.setCallcontext(callContexts.toProtobuf(this._executionContextManager.current));
         request.setEventsList(uncommittedEvents);
 
-        console.log('Commit');
-
         const promise: Promise<any> = new Promise((resolve, reject) => {
-            this._eventStoreClient.commit(request, response => {
-                console.log('Committed ' + response);
-                if (array) {
-                    const committedEvents = new CommittedEvents();
-                    resolve(committedEvents);
-                } else {
-                    const committedEvent = new CommittedEvent();
-                    resolve(committedEvent);
+            this._eventStoreClient.commit(request, (error: ServiceError | null, response?: CommitEventsResponse) => {
+                if (this.handleAnyErrors(reject, error, response) && response) {
+                    resolve(this.getActualResponseFrom(response));
                 }
             });
         });
@@ -114,33 +90,48 @@ export class EventStore implements IEventStore {
         return promise;
     }
 
-    /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
-    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
-        throw new Error('Method not implemented.');
+    private handleAnyErrors(reject: Function, error: ServiceError | null, response?: CommitEventsResponse) {
+        if (error) {
+            this._logger.error('Failed to commit event', error);
+            reject(error);
+            return false;
+        }
+        if (response) {
+            if (response.hasFailure()) {
+                const failure = failures.toSDK(response.getFailure());
+                this._logger.error(`Failure with id '${failure.id}' with reason '${failure.reason}'`);
+                reject(failure);
+                return false;
+            }
+        }
+        return true;
     }
 
+    private getActualResponseFrom(response: CommitEventsResponse): CommittedEvent | CommittedEvents {
+        const committedEvents = response.getEventsList().map(event => EventConverters.toSDK(event));
+        if (committedEvents.length < 1) {
+            throw new MissingEventsFromRuntime();
+        }
 
-    private getUncommittedEventFrom(event: any, eventSourceId: Guid, artifact: Artifact, isPublic: boolean) {
-        const uncommittedEvent = new UncommittedEvent();
-        uncommittedEvent.setArtifact(artifacts.toProtobuf(artifact));
-        uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId));
-        uncommittedEvent.setPublic(isPublic);
-        uncommittedEvent.setContent(JSON.stringify(event));
-        return uncommittedEvent;
+        if (committedEvents.length > 1) {
+            const committedEvents = new CommittedEvents();
+            return committedEvents;
+        } else {
+            return committedEvents[0];
+        }
     }
 
-    private getCallContext() {
-        const executionContext = this._executionContextManager.current;
-        const callContext = new CallRequestContext();
-        const grpcExecutionContext = new GrpcExecutionContext();
-        grpcExecutionContext.setMicroserviceid(guids.toProtobuf(executionContext.microserviceId));
-        grpcExecutionContext.setTenantid(guids.toProtobuf(executionContext.tenantId));
-        grpcExecutionContext.setVersion(versions.toProtobuf(executionContext.version));
-        grpcExecutionContext.setCorrelationid(guids.toProtobuf(executionContext.correlationId));
-        grpcExecutionContext.setClaimsList(claims.toProtobuf(executionContext.claims) as PbClaim[]);
-        callContext.setExecutioncontext(grpcExecutionContext);
-        return callContext;
+    private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined, input: any) {
+        if (inputId && Array.isArray(inputId)) {
+            if (input.length !== inputId.length) {
+                throw new EventsAndArtifactsAreNotTheSameSize(input.length, inputId.length);
+            }
+        }
+    }
+
+    private throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray: boolean, isArtifactArray: boolean, input: any, inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined) {
+        if (isEventArray !== isArtifactArray) {
+            throw new InconsistentUseOfArrayForEventsAndArtifacts(input, inputId);
+        }
     }
 }
