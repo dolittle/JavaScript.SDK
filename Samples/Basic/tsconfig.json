@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "baseUrl": "./",
+        "sourceRoot": "../",
+        "sourceMap": true,
+        "inlineSourceMap": false,
+        "inlineSources": false,
+        "outDir": "./Distribution"
+    }
+}
