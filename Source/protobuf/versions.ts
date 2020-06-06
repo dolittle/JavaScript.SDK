@@ -23,7 +23,10 @@ function toProtobuf(input: SdkVersion): PbVersion {
  * Convert to SDK representation
  * @returns {SdkVersion}
  */
-function toSDK(input: PbVersion): SdkVersion {
+function toSDK(input?: PbVersion): SdkVersion {
+    if (!input) {
+        return SdkVersion.notSet;
+    }
     const version = new SdkVersion(
         input.getMajor(),
         input.getMinor(),
@@ -65,6 +68,6 @@ declare module '@dolittle/runtime.contracts/Fundamentals/Versioning/Version_pb' 
  * Convert to SDK representation
  * @returns {SdkVersion}
  */
-PbVersion.prototype.toSDK = function() {
+PbVersion.prototype.toSDK = function () {
     return toSDK(this);
 };

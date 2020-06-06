@@ -24,7 +24,10 @@ function toProtobuf(input: SdkFailure): PbFailure {
  * Convert to SDK representation
  * @returns {SdkFailure}
  */
-function toSDK(input: PbFailure): SdkFailure {
+function toSDK(input?: PbFailure): SdkFailure {
+    if (!input) {
+        return new SdkFailure(Guid.empty, 'Unknown');
+    }
     const uuid = input.getId()?.getValue_asU8();
     if (!uuid) {
         throw new MissingFailureIdentifier();

@@ -18,7 +18,10 @@ function toProtobuf(guid: Guid): Uuid {
  * Convert to SDK representation
  * @returns {Guid}
  */
-function toSDK(uuid: Uuid): Guid {
+function toSDK(uuid?: Uuid): Guid {
+    if (!uuid) {
+        return Guid.empty;
+    }
     return new Guid(uuid.getValue_asU8());
 }
 
