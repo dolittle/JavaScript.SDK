@@ -5,7 +5,7 @@ import { EventDecoratedMethods } from './EventDecoratedMethods';
 
 export function event(type: Function) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        EventDecoratedMethods.register(target.constructor, descriptor.value);
+        EventDecoratedMethods.register(target.constructor, type, descriptor.value);
     };
 }
 
