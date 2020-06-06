@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact as SdkArtifact, ArtifactId } from '@dolittle/sdk.artifacts';
+import { Artifact as SdkArtifact, ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
 import guids from './guids';
@@ -24,7 +24,10 @@ function toProtobuf(input: SdkArtifact): PbArtifact {
  * Convert to SDK representation
  * @returns {SdkArtifact}
  */
-function toSDK(input: PbArtifact): SdkArtifact {
+function toSDK(input?: PbArtifact): SdkArtifact {
+    if (!input) {
+        throw new MissingArtifactIdentifier();
+    }
     const uuid = input.getId()?.getValue_asU8();
     if (!uuid) {
         throw new MissingArtifactIdentifier();
