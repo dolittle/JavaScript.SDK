@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReplaySubject } from 'rxjs';
-import { EventHandlerDecoratedType } from 'EventHandlerDecoratedType';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerId } from './EventHandlerId';
 
 export class EventHandlerDecoratedTypes {

@@ -3,7 +3,7 @@
 
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerMethod } from './EventHandlerMethod';
-import { EventHandlerDecoratedTypes } from 'EventHandlerDecoratedTypes';
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 
 export type EventHandlerProvider = () => any;
 
