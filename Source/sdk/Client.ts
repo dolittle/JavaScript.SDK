@@ -14,7 +14,7 @@ import '@dolittle/sdk.protobuf';
 import { Guid } from '@dolittle/rudiments';
 import { Logger, LoggerOptions } from 'winston';
 import winston from 'winston';
-import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling/Distribution/EventHandlersBuilder';
+import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;

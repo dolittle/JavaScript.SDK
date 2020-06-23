@@ -4,5 +4,5 @@
 export { eventHandler } from './EventHandler';
 export { EventHandlerId } from './EventHandlerId';
 export { EventHandlers } from './EventHandlers';
-export { EventHandlersBuilder } from './EventHandlersBuilder';
+export { EventHandlersBuilder, EventHandlersBuilderCallback } from './EventHandlersBuilder';
 export { IEventHandlers } from './IEventHandlers';
