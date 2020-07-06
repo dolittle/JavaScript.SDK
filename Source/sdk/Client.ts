@@ -12,7 +12,7 @@ import grpc from 'grpc';
 
 import '@dolittle/sdk.protobuf';
 import { Guid } from '@dolittle/rudiments';
-import { Logger, LoggerOptions } from 'winston';
+import { Logger, LoggerOptions, DefaulLevels } from 'winston';
 import winston from 'winston';
 import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 
@@ -84,7 +84,7 @@ export class ClientBuilder {
     private _port = 50053;
     private _version: Version;
     private _environment: string;
-    private _loggerOptions: LoggerOptions;
+    private _loggerOptions: LoggerOptions<DefaulLevels>;
     private _artifactsBuilder: ArtifactsBuilder;
     private _eventHandlersBuilder: EventHandlersBuilder;
 

@@ -47,7 +47,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         subscription.add(() => streamingCall.cancel());
 
         const errorHandler = (err: any) => {
-            subject.error(err)
+            subject.error(err);
         };
         streamingCall.on('error', errorHandler);
         const endHandler = () => {
@@ -73,7 +73,6 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
 
     /** @inheritdoc */
     handle(callback: OperatorFunction<TRequest, TResponse>): Subscription {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
-    
 }
