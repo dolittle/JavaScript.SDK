@@ -34,10 +34,11 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "2",
-        "@dolittle/runtime.contracts": "5",
+        "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "^1.0.0",
         "@dolittle/sdk.execution": "^1.0.0",
         "@dolittle/sdk.protobuf": "^1.0.0",
+        "@dolittle/sdk.services": "^1.0.0",
         "@types/luxon": "^1.24.0",
         "luxon": "^1.24.1",
         "rxjs": "^6.5.5",
