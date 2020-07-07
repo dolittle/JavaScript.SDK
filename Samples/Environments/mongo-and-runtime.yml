@@ -9,7 +9,7 @@ services:
       - 27017:27017
  
   runtime:
-    image: dolittle/runtime:5.0.0-alpha.16
+    image: dolittle/runtime:5.0.0-rc.7
     depends_on: 
       - mongo
     links:
@@ -17,6 +17,7 @@ services:
     volumes:
       - ${PWD}/resources.json:/app/.dolittle/resources.json
       - ${PWD}/tenants.json:/app/.dolittle/tenants.json
+      - ${PWD}/appsettings.json:/app/appsettings.json
     ports:
       - 81:81
       - 9700:9700
