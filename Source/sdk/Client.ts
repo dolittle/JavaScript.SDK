@@ -6,6 +6,7 @@ import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
 import grpc from 'grpc';
@@ -15,7 +16,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Logger, LoggerOptions, DefaulLevels } from 'winston';
 import winston from 'winston';
 import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-
+import { ReactiveGrpc } from '@dolittle/sdk.services';
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
@@ -163,16 +164,23 @@ export class ClientBuilder {
     build(): Client {
         const logger = winston.createLogger(this._loggerOptions);
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
+        const reactiveGrpc = new ReactiveGrpc();
         const artifacts = this._artifactsBuilder.build();
-        const eventHandlers = this._eventHandlersBuilder.build();
+
+        const connectionString = `${this._host}:${this._port}`;
+        const credentials = grpc.credentials.createInsecure();
+
+        const eventHandlersClient = new EventHandlersClient(connectionString, credentials);
+        const eventHandlers = this._eventHandlersBuilder.build(eventHandlersClient);
         return new Client(
             logger,
             executionContextManager,
             artifacts,
             new EventStore(
-                new EventStoreClient(`${this._host}:${this._port}`, grpc.credentials.createInsecure()),
+                new EventStoreClient(connectionString, credentials),
                 artifacts,
                 executionContextManager,
+                reactiveGrpc,
                 logger),
             eventHandlers
         );
