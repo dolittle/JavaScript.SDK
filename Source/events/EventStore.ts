@@ -9,12 +9,13 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { IEventStore } from './IEventStore';
 import { CommittedEvent } from './CommittedEvent';
 import { CommittedEvents } from './CommittedEvents';
+import { CommitEventsResponse } from './CommitEventsResponse';
 import { EventSourceId } from './EventSourceId';
 import { EventsAndArtifactsAreNotTheSameSize } from './EventsAndArtifactsAreNotTheSameSize';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { UncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
-import { CommitEventsRequest, CommitEventsResponse } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
+import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
 import { Guid } from '@dolittle/rudiments';
 import { InconsistentUseOfArrayForEventsAndArtifacts } from './InconsistentUseOfArrayForEventsAndArtifacts';
@@ -29,6 +30,10 @@ import { Logger } from 'winston';
 import { failures } from '@dolittle/sdk.protobuf';
 import { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 
+import { IReactiveGrpc, Cancellation } from '@dolittle/sdk.services';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 /**
  * Represents an implementation of {IEventStore}
  */
@@ -37,27 +42,28 @@ export class EventStore implements IEventStore {
         private _eventStoreClient: EventStoreClient,
         private _artifacts: IArtifacts,
         private _executionContextManager: IExecutionContextManager,
+        private _reactiveGrpc: IReactiveGrpc,
         private _logger: Logger) {
     }
 
     /** @inheritdoc */
-    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
-    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[], cancellation: Cancellation = Cancellation.default): Promise<CommitEventsResponse> {
         this._logger.debug('Commit:', input);
         return this.commitInternal(false, input, eventSourceId, inputId);
     }
 
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
-    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[], cancellation: Cancellation = Cancellation.default): Promise<CommitEventsResponse> {
         this._logger.debug('Commit public:', input);
         return this.commitInternal(true, input, eventSourceId, inputId);
     }
 
-    private async commitInternal(isPublic: boolean, input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    private async commitInternal(isPublic: boolean, input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommitEventsResponse> {
         const uncommittedEvents: UncommittedEvent[] = [];
         const isEventArray = Array.isArray(input);
         const isArtifactArray = Array.isArray(inputId);
@@ -79,46 +85,13 @@ export class EventStore implements IEventStore {
         request.setCallcontext(callContexts.toProtobuf(this._executionContextManager.current));
         request.setEventsList(uncommittedEvents);
 
-        const promise: Promise<any> = new Promise((resolve, reject) => {
-            this._eventStoreClient.commit(request, (error: ServiceError | null, response?: CommitEventsResponse) => {
-                if (this.handleAnyErrors(reject, error, response) && response) {
-                    resolve(this.getActualResponseFrom(response));
-                }
-            });
-        });
+        const cancellation = new Subject<void>();
 
-        return promise;
-    }
-
-    private handleAnyErrors(reject: Function, error: ServiceError | null, response?: CommitEventsResponse) {
-        if (error) {
-            this._logger.error('Failed to commit event', error);
-            reject(error);
-            return false;
-        }
-        if (response) {
-            if (response.hasFailure()) {
-                const failure = failures.toSDK(response.getFailure());
-                this._logger.error(`Failure with id '${failure.id}' with reason '${failure.reason}'`);
-                reject(failure);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private getActualResponseFrom(response: CommitEventsResponse): CommittedEvent | CommittedEvents {
-        const committedEvents = response.getEventsList().map(event => EventConverters.toSDK(event));
-        if (committedEvents.length < 1) {
-            throw new MissingEventsFromRuntime();
-        }
-
-        if (committedEvents.length > 1) {
-            const committedEvents = new CommittedEvents();
-            return committedEvents;
-        } else {
-            return committedEvents[0];
-        }
+        return this._reactiveGrpc.performUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
+            .pipe(map(response => {
+                const committedEvents = new CommittedEvents(...response.getEventsList().map(event => EventConverters.toSDK(event)));
+                return new CommitEventsResponse(committedEvents, failures.toSDK(response.getFailure()));
+            })).toPromise();
     }
 
     private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined, input: any) {
