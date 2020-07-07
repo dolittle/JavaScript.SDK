@@ -5,18 +5,18 @@ import * as grpc from 'grpc';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { IReactiveGrpc } from 'IReactiveGrpc';
-import { UnaryMethod, ClientStreamMethod, ServerStreamMethod, DuplexMethod } from 'GrpcMethods';
-import { Cancellation } from 'Cancellation';
+import { IReactiveGrpc } from './IReactiveGrpc';
+import { UnaryMethod, ClientStreamMethod, ServerStreamMethod, DuplexMethod } from './GrpcMethods';
+import { Cancellation } from './Cancellation';
 
 /**
  * Represents an implementation of {@link IReactiveGrpc}.
  */
 export class ReactiveGrpc implements IReactiveGrpc {
     /** @inheritdoc */
-    performUnary<TArgument, TResponse>(method: UnaryMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
+    performUnary<TArgument, TResponse>(client: grpc.Client, method: UnaryMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
         const subject = new Subject<TResponse>();
-        const call = method(argument, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
+        const call = method.call(client, argument, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
             if (error) {
                 subject.error(error);
             } else {
@@ -24,14 +24,15 @@ export class ReactiveGrpc implements IReactiveGrpc {
                 subject.complete();
             }
         });
+
         this.handleCancellation(call, cancellation);
         return subject;
     }
 
     /** @inheritdoc */
-    performClientStream<TRequest, TResponse>(method: ClientStreamMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
+    performClientStream<TRequest, TResponse>(client: grpc.Client, method: ClientStreamMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
         const subject = new Subject<TResponse>();
-        const stream = method(null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
+        const stream = method.call(client, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
             if (error) {
                 subject.error(error);
             } else {
@@ -45,18 +46,18 @@ export class ReactiveGrpc implements IReactiveGrpc {
     }
 
     /** @inheritdoc */
-    performServerStream<TArgument, TResponse>(method: ServerStreamMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
+    performServerStream<TArgument, TResponse>(client: grpc.Client, method: ServerStreamMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
         const subject = new Subject<TResponse>();
-        const stream = method(argument, null, null);
+        const stream = method.call(client, argument, null, null);
         this.handleCancellation(stream, cancellation);
         this.handleServerResponses(stream, subject);
         return subject;
     }
 
     /** @inheritdoc */
-    performDuplex<TRequest, TResponse>(method: DuplexMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
+    performDuplex<TRequest, TResponse>(client: grpc.Client, method: DuplexMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
         const subject = new Subject<TResponse>();
-        const stream = method(null, null);
+        const stream = method.call(client, null, null);
         this.handleCancellation(stream, cancellation);
         this.handleClientRequests(stream, requests, subject);
         this.handleServerResponses(stream, subject);
