@@ -5,6 +5,8 @@ import { IEventHandlers } from './IEventHandlers';
 import { EventHandlers } from './EventHandlers';
 import { EventHandlerSignature } from './EventHandlerMethod';
 
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
 /**
@@ -24,8 +26,8 @@ export class EventHandlersBuilder {
      * Builds an instance for holding event handlers.
      * @returns {IEventHandlers} New instance.
      */
-    build(): IEventHandlers {
-        const eventHandlers = new EventHandlers();
+    build(client: EventHandlersClient): IEventHandlers {
+        const eventHandlers = new EventHandlers(client);
         return eventHandlers;
     }
 }

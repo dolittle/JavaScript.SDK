@@ -5,10 +5,14 @@ import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerProvider } from './EventHandler';
 import { EventHandlerSignature } from './EventHandlerMethod';
 
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+
 /**
  * Defines the system for event handlers
  */
 export interface IEventHandlers {
+
+    readonly eventHandlersClient: EventHandlersClient;
 
     /**
      * Register an event handler

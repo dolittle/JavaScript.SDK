@@ -13,13 +13,14 @@ import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventDecoratedMethod } from '@dolittle/sdk.events/EventDecoratedMethod';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
 /**
  * Represents an implementation of {IEventHandlers}.
  */
 export class EventHandlers implements IEventHandlers {
 
-    constructor() {
+    constructor(readonly eventHandlersClient: EventHandlersClient) {
         const handleMethods = EventDecoratedMethods.methods.pipe(
             filter(_ => _.method.name === 'handle'),
         );
