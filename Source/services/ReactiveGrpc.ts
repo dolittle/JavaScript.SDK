@@ -87,6 +87,7 @@ export class ReactiveGrpc implements IReactiveGrpc {
                 stream.end();
             },
             error: (error: any) => {
+                stream.cancel();
                 subject.error(error);
             }
         });

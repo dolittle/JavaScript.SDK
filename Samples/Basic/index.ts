@@ -26,7 +26,7 @@ const connectArguments = new EventHandlerRegistrationRequest();
 
 connectArguments.setScopeid(guids.toProtobuf(Guid.empty));
 //connectArguments.setEventhandlerid(guids.toProtobuf(Guid.parse('f734d633-86fe-4e92-bf7a-46ff8c5d7997')));
-connectArguments.setEventhandlerid(guids.toProtobuf(Guid.parse('f734d633-86fe-4e92-bf7a-46ff8c5d7998')));
+connectArguments.setEventhandlerid(guids.toProtobuf(Guid.parse('f734d633-86fe-4e92-bf7a-46ff8c5d7990')));
 connectArguments.setPartitioned(true);
 
 const types = [new Artifact('c7b37f26-ffe4-4ffc-9a53-8d67acbecd4d', 1)].map(artifact => artifacts.toProtobuf(artifact));
@@ -42,16 +42,19 @@ const reverseCallClient = new ReverseCallClient<EventHandlerClientToRuntimeMessa
     (connectArguments, context) => connectArguments.setCallcontext(context),
     (request) => request.getCallcontext(),
     (response, context) => response.setCallcontext(context),
+    (message) => message.getPing(),
+    (message, pong) => message.setPong(pong),
     client.executionContextManager,
     connectArguments,
+    1,
     (request) => {
-        console.log('Got handle event request', request.getEvent()?.getEvent()?.getContent(), request.getRetryprocessingstate()?.getRetrycount());
+        console.log('Got handle event request', request.getEvent()?.getEvent()?.getContent(), request.getRetryprocessingstate()?.getRetrycount(), guids.toSDK(request.getCallcontext()?.getExecutioncontext()?.getTenantid()).toString());
         const response = new EventHandlerResponse();
         const failure = new ProcessorFailure();
         failure.setReason('Hi');
         failure.setRetry(true);
         const retryTimeout = new Duration();
-        retryTimeout.setSeconds(2);
+        retryTimeout.setSeconds(10);
         failure.setRetrytimeout(retryTimeout)
         response.setFailure(failure);
         return response;
