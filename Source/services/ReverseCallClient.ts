@@ -1,22 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { Subject, Observable, Unsubscribable, NextObserver, ErrorObserver, CompletionObserver, partition, merge, concat, TimeoutError } from 'rxjs';
 import { first, skip, map, filter, timeout } from 'rxjs/operators';
+
+import { Duration } from "google-protobuf/google/protobuf/duration_pb";
+import { Logger } from 'winston';
+
 import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgumentsContext } from '@dolittle/runtime.contracts/Fundamentals/Services/ReverseCallContext_pb';
 import { Ping, Pong } from '@dolittle/runtime.contracts/Fundamentals/Services/Ping_pb';
 
-import { Duration } from "google-protobuf/google/protobuf/duration_pb";
-
-import { executionContexts } from '@dolittle/sdk.protobuf';
-
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
-import { Logger } from 'winston';
-import { Cancellation } from './Cancellation';
-
 import { Guid } from '@dolittle/rudiments';
-import { guids } from '@dolittle/sdk.protobuf';
+import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { executionContexts, guids } from '@dolittle/sdk.protobuf';
+
+import { Cancellation } from './Cancellation';
+import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
+import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
+import { PingTimeout } from './PingTimeout';
 
 /**
  * Represents an implementation of {IReverseCallClient}.
@@ -125,19 +126,17 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 next: (message: TServerMessage) => {
                     const response = this._getConnectResponse(message);
                     if (!response) {
-                        this._logger.warn('Did not receive connect response. Server message did not contain the connect response');
-                        subscriber.complete();
+                        subscriber.error(new DidNotReceiveConnectResponse());
+                        return;
                     }
                     subscriber.next(response);
                 },
                 error: (error: Error) => {
                     if (error instanceof TimeoutError) {
-                        this._logger.warn('Waiting for Ping from Server timed out.');
-                        subscriber.complete();
+                        subscriber.error(new PingTimeout());
                         return;
                     }
-                    this._logger.warn('Error while handling requests from Reverse Call Dispatcher', error);
-                    subscriber.complete();
+                    subscriber.error(error);
                 },
                 complete: () => {
                     subscriber.complete();
