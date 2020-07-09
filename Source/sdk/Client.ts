@@ -16,7 +16,6 @@ import { Guid } from '@dolittle/rudiments';
 import { Logger, LoggerOptions, DefaulLevels } from 'winston';
 import winston from 'winston';
 import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { ReactiveGrpc } from '@dolittle/sdk.services';
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
@@ -164,7 +163,6 @@ export class ClientBuilder {
     build(): Client {
         const logger = winston.createLogger(this._loggerOptions);
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
-        const reactiveGrpc = new ReactiveGrpc();
         const artifacts = this._artifactsBuilder.build();
 
         const connectionString = `${this._host}:${this._port}`;
@@ -180,7 +178,6 @@ export class ClientBuilder {
                 new EventStoreClient(connectionString, credentials),
                 artifacts,
                 executionContextManager,
-                reactiveGrpc,
                 logger),
             eventHandlers
         );
