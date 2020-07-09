@@ -9,13 +9,17 @@ export class Artifact {
     readonly id: Guid;
     readonly generation: number;
 
-    constructor(id: ArtifactId, generation: number) {
+    constructor(id: ArtifactId, generation: number = 1) {
         this.id = Guid.as(id);
         this.generation = generation;
     }
+
+    toString() {
+        return `[${this.id} - ${this.generation}]`;
+    }
 }
 
-export function artifact(identifier: ArtifactId, generation: number = 1) {
+export function artifact(identifier: ArtifactId, generation?: number) {
     return function (target: any) {
         ArtifactsFromDecorators.associate(target.prototype.constructor, identifier, generation);
     };
