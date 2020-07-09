@@ -6,3 +6,4 @@ export { EventHandlerId } from './EventHandlerId';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlersBuilder, EventHandlersBuilderCallback } from './EventHandlersBuilder';
 export { IEventHandlers } from './IEventHandlers';
+export { ScopeId } from './ScopeId';

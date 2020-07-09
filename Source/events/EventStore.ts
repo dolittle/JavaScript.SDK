@@ -30,7 +30,7 @@ import { Logger } from 'winston';
 import { failures } from '@dolittle/sdk.protobuf';
 import { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 
-import { IReactiveGrpc, Cancellation } from '@dolittle/sdk.services';
+import { Cancellation, reactiveUnary } from '@dolittle/sdk.services';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -42,7 +42,6 @@ export class EventStore implements IEventStore {
         private _eventStoreClient: EventStoreClient,
         private _artifacts: IArtifacts,
         private _executionContextManager: IExecutionContextManager,
-        private _reactiveGrpc: IReactiveGrpc,
         private _logger: Logger) {
     }
 
@@ -87,7 +86,7 @@ export class EventStore implements IEventStore {
 
         const cancellation = new Subject<void>();
 
-        return this._reactiveGrpc.performUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
+        return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
             .pipe(map(response => {
                 const committedEvents = new CommittedEvents(...response.getEventsList().map(event => EventConverters.toSDK(event)));
                 return new CommitEventsResponse(committedEvents, failures.toSDK(response.getFailure()));

@@ -4,7 +4,7 @@
 import { Subject, Observable, Unsubscribable, NextObserver, ErrorObserver, CompletionObserver, partition, merge, concat, TimeoutError } from 'rxjs';
 import { first, skip, map, filter, timeout } from 'rxjs/operators';
 
-import { Duration } from "google-protobuf/google/protobuf/duration_pb";
+import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 import { Logger } from 'winston';
 
 import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgumentsContext } from '@dolittle/runtime.contracts/Fundamentals/Services/ReverseCallContext_pb';
@@ -62,7 +62,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
 
         const pingInterval = new Duration();
         const pingSeconds = Math.trunc(this._pingInterval);
-        const pingNanos = Math.trunc((this._pingInterval-pingSeconds)*1e9);
+        const pingNanos = Math.trunc((this._pingInterval - pingSeconds) * 1e9);
         pingInterval.setSeconds(pingSeconds);
         pingInterval.setNanos(pingNanos);
         callContext.setPinginterval(pingInterval);
@@ -85,10 +85,10 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 toClientMessages.pipe(
                     skip(1),
                     filter(this.onlyPingsOrRequests, this),
-                    timeout(this._pingInterval*3e3)
+                    timeout(this._pingInterval * 3e3)
                 ),
                 this.isPingMessage, this);
-            
+
             const pongs = pings.pipe(map((message: TServerMessage) => {
                 const responseMessage = new this._messageConstructor();
                 const pong = new Pong();
@@ -105,13 +105,13 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                     this._executionContextManager.currentFor(executionContext.tenantId, executionContext.claims);
 
                     const response = this._callback(request);
-                    
+
                     const responseContext = new ReverseCallResponseContext();
                     responseContext.setCallid(context.getCallid());
                     this._setResponseContext(response, responseContext);
                     const responseMessage = new this._messageConstructor();
                     this._setMessageResponse(responseMessage, response);
-                    
+
                     return responseMessage;
                 })
             );
@@ -151,7 +151,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         if (ping || request) {
             return true;
         }
-        this._logger.warn('Received message from Reverse Call Dispatcher, but it was not a request or a ping')
+        this._logger.warn('Received message from Reverse Call Dispatcher, but it was not a request or a ping');
         return false;
     }
 
