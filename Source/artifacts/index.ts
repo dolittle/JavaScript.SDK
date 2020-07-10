@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { ArtifactId } from './ArtifactId';
-export { Artifact } from './Artifact';
-export { artifact } from './Artifact';
+export { Artifact, artifact } from './Artifact';
 export { Artifacts } from './Artifacts';
 export { ArtifactsBuilder } from './ArtifactsBuilder';
 export { IArtifacts } from './IArtifacts';
 export { UnknownArtifact } from './UnknownArtifact';
 export { UnableToResolveArtifact } from './UnableToResolveArtifact';
+export { ArtifactMap } from './ArtifactMap';
