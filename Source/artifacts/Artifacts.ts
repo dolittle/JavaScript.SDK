@@ -44,7 +44,7 @@ export class Artifacts implements IArtifacts {
         }
 
         for (const artifact of this._associations.value.values()) {
-            if (artifact === input) {
+            if (this.aritfactEquals(artifact, input)) {
                 return true;
             }
         }
@@ -59,7 +59,7 @@ export class Artifacts implements IArtifacts {
         }
 
         for (const [type, artifact] of this._associations.value.entries()) {
-            if (artifact === input) {
+            if (this.aritfactEquals(artifact, input)) {
                 return type;
             }
         }
@@ -117,5 +117,9 @@ export class Artifacts implements IArtifacts {
         const map = new Map(this._associations.value);
         map.set(association.type, association.artifact);
         this._associations.next(map);
+    }
+
+    private aritfactEquals(left: Artifact, right: Artifact): boolean {
+        return left.generation === right.generation && left.id.toString() === right.id.toString();
     }
 }
