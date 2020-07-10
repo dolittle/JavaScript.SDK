@@ -169,7 +169,13 @@ export class ClientBuilder {
         const credentials = grpc.credentials.createInsecure();
 
         const eventHandlersClient = new EventHandlersClient(connectionString, credentials);
-        const eventHandlers = this._eventHandlersBuilder.build(eventHandlersClient);
+        const eventHandlers = this._eventHandlersBuilder.build(
+            eventHandlersClient,
+            executionContextManager,
+            artifacts,
+            logger
+        );
+
         return new Client(
             logger,
             executionContextManager,

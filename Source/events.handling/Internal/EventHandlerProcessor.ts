@@ -28,7 +28,7 @@ import { guids, artifacts, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { EventHandlerId } from '../EventHandlerId';
 import { ScopeId } from '../ScopeId';
-import { IEventHandler } from 'IEventHandler';
+import { IEventHandler } from '../IEventHandler';
 import { MissingEventInformation } from '../MissingEventInformation';
 
 /**
@@ -118,7 +118,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         const pbEvent = request.getEvent()!.getEvent()!;
 
         const pbSequenceNumber = pbEvent.getEventlogsequencenumber();
-        if ( !pbSequenceNumber ) throw new MissingEventInformation('Sequence Number');
+        if ( pbSequenceNumber === undefined ) throw new MissingEventInformation('Sequence Number');
 
         const pbEventSourceId = pbEvent.getEventsourceid();
         if ( !pbEventSourceId ) throw new MissingEventInformation('EventSourceId');
@@ -147,7 +147,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
             event = Object.assign(new eventType(), event);
         }
 
-        this._handler.handle(event, eventContext);
+        this._handler.handle(event, artifact, eventContext);
 
         return new EventHandlerResponse();
     }
