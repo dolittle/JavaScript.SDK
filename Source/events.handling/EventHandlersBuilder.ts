@@ -21,15 +21,6 @@ export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => vo
 export class EventHandlersBuilder {
     private _eventHandlers: Map<EventHandlerId, EventHandlerBuilder> = new Map();
 
-
-    /**
-     * Event handler methods
-     * @param {...Function[]} types Event handler types
-     */
-    from(...types: Function[]): void {
-        console.log('');
-    }
-
     /**
      * Start building an event handler.
      * @param {EventHandlerId} eventHandlerId The unique identifier of the event handler.
@@ -50,7 +41,7 @@ export class EventHandlersBuilder {
 
         for ( const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers ) {
             const eventHandler = eventHandlerBuilder.build(artifacts);
-            eventHandlers.register(eventHandlerId, eventHandlerBuilder.scopeId, eventHandlerBuilder.isPartitioned, eventHandler);
+            eventHandlers.register(eventHandler);
         }
 
         return eventHandlers;

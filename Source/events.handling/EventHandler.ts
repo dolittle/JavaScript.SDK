@@ -8,9 +8,14 @@ import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerSignature } from './EventHandlerMethod';
 import { IEventHandler } from './IEventHandler';
+import { ScopeId } from './ScopeId';
 
 export class EventHandler implements IEventHandler {
-    constructor(readonly eventHandlerId: EventHandlerId, readonly handleMethodsByArtifact: ArtifactMap<EventHandlerSignature<any>>) {
+    constructor(
+        readonly eventHandlerId: EventHandlerId,
+        readonly scopeId: ScopeId,
+        readonly partitioned: boolean,
+        readonly handleMethodsByArtifact: ArtifactMap<EventHandlerSignature<any>>) {
     }
 
     get handledEvents(): Iterable<Artifact> {
@@ -30,7 +35,7 @@ export class EventHandler implements IEventHandler {
 
 export function eventHandler(eventHandlerId: EventHandlerId) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.register(eventHandlerId, target.constructor);
+        EventHandlerDecoratedTypes.register(eventHandlerId, target);
     };
 }
 

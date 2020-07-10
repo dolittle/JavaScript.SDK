@@ -60,6 +60,6 @@ export class EventHandlerBuilder {
             artifactsToMethods.set(artifact, method);
         }
 
-        return new EventHandler(this._eventHandlerId, artifactsToMethods);
+        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, artifactsToMethods);
     }
 }
