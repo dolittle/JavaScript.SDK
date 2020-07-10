@@ -3,10 +3,10 @@
 
 import { EventContext } from '@dolittle/sdk.events';
 
-export type EventHandlerSignature = (event: any, context: EventContext) => void;
+export type EventHandlerSignature<T> = (event: T, context: EventContext) => void;
 
 export class EventHandlerMethod {
-    constructor(private _method: EventHandlerSignature) {
+    constructor(private _method: EventHandlerSignature<any>) {
     }
 
     invoke(self: any, event: any, context: EventContext) {

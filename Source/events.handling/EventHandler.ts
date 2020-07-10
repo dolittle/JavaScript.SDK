@@ -10,7 +10,7 @@ import { EventHandlerSignature } from './EventHandlerMethod';
 import { IEventHandler } from './IEventHandler';
 
 export class EventHandler implements IEventHandler {
-    constructor(readonly eventHandlerId: EventHandlerId, readonly handleMethodsByArtifact: ArtifactMap<EventHandlerSignature>) {
+    constructor(readonly eventHandlerId: EventHandlerId, readonly handleMethodsByArtifact: ArtifactMap<EventHandlerSignature<any>>) {
     }
 
     get handledEvents(): Iterable<Artifact> {

@@ -3,19 +3,15 @@
 
 import { Logger } from 'winston';
 
-import { Constructor, Guid } from '@dolittle/rudiments';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
-import { Artifact, ArtifactId, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { IArtifacts } from '@dolittle/sdk.artifacts';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
 import { IEventHandlers } from './IEventHandlers';
 import { EventHandlers } from './EventHandlers';
-import { EventHandlerSignature } from './EventHandlerMethod';
 import { EventHandlerId } from './EventHandlerId';
-import { EventHandler } from './EventHandler';
-import { IEventHandler } from './IEventHandler';
-import { ScopeId } from './ScopeId';
+import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -58,64 +54,5 @@ export class EventHandlersBuilder {
         }
 
         return eventHandlers;
-    }
-}
-
-
-
-export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
-
-
-
-export class EventHandlerBuilder {
-    private _handlers: Map<Constructor<any> | Artifact | ArtifactId, EventHandlerSignature> = new Map();
-
-    private _scopeId: ScopeId = Guid.empty;
-    private _partitioned: boolean = true;
-
-    constructor(private _eventHandlerId: EventHandlerId) {
-    }
-
-    get scopeId(): ScopeId {
-        return this._scopeId;
-    }
-
-    get isPartitioned(): boolean {
-        return this._partitioned;
-    }
-
-    partitioned() {
-        this._partitioned = true;
-    }
-
-    unpartitioned() {
-        this._partitioned = false;
-    }
-
-    inScope(scopeId: ScopeId) {
-        this._scopeId = scopeId;
-    }
-
-    handle(typeOrArtifact: Constructor<any> | Artifact | ArtifactId, method: EventHandlerSignature) {
-        this._handlers.set(typeOrArtifact, method);
-    }
-
-    build(artifacts: IArtifacts): IEventHandler {
-        const artifactsToMethods = new ArtifactMap<EventHandlerSignature>();
-
-        for ( const [typeOrArtifact, method] of this._handlers ) {
-            let artifact: Artifact;
-            if ( typeOrArtifact instanceof Artifact ) {
-                artifact = typeOrArtifact;
-            } else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
-                artifact = new Artifact(Guid.as(typeOrArtifact));
-            } else {
-                artifact = artifacts.getFor(typeOrArtifact);
-            }
-
-            artifactsToMethods.set(artifact, method);
-        }
-
-        return new EventHandler(this._eventHandlerId, artifactsToMethods);
     }
 }
