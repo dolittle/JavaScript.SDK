@@ -151,9 +151,9 @@ export class ClientBuilder {
      * Configures logging for the SDK
      * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
      */
-    configureLogging(callback: LoggingConfigurationCallback) {
-
+    configureLogging(callback: LoggingConfigurationCallback): ClientBuilder {
         callback(this._loggerOptions);
+        return this;
     }
 
     /**
