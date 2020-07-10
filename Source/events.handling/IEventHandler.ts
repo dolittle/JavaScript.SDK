@@ -26,8 +26,15 @@ export interface IEventHandler {
     readonly partitioned: boolean;
 
     /**
-     * Gets the event types handled by the event handler.
+     * Gets the event types identified by its artifact that is handled by this event handler.
      */
     readonly handledEvents: Iterable<Artifact>;
+
+    /**
+     * Handle an event.
+     * @param {*} event Event to handle.
+     * @param {Artifact} artifact The artifact representing the event type.
+     * @param {EventContext} context The context in which the event is in.
+     */
     handle(event: any, artifact: Artifact, context: EventContext): void;
 }

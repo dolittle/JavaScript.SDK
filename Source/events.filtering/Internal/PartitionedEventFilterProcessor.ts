@@ -18,13 +18,7 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Pro
 
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId } from '../FilterId';
-import { PartitionId } from '../PartitionId';
-
-export class PartitionedFilterResult {
-    constructor(readonly shouldInclude: boolean, readonly partitionId: PartitionId) {}
-}
-
-export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult;
+import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
 
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {
 

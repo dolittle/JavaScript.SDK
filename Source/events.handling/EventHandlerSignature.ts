@@ -5,12 +5,3 @@ import { EventContext } from '@dolittle/sdk.events';
 
 export type EventHandlerSignature<T> = (event: T, context: EventContext) => void;
 
-export class EventHandlerMethod {
-    constructor(private _method: EventHandlerSignature<any>) {
-    }
-
-    invoke(self: any, event: any, context: EventContext) {
-        this._method.apply(self, [event, context]);
-    }
-}
-

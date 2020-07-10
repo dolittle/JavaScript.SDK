@@ -7,6 +7,7 @@ import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext } from '@dolittle/sdk.events';
 import { ScopeId } from '@dolittle/sdk.events.handling';
+import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation, IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -16,9 +17,7 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Pro
 
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId } from '../FilterId';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
-
-export type FilterEventCallback = (event: any, context: EventContext) => boolean;
+import { FilterEventCallback } from '../FilterEventCallback';
 
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 

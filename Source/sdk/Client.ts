@@ -1,21 +1,21 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
-import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import grpc from 'grpc';
+import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
+
+import { Guid } from '@dolittle/rudiments';
+import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
+import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
+import { IFilters } from '@dolittle/sdk.events.filtering';
+
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
-import { IEventHandlers } from '@dolittle/sdk.events.handling';
-import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
-import grpc from 'grpc';
+import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import '@dolittle/sdk.protobuf';
-import { Guid } from '@dolittle/rudiments';
-import { Logger, LoggerOptions, DefaulLevels } from 'winston';
-import winston from 'winston';
-import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
@@ -36,11 +36,13 @@ export class Client {
         readonly executionContextManager: IExecutionContextManager,
         readonly artifacts: IArtifacts,
         readonly eventStore: IEventStore,
-        readonly eventHandlers: IEventHandlers) {
+        readonly eventHandlers: IEventHandlers,
+        readonly filters: IFilters) {
         this.executionContextManager = executionContextManager;
         this.artifacts = artifacts;
         this.eventStore = eventStore;
         this.eventHandlers = eventHandlers;
+        this.filters = filters;
     }
 
     /**
@@ -87,6 +89,7 @@ export class ClientBuilder {
     private _loggerOptions: LoggerOptions<DefaulLevels>;
     private _artifactsBuilder: ArtifactsBuilder;
     private _eventHandlersBuilder: EventHandlersBuilder;
+    private _eventFiltersBuilder: EventFiltersBuilder;
 
     /**
      * Creates an instance of client builder.
@@ -100,15 +103,16 @@ export class ClientBuilder {
         this._environment = environment;
         this._artifactsBuilder = new ArtifactsBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
+        this._eventFiltersBuilder = new EventFiltersBuilder();
         this._loggerOptions = {
             level: 'info',
-            format: winston.format.prettyPrint(),
+            format: format.prettyPrint(),
             defaultMeta: {
                 microserviceId: this._microserviceId.toString()
             },
             transports: [
-                new winston.transports.Console({
-                    format: winston.format.prettyPrint()
+                new transports.Console({
+                    format: format.prettyPrint()
                 })
             ]
         };
@@ -131,6 +135,16 @@ export class ClientBuilder {
      */
     withEventHandlers(callback: EventHandlersBuilderCallback): ClientBuilder {
         callback(this._eventHandlersBuilder);
+        return this;
+    }
+
+    /**
+     * Configure event filters through the event filters builder.
+     * @param {EventFiltersBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withFilters(callback: EventFiltersBuilderCallback): ClientBuilder {
+        callback(this._eventFiltersBuilder);
         return this;
     }
 
@@ -161,7 +175,7 @@ export class ClientBuilder {
      * @returns {Client}
      */
     build(): Client {
-        const logger = winston.createLogger(this._loggerOptions);
+        const logger = createLogger(this._loggerOptions);
         const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
         const artifacts = this._artifactsBuilder.build();
 
@@ -176,6 +190,14 @@ export class ClientBuilder {
             logger
         );
 
+        const filtersClient = new FiltersClient(connectionString, credentials);
+        const filters = this._eventFiltersBuilder.build(
+            filtersClient,
+            executionContextManager,
+            artifacts,
+            logger
+        );
+
         return new Client(
             logger,
             executionContextManager,
@@ -185,7 +207,8 @@ export class ClientBuilder {
                 artifacts,
                 executionContextManager,
                 logger),
-            eventHandlers
+            eventHandlers,
+            filters
         );
     }
 }

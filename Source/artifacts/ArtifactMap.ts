@@ -3,13 +3,23 @@
 
 import { Artifact } from './Artifact';
 
+/**
+ * Represents a map for mapping an artifact to a given type and provide.
+ * @template T Type to map to.
+ */
 export class ArtifactMap<T> implements Map<Artifact, T> {
     private _generationsById: Map<string, Map<number, T>>;
 
+    /**
+     * Initializes a new instance of {@link ArtifactMap}
+     */
     constructor() {
         this._generationsById = new Map<string, Map<number, T>>();
     }
 
+    /**
+     * Gets the size of the map.
+     */
     get size(): number {
         let size = 0;
         for (const generations of this._generationsById.values()) {
@@ -18,16 +28,19 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
         return size;
     }
 
+    /** @inheritdoc */
     has(key: Artifact): boolean {
         const artifactId = key.id.toString();
         return this._generationsById.get(artifactId)?.has(key.generation) ?? false;
     }
 
+    /** @inheritdoc */
     get(key: Artifact): T | undefined {
         const artifactId = key.id.toString();
         return this._generationsById.get(artifactId)?.get(key.generation);
     }
 
+    /** @inheritdoc */
     set(key: Artifact, value: T): this {
         const artifactId = key.id.toString();
 
@@ -44,10 +57,12 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
         return this;
     }
 
+    /** @inheritdoc */
     clear(): void {
         this._generationsById.clear();
     }
 
+    /** @inheritdoc */
     delete(key: Artifact): boolean {
         const artifactId = key.id.toString();
 
@@ -62,6 +77,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
         return false;
     }
 
+    /** @inheritdoc */
     *[Symbol.iterator](): IterableIterator<[Artifact, T]> {
         for (const [artifactId, generations] of this._generationsById) {
             for (const [generation, entry] of generations) {
@@ -71,27 +87,32 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
         }
     }
 
+    /** @inheritdoc */
     entries(): IterableIterator<[Artifact, T]> {
         return this[Symbol.iterator]();
     }
 
+    /** @inheritdoc */
     *keys(): IterableIterator<Artifact> {
         for (const [artifact, entry] of this.entries()) {
             yield artifact;
         }
     }
 
+    /** @inheritdoc */
     *values(): IterableIterator<T> {
         for (const [artifact, entry] of this.entries()) {
             yield entry;
         }
     }
 
+    /** @inheritdoc */
     forEach(callbackfn: (value: T, key: Artifact, map: Map<Artifact, T>) => void, thisArg?: any): void {
         for (const [artifact, entry] of this.entries()) {
             callbackfn.call(thisArg, entry, artifact, this);
         }
     }
 
+    /** @inheritdoc */
     [Symbol.toStringTag]: string = 'ArtifactMap';
 }

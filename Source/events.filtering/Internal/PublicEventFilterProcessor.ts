@@ -6,20 +6,19 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext } from '@dolittle/sdk.events';
-import { ScopeId } from '@dolittle/sdk.events.handling';
+import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation, IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
-import { FilterRegistrationRequest, FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
+import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
 import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PartitionedFilters_pb';
 import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PublicFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId } from '../FilterId';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
-import { PartitionedFilterEventCallback } from './PartitionedEventFilterProcessor';
+import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
 
 export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 
