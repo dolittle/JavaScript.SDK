@@ -12,7 +12,19 @@ import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
  * generation.
  */
 export class Artifact {
+
+    /**
+     * The artifact id.
+     *
+     * @type {Guid}
+     */
     readonly id: Guid;
+
+    /**
+     * The generation number.
+     *
+     * @type {number}
+     */
     readonly generation: number;
 
     /**
