@@ -32,7 +32,7 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/rudiments": "2",
+        "@dolittle/rudiments": "3.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "1.2.0",
         "@dolittle/sdk.events": "1.2.0",
@@ -40,7 +40,7 @@
         "@dolittle/sdk.execution": "1.2.0",
         "@dolittle/sdk.services": "1.2.0",
         "@dolittle/sdk.protobuf": "1.2.0",
-        "rxjs": "^6.5.5",
-        "winston": "^3.2.1"
+        "rxjs": "6.6.0",
+        "winston": "3.3.2"
     }
 }
