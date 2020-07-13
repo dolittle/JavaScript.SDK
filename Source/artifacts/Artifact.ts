@@ -7,7 +7,7 @@ import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
 
 /**
  * Defines an artifact. An artifact represents typically a type in the system in an runtime agnostic way.
- * 
+ *
  * An artifact is represented with a unique identifier and can also be versioned through the concept of
  * generation.
  */
@@ -17,10 +17,10 @@ export class Artifact {
 
     /**
      * Initializes a new instance of {@link Artifact}
-     * @param id 
-     * @param [generation] 
+     * @param id The artifact id.
+     * @param [generation] The generation number
      */
-    constructor(id: ArtifactId, generation: number = 1) {
+    constructor(id: ArtifactId, generation = 1) {
         this.id = Guid.as(id);
         this.generation = generation;
     }
