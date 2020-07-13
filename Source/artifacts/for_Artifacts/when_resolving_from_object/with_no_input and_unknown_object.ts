@@ -10,8 +10,7 @@ describe('when resolving from object with no input and unknown', () => {
 
     try {
         const result = no_association.artifacts.resolveFrom(object);
-    }
-    catch (ex) {
+    } catch (ex) {
         result = ex;
     }
 

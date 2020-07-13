@@ -40,8 +40,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
                     const failure = this.getFailureFromRegisterResponse(message);
                     if (failure) {
                         subscriber.error(new RegistrationFailed(this._kind, this._identifier, failures.toSDK(failure)));
-                    }
- else {
+                    } else {
                         this._logger.debug(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
                     }
                 },
@@ -83,8 +82,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
             return this.handle(request);
-        }
- catch (error) {
+        } catch (error) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
             failure.setRetry(true);

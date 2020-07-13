@@ -15,8 +15,7 @@ function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
         claim.setValue(input.value);
         claim.setValuetype(input.valueType);
         return claim;
-    }
- else {
+    } else {
         const claims: PbClaim[] = [];
 
         for (const claim of input) {

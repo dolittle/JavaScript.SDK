@@ -50,11 +50,9 @@ export class EventHandlerBuilder {
             let artifact: Artifact;
             if (typeOrArtifact instanceof Artifact) {
                 artifact = typeOrArtifact;
-            }
-            else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
+            } else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
                 artifact = new Artifact(Guid.as(typeOrArtifact));
-            }
-            else {
+            } else {
                 artifact = artifacts.getFor(typeOrArtifact);
             }
 

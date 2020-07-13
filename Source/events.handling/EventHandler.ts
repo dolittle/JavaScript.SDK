@@ -39,8 +39,7 @@ export class EventHandler implements IEventHandler {
         if (this.handleMethodsByArtifact.has(artifact)) {
             const method = this.handleMethodsByArtifact.get(artifact)!;
             method(event, context);
-        }
- else {
+        } else {
             throw new MissingEventHandlerForType(artifact);
         }
     }

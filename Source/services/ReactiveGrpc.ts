@@ -21,8 +21,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
     const call = method.call(client, argument, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
             subject.error(error);
-        }
- else {
+        } else {
             subject.next(message);
             subject.complete();
         }
@@ -44,8 +43,7 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
     const stream = method.call(client, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
             subject.error(error);
-        }
- else {
+        } else {
             subject.next(message);
             subject.complete();
         }

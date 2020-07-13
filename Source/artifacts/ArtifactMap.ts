@@ -47,8 +47,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
         let generations: Map<number, T>;
         if (this._generationsById.has(artifactId)) {
             generations = this._generationsById.get(artifactId)!;
-        }
-        else {
+        } else {
             generations = new Map<number, T>();
             this._generationsById.set(artifactId, generations);
         }

@@ -91,11 +91,9 @@ export class Artifacts implements IArtifacts {
 
         if (input && input instanceof Artifact) {
             artifact = input as Artifact;
-        }
-        else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
+        } else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
             artifact = new Artifact(input as ArtifactId, 1);
-        }
-        else {
+        } else {
             if (object) {
                 if (this.hasFor(object.constructor)) {
                     artifact = this.getFor(object.constructor);

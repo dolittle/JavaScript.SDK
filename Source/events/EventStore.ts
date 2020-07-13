@@ -73,8 +73,7 @@ export class EventStore implements IEventStore {
                 const artifactOrId = (inputId as [])[index];
                 uncommittedEvents.push(EventConverters.getUncommittedEventFrom(event, eventSourceId, this._artifacts.resolveFrom(input, artifactOrId), false));
             });
-        }
-        else {
+        } else {
             uncommittedEvents.push(EventConverters.getUncommittedEventFrom(input, eventSourceId, this._artifacts.resolveFrom(input, inputId as any), false));
         }
 

@@ -39,8 +39,7 @@ export class EventHandlers implements IEventHandlers {
             filter((value: EventHandlerDecoratedType) => {
                 if (HandlesDecoratedMethods.methodsPerEventHandler.has(value.type)) {
                     return true;
-                }
- else {
+                } else {
                     _logger.warn(`EventHandler with Id '${value.eventHandlerId}' does not handle any events. This event handler will not be registered.`);
                     return false;
                 }
