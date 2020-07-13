@@ -6,6 +6,8 @@ import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import grpc from 'grpc';
 import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
 

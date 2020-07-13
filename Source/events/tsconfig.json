@@ -10,6 +10,7 @@
     "references": [
         { "path": "../artifacts" },
         { "path": "../execution" },
-        { "path": "../protobuf" }
+        { "path": "../protobuf" },
+        { "path": "../services" }
     ]
 }

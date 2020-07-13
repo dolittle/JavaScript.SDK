@@ -3,8 +3,7 @@
 import { MyEvent } from './MyEvent';
 import { Client } from '@dolittle/sdk';
 
-import { Cancellation } from '@dolittle/sdk.services';
-import { ReverseCallClient } from '@dolittle/sdk.services';
+import { Cancellation, ReverseCallClient } from '@dolittle/sdk.services';
 import { EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
@@ -33,7 +32,7 @@ const client = Client
                                     console.log('Filtering event', event);
                                     return false;
                                 });
-                        })
+                        });
                     })
                     .build();
 client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');

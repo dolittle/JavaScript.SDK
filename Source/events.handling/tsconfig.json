@@ -10,7 +10,9 @@
     "references": [
         { "path": "../artifacts" },
         { "path": "../events" },
+        { "path": "../events.processing" },
         { "path": "../execution" },
-        { "path": "../protobuf" }
+        { "path": "../protobuf" },
+        { "path": "../services"}
     ]
 }

@@ -13,6 +13,6 @@ export class RegistrationFailed extends Error {
      * Initializes a new instance of {@link DidNotReceRegistrationFailediveConnectResponse}.
      */
     constructor(kind: string, identifier: Guid | string, failure: Failure) {
-        super(`Failure occured during registration of ${kind} ${identifier}. ${failure.reason}`);
+        super(`Failure occurred during registration of ${kind} ${identifier}. ${failure.reason}`);
     }
 }

@@ -27,7 +27,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
 
     constructor(
         private _establishConnection: (requests: Observable<TClientMessage>, cancellation: Cancellation) => Observable<TServerMessage>,
-        private _messageConstructor: { new(): TClientMessage },
+        private _messageConstructor: new() => TClientMessage,
         private _setConnectArguments: (message: TClientMessage, connectArguments: TConnectArguments) => void,
         private _getConnectResponse: (message: TServerMessage) => TConnectResponse | undefined,
         private _getMessageRequest: (message: TServerMessage) => TRequest | undefined,
@@ -42,14 +42,14 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         private _pingInterval: number,
         private _callback: ReverseCallCallback<TRequest, TResponse>,
         private _cancellation: Cancellation,
-        private _logger: Logger)
-    {
+        private _logger: Logger) {
         this._observable = this.create();
     }
 
     subscribe(observer?: NextObserver<TConnectResponse> | ErrorObserver<TConnectResponse> | CompletionObserver<TConnectResponse> | undefined): Unsubscribable;
     subscribe(next: null | undefined, error: null | undefined, complete: () => void): Unsubscribable;
     subscribe(next: null | undefined, error: (error: any) => void, complete?: (() => void) | undefined): Unsubscribable;
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     subscribe(next: (value: TConnectResponse) => void, error: null | undefined, complete: () => void): Unsubscribable;
     subscribe(next?: ((value: TConnectResponse) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined): Unsubscribable;
     subscribe(next?: any, error?: any, complete?: any) {

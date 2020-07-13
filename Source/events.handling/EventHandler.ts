@@ -6,7 +6,7 @@ import { EventContext } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
 import { ScopeId } from './ScopeId';
 
@@ -39,7 +39,8 @@ export class EventHandler implements IEventHandler {
         if (this.handleMethodsByArtifact.has(artifact)) {
             const method = this.handleMethodsByArtifact.get(artifact)!;
             method(event, context);
-        } else {
+        }
+ else {
             throw new MissingEventHandlerForType(artifact);
         }
     }

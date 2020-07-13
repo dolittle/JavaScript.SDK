@@ -114,5 +114,5 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
     }
 
     /** @inheritdoc */
-    [Symbol.toStringTag]: string = 'ArtifactMap';
+    [Symbol.toStringTag] = 'ArtifactMap';
 }
