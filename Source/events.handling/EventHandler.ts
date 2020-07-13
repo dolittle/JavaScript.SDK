@@ -6,7 +6,7 @@ import { EventContext } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
 import { ScopeId } from './ScopeId';
 

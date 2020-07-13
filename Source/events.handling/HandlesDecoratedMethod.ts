@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/rudiments';
 
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 
 export class HandlesDecoratedMethod {
     constructor(readonly owner: Constructor<any>, readonly eventType: Constructor<any>, readonly method: EventHandlerSignature<any>) {

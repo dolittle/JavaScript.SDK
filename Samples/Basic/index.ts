@@ -22,7 +22,7 @@ const client = Client
                                     console.log('Filtering event', event);
                                     return false;
                                 });
-                        })
+                        });
                     })
                     .build();
 client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');

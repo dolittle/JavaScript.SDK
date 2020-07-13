@@ -3,7 +3,7 @@
 
 import { Constructor, Guid } from '@dolittle/rudiments';
 import { Artifact, ArtifactId, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandler } from './EventHandler';
 import { IEventHandler } from './IEventHandler';

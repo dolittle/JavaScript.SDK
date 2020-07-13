@@ -4,7 +4,7 @@
 import { Constructor } from '@dolittle/rudiments';
 
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 
 export class HandlesDecoratedMethods {
     static readonly methodsPerEventHandler: Map<Function, HandlesDecoratedMethod[]> = new Map();

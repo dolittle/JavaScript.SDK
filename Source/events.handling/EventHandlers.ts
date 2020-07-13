@@ -7,7 +7,7 @@ import { map, filter } from 'rxjs/operators';
 // import { EventDecoratedMethods } from '@dolittle/sdk.events';
 import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 import { EventHandler } from './EventHandler';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
