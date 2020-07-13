@@ -38,9 +38,9 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | Array<string> | Artifact | ArtifactId): Promise<CommittedEvent>;
-    async commit(events: Array<any>, eventSourceId: EventSourceId, artifactIds?: string | Array<string> | Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
-    async commit(input: any | Array<any>, eventSourceId: EventSourceId, inputId?: string | Array<string> | Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
+    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
+    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
+    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
         this._logger.debug('Commit:', input);
         return this.commitInternal(false, input, eventSourceId, inputId);
     }
@@ -48,14 +48,14 @@ export class EventStore implements IEventStore {
 
     /** @inheritdoc */
     commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
-    commitPublic(events: Array<any>, eventSourceId: EventSourceId, artifactIds?: Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
-    commitPublic(input: any | Array<any>, eventSourceId: EventSourceId, inputId?: Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
+    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
+    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
         this._logger.debug('Commit public:', input);
         return this.commitInternal(true, input, eventSourceId, inputId);
     }
 
-    private async commitInternal(isPublic: boolean, input: any | Array<any>, eventSourceId: EventSourceId, inputId?: string | Array<string> | Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
-        const uncommittedEvents: Array<UncommittedEvent> = [];
+    private async commitInternal(isPublic: boolean, input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+        const uncommittedEvents: UncommittedEvent[] = [];
         const isEventArray = Array.isArray(input);
         const isArtifactArray = Array.isArray(inputId);
 
@@ -120,7 +120,7 @@ export class EventStore implements IEventStore {
         }
     }
 
-    private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | Array<string> | Artifact | Array<Artifact> | Guid | Array<ArtifactId> | undefined, input: any) {
+    private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined, input: any) {
         if (inputId && Array.isArray(inputId)) {
             if (input.length !== inputId.length) {
                 throw new EventsAndArtifactsAreNotTheSameSize(input.length, inputId.length);
@@ -128,7 +128,7 @@ export class EventStore implements IEventStore {
         }
     }
 
-    private throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray: boolean, isArtifactArray: boolean, input: any, inputId: string | Array<string> | Artifact | Array<Artifact> | Guid | Array<ArtifactId> | undefined) {
+    private throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray: boolean, isArtifactArray: boolean, input: any, inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined) {
         if (isEventArray !== isArtifactArray) {
             throw new InconsistentUseOfArrayForEventsAndArtifacts(input, inputId);
         }

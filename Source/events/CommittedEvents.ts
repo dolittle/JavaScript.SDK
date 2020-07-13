@@ -9,7 +9,7 @@ import { CommittedEvent } from './CommittedEvent';
  * @summary This type implements Iterable<CommittedEvent> and can be used for iterations directly.
  */
 export class CommittedEvents implements Iterable<CommittedEvent> {
-    private _events: Array<CommittedEvent> = [];
+    private _events: CommittedEvent[] = [];
 
     static readonly empty: CommittedEvents = new CommittedEvents();
 
@@ -17,7 +17,7 @@ export class CommittedEvents implements Iterable<CommittedEvent> {
      * Creates an instance of {CommittedEvents}.
      * @param {...CommittedEvent[]} events Events to initialize with.
      */
-    constructor(...events: Array<CommittedEvent>) {
+    constructor(...events: CommittedEvent[]) {
         if (events) {
             this._events = events;
         }
@@ -41,7 +41,7 @@ export class CommittedEvents implements Iterable<CommittedEvent> {
      * Convert committed events to an array.
      * @returns {CommittedEvent[]} Array of committed events.
      */
-    toArray(): Array<CommittedEvent> {
+    toArray(): CommittedEvent[] {
         return [...this._events];
     }
 }

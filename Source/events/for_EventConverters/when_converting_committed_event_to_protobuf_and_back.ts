@@ -10,7 +10,7 @@ import { Artifact } from '@dolittle/sdk.artifacts';
 import { EventConverters } from '../EventConverters';
 
 describe('when converting committed event to protobuf and back', () => {
-    const claimsArray: Array<Claim> = [
+    const claimsArray: Claim[] = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')
     ];

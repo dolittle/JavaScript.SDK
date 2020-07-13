@@ -9,7 +9,7 @@ import { Claim } from './Claim';
  * @summary This type implements Iterable<Claim> and can be used for iterations directly.
  */
 export class Claims implements Iterable<Claim> {
-    private _claims: Array<Claim> = [];
+    private _claims: Claim[] = [];
 
     static readonly empty: Claims = new Claims();
 
@@ -17,7 +17,7 @@ export class Claims implements Iterable<Claim> {
      * Creates an instance of claims.
      * @param [claims] Claims to initialize with.
      */
-    constructor(claims?: Array<Claim>) {
+    constructor(claims?: Claim[]) {
         if (claims) {
             this._claims = claims;
         }
@@ -41,7 +41,7 @@ export class Claims implements Iterable<Claim> {
      * Convert claims to an array.
      * @returns {Claims[]} Array of claims.
      */
-    toArray(): Array<Claim> {
+    toArray(): Claim[] {
         return [...this._claims];
     }
 }

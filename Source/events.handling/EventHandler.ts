@@ -8,7 +8,7 @@ import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 export type EventHandlerProvider = () => any;
 
 export class EventHandler {
-    constructor(readonly eventHandlerId: EventHandlerId, readonly eventHandlerProvider: EventHandlerProvider, readonly methods: Array<EventHandlerMethod>) {
+    constructor(readonly eventHandlerId: EventHandlerId, readonly eventHandlerProvider: EventHandlerProvider, readonly methods: EventHandlerMethod[]) {
     }
 }
 

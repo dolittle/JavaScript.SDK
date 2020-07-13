@@ -16,7 +16,7 @@ export class EventHandlersBuilder {
      * Event handler methods
      * @param {...Function[]} types Event handler types
      */
-    from(...types: Array<Function>) {
+    from(...types: Function[]) {
         console.log('');
     }
 

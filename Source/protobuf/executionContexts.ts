@@ -22,7 +22,7 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     result.setVersion(versions.toProtobuf(input.version));
     result.setCorrelationid(guids.toProtobuf(input.correlationId));
     result.setEnvironment(input.environment);
-    result.setClaimsList(claims.toProtobuf(input.claims) as Array<PbClaim>);
+    result.setClaimsList(claims.toProtobuf(input.claims) as PbClaim[]);
     return result;
 }
 

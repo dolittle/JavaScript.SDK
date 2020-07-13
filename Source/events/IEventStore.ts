@@ -32,7 +32,7 @@ export interface IEventStore {
      * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
      * @summary on the actual type of the event.
      */
-    commit(events: Array<any>, eventSourceId: EventSourceId, artifacts?: Array<string> | Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
+    commit(events: any[], eventSourceId: EventSourceId, artifacts?: string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
 
     /**
      * Commit a single public event.
@@ -43,7 +43,7 @@ export interface IEventStore {
      * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
      * @summary on the actual type of the event.
      */
-    commitPublic(event: any, eventSourceId: EventSourceId, artifact?: Array<string> | Artifact | ArtifactId): Promise<CommittedEvent>;
+    commitPublic(event: any, eventSourceId: EventSourceId, artifact?: string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
 
     /**
      * Commit a collection of public events.
@@ -55,5 +55,5 @@ export interface IEventStore {
      * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
      * @summary on the actual type of the event.
      */
-    commitPublic(events: Array<any>, eventSourceId: EventSourceId, artifacts?: Array<string> | Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
+    commitPublic(events: any[], eventSourceId: EventSourceId, artifacts?: string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
 }
