@@ -33,9 +33,10 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "2",
-        "@dolittle/runtime.contracts": "5",
+        "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "1.2.0",
         "@dolittle/sdk.events": "1.2.0",
+        "@dolittle/sdk.events.processing": "1.2.0",
         "@dolittle/sdk.execution": "1.2.0",
         "@dolittle/sdk.protobuf": "1.2.0",
         "rxjs": "^6.5.5",

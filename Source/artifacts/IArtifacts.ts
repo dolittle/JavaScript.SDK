@@ -4,6 +4,8 @@
 import { Artifact } from './Artifact';
 import { ArtifactId } from './ArtifactId';
 import { UnableToResolveArtifact } from './UnableToResolveArtifact';
+import { Constructor } from '@dolittle/rudiments';
+
 
 /**
  * Defines the system for working with {Artifact}
@@ -11,18 +13,32 @@ import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 export interface IArtifacts {
 
     /**
+     * Check if there is a type associated with an artifact.
+     * @param {Artifact | ArtifactId} input Artifact or artifactId.
+     * @returns {boolean} true if there is, false if not.
+     */
+    hasTypeFor(input: Artifact | ArtifactId): boolean;
+
+    /**
+     * Get type for a given {@link Artifact} or {@link ArtifactId};
+     * @param {Artifact | ArtifactId} input Artifact or artifactId.
+     * @returns type for artifact.
+     */
+    getTypeFor(input: Artifact | ArtifactId): Constructor<any>;
+
+    /**
      * Check if there is an {Artifact} definition for a given type.
      * @param {Function} type Type to check for.
      * @returns true if there is, false if not.
      */
-    hasFor(type: Function): boolean;
+    hasFor(type: Constructor<any>): boolean;
 
     /**
      * Get {Artifact} definition for a given type.
      * @param {Function} type Type to get for.
      * @returns {Artifact} The artifact associated.
      */
-    getFor(type: Function): Artifact;
+    getFor(type: Constructor<any>): Artifact;
 
     /**
      * Resolves an artifact from optional input or the given object.
@@ -31,13 +47,13 @@ export interface IArtifacts {
      * @returns {Artifact} resolved artifacts.
      * @throws {UnableToResolveArtifact} If not able to resolve artifact.
      */
-    resolveFrom(object: any, input?: Artifact | ArtifactId | string): Artifact;
+    resolveFrom(object: any, input?: Artifact | ArtifactId): Artifact;
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
-     * @param {Function} type Type to associate.
+     * @param {Constructor<any>} type Type to associate.
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associate(type: Function, identifier: ArtifactId, generation?: number): void;
+    associate(type: Constructor<any>, identifier: ArtifactId, generation?: number): void;
 }

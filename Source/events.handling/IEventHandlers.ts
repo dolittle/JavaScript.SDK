@@ -1,9 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerProvider } from './EventHandler';
-import { EventHandlerSignature } from './EventHandlerMethod';
+import { IEventHandler } from './IEventHandler';
 
 /**
  * Defines the system for event handlers
@@ -12,9 +10,7 @@ export interface IEventHandlers {
 
     /**
      * Register an event handler
-     * @param method Type of event handler
+     * @param {IEventHandler} eventHandler EventHandler to register.
      */
-    register(eventHandlerProvider: EventHandlerProvider, eventType: Function, method: EventHandlerSignature, eventHandlerId?: EventHandlerId): void
+    register(eventHandler: IEventHandler): void;
 }
-
-

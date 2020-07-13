@@ -1,7 +1,5 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export class EventDecoratedMethod {
-    constructor(readonly owner: Function, readonly eventType: Function, readonly method: Function) {
-    }
-}
+export { EventFiltersBuilder, EventFiltersBuilderCallback } from './EventFiltersBuilder';
+export { IFilters } from './IFilters';

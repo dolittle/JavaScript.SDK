@@ -5,21 +5,21 @@ import { ArtifactId } from './ArtifactId';
 import { IArtifacts } from './IArtifacts';
 import { Artifact } from './Artifact';
 import { Artifacts } from './Artifacts';
-import { Guid } from '@dolittle/rudiments';
+import { Guid, Constructor } from '@dolittle/rudiments';
 
 /**
  * Represents a builder for building {IArtifacts} instances
  */
 export class ArtifactsBuilder {
-    private _artifactsMap: Map<Function, Artifact> = new Map();
+    private _artifactsMap: Map<Constructor<any>, Artifact> = new Map();
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
-     * @param {Function} type Type to associate.
+     * @param {Constructor} type Type to associate.
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associate(type: Function, identifier: ArtifactId, generation = 1): ArtifactsBuilder {
+    associate(type: Constructor<any>, identifier: ArtifactId, generation = 1): ArtifactsBuilder {
         this._artifactsMap.set(type, new Artifact(Guid.as(identifier), generation));
         return this;
     }

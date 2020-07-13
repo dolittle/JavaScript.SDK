@@ -3,16 +3,17 @@
 
 import { Artifacts } from '../../Artifacts';
 import { Artifact } from '../../Artifact';
-import { Guid } from '@dolittle/rudiments';
+import { Guid, Constructor } from '@dolittle/rudiments';
 
 class MyType {}
 
 const artifact = {id: Guid.create(), generation: 1};
-const map = new Map<Function, Artifact>();
+const map = new Map<Constructor<any>, Artifact>();
 map.set(MyType, artifact);
 const artifacts = new Artifacts(map);
 
 export default {
     artifacts,
-    type: MyType
+    type: MyType,
+    artifact
 };

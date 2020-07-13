@@ -34,6 +34,7 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "^2.0.18",
-        "@dolittle/runtime.contracts": "5.*"
+        "@dolittle/runtime.contracts": "^5.1.19",
+        "rxjs": "^6.5.5"
     }
 }
