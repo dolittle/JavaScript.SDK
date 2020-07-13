@@ -14,7 +14,8 @@ describe('when converting from protobuf with missing id', () => {
 
     try {
         pbArtifact.toSDK();
-    } catch (ex) {
+    }
+ catch (ex) {
         result = ex;
     }
 

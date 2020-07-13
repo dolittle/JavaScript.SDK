@@ -2,19 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
-import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { IEventHandlers } from '@dolittle/sdk.events.handling';
-import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
+import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import grpc from 'grpc';
 
 import '@dolittle/sdk.protobuf';
 import { Guid } from '@dolittle/rudiments';
-import { Logger, LoggerOptions } from 'winston';
-import winston from 'winston';
-import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import winston, { Logger, LoggerOptions } from 'winston';
 
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
@@ -62,7 +58,7 @@ export class Client {
      */
     static for(microserviceId: MicroserviceId, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
-            environment = process.env['NODE_ENV'];
+            environment = process.env.NODE_ENV;
             if (!environment || environment === '') {
                 environment = 'development';
             }

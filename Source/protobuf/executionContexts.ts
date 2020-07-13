@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContext as SdkExecutionContext } from '@dolittle/sdk.execution';
-import { Claims } from '@dolittle/sdk.execution';
+import { ExecutionContext as SdkExecutionContext, Claims } from '@dolittle/sdk.execution';
 
 import { ExecutionContext as PbExecutionContext } from '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
@@ -23,7 +22,7 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     result.setVersion(versions.toProtobuf(input.version));
     result.setCorrelationid(guids.toProtobuf(input.correlationId));
     result.setEnvironment(input.environment);
-    result.setClaimsList(claims.toProtobuf(input.claims) as PbClaim[]);
+    result.setClaimsList(claims.toProtobuf(input.claims) as Array<PbClaim>);
     return result;
 }
 
@@ -50,8 +49,8 @@ function toSDK(input: PbExecutionContext): SdkExecutionContext {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 declare module '@dolittle/sdk.execution' {

@@ -4,16 +4,13 @@
 import { CommittedEvent } from '../CommittedEvent';
 import { DateTime } from 'luxon';
 import { Guid } from '@dolittle/rudiments';
-import { Claim } from '@dolittle/sdk.execution';
-import { Claims } from '@dolittle/sdk.execution';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Version } from '@dolittle/sdk.execution';
+import { Claim, Claims, ExecutionContext, Version } from '@dolittle/sdk.execution';
 import { Artifact } from '@dolittle/sdk.artifacts';
 
 import { EventConverters } from '../EventConverters';
 
 describe('when converting committed event to protobuf and back', () => {
-    const claimsArray: Claim[] = [
+    const claimsArray: Array<Claim> = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')
     ];

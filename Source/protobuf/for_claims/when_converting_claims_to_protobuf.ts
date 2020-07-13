@@ -6,7 +6,7 @@ import { Claims, Claim } from '@dolittle/sdk.execution';
 import '../claims';
 
 describe('when converting claims to protobuf', () => {
-    const claimsArray: Claim[] = [
+    const claimsArray: Array<Claim> = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')
     ];

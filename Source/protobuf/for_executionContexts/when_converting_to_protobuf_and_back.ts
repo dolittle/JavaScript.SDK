@@ -7,7 +7,7 @@ import { ExecutionContext, Version, Claim, Claims } from '@dolittle/sdk.executio
 import executionContexts from '../executionContexts';
 
 describe('when converting to protobuf and back', () => {
-    const claimsArray: Claim[] = [
+    const claimsArray: Array<Claim> = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')
     ];

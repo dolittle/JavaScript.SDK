@@ -13,6 +13,6 @@ map.set(MyType, artifact);
 const artifacts = new Artifacts(map);
 
 export default {
-    artifacts: artifacts,
+    artifacts,
     type: MyType
 };

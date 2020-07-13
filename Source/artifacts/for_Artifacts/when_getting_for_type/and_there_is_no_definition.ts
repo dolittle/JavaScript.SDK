@@ -10,7 +10,8 @@ describe('when checking if has for type and there is no definition', () => {
     let result: any;
     try {
         no_associations.artifacts.getFor(MyType);
-    } catch (exception) {
+    }
+    catch (exception) {
         result = exception;
     }
 

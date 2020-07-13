@@ -59,9 +59,11 @@ export class Artifacts implements IArtifacts {
 
         if (input && input instanceof Artifact) {
             artifact = input as Artifact;
-        } else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
+        }
+        else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
             artifact = new Artifact(input as ArtifactId, 1);
-        } else {
+        }
+        else {
             if (object) {
                 if (this.hasFor(object.constructor)) {
                     artifact = this.getFor(object.constructor);
@@ -77,7 +79,7 @@ export class Artifacts implements IArtifacts {
     }
 
     /** @inheritdoc */
-    associate(type: Function, identifier: ArtifactId, generation: number = 1): void {
+    associate(type: Function, identifier: ArtifactId, generation = 1): void {
         this._registered.next(new ArtifactAssociation(type, new Artifact(Guid.as(identifier), generation)));
     }
 

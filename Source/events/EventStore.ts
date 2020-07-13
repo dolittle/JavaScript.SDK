@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import '@dolittle/sdk.protobuf';
-
+import { callContexts, failures } from '@dolittle/sdk.protobuf';
 import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
@@ -20,13 +19,11 @@ import { Guid } from '@dolittle/rudiments';
 import { InconsistentUseOfArrayForEventsAndArtifacts } from './InconsistentUseOfArrayForEventsAndArtifacts';
 
 import { EventConverters } from './EventConverters';
-import { callContexts } from '@dolittle/sdk.protobuf';
 
 import { ServiceError } from 'grpc';
 
 import { Logger } from 'winston';
 
-import { failures } from '@dolittle/sdk.protobuf';
 import { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 
 /**
@@ -41,9 +38,9 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | string[] | Artifact | ArtifactId): Promise<CommittedEvent>;
-    async commit(events: any[], eventSourceId: EventSourceId, artifactIds?: string | string[] | Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    async commit(input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    async commit(event: any, eventSourceId: EventSourceId, artifactId?: string | Array<string> | Artifact | ArtifactId): Promise<CommittedEvent>;
+    async commit(events: Array<any>, eventSourceId: EventSourceId, artifactIds?: string | Array<string> | Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
+    async commit(input: any | Array<any>, eventSourceId: EventSourceId, inputId?: string | Array<string> | Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
         this._logger.debug('Commit:', input);
         return this.commitInternal(false, input, eventSourceId, inputId);
     }
@@ -51,14 +48,14 @@ export class EventStore implements IEventStore {
 
     /** @inheritdoc */
     commitPublic(event: any, eventSourceId: EventSourceId, artifactId?: Artifact | ArtifactId): Promise<CommittedEvent>;
-    commitPublic(events: any[], eventSourceId: EventSourceId, artifactIds?: Artifact[] | ArtifactId[]): Promise<CommittedEvents>;
-    commitPublic(input: any | any[], eventSourceId: EventSourceId, inputId?: Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
+    commitPublic(events: Array<any>, eventSourceId: EventSourceId, artifactIds?: Array<Artifact> | Array<ArtifactId>): Promise<CommittedEvents>;
+    commitPublic(input: any | Array<any>, eventSourceId: EventSourceId, inputId?: Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
         this._logger.debug('Commit public:', input);
         return this.commitInternal(true, input, eventSourceId, inputId);
     }
 
-    private async commitInternal(isPublic: boolean, input: any | any[], eventSourceId: EventSourceId, inputId?: string | string[] | Artifact | Artifact[] | ArtifactId | ArtifactId[]): Promise<CommittedEvent | CommittedEvents> {
-        const uncommittedEvents: UncommittedEvent[] = [];
+    private async commitInternal(isPublic: boolean, input: any | Array<any>, eventSourceId: EventSourceId, inputId?: string | Array<string> | Artifact | Array<Artifact> | ArtifactId | Array<ArtifactId>): Promise<CommittedEvent | CommittedEvents> {
+        const uncommittedEvents: Array<UncommittedEvent> = [];
         const isEventArray = Array.isArray(input);
         const isArtifactArray = Array.isArray(inputId);
 
@@ -71,7 +68,8 @@ export class EventStore implements IEventStore {
                 const artifactOrId = (inputId as [])[index];
                 uncommittedEvents.push(EventConverters.getUncommittedEventFrom(event, eventSourceId, this._artifacts.resolveFrom(input, artifactOrId), false));
             });
-        } else {
+        }
+ else {
             uncommittedEvents.push(EventConverters.getUncommittedEventFrom(input, eventSourceId, this._artifacts.resolveFrom(input, inputId as any), false));
         }
 
@@ -116,12 +114,13 @@ export class EventStore implements IEventStore {
         if (committedEvents.length > 1) {
             const committedEvents = new CommittedEvents();
             return committedEvents;
-        } else {
+        }
+        else {
             return committedEvents[0];
         }
     }
 
-    private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined, input: any) {
+    private throwIfEventsArrayAndArtifactsArrayAreNotEqualInLength(inputId: string | Array<string> | Artifact | Array<Artifact> | Guid | Array<ArtifactId> | undefined, input: any) {
         if (inputId && Array.isArray(inputId)) {
             if (input.length !== inputId.length) {
                 throw new EventsAndArtifactsAreNotTheSameSize(input.length, inputId.length);
@@ -129,7 +128,7 @@ export class EventStore implements IEventStore {
         }
     }
 
-    private throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray: boolean, isArtifactArray: boolean, input: any, inputId: string | string[] | Artifact | Artifact[] | Guid | ArtifactId[] | undefined) {
+    private throwIfEventAndArtifactTypesAreInconsistentOnSingleOrArray(isEventArray: boolean, isArtifactArray: boolean, input: any, inputId: string | Array<string> | Artifact | Array<Artifact> | Guid | Array<ArtifactId> | undefined) {
         if (isEventArray !== isArtifactArray) {
             throw new InconsistentUseOfArrayForEventsAndArtifacts(input, inputId);
         }

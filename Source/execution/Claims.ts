@@ -9,7 +9,7 @@ import { Claim } from './Claim';
  * @summary This type implements Iterable<Claim> and can be used for iterations directly.
  */
 export class Claims implements Iterable<Claim> {
-    private _claims: Claim[] = [];
+    private _claims: Array<Claim> = [];
 
     static readonly empty: Claims = new Claims();
 
@@ -17,7 +17,7 @@ export class Claims implements Iterable<Claim> {
      * Creates an instance of claims.
      * @param [claims] Claims to initialize with.
      */
-    constructor(claims?: Claim[]) {
+    constructor(claims?: Array<Claim>) {
         if (claims) {
             this._claims = claims;
         }
@@ -28,12 +28,12 @@ export class Claims implements Iterable<Claim> {
         let position = 0;
         const self = this;
         return {
-            next: function () {
+            next() {
                 return {
                     done: position === self._claims.length,
                     value: self._claims[position++]
                 };
-            }.bind(this)
+            }
         };
     }
 
@@ -41,7 +41,7 @@ export class Claims implements Iterable<Claim> {
      * Convert claims to an array.
      * @returns {Claims[]} Array of claims.
      */
-    toArray(): Claim[] {
+    toArray(): Array<Claim> {
         return [...this._claims];
     }
 }

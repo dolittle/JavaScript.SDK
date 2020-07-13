@@ -84,7 +84,8 @@ export class ExecutionContextManager implements IExecutionContextManager {
 
         if (this._executionContextByAsyncId.has(triggerAsyncId)) {
             parent = this._executionContextByAsyncId.get(triggerAsyncId) || this._base;
-        } else {
+        }
+ else {
             parent = this._base;
         }
 

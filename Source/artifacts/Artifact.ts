@@ -15,7 +15,7 @@ export class Artifact {
     }
 }
 
-export function artifact(identifier: ArtifactId, generation: number = 1) {
+export function artifact(identifier: ArtifactId, generation = 1) {
     return function (target: any) {
         ArtifactsFromDecorators.associate(target.prototype.constructor, identifier, generation);
     };

@@ -26,6 +26,6 @@ function toSDK(uuid?: Uuid): Guid {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };

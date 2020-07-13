@@ -36,8 +36,8 @@ function toSDK(input?: PbArtifact): SdkArtifact {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 declare module '@dolittle/sdk.artifacts' {

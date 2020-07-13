@@ -8,15 +8,16 @@ import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Secur
  * Convert to protobuf representation
  * @returns {PbClaim}
  */
-function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
+function toProtobuf(input: SdkClaim | Claims): PbClaim | Array<PbClaim> {
     if (input instanceof SdkClaim) {
         const claim = new PbClaim();
         claim.setKey(input.key);
         claim.setValue(input.value);
         claim.setValuetype(input.valueType);
         return claim;
-    } else {
-        const claims: PbClaim[] = [];
+    }
+ else {
+        const claims: Array<PbClaim> = [];
 
         for (const claim of input) {
             claims.push(toProtobuf(claim) as PbClaim);
@@ -36,8 +37,8 @@ function toSDK(input: PbClaim): SdkClaim {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 
@@ -47,7 +48,7 @@ declare module '@dolittle/sdk.execution' {
     }
 
     interface Claims {
-        toProtobuf(): PbClaim[];
+        toProtobuf(): Array<PbClaim>;
     }
 }
 
@@ -65,7 +66,7 @@ SdkClaim.prototype.toProtobuf = function () {
  * @returns {PbClaim[]}
  */
 Claims.prototype.toProtobuf = function () {
-    return toProtobuf(this) as PbClaim[];
+    return toProtobuf(this) as Array<PbClaim>;
 };
 
 
