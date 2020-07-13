@@ -39,8 +39,8 @@ export class Artifacts implements IArtifacts {
 
     /** @inheritdoc */
     hasTypeFor(input: Artifact | ArtifactId): boolean {
-        if (!(input instanceof Artifact)) {
-            input = new Artifact(Guid.as(input));
+        if (typeof input === 'string' || input instanceof Guid) {
+            input = new Artifact(input);
         }
 
         for (const artifact of this._associations.value.values()) {
