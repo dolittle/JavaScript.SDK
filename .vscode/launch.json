@@ -8,10 +8,11 @@
             "type": "node",
             "request": "launch",
             "name": "Debug Basic Sample",
-            "program": "${workspaceFolder}/Samples/Basic/index.ts",
+            "program": "${workspaceFolder}/Samples/Basic/Distribution/index.js",
             "cwd": "${workspaceFolder}/Samples/Basic",
             "preLaunchTask": "tsc: build - Samples/Basic/tsconfig.json",
             "protocol": "inspector",
+            "outputCapture": "std",
             "outFiles": [
                 "${workspaceFolder}/Samples/Basic/Distribution/*.js"
             ]
