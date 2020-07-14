@@ -3,7 +3,7 @@
 
 import { Subscribable } from 'rxjs';
 
-export type ReverseCallCallback<TRequest, TResponse> = (request: TRequest) => TResponse;
+export type ReverseCallCallback<TRequest, TResponse> = (request: TRequest) => TResponse | Promise<TResponse>;
 
 /**
  * Defines a client for reverse calls coming from the server to the client.
