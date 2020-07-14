@@ -39,8 +39,8 @@ export class Artifacts implements IArtifacts {
 
     /** @inheritdoc */
     hasTypeFor(input: Artifact | ArtifactId): boolean {
-        if (!(input instanceof Artifact)) {
-            input = new Artifact(Guid.as(input));
+        if (typeof input === 'string' || input instanceof Guid) {
+            input = new Artifact(input);
         }
 
         for (const artifact of this._associations.value.values()) {
@@ -109,7 +109,7 @@ export class Artifacts implements IArtifacts {
     }
 
     /** @inheritdoc */
-    associate(type: Constructor<any>, identifier: ArtifactId, generation: number = 1): void {
+    associate(type: Constructor<any>, identifier: ArtifactId, generation = 1): void {
         this._registered.next(new ArtifactAssociation(type, new Artifact(Guid.as(identifier), generation)));
     }
 

@@ -1,8 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import '@dolittle/sdk.protobuf';
-
 import { Guid } from '@dolittle/rudiments';
 import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 

@@ -36,8 +36,8 @@ function toSDK(input: PbClaim): SdkClaim {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 

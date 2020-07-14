@@ -26,7 +26,7 @@ export class EventHandlersBuilder {
      * @param {EventHandlerId} eventHandlerId The unique identifier of the event handler.
      * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
      */
-    for(eventHandlerId: EventHandlerId, callback: EventHandlerBuilderCallback ): void {
+    for(eventHandlerId: EventHandlerId, callback: EventHandlerBuilderCallback): void {
         const builder = new EventHandlerBuilder(eventHandlerId);
         callback(builder);
         this._eventHandlers.set(eventHandlerId, builder);
@@ -39,7 +39,7 @@ export class EventHandlersBuilder {
     build(client: EventHandlersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IEventHandlers {
         const eventHandlers = new EventHandlers(client, executionContextManager, artifacts, logger);
 
-        for ( const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers ) {
+        for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
             const eventHandler = eventHandlerBuilder.build(artifacts);
             eventHandlers.register(eventHandler);
         }

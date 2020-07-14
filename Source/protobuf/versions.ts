@@ -39,8 +39,8 @@ function toSDK(input?: PbVersion): SdkVersion {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 

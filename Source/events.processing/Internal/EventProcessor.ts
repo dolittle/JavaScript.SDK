@@ -23,13 +23,12 @@ export type EventProcessorId = Guid | string;
  * Partial implementation of {@link IEventProcessor}.
  */
 export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
-    private _pingTimeout: number = 1;
+    private _pingTimeout = 1;
 
     constructor(
         private _kind: string,
         protected _identifier: TIdentifier,
-        protected _logger: Logger)
-    {}
+        protected _logger: Logger) {}
 
     /** @inheritdoc */
     register(cancellation: Cancellation): Observable<never> {
@@ -66,17 +65,17 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
         throw new Error('Method not implemented.');
     }
 
-    protected abstract get registerArguments(): TRegisterArguments;
+    protected abstract get registerArguments (): TRegisterArguments;
 
-    protected abstract createClient(registerArguments: TRegisterArguments, callback: (request: TRequest) => TResponse, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
+    protected abstract createClient (registerArguments: TRegisterArguments, callback: (request: TRequest) => TResponse, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
-    protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): PbFailure | undefined;
+    protected abstract getFailureFromRegisterResponse (response: TRegisterResponse): PbFailure | undefined;
 
-    protected abstract getRetryProcessingStateFromRequest(request: TRequest): RetryProcessingState | undefined;
+    protected abstract getRetryProcessingStateFromRequest (request: TRequest): RetryProcessingState | undefined;
 
-    protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
+    protected abstract createResponseFromFailure (failure: ProcessorFailure): TResponse;
 
-    protected abstract handle(request: TRequest): TResponse;
+    protected abstract handle (request: TRequest): TResponse;
 
     private catchingHandle(request: TRequest): TResponse {
         let retryProcessingState: RetryProcessingState | undefined;

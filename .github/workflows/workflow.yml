@@ -1,0 +1,57 @@
+name: TypeScript Library CI/CD
+
+env:
+  PRERELEASE_BRANCHES: '' # Comma separated list of prerelease branch names. 'alpha,rc, ...'
+
+on:
+  push:
+    branches:
+    - '**'
+  pull_request:
+    types: [closed]
+
+jobs:
+  build:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup node v12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+        registry-url: 'https://registry.npmjs.org'
+    - run: yarn
+    - run: yarn ci
+
+    - name: Establish context
+      id: context
+      uses: dolittle/establish-context-action@v2 # Replace with ./ if used withing dolittle/establish-context-action
+      with:
+        prerelease-branches: ${{ env.PRERELEASE_BRANCHES }}
+
+    - name: Increment version
+      id: increment-version
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
+      uses: dolittle/increment-version-action@v2 # Replace with ./ if used withing dolittle/increment-version-action
+      with:
+        version: ${{ steps.context.outputs.current-version }}
+        release-type: ${{ steps.context.outputs.release-type }}
+
+    - name: Create GitHub Release
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
+      uses: dolittle/github-release-action@v1 # Replace with ./ if used withing dolittle/github-release-action
+      with:
+        token: ${{  secrets.BUILD_PAT  }}
+        cascading-release: ${{ steps.context.outputs.cascading-release }}
+        version: ${{ steps.increment-version.outputs.next-version }}
+    - name: Release javascript 
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
+      uses: dolittle/release-typescript-lib-action@v1
+      with:
+        version: ${{ steps.increment-version.outputs.next-version }}
+        root: '.'
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        

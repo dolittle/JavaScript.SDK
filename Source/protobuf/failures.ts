@@ -36,8 +36,8 @@ function toSDK(input?: PbFailure): SdkFailure {
 }
 
 export default {
-    toProtobuf: toProtobuf,
-    toSDK: toSDK
+    toProtobuf,
+    toSDK
 };
 
 declare module './Failure' {

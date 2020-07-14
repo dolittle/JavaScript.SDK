@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import '@dolittle/sdk.protobuf';
-
+import { callContexts, failures } from '@dolittle/sdk.protobuf';
 import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
@@ -21,13 +20,11 @@ import { Guid } from '@dolittle/rudiments';
 import { InconsistentUseOfArrayForEventsAndArtifacts } from './InconsistentUseOfArrayForEventsAndArtifacts';
 
 import { EventConverters } from './EventConverters';
-import { callContexts } from '@dolittle/sdk.protobuf';
 
 import { ServiceError } from 'grpc';
 
 import { Logger } from 'winston';
 
-import { failures } from '@dolittle/sdk.protobuf';
 import { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 
 import { Cancellation, reactiveUnary } from '@dolittle/sdk.services';

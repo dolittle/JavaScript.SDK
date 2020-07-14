@@ -15,5 +15,5 @@ function toProtobuf(executionContext: ExecutionContext): CallRequestContext {
 }
 
 export default {
-    toProtobuf: toProtobuf
+    toProtobuf
 };

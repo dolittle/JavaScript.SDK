@@ -1,8 +1,18 @@
 {
-  "extends": "../../tsconfig.settings.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": "./",
-    "sourceRoot": "./"
-  }
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceRoot": "./",
+        "outDir": "Distribution"
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../artifacts" },
+        { "path": "../events" },
+        { "path": "../events.processing" },
+        { "path": "../execution" },
+        { "path": "../protobuf" },
+        { "path": "../services"}
+    ]
 }

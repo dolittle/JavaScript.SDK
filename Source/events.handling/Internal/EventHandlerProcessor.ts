@@ -118,19 +118,19 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         const pbEvent = request.getEvent()!.getEvent()!;
 
         const pbSequenceNumber = pbEvent.getEventlogsequencenumber();
-        if ( pbSequenceNumber === undefined ) throw new MissingEventInformation('Sequence Number');
+        if (pbSequenceNumber === undefined) throw new MissingEventInformation('Sequence Number');
 
         const pbEventSourceId = pbEvent.getEventsourceid();
-        if ( !pbEventSourceId ) throw new MissingEventInformation('EventSourceId');
+        if (!pbEventSourceId) throw new MissingEventInformation('EventSourceId');
 
         const pbExecutionContext = pbEvent.getExecutioncontext();
-        if ( !pbExecutionContext ) throw new MissingEventInformation('Execution context');
+        if (!pbExecutionContext) throw new MissingEventInformation('Execution context');
 
         const pbOccurred = pbEvent.getOccurred();
-        if ( !pbOccurred ) throw new MissingEventInformation('Occurred');
+        if (!pbOccurred) throw new MissingEventInformation('Occurred');
 
         const pbArtifact = pbEvent.getType();
-        if ( !pbArtifact ) throw new MissingEventInformation('Artifact');
+        if (!pbArtifact) throw new MissingEventInformation('Artifact');
 
         const eventContext = new EventContext(
             pbSequenceNumber,
