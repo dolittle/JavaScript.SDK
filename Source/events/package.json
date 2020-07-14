@@ -38,6 +38,8 @@
         "@dolittle/sdk.execution": "1.2.0",
         "@dolittle/sdk.protobuf": "1.2.0",
         "@dolittle/sdk.services": "1.2.0",
+        "google-protobuf": "3.12.2",
+        "grpc": "1.24.2",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
