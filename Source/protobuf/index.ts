@@ -20,10 +20,3 @@ export {
     versions,
     claims
 };
-
-import './callContexts';
-import './executionContexts';
-import './failures';
-import './artifacts';
-import './claims';
-import './versions';

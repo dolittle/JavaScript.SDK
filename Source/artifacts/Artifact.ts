@@ -12,15 +12,27 @@ import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
  * generation.
  */
 export class Artifact {
+
+    /**
+     * The artifact id.
+     *
+     * @type {Guid}
+     */
     readonly id: Guid;
+
+    /**
+     * The generation number.
+     *
+     * @type {number}
+     */
     readonly generation: number;
 
     /**
      * Initializes a new instance of {@link Artifact}
-     * @param id
-     * @param [generation]
+     * @param id The artifact id.
+     * @param [generation] The generation number
      */
-    constructor(id: ArtifactId, generation: number = 1) {
+    constructor(id: ArtifactId, generation = 1) {
         this.id = Guid.as(id);
         this.generation = generation;
     }
@@ -29,11 +41,10 @@ export class Artifact {
         return `[${this.id} - ${this.generation}]`;
     }
 }
-
 /**
  * Decorator for associating a type with an artifact.
  */
-export function artifact(identifier: ArtifactId, generation?: number) {
+export function artifact(identifier: ArtifactId, generation = 1) {
     return function (target: any) {
         ArtifactsFromDecorators.associate(target.prototype.constructor, identifier, generation);
     };

@@ -28,12 +28,12 @@ export class CommittedEvents implements Iterable<CommittedEvent> {
         let position = 0;
         const self = this;
         return {
-            next: function () {
+            next() {
                 return {
                     done: position === self._events.length,
                     value: self._events[position++]
                 };
-            }.bind(this)
+            }
         };
     }
 

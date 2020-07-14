@@ -19,7 +19,7 @@ export class Version {
      * @param {number} build Builder number of the software.
      * @param {string} [preReleaseString] If prerelease - the prerelease string.
      */
-    constructor(major: number, minor: number, patch: number, build: number, preReleaseString: string = '') {
+    constructor(major: number, minor: number, patch: number, build: number, preReleaseString = '') {
         this.major = major;
         this.minor = minor;
         this.patch = patch;

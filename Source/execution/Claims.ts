@@ -28,12 +28,12 @@ export class Claims implements Iterable<Claim> {
         let position = 0;
         const self = this;
         return {
-            next: function () {
+            next() {
                 return {
                     done: position === self._claims.length,
                     value: self._claims[position++]
                 };
-            }.bind(this)
+            }
         };
     }
 

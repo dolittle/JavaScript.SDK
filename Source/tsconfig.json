@@ -1,0 +1,13 @@
+{
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./artifacts" },
+        { "path": "./events" },
+        { "path": "./events.handling" },
+        { "path": "./execution" },
+        { "path": "./protobuf" },
+        { "path": "./sdk" },
+        { "path": "./services" }
+    ]
+}

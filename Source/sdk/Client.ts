@@ -1,20 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { IEventStore, EventStore } from '@dolittle/sdk.events';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
+import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 import grpc from 'grpc';
 import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
-import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
-import { IEventStore, EventStore } from '@dolittle/sdk.events';
-import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
-import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { IFilters } from '@dolittle/sdk.events.filtering';
-
-import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
@@ -64,7 +62,7 @@ export class Client {
      */
     static for(microserviceId: MicroserviceId, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
-            environment = process.env['NODE_ENV'];
+            environment = process.env.NODE_ENV;
             if (!environment || environment === '') {
                 environment = 'development';
             }
