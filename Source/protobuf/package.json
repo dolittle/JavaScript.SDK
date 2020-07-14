@@ -1,42 +1,42 @@
 {
-    "name": "@dolittle/sdk.protobuf",
-    "version": "1.2.0",
-    "description": "",
-    "author": "",
-    "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dolittle/Javascript.SDK.git"
-    },
-    "bugs": {
-        "url": "https://github.com/dolittle/home/issues"
-    },
-    "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
-    "files": [
-        "Distribution",
-        "package.json",
-        "**/*.ts"
-    ],
-    "main": "Distribution/index.js",
-    "types": "Distribution/index.d.ts",
-    "scripts": {
-        "prebuild": "yarn clean",
-        "postbuild": "yarn lint",
-        "build": "tsc -b",
-        "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
-    },
-    "dependencies": {
-        "@dolittle/contracts": "5.1.19",
-        "@dolittle/rudiments": "3.0.0",
-        "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "1.2.0",
-        "@dolittle/sdk.execution": "1.2.0"
-    }
+  "name": "@dolittle/sdk.protobuf",
+  "version": "1.1.3",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolittle/Javascript.SDK.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dolittle/home/issues"
+  },
+  "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
+  "files": [
+    "Distribution",
+    "package.json",
+    "**/*.ts"
+  ],
+  "main": "Distribution/index.js",
+  "types": "Distribution/index.d.ts",
+  "scripts": {
+    "prebuild": "yarn clean",
+    "postbuild": "yarn lint",
+    "build": "tsc -b",
+    "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+    "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
+  },
+  "dependencies": {
+    "@dolittle/contracts": "5.1.19",
+    "@dolittle/rudiments": "3.0.0",
+    "@dolittle/runtime.contracts": "5.1.19",
+    "@dolittle/sdk.artifacts": "1.1.3",
+    "@dolittle/sdk.execution": "1.1.3"
+  }
 }
