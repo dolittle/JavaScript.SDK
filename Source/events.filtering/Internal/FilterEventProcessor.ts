@@ -35,7 +35,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         return request.getRetryprocessingstate();
     }
 
-    protected handle(request: FilterEventRequest): TResponse {
+    protected async handle(request: FilterEventRequest): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');
         }
@@ -75,5 +75,5 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         return this.filter(event, eventContext);
     }
 
-    protected abstract filter (event: any, context: EventContext): TResponse;
+    protected abstract filter (event: any, context: EventContext): Promise<TResponse>;
 }

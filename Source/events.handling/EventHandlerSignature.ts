@@ -3,5 +3,5 @@
 
 import { EventContext } from '@dolittle/sdk.events';
 
-export type EventHandlerSignature<T> = (event: T, context: EventContext) => void;
+export type EventHandlerSignature<T> = (event: T, context: EventContext) => void | Promise<void>;
 

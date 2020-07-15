@@ -67,7 +67,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
 
     protected abstract get registerArguments (): TRegisterArguments;
 
-    protected abstract createClient (registerArguments: TRegisterArguments, callback: (request: TRequest) => TResponse, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
+    protected abstract createClient (registerArguments: TRegisterArguments, callback: (request: TRequest) => Promise<TResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     protected abstract getFailureFromRegisterResponse (response: TRegisterResponse): PbFailure | undefined;
 
@@ -75,13 +75,13 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
 
     protected abstract createResponseFromFailure (failure: ProcessorFailure): TResponse;
 
-    protected abstract handle (request: TRequest): TResponse;
+    protected abstract handle (request: TRequest): Promise<TResponse>;
 
-    private catchingHandle(request: TRequest): TResponse {
+    private async catchingHandle(request: TRequest): Promise<TResponse> {
         let retryProcessingState: RetryProcessingState | undefined;
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
-            return this.handle(request);
+            return await this.handle(request);
         } catch (error) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);

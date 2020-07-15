@@ -74,7 +74,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         return registerArguments;
     }
 
-    protected createClient(registerArguments: EventHandlerRegistrationRequest, callback: (request: HandleEventRequest) => EventHandlerResponse, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
+    protected createClient(registerArguments: EventHandlerRegistrationRequest, callback: (request: HandleEventRequest) => Promise<EventHandlerResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
             EventHandlerClientToRuntimeMessage,
@@ -110,7 +110,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         return response;
     }
 
-    protected handle(request: HandleEventRequest): EventHandlerResponse {
+    protected async handle(request: HandleEventRequest): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }
@@ -147,7 +147,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
             event = Object.assign(new eventType(), event);
         }
 
-        this._handler.handle(event, artifact, eventContext);
+        await this._handler.handle(event, artifact, eventContext);
 
         return new EventHandlerResponse();
     }
