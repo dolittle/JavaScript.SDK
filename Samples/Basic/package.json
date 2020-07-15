@@ -12,7 +12,10 @@
 
   },
   "dependencies": {
-    "@dolittle/sdk": "1.2.0"
+    "@dolittle/sdk": "1.2.0",
+    "@dolittle/sdk.artifacts": "1.2.0",
+    "@dolittle/sdk.events": "1.2.0",
+    "@dolittle/sdk.events.handling": "1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
