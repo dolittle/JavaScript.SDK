@@ -98,8 +98,9 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
 
             const responses = new Subject<TClientMessage>();
             requests.pipe(
-                filter(this.onlyValidMessages, this),
-                map(async (message: TServerMessage) => {
+                filter(this.onlyValidMessages, this)
+            ).subscribe({
+                next: async (message: TServerMessage) => {
                     try {
                         const request = this._getMessageRequest(message)!;
                         const context = this._getRequestContext(request)!;
@@ -118,8 +119,11 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                     } catch (error) {
                         responses.error(error);
                     }
-                })
-            );
+                },
+                error: (error) => {
+                    responses.error(error);
+                }
+            });
 
             merge(pongs, responses).subscribe(toServerMessages);
 
