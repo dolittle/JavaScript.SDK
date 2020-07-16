@@ -36,5 +36,5 @@ export interface IEventHandler {
      * @param {Artifact} artifact The artifact representing the event type.
      * @param {EventContext} context The context in which the event is in.
      */
-    handle(event: any, artifact: Artifact, context: EventContext): void;
+    handle(event: any, artifact: Artifact, context: EventContext): Promise<void>;
 }

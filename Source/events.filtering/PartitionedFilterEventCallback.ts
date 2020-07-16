@@ -9,4 +9,4 @@ export class PartitionedFilterResult {
     constructor(readonly shouldInclude: boolean, readonly partitionId: PartitionId) {}
 }
 
-export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult;
+export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult | Promise<PartitionedFilterResult>;

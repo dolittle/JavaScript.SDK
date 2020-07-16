@@ -35,10 +35,10 @@ export class EventHandler implements IEventHandler {
     }
 
     /** @inheritdoc */
-    handle(event: any, artifact: Artifact, context: EventContext): void {
+    async handle(event: any, artifact: Artifact, context: EventContext): Promise<void> {
         if (this.handleMethodsByArtifact.has(artifact)) {
             const method = this.handleMethodsByArtifact.get(artifact)!;
-            method(event, context);
+            await method(event, context);
         } else {
             throw new MissingEventHandlerForType(artifact);
         }

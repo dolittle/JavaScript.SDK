@@ -39,7 +39,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         return registerArguments;
     }
 
-    protected createClient(registerArguments: PublicFilterRegistrationRequest, callback: (request: FilterEventRequest) => PartitionedFilterResponse, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+    protected createClient(registerArguments: PublicFilterRegistrationRequest, callback: (request: FilterEventRequest) => Promise<PartitionedFilterResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<PublicFilterClientToRuntimeMessage, FilterRuntimeToClientMessage, PublicFilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, PartitionedFilterResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connectPublic, requests, cancellation),
             PublicFilterClientToRuntimeMessage,
@@ -67,8 +67,8 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         return response;
     }
 
-    protected filter(event: any, context: EventContext): PartitionedFilterResponse {
-        const result = this._callback(event, context);
+    protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
+        const result = await this._callback(event, context);
 
         const response = new PartitionedFilterResponse();
         response.setIsincluded(result.shouldInclude);

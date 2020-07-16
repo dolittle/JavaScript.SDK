@@ -96,25 +96,34 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 return responseMessage;
             }));
 
-            const responses = requests.pipe(
-                filter(this.onlyValidMessages, this),
-                map((message: TServerMessage) => {
-                    const request = this._getMessageRequest(message)!;
-                    const context = this._getRequestContext(request)!;
-                    const executionContext = executionContexts.toSDK(context.getExecutioncontext()!);
-                    this._executionContextManager.currentFor(executionContext.tenantId, executionContext.claims);
+            const responses = new Subject<TClientMessage>();
+            requests.pipe(
+                filter(this.onlyValidMessages, this)
+            ).subscribe({
+                next: async (message: TServerMessage) => {
+                    try {
+                        const request = this._getMessageRequest(message)!;
+                        const context = this._getRequestContext(request)!;
+                        const executionContext = executionContexts.toSDK(context.getExecutioncontext()!);
+                        this._executionContextManager.currentFor(executionContext.tenantId, executionContext.claims);
 
-                    const response = this._callback(request);
+                        const response = await this._callback(request);
 
-                    const responseContext = new ReverseCallResponseContext();
-                    responseContext.setCallid(context.getCallid());
-                    this._setResponseContext(response, responseContext);
-                    const responseMessage = new this._messageConstructor();
-                    this._setMessageResponse(responseMessage, response);
+                        const responseContext = new ReverseCallResponseContext();
+                        responseContext.setCallid(context.getCallid());
+                        this._setResponseContext(response, responseContext);
+                        const responseMessage = new this._messageConstructor();
+                        this._setMessageResponse(responseMessage, response);
 
-                    return responseMessage;
-                })
-            );
+                        responses.next(responseMessage);
+                    } catch (error) {
+                        responses.error(error);
+                    }
+                },
+                error: (error) => {
+                    responses.error(error);
+                }
+            });
 
             merge(pongs, responses).subscribe(toServerMessages);
 
