@@ -1,7 +1,7 @@
 {
     "name": "basic",
     "private": true,
-    "version": "1.3.0",
+    "version": "1.4.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -11,10 +11,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "1.3.0",
-        "@dolittle/sdk.artifacts": "1.3.0",
-        "@dolittle/sdk.events": "1.3.0",
-        "@dolittle/sdk.events.handling": "1.3.0"
+        "@dolittle/sdk": "1.4.0",
+        "@dolittle/sdk.artifacts": "1.4.0",
+        "@dolittle/sdk.events": "1.4.0",
+        "@dolittle/sdk.events.handling": "1.4.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
