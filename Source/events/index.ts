@@ -8,3 +8,4 @@ export { CommittedEvent } from './CommittedEvent';
 export { CommittedEvents } from './CommittedEvents';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
+export { UncomittedEvent } from './UncomittedEvent';
