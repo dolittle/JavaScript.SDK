@@ -13,6 +13,7 @@ import { FilterId } from './FilterId';
 import { EventFilterBuilder, EventFilterBuilderCallback } from './EventFilterBuilder';
 import { Filters } from './Filters';
 import { IFilters } from './IFilters';
+import { Cancellation } from '@dolittle/sdk.services';
 
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
 
@@ -42,12 +43,12 @@ export class EventFiltersBuilder {
      * @param {IArtifacts} artifacts For artifacts resolution.
      * @param {Logger} logger For logging.
      */
-    build(client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IFilters {
+    build(client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger, cancellation: Cancellation): IFilters {
         const filters = new Filters();
 
         for (const eventFilterBuilder of this._eventFilterBuilders) {
             const filterProcessor = eventFilterBuilder.build(client, executionContextManager, artifacts, logger);
-            filters.register(filterProcessor);
+            filters.register(filterProcessor, cancellation);
         }
 
         return filters;

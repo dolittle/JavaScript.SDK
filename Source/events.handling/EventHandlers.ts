@@ -34,6 +34,7 @@ export class EventHandlers implements IEventHandlers {
         private _executionContextManager: IExecutionContextManager,
         private _artifacts: IArtifacts,
         private _logger: Logger,
+        private _cancellation: Cancellation,
     ) {
         EventHandlerDecoratedTypes.types.pipe(
             filter((value: EventHandlerDecoratedType) => {
@@ -56,13 +57,13 @@ export class EventHandlers implements IEventHandlers {
             })
         ).subscribe({
             next: (eventHandler: IEventHandler) => {
-                this.register(eventHandler);
+                this.register(eventHandler, _cancellation);
             }
         });
     }
 
     /** @inheritdoc */
-    register(eventHandler: IEventHandler): void {
+    register(eventHandler: IEventHandler, cancellation = Cancellation.default): void {
         this._logger.debug(`Registering a ${eventHandler.partitioned ? 'partitioned' : 'unpartitioned'} EventHandler with Id '${eventHandler.eventHandlerId}' for scope '${eventHandler.scopeId}'.`);
         new EventHandlerProcessor(
             eventHandler.eventHandlerId,
@@ -73,7 +74,7 @@ export class EventHandlers implements IEventHandlers {
             this._executionContextManager,
             this._artifacts,
             this._logger)
-            .register(Cancellation.default).subscribe({
+            .register(cancellation).subscribe({
                 error: (error: Error) => {
                     console.log('Failed to register eventhandler', error);
                 },

@@ -6,8 +6,8 @@ import { IFilterProcessor } from './IFilterProcessor';
 import { IFilters } from './IFilters';
 
 export class Filters implements IFilters {
-    register(filterProcessor: IFilterProcessor): void {
-        filterProcessor.register(Cancellation.default).subscribe({
+    register(filterProcessor: IFilterProcessor, cancellation = Cancellation.default): void {
+        filterProcessor.register(cancellation).subscribe({
             error: (error: Error) => {
                 console.log('Failed to register filter', error);
             },
