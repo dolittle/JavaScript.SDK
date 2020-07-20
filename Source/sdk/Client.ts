@@ -13,6 +13,7 @@ import grpc from 'grpc';
 import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
+import { Cancellation } from '@dolittle/sdk.services';
 
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
@@ -88,6 +89,7 @@ export class ClientBuilder {
     private _artifactsBuilder: ArtifactsBuilder;
     private _eventHandlersBuilder: EventHandlersBuilder;
     private _eventFiltersBuilder: EventFiltersBuilder;
+    private _cancellation: Cancellation;
 
     /**
      * Creates an instance of client builder.
@@ -102,6 +104,7 @@ export class ClientBuilder {
         this._artifactsBuilder = new ArtifactsBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._eventFiltersBuilder = new EventFiltersBuilder();
+        this._cancellation = Cancellation.default;
         this._loggerOptions = {
             level: 'info',
             format: format.prettyPrint(),
@@ -169,6 +172,15 @@ export class ClientBuilder {
     }
 
     /**
+     * Configures cancellation for closing open connections to the Runtime.
+     * @param {Cancellation} cancellation The cancellation that will be passed to Filters and Event Handlers.
+     */
+    withCancellation(cancellation: Cancellation): ClientBuilder {
+        this._cancellation = cancellation;
+        return this;
+    }
+
+    /**
      * Build the {Client}.
      * @returns {Client}
      */
@@ -185,7 +197,8 @@ export class ClientBuilder {
             eventHandlersClient,
             executionContextManager,
             artifacts,
-            logger
+            logger,
+            this._cancellation
         );
 
         const filtersClient = new FiltersClient(connectionString, credentials);
@@ -193,7 +206,8 @@ export class ClientBuilder {
             filtersClient,
             executionContextManager,
             artifacts,
-            logger
+            logger,
+            this._cancellation
         );
 
         return new Client(

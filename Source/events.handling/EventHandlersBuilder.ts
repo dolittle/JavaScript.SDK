@@ -12,6 +12,7 @@ import { IEventHandlers } from './IEventHandlers';
 import { EventHandlers } from './EventHandlers';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
+import { Cancellation } from '@dolittle/sdk.services';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -36,12 +37,12 @@ export class EventHandlersBuilder {
      * Builds an instance for holding event handlers.
      * @returns {IEventHandlers} New instance.
      */
-    build(client: EventHandlersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IEventHandlers {
-        const eventHandlers = new EventHandlers(client, executionContextManager, artifacts, logger);
+    build(client: EventHandlersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger, cancellation: Cancellation): IEventHandlers {
+        const eventHandlers = new EventHandlers(client, executionContextManager, artifacts, logger, cancellation);
 
         for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
             const eventHandler = eventHandlerBuilder.build(artifacts);
-            eventHandlers.register(eventHandler);
+            eventHandlers.register(eventHandler, cancellation);
         }
 
         return eventHandlers;
