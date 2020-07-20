@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events.handling",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -34,12 +34,12 @@
     "dependencies": {
         "@dolittle/rudiments": "3.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "1.5.1",
-        "@dolittle/sdk.events": "1.5.1",
-        "@dolittle/sdk.events.processing": "1.5.1",
-        "@dolittle/sdk.execution": "1.5.1",
-        "@dolittle/sdk.services": "1.5.1",
-        "@dolittle/sdk.protobuf": "1.5.1",
+        "@dolittle/sdk.artifacts": "1.5.2",
+        "@dolittle/sdk.events": "1.5.2",
+        "@dolittle/sdk.events.processing": "1.5.2",
+        "@dolittle/sdk.execution": "1.5.2",
+        "@dolittle/sdk.services": "1.5.2",
+        "@dolittle/sdk.protobuf": "1.5.2",
         "rxjs": "6.6.0",
         "luxon": "1.24.1",
         "winston": "3.3.2"
