@@ -10,12 +10,14 @@ import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 import { Guid } from '@dolittle/rudiments';
 import { Cancellation, IReverseCallClient } from '@dolittle/sdk.services';
 import { failures } from '@dolittle/sdk.protobuf';
+import { RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
 import { IEventProcessor } from './IEventProcessor';
 import { RegistrationFailed } from '../RegistrationFailed';
+import { retryWhen, repeat } from 'rxjs/operators';
 
 export type EventProcessorId = Guid | string;
 
@@ -56,13 +58,13 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
     }
 
     /** @inheritdoc */
-    registerWithPolicy(cancellation: Cancellation): Observable<never> {
-        throw new Error('Method not implemented.');
+    registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never> {
+        return retryWithPolicy(this.register(cancellation), policy);
     }
 
     /** @inheritdoc */
-    registerForeverWithPolicy(cancellation: Cancellation): Observable<never> {
-        throw new Error('Method not implemented.');
+    registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never> {
+        return this.registerWithPolicy(policy, cancellation).pipe(repeat());
     }
 
     protected abstract get registerArguments (): TRegisterArguments;

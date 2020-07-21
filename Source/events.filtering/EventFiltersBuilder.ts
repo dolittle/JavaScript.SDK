@@ -44,7 +44,7 @@ export class EventFiltersBuilder {
      * @param {Logger} logger For logging.
      */
     build(client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger, cancellation: Cancellation): IFilters {
-        const filters = new Filters();
+        const filters = new Filters(logger);
 
         for (const eventFilterBuilder of this._eventFilterBuilders) {
             const filterProcessor = eventFilterBuilder.build(client, executionContextManager, artifacts, logger);

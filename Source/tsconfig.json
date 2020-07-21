@@ -7,6 +7,7 @@
         { "path": "./events.handling" },
         { "path": "./execution" },
         { "path": "./protobuf" },
+        { "path": "./resilience" },
         { "path": "./sdk" },
         { "path": "./services" }
     ]

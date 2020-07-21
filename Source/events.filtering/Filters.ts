@@ -4,15 +4,20 @@
 import { Cancellation } from '@dolittle/sdk.services';
 import { IFilterProcessor } from './IFilterProcessor';
 import { IFilters } from './IFilters';
+import { Logger } from 'winston';
+import { retryPipe } from '@dolittle/sdk.resilience';
+import { delay } from 'rxjs/operators';
 
 export class Filters implements IFilters {
+    constructor(private readonly _logger: Logger) {}
+
     register(filterProcessor: IFilterProcessor, cancellation = Cancellation.default): void {
-        filterProcessor.register(cancellation).subscribe({
+        filterProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
             error: (error: Error) => {
-                console.log('Failed to register filter', error);
+                this._logger.error(`Failed to register filter: ${error}`);
             },
             complete: () => {
-                console.log('Filter registration completed!');
+                this._logger.error(`Filter registartion completed.`);
             }
         });
     }
