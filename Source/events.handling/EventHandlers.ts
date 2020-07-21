@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { forkJoin } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, delay } from 'rxjs/operators';
 
 // import { EventDecoratedMethods } from '@dolittle/sdk.events';
 import { IEventHandlers } from './IEventHandlers';
@@ -23,6 +23,7 @@ import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { Logger } from 'winston';
 import { Cancellation } from '@dolittle/sdk.services';
 import { Guid } from '@dolittle/rudiments';
+import { retryPipe } from '@dolittle/sdk.resilience';
 
 /**
  * Represents an implementation of {IEventHandlers}.
@@ -74,12 +75,12 @@ export class EventHandlers implements IEventHandlers {
             this._executionContextManager,
             this._artifacts,
             this._logger)
-            .register(cancellation).subscribe({
+            .registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
                 error: (error: Error) => {
-                    console.log('Failed to register eventhandler', error);
+                    this._logger.error(`Failed to register eventhandler: ${error}`);
                 },
                 complete: () => {
-                    console.log('EventHandler registration completed!');
+                    this._logger.error(`Eventhandler registartion completed.`);
                 }
             });
     }

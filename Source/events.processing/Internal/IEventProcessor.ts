@@ -4,6 +4,7 @@
 import { Observable } from 'rxjs';
 
 import { Cancellation } from '@dolittle/sdk.services';
+import { RetryPolicy } from '@dolittle/sdk.resilience';
 
 /**
  * Defines a system that handles the behaviour of event processors that registers with the Runtime and handles processing requests.
@@ -16,8 +17,8 @@ export interface IEventProcessor {
      */
     register(cancellation: Cancellation): Observable<never>;
 
-    registerWithPolicy(cancellation: Cancellation): Observable<never>;
+    registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never>;
 
-    registerForeverWithPolicy(cancellation: Cancellation): Observable<never>;
+    registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never>;
 }
 

@@ -13,6 +13,7 @@
         { "path": "../events.processing" },
         { "path": "../execution" },
         { "path": "../protobuf" },
-        { "path": "../services"}
+        { "path": "../services"},
+        { "path": "../resilience"}
     ]
 }
