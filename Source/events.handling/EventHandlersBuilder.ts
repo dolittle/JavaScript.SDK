@@ -5,6 +5,7 @@ import { Logger } from 'winston';
 
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
@@ -12,7 +13,6 @@ import { IEventHandlers } from './IEventHandlers';
 import { EventHandlers } from './EventHandlers';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
-import { Cancellation } from '@dolittle/sdk.services';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 

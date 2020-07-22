@@ -13,8 +13,8 @@ import { Ping, Pong } from '@dolittle/runtime.contracts/Fundamentals/Services/Pi
 import { Guid } from '@dolittle/rudiments';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { executionContexts, guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { Cancellation } from './Cancellation';
 import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';

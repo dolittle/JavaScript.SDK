@@ -1,29 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { forkJoin } from 'rxjs';
 import { map, filter, delay } from 'rxjs/operators';
+import { Logger } from 'winston';
 
-// import { EventDecoratedMethods } from '@dolittle/sdk.events';
-import { IEventHandlers } from './IEventHandlers';
-import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { EventHandler } from './EventHandler';
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
-import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
+import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
+import { Guid } from '@dolittle/rudiments';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+
+import { EventHandler } from './EventHandler';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+import { EventHandlerSignature } from './EventHandlerSignature';
+import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { IEventHandler } from './IEventHandler';
-import { ScopeId } from './ScopeId';
+import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
-import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
-import { Logger } from 'winston';
-import { Cancellation } from '@dolittle/sdk.services';
-import { Guid } from '@dolittle/rudiments';
-import { retryPipe } from '@dolittle/sdk.resilience';
 
 /**
  * Represents an implementation of {IEventHandlers}.

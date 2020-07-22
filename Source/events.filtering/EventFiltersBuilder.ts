@@ -5,15 +5,15 @@ import { Logger } from 'winston';
 
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId } from './FilterId';
-
 import { EventFilterBuilder, EventFilterBuilderCallback } from './EventFilterBuilder';
-import { Filters } from './Filters';
 import { IFilters } from './IFilters';
-import { Cancellation } from '@dolittle/sdk.services';
+import { FilterId } from './FilterId';
+import { Filters } from './Filters';
+
 
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
 

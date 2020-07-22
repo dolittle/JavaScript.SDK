@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
-import { EventSourceId } from './EventSourceId';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { CommitEventsResponse } from './CommitEventsResponse';
-import { Cancellation } from '@dolittle/sdk.services';
+import { EventSourceId } from './EventSourceId';
 import { UncomittedEvent } from './UncomittedEvent';
 
 /**

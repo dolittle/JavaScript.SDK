@@ -1,12 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Cancellation } from '@dolittle/sdk.services';
-import { IFilterProcessor } from './IFilterProcessor';
-import { IFilters } from './IFilters';
 import { Logger } from 'winston';
-import { retryPipe } from '@dolittle/sdk.resilience';
 import { delay } from 'rxjs/operators';
+
+import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
+
+import { IFilters } from './IFilters';
+import { IFilterProcessor } from './IFilterProcessor';
 
 export class Filters implements IFilters {
     constructor(private readonly _logger: Logger) {}

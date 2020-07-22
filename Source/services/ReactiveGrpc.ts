@@ -5,8 +5,9 @@ import * as grpc from 'grpc';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { UnaryMethod, ClientStreamMethod, ServerStreamMethod, DuplexMethod } from './GrpcMethods';
-import { Cancellation } from './Cancellation';
 
 /**
  * Performs a unary call.
