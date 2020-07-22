@@ -1,8 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { IEventHandler } from './IEventHandler';
-import { Cancellation } from '@dolittle/sdk.services';
 
 /**
  * Defines the system for event handlers

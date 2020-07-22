@@ -9,7 +9,8 @@ import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
-import { Cancellation, IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
 import {
     EventHandlerRegistrationRequest,

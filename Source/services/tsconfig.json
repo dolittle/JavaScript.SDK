@@ -6,5 +6,8 @@
         "outDir": "Distribution"
     },
     "include": ["**/*.ts"],
-    "exclude": ["node_modules", "Distribution"]
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../resilience" }
+    ]
 }

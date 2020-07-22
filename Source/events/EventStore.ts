@@ -1,26 +1,25 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+import { map } from 'rxjs/operators';
+
 import { callContexts, failures } from '@dolittle/sdk.protobuf';
 import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
-
-import { IEventStore } from './IEventStore';
-import { CommittedEvents } from './CommittedEvents';
-import { CommitEventsResponse } from './CommitEventsResponse';
-import { EventSourceId } from './EventSourceId';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
-
+import { CommittedEvents } from './CommittedEvents';
+import { CommitEventsResponse } from './CommitEventsResponse';
 import { EventConverters } from './EventConverters';
-
-import { Logger } from 'winston';
-
-import { Cancellation, reactiveUnary } from '@dolittle/sdk.services';
-import { map } from 'rxjs/operators';
+import { EventSourceId } from './EventSourceId';
+import { IEventStore } from './IEventStore';
 import { UncomittedEvent } from './UncomittedEvent';
+
 
 /**
  * Represents an implementation of {IEventStore}

@@ -9,7 +9,8 @@ import { EventContext } from '@dolittle/sdk.events';
 import { ScopeId } from '@dolittle/sdk.events.handling';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
-import { Cancellation, IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
