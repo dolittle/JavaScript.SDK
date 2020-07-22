@@ -17,7 +17,7 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 
 import { IEventProcessor } from './IEventProcessor';
 import { RegistrationFailed } from '../RegistrationFailed';
-import { retryWhen, repeat } from 'rxjs/operators';
+import { repeat } from 'rxjs/operators';
 
 export type EventProcessorId = Guid | string;
 
@@ -59,7 +59,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
 
     /** @inheritdoc */
     registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never> {
-        return retryWithPolicy(this.register(cancellation), policy);
+        return retryWithPolicy(this.register(cancellation), policy, cancellation);
     }
 
     /** @inheritdoc */
