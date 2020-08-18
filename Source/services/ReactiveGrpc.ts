@@ -32,7 +32,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
 }
 
 /**
- * Peforms a client streaming call.
+ * Performs a client streaming call.
  * @param {grpc.Client} client The Runtime client.
  * @param {ClientStreamMethod} method The method to call.
  * @param {Observable} requests The requests to send to the server.

@@ -7,4 +7,5 @@ export { IFilterProcessor } from './IFilterProcessor';
 export { FilterId } from './FilterId';
 export { PartitionId } from './PartitionId';
 export { FilterEventCallback } from './FilterEventCallback';
-export { PartitionedFilterEventCallback, PartitionedFilterResult } from './PartitionedFilterEventCallback';
+export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+export { PartitionedFilterResult } from './PartitionedFilterResult';

@@ -20,7 +20,7 @@ export class Artifacts implements IArtifacts {
     private _associations: BehaviorSubject<Map<Constructor<any>, Artifact>>;
 
     /**
-     * Initializes a new instance of {Artifacts}
+     * Initializes a new instance of {@link Artifacts}
      * @param {Map<Function, Artifact>?} associations Known associations
      */
     constructor(associations?: Map<Constructor<any>, Artifact>) {

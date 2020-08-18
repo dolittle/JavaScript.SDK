@@ -10,7 +10,7 @@ import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/
 import { EventSourceId } from './EventSourceId';
 import { Artifact } from '@dolittle/sdk.artifacts';
 
-import { artifacts, guids, executionContexts, callContexts } from '@dolittle/sdk.protobuf';
+import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
 import { DateTime } from 'luxon';
 import { MissingExecutionContext } from './MissingExecutionContext';
 
@@ -22,7 +22,7 @@ import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 export class EventConverters {
 
     /**
-     * Constructors an uncommitted event from given parameters.
+     * Creates an uncommitted event from given parameters.
      * @param {*} event Event content to constructor with.
      * @param {EventSourceId} eventSourceId The unique identifier of the event source that the event is originating from.
      * @param {Artifact} artifact Artifact of the event type.

@@ -6,7 +6,7 @@ import { TenantId } from './TenantId';
 import { Claims } from './Claims';
 
 /**
- * Defines a manager for working with the {ExecutionContext}.
+ * Defines a manager for working with the {@link ExecutionContext}.
  */
 export interface IExecutionContextManager {
     /**

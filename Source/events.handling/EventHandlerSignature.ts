@@ -3,5 +3,8 @@
 
 import { EventContext } from '@dolittle/sdk.events';
 
+/**
+ * Represents the signature for an event handler.
+ */
 export type EventHandlerSignature<T> = (event: T, context: EventContext) => void | Promise<void>;
 

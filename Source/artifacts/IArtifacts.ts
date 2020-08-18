@@ -6,7 +6,6 @@ import { ArtifactId } from './ArtifactId';
 import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 import { Constructor } from '@dolittle/rudiments';
 
-
 /**
  * Defines the system for working with {Artifact}
  */

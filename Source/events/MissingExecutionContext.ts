@@ -7,7 +7,7 @@
 export class MissingExecutionContext extends Error {
 
     /**
-     * Initializes a new instance of {MissingExecutionContext}.
+     * Initializes a new instance of {@link MissingExecutionContext}.
      */
     constructor() {
         super('The execution context is missing. Impossible to continue.');

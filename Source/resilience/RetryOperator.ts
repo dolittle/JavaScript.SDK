@@ -3,4 +3,7 @@
 
 import { MonoTypeOperatorFunction } from 'rxjs';
 
+/**
+ * Represents an operator for retrying.
+ */
 export type RetryOperator = MonoTypeOperatorFunction<Error>;

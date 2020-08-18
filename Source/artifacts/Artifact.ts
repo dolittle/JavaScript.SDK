@@ -6,7 +6,7 @@ import { ArtifactId } from './ArtifactId';
 import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
 
 /**
- * Defines an artifact. An artifact represents typically a type in the system in an runtime agnostic way.
+ * Defines an artifact. An artifact represents typically a type in the system in a runtime agnostic way.
  *
  * An artifact is represented with a unique identifier and can also be versioned through the concept of
  * generation.
@@ -41,6 +41,7 @@ export class Artifact {
         return `[${this.id} - ${this.generation}]`;
     }
 }
+
 /**
  * Decorator for associating a type with an artifact.
  */
