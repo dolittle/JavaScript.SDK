@@ -9,6 +9,7 @@ import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
 import { ScopeId } from './ScopeId';
+import { MissingEventHandlerForType } from './MissingEventHandlerForType';
 
 /**
  * Represents an implementation of {@link IEventHandler}.
@@ -50,10 +51,3 @@ export function eventHandler(eventHandlerId: EventHandlerId) {
         EventHandlerDecoratedTypes.register(eventHandlerId, target);
     };
 }
-
-
-export class MissingEventHandlerForType extends Error {
-    constructor(artifact: Artifact) {
-        super(`Missing event handler for '${artifact}'`);
-    }
- }

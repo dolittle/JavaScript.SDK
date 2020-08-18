@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Exception } from '@dolittle/rudiments';
+
 /**
  * Exception that gets thrown when the first message from a Reverse Call Dispatcher does not contain a Connect Response.
  */
-export class DidNotReceiveConnectResponse extends Error {
+export class DidNotReceiveConnectResponse extends Exception {
 
     /**
      * Initializes a new instance of {@link DidNotReceiveConnectResponse}.
