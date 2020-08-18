@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Exception } from '@dolittle/rudiments';
+
 /**
  * Exception that gets thrown when an {Artifact} is unknown.
  */
-export class UnknownArtifact extends Error {
+export class UnknownArtifact extends Exception {
     /**
      * Initializes a new instance of {UnknownArtifact}.
      * @param {Function} type Type that has a missing association.

@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Exception } from '@dolittle/rudiments';
+
 /**
  * Exception that is thrown when an artifact is not possible to be resolved
  */
-export class UnableToResolveArtifact extends Error {
+export class UnableToResolveArtifact extends Exception {
 
     /**
      * Initializes a new instance of {UnknownEventType}
