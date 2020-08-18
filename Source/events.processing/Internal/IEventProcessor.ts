@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Cancellation, RetryPolicy } from '@dolittle/sdk.resilience';
 
 /**
- * Defines a system that handles the behaviour of event processors that registers with the Runtime and handles processing requests.
+ * Defines a system that handles the behavior of event processors that registers with the Runtime and handles processing requests.
  */
 export interface IEventProcessor {
     /**
