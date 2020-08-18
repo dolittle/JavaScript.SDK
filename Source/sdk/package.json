@@ -12,7 +12,7 @@
         "url": "git+https://github.com/dolittle/Javascript.SDK.git"
     },
     "bugs": {
-        "url": "https://github.com/dolittle/home/issues"
+        "url": "https://github.com/dolittle/Javascript.SDK/issues"
     },
     "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
     "files": [
@@ -40,6 +40,7 @@
         "@dolittle/sdk.events.handling": "2.1.2",
         "@dolittle/sdk.events.filtering": "2.1.2",
         "@dolittle/sdk.events.processing": "2.1.2",
+        "@dolittle/sdk.eventhorizon": "2.1.2",
         "@dolittle/sdk.execution": "2.1.2",
         "@dolittle/sdk.protobuf": "2.1.2",
         "@dolittle/sdk.services": "2.1.2",

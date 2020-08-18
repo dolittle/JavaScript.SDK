@@ -5,6 +5,5 @@ export { EventFiltersBuilder, EventFiltersBuilderCallback } from './EventFilters
 export { IFilters } from './IFilters';
 export { IFilterProcessor } from './IFilterProcessor';
 export { FilterId } from './FilterId';
-export { PartitionId } from './PartitionId';
 export { FilterEventCallback } from './FilterEventCallback';
 export { PartitionedFilterEventCallback, PartitionedFilterResult } from './PartitionedFilterEventCallback';

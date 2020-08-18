@@ -9,12 +9,14 @@ import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 
 export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
@@ -29,6 +31,9 @@ export class Client {
      * @param {IExecutionContextManager} executionContextManager The execution context manager.
      * @param {IArtifacts} artifacts All the configured artifacts.
      * @param {IEventStore} eventStore The event store to work with.
+     * @param {IEventHandlers} eventHandlers All the event handlers.
+     * @param {IFilters} filters All the filters.
+     * @param {IEventHorizons} eventHorizons All event horizons.
      */
     constructor(
         readonly logger: Logger,
@@ -36,12 +41,8 @@ export class Client {
         readonly artifacts: IArtifacts,
         readonly eventStore: IEventStore,
         readonly eventHandlers: IEventHandlers,
-        readonly filters: IFilters) {
-        this.executionContextManager = executionContextManager;
-        this.artifacts = artifacts;
-        this.eventStore = eventStore;
-        this.eventHandlers = eventHandlers;
-        this.filters = filters;
+        readonly filters: IFilters,
+        readonly eventHorizons: IEventHorizons) {
     }
 
     /**
@@ -89,6 +90,7 @@ export class ClientBuilder {
     private _artifactsBuilder: ArtifactsBuilder;
     private _eventHandlersBuilder: EventHandlersBuilder;
     private _eventFiltersBuilder: EventFiltersBuilder;
+    private _eventHorizonsBuilder: EventHorizonsBuilder;
     private _cancellation: Cancellation;
 
     /**
@@ -104,6 +106,7 @@ export class ClientBuilder {
         this._artifactsBuilder = new ArtifactsBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._eventFiltersBuilder = new EventFiltersBuilder();
+        this._eventHorizonsBuilder = new EventHorizonsBuilder();
         this._cancellation = Cancellation.default;
         this._loggerOptions = {
             level: 'info',
@@ -118,6 +121,17 @@ export class ClientBuilder {
             ]
         };
     }
+
+    /**
+     * Configure event horizons and any subscriptions.
+     * @param {EventHorizonsBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withEventHorizons(callback: EventHorizonsBuilderCallback): ClientBuilder {
+        callback(this._eventHorizonsBuilder);
+        return this;
+    }
+
 
     /**
      * Configure artifacts through the artifacts builder.
@@ -210,6 +224,10 @@ export class ClientBuilder {
             this._cancellation
         );
 
+
+        const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
+        const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContextManager, logger);
+
         return new Client(
             logger,
             executionContextManager,
@@ -220,7 +238,8 @@ export class ClientBuilder {
                 executionContextManager,
                 logger),
             eventHandlers,
-            filters
+            filters,
+            eventHorizons
         );
     }
 }

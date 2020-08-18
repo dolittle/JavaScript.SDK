@@ -5,8 +5,7 @@ import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { EventContext } from '@dolittle/sdk.events';
-import { ScopeId } from '@dolittle/sdk.events.handling';
+import { EventContext, ScopeId } from '@dolittle/sdk.events';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';

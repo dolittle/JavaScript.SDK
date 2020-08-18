@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { EventContext } from '@dolittle/sdk.events';
+import { EventContext, ScopeId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -28,7 +28,6 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 import { guids, artifacts, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { EventHandlerId } from '../EventHandlerId';
-import { ScopeId } from '../ScopeId';
 import { IEventHandler } from '../IEventHandler';
 import { MissingEventInformation } from '../MissingEventInformation';
 
