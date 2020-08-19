@@ -6,7 +6,7 @@ import { Claim } from './Claim';
 /**
  * Represents a collection of claims.
  *
- * @summary This type implements Iterable<Claim> and can be used for iterations directly.
+ * @summary This type implements {@link Iterable<Claim>} and can be used for iterations directly.
  */
 export class Claims implements Iterable<Claim> {
     private _claims: Claim[] = [];
@@ -15,7 +15,7 @@ export class Claims implements Iterable<Claim> {
 
     /**
      * Creates an instance of claims.
-     * @param [claims] Claims to initialize with.
+     * @param {Claim[]} [claims] Claims to initialize with.
      */
     constructor(claims?: Claim[]) {
         if (claims) {

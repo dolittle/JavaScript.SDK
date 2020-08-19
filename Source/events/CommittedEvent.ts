@@ -12,7 +12,7 @@ import { Artifact } from '@dolittle/sdk.artifacts';
 export class CommittedEvent {
 
     /**
-     * Initializes a new instance of {CommittedEvent}.
+     * Initializes a new instance of {@link CommittedEvent}.
      * @param {number} eventLogSequenceNumber The sequence number in the event log.
      * @param {DateTime} occurred Timestamp for when it occurred.
      * @param {EventSourceId} eventSourceId Identifier of the event source.

@@ -25,6 +25,14 @@ import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
  */
 export class EventHandlers implements IEventHandlers {
 
+    /**
+     * Initializes an instance of {@link EventHandlers}.
+     * @param {EventHandlersClient} _eventHandlersClient Client to use for connecting to the runtime.
+     * @param {IExecutionContextManager} _executionContextManager For managing execution context.
+     * @param {IArtifacts} _artifacts For mapping artifacts.
+     * @param {Logger} _logger For logging.
+     * @param {Cancellation} _cancellation For handling cancellation.
+     */
     constructor(
         private _eventHandlersClient: EventHandlersClient,
         private _executionContextManager: IExecutionContextManager,
@@ -72,10 +80,10 @@ export class EventHandlers implements IEventHandlers {
             this._logger)
             .registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
                 error: (error: Error) => {
-                    this._logger.error(`Failed to register eventhandler: ${error}`);
+                    this._logger.error(`Failed to register event handler: ${error}`);
                 },
                 complete: () => {
-                    this._logger.error(`Eventhandler registartion completed.`);
+                    this._logger.error(`Event handler registration completed.`);
                 }
             });
     }

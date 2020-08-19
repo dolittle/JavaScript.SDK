@@ -29,7 +29,23 @@ export class PartitionedEventFilterBuilder {
         this._callback = callback;
     }
 
-    build(filterId: FilterId, scopeId: ScopeId, client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IFilterProcessor {
+    /**
+     * Builds partitioned event filter builder
+     * @param {FilterId} filterId Unique identifier for the filter.
+     * @param {ScopeId} scopeId The identifier of the scope the filter runs on.
+     * @param {FiltersClient} client The client for working with the filters in the runtime.
+     * @param {IExecutionContextManager} executionContextManager Execution context manager for working with execution context.
+     * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
+     * @param {Logger} logger Logger for logging.
+     * @returns {IFilterProcessor}
+     */
+    build(
+        filterId: FilterId,
+        scopeId: ScopeId,
+        client: FiltersClient,
+        executionContextManager: IExecutionContextManager,
+        artifacts: IArtifacts,
+        logger: Logger): IFilterProcessor {
         this.throwIfCallbackIsMissing(filterId, scopeId);
         return new PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContextManager, artifacts, logger);
     }

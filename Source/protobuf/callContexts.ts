@@ -5,7 +5,11 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { CallRequestContext } from '@dolittle/runtime.contracts/Fundamentals/Services/CallContext_pb';
 import executionContexts from './executionContexts';
 
-
+/**
+ * Convert {@link ExecutionContext} to a {@link CallRequestContext}.
+ * @param {ExecutionContext} executionContext Execution context to convert from.
+ * @returns {CallRequestContext}
+ */
 function toProtobuf(executionContext: ExecutionContext): CallRequestContext {
     const callContext = new CallRequestContext();
     callContext.setExecutioncontext(executionContexts.toProtobuf(executionContext));

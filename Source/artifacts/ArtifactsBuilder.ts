@@ -8,7 +8,7 @@ import { Artifacts } from './Artifacts';
 import { Guid, Constructor } from '@dolittle/rudiments';
 
 /**
- * Represents a builder for building {IArtifacts} instances
+ * Represents a builder for building {@link IArtifacts} instances
  */
 export class ArtifactsBuilder {
     private _artifactsMap: Map<Constructor<any>, Artifact> = new Map();

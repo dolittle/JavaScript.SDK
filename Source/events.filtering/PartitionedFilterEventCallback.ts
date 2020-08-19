@@ -3,9 +3,6 @@
 
 import { EventContext, PartitionId } from '@dolittle/sdk.events';
 
-
-export class PartitionedFilterResult {
-    constructor(readonly shouldInclude: boolean, readonly partitionId: PartitionId) {}
-}
+import { PartitionedFilterResult } from './PartitionedFilterResult';
 
 export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult | Promise<PartitionedFilterResult>;

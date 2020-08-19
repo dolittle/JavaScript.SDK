@@ -9,7 +9,7 @@ import { Exception } from '@dolittle/rudiments';
 export class MissingExecutionContext extends Exception {
 
     /**
-     * Initializes a new instance of {MissingExecutionContext}.
+     * Initializes a new instance of {@link MissingExecutionContext}.
      */
     constructor() {
         super('The execution context is missing. Impossible to continue.');

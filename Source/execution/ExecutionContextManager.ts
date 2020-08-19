@@ -14,7 +14,7 @@ import { Guid } from '@dolittle/rudiments';
 
 
 /**
- * Represents an implementation of {IExecutionContextManager}.
+ * Represents an implementation of {@link IExecutionContextManager}.
  */
 export class ExecutionContextManager implements IExecutionContextManager {
     private _microserviceId: MicroserviceId;
@@ -25,7 +25,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
     private _base: ExecutionContext;
 
     /**
-     * Creates an instance of execution context manager.
+     * Initializes a new instance of {@link IExecutionContextManager}.
      * @param {MicroserviceId} microserviceId The unique identifier of the microservice.
      * @param {Version} version The version of the currently running software.
      * @param {string} environment The environment the software is running in. (e.g. development, production).

@@ -20,11 +20,18 @@ import { EventSourceId } from './EventSourceId';
 import { IEventStore } from './IEventStore';
 import { UncomittedEvent } from './UncomittedEvent';
 
-
 /**
- * Represents an implementation of {IEventStore}
+ * Represents an implementation of {@link IEventStore}
  */
 export class EventStore implements IEventStore {
+
+    /**
+     * Initializes a new instance of {@link EventStore}.
+     * @param {EventStoreClient} _eventStoreClient The client to use for connecting to the event store.
+     * @param {IArtifacts} _artifacts Artifacts system for working with artifacts.
+     * @param {IExecutionContextManager} _executionContextManager For working with the execution context.
+     * @param {Logger} _logger Logger for logging.
+     */
     constructor(
         private _eventStoreClient: EventStoreClient,
         private _artifacts: IArtifacts,

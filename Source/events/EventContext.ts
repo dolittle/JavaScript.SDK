@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
-import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { EventSourceId } from './EventSourceId';
 
@@ -12,7 +11,7 @@ import { EventSourceId } from './EventSourceId';
 export class EventContext {
 
     /**
-     * Initializes a new instance of {EventContext}.
+     * Initializes a new instance of {@link EventContext}.
      * @param {number} sequenceNumber Sequence number in the event log the event belongs to.
      * @param {EventSourceId} eventSourceId Unique identifier of the event source it originates from.
      * @param {DateTime} occurred DateTime in UTC for when the event occurred.

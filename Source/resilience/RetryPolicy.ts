@@ -9,6 +9,11 @@ import { RetryOperator } from './RetryOperator';
 
 export type RetryPolicy = (errors: Observable<Error>) => Observable<Error>;
 
+/**
+ * Creates a retry policy from a pipe of operators.
+ * @param {RetryOperator[]} operators Operators for the pipe.
+ * @returns {RetryPolicy}
+ */
 export function retryPipe(...operators: RetryOperator[]): RetryPolicy {
     return (errors: Observable<Error>) => {
         let result = errors;
@@ -19,6 +24,14 @@ export function retryPipe(...operators: RetryOperator[]): RetryPolicy {
     };
 }
 
+/**
+ * Run a {@link Observable<T>} with a {@link RetryPolicy}.
+ * @template T Type for the observable.
+ * @param {Observable<T>} source Observable to retry for.
+ * @param {RetryPolicy} policy The policy to apply.
+ * @param {Cancellation} cancellation A cancellation.
+ * @returns {Observable<T>}
+ */
 export function retryWithPolicy<T>(source: Observable<T>, policy: RetryPolicy, cancellation: Cancellation): Observable<T> {
     return source.pipe(retryWhen((errors: Observable<Error>) => {
         const cancelled = cancellation.pipe(endWith(true));

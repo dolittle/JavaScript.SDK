@@ -5,7 +5,17 @@ import { Constructor } from '@dolittle/rudiments';
 
 import { EventHandlerSignature } from './EventHandlerSignature';
 
+/**
+ * Represents methods decorated with the handles decorator.
+ */
 export class HandlesDecoratedMethod {
+
+    /**
+     * Initializes a new instance of {@link HandlesDecoratedMethod}.
+     * @param {Constructor<any>} owner Owner of the method.
+     * @param {Constructor<any>} eventType Type of event it handles.
+     * @param {EventHandlerSignature<any>} method The actual method that handles the event.
+     */
     constructor(readonly owner: Constructor<any>, readonly eventType: Constructor<any>, readonly method: EventHandlerSignature<any>) {
     }
 }

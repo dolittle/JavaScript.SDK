@@ -8,7 +8,7 @@ import { Exception } from '@dolittle/rudiments';
  */
 export class MissingEventsFromRuntime extends Exception {
     /**
-     * Initializes a new instance of {MissingEventsFromRuntime}.
+     * Initializes a new instance of {@link MissingEventsFromRuntime}.
      */
     constructor() {
         super('Events are not present in payload coming back from runtime');

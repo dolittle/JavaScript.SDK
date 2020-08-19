@@ -4,6 +4,9 @@
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { Constructor } from '@dolittle/rudiments';
 
+/**
+ * Decorator for decorating handle methods.
+ */
 export function handles(type: Function) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         HandlesDecoratedMethods.register(target.constructor, type as Constructor<any>, descriptor.value);

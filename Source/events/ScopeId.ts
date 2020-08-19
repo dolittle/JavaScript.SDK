@@ -3,4 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
+/**
+ * Represents the unique identifier of a scope.
+ */
 export type ScopeId = Guid | string;
