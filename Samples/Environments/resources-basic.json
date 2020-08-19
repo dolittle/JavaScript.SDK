@@ -4,7 +4,7 @@
             "servers": [
                 "mongo"
             ],
-            "database": "event_store"
+            "database": "event_store_basic"
         }
     }
 }

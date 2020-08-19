@@ -8,18 +8,27 @@ services:
     ports:
       - 27017:27017
  
-  runtime:
-    image: dolittle/runtime:5.0.0-rc.7
-    depends_on: 
-      - mongo
-    links:
-      - mongo
+  runtime-basic:
+    image: dolittle/runtime:5.0.1
     volumes:
-      - ${PWD}/resources.json:/app/.dolittle/resources.json
+      - ${PWD}/resources-basic.json:/app/.dolittle/resources.json
       - ${PWD}/tenants.json:/app/.dolittle/tenants.json
+      - ${PWD}/microservices.json:/app/.dolittle/microservices.json
+      - ${PWD}/event-horizon-consents.json:/app/.dolittle/event-horizon-consents.json
       - ${PWD}/appsettings.json:/app/appsettings.json
     ports:
-      - 81:81
       - 9700:9700
       - 50052:50052
       - 50053:50053
+
+  runtime-eventhorizon:
+    image: dolittle/runtime:5.0.1
+    volumes:
+      - ${PWD}/resources-eventhorizon.json:/app/.dolittle/resources.json
+      - ${PWD}/tenants.json:/app/.dolittle/tenants.json
+      - ${PWD}/microservices.json:/app/.dolittle/microservices.json
+      - ${PWD}/appsettings.json:/app/appsettings.json
+    ports:
+      - 9701:9700
+      - 50054:50052
+      - 50055:50053
