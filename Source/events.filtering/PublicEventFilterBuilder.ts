@@ -15,14 +15,36 @@ import { PublicEventFilterProcessor } from './Internal/PublicEventFilterProcesso
 import { MissingFilterCallback } from './MissingFilterCallback';
 import { IFilterProcessor } from './IFilterProcessor';
 
+/**
+ * Represents the builder for building public event filters.
+ */
 export class PublicEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
 
+    /**
+     * Defines a callback for the filter.
+     * @param {FilterEventCallback} callback The callback that will be called for each event.
+     */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
     }
 
-    build(filterId: FilterId, client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IFilterProcessor {
+    /**
+     * Build an instance of a {@link IFilterProcessor}.
+     * @param {FilterId} filterId Unique identifier for the filter.
+     * @param {FiltersClient} client The client for working with the filters in the runtime.
+     * @param {IExecutionContextManager} executionContextManager Execution context manager for working with execution context.
+     * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
+     * @param {Logger} logger Logger for logging.
+     * @returns {IFilterProcessor}
+     */
+    build(
+        filterId: FilterId,
+        client: FiltersClient,
+        executionContextManager: IExecutionContextManager,
+        artifacts: IArtifacts,
+        logger: Logger): IFilterProcessor {
+
         this.throwIfCallbackIsMissing(filterId);
         return new PublicEventFilterProcessor(filterId, this._callback!, client, executionContextManager, artifacts, logger);
     }

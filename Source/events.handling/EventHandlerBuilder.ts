@@ -11,38 +11,80 @@ import { ScopeId } from './ScopeId';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
+/**
+ * Represents a builder for building {@link IEventHandler} - event handlers.
+ */
 export class EventHandlerBuilder {
     private _handlers: Map<Constructor<any> | Artifact | ArtifactId, EventHandlerSignature<any>> = new Map();
     private _scopeId: ScopeId = Guid.empty;
     private _partitioned = true;
 
+    /**
+     * Initializes a new instance of {@link EventHandlerBuilder}.
+     * @param {EventHandlerId} _eventHandlerId The unique identifier of the event handler to build for.
+     */
     constructor(private _eventHandlerId: EventHandlerId) {
     }
 
+    /**
+     * Gets the {@link ScopeId} the event handler operates on.
+     * @returns {ScopeId}
+     */
     get scopeId(): ScopeId {
         return this._scopeId;
     }
 
+    /**
+     * Gets whether or not the event handler is partitioned.
+     * @returns {boolean}
+     */
     get isPartitioned(): boolean {
         return this._partitioned;
     }
 
-    partitioned() {
+    /**
+     * Defines the event handler to be partitioned - this is default for a event handler.
+     * @returns {EventHandlerBuilder}
+     */
+    partitioned(): EventHandlerBuilder {
         this._partitioned = true;
+        return this;
     }
 
-    unpartitioned() {
+    /**
+     * Defines the event handler to be unpartitioned. By default it will be partitioned.
+     * @returns {EventHandlerBuilder}
+     */
+    unpartitioned(): EventHandlerBuilder {
         this._partitioned = false;
+        return this;
     }
 
-    inScope(scopeId: ScopeId) {
+    /**
+     * Defines the event handler to operate on a specific {@link ScopeId}.
+     * @param {ScopeId} scopeId Scope the event handler operates on.
+     * @returns {EventHandlerBuilder}
+     */
+    inScope(scopeId: ScopeId): EventHandlerBuilder {
         this._scopeId = scopeId;
+        return this;
     }
 
-    handle<T>(typeOrArtifact: Constructor<T> | Artifact | ArtifactId, method: EventHandlerSignature<T>) {
+    /**
+     * Add a handler method for handling the event.
+     * @template T Type of event, when using type rather than artifact - default is any.
+     * @param {Constructor<T>|Artifact|ArtifactId} typeOrArtifact The type of event or the artifact or identifier of the artifact.
+     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     */
+    handle<T = any>(typeOrArtifact: Constructor<T> | Artifact | ArtifactId, method: EventHandlerSignature<T>) {
         this._handlers.set(typeOrArtifact, method);
     }
 
+    /**
+     * Builds the {@link IEventHandler}.
+     * @param {IArtifacts} artifacts Artifacts for resolving artifacts.
+     * @returns {IEventHandler}
+     */
     build(artifacts: IArtifacts): IEventHandler {
         const artifactsToMethods = new ArtifactMap<EventHandlerSignature<any>>();
 

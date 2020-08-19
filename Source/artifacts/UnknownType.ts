@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 import { Artifact } from './Artifact';
 
 /**
- * Exception that gets thrown when an {Artifact} is unknown.
+ * Exception that gets thrown when an {@link Artifact} is unknown.
  */
 export class UnknownType extends Exception {
     /**

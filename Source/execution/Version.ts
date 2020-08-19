@@ -12,7 +12,7 @@ export class Version {
     readonly preReleaseString: string;
 
     /**
-     * Initializes a new instance of {Version}.
+     * Initializes a new instance of {@link Version}.
      * @param {number} major Major version of the software.
      * @param {number} minor Minor version of the software.
      * @param {number} patch Path level of the software.

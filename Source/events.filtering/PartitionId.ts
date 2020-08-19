@@ -3,4 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
+/**
+ * Represents the unique identifier of a partition.
+ */
 export type PartitionId = Guid | string;
