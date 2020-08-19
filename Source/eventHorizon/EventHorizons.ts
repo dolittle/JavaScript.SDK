@@ -45,14 +45,10 @@ export class EventHorizons implements IEventHorizons {
         this.subscribeAll();
     }
 
-    /**
-     * Gets response for a specific {@link Subscription}.
-     * @param {Subscription} subscription Subscription to get response for.
-     * @throws {SubscriptionDoesNotExist} If subscription does not exist.
-     */
-    getResponseFor(subscription: Subscription) {
+    /** @inheritdoc */
+    getResponseFor(subscription: Subscription): SubscriptionResponse {
         this.throwIfSubscriptionDoesNotExist(subscription);
-        this._subscriptionResponses.get(subscription);
+        return this._subscriptionResponses.get(subscription)!;
     }
 
     private throwIfSubscriptionDoesNotExist(subscription: Subscription) {
