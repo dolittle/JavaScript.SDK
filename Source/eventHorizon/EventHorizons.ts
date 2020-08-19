@@ -8,17 +8,21 @@ import { IEventHorizons } from './IEventHorizons';
 
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 
+import { SubscriptionResponse } from './SubscriptionResponse';
+
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
 import { Guid } from '@dolittle/rudiments';
 import { Logger } from 'winston';
 
 import * as grpc from 'grpc';
+import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
  */
 export class EventHorizons implements IEventHorizons {
+    private _subscriptionResponses: Map<Subscription, SubscriptionResponse> = new Map();
     readonly subscriptions: Map<TenantId, Subscription[]> = new Map();
 
     /**
@@ -39,6 +43,22 @@ export class EventHorizons implements IEventHorizons {
         }
 
         this.subscribeAll();
+    }
+
+    /**
+     * Gets response for a specific {@link Subscription}.
+     * @param {Subscription} subscription Subscription to get response for.
+     * @throws {SubscriptionDoesNotExist} If subscription does not exist.
+     */
+    getResponseFor(subscription: Subscription) {
+        this.throwIfSubscriptionDoesNotExist(subscription);
+        this._subscriptionResponses.get(subscription);
+    }
+
+    private throwIfSubscriptionDoesNotExist(subscription: Subscription) {
+        if (!this._subscriptionResponses.has(subscription)) {
+            throw new SubscriptionDoesNotExist(subscription);
+        }
     }
 
     private subscribeAll() {
@@ -65,8 +85,13 @@ export class EventHorizons implements IEventHorizons {
         pbSubscription.setTenantid(guids.toProtobuf(Guid.as(subscription.tenant)));
         pbSubscription.setMicroserviceid(guids.toProtobuf(Guid.as(subscription.microservice)));
 
-        this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, response?: PbSubscriptionResponse) => {
+        this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, pbResponse?: PbSubscriptionResponse) => {
+            const response = new SubscriptionResponse(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
+            this._subscriptionResponses.set(subscription, response);
 
+            if (response.failed) {
+                this._logger.error(`Setting up event horizon subscription failed with '${response.failure?.reason}' - (id:${response.failure?.id}).`);
+            }
         });
     }
 }
