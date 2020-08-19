@@ -44,7 +44,6 @@
         "@dolittle/sdk.execution": "2.1.2",
         "@dolittle/sdk.protobuf": "2.1.2",
         "@dolittle/sdk.services": "2.1.2",
-        "grpc": "1.24.3",
         "winston": "3.3.2"
     }
 }

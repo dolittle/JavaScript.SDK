@@ -39,8 +39,6 @@
         "@dolittle/sdk.protobuf": "2.1.2",
         "@dolittle/sdk.services": "2.1.2",
         "@dolittle/sdk.resilience": "2.1.2",
-        "google-protobuf": "3.12.2",
-        "grpc": "1.24.3",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
