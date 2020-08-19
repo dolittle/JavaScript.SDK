@@ -25,9 +25,9 @@ const client = Client
                 .onFailure((t, s, sr) => console.log(`Tenant: Failed - ${sr.failure?.reason}`))
                 .onCompleted((t, s, sr) => console.log(`Tenant: Completed`));
         })
-        .onSuccess((t, s, sr) => console.log('EventHorizons: Success'))
-        .onFailure((t, s, sr) => console.log(`EventHorizons: Failed - ${sr.failure?.reason}`))
-        .onCompleted((t, s, sr) => console.log(`EventHorizons: Completed`));
+            .onSuccess((t, s, sr) => console.log('EventHorizons: Success'))
+            .onFailure((t, s, sr) => console.log(`EventHorizons: Failed - ${sr.failure?.reason}`))
+            .onCompleted((t, s, sr) => console.log(`EventHorizons: Completed`));
     })
     .build();
 
