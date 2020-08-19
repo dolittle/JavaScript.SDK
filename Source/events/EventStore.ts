@@ -14,7 +14,7 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/Eve
 import { CommitEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
 import { CommittedEvents } from './CommittedEvents';
-import { CommitEventsResponse } from './CommitEventsResponse';
+import { CommitEventsResponse } from './CommitEventsResponse';
 import { EventConverters } from './EventConverters';
 import { EventSourceId } from './EventSourceId';
 import { IEventStore } from './IEventStore';
@@ -33,24 +33,23 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: EventSourceId, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(event: any, eventSourceId: EventSourceId, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse>;
     commit(events: UncomittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: any, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse> {
-        if (arguments.length < 3) {
-            return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation);
-        } else {
-            const events: UncomittedEvent[] = [{
-                content: eventOrEvents,
-                eventSourceId: eventSourceIdOrCancellation,
-                artifact,
-                public: false,
-            }];
-            return this.commitInternal(events, cancellation);
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Cancellation, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+        if (this.isArrayOfUncommittedEvents(eventOrEvents)) {
+            return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
+
+        return this.commitInternal([{
+            content: eventOrEvents,
+            eventSourceId: eventSourceIdOrCancellation as EventSourceId,
+            artifact,
+            public: false,
+        }], cancellation);
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: EventSourceId, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+    commitPublic(event: any, eventSourceId: EventSourceId, artifact?: Artifact | ArtifactId, cancellation?: Cancellation): Promise<CommitEventsResponse> {
         const events: UncomittedEvent[] = [{
             content: event,
             eventSourceId,
@@ -58,6 +57,10 @@ export class EventStore implements IEventStore {
             public: true,
         }];
         return this.commitInternal(events, cancellation);
+    }
+
+    private isArrayOfUncommittedEvents(eventOrEvents: any): eventOrEvents is UncomittedEvent[] {
+        return Array.isArray(eventOrEvents) && eventOrEvents.length > 0 && eventOrEvents[0].eventSourceId && eventOrEvents[0].content;
     }
 
     private async commitInternal(events: UncomittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResponse> {
