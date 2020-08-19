@@ -30,7 +30,7 @@ export class EventHandler implements IEventHandler {
     }
 
     /** @inheritdoc */
-    get handledEvents(): Iterable<Artifact> {
+    get handledEvents(): Iterable<Artifact> {
         return this.handleMethodsByArtifact.keys();
     }
 
@@ -45,8 +45,8 @@ export class EventHandler implements IEventHandler {
     }
 }
 
-export function eventHandler(eventHandlerId: EventHandlerId) {
+export function eventHandler(eventHandlerId: EventHandlerId, scopeId?: ScopeId) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.register(eventHandlerId, target);
+        EventHandlerDecoratedTypes.register(eventHandlerId, scopeId, target);
     };
 }
