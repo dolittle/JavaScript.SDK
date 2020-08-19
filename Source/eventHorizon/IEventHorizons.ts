@@ -4,6 +4,7 @@
 import { TenantId } from '@dolittle/sdk.execution';
 import { Subscription } from './Subscription';
 import { SubscriptionResponse } from './SubscriptionResponse';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 
 /**
  * Defines the capabilities of the event horizons.
@@ -12,7 +13,7 @@ export interface IEventHorizons {
     /**
      * Subscriptions by tenant.
      */
-    readonly subscriptions: Map<TenantId, Subscription[]>;
+    readonly subscriptions: TenantWithSubscriptions[];
 
     /**
      * Gets response for a specific {@link Subscription}.

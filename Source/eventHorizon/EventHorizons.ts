@@ -3,7 +3,7 @@
 
 import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Subscription } from './Subscription';
-import { TenantSubscriptions } from './TenantSubscriptions';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 import { IEventHorizons } from './IEventHorizons';
 
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
@@ -17,31 +17,32 @@ import { Logger } from 'winston';
 
 import * as grpc from 'grpc';
 import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
+import { SubscriptionFailed, SubscriptionCompleted, SubscriptionSucceeded } from './SubscriptionCallbacks';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
  */
 export class EventHorizons implements IEventHorizons {
     private _subscriptionResponses: Map<Subscription, SubscriptionResponse> = new Map();
-    readonly subscriptions: Map<TenantId, Subscription[]> = new Map();
 
     /**
      * Initializes a new instance of {@link EventHorizons}.
      * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
      * @param {IExecutionContextManager} executionContextManager For Managing execution context.
-     * @param {TenantSubscriptions[]} tenantSubscriptions Tenant subscriptions to connect.
+     * @param {TenantWithSubscriptions[]} tenantSubscriptions Tenant subscriptions to connect.
+     * @param {completed} SubscriptionCompleted Completed callback.
+     * @param {succeeded} SubscriptionSucceeded Succeeded callback.
+     * @param {failed} SubscriptionFailed Failed callback.
      * @param {Logger} logger Logger for logging;
      */
     constructor(
         readonly _subscriptionsClient: SubscriptionsClient,
         readonly _executionContextManager: IExecutionContextManager,
-        tenantSubscriptions: TenantSubscriptions[],
+        readonly subscriptions: TenantWithSubscriptions[],
+        readonly completed: SubscriptionCompleted,
+        readonly succeeded: SubscriptionSucceeded,
+        readonly failed: SubscriptionFailed,
         readonly _logger: Logger) {
-
-        for (const subscription of tenantSubscriptions) {
-            this.subscriptions.set(subscription.tenant, subscription.subscriptions);
-        }
-
         this.subscribeAll();
     }
 
@@ -58,36 +59,52 @@ export class EventHorizons implements IEventHorizons {
     }
 
     private subscribeAll() {
-        for (const [tenant, subscriptions] of this.subscriptions) {
-            for (const subscription of subscriptions) {
-                this.subscribe(tenant, subscription);
+        for (const tenantWithSubscriptions of this.subscriptions) {
+            const consumerTenant = tenantWithSubscriptions.tenant;
+
+            for (const subscription of tenantWithSubscriptions.subscriptions) {
+                this._executionContextManager.currentFor(consumerTenant);
+
+                this._logger.debug(`Subscribing to events from ${subscription.partition} in ${subscription.stream} of ${subscription.tenant} in ${subscription.microservice} for ${consumerTenant} into ${subscription.scope}`);
+
+                const callContext = callContexts.toProtobuf(this._executionContextManager.current);
+                callContext.setHeadid(guids.toProtobuf(Guid.create()));
+
+                const pbSubscription = new PbSubscription();
+                pbSubscription.setCallcontext(callContext);
+                pbSubscription.setPartitionid(guids.toProtobuf(Guid.as(subscription.partition)));
+                pbSubscription.setScopeid(guids.toProtobuf(Guid.as(subscription.scope)));
+                pbSubscription.setStreamid(guids.toProtobuf(Guid.as(subscription.stream)));
+                pbSubscription.setTenantid(guids.toProtobuf(Guid.as(subscription.tenant)));
+                pbSubscription.setMicroserviceid(guids.toProtobuf(Guid.as(subscription.microservice)));
+
+                this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, pbResponse?: PbSubscriptionResponse) => {
+                    const response = new SubscriptionResponse(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
+                    this._subscriptionResponses.set(subscription, response);
+
+                    this.handleResponse(tenantWithSubscriptions, subscription, response);
+
+                    if (response.failed) {
+                        this._logger.error(`Setting up event horizon subscription failed with '${response.failure?.reason}' - (id:${response.failure?.id}).`);
+                    }
+                });
             }
         }
     }
 
-    private subscribe(consumerTenant: TenantId, subscription: Subscription) {
-        this._executionContextManager.currentFor(consumerTenant);
+    private handleResponse(tenantWithSubscriptions: TenantWithSubscriptions, subscription: Subscription, response: SubscriptionResponse): void {
+        const consumerTenant = tenantWithSubscriptions.tenant;
 
-        this._logger.debug(`Subscribing to events from ${subscription.partition} in ${subscription.stream} of ${subscription.tenant} in ${subscription.microservice} for ${consumerTenant} into ${subscription.scope}`);
+        subscription.handleResponse(consumerTenant, response);
+        tenantWithSubscriptions.handleResponse(consumerTenant, subscription, response);
 
-        const callContext = callContexts.toProtobuf(this._executionContextManager.current);
-        callContext.setHeadid(guids.toProtobuf(Guid.create()));
+        this.completed(consumerTenant, subscription, response);
 
-        const pbSubscription = new PbSubscription();
-        pbSubscription.setCallcontext(callContext);
-        pbSubscription.setPartitionid(guids.toProtobuf(Guid.as(subscription.partition)));
-        pbSubscription.setScopeid(guids.toProtobuf(Guid.as(subscription.scope)));
-        pbSubscription.setStreamid(guids.toProtobuf(Guid.as(subscription.stream)));
-        pbSubscription.setTenantid(guids.toProtobuf(Guid.as(subscription.tenant)));
-        pbSubscription.setMicroserviceid(guids.toProtobuf(Guid.as(subscription.microservice)));
-
-        this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, pbResponse?: PbSubscriptionResponse) => {
-            const response = new SubscriptionResponse(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
-            this._subscriptionResponses.set(subscription, response);
-
-            if (response.failed) {
-                this._logger.error(`Setting up event horizon subscription failed with '${response.failure?.reason}' - (id:${response.failure?.id}).`);
-            }
-        });
+        if (response.failed) {
+            this.failed(consumerTenant, subscription, response);
+        } else {
+            this.succeeded(consumerTenant, subscription, response);
+        }
     }
+
 }

@@ -6,10 +6,10 @@ import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 import { Subscription } from './Subscription';
 import { MissingTenantForSubscription } from './MissingTenantForSubscription';
-import { MissingPartitionForSubscription } from './MissingPartitionForSubscription';
 import { MissingStreamForSubscription } from './MissingStreamForSubscription';
 import { MissingScopeForSubscription } from './MissingScopeForSubscription';
 import { Guid } from '@dolittle/rudiments';
+import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
 
 /**
  * Represents the callback for the {@link SubscriptionBuilder}.
@@ -24,6 +24,10 @@ export class SubscriptionBuilder {
     private _stream?: StreamId;
     private _partition: PartitionId = Guid.empty;
     private _tenant?: TenantId;
+    private _completed: SubscriptionCompleted = (t, s, sr) => { };
+    private _succeeded: SubscriptionSucceeded = (t, s, sr) => { };
+    private _failed: SubscriptionFailed = (t, s, sr) => { };
+
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilder}.
@@ -69,6 +73,36 @@ export class SubscriptionBuilder {
     }
 
     /**
+     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
+     * @param {SubscriptionCompleted} completed The callback method.
+     * @returns {SubscriptionBuilder}
+     */
+    onCompleted(completed: SubscriptionCompleted): SubscriptionBuilder {
+        this._completed = completed;
+        return this;
+    }
+
+    /**
+     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
+     * @param {SubscriptionSucceeded} succeeded The callback method.
+     * @returns {SubscriptionBuilder}
+     */
+    onSuccess(succeeded: SubscriptionSucceeded): SubscriptionBuilder {
+        this._succeeded = succeeded;
+        return this;
+    }
+
+    /**
+     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
+     * @param {SubscriptionFailed} failed The callback method.
+     * @returns {SubscriptionBuilder}
+     */
+    onFailure(failed: SubscriptionFailed): SubscriptionBuilder {
+        this._failed = failed;
+        return this;
+    }
+
+    /**
      * Builds the subscription.
      * @returns {Subscription}
      */
@@ -77,7 +111,15 @@ export class SubscriptionBuilder {
         this.throwIfMissingStream();
         this.throwIfMissingTenant();
 
-        return new Subscription(this._scope!, this._microservice!, this._tenant!, this._stream!, this._partition!);
+        return new Subscription(
+            this._scope!,
+            this._microservice!,
+            this._tenant!,
+            this._stream!,
+            this._partition!,
+            this._completed,
+            this._succeeded,
+            this._failed);
     }
 
     private throwIfMissingScope() {
@@ -89,12 +131,6 @@ export class SubscriptionBuilder {
     private throwIfMissingStream() {
         if (!this._stream) {
             throw new MissingStreamForSubscription(this._microservice);
-        }
-    }
-
-    private throwIfMissingPartition() {
-        if (!this._partition) {
-            throw new MissingPartitionForSubscription(this._microservice);
         }
     }
 
