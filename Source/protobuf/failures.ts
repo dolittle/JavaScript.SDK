@@ -24,9 +24,9 @@ function toProtobuf(input: SdkFailure): PbFailure {
  * Convert to SDK representation
  * @returns {SdkFailure}
  */
-function toSDK(input?: PbFailure): SdkFailure {
+function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
-        return new SdkFailure(Guid.empty, 'Unknown');
+        return undefined;
     }
     const uuid = input.getId()?.getValue_asU8();
     if (!uuid) {
@@ -56,7 +56,7 @@ SdkFailure.prototype.toProtobuf = function () {
 
 declare module '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb' {
     interface Failure {
-        toSDK(): SdkFailure
+        toSDK(): SdkFailure | undefined
     }
 }
 
