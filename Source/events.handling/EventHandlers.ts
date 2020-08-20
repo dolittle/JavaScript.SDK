@@ -57,7 +57,7 @@ export class EventHandlers implements IEventHandlers {
                     const artifact = _artifacts.getFor(method.eventType);
                     methodsByArtifact.set(artifact, method.method);
                 }
-                return new EventHandler(value.eventHandlerId, Guid.empty, true, methodsByArtifact);
+                return new EventHandler(value.eventHandlerId, value.scopeId || Guid.empty, true, methodsByArtifact);
             })
         ).subscribe({
             next: (eventHandler: IEventHandler) => {

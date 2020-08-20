@@ -7,7 +7,7 @@ import { EventHandlerSignature } from './EventHandlerSignature';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandler } from './EventHandler';
 import { IEventHandler } from './IEventHandler';
-import { ScopeId } from './ScopeId';
+import { ScopeId } from '@dolittle/sdk.events';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 

@@ -3,8 +3,11 @@
     "include": [],
     "references": [
         { "path": "./artifacts" },
+        { "path": "./eventHorizon" },
         { "path": "./events" },
+        { "path": "./events.filtering" },
         { "path": "./events.handling" },
+        { "path": "./events.processing" },
         { "path": "./execution" },
         { "path": "./protobuf" },
         { "path": "./resilience" },

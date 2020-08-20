@@ -10,6 +10,7 @@
     "references": [
         { "path": "../artifacts" },
         { "path": "../events" },
+        { "path": "../eventHorizon" },
         { "path": "../events.filtering" },
         { "path": "../events.handling" },
         { "path": "../events.processing" },

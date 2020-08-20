@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { ScopeId } from '@dolittle/sdk.events.handling';
+import { ScopeId } from '@dolittle/sdk.events';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';

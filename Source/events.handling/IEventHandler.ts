@@ -2,8 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Artifact } from '@dolittle/sdk.artifacts';
-import { EventContext } from '@dolittle/sdk.events';
-import { ScopeId } from './ScopeId';
+import { EventContext, ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerId } from './EventHandlerId';
 
 /**

@@ -40,7 +40,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
                 next: (message: TRegisterResponse) => {
                     const failure = this.getFailureFromRegisterResponse(message);
                     if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier, failures.toSDK(failure)));
+                        subscriber.error(new RegistrationFailed(this._kind, this._identifier, failures.toSDK(failure)!));
                     } else {
                         this._logger.debug(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
                     }

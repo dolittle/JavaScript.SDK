@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceRoot": "../",
+        "outDir": "Distribution"
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../artifacts" },
+        { "path": "../execution" },
+        { "path": "../protobuf" },
+        { "path": "../services" }
+    ]
+}

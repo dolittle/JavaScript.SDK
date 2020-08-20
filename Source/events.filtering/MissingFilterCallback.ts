@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { ScopeId } from '@dolittle/sdk.events.handling';
+import { ScopeId } from '@dolittle/sdk.events';
 import { FilterId } from './FilterId';
 
 /**

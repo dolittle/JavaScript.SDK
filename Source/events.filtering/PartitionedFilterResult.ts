@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-import { PartitionId } from './PartitionId';
+
+import { PartitionId } from '@dolittle/sdk.events';
 
 /**
  * Represents the result from a partitioned filter.

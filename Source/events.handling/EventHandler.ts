@@ -2,13 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
-import { EventContext } from '@dolittle/sdk.events';
+import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
-import { ScopeId } from './ScopeId';
 import { MissingEventHandlerForType } from './MissingEventHandlerForType';
 
 /**
@@ -31,7 +30,7 @@ export class EventHandler implements IEventHandler {
     }
 
     /** @inheritdoc */
-    get handledEvents(): Iterable<Artifact> {
+    get handledEvents(): Iterable<Artifact> {
         return this.handleMethodsByArtifact.keys();
     }
 
@@ -46,8 +45,8 @@ export class EventHandler implements IEventHandler {
     }
 }
 
-export function eventHandler(eventHandlerId: EventHandlerId) {
+export function eventHandler(eventHandlerId: EventHandlerId, scopeId?: ScopeId) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.register(eventHandlerId, target);
+        EventHandlerDecoratedTypes.register(eventHandlerId, scopeId, target);
     };
 }

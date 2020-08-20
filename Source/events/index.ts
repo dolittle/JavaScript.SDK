@@ -9,3 +9,6 @@ export { CommittedEvents } from './CommittedEvents';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncomittedEvent } from './UncomittedEvent';
+export { PartitionId } from './PartitionId';
+export { ScopeId } from './ScopeId';
+export { StreamId } from './StreamId';

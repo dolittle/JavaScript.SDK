@@ -10,7 +10,8 @@ module.exports = {
         tsconfigRootDir: __dirname,
     },
     rules: {
-        "@typescript-eslint/no-this-alias": ['error', { allowedNames: ['self']}]
+        "@typescript-eslint/no-this-alias": ['error', { allowedNames: ['self']}],
+        "import/no-extraneous-dependencies": 'off'
     },
     overrides: [
         {
