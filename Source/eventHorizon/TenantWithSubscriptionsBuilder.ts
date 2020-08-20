@@ -4,7 +4,9 @@
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 import { SubscriptionBuilder, SubscriptionBuilderCallback } from './SubscriptionBuilder';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
+import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;
 
@@ -67,16 +69,20 @@ export class TenantWithSubscriptionsBuilder {
 
     /**
      * Build the {@link TenantSubscriptions} instance.
+     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {TenantWithSubscriptions}
      */
-    build(): TenantWithSubscriptions {
-        const subscriptions = this._subscriptionBuilders.map(_ => _.build());
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): TenantWithSubscriptions {
+        const callbacks = new SubscriptionCallbacks(callbackArgumentsSource.pipe(filter(_ => _.consumerTenant === this._tenant)));
+        callbacks.onCompleted(this._completed);
+        callbacks.onSucceeded(this._succeeded);
+        callbacks.onFailed(this._failed);
+
+        const subscriptions = this._subscriptionBuilders.map(_ => _.build(callbacks.responses));
         const tenantSubscriptions = new TenantWithSubscriptions(
             this._tenant,
             subscriptions,
-            this._completed,
-            this._succeeded,
-            this._failed);
+            callbacks);
         return tenantSubscriptions;
     }
 }

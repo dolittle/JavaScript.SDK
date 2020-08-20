@@ -8,7 +8,7 @@ import { EventHorizons } from './EventHorizons';
 
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Logger } from 'winston';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
+import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 export type EventHorizonsBuilderCallback = (builder: EventHorizonsBuilder) => void;
 
@@ -76,14 +76,17 @@ export class EventHorizonsBuilder {
      * @returns {TenantSubscriptions[]}
      */
     build(subscriptionsClient: SubscriptionsClient, executionContextManager: IExecutionContextManager, logger: Logger): IEventHorizons {
-        const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build());
+        const callbacks = new SubscriptionCallbacks();
+        callbacks.onCompleted(this._completed);
+        callbacks.onSucceeded(this._succeeded);
+        callbacks.onFailed(this._failed);
+
+        const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build(callbacks.responses));
         return new EventHorizons(
             subscriptionsClient,
             executionContextManager,
             tenantSubscriptions,
-            this._completed,
-            this._succeeded,
-            this._failed,
+            callbacks,
             logger);
     }
 }

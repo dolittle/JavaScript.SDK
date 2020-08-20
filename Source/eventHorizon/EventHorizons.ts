@@ -1,23 +1,21 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
+import { Guid } from '@dolittle/rudiments';
+import { Logger } from 'winston';
+import * as grpc from 'grpc';
+import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
+import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
+
 import { Subscription } from './Subscription';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 import { IEventHorizons } from './IEventHorizons';
 
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
-
 import { SubscriptionResponse } from './SubscriptionResponse';
-
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
-import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
-import { Guid } from '@dolittle/rudiments';
-import { Logger } from 'winston';
-
-import * as grpc from 'grpc';
 import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
-import { SubscriptionFailed, SubscriptionCompleted, SubscriptionSucceeded } from './SubscriptionCallbacks';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
@@ -30,19 +28,15 @@ export class EventHorizons implements IEventHorizons {
      * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
      * @param {IExecutionContextManager} executionContextManager For Managing execution context.
      * @param {TenantWithSubscriptions[]} tenantSubscriptions Tenant subscriptions to connect.
-     * @param {completed} SubscriptionCompleted Completed callback.
-     * @param {succeeded} SubscriptionSucceeded Succeeded callback.
-     * @param {failed} SubscriptionFailed Failed callback.
+     * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
      * @param {Logger} logger Logger for logging;
      */
     constructor(
-        readonly _subscriptionsClient: SubscriptionsClient,
-        readonly _executionContextManager: IExecutionContextManager,
+        private _subscriptionsClient: SubscriptionsClient,
+        private _executionContextManager: IExecutionContextManager,
         readonly subscriptions: TenantWithSubscriptions[],
-        readonly completed: SubscriptionCompleted,
-        readonly succeeded: SubscriptionSucceeded,
-        readonly failed: SubscriptionFailed,
-        readonly _logger: Logger) {
+        readonly callbacks: SubscriptionCallbacks,
+        private _logger: Logger) {
         this.subscribeAll();
     }
 
@@ -82,7 +76,7 @@ export class EventHorizons implements IEventHorizons {
                     const response = new SubscriptionResponse(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
                     this._subscriptionResponses.set(subscription, response);
 
-                    this.handleResponse(tenantWithSubscriptions, subscription, response);
+                    this.callbacks.next(consumerTenant, subscription, response);
 
                     if (response.failed) {
                         this._logger.error(`Setting up event horizon subscription failed with '${response.failure?.reason}' - (id:${response.failure?.id}).`);
@@ -91,20 +85,4 @@ export class EventHorizons implements IEventHorizons {
             }
         }
     }
-
-    private handleResponse(tenantWithSubscriptions: TenantWithSubscriptions, subscription: Subscription, response: SubscriptionResponse): void {
-        const consumerTenant = tenantWithSubscriptions.tenant;
-
-        subscription.handleResponse(consumerTenant, response);
-        tenantWithSubscriptions.handleResponse(consumerTenant, subscription, response);
-
-        this.completed(consumerTenant, subscription, response);
-
-        if (response.failed) {
-            this.failed(consumerTenant, subscription, response);
-        } else {
-            this.succeeded(consumerTenant, subscription, response);
-        }
-    }
-
 }

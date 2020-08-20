@@ -3,8 +3,7 @@
 
 import { TenantId } from '@dolittle/sdk.execution';
 import { Subscription } from './Subscription';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
-import { SubscriptionResponse } from './SubscriptionResponse';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 /**
  * Represents an event horizon.
@@ -15,31 +14,11 @@ export class TenantWithSubscriptions {
      * Initializes a new instance of {EventHorizon}.
      * @param {TenantId} tenant The tenant in our microservice.
      * @param {Subscription[]} subscriptions The subscriptions to
-     * @param {completed} SubscriptionCompleted Completed callback.
-     * @param {succeeded} SubscriptionSucceeded Succeeded callback.
-     * @param {failed} SubscriptionFailed Failed callback.
+     * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
      */
     constructor(
         readonly tenant: TenantId,
         readonly subscriptions: Subscription[],
-        readonly completed: SubscriptionCompleted,
-        readonly succeeded: SubscriptionSucceeded,
-        readonly failed: SubscriptionFailed) {
-    }
-
-    /**
-     * Handles the response coming from a subscription request done to the runtime.
-     * @param {TenantId} consumerTenant Consumer tenant the subscription is for.
-     * @param {Subscription} subscription The subscription the response is for.
-     * @param {SubscriptionResponse} response The response to handle.
-     */
-    handleResponse(consumerTenant: TenantId, subscription: Subscription, response: SubscriptionResponse): void {
-        this.completed(consumerTenant, subscription, response);
-
-        if (response.failed) {
-            this.failed(consumerTenant, subscription, response);
-        } else {
-            this.succeeded(consumerTenant, subscription, response);
-        }
+        readonly callbacks: SubscriptionCallbacks) {
     }
 }

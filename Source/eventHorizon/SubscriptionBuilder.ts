@@ -9,7 +9,9 @@ import { MissingTenantForSubscription } from './MissingTenantForSubscription';
 import { MissingStreamForSubscription } from './MissingStreamForSubscription';
 import { MissingScopeForSubscription } from './MissingScopeForSubscription';
 import { Guid } from '@dolittle/rudiments';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
+import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 /**
  * Represents the callback for the {@link SubscriptionBuilder}.
@@ -104,12 +106,18 @@ export class SubscriptionBuilder {
 
     /**
      * Builds the subscription.
+     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfMissingScope();
         this.throwIfMissingStream();
         this.throwIfMissingTenant();
+
+        const callbacks = new SubscriptionCallbacks(callbackArgumentsSource.pipe(filter(_ => _.subscription.microservice === this._microservice)));
+        callbacks.onCompleted(this._completed);
+        callbacks.onSucceeded(this._succeeded);
+        callbacks.onFailed(this._failed);
 
         return new Subscription(
             this._scope!,
@@ -117,9 +125,7 @@ export class SubscriptionBuilder {
             this._tenant!,
             this._stream!,
             this._partition!,
-            this._completed,
-            this._succeeded,
-            this._failed);
+            callbacks);
     }
 
     private throwIfMissingScope() {
