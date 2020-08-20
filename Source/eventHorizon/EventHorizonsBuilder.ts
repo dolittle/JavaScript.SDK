@@ -17,9 +17,7 @@ export type EventHorizonsBuilderCallback = (builder: EventHorizonsBuilder) => vo
  */
 export class EventHorizonsBuilder {
     private _tenantSubscriptionsBuilders: TenantWithSubscriptionsBuilder[] = [];
-    private _completed: SubscriptionCompleted = (t, s, sr) => { };
-    private _succeeded: SubscriptionSucceeded = (t, s, sr) => { };
-    private _failed: SubscriptionFailed = (t, s, sr) => { };
+    readonly callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
 
     /**
      * Configure subscriptions for a tenant in our microservice.
@@ -29,7 +27,7 @@ export class EventHorizonsBuilder {
      * @summary Two microservices does not need to be aligned on tenancy. This allows for that purpose.
      */
     forTenant(tenant: TenantId, callback: TenantWithSubscriptionsBuilderCallback): EventHorizonsBuilder {
-        const builder = new TenantWithSubscriptionsBuilder(tenant);
+        const builder = new TenantWithSubscriptionsBuilder(tenant, this.callbacks.responses);
         callback(builder);
         this._tenantSubscriptionsBuilders.push(builder);
         return this;
@@ -42,7 +40,7 @@ export class EventHorizonsBuilder {
      * @summary The callback will be called on each subscription.
      */
     onCompleted(completed: SubscriptionCompleted): EventHorizonsBuilder {
-        this._completed = completed;
+        this.callbacks.onCompleted(completed);
         return this;
     }
 
@@ -53,7 +51,7 @@ export class EventHorizonsBuilder {
      * @summary The callback will be called on each subscription.
      */
     onSuccess(succeeded: SubscriptionSucceeded): EventHorizonsBuilder {
-        this._succeeded = succeeded;
+        this.callbacks.onSucceeded(succeeded);
         return this;
     }
 
@@ -64,7 +62,7 @@ export class EventHorizonsBuilder {
      * @summary The callback will be called on each subscription.
      */
     onFailure(failed: SubscriptionFailed): EventHorizonsBuilder {
-        this._failed = failed;
+        this.callbacks.onFailed(failed);
         return this;
     }
 
@@ -76,17 +74,12 @@ export class EventHorizonsBuilder {
      * @returns {TenantSubscriptions[]}
      */
     build(subscriptionsClient: SubscriptionsClient, executionContextManager: IExecutionContextManager, logger: Logger): IEventHorizons {
-        const callbacks = new SubscriptionCallbacks();
-        callbacks.onCompleted(this._completed);
-        callbacks.onSucceeded(this._succeeded);
-        callbacks.onFailed(this._failed);
-
-        const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build(callbacks.responses));
+        const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build());
         return new EventHorizons(
             subscriptionsClient,
             executionContextManager,
             tenantSubscriptions,
-            callbacks,
+            this.callbacks,
             logger);
     }
 }

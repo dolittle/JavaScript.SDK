@@ -26,16 +26,21 @@ export class SubscriptionBuilder {
     private _stream?: StreamId;
     private _partition: PartitionId = Guid.empty;
     private _tenant?: TenantId;
-    private _completed: SubscriptionCompleted = (t, s, sr) => { };
-    private _succeeded: SubscriptionSucceeded = (t, s, sr) => { };
-    private _failed: SubscriptionFailed = (t, s, sr) => { };
-
+    readonly callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilder}.
      * @param {MicroserviceId} _microservice The microservice the subscriptions are for.
+     * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
-    constructor(private _microservice: MicroserviceId) { }
+    constructor(private _microservice: MicroserviceId, responsesSource: Observable<SubscriptionCallbackArguments>) {
+        this.callbacks = new SubscriptionCallbacks(responsesSource.pipe(filter(_ =>
+            _.subscription.microservice.toString() === this._microservice.toString() &&
+            _.subscription.scope.toString() === this._scope?.toString() &&
+            _.subscription.stream.toString() === this._stream?.toString() &&
+            _.subscription.tenant.toString() === this._tenant?.toString() &&
+            _.subscription.partition.toString() === this._partition?.toString())));
+    }
 
     /**
      * Sets the scope in which the subscription is for.
@@ -80,7 +85,7 @@ export class SubscriptionBuilder {
      * @returns {SubscriptionBuilder}
      */
     onCompleted(completed: SubscriptionCompleted): SubscriptionBuilder {
-        this._completed = completed;
+        this.callbacks.onCompleted(completed);
         return this;
     }
 
@@ -90,7 +95,7 @@ export class SubscriptionBuilder {
      * @returns {SubscriptionBuilder}
      */
     onSuccess(succeeded: SubscriptionSucceeded): SubscriptionBuilder {
-        this._succeeded = succeeded;
+        this.callbacks.onSucceeded(succeeded);
         return this;
     }
 
@@ -100,7 +105,7 @@ export class SubscriptionBuilder {
      * @returns {SubscriptionBuilder}
      */
     onFailure(failed: SubscriptionFailed): SubscriptionBuilder {
-        this._failed = failed;
+        this.callbacks.onFailed(failed);
         return this;
     }
 
@@ -109,15 +114,10 @@ export class SubscriptionBuilder {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
+    build(): Subscription {
         this.throwIfMissingScope();
         this.throwIfMissingStream();
         this.throwIfMissingTenant();
-
-        const callbacks = new SubscriptionCallbacks(callbackArgumentsSource.pipe(filter(_ => _.subscription.microservice === this._microservice)));
-        callbacks.onCompleted(this._completed);
-        callbacks.onSucceeded(this._succeeded);
-        callbacks.onFailed(this._failed);
 
         return new Subscription(
             this._scope!,
@@ -125,7 +125,7 @@ export class SubscriptionBuilder {
             this._tenant!,
             this._stream!,
             this._partition!,
-            callbacks);
+            this.callbacks);
     }
 
     private throwIfMissingScope() {
