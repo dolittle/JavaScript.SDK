@@ -32,6 +32,6 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/rudiments": "3.0.0"
+        "@dolittle/rudiments": "4.0.0"
     }
 }
