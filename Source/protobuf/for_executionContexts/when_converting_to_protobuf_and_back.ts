@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext, Version, Claim, Claims } from '@dolittle/sdk.execution';
 
-import executionContexts from '../executionContexts';
+import { executionContexts } from '../index';
 
 describe('when converting to protobuf and back', () => {
     const claimsArray: Claim[] = [
