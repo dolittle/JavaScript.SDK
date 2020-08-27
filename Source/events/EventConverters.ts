@@ -1,20 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { DateTime } from 'luxon';
+import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { Guid } from '@dolittle/rudiments';
+import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
 import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
-import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
-import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
-
-import { EventSourceId } from './EventSourceId';
 import { Artifact } from '@dolittle/sdk.artifacts';
-
 import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
-import { DateTime } from 'luxon';
-import { MissingExecutionContext } from './MissingExecutionContext';
 
-import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
+import { CommittedEvent as SdkCommittedEvent, EventSourceId, MissingExecutionContext } from './index';
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.
@@ -32,7 +28,7 @@ export class EventConverters {
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, artifact: Artifact, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
         uncommittedEvent.setArtifact(artifacts.toProtobuf(artifact));
-        uncommittedEvent.setEventsourceid(guids.toProtobuf(Guid.as(eventSourceId)));
+        uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId.value));
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -53,7 +49,7 @@ export class EventConverters {
         const committedEvent = new SdkCommittedEvent(
             input.getEventlogsequencenumber(),
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
-            guids.toSDK(input.getEventsourceid()),
+            EventSourceId.create(guids.toSDK(input.getEventsourceid())),
             executionContexts.toSDK(executionContext),
             artifacts.toSDK(input.getType()),
             JSON.parse(input.getContent()),
@@ -80,7 +76,7 @@ export class EventConverters {
         const committedEvent = new PbCommittedEvent();
         committedEvent.setEventlogsequencenumber(input.eventLogSequenceNumber);
         committedEvent.setOccurred(occurred);
-        committedEvent.setEventsourceid(guids.toProtobuf(Guid.as(input.eventSourceId)));
+        committedEvent.setEventsourceid(guids.toProtobuf(input.eventSourceId.value));
         committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
         committedEvent.setType(artifacts.toProtobuf(input.type));
         committedEvent.setContent(JSON.stringify(input.content));
@@ -91,5 +87,3 @@ export class EventConverters {
         return committedEvent;
     }
 }
-
-

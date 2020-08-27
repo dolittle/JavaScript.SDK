@@ -5,16 +5,13 @@ import async_hooks from 'async_hooks';
 import { Guid } from '@dolittle/rudiments';
 
 import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId } from './index';
+import { Environment } from './Environment';
 
 
 /**
  * Represents an implementation of {@link IExecutionContextManager}.
  */
 export class ExecutionContextManager implements IExecutionContextManager {
-    private _microserviceId: MicroserviceId;
-    private _version: Version;
-    private _environment: string;
-
     private _executionContextByAsyncId: Map<number, ExecutionContext> = new Map();
     private _base: ExecutionContext;
 
@@ -24,12 +21,8 @@ export class ExecutionContextManager implements IExecutionContextManager {
      * @param {Version} version The version of the currently running software.
      * @param {string} environment The environment the software is running in. (e.g. development, production).
      */
-    constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
-        this._microserviceId = microserviceId;
-        this._version = version;
-        this._environment = environment;
-
-        this._base = new ExecutionContext(microserviceId, TenantId.system, version, environment, CorrelationId.system, Claims.empty);
+    constructor(private _microserviceId: MicroserviceId, private _version: Version, private _environment: Environment) {
+        this._base = new ExecutionContext(_microserviceId, TenantId.system, _version, _environment, CorrelationId.system, Claims.empty);
 
         async_hooks.createHook({
             init: this.asyncOperationInit.bind(this),

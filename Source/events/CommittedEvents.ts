@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CommittedEvent } from './CommittedEvent';
+import { CommittedEvent } from './index';
 
 /**
  * Represents a collection of committed events.

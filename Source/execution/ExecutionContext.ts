@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { Version, MicroserviceId, TenantId, Claims, CorrelationId } from './index';
+import { Version, MicroserviceId, TenantId, Claims, CorrelationId, Environment } from './index';
 
 /**
  * Represents the execution context in a running application.
@@ -23,7 +22,7 @@ export class ExecutionContext {
         private _microserviceId: MicroserviceId,
         private _tenantId: TenantId,
         readonly version: Version,
-        readonly environment: string,
+        readonly environment: Environment,
         private _correlationId: CorrelationId,
         readonly claims: Claims) {
     }

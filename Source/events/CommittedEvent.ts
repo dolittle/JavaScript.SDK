@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
-import { EventSourceId } from './EventSourceId';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Artifact } from '@dolittle/sdk.artifacts';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { EventSourceId } from './index';
 
 /**
  * Represents a committed event

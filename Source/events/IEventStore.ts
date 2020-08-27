@@ -4,9 +4,7 @@
 import { ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { CommitEventsResponse } from './CommitEventsResponse';
-import { EventSourceId } from './EventSourceId';
-import { UncomittedEvent } from './UncomittedEvent';
+import { CommitEventsResponse, EventSourceId, UncommittedEvent } from './index';;
 
 /**
  * Defines the API surface for the event store
@@ -27,13 +25,13 @@ export interface IEventStore {
 
     /**
      * Commit a collection of events.
-     * @param {UncomittedEvent[]} events Collection of events.
+     * @param {UncommittedEvent[]} events Collection of events.
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns Promise<CommitEventsResponse>
      * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
      * @summary on the actual type of the event.
      */
-    commit(events: UncomittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
 
     /**
      * Commit a single public event.

@@ -1,13 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContextManager, Version, TenantId, MicroserviceId, ExecutionContext } from '../index';
+import { ExecutionContextManager, Version, TenantId, MicroserviceId, ExecutionContext, Environment } from '../index';
 
 
 describe('when getting context from two different nested async contexts', async () => {
     const microserviceId = MicroserviceId.create('c87b335d-be3b-48ca-87c6-f6df2c3939a2');
     const version = new Version(1, 0, 0, 0);
-    const environment = 'Development';
+    const environment = Environment.development;
     const firstLevelTenant = TenantId.create('941b5d80-1fdd-4f1e-996f-dc1126338f3d');
     const secondLevelTenant = TenantId.create('11850573-b164-4835-8398-d1a48d9bb9be');
 

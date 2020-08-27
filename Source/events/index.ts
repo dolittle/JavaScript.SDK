@@ -1,14 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
+export { MissingExecutionContext } from './MissingExecutionContext';
+export { EventSourceId } from './EventSourceId';
+export { PartitionId } from './PartitionId';
+export { ScopeId } from './ScopeId';
+export { StreamId } from './StreamId';
 export { EventContext } from './EventContext';
 export { EventStore } from './EventStore';
-export { EventSourceId } from './EventSourceId';
 export { CommittedEvent } from './CommittedEvent';
 export { CommittedEvents } from './CommittedEvents';
-export { EventConverters } from './EventConverters';
+export { CommitEventsResponse } from './CommitEventsResponse';
+export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
-export { UncomittedEvent } from './UncomittedEvent';
-export { PartitionId } from './PartitionId';
-export { ScopeId } from './ScopeId';
-export { StreamId } from './StreamId';
+export { UncommittedEvent } from './UncommittedEvent';

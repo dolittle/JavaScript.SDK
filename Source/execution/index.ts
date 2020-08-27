@@ -3,6 +3,7 @@
 
 export { CorrelationId } from './CorrelationId';
 export { MicroserviceId } from './MicroserviceId';
+export { Environment } from './Environment';
 export { TenantId } from './TenantId';
 export { Claim } from './Claim';
 export { Claims } from './Claims';
