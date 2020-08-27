@@ -1,9 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { ArtifactId } from './ArtifactId';
-import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
+import {
+    Generation,
+    ArtifactId,
+    ArtifactsFromDecorators
+} from './index';
 
 /**
  * Defines an artifact. An artifact represents typically a type in the system in a runtime agnostic way.
@@ -16,36 +18,36 @@ export class Artifact {
     /**
      * The artifact id.
      *
-     * @type {Guid}
+     * @type {ArtifactId}
      */
-    readonly id: Guid;
+    readonly id: ArtifactId;
 
     /**
      * The generation number.
      *
-     * @type {number}
+     * @type {Generation}
      */
-    readonly generation: number;
+    readonly generation: Generation;
 
     /**
      * Initializes a new instance of {@link Artifact}
      * @param id The artifact id.
      * @param [generation] The generation number
      */
-    constructor(id: ArtifactId, generation = 1) {
-        this.id = Guid.as(id);
+    constructor(id: ArtifactId, generation = Generation.first) {
+        this.id = id;
         this.generation = generation;
     }
 
     toString() {
-        return `[${this.id} - ${this.generation}]`;
+        return `[${this.id.toString()} - ${this.generation.toString()}]`;
     }
 }
 
 /**
  * Decorator for associating a type with an artifact.
  */
-export function artifact(identifier: ArtifactId, generation = 1) {
+export function artifact(identifier: ArtifactId, generation = Generation.first) {
     return function (target: any) {
         ArtifactsFromDecorators.associate(target.prototype.constructor, identifier, generation);
     };

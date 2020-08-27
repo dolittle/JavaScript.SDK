@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import no_association from '../given/no_associations';
-import { UnableToResolveArtifact } from '../../UnableToResolveArtifact';
+import { UnableToResolveArtifact } from '../../index';
 
 describe('when resolving from object with no input and unknown', () => {
     const object = {};

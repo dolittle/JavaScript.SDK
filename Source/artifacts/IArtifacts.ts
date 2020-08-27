@@ -1,10 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact } from './Artifact';
-import { ArtifactId } from './ArtifactId';
-import { UnableToResolveArtifact } from './UnableToResolveArtifact';
-import { Constructor } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+import { UnableToResolveArtifact, ArtifactId, Artifact, Generation } from './index';
 
 /**
  * Defines the system for working with {Artifact}
@@ -52,7 +50,7 @@ export interface IArtifacts {
      * Associate a type with a unique artifact identifier and optional generation.
      * @param {Constructor<any>} type Type to associate.
      * @param {ArtifactId} identifier Identifier to associate with.
-     * @param {number} generation Optional generation - defaults to 1.
+     * @param {Generation} generation Optional generation - defaults to 0.
      */
-    associate(type: Constructor<any>, identifier: ArtifactId, generation?: number): void;
+    associate(type: Constructor<any>, identifier: ArtifactId, generation?: Generation): void;
 }

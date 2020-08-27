@@ -1,19 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ArtifactsBuilder } from '../../ArtifactsBuilder';
-import { ArtifactId } from '../../ArtifactId';
-import { Guid } from '@dolittle/rudiments';
+import { ArtifactId, ArtifactsBuilder, Generation } from '../../index';
 
 class FirstType {}
 
 class SecondType {}
 
 describe('when building with two associations', () => {
-    const firstTypeIdentifier = Guid.as('21ef6f8d-4871-48b0-9567-4d576b6a12da');
-    const secondTypeIdentifier = Guid.as('1c385ede-49ce-4266-a752-e1a85587758e');
-    const firstTypeGeneration = 42;
-    const secondTypeGeneration = 43;
+    const firstTypeIdentifier = ArtifactId.create('21ef6f8d-4871-48b0-9567-4d576b6a12da');
+    const secondTypeIdentifier = ArtifactId.create('1c385ede-49ce-4266-a752-e1a85587758e');
+    const firstTypeGeneration = Generation.create(42);
+    const secondTypeGeneration = Generation.create(43);
 
     const builder = new ArtifactsBuilder();
     builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);

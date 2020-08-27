@@ -1,11 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ArtifactId } from './ArtifactId';
-import { IArtifacts } from './IArtifacts';
-import { Artifact } from './Artifact';
-import { Artifacts } from './Artifacts';
-import { Guid, Constructor } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+import { ArtifactId, Artifact, Artifacts, IArtifacts, Generation } from './index';
 
 /**
  * Represents a builder for building {@link IArtifacts} instances
@@ -19,8 +16,8 @@ export class ArtifactsBuilder {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associate(type: Constructor<any>, identifier: ArtifactId, generation = 1): ArtifactsBuilder {
-        this._artifactsMap.set(type, new Artifact(Guid.as(identifier), generation));
+    associate(type: Constructor<any>, identifier: ArtifactId, generation = Generation.first): ArtifactsBuilder {
+        this._artifactsMap.set(type, new Artifact(identifier, generation));
         return this;
     }
 

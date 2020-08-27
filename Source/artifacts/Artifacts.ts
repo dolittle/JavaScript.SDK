@@ -1,16 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid, Constructor } from '@dolittle/rudiments';
-import { IArtifacts } from './IArtifacts';
-import { Artifact } from './Artifact';
-import { UnknownArtifact } from './UnknownArtifact';
-import { UnknownType } from './UnknownType';
-import { ArtifactId } from './ArtifactId';
-import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { ArtifactAssociation } from './ArtifactAssociation';
-import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+import {
+    IArtifacts,
+    ArtifactAssociation,
+    Artifact,
+    ArtifactsFromDecorators,
+    ArtifactId,
+    UnknownType,
+    UnableToResolveArtifact,
+    UnknownArtifact,
+    Generation
+} from './index';
 
 /**
  * Represents an implementation of {IArtifacts}
@@ -39,12 +43,12 @@ export class Artifacts implements IArtifacts {
 
     /** @inheritdoc */
     hasTypeFor(input: Artifact | ArtifactId): boolean {
-        if (typeof input === 'string' || input instanceof Guid) {
+        if (!(input instanceof Artifact)) {
             input = new Artifact(input);
         }
 
         for (const artifact of this._associations.value.values()) {
-            if (this.aritfactEquals(artifact, input)) {
+            if (this.artifactEquals(artifact, input)) {
                 return true;
             }
         }
@@ -55,11 +59,11 @@ export class Artifacts implements IArtifacts {
     /** @inheritdoc */
     getTypeFor(input: Artifact | ArtifactId): Constructor<any> {
         if (!(input instanceof Artifact)) {
-            input = new Artifact(Guid.as(input));
+            input = new Artifact(input);
         }
 
         for (const [type, artifact] of this._associations.value.entries()) {
-            if (this.aritfactEquals(artifact, input)) {
+            if (this.artifactEquals(artifact, input)) {
                 return type;
             }
         }
@@ -89,16 +93,12 @@ export class Artifacts implements IArtifacts {
     resolveFrom(object: any, input?: Artifact | ArtifactId | string): Artifact {
         let artifact: Artifact | undefined;
 
-        if (input && input instanceof Artifact) {
-            artifact = input as Artifact;
-        } else if (input && (typeof input === 'string' || input.constructor.name === 'Guid')) {
-            artifact = new Artifact(input as ArtifactId, 1);
-        } else {
-            if (object) {
-                if (this.hasFor(object.constructor)) {
-                    artifact = this.getFor(object.constructor);
-                }
-            }
+        if (input != null) {
+            if (input instanceof Artifact) artifact = input;
+            else if (typeof input === 'string') artifact = new Artifact(ArtifactId.create(input));
+            else artifact = new Artifact(input);
+        } else if (object && this.hasFor(object.constructor)) {
+            artifact = this.getFor(object.constructor);
         }
 
         if (!artifact) {
@@ -109,8 +109,8 @@ export class Artifacts implements IArtifacts {
     }
 
     /** @inheritdoc */
-    associate(type: Constructor<any>, identifier: ArtifactId, generation = 1): void {
-        this._registered.next(new ArtifactAssociation(type, new Artifact(Guid.as(identifier), generation)));
+    associate(type: Constructor<any>, identifier: ArtifactId, generation = Generation.first): void {
+        this._registered.next(new ArtifactAssociation(type, new Artifact(identifier, generation)));
     }
 
     private addAssociation(association: ArtifactAssociation) {
@@ -119,7 +119,7 @@ export class Artifacts implements IArtifacts {
         this._associations.next(map);
     }
 
-    private aritfactEquals(left: Artifact, right: Artifact): boolean {
+    private artifactEquals(left: Artifact, right: Artifact): boolean {
         return left.generation === right.generation && left.id.toString() === right.id.toString();
     }
 }

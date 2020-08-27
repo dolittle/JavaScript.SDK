@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact } from './Artifact';
 import { Exception } from '@dolittle/rudiments';
+import { Artifact } from './index';
 
 /**
  * Exception that is thrown when an {@link Artifact} is not possible to be resolved

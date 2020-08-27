@@ -26,6 +26,7 @@
         "postbuild": "yarn lint",
         "build": "tsc -b",
         "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "test": "yarn build && yarn test:run",
         "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
@@ -34,6 +35,7 @@
     "dependencies": {
         "@dolittle/concepts": "4.0.0",
         "@dolittle/rudiments": "4.0.0",
+        "@dolittle/types": "4.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "rxjs": "6.6.0"
     }
