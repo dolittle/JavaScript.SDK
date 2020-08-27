@@ -5,9 +5,7 @@ import { ExecutionContext as SdkExecutionContext, Claims } from '@dolittle/sdk.e
 import { ExecutionContext as PbExecutionContext } from '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
 
-import claims from './claims';
-import guids from './guids';
-import versions from './versions';
+import { claims, guids, versions } from './index';
 
 /**
  * Convert to protobuf representation

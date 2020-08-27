@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FailureId, FailureReason } from './internal';
+import { FailureId, FailureReason } from './index';
 
 /**
  * Represents a unique failure that occurred when performing operations with the runtime.

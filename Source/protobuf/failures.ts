@@ -1,13 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure as SdkFailure, FailureId, FailureReason} from './index';
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-
-import guids from './guids';
-
-import { MissingFailureIdentifier } from './internal';
 import { Guid } from '@dolittle/rudiments';
+
+import { Failure as SdkFailure, FailureId, FailureReason, MissingFailureIdentifier, guids} from './index';
 
 /**
  * Convert to protobuf representation

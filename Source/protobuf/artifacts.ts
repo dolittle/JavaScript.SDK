@@ -5,8 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Artifact as SdkArtifact, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
-import guids from './guids';
-import { MissingArtifactIdentifier } from './internal';
+import { MissingArtifactIdentifier, guids } from './index';
 
 /**
  * Convert to protobuf representation
