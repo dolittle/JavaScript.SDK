@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContext as SdkExecutionContext, Claims, TenantId, MicroserviceId, CorrelationId } from '@dolittle/sdk.execution';
+import { ExecutionContext as SdkExecutionContext, Claims, TenantId, MicroserviceId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 import { ExecutionContext as PbExecutionContext } from '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb';
 import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
 
@@ -18,7 +18,7 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     result.setTenantid(guids.toProtobuf(input.tenantId.value));
     result.setVersion(versions.toProtobuf(input.version));
     result.setCorrelationid(guids.toProtobuf(input.correlationId.value));
-    result.setEnvironment(input.environment);
+    result.setEnvironment(input.environment.value);
     result.setClaimsList(claims.toProtobuf(input.claims) as PbClaim[]);
     return result;
 }
@@ -32,7 +32,7 @@ function toSDK(input: PbExecutionContext): SdkExecutionContext {
     const microserviceId = MicroserviceId.create(guids.toSDK(input.getMicroserviceid()));
     const tenantId = TenantId.create(guids.toSDK(input.getTenantid()));
     const version = versions.toSDK(input.getVersion());
-    const environment = input.getEnvironment();
+    const environment = Environment.create(input.getEnvironment());
     const correlationId = CorrelationId.create(guids.toSDK(input.getCorrelationid()));
     const convertedClaims = new Claims(input.getClaimsList().map(claim => claims.toSDK(claim)));
 

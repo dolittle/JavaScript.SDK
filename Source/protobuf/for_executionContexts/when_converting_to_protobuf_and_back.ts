@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId } from '@dolittle/sdk.execution';
+import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 
 import { executionContexts } from '../index';
 
@@ -17,7 +17,7 @@ describe('when converting to protobuf and back', () => {
         MicroserviceId.create('98260f59-9b4c-4730-a9c5-8254a8c32b18'),
         TenantId.create('3461f78c-2a06-4fe4-8d6d-7db92dbff038'),
         new Version(42,43,43,44,'alpha'),
-        'development',
+        Environment.development,
         CorrelationId.create('ba704191-1659-4e5c-b124-fe1c63e5bcbe'),
         claims
     );
@@ -28,7 +28,7 @@ describe('when converting to protobuf and back', () => {
     it('should hold the same microservice identifier', () => result.microserviceId.toString().should.equal(original.microserviceId.toString()));
     it('should hold the same tenand identifier', () => result.tenantId.toString().should.equal(original.tenantId.toString()));
     it('should hold the same version identifier', () => result.version.toString().should.equal(original.version.toString()));
-    it('should hold the same environment identifier', () => result.environment.should.equal(original.environment));
+    it('should hold the same environment identifier', () => result.environment.equals(original.environment).should.be.true);
     it('should hold the same correlation identifier', () => result.correlationId.toString().should.equal(original.correlationId.toString()));
 
     it('should contain same key for first claim', () => resultClaims[0].key.should.equal(claimsArray[0].key));
