@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext, Version, Claim, Claims } from '@dolittle/sdk.execution';
+import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId } from '@dolittle/sdk.execution';
 
 import { executionContexts } from '../index';
 
@@ -14,11 +14,11 @@ describe('when converting to protobuf and back', () => {
     const claims = new Claims(claimsArray);
 
     const original = new ExecutionContext(
-        Guid.parse('98260f59-9b4c-4730-a9c5-8254a8c32b18'),
-        Guid.parse('3461f78c-2a06-4fe4-8d6d-7db92dbff038'),
+        MicroserviceId.create('98260f59-9b4c-4730-a9c5-8254a8c32b18'),
+        TenantId.create('3461f78c-2a06-4fe4-8d6d-7db92dbff038'),
         new Version(42,43,43,44,'alpha'),
         'development',
-        Guid.parse('ba704191-1659-4e5c-b124-fe1c63e5bcbe'),
+        CorrelationId.create('ba704191-1659-4e5c-b124-fe1c63e5bcbe'),
         claims
     );
 

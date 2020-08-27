@@ -2,14 +2,23 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+import { ConceptAs } from '@dolittle/concepts';
 
 /**
  * Represents the unique identifier for a Microservice.
  */
-export type MicroserviceId = Guid | string;
 
+export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.MicroserviceId'> {
+    constructor(id: Guid) {
+        super(id, '@dolittle/sdk.execution.MicroserviceId');
+    }
 
-/**
- * Represents the identifier for when Microservice is not applicable.
- */
-export const notApplicable = Guid.empty;
+    /**
+     * Represents the identifier for when Microservice is not applicable.
+     */
+    static notApplicable = MicroserviceId.create(Guid.empty);
+
+    static create(id: string | Guid): MicroserviceId {
+        return new MicroserviceId(id != null? Guid.as(id) : Guid.create());
+    };
+}
