@@ -14,5 +14,12 @@ export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
     static create(id?: Guid | string): StreamId {
         return new StreamId(id != null ? Guid.as(id) : Guid.create());
     }
-};
 
+    /**
+     * Represents the event log.
+     *
+     * @static
+     * @type {StreamId}
+     */
+    static eventLog: StreamId = StreamId.create(Guid.empty);
+};

@@ -14,5 +14,12 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
     static create(id?: Guid | string): ScopeId {
         return new ScopeId(id != null ? Guid.as(id) : Guid.create());
     }
-};
 
+    /**
+     * Represents the default scope
+     *
+     * @static
+     * @type {ScopeId}
+     */
+    static default: ScopeId = ScopeId.create(Guid.empty);
+};

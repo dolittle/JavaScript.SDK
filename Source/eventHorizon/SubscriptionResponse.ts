@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Failure } from '@dolittle/sdk.protobuf';
-import { ConsentId } from './ConsentId';
+import { ConsentId } from './index';
 
 /**
  * Represents the result from an event horizon subscription request.

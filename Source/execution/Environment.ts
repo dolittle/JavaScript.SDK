@@ -7,8 +7,8 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a tenant.
  */
 export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Environment'> {
-    constructor(id: string) {
-        super(id, '@dolittle/sdk.execution.Environment');
+    constructor(env: string) {
+        super(env, '@dolittle/sdk.execution.Environment');
     }
 
     /**

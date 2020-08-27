@@ -1,12 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-import { SubscriptionBuilder, SubscriptionBuilderCallback } from './SubscriptionBuilder';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+import {
+    TenantWithSubscriptions,
+    SubscriptionBuilder,
+    SubscriptionCallbacks,
+    SubscriptionCallbackArguments,
+    SubscriptionBuilderCallback,
+    SubscriptionCompleted,
+    SubscriptionSucceeded,
+    SubscriptionFailed
+} from './index';
 
 export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;
 

@@ -11,8 +11,13 @@ export class PartitionId extends ConceptAs<Guid, '@dolittle/sdk.events.Partition
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.PartitionId');
     }
+
+    /**
+     * Gets the unspecified partition id
+     */
+    static unspecified: PartitionId = PartitionId.create(Guid.empty);
+
     static create(id?: Guid | string): PartitionId {
         return new PartitionId(id != null ? Guid.as(id) : Guid.create());
     }
 };
-

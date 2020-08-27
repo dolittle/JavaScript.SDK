@@ -2,13 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
-import { TenantWithSubscriptionsBuilder, TenantWithSubscriptionsBuilderCallback } from './TenantWithSubscriptionsBuilder';
-import { IEventHorizons } from './IEventHorizons';
-import { EventHorizons } from './EventHorizons';
 
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Logger } from 'winston';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import {
+    TenantWithSubscriptionsBuilder,
+    TenantWithSubscriptionsBuilderCallback,
+    SubscriptionCallbacks,
+    SubscriptionCompleted,
+    SubscriptionSucceeded,
+    SubscriptionFailed,
+    EventHorizons,
+    IEventHorizons
+} from './index';
 
 export type EventHorizonsBuilderCallback = (builder: EventHorizonsBuilder) => void;
 

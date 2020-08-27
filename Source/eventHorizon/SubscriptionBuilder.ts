@@ -1,17 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
-import { Subscription } from './Subscription';
-import { MissingTenantForSubscription } from './MissingTenantForSubscription';
-import { MissingStreamForSubscription } from './MissingStreamForSubscription';
-import { MissingScopeForSubscription } from './MissingScopeForSubscription';
-import { Guid } from '@dolittle/rudiments';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
-import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import {
+    Subscription,
+    SubscriptionCallbacks,
+    SubscriptionCallbackArguments,
+    SubscriptionCompleted,
+    SubscriptionSucceeded,
+    SubscriptionFailed,
+    MissingScopeForSubscription,
+    MissingTenantForSubscription,
+    MissingStreamForSubscription
+} from './index';
 
 /**
  * Represents the callback for the {@link SubscriptionBuilder}.
@@ -24,7 +29,7 @@ export type SubscriptionBuilderCallback = (builder: SubscriptionBuilder) => void
 export class SubscriptionBuilder {
     private _scope?: ScopeId;
     private _stream?: StreamId;
-    private _partition: PartitionId = Guid.empty;
+    private _partition: PartitionId = PartitionId.unspecified;
     private _tenant?: TenantId;
     readonly callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
 
@@ -35,11 +40,11 @@ export class SubscriptionBuilder {
      */
     constructor(private _microservice: MicroserviceId, responsesSource: Observable<SubscriptionCallbackArguments>) {
         this.callbacks = new SubscriptionCallbacks(responsesSource.pipe(filter(_ =>
-            _.subscription.microservice.toString() === this._microservice.toString() &&
-            _.subscription.scope.toString() === this._scope?.toString() &&
-            _.subscription.stream.toString() === this._stream?.toString() &&
-            _.subscription.tenant.toString() === this._tenant?.toString() &&
-            _.subscription.partition.toString() === this._partition?.toString())));
+            _.subscription.microservice.equals(this._microservice) &&
+            _.subscription.scope.equals(this._scope) &&
+            _.subscription.stream.equals(this._stream) &&
+            _.subscription.tenant.equals(this._tenant) &&
+            _.subscription.partition.equals(this._partition))));
     }
 
     /**
