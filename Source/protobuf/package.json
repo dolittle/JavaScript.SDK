@@ -35,8 +35,8 @@
     },
     "dependencies": {
         "@dolittle/contracts": "5.1.19",
-        "@dolittle/concepts": "4.1.0",
-        "@dolittle/rudiments": "4.1.0",
+        "@dolittle/concepts": "5.0.0",
+        "@dolittle/rudiments": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "2.2.0",
         "@dolittle/sdk.execution": "2.2.0"
