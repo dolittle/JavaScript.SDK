@@ -19,6 +19,7 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { IEventHandler } from './IEventHandler';
 import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
+import { ScopeId } from '@dolittle/sdk.events';
 
 /**
  * Represents an implementation of {IEventHandlers}.
@@ -57,7 +58,7 @@ export class EventHandlers implements IEventHandlers {
                     const artifact = _artifacts.getFor(method.eventType);
                     methodsByArtifact.set(artifact, method.method);
                 }
-                return new EventHandler(value.eventHandlerId, value.scopeId || Guid.empty, true, methodsByArtifact);
+                return new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
             })
         ).subscribe({
             next: (eventHandler: IEventHandler) => {

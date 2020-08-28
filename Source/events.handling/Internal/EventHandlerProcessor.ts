@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId } from '@dolittle/sdk.events';
+import { EventContext, ScopeId, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -34,7 +34,7 @@ import { MissingEventInformation } from '../MissingEventInformation';
 /**
  * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
  */
-export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
+export class EventHandlerProcessor extends EventProcessor<EventHandlerId, '@dolittle/sdk.events.handling.EventHandlerId', EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
      * Initializes a new instance of {@link EventHandlerProcessor}
@@ -62,8 +62,8 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
 
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
-        registerArguments.setEventhandlerid(guids.toProtobuf(Guid.as(this._identifier)));
-        registerArguments.setScopeid(guids.toProtobuf(Guid.as(this._scope)));
+        registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(guids.toProtobuf(this._scope.value));
         registerArguments.setPartitioned(this._partitioned);
 
         const handledArtifacts: Artifact[] = [];
@@ -134,7 +134,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            guids.toSDK(pbEventSourceId),
+            EventSourceId.create(guids.toSDK(pbEventSourceId)),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContexts.toSDK(pbExecutionContext)
         );
@@ -152,4 +152,3 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         return new EventHandlerResponse();
     }
 }
-

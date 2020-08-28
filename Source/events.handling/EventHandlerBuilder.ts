@@ -16,7 +16,7 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
  */
 export class EventHandlerBuilder {
     private _handlers: Map<Constructor<any> | Artifact | ArtifactId, EventHandlerSignature<any>> = new Map();
-    private _scopeId: ScopeId = Guid.empty;
+    private _scopeId: ScopeId = ScopeId.default;
     private _partitioned = true;
 
     /**
@@ -93,7 +93,7 @@ export class EventHandlerBuilder {
             if (typeOrArtifact instanceof Artifact) {
                 artifact = typeOrArtifact;
             } else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
-                artifact = new Artifact(Guid.as(typeOrArtifact));
+                artifact = new Artifact(ArtifactId.create(typeOrArtifact));
             } else {
                 artifact = artifacts.getFor(typeOrArtifact);
             }
