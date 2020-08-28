@@ -17,6 +17,7 @@ import {
     IFilterProcessor,
     FilterDefinitionIncomplete
 } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents the builder for building private event filters.
@@ -37,8 +38,8 @@ export class PrivateEventFilterBuilder {
      * @param {ScopeId} scopeId Scope the filter operates on.
      * @returns {PrivateEventFilterBuilder}
      */
-    inScope(scopeId: ScopeId): PrivateEventFilterBuilder {
-        this._scopeId = scopeId;
+    inScope(scopeId: Guid | string): PrivateEventFilterBuilder {
+        this._scopeId = ScopeId.from(scopeId);
         return this;
     }
 
