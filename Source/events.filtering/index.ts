@@ -8,3 +8,6 @@ export { FilterId } from './FilterId';
 export { FilterEventCallback } from './FilterEventCallback';
 export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 export { PartitionedFilterResult } from './PartitionedFilterResult';
+export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';

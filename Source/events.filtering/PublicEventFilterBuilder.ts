@@ -14,6 +14,7 @@ import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback
 import { PublicEventFilterProcessor } from './Internal/PublicEventFilterProcessor';
 import { MissingFilterCallback } from './MissingFilterCallback';
 import { IFilterProcessor } from './IFilterProcessor';
+import { ScopeId } from '@dolittle/sdk.events';
 
 /**
  * Represents the builder for building public event filters.
@@ -51,7 +52,7 @@ export class PublicEventFilterBuilder {
 
     private throwIfCallbackIsMissing(filterId: FilterId) {
         if (!this._callback) {
-            throw new MissingFilterCallback(filterId, Guid.empty);
+            throw new MissingFilterCallback(filterId, ScopeId.default);
         }
     }
 }

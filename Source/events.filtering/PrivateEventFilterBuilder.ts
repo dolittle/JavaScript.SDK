@@ -3,25 +3,26 @@
 
 import { Logger } from 'winston';
 
-import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
-import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
-import { FilterEventCallback } from './FilterEventCallback';
-import { FilterId } from './FilterId';
-import { IFilterProcessor } from './IFilterProcessor';
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
+import {
+    PartitionedEventFilterBuilder, 
+    UnpartitionedEventFilterBuilder,
+    FilterEventCallback,
+    FilterId,
+    IFilterProcessor,
+    FilterDefinitionIncomplete
+} from './index';
 
 /**
  * Represents the builder for building private event filters.
  */
 export class PrivateEventFilterBuilder {
-    private _scopeId: ScopeId = Guid.empty;
+    private _scopeId: ScopeId = ScopeId.default;
     private _innerBuilder?: PartitionedEventFilterBuilder | UnpartitionedEventFilterBuilder;
 
     /**

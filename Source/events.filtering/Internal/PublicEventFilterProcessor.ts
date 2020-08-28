@@ -36,7 +36,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
     protected get registerArguments(): PublicFilterRegistrationRequest {
         const registerArguments = new PublicFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(Guid.as(this._identifier)));
+        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
         return registerArguments;
     }
 
@@ -73,7 +73,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
         const response = new PartitionedFilterResponse();
         response.setIsincluded(result.shouldInclude);
-        response.setPartitionid(guids.toProtobuf(Guid.as(result.partitionId)));
+        response.setPartitionid(guids.toProtobuf(result.partitionId.value));
         return response;
     }
 }
