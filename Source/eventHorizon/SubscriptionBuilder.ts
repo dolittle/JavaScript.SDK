@@ -3,9 +3,12 @@
 
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 
+import { Guid } from '@dolittle/rudiments';
+
+import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+
 import {
     Subscription,
     SubscriptionCallbacks,
@@ -49,38 +52,38 @@ export class SubscriptionBuilder {
 
     /**
      * Sets the scope in which the subscription is for.
-     * @param {ScopeId} scope Scope for the subscription.
+     * @param {Guid | string} scope Scope for the subscription.
      */
-    toScope(scope: ScopeId): SubscriptionBuilder {
-        this._scope = scope;
+    toScope(scope: Guid | string): SubscriptionBuilder {
+        this._scope = ScopeId.from(scope);
         return this;
     }
 
     /**
      * Specifies from which tenant we should get events from.
-     * @param {TenantId} tenant Tenant for the subscription.
+     * @param {Guid | string} tenant Tenant for the subscription.
      */
-    fromTenant(tenant: TenantId): SubscriptionBuilder {
-        this._tenant = tenant;
+    fromTenant(tenant: Guid | string): SubscriptionBuilder {
+        this._tenant = TenantId.from(tenant);
         return this;
     }
 
     /**
      * Specifies the source stream in the other microservice.
-     * @param {StreamId} stream Stream for the subscription.
+     * @param {Guid | string} stream Stream for the subscription.
      */
-    forStream(stream: StreamId): SubscriptionBuilder {
-        this._stream = stream;
+    forStream(stream: Guid | string): SubscriptionBuilder {
+        this._stream = StreamId.from(stream);
         return this;
     }
 
     /**
      * Specifies which partition the subscription is for.
-     * @param {PartitionId} partition
+     * @param {Guid | string} partition
      * @summary This is optional and only to be used if you're only interested in one specific partition.
      */
-    forPartition(partition: PartitionId): SubscriptionBuilder {
-        this._partition = partition;
+    forPartition(partition: Guid | string): SubscriptionBuilder {
+        this._partition = PartitionId.from(partition);
         return this;
     }
 

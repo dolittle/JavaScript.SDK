@@ -12,7 +12,14 @@ export class FilterId extends ConceptAs<Guid, '@dolittle/sdk.events.filtering.Fi
         super(id, '@dolittle/sdk.events.filtering.FilterId');
     }
 
-    static create(id?: Guid | string): FilterId {
-        return new FilterId(id != null ? Guid.as(id) : Guid.create());
+    /**
+     * Creates a {FilterId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {FilterId}
+     */
+    static from(id: Guid | string): FilterId {
+        return new FilterId(Guid.as(id));
     }
 }

@@ -1,12 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { Failure, FailureId, FailureReason } from '../index';
+import { Failure } from '../index';
 
 describe('when converting to and from protobuf', () => {
-    const reason = FailureReason.create('MyReason');
-    const failure = new Failure(FailureId.create(Guid.create()), reason);
+    const failureId = '0c2b9956-cbe8-4ed1-be9c-d2ede0c8ec20';
+    const reason = 'MyReason';
+    const failure = Failure.from(failureId, reason);
     const result = failure.toProtobuf().toSDK();
 
     it('should not be undefined', () => result!.should.not.be.undefined);

@@ -2,10 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import async_hooks from 'async_hooks';
-import { Guid } from '@dolittle/rudiments';
-
-import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId } from './index';
-import { Environment } from './Environment';
+import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId, Environment } from './index';
 
 
 /**
@@ -40,7 +37,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
                 this._base.tenantId,
                 this._version,
                 this._environment,
-                CorrelationId.create(),
+                CorrelationId.new(),
                 this._base.claims
             );
             this._executionContextByAsyncId.set(asyncId, executionContext);
@@ -80,7 +77,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
             parent.tenantId,
             this._version,
             this._environment,
-            CorrelationId.create(),
+            CorrelationId.new(),
             parent.claims
         );
 

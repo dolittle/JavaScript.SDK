@@ -6,6 +6,7 @@ import {
     ArtifactId,
     ArtifactsFromDecorators
 } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Defines an artifact. An artifact represents typically a type in the system in a runtime agnostic way.
@@ -39,6 +40,20 @@ export class Artifact {
         this.generation = generation;
     }
 
+    /**
+     * Creates an {Artifact} from a guid and an optional generation number.
+     *
+     * @static
+     * @param {(string | Guid)} id
+     * @param {number} [generationNumber]
+     * @returns
+     */
+    static from(id: string | Guid, generationNumber?: number) {
+        const artifactId = ArtifactId.from(id);
+        const generation = generationNumber != null ? Generation.from(generationNumber) : Generation.first;
+        return new Artifact(artifactId, generation);
+    }
+
     toString() {
         return `[${this.id.toString()} - ${this.generation.toString()}]`;
     }
@@ -47,8 +62,11 @@ export class Artifact {
 /**
  * Decorator for associating a type with an artifact.
  */
-export function artifact(identifier: string, generation = Generation.first) {
+export function artifact(identifier: string, generationNumber?: number) {
     return function (target: any) {
-        ArtifactsFromDecorators.associate(target.prototype.constructor, ArtifactId.create(identifier), generation);
+        ArtifactsFromDecorators.associate(
+            target.prototype.constructor,
+            ArtifactId.from(identifier),
+            generationNumber != null ? Generation.from(generationNumber) : Generation.first);
     };
 }

@@ -30,7 +30,7 @@ function toSDK(input?: PbArtifact): SdkArtifact {
     if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return new SdkArtifact(ArtifactId.create(new Guid(uuid)), Generation.create(input.getGeneration()));
+    return SdkArtifact.from(new Guid(uuid), input.getGeneration());
 }
 
 export default {

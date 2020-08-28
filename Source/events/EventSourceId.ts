@@ -8,7 +8,14 @@ export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSo
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.EventSourceId');
     }
-    static create(id?: Guid | string): EventSourceId {
-        return new EventSourceId(id != null ? Guid.as(id) : Guid.create());
+    /**
+     * Creates an {EventSourceId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {EventSourceId}
+     */
+    static from(id: Guid | string): EventSourceId {
+        return new EventSourceId(Guid.as(id));
     }
 };

@@ -35,8 +35,12 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.0",
         "@dolittle/rudiments": "5.0.0",
-        "@dolittle/types": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
+        "@dolittle/types": "5.0.0",
+        "is-natural-number": "^4.0.1",
         "rxjs": "6.6.0"
+    },
+    "devDependencies": {
+        "@types/is-natural-number": "^4.0.0"
     }
 }

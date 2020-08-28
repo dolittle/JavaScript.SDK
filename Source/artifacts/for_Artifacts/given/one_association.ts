@@ -6,7 +6,7 @@ import { Artifact, Artifacts, ArtifactId, Generation } from '../../index';
 
 class MyType {}
 
-const artifact = new Artifact(ArtifactId.create('545f1841-4cab-44fc-bd9d-bda241487c56'), Generation.first);
+const artifact = Artifact.from('545f1841-4cab-44fc-bd9d-bda241487c56');
 const map = new Map<Constructor<any>, Artifact>();
 map.set(MyType, artifact);
 const artifacts = new Artifacts(map);

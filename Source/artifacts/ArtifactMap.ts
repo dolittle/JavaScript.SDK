@@ -81,7 +81,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
     *[Symbol.iterator](): IterableIterator<[Artifact, T]> {
         for (const [artifactId, generations] of this._generationsById) {
             for (const [generation, entry] of generations) {
-                const artifact = new Artifact(ArtifactId.create(artifactId), Generation.create(generation));
+                const artifact = Artifact.from(artifactId, generation);
                 yield [artifact, entry];
             }
         }

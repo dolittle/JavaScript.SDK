@@ -5,7 +5,7 @@ import no_associations from '../given/no_associations';
 import { ArtifactId } from '../../index';
 
 describe('when resolving from object and input is artifact id', () => {
-    const artifactId = ArtifactId.create('ec0111e1-84e4-4d1a-b7f3-a2f6c4427609');
+    const artifactId = ArtifactId.from('ec0111e1-84e4-4d1a-b7f3-a2f6c4427609');
     const result = no_associations.artifacts.resolveFrom({}, artifactId);
 
     it('should return artifact with the identifier', () => result.id.equals(artifactId).should.be.true);

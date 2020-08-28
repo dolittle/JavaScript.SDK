@@ -8,10 +8,10 @@ class FirstType {}
 class SecondType {}
 
 describe('when building with two associations', () => {
-    const firstTypeIdentifier = ArtifactId.create('21ef6f8d-4871-48b0-9567-4d576b6a12da');
-    const secondTypeIdentifier = ArtifactId.create('1c385ede-49ce-4266-a752-e1a85587758e');
-    const firstTypeGeneration = Generation.create(42);
-    const secondTypeGeneration = Generation.create(43);
+    const firstTypeIdentifier = ArtifactId.from('21ef6f8d-4871-48b0-9567-4d576b6a12da');
+    const secondTypeIdentifier = ArtifactId.from('1c385ede-49ce-4266-a752-e1a85587758e');
+    const firstTypeGeneration = Generation.from(42);
+    const secondTypeGeneration = Generation.from(43);
 
     const builder = new ArtifactsBuilder();
     builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);

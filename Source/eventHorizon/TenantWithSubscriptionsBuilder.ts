@@ -14,6 +14,7 @@ import {
     SubscriptionSucceeded,
     SubscriptionFailed
 } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;
 
@@ -35,12 +36,12 @@ export class TenantWithSubscriptionsBuilder {
 
     /**
      * Build subscriptions for a specific microservice.
-     * @param {MicroserviceId} microservice Microservice to build for.
+     * @param {Guid | string} microservice Microservice to build for.
      * @param {SubscriptionBuilderCallback} callback Builder callback.
      * @returns {TenantWithSubscriptionsBuilder}
      */
-    forMicroservice(microservice: MicroserviceId, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
-        const builder = new SubscriptionBuilder(microservice, this.callbacks.responses);
+    forMicroservice(microservice: Guid | string, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
+        const builder = new SubscriptionBuilder(MicroserviceId.from(microservice), this.callbacks.responses);
         callback(builder);
         this._subscriptionBuilders.push(builder);
         return this;

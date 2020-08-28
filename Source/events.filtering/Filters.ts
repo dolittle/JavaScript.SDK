@@ -6,8 +6,7 @@ import { delay } from 'rxjs/operators';
 
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
-import { IFilters } from './IFilters';
-import { IFilterProcessor } from './IFilterProcessor';
+import { IFilters, IFilterProcessor } from './index';
 
 /**
  * Represents an implementation of {@link IFilters}.

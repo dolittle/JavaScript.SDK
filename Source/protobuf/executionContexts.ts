@@ -29,11 +29,11 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
  * @returns {PbExecutionContext} SDK representation
  */
 function toSDK(input: PbExecutionContext): SdkExecutionContext {
-    const microserviceId = MicroserviceId.create(guids.toSDK(input.getMicroserviceid()));
-    const tenantId = TenantId.create(guids.toSDK(input.getTenantid()));
+    const microserviceId = MicroserviceId.from(guids.toSDK(input.getMicroserviceid()));
+    const tenantId = TenantId.from(guids.toSDK(input.getTenantid()));
     const version = versions.toSDK(input.getVersion());
-    const environment = Environment.create(input.getEnvironment());
-    const correlationId = CorrelationId.create(guids.toSDK(input.getCorrelationid()));
+    const environment = Environment.from(input.getEnvironment());
+    const correlationId = CorrelationId.from(guids.toSDK(input.getCorrelationid()));
     const convertedClaims = new Claims(input.getClaimsList().map(claim => claims.toSDK(claim)));
 
     return new SdkExecutionContext(

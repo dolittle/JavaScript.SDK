@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 import {
     IArtifacts,
@@ -95,7 +94,7 @@ export class Artifacts implements IArtifacts {
 
         if (input != null) {
             if (input instanceof Artifact) artifact = input;
-            else if (typeof input === 'string') artifact = new Artifact(ArtifactId.create(input));
+            else if (typeof input === 'string') artifact = new Artifact(ArtifactId.from(input));
             else artifact = new Artifact(input);
         } else if (object && this.hasFor(object.constructor)) {
             artifact = this.getFor(object.constructor);

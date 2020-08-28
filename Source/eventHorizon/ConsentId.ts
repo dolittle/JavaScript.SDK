@@ -7,12 +7,19 @@ import { ConceptAs } from '@dolittle/concepts';
 /**
  * Represents the unique identifier for a consent.
  */
-export class ConsentId extends ConceptAs<Guid, '@dolittle/sdk.eventhorizon'> {
+export class ConsentId extends ConceptAs<Guid, '@dolittle/sdk.eventhorizon.ConsentId'> {
     constructor(id: Guid) {
-        super(id, '@dolittle/sdk.eventhorizon');
+        super(id, '@dolittle/sdk.eventhorizon.ConsentId');
     }
 
-    static create(id: string | Guid): ConsentId {
-        return new ConsentId(id != null? Guid.as(id) : Guid.create());
+    /**
+     * Creates a {ConsentId} from a guid.
+     *
+     * @static
+     * @param {(string | Guid)} id
+     * @returns {ConsentId}
+     */
+    static from(id: string | Guid): ConsentId {
+        return new ConsentId(Guid.as(id));
     };
 }

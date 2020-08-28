@@ -17,11 +17,9 @@ import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/E
 import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PublicFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId } from '../FilterId';
-import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
+import { internal, FilterId, PartitionedFilterEventCallback } from '../index';
 
-export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
+export class PublicEventFilterProcessor extends internal.FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 
     constructor(
         filterId: FilterId,

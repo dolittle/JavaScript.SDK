@@ -14,19 +14,19 @@ export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Envi
     /**
      * Represents an undetermined environment
      */
-    static undetermined: Environment = Environment.create('Undetermined');
+    static undetermined: Environment = Environment.from('Undetermined');
 
     /**
      * Represents an production environment
      */
-    static production: Environment = Environment.create('Production');
+    static production: Environment = Environment.from('Production');
 
     /**
      * Represents an development environment
      */
-    static development: Environment = Environment.create('Development');
+    static development: Environment = Environment.from('Development');
 
-    static create(env: string): Environment {
-        return env != null ? new Environment(env) : Environment.undetermined;
+    static from(env: string): Environment {
+        return new Environment(env);
     };
 }

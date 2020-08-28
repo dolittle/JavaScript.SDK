@@ -29,7 +29,7 @@ function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!uuid) {
         throw new MissingFailureIdentifier();
     }
-    return new SdkFailure(FailureId.create(new Guid(uuid)), FailureReason.create(input.getReason()));
+    return SdkFailure.from(new Guid(uuid), input.getReason());
 }
 
 export default {

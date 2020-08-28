@@ -10,7 +10,7 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
 import {
-    PartitionedEventFilterBuilder, 
+    PartitionedEventFilterBuilder,
     UnpartitionedEventFilterBuilder,
     FilterEventCallback,
     FilterId,

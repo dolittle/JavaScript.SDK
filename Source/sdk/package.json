@@ -27,6 +27,7 @@
         "postbuild": "yarn lint",
         "build": "tsc -b",
         "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "test": "yarn build && yarn test:run",
         "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",

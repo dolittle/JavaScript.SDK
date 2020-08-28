@@ -11,7 +11,25 @@ export class ArtifactId extends ConceptAs<Guid, '@dolittle/sdk.artifacts.Artifac
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.artifacts.ArtifactId');
     }
-    static create(id?: Guid | string): ArtifactId {
-        return new ArtifactId(id != null ? Guid.as(id) : Guid.create());
+
+    /**
+     * Creates a new {ArtifactId}.
+     *
+     * @static
+     * @returns {ArtifactId}
+     */
+    static new(): ArtifactId {
+        return ArtifactId.from(Guid.create());
+    }
+
+    /**
+     * Creates an {ArtifactId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {ArtifactId}
+     */
+    static from(id: Guid | string): ArtifactId {
+        return new ArtifactId(Guid.as(id));
     }
 };

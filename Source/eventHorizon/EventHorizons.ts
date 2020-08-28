@@ -76,7 +76,7 @@ export class EventHorizons implements IEventHorizons {
                 pbSubscription.setMicroserviceid(guids.toProtobuf(subscription.microservice.value));
 
                 this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, pbResponse?: PbSubscriptionResponse) => {
-                    const response = new SubscriptionResponse(ConsentId.create(guids.toSDK(pbResponse?.getConsentid())), failures.toSDK(pbResponse?.getFailure()));
+                    const response = SubscriptionResponse.from(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
                     this._subscriptionResponses.set(subscription, response);
 
                     this.callbacks.next(consumerTenant, subscription, response);

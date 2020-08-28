@@ -8,11 +8,7 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId } from './FilterId';
-import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
-import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
-import { IFilterProcessor } from './IFilterProcessor';
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
+import { FilterId, IFilterProcessor, FilterDefinitionIncomplete, PrivateEventFilterBuilder, PublicEventFilterBuilder } from './index';
 
 export type EventFilterBuilderCallback = (builder: EventFilterBuilder) => void;
 
@@ -54,7 +50,11 @@ export class EventFilterBuilder {
      * @param {Logger} logger For logging.
      * @returns {IFilterProcessor}
      */
-    build(client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger): IFilterProcessor {
+    build(
+        client: FiltersClient,
+        executionContextManager: IExecutionContextManager,
+        artifacts: IArtifacts,
+        logger: Logger): IFilterProcessor {
         if (!this._innerBuilder) {
             throw new FilterDefinitionIncomplete(this._filterId, 'call private() or public().');
         }

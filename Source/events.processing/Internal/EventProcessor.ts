@@ -21,7 +21,7 @@ import { IEventProcessor, RegistrationFailed } from '../index';
 /**
  * Partial implementation of {@link IEventProcessor}.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, TConceptIdentifier>, TConceptIdentifier extends string, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
     private _pingTimeout = 1;
 
     constructor(

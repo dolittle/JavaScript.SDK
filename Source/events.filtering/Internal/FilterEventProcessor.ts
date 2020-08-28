@@ -16,7 +16,7 @@ import { RetryProcessingState } from '@dolittle/runtime.contracts/Runtime/Events
 
 import { FilterId } from '../index';
 
-export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends EventProcessor<FilterId, '@dolittle/sdk.events.filtering.FilterId', TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
+export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
     constructor(
         kind: string,
@@ -59,7 +59,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            EventSourceId.create(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(guids.toSDK(pbEventSourceId)),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContexts.toSDK(pbExecutionContext)
         );

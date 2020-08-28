@@ -15,9 +15,16 @@ export class PartitionId extends ConceptAs<Guid, '@dolittle/sdk.events.Partition
     /**
      * Gets the unspecified partition id
      */
-    static unspecified: PartitionId = PartitionId.create(Guid.empty);
+    static unspecified: PartitionId = PartitionId.from(Guid.empty);
 
-    static create(id?: Guid | string): PartitionId {
-        return new PartitionId(id != null ? Guid.as(id) : Guid.create());
+    /**
+     * Creates a {PartitionId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {PartitionId}
+     */
+    static from(id: Guid | string): PartitionId {
+        return new PartitionId(Guid.as(id));
     }
 };

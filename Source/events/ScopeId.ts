@@ -11,9 +11,6 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.ScopeId');
     }
-    static create(id?: Guid | string): ScopeId {
-        return new ScopeId(id != null ? Guid.as(id) : Guid.create());
-    }
 
     /**
      * Represents the default scope
@@ -21,5 +18,16 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
      * @static
      * @type {ScopeId}
      */
-    static default: ScopeId = ScopeId.create(Guid.empty);
+    static default: ScopeId = ScopeId.from(Guid.empty);
+
+    /**
+     * Creates a {ScopeId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} [id]
+     * @returns {ScopeId}
+     */
+    static from(id: Guid | string): ScopeId {
+        return new ScopeId(Guid.as(id));
+    }
 };

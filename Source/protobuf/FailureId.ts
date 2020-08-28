@@ -4,12 +4,26 @@
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 
+/**
+ * Represents the unique identifier for a {Failure}.
+ *
+ * @export
+ * @class FailureId
+ * @extends {ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'>}
+ */
 export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'> {
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.protobuf.FailureId');
     }
 
-    static create(id: string | Guid): FailureId {
+    /**
+     * Creates a {FailureId} from a guid.
+     *
+     * @static
+     * @param {(string | Guid)} id
+     * @returns {FailureId}
+     */
+    static from(id: string | Guid): FailureId {
         return new FailureId(Guid.as(id));
     };
 }

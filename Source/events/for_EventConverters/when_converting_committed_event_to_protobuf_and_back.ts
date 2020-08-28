@@ -15,11 +15,11 @@ describe('when converting committed event to protobuf and back', () => {
     const claims = new Claims(claimsArray);
 
     const executionContext = new ExecutionContext(
-        MicroserviceId.create('98260f59-9b4c-4730-a9c5-8254a8c32b18'),
-        TenantId.create('3461f78c-2a06-4fe4-8d6d-7db92dbff038'),
+        MicroserviceId.from('98260f59-9b4c-4730-a9c5-8254a8c32b18'),
+        TenantId.from('3461f78c-2a06-4fe4-8d6d-7db92dbff038'),
         new Version(42, 43, 43, 44, 'alpha'),
         Environment.development,
-        CorrelationId.create('ba704191-1659-4e5c-b124-fe1c63e5bcbe'),
+        CorrelationId.from('ba704191-1659-4e5c-b124-fe1c63e5bcbe'),
         claims
     );
 
@@ -33,9 +33,9 @@ describe('when converting committed event to protobuf and back', () => {
     const committedEvent = new CommittedEvent(
         42,
         DateTime.utc(),
-        EventSourceId.create('3a52080d-c44b-4827-8d65-1325b7f055f2'),
+        EventSourceId.from('3a52080d-c44b-4827-8d65-1325b7f055f2'),
         executionContext,
-        new Artifact(ArtifactId.create('559c3025-fd90-4aad-9508-12a6ee517707'), Generation.create(43)),
+        new Artifact(ArtifactId.from('559c3025-fd90-4aad-9508-12a6ee517707'), Generation.from(43)),
         content,
         true,
         true,

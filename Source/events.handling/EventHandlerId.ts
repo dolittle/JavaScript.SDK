@@ -12,7 +12,14 @@ export class EventHandlerId extends ConceptAs<Guid, '@dolittle/sdk.events.handli
         super(id, '@dolittle/sdk.events.handling.EventHandlerId');
     }
 
-    static create(id?: Guid | string): EventHandlerId {
-        return new EventHandlerId(id != null ? Guid.as(id) : Guid.create());
+    /**
+     * Creates an {EventHandlerId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {EventHandlerId}
+     */
+    static from(id: Guid | string): EventHandlerId {
+        return new EventHandlerId(Guid.as(id));
     }
 }

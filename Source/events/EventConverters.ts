@@ -3,7 +3,6 @@
 
 import { DateTime } from 'luxon';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
-import { Guid } from '@dolittle/rudiments';
 import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
 import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
@@ -49,7 +48,7 @@ export class EventConverters {
         const committedEvent = new SdkCommittedEvent(
             input.getEventlogsequencenumber(),
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
-            EventSourceId.create(guids.toSDK(input.getEventsourceid())),
+            EventSourceId.from(guids.toSDK(input.getEventsourceid())),
             executionContexts.toSDK(executionContext),
             artifacts.toSDK(input.getType()),
             JSON.parse(input.getContent()),

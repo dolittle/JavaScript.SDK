@@ -11,9 +11,6 @@ export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.StreamId');
     }
-    static create(id?: Guid | string): StreamId {
-        return new StreamId(id != null ? Guid.as(id) : Guid.create());
-    }
 
     /**
      * Represents the event log.
@@ -21,5 +18,16 @@ export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
      * @static
      * @type {StreamId}
      */
-    static eventLog: StreamId = StreamId.create(Guid.empty);
+    static eventLog: StreamId = StreamId.from(Guid.empty);
+
+    /**
+     * Creates a {StreamId} from a guid.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @returns {StreamId}
+     */
+    static from(id: Guid | string): StreamId {
+        return new StreamId(Guid.as(id));
+    }
 };

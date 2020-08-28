@@ -15,9 +15,26 @@ export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.Corr
     /**
      * Represents the system correlation identifier
      */
-    static system = CorrelationId.create('868ff40f-a133-4d0f-bfdd-18d726181e01');
+    static system = CorrelationId.from('868ff40f-a133-4d0f-bfdd-18d726181e01');
 
-    static create(id?: string | Guid): CorrelationId {
-        return new CorrelationId(id != null? Guid.as(id) : Guid.create());
+    /**
+     * Creates a {CorrelationId} from a guid.
+     *
+     * @static
+     * @param {(string | Guid)} id
+     * @returns {CorrelationId}
+     */
+    static from(id: string | Guid): CorrelationId {
+        return new CorrelationId(Guid.as(id));
     };
+
+    /**
+     * Creates a new {CorrelationId}
+     *
+     * @static
+     * @returns {CorrelationId}
+     */
+    static new(): CorrelationId {
+        return CorrelationId.from(Guid.create());
+    }
 }

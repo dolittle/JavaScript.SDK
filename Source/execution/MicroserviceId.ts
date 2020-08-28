@@ -16,9 +16,16 @@ export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.Mic
     /**
      * Represents the identifier for when Microservice is not applicable.
      */
-    static notApplicable = MicroserviceId.create(Guid.empty);
+    static notApplicable = MicroserviceId.from(Guid.empty);
 
-    static create(id: string | Guid): MicroserviceId {
-        return new MicroserviceId(id != null? Guid.as(id) : Guid.create());
+    /**
+     * Creates a {MicroserviceId} from a guid.
+     *
+     * @static
+     * @param {(string | Guid)} id
+     * @returns {MicroserviceId}
+     */
+    static from(id: string | Guid): MicroserviceId {
+        return new MicroserviceId(Guid.as(id));
     };
 }
