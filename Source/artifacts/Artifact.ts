@@ -47,8 +47,8 @@ export class Artifact {
 /**
  * Decorator for associating a type with an artifact.
  */
-export function artifact(identifier: ArtifactId, generation = Generation.first) {
+export function artifact(identifier: string, generation = Generation.first) {
     return function (target: any) {
-        ArtifactsFromDecorators.associate(target.prototype.constructor, identifier, generation);
+        ArtifactsFromDecorators.associate(target.prototype.constructor, ArtifactId.create(identifier), generation);
     };
 }

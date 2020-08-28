@@ -8,7 +8,7 @@ import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager, Environment } from '@dolittle/sdk.execution';
 import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
@@ -51,7 +51,7 @@ export class Client {
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static default(microserviceId: MicroserviceId = Guid.empty, version: Version = Version.first, environment?: string): Client {
+    static default(microserviceId: MicroserviceId = MicroserviceId.notApplicable, version: Version = Version.first, environment?: string): Client {
         return Client.for(microserviceId, version, environment).build();
     }
 
@@ -100,7 +100,7 @@ export class ClientBuilder {
      * @param {string} environment The environment the software is running in. (e.g. development, production).
      */
     constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
-        this._microserviceId = Guid.as(microserviceId);
+        this._microserviceId = microserviceId;
         this._version = version;
         this._environment = environment;
         this._artifactsBuilder = new ArtifactsBuilder();
@@ -200,7 +200,7 @@ export class ClientBuilder {
      */
     build(): Client {
         const logger = createLogger(this._loggerOptions);
-        const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
+        const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, Environment.create(this._environment));
         const artifacts = this._artifactsBuilder.build();
 
         const connectionString = `${this._host}:${this._port}`;

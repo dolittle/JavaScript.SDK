@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, fromConceptFor } from '@dolittle/concepts';
 import { GenerationCannotBeLessThanZero } from './index';
 
 export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>{
@@ -11,7 +11,7 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
     }
 
     static first: Generation = new Generation(1);
-    static create(generation?: number): Generation {
+    static as(generation: number): Generation {
         return generation != null ? new Generation(generation) : Generation.first;
     }
 }
