@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor, Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+import { Guid } from '@dolittle/rudiments';
 import { Artifact, ArtifactId, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { EventHandlerSignature } from './EventHandlerSignature';
 import { EventHandlerId } from './EventHandlerId';
@@ -88,14 +89,14 @@ export class EventHandlerBuilder {
     build(artifacts: IArtifacts): IEventHandler {
         const artifactsToMethods = new ArtifactMap<EventHandlerSignature<any>>();
 
-        for (const [typeOrArtifact, method] of this._handlers) {
+        for (const [typeOrArtifactOrId, method] of this._handlers) {
             let artifact: Artifact;
-            if (typeOrArtifact instanceof Artifact) {
-                artifact = typeOrArtifact;
-            } else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
-                artifact = new Artifact(ArtifactId.create(typeOrArtifact));
+            if (typeOrArtifactOrId instanceof Artifact) {
+                artifact = typeOrArtifactOrId;
+            } else if (typeOrArtifactOrId instanceof ArtifactId) {
+                artifact = new Artifact(typeOrArtifactOrId);
             } else {
-                artifact = artifacts.getFor(typeOrArtifact);
+                artifact = artifacts.getFor(typeOrArtifactOrId);
             }
 
             artifactsToMethods.set(artifact, method);
