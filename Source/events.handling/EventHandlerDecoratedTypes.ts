@@ -7,9 +7,23 @@ import { ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerDecoratedType, EventHandlerId } from './index';
 
 export class EventHandlerDecoratedTypes {
-    static readonly types: ReplaySubject<EventHandlerDecoratedType> = new ReplaySubject<EventHandlerDecoratedType>();
+    private static readonly _eventHandlers = new Map<Function, EventHandlerId>();
+    private static readonly _scopes  = new Map<Function, ScopeId>();
+    static registerEventHandler(eventHandlerId: EventHandlerId, type: Function) {
+        this._eventHandlers.set(type, eventHandlerId);
+    }
+    static registerScope(scopeId: ScopeId, type: Function) {
+        this._scopes.set(type, scopeId);
+    }
+    static forEach(callback: (eventHandlerDecoratedType: EventHandlerDecoratedType) => void) {
+        const eventHandlerDecoratedTypes: EventHandlerDecoratedType[] = [];
+        for (const [func, eventHandlerId] of this._eventHandlers) {
+            const scopeId = this._scopes.has(func) ? this._scopes.get(func)! : ScopeId.default;
+            eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(eventHandlerId, scopeId, func));
+        }
 
-    static register(eventHandlerId: EventHandlerId, scopeId: ScopeId | undefined, type: Function) {
-        this.types.next(new EventHandlerDecoratedType(eventHandlerId, scopeId, type));
+        for (const eventHandlerDecoratedType of eventHandlerDecoratedTypes) {
+            callback(eventHandlerDecoratedType);
+        }
     }
 }

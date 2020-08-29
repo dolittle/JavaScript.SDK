@@ -7,7 +7,6 @@ import { Logger } from 'winston';
 import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
-import { Guid } from '@dolittle/rudiments';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
@@ -34,30 +33,7 @@ export class EventHandlers implements IEventHandlers {
         private _logger: Logger,
         private _cancellation: Cancellation,
     ) {
-        EventHandlerDecoratedTypes.types.pipe(
-            filter((value: EventHandlerDecoratedType) => {
-                if (HandlesDecoratedMethods.methodsPerEventHandler.has(value.type)) {
-                    return true;
-                } else {
-                    _logger.warn(`EventHandler with Id '${value.eventHandlerId}' does not handle any events. This event handler will not be registered.`);
-                    return false;
-                }
-            }),
-            map((value: EventHandlerDecoratedType) => {
-                _logger.debug(`Register EventHandler '${value.eventHandlerId}'`);
-
-                const methodsByArtifact = new ArtifactMap<EventHandlerSignature<any>>();
-                for (const method of HandlesDecoratedMethods.methodsPerEventHandler.get(value.type)!) {
-                    const artifact = _artifacts.getFor(method.eventType);
-                    methodsByArtifact.set(artifact, method.method);
-                }
-                return new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
-            })
-        ).subscribe({
-            next: (eventHandler: IEventHandler) => {
-                this.register(eventHandler, _cancellation);
-            }
-        });
+        this.registerDecoratedEventHandlerTypes();
     }
 
     /** @inheritdoc */
@@ -80,5 +56,31 @@ export class EventHandlers implements IEventHandlers {
                     this._logger.error(`Event handler registration completed.`);
                 }
             });
+    }
+
+    private registerDecoratedEventHandlerTypes() {
+        EventHandlerDecoratedTypes.forEach(_ => {
+            if (!this.eventHandlerHandlesEvents(_.type)) {
+                this._logger.warn(`EventHandler with Id '${_.eventHandlerId}' does not handle any events. This event handler will not be registered.`);
+                return;
+            }
+            this._logger.debug(`Register EventHandler '${_.eventHandlerId}'`);
+
+            const eventHandler = new EventHandler(_.eventHandlerId, _.scopeId, true, this.getEventHandlerMethodsByArtifact(_.type));
+            this.register(eventHandler, this._cancellation);
+        });
+    }
+
+    private eventHandlerHandlesEvents(eventHandler: Function) {
+        return HandlesDecoratedMethods.methodsPerEventHandler.has(eventHandler);
+    }
+
+    private getEventHandlerMethodsByArtifact(eventHandler: Function) {
+        const methodsByArtifact = new ArtifactMap<EventHandlerSignature<any>>();
+            for (const method of HandlesDecoratedMethods.methodsPerEventHandler.get(eventHandler)!) {
+                const artifact = this._artifacts.getFor(method.eventType);
+                methodsByArtifact.set(artifact, method.method);
+            }
+        return methodsByArtifact;
     }
 }

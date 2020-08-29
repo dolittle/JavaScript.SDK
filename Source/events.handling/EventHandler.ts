@@ -43,11 +43,17 @@ export class EventHandler implements IEventHandler {
     }
 }
 
-export function eventHandler(eventHandlerId: Guid | string, scopeId?: Guid | string) {
+export function eventHandler(eventHandlerId: Guid | string) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.register(
+        EventHandlerDecoratedTypes.registerEventHandler(
             EventHandlerId.from(eventHandlerId),
-            scopeId != null ? ScopeId.from(scopeId) : undefined,
+            target);
+    };
+}
+export function inScope(scopeId: Guid | string) {
+    return function (target: any) {
+        EventHandlerDecoratedTypes.registerScope(
+            ScopeId.from(scopeId),
             target);
     };
 }
