@@ -62,7 +62,7 @@ export class Artifact {
 /**
  * Decorator for associating a type with an artifact.
  */
-export function artifact(identifier: string, generationNumber?: number) {
+export function artifact(identifier: Guid | string, generationNumber?: number) {
     return function (target: any) {
         ArtifactsFromDecorators.associate(
             target.prototype.constructor,
