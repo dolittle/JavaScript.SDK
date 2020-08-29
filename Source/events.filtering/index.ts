@@ -1,13 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 export { FilterId } from './FilterId';
-export { MissingFilterCallback } from './MissingFilterCallback';
 export { FilterEventCallback } from './FilterEventCallback';
-export { PartitionedFilterResult } from './PartitionedFilterResult';
-export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 export { IFilterProcessor } from './IFilterProcessor';
+export { PartitionedFilterResult } from './PartitionedFilterResult';
+export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
+export { MissingFilterCallback } from './MissingFilterCallback';
+export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 export { IFilters } from './IFilters';
 export { Filters } from './Filters';
 export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';

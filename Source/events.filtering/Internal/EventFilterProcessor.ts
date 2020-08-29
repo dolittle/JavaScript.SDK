@@ -15,9 +15,10 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Proces
 import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterId, FilterEventCallback, internal } from '../index';
+import { FilterId, FilterEventCallback } from '../index';
+import { FilterEventProcessor } from './index';
 
-export class EventFilterProcessor extends internal.FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
+export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 
     constructor(
         filterId: FilterId,
