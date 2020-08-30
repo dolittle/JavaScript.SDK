@@ -9,7 +9,7 @@ import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contra
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
-import { CommittedEvent as SdkCommittedEvent, EventSourceId, MissingExecutionContext } from './index';
+import { CommittedEvent as SdkCommittedEvent, EventSourceId, MissingExecutionContext, EventLogSequenceNumber } from './index';
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.
@@ -46,7 +46,7 @@ export class EventConverters {
         }
 
         const committedEvent = new SdkCommittedEvent(
-            input.getEventlogsequencenumber(),
+            EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
             EventSourceId.from(guids.toSDK(input.getEventsourceid())),
             executionContexts.toSDK(executionContext),
@@ -54,7 +54,7 @@ export class EventConverters {
             JSON.parse(input.getContent()),
             input.getPublic(),
             input.getExternal(),
-            input.getExternaleventlogsequencenumber(),
+            EventLogSequenceNumber.from(input.getExternaleventlogsequencenumber()),
             DateTime.fromJSDate(input.getExternaleventreceived()?.toDate() || new Date())
         );
         return committedEvent;
@@ -73,7 +73,7 @@ export class EventConverters {
         externalEventReceived.fromDate(input.externalEventReceived.toJSDate());
 
         const committedEvent = new PbCommittedEvent();
-        committedEvent.setEventlogsequencenumber(input.eventLogSequenceNumber);
+        committedEvent.setEventlogsequencenumber(input.eventLogSequenceNumber.value);
         committedEvent.setOccurred(occurred);
         committedEvent.setEventsourceid(guids.toProtobuf(input.eventSourceId.value));
         committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
@@ -81,7 +81,7 @@ export class EventConverters {
         committedEvent.setContent(JSON.stringify(input.content));
         committedEvent.setPublic(input.isPublic);
         committedEvent.setExternal(input.isExternal);
-        committedEvent.setExternaleventlogsequencenumber(input.externalEventLogSequenceNumber);
+        committedEvent.setExternaleventlogsequencenumber(input.externalEventLogSequenceNumber.value);
         committedEvent.setExternaleventreceived(externalEventReceived);
         return committedEvent;
     }

@@ -4,7 +4,7 @@
 import { DateTime } from 'luxon';
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EventSourceId } from './index';
+import { EventSourceId, EventLogSequenceNumber } from './index';
 
 /**
  * Represents a committed event
@@ -13,7 +13,7 @@ export class CommittedEvent {
 
     /**
      * Initializes a new instance of {@link CommittedEvent}.
-     * @param {number} eventLogSequenceNumber The sequence number in the event log.
+     * @param {EventLogSequenceNumber} eventLogSequenceNumber The sequence number in the event log.
      * @param {DateTime} occurred Timestamp for when it occurred.
      * @param {EventSourceId} eventSourceId Identifier of the event source.
      * @param {ExecutionContext} executionContext The execution context in which the event happened.
@@ -25,7 +25,7 @@ export class CommittedEvent {
      * @param {DateTime} externalEventReceived If external; timestamp for when it was received.
      */
     constructor(
-        readonly eventLogSequenceNumber: number,
+        readonly eventLogSequenceNumber: EventLogSequenceNumber,
         readonly occurred: DateTime,
         readonly eventSourceId: EventSourceId,
         readonly executionContext: ExecutionContext,
@@ -33,7 +33,7 @@ export class CommittedEvent {
         readonly content: any,
         readonly isPublic: boolean,
         readonly isExternal: boolean,
-        readonly externalEventLogSequenceNumber: number,
+        readonly externalEventLogSequenceNumber: EventLogSequenceNumber,
         readonly externalEventReceived: DateTime) {
     }
 }
