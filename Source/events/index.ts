@@ -3,6 +3,8 @@
 
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { MissingExecutionContext } from './MissingExecutionContext';
+export { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNumberMustBeNaturalNumber';
+export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventSourceId } from './EventSourceId';
 export { PartitionId } from './PartitionId';
 export { ScopeId } from './ScopeId';
