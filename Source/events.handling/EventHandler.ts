@@ -57,3 +57,9 @@ export function inScope(scopeId: Guid | string) {
             target);
     };
 }
+export function unpartitioned() {
+    return function (target: any) {
+        EventHandlerDecoratedTypes.registerUnpartitioned(
+            target);
+    };
+}
