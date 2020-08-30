@@ -68,6 +68,6 @@ describe('when converting committed event to protobuf and back', () => {
 
     it('should have same public state', () => result.isPublic.should.equal(committedEvent.isPublic));
     it('should have same external state', () => result.isPublic.should.equal(committedEvent.isExternal));
-    it('should have same external event log sequence number', () => result.externalEventLogSequenceNumber.should.equal(committedEvent.externalEventLogSequenceNumber));
+    it('should have same external event log sequence number', () => result.externalEventLogSequenceNumber.equals(committedEvent.externalEventLogSequenceNumber).should.be.true);
     it('should have same external event received', () => result.externalEventReceived.toUTC().toString().should.equal(committedEvent.externalEventReceived.toUTC().toString()));
 });
