@@ -13,9 +13,9 @@ import { EventLogSequenceNumberMustBeNaturalNumber } from './index';
  */
 export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>{
 
-    constructor(generation: number) {
-        if (!isNaturalNumber(generation, { includeZero: true })) throw new EventLogSequenceNumberMustBeNaturalNumber();
-        super(generation, '@dolittle/sdk.events.EventLogSequenceNumber');
+    constructor(value: number) {
+        if (!isNaturalNumber(value, { includeZero: true })) throw new EventLogSequenceNumberMustBeNaturalNumber();
+        super(value, '@dolittle/sdk.events.EventLogSequenceNumber');
     }
 
     /**
@@ -30,10 +30,10 @@ export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.eve
      * Creates a {EventLogSequenceNumber} from a number.
      *
      * @static
-     * @param {number} num
+     * @param {number} value
      * @returns {Generation}
      */
-    static from(num: number): EventLogSequenceNumber {
-        return new EventLogSequenceNumber(num);
+    static from(value: number): EventLogSequenceNumber {
+        return new EventLogSequenceNumber(value);
     }
 }
