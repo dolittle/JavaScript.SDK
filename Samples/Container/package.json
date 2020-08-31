@@ -11,10 +11,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "2.2.0",
-        "@dolittle/sdk.artifacts": "2.2.0",
-        "@dolittle/sdk.events": "2.2.0",
-        "@dolittle/sdk.events.handling": "2.2.0",
+        "@dolittle/sdk": "3.0.0",
+        "@dolittle/sdk.artifacts": "3.0.0",
+        "@dolittle/sdk.events": "3.0.0",
+        "@dolittle/sdk.events.handling": "3.0.0",
         "reflect-metadata": "^0.1.13",
         "typedi": "0.8.0"
     },
