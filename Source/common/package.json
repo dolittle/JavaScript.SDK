@@ -1,5 +1,5 @@
 {
-    "name": "@dolittle/sdk.events.handling",
+    "name": "@dolittle/sdk.common",
     "version": "3.0.0",
     "description": "",
     "author": "",
@@ -26,25 +26,14 @@
         "postbuild": "yarn lint",
         "build": "tsc -b",
         "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "test": "yarn build && yarn test:run",
         "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/types": "5.0.0",
-        "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "3.0.0",
-        "@dolittle/sdk.common": "3.0.0",
-        "@dolittle/sdk.events": "3.0.0",
-        "@dolittle/sdk.events.processing": "3.0.0",
-        "@dolittle/sdk.execution": "3.0.0",
-        "@dolittle/sdk.services": "3.0.0",
-        "@dolittle/sdk.protobuf": "3.0.0",
-        "@dolittle/sdk.resilience": "3.0.0",
-        "rxjs": "6.6.0",
-        "luxon": "1.24.1",
-        "winston": "3.3.2"
+        "@dolittle/types": "5.0.0"
+    },
+    "devDependencies": {
     }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
 /**
@@ -31,10 +31,11 @@ export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'
      * Creates a {TenantId} from a guid.
      *
      * @static
-     * @param {(string | Guid)} id
+     * @param {string | Guid | TenantId} id
      * @returns {TenantId}
      */
-    static from(id: string | Guid): TenantId {
+    static from(id: string | Guid | TenantId): TenantId {
+        if (id instanceof TenantId) return id;
         return new TenantId(Guid.as(id));
     };
 }

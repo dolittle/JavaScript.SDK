@@ -37,6 +37,7 @@
         "@dolittle/rudiments": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "3.0.0",
+        "@dolittle/sdk.common": "3.0.0",
         "@dolittle/sdk.eventhorizon": "3.0.0",
         "@dolittle/sdk.events": "3.0.0",
         "@dolittle/sdk.events.handling": "3.0.0",

@@ -14,9 +14,9 @@ export interface IExecutionContextManager {
 
     /**
      * Set the current execution context for a tenant and possibly claims.
-     * @param {TenantId} tenantId Tenant to set for.
+     * @param {TenantId | string} tenantId Tenant to set for.
      * @param [claims] Optional claims to set for.
      * @returns {ExecutionContext} The execution context that was set.
      */
-    currentFor(tenantId: TenantId, claims?: Claims): ExecutionContext;
+    currentFor(tenantId: TenantId | string, claims?: Claims): ExecutionContext;
 }

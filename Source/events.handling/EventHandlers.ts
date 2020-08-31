@@ -5,6 +5,7 @@ import { map, filter, delay } from 'rxjs/operators';
 import { Logger } from 'winston';
 
 import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { IContainer } from '@dolittle/sdk.common';
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
@@ -22,17 +23,19 @@ export class EventHandlers implements IEventHandlers {
     /**
      * Initializes an instance of {@link EventHandlers}.
      * @param {EventHandlersClient} _eventHandlersClient Client to use for connecting to the runtime.
+     * @param {IContainer} _container The container for creating instances needed.
      * @param {IExecutionContextManager} _executionContextManager For managing execution context.
      * @param {IArtifacts} _artifacts For mapping artifacts.
      * @param {Logger} _logger For logging.
      * @param {Cancellation} _cancellation For handling cancellation.
      */
     constructor(
-        private _eventHandlersClient: EventHandlersClient,
-        private _executionContextManager: IExecutionContextManager,
-        private _artifacts: IArtifacts,
-        private _logger: Logger,
-        private _cancellation: Cancellation,
+        private readonly _eventHandlersClient: EventHandlersClient,
+        private readonly _container: IContainer,
+        private readonly _executionContextManager: IExecutionContextManager,
+        private readonly _artifacts: IArtifacts,
+        private readonly _logger: Logger,
+        private readonly _cancellation: Cancellation,
     ) {
         EventHandlerDecoratedTypes.types.pipe(
             filter((value: EventHandlerDecoratedType) => {
@@ -44,12 +47,24 @@ export class EventHandlers implements IEventHandlers {
                 }
             }),
             map((value: EventHandlerDecoratedType) => {
-                _logger.debug(`Register EventHandler '${value.eventHandlerId}'`);
-
                 const methodsByArtifact = new ArtifactMap<EventHandlerSignature<any>>();
                 for (const method of HandlesDecoratedMethods.methodsPerEventHandler.get(value.type)!) {
                     const artifact = _artifacts.getFor(method.eventType);
-                    methodsByArtifact.set(artifact, method.method);
+                    methodsByArtifact.set(artifact, (event, eventContext) => {
+
+                        if (method.owner) {
+                            let instance: any;
+                            try {
+                                instance = this._container.get(method.owner);
+                            } catch (ex) {
+                                this._logger.error('Unable to create instance of event handler.', ex);
+                                throw ex;
+                            }
+
+                            return method.method.call(instance, event, eventContext);
+                        }
+                        return method.method(event, eventContext);
+                    });
                 }
                 return new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
             })

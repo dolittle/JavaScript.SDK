@@ -25,7 +25,8 @@ export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.Mic
      * @param {(string | Guid)} id
      * @returns {MicroserviceId}
      */
-    static from(id: string | Guid): MicroserviceId {
+    static from(id: string | Guid | MicroserviceId): MicroserviceId {
+        if (id instanceof MicroserviceId) return id;
         return new MicroserviceId(Guid.as(id));
     };
 }
