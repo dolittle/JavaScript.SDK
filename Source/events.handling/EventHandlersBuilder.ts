@@ -3,6 +3,7 @@
 
 import { Logger } from 'winston';
 
+import { IContainer } from '@dolittle/sdk.common';
 import { Guid } from '@dolittle/rudiments';
 
 import { IExecutionContextManager } from '@dolittle/sdk.execution';
@@ -39,11 +40,12 @@ export class EventHandlersBuilder {
      */
     build(
         client: EventHandlersClient,
+        container: IContainer,
         executionContextManager: IExecutionContextManager,
         artifacts: IArtifacts,
         logger: Logger,
         cancellation: Cancellation): IEventHandlers {
-        const eventHandlers = new EventHandlers(client, executionContextManager, artifacts, logger, cancellation);
+        const eventHandlers = new EventHandlers(client, container, executionContextManager, artifacts, logger, cancellation);
 
         for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
             const eventHandler = eventHandlerBuilder.build(artifacts);

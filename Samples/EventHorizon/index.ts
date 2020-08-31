@@ -5,7 +5,6 @@ import { Client } from '@dolittle/sdk';
 import { EventContext } from '@dolittle/sdk.events';
 
 import './MyEventHandler';
-import { TenantId } from '@dolittle/sdk.execution';
 
 const client = Client
     .forMicroservice('a14bb24e-51f3-4d83-9eba-44c4cffe6bb9')
@@ -32,4 +31,4 @@ const client = Client
     })
     .build();
 
-client.executionContextManager.currentFor(TenantId.from('900893e7-c4cc-4873-8032-884e965e4b97'));
+client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');

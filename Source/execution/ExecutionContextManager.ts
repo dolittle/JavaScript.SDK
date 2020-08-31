@@ -46,13 +46,13 @@ export class ExecutionContextManager implements IExecutionContextManager {
     }
 
     /** @inheritdoc */
-    currentFor(tenantId: TenantId, claims?: Claims): ExecutionContext {
+    currentFor(tenantId: TenantId | string, claims?: Claims): ExecutionContext {
         const asyncId = async_hooks.executionAsyncId();
 
         const current = this.current;
         const executionContext = new ExecutionContext(
             this._microserviceId,
-            tenantId,
+            TenantId.from(tenantId),
             this._version,
             this._environment,
             current.correlationId,
