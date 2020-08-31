@@ -30,6 +30,11 @@ export interface IEventHandler {
     readonly handledEvents: Iterable<Artifact>;
 
     /**
+     * Gets the owning type, if any.
+     */
+    readonly owningType?: Function;
+
+    /**
      * Handle an event.
      * @param {*} event Event to handle.
      * @param {Artifact} artifact The artifact representing the event type.

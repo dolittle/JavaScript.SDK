@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { IContainer } from '@dolittle/sdk.common';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
