@@ -61,8 +61,7 @@ export class EventHandlers implements IEventHandlers {
                                 throw ex;
                             }
 
-                            const result = method.method.call(instance, event, eventContext);
-                            return result;
+                            return method.method.call(instance, event, eventContext);
                         }
                         return method.method(event, eventContext);
                     });
