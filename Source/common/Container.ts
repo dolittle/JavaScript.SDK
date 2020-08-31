@@ -3,7 +3,7 @@
 
 import { IContainer } from './IContainer';
 import { DefaultContainerDoesNotSupportConstructorArguments } from './DefaultContainerDoesNotSupportConstructorArguments';
-import { Constructor } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
 
 /**
  * Represents an implementation of {@link IContainer}.
