@@ -15,5 +15,6 @@ export { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandler
 export { IEventHandlers } from './IEventHandlers';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlersBuilder, EventHandlersBuilderCallback } from './EventHandlersBuilder';
+export { EventHandlerIdAlreadyInUse } from './EventHandlerIdAlreadyInUse';
 export { handles } from './handles';
 export * as internal from './Internal';
