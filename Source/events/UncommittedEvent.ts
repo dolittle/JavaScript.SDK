@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
-import { EventSourceId } from './EventSourceId';
+import { EventSourceId } from './index';
 
 /**
  * Represents and uncommitted event
  */
-export interface UncomittedEvent {
+export interface UncommittedEvent {
     /**
      * The source of the event - a unique identifier that is associated with the event.
      */

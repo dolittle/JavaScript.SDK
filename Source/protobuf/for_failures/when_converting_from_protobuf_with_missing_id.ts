@@ -3,8 +3,7 @@
 
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 
-import '../failures';
-import { MissingFailureIdentifier } from '../MissingFailureIdentifier';
+import { MissingFailureIdentifier } from '../index';
 
 describe('when converting from protobuf with missing id', () => {
     const reason = 'MyReason';

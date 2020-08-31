@@ -3,14 +3,15 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { Client } from '@dolittle/sdk';
-import { EventContext } from '@dolittle/sdk.events';
+import { EventContext, PartitionId } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
+import { TenantId } from '@dolittle/sdk.execution';
 
 const client = Client
-    .for('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .configureLogging(_ => _.level = 'debug')
     // .withEventHandlers(_ => {
     //     _.for('a0be3ef0-113f-45a6-800e-061d375407c2', ehb => {
@@ -39,14 +40,14 @@ const client = Client
             fb
                 .public()
                 .handle((event: any, context: EventContext) => {
-                    return new PartitionedFilterResult(true, Guid.empty);
+                    return new PartitionedFilterResult(true, PartitionId.unspecified);
                 });
         });
     })
     .build();
 
 
-client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');
+client.executionContextManager.currentFor(TenantId.from('900893e7-c4cc-4873-8032-884e965e4b97'));
 
 const event = new MyEvent();
 event.anInteger = 42;

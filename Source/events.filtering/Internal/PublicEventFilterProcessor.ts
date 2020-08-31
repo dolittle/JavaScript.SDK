@@ -17,9 +17,8 @@ import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/E
 import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PublicFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId } from '../FilterId';
-import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
+import { FilterId, PartitionedFilterEventCallback } from '../index';
+import { FilterEventProcessor } from './index';
 
 export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 
@@ -36,7 +35,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
     protected get registerArguments(): PublicFilterRegistrationRequest {
         const registerArguments = new PublicFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(Guid.as(this._identifier)));
+        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
         return registerArguments;
     }
 
@@ -73,7 +72,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
         const response = new PartitionedFilterResponse();
         response.setIsincluded(result.shouldInclude);
-        response.setPartitionid(guids.toProtobuf(Guid.as(result.partitionId)));
+        response.setPartitionid(guids.toProtobuf(result.partitionId.value));
         return response;
     }
 }

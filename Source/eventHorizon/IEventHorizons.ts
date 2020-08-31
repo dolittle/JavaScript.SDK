@@ -1,10 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TenantId } from '@dolittle/sdk.execution';
-import { Subscription } from './Subscription';
-import { SubscriptionResponse } from './SubscriptionResponse';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
+import { Subscription, TenantWithSubscriptions, SubscriptionResponse } from './index';
 
 /**
  * Defines the capabilities of the event horizons.

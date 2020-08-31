@@ -1,13 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure as SdkFailure } from './Failure';
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-
-import guids from './guids';
-
-import { MissingFailureIdentifier } from './MissingFailureIdentifier';
 import { Guid } from '@dolittle/rudiments';
+
+import { Failure as SdkFailure, FailureId, FailureReason, MissingFailureIdentifier, guids} from './index';
 
 /**
  * Convert to protobuf representation
@@ -15,8 +12,8 @@ import { Guid } from '@dolittle/rudiments';
  */
 function toProtobuf(input: SdkFailure): PbFailure {
     const artifact = new PbFailure();
-    artifact.setId(guids.toProtobuf(input.id));
-    artifact.setReason(input.reason);
+    artifact.setId(guids.toProtobuf(input.id.value));
+    artifact.setReason(input.reason.value);
     return artifact;
 }
 
@@ -32,7 +29,7 @@ function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!uuid) {
         throw new MissingFailureIdentifier();
     }
-    return new SdkFailure(new Guid(uuid), input.getReason());
+    return SdkFailure.from(new Guid(uuid), input.getReason());
 }
 
 export default {

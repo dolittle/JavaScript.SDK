@@ -9,10 +9,8 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { EventFilterBuilder, EventFilterBuilderCallback } from './EventFilterBuilder';
-import { IFilters } from './IFilters';
-import { FilterId } from './FilterId';
-import { Filters } from './Filters';
+import { FilterId, Filters, IFilters, EventFilterBuilder, EventFilterBuilderCallback } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
@@ -25,12 +23,12 @@ export class EventFiltersBuilder {
 
     /**
      * Start building for a specific filter.
-     * @param {FilterId} filterId The identifier of the filter.
+     * @param {Guid | string} filterId The identifier of the filter.
      * @param {EventFilterBuilderCallback} callback Callback for building the event filter.
      * @returns {EventFiltersBuilder} Continuation of the builder
      */
-    for(filterId: FilterId, callback: EventFilterBuilderCallback): EventFiltersBuilder {
-        const builder = new EventFilterBuilder(filterId);
+    for(filterId: Guid | string, callback: EventFilterBuilderCallback): EventFiltersBuilder {
+        const builder = new EventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._eventFilterBuilders.push(builder);
         return this;
@@ -43,7 +41,12 @@ export class EventFiltersBuilder {
      * @param {IArtifacts} artifacts For artifacts resolution.
      * @param {Logger} logger For logging.
      */
-    build(client: FiltersClient, executionContextManager: IExecutionContextManager, artifacts: IArtifacts, logger: Logger, cancellation: Cancellation): IFilters {
+    build(
+        client: FiltersClient,
+        executionContextManager: IExecutionContextManager,
+        artifacts: IArtifacts,
+        logger: Logger,
+        cancellation: Cancellation): IFilters {
         const filters = new Filters(logger);
 
         for (const eventFilterBuilder of this._eventFilterBuilders) {

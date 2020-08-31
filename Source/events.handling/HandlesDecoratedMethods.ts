@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
 
-import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
-import { EventHandlerSignature } from './EventHandlerSignature';
+import { HandlesDecoratedMethod, EventHandlerSignature } from './index';
 
 /**
  * Defines the system that knows about all the methods decorated with the handle decorator.

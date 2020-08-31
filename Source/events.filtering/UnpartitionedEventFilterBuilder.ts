@@ -9,11 +9,7 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId } from './FilterId';
-import { FilterEventCallback } from './FilterEventCallback';
-import { EventFilterProcessor } from './Internal/EventFilterProcessor';
-import { MissingFilterCallback } from './MissingFilterCallback';
-import { IFilterProcessor } from './IFilterProcessor';
+import { FilterId, FilterEventCallback, IFilterProcessor, MissingFilterCallback, internal } from './index';
 
 /**
  * Represents the builder for building public event filters.
@@ -47,7 +43,7 @@ export class UnpartitionedEventFilterBuilder {
         logger: Logger): IFilterProcessor {
 
         this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new EventFilterProcessor(filterId, scopeId, this._callback!, client, executionContextManager, artifacts, logger);
+        return new internal.EventFilterProcessor(filterId, scopeId, this._callback!, client, executionContextManager, artifacts, logger);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {

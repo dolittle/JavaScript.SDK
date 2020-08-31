@@ -1,9 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContext } from './ExecutionContext';
-import { TenantId } from './TenantId';
-import { Claims } from './Claims';
+import { ExecutionContext, TenantId, Claims } from './index';
 
 /**
  * Defines a manager for working with the {@link ExecutionContext}.

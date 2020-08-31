@@ -27,6 +27,7 @@
         "postbuild": "yarn lint",
         "build": "tsc -b",
         "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "test": "yarn build && yarn test:run",
         "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
         "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
@@ -34,7 +35,8 @@
     },
     "dependencies": {
         "@dolittle/contracts": "5.1.19",
-        "@dolittle/rudiments": "3.0.0",
+        "@dolittle/concepts": "5.0.0",
+        "@dolittle/rudiments": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "2.2.0",
         "@dolittle/sdk.execution": "2.2.0"

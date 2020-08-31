@@ -1,10 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { handles } from './handles';
-export { eventHandler } from './EventHandler';
+export { MissingEventInformation } from './MissingEventInformation';
+export { MissingEventHandlerForType } from './MissingEventHandlerForType';
 export { EventHandlerId } from './EventHandlerId';
+export { EventHandlerSignature } from './EventHandlerSignature';
+export { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
+export { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
+export { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
+export { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+export { IEventHandler } from './IEventHandler';
+export { EventHandler, eventHandler } from './EventHandler';
+export { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
+export { IEventHandlers } from './IEventHandlers';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlersBuilder, EventHandlersBuilderCallback } from './EventHandlersBuilder';
-export { IEventHandlers } from './IEventHandlers';
-export { MissingEventInformation } from './MissingEventInformation';
+export { handles } from './handles';
+export * as internal from './Internal';

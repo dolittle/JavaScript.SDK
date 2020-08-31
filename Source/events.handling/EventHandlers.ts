@@ -11,14 +11,8 @@ import { Guid } from '@dolittle/rudiments';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandler } from './EventHandler';
-import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
-import { IEventHandler } from './IEventHandler';
-import { IEventHandlers } from './IEventHandlers';
-import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
+import { EventHandler, internal, IEventHandlers, EventHandlerDecoratedTypes, EventHandlerDecoratedType, HandlesDecoratedMethods, EventHandlerSignature, IEventHandler } from './index';
+import { ScopeId } from '@dolittle/sdk.events';
 
 /**
  * Represents an implementation of {IEventHandlers}.
@@ -57,7 +51,7 @@ export class EventHandlers implements IEventHandlers {
                     const artifact = _artifacts.getFor(method.eventType);
                     methodsByArtifact.set(artifact, method.method);
                 }
-                return new EventHandler(value.eventHandlerId, value.scopeId || Guid.empty, true, methodsByArtifact);
+                return new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
             })
         ).subscribe({
             next: (eventHandler: IEventHandler) => {
@@ -69,7 +63,7 @@ export class EventHandlers implements IEventHandlers {
     /** @inheritdoc */
     register(eventHandler: IEventHandler, cancellation = Cancellation.default): void {
         this._logger.debug(`Registering a ${eventHandler.partitioned ? 'partitioned' : 'unpartitioned'} EventHandler with Id '${eventHandler.eventHandlerId}' for scope '${eventHandler.scopeId}'.`);
-        new EventHandlerProcessor(
+        new internal.EventHandlerProcessor(
             eventHandler.eventHandlerId,
             eventHandler.scopeId,
             eventHandler.partitioned,

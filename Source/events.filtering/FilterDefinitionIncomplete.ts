@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { FilterId } from './FilterId';
+import { FilterId } from './index';
 
 /**
  * Exception that is thrown when a filter definition is started using the {@link EventFiltersBuilder}, but not completed..

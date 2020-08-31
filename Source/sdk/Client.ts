@@ -8,7 +8,7 @@ import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager } from '@dolittle/sdk.execution';
+import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager, Environment } from '@dolittle/sdk.execution';
 import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
@@ -47,30 +47,34 @@ export class Client {
 
     /**
      * Create a default builder - not specifically targeting a Microservice.
+     * @param {Guid | string} [microserviceId] Optional microservice id.
      * @param {Version} [version] Optional version of the software.
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static default(microserviceId: MicroserviceId = Guid.empty, version: Version = Version.first, environment?: string): Client {
-        return Client.for(microserviceId, version, environment).build();
+    static default(
+        microserviceId?: Guid | string,
+        version?: Version,
+        environment?: string): Client {
+        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable.value, version, environment).build();
     }
 
     /**
      * Create a client builder for a Microservice
-     * @param {MicroserviceId} microserviceId The unique identifier for the microservice.
+     * @param {Guid | string} microserviceId The unique identifier for the microservice.
      * @param {Version} [version] Optional version of the software.
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static for(microserviceId: MicroserviceId, version: Version = Version.first, environment?: string): ClientBuilder {
+    static forMicroservice(microserviceId: Guid | string, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
             environment = process.env.NODE_ENV;
             if (!environment || environment === '') {
-                environment = 'development';
+                environment = Environment.development.value;
             }
         }
 
-        const builder = new ClientBuilder(microserviceId, version, environment);
+        const builder = new ClientBuilder(MicroserviceId.from(microserviceId), version, Environment.from(environment));
         return builder;
     }
 }
@@ -85,7 +89,7 @@ export class ClientBuilder {
     private _host = 'localhost';
     private _port = 50053;
     private _version: Version;
-    private _environment: string;
+    private _environment: Environment;
     private _loggerOptions: LoggerOptions<DefaulLevels>;
     private _artifactsBuilder: ArtifactsBuilder;
     private _eventHandlersBuilder: EventHandlersBuilder;
@@ -97,10 +101,10 @@ export class ClientBuilder {
      * Creates an instance of client builder.
      * @param {MicroserviceId} microserviceId The unique identifier of the microservice.
      * @param {Version} version The version of the currently running software.
-     * @param {string} environment The environment the software is running in. (e.g. development, production).
+     * @param {Environment} environment The environment the software is running in. (e.g. development, production).
      */
-    constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
-        this._microserviceId = Guid.as(microserviceId);
+    constructor(microserviceId: MicroserviceId, version: Version, environment: Environment) {
+        this._microserviceId = microserviceId;
         this._version = version;
         this._environment = environment;
         this._artifactsBuilder = new ArtifactsBuilder();

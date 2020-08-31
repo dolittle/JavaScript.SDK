@@ -15,9 +15,8 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Proces
 import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId } from '../FilterId';
-import { FilterEventCallback } from '../FilterEventCallback';
+import { FilterId, FilterEventCallback } from '../index';
+import { FilterEventProcessor } from './index';
 
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 
@@ -35,8 +34,8 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
 
     protected get registerArguments(): FilterRegistrationRequest {
         const registerArguments = new FilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(Guid.as(this._identifier)));
-        registerArguments.setScopeid(guids.toProtobuf(Guid.as(this._scopeId)));
+        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(guids.toProtobuf(this._scopeId.value));
         return registerArguments;
     }
 

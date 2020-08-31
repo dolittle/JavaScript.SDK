@@ -7,6 +7,7 @@ import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
+import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { IReverseCallClient } from '@dolittle/sdk.services';
 import { failures } from '@dolittle/sdk.protobuf';
@@ -15,15 +16,12 @@ import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resili
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { IEventProcessor } from './IEventProcessor';
-import { RegistrationFailed } from '../RegistrationFailed';
-
-export type EventProcessorId = Guid | string;
+import { IEventProcessor, RegistrationFailed } from '../index';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
  */
-export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
     private _pingTimeout = 1;
 
     constructor(
@@ -40,7 +38,7 @@ export abstract class EventProcessor<TIdentifier extends EventProcessorId, TRegi
                 next: (message: TRegisterResponse) => {
                     const failure = this.getFailureFromRegisterResponse(message);
                     if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier, failures.toSDK(failure)!));
+                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, failures.toSDK(failure)!));
                     } else {
                         this._logger.debug(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
                     }

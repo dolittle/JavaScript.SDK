@@ -1,12 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { MicroserviceId } from './MicroserviceId';
-import { TenantId } from './TenantId';
-import { CorrelationId } from './CorrelationId';
-import { Claims } from './Claims';
-import { Version } from './Version';
-import { Guid } from '@dolittle/rudiments';
+import { Version, MicroserviceId, TenantId, Claims, CorrelationId, Environment } from './index';
 
 /**
  * Represents the execution context in a running application.
@@ -27,29 +22,28 @@ export class ExecutionContext {
         private _microserviceId: MicroserviceId,
         private _tenantId: TenantId,
         readonly version: Version,
-        readonly environment: string,
+        readonly environment: Environment,
         private _correlationId: CorrelationId,
         readonly claims: Claims) {
     }
 
-
     /**
      * Gets the microservice identifier
-     * @returns {Guid}
+     * @returns {MicroserviceId}
      */
-    get microserviceId(): Guid { return Guid.as(this._microserviceId); }
+    get microserviceId(): MicroserviceId { return this._microserviceId; }
 
     /**
      * Gets the tenant identifier
      * @returns {Guid}
      */
-    get tenantId(): Guid { return Guid.as(this._tenantId); }
+    get tenantId(): TenantId { return this._tenantId; }
 
     /**
      * Gets the correlation identifier
-     * @returns {Guid}
+     * @returns {CorrelationId}
      */
-    get correlationId(): Guid { return Guid.as(this._correlationId); }
+    get correlationId(): CorrelationId { return this._correlationId; }
 
     /**
      * Gets parent execution context
