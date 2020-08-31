@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { FailureId, FailureReason } from './index';
 import { Guid } from '@dolittle/rudiments';
 
 /**
@@ -10,9 +11,21 @@ export class Failure {
 
     /**
      * Initializes an instance of failure.
-     * @param {Guid} id Unique identifier of the failure.
-     * @param {string} reason Reason for failing
+     * @param {Failure} id Unique identifier of the failure.
+     * @param {FailureReason} reason Reason for failing
      */
-    constructor(readonly id: Guid, readonly reason: string) {
+    constructor(readonly id: FailureId, readonly reason: FailureReason) {
+    }
+
+    /**
+     * Creates a {Failure} from a guid and a string.
+     *
+     * @static
+     * @param {(Guid | string)} id
+     * @param {string} reason
+     * @returns
+     */
+    static from(id: Guid | string, reason: string) {
+        return new Failure(FailureId.from(id), FailureReason.from(reason));
     }
 }

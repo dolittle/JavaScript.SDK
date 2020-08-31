@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
-import { Constructor } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
 
 /**
  * Decorator for decorating handle methods.

@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { EventContext } from '@dolittle/sdk.events';
+import { EventContext, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { MissingEventInformation } from '@dolittle/sdk.events.handling';
 import { guids, executionContexts, artifacts } from '@dolittle/sdk.protobuf';
@@ -14,7 +14,7 @@ import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failu
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterId } from '../FilterId';
+import { FilterId } from '../index';
 
 export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
@@ -59,7 +59,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            guids.toSDK(pbEventSourceId),
+            EventSourceId.from(guids.toSDK(pbEventSourceId)),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContexts.toSDK(pbExecutionContext)
         );

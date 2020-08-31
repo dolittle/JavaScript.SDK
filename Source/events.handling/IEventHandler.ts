@@ -3,7 +3,8 @@
 
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
-import { EventHandlerId } from './EventHandlerId';
+
+import { EventHandlerId } from './index';
 
 /**
  * Defines an event handler

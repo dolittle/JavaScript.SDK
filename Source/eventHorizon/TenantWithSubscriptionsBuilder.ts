@@ -1,12 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-import { SubscriptionBuilder, SubscriptionBuilderCallback } from './SubscriptionBuilder';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+import {
+    TenantWithSubscriptions,
+    SubscriptionBuilder,
+    SubscriptionCallbacks,
+    SubscriptionCallbackArguments,
+    SubscriptionBuilderCallback,
+    SubscriptionCompleted,
+    SubscriptionSucceeded,
+    SubscriptionFailed
+} from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;
 
@@ -28,12 +36,12 @@ export class TenantWithSubscriptionsBuilder {
 
     /**
      * Build subscriptions for a specific microservice.
-     * @param {MicroserviceId} microservice Microservice to build for.
+     * @param {Guid | string} microservice Microservice to build for.
      * @param {SubscriptionBuilderCallback} callback Builder callback.
      * @returns {TenantWithSubscriptionsBuilder}
      */
-    forMicroservice(microservice: MicroserviceId, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
-        const builder = new SubscriptionBuilder(microservice, this.callbacks.responses);
+    forMicroservice(microservice: Guid | string, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
+        const builder = new SubscriptionBuilder(MicroserviceId.from(microservice), this.callbacks.responses);
         callback(builder);
         this._subscriptionBuilders.push(builder);
         return this;

@@ -2,13 +2,20 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
-import { TenantWithSubscriptionsBuilder, TenantWithSubscriptionsBuilderCallback } from './TenantWithSubscriptionsBuilder';
-import { IEventHorizons } from './IEventHorizons';
-import { EventHorizons } from './EventHorizons';
 
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Logger } from 'winston';
-import { SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import {
+    TenantWithSubscriptionsBuilder,
+    TenantWithSubscriptionsBuilderCallback,
+    SubscriptionCallbacks,
+    SubscriptionCompleted,
+    SubscriptionSucceeded,
+    SubscriptionFailed,
+    EventHorizons,
+    IEventHorizons
+} from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export type EventHorizonsBuilderCallback = (builder: EventHorizonsBuilder) => void;
 
@@ -21,13 +28,13 @@ export class EventHorizonsBuilder {
 
     /**
      * Configure subscriptions for a tenant in our microservice.
-     * @param {TenantId} tenant The tenant in our microservice.
+     * @param {Guid | string} tenant The tenant in our microservice.
      * @param {TenantWithSubscriptionsBuilderCallback} callback The subscriptions builder callback.
      * @returns {EventHorizonsBuilder}
      * @summary Two microservices does not need to be aligned on tenancy. This allows for that purpose.
      */
-    forTenant(tenant: TenantId, callback: TenantWithSubscriptionsBuilderCallback): EventHorizonsBuilder {
-        const builder = new TenantWithSubscriptionsBuilder(tenant, this.callbacks.responses);
+    forTenant(tenant: Guid | string, callback: TenantWithSubscriptionsBuilderCallback): EventHorizonsBuilder {
+        const builder = new TenantWithSubscriptionsBuilder(TenantId.from(tenant), this.callbacks.responses);
         callback(builder);
         this._tenantSubscriptionsBuilders.push(builder);
         return this;

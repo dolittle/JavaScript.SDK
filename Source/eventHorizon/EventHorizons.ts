@@ -9,13 +9,16 @@ import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
 
-import { Subscription } from './Subscription';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-import { IEventHorizons } from './IEventHorizons';
+import {
+    Subscription,
+    IEventHorizons,
+    SubscriptionResponse,
+    TenantWithSubscriptions,
+    SubscriptionCallbacks,
+    SubscriptionDoesNotExist,
+    ConsentId
+} from './index';
 
-import { SubscriptionResponse } from './SubscriptionResponse';
-import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
-import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
@@ -66,14 +69,14 @@ export class EventHorizons implements IEventHorizons {
 
                 const pbSubscription = new PbSubscription();
                 pbSubscription.setCallcontext(callContext);
-                pbSubscription.setPartitionid(guids.toProtobuf(Guid.as(subscription.partition)));
-                pbSubscription.setScopeid(guids.toProtobuf(Guid.as(subscription.scope)));
-                pbSubscription.setStreamid(guids.toProtobuf(Guid.as(subscription.stream)));
-                pbSubscription.setTenantid(guids.toProtobuf(Guid.as(subscription.tenant)));
-                pbSubscription.setMicroserviceid(guids.toProtobuf(Guid.as(subscription.microservice)));
+                pbSubscription.setPartitionid(guids.toProtobuf(subscription.partition.value));
+                pbSubscription.setScopeid(guids.toProtobuf(subscription.scope.value));
+                pbSubscription.setStreamid(guids.toProtobuf(subscription.stream.value));
+                pbSubscription.setTenantid(guids.toProtobuf(subscription.tenant.value));
+                pbSubscription.setMicroserviceid(guids.toProtobuf(subscription.microservice.value));
 
                 this._subscriptionsClient.subscribe(pbSubscription, (error: grpc.ServiceError | null, pbResponse?: PbSubscriptionResponse) => {
-                    const response = new SubscriptionResponse(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
+                    const response = SubscriptionResponse.from(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
                     this._subscriptionResponses.set(subscription, response);
 
                     this.callbacks.next(consumerTenant, subscription, response);

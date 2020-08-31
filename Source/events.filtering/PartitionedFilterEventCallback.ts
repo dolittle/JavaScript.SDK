@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventContext, PartitionId } from '@dolittle/sdk.events';
+import { EventContext } from '@dolittle/sdk.events';
 
-import { PartitionedFilterResult } from './PartitionedFilterResult';
+import { PartitionedFilterResult } from './index';
 
 export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult | Promise<PartitionedFilterResult>;

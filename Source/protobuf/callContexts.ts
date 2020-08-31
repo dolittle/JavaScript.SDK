@@ -3,7 +3,7 @@
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { CallRequestContext } from '@dolittle/runtime.contracts/Fundamentals/Services/CallContext_pb';
-import executionContexts from './executionContexts';
+import { executionContexts } from './index';
 
 /**
  * Convert {@link ExecutionContext} to a {@link CallRequestContext}.

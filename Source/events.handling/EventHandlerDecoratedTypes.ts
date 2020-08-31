@@ -4,8 +4,7 @@
 import { ReplaySubject } from 'rxjs';
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerDecoratedType, EventHandlerId } from './index';
 
 export class EventHandlerDecoratedTypes {
     static readonly types: ReplaySubject<EventHandlerDecoratedType> = new ReplaySubject<EventHandlerDecoratedType>();

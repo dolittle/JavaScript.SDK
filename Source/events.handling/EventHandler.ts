@@ -1,15 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
+
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { IEventHandler } from './IEventHandler';
-import { MissingEventHandlerForType } from './MissingEventHandlerForType';
+import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId } from './index';
 
 /**
  * Represents an implementation of {@link IEventHandler}.
@@ -46,8 +44,11 @@ export class EventHandler implements IEventHandler {
     }
 }
 
-export function eventHandler(eventHandlerId: EventHandlerId, scopeId?: ScopeId) {
+export function eventHandler(eventHandlerId: Guid | string, scopeId?: Guid | string) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.register(eventHandlerId, scopeId, target);
+        EventHandlerDecoratedTypes.register(
+            EventHandlerId.from(eventHandlerId),
+            scopeId != null ? ScopeId.from(scopeId) : undefined,
+            target);
     };
 }

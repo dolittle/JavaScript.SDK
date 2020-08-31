@@ -2,25 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import async_hooks from 'async_hooks';
-
-import { IExecutionContextManager } from './IExecutionContextManager';
-import { ExecutionContext } from './ExecutionContext';
-import { Version } from './Version';
-import { MicroserviceId } from './MicroserviceId';
-import { system as SystemCorrelation } from './CorrelationId';
-import { TenantId, system as SystemTenant } from './TenantId';
-import { Claims } from './Claims';
-import { Guid } from '@dolittle/rudiments';
+import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId, Environment } from './index';
 
 
 /**
  * Represents an implementation of {@link IExecutionContextManager}.
  */
 export class ExecutionContextManager implements IExecutionContextManager {
-    private _microserviceId: MicroserviceId;
-    private _version: Version;
-    private _environment: string;
-
     private _executionContextByAsyncId: Map<number, ExecutionContext> = new Map();
     private _base: ExecutionContext;
 
@@ -30,12 +18,8 @@ export class ExecutionContextManager implements IExecutionContextManager {
      * @param {Version} version The version of the currently running software.
      * @param {string} environment The environment the software is running in. (e.g. development, production).
      */
-    constructor(microserviceId: MicroserviceId, version: Version, environment: string) {
-        this._microserviceId = microserviceId;
-        this._version = version;
-        this._environment = environment;
-
-        this._base = new ExecutionContext(microserviceId, SystemTenant, version, environment, SystemCorrelation, Claims.empty);
+    constructor(private _microserviceId: MicroserviceId, private _version: Version, private _environment: Environment) {
+        this._base = new ExecutionContext(_microserviceId, TenantId.system, _version, _environment, CorrelationId.system, Claims.empty);
 
         async_hooks.createHook({
             init: this.asyncOperationInit.bind(this),
@@ -53,7 +37,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
                 this._base.tenantId,
                 this._version,
                 this._environment,
-                Guid.create(),
+                CorrelationId.new(),
                 this._base.claims
             );
             this._executionContextByAsyncId.set(asyncId, executionContext);
@@ -93,7 +77,7 @@ export class ExecutionContextManager implements IExecutionContextManager {
             parent.tenantId,
             this._version,
             this._environment,
-            Guid.create(),
+            CorrelationId.new(),
             parent.claims
         );
 

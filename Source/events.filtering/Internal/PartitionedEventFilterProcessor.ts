@@ -12,13 +12,12 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
-import { FilterRegistrationRequest, FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
+import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
 import { PartitionedFilterClientToRuntimeMessage, PartitionedFilterRegistrationRequest, PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PartitionedFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId } from '../FilterId';
-import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
+import { FilterEventProcessor } from './index';
+import { FilterId, PartitionedFilterEventCallback } from '../index';
 
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {
 
@@ -36,8 +35,8 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
 
     protected get registerArguments(): PartitionedFilterRegistrationRequest {
         const registerArguments = new PartitionedFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(Guid.as(this._identifier)));
-        registerArguments.setScopeid(guids.toProtobuf(Guid.as(this._scopeId)));
+        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(guids.toProtobuf(this._scopeId.value));
         return registerArguments;
     }
 
@@ -74,7 +73,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
 
         const response = new PartitionedFilterResponse();
         response.setIsincluded(result.shouldInclude);
-        response.setPartitionid(guids.toProtobuf(Guid.as(result.partitionId)));
+        response.setPartitionid(guids.toProtobuf(result.partitionId.value));
         return response;
     }
 }

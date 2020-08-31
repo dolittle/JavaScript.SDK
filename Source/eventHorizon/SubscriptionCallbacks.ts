@@ -1,12 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SubscriptionResponse } from './SubscriptionResponse';
-import { Subscription } from './Subscription';
-import { TenantId } from '@dolittle/sdk.execution';
 import { Subject, Observable } from 'rxjs';
-import { CallbackShouldBeFunction } from './CallbackShouldBeFunction';
 import { filter } from 'rxjs/operators';
+import { TenantId } from '@dolittle/sdk.execution';
+import { CallbackShouldBeFunction, Subscription, SubscriptionResponse } from './index';
 
 /**
  * Callback that gets called when a subscription has been completed
@@ -98,4 +96,3 @@ export class SubscriptionCallbacks {
         }
     }
 }
-

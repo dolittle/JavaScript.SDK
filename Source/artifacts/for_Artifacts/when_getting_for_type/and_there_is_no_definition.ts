@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import no_associations from '../given/no_associations';
-import { UnknownArtifact } from '../../UnknownArtifact';
+import { UnknownArtifact } from '../../index';
 
 class MyType { }
 

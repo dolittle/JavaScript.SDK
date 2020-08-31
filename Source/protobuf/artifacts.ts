@@ -1,13 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact as SdkArtifact, ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
+import { Guid } from '@dolittle/rudiments';
+import { Artifact as SdkArtifact, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
-import guids from './guids';
-
-import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
-import { Guid } from '@dolittle/rudiments';
+import { MissingArtifactIdentifier, guids } from './index';
 
 /**
  * Convert to protobuf representation
@@ -15,8 +13,8 @@ import { Guid } from '@dolittle/rudiments';
  */
 function toProtobuf(input: SdkArtifact): PbArtifact {
     const artifact = new PbArtifact();
-    artifact.setId(guids.toProtobuf(input.id));
-    artifact.setGeneration(input.generation);
+    artifact.setId(guids.toProtobuf(input.id.value));
+    artifact.setGeneration(input.generation.value);
     return artifact;
 }
 
@@ -32,7 +30,7 @@ function toSDK(input?: PbArtifact): SdkArtifact {
     if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return new SdkArtifact(new Guid(uuid), input.getGeneration());
+    return SdkArtifact.from(new Guid(uuid), input.getGeneration());
 }
 
 export default {

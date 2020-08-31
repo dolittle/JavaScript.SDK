@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ArtifactsBuilder } from '../../ArtifactsBuilder';
+import { ArtifactsBuilder } from '../../index';
 
 describe('when building with no associations', () => {
     const builder = new ArtifactsBuilder();

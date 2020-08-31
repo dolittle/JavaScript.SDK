@@ -1,13 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor, Guid } from '@dolittle/rudiments';
-import { Artifact, ArtifactId, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { EventHandlerId } from './EventHandlerId';
-import { EventHandler } from './EventHandler';
-import { IEventHandler } from './IEventHandler';
+import { Constructor } from '@dolittle/types';
+import { Guid } from '@dolittle/rudiments';
+import { Artifact, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
+
+import { EventHandlerSignature, EventHandlerId, IEventHandler, EventHandler } from './index';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
@@ -15,8 +14,8 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
 export class EventHandlerBuilder {
-    private _handlers: Map<Constructor<any> | Artifact | ArtifactId, EventHandlerSignature<any>> = new Map();
-    private _scopeId: ScopeId = Guid.empty;
+    private _handlers: Map<Constructor<any> | Artifact | Guid | string, EventHandlerSignature<any>> = new Map();
+    private _scopeId: ScopeId = ScopeId.default;
     private _partitioned = true;
 
     /**
@@ -62,21 +61,21 @@ export class EventHandlerBuilder {
 
     /**
      * Defines the event handler to operate on a specific {@link ScopeId}.
-     * @param {ScopeId} scopeId Scope the event handler operates on.
+     * @param {Guid | string} scopeId Scope the event handler operates on.
      * @returns {EventHandlerBuilder}
      */
-    inScope(scopeId: ScopeId): EventHandlerBuilder {
-        this._scopeId = scopeId;
+    inScope(scopeId: Guid | string): EventHandlerBuilder {
+        this._scopeId = ScopeId.from(scopeId);
         return this;
     }
 
     /**
      * Add a handler method for handling the event.
      * @template T Type of event, when using type rather than artifact - default is any.
-     * @param {Constructor<T>|Artifact|ArtifactId} typeOrArtifact The type of event or the artifact or identifier of the artifact.
+     * @param {Constructor<T>|Artifact|Guid|string} typeOrArtifact The type of event or the artifact or identifier of the artifact.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
-    handle<T = any>(typeOrArtifact: Constructor<T> | Artifact | ArtifactId, method: EventHandlerSignature<T>) {
+    handle<T = any>(typeOrArtifact: Constructor<T> | Artifact | Guid | string, method: EventHandlerSignature<T>) {
         this._handlers.set(typeOrArtifact, method);
     }
 
@@ -88,14 +87,14 @@ export class EventHandlerBuilder {
     build(artifacts: IArtifacts): IEventHandler {
         const artifactsToMethods = new ArtifactMap<EventHandlerSignature<any>>();
 
-        for (const [typeOrArtifact, method] of this._handlers) {
+        for (const [typeOrArtifactOrId, method] of this._handlers) {
             let artifact: Artifact;
-            if (typeOrArtifact instanceof Artifact) {
-                artifact = typeOrArtifact;
-            } else if (typeOrArtifact instanceof Guid || typeof typeOrArtifact === 'string') {
-                artifact = new Artifact(Guid.as(typeOrArtifact));
+            if (typeOrArtifactOrId instanceof Artifact) {
+                artifact = typeOrArtifactOrId;
+            } else if (typeOrArtifactOrId instanceof Guid || typeof typeOrArtifactOrId === 'string') {
+                artifact = Artifact.from(typeOrArtifactOrId);
             } else {
-                artifact = artifacts.getFor(typeOrArtifact);
+                artifact = artifacts.getFor(typeOrArtifactOrId);
             }
 
             artifactsToMethods.set(artifact, method);

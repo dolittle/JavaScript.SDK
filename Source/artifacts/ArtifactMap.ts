@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact } from './Artifact';
+import { Artifact, ArtifactId, Generation } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents a map for mapping an artifact to a given type and provide.
@@ -31,13 +32,13 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
     /** @inheritdoc */
     has(key: Artifact): boolean {
         const artifactId = key.id.toString();
-        return this._generationsById.get(artifactId)?.has(key.generation) ?? false;
+        return this._generationsById.get(artifactId)?.has(key.generation.value) ?? false;
     }
 
     /** @inheritdoc */
     get(key: Artifact): T | undefined {
         const artifactId = key.id.toString();
-        return this._generationsById.get(artifactId)?.get(key.generation);
+        return this._generationsById.get(artifactId)?.get(key.generation.value);
     }
 
     /** @inheritdoc */
@@ -51,7 +52,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
             generations = new Map<number, T>();
             this._generationsById.set(artifactId, generations);
         }
-        generations.set(key.generation, value);
+        generations.set(key.generation.value, value);
 
         return this;
     }
@@ -67,7 +68,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
 
         const generations = this._generationsById.get(artifactId);
         if (generations) {
-            const deleted = generations.delete(key.generation);
+            const deleted = generations.delete(key.generation.value);
             if (generations.size === 0) {
                 this._generationsById.delete(artifactId);
             }
@@ -80,7 +81,7 @@ export class ArtifactMap<T> implements Map<Artifact, T> {
     *[Symbol.iterator](): IterableIterator<[Artifact, T]> {
         for (const [artifactId, generations] of this._generationsById) {
             for (const [generation, entry] of generations) {
-                const artifact = new Artifact(artifactId, generation);
+                const artifact = Artifact.from(artifactId, generation);
                 yield [artifact, entry];
             }
         }
