@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.common",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -34,6 +34,5 @@
     "dependencies": {
         "@dolittle/types": "5.0.0"
     },
-    "devDependencies": {
-    }
+    "devDependencies": {}
 }
