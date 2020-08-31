@@ -35,6 +35,7 @@
         "@dolittle/rudiments": "3.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
         "@dolittle/sdk.artifacts": "2.2.0",
+        "@dolittle/sdk.common": "2.2.0",
         "@dolittle/sdk.events": "2.2.0",
         "@dolittle/sdk.events.processing": "2.2.0",
         "@dolittle/sdk.execution": "2.2.0",

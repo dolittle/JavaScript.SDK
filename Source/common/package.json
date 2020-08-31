@@ -1,5 +1,5 @@
 {
-    "name": "@dolittle/sdk",
+    "name": "@dolittle/sdk.common",
     "version": "2.2.0",
     "description": "",
     "author": "",
@@ -17,7 +17,6 @@
     "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
     "files": [
         "Distribution",
-        "package.json",
         "**/*.ts"
     ],
     "main": "Distribution/index.js",
@@ -33,18 +32,8 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/rudiments": "3.0.0",
-        "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "2.2.0",
-        "@dolittle/sdk.common": "2.2.0",
-        "@dolittle/sdk.eventhorizon": "2.2.0",
-        "@dolittle/sdk.events": "2.2.0",
-        "@dolittle/sdk.events.handling": "2.2.0",
-        "@dolittle/sdk.events.filtering": "2.2.0",
-        "@dolittle/sdk.events.processing": "2.2.0",
-        "@dolittle/sdk.execution": "2.2.0",
-        "@dolittle/sdk.protobuf": "2.2.0",
-        "@dolittle/sdk.services": "2.2.0",
-        "winston": "3.3.2"
+        "@dolittle/rudiments": "3.0.0"
+    },
+    "devDependencies": {
     }
 }
