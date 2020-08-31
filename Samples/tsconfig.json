@@ -3,6 +3,7 @@
     "include": [],
     "references": [
         { "path": "./Basic" },
+        { "path": "./Container" },
         { "path": "./EventHorizon" }
     ]
 }

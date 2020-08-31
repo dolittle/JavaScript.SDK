@@ -1,0 +1,25 @@
+{
+    "name": "container",
+    "private": true,
+    "version": "2.2.0",
+    "main": "index.js",
+    "author": "Dolittle",
+    "license": "MIT",
+    "scripts": {
+        "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
+        "start": "ts-node index.ts",
+        "build": "tsc -p ./tsconfig.json"
+    },
+    "dependencies": {
+        "@dolittle/sdk": "2.2.0",
+        "@dolittle/sdk.artifacts": "2.2.0",
+        "@dolittle/sdk.events": "2.2.0",
+        "@dolittle/sdk.events.handling": "2.2.0",
+        "reflect-metadata": "^0.1.13",
+        "typedi": "0.8.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4",
+        "ts-node": "^8.10.1"
+    }
+}

@@ -3,6 +3,7 @@
   "workspaces": [
     "Source/*",
     "Samples/Basic",
+    "Samples/Container",
     "Samples/EventHorizon"
   ],
   "scripts": {
