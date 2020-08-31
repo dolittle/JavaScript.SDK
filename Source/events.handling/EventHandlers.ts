@@ -58,7 +58,7 @@ export class EventHandlers implements IEventHandlers {
                                 instance = this._container.get(method.owner);
                             } catch (ex) {
                                 this._logger.error('Unable to create instance of event handler.', ex);
-                                return new Promise<void>(() => { });
+                                throw ex;
                             }
 
                             const result = method.method.call(instance, event, eventContext);
