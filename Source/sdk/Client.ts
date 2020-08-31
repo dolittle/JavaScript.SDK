@@ -54,10 +54,10 @@ export class Client {
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
     static default(
-        microserviceId?: Guid | string,
+        microserviceId?: MicroserviceId | string,
         version?: Version,
         environment?: string): Client {
-        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable.value, version, environment).build();
+        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable, version, environment).build();
     }
 
     /**
@@ -67,7 +67,7 @@ export class Client {
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static forMicroservice(microserviceId: Guid | string, version: Version = Version.first, environment?: string): ClientBuilder {
+    static forMicroservice(microserviceId: MicroserviceId | string, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
             environment = process.env.NODE_ENV;
             if (!environment || environment === '') {
