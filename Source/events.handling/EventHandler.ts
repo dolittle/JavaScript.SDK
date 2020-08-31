@@ -4,7 +4,6 @@
 import { Guid } from '@dolittle/rudiments';
 
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
-import { IContainer } from '@dolittle/sdk.common';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId } from './index';
