@@ -119,6 +119,6 @@ export class Artifacts implements IArtifacts {
     }
 
     private artifactEquals(left: Artifact, right: Artifact): boolean {
-        return left.generation === right.generation && left.id.toString() === right.id.toString();
+        return left.generation.equals(right.generation) && left.id.toString() === right.id.toString();
     }
 }
