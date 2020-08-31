@@ -12,7 +12,6 @@ export class Container implements IContainer {
 
     /** @inheritdoc */
     get(service: Constructor) {
-        console.log('Get service');
         this.throwIfConstructorHasArguments(service);
         return new service();
     }
