@@ -8,8 +8,10 @@ import { Container } from 'typedi';
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
 
+import { TenantId } from '@dolittle/sdk.execution';
+
 const client = Client
-    .for('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .useContainer(Container)
     .configureLogging(_ => _.level = 'debug')
     .build();
