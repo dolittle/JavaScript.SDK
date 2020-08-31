@@ -44,7 +44,7 @@ export class EventHandler implements IEventHandler {
 }
 
 /**
- * Decorator to add to classes containing event handling methods decorate with the 
+ * Decorator to add to classes containing event handling methods decorate with the
  * @handles() decorator.
  * @param {Guid | string} eventHandlerId EventHandler's given id
  */
@@ -57,7 +57,7 @@ export function eventHandler(eventHandlerId: Guid | string) {
 }
 /**
  * Optional decorator for @eventHandler() decorated classes to specify the wanted scope.
- * @param scopeId 
+ * @param scopeId
  */
 export function inScope(scopeId: Guid | string) {
     return function (target: any) {
