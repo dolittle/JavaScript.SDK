@@ -17,7 +17,9 @@ export class EventHandlerDecoratedTypes {
      * @param {Function} eventHandlerType Type of the event handler.
      */
     static registerEventHandler(eventHandlerId: EventHandlerId, eventHandlerType: Function) {
-        if ([...this._eventHandlers.values()].some(id => id.equals(eventHandlerId))) throw new EventHandlerIdAlreadyInUse(eventHandlerId, eventHandlerType);
+        for (const [func, id] of this._eventHandlers) {
+            if (id.equals(eventHandlerId)) throw new EventHandlerIdAlreadyInUse(eventHandlerId, eventHandlerType, func);
+        }
         this._eventHandlers.set(eventHandlerType, eventHandlerId);
     }
 

@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 import { EventHandlerId } from './index';
 
 export class EventHandlerIdAlreadyInUse extends Exception {
-    constructor(eventHandlerId: EventHandlerId, type: Function) {
-        super(`EventHandlerId '${eventHandlerId}' in EventHandler '${type.name}' is already in use`);
+    constructor(eventHandlerId: EventHandlerId, type: Function, alreadyUsedType: Function) {
+        super(`EventHandlerId '${eventHandlerId}' in EventHandler '${type.name}' is already in use in type '${alreadyUsedType.name}'`);
     }
 }
