@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.protobuf",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -38,7 +38,7 @@
         "@dolittle/concepts": "5.0.0",
         "@dolittle/rudiments": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "3.1.0",
-        "@dolittle/sdk.execution": "3.1.0"
+        "@dolittle/sdk.artifacts": "3.1.1",
+        "@dolittle/sdk.execution": "3.1.1"
     }
 }
