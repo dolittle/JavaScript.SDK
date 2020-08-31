@@ -43,7 +43,7 @@ export class EventStore implements IEventStore {
             return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
         const eventSourceId = eventSourceIdOrCancellation as Guid | string;
-        return this.commitInternal([this.toUncommittedEvent(event, eventSourceId, artifact, false)], cancellation);
+        return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, artifact, false)], cancellation);
     }
 
     /** @inheritdoc */
