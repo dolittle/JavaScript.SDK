@@ -9,12 +9,8 @@
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../artifacts" },
-        { "path": "../common" },
-        { "path": "../events" },
-        { "path": "../events.processing" },
         { "path": "../execution" },
         { "path": "../protobuf" },
-        { "path": "../services"},
-        { "path": "../resilience"}
+        { "path": "../services" }
     ]
 }

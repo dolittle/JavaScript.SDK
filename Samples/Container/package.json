@@ -1,5 +1,5 @@
 {
-    "name": "basic",
+    "name": "container",
     "private": true,
     "version": "3.1.2",
     "main": "index.js",
@@ -14,7 +14,9 @@
         "@dolittle/sdk": "3.1.2",
         "@dolittle/sdk.artifacts": "3.1.2",
         "@dolittle/sdk.events": "3.1.2",
-        "@dolittle/sdk.events.handling": "3.1.2"
+        "@dolittle/sdk.events.handling": "3.1.2",
+        "reflect-metadata": "^0.1.13",
+        "typedi": "0.8.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",

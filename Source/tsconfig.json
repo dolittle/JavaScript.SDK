@@ -3,6 +3,7 @@
     "include": [],
     "references": [
         { "path": "./artifacts" },
+        { "path": "./common" },
         { "path": "./eventHorizon" },
         { "path": "./events" },
         { "path": "./events.filtering" },

@@ -5,6 +5,7 @@ import grpc from 'grpc';
 import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
 
 import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { IContainer, Container } from '@dolittle/sdk.common';
 import { IEventStore, EventStore } from '@dolittle/sdk.events';
 import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
@@ -53,10 +54,10 @@ export class Client {
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
     static default(
-        microserviceId?: Guid | string,
+        microserviceId?: MicroserviceId | string,
         version?: Version,
         environment?: string): Client {
-        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable.value, version, environment).build();
+        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable, version, environment).build();
     }
 
     /**
@@ -66,7 +67,7 @@ export class Client {
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static forMicroservice(microserviceId: Guid | string, version: Version = Version.first, environment?: string): ClientBuilder {
+    static forMicroservice(microserviceId: MicroserviceId | string, version: Version = Version.first, environment?: string): ClientBuilder {
         if (!environment) {
             environment = process.env.NODE_ENV;
             if (!environment || environment === '') {
@@ -96,6 +97,7 @@ export class ClientBuilder {
     private _eventFiltersBuilder: EventFiltersBuilder;
     private _eventHorizonsBuilder: EventHorizonsBuilder;
     private _cancellation: Cancellation;
+    private _container: IContainer = new Container();
 
     /**
      * Creates an instance of client builder.
@@ -183,6 +185,7 @@ export class ClientBuilder {
     /**
      * Configures logging for the SDK
      * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
+     * @returns {ClientBuilder}
      */
     configureLogging(callback: LoggingConfigurationCallback): ClientBuilder {
         callback(this._loggerOptions);
@@ -192,9 +195,20 @@ export class ClientBuilder {
     /**
      * Configures cancellation for closing open connections to the Runtime.
      * @param {Cancellation} cancellation The cancellation that will be passed to Filters and Event Handlers.
+     * @returns {ClientBuilder}
      */
     withCancellation(cancellation: Cancellation): ClientBuilder {
         this._cancellation = cancellation;
+        return this;
+    }
+
+    /**
+     * Use a specific IoC container for creating instances of types.
+     * @param {IContainer} container Container
+     * @returns {ClientBuilder}
+     */
+    useContainer(container: IContainer): ClientBuilder {
+        this._container = container;
         return this;
     }
 
@@ -213,6 +227,7 @@ export class ClientBuilder {
         const eventHandlersClient = new EventHandlersClient(connectionString, credentials);
         const eventHandlers = this._eventHandlersBuilder.build(
             eventHandlersClient,
+            this._container,
             executionContextManager,
             artifacts,
             logger,
