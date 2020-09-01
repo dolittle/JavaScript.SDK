@@ -27,7 +27,7 @@ export class EventHandlerDecoratedTypes {
         const eventHandlerDecoratedTypes: EventHandlerDecoratedType[] = [];
         for (const [func, eventHandlerId] of this._eventHandlers) {
             const scopeId = this._scopes.has(func) ? this._scopes.get(func)! : ScopeId.default;
-            const partitioned = this._unpartitioned.has(func) ? false : true;
+            const partitioned = !this._unpartitioned.has(func);
             eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(eventHandlerId, scopeId, partitioned, func));
         }
 
