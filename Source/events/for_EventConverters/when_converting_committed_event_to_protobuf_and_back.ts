@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { Claim, Claims, ExecutionContext, Version, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 import { Artifact, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
 
-import { CommittedEvent, EventSourceId, EventConverters } from '../index';
+import { CommittedEvent, EventSourceId, EventConverters, EventLogSequenceNumber } from '../index';
 
 describe('when converting committed event to protobuf and back', () => {
     const claimsArray: Claim[] = [
@@ -31,7 +31,7 @@ describe('when converting committed event to protobuf and back', () => {
     const externalReceived = DateTime.utc();
 
     const committedEvent = new CommittedEvent(
-        42,
+        EventLogSequenceNumber.from(42),
         DateTime.utc(),
         EventSourceId.from('3a52080d-c44b-4827-8d65-1325b7f055f2'),
         executionContext,
@@ -39,13 +39,13 @@ describe('when converting committed event to protobuf and back', () => {
         content,
         true,
         true,
-        44,
+        EventLogSequenceNumber.from(44),
         externalReceived
     );
     const result = EventConverters.toSDK(EventConverters.toProtobuf(committedEvent));
     const resultClaims = result.executionContext.claims.toArray();
 
-    it('should have same event log sequence number', () => result.eventLogSequenceNumber.should.equal(committedEvent.eventLogSequenceNumber));
+    it('should have same event log sequence number', () => result.eventLogSequenceNumber.equals(committedEvent.eventLogSequenceNumber).should.be.true);
     it('should have same occurred', () => result.occurred.toUTC().toString().should.equal(committedEvent.occurred.toUTC().toString()));
     it('should have same event source id', () => result.eventSourceId.equals(committedEvent.eventSourceId).should.be.true);
 
@@ -68,6 +68,6 @@ describe('when converting committed event to protobuf and back', () => {
 
     it('should have same public state', () => result.isPublic.should.equal(committedEvent.isPublic));
     it('should have same external state', () => result.isPublic.should.equal(committedEvent.isExternal));
-    it('should have same external event log sequence number', () => result.externalEventLogSequenceNumber.should.equal(committedEvent.externalEventLogSequenceNumber));
+    it('should have same external event log sequence number', () => result.externalEventLogSequenceNumber.equals(committedEvent.externalEventLogSequenceNumber).should.be.true);
     it('should have same external event received', () => result.externalEventReceived.toUTC().toString().should.equal(committedEvent.externalEventReceived.toUTC().toString()));
 });

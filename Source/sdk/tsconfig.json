@@ -9,6 +9,7 @@
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../artifacts" },
+        { "path": "../common" },
         { "path": "../events" },
         { "path": "../eventHorizon" },
         { "path": "../events.filtering" },
