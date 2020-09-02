@@ -69,7 +69,7 @@ export class EventHandlers implements IEventHandlers {
             }
             this._logger.debug(`Register EventHandler '${_.eventHandlerId}'`);
 
-            const eventHandler = new EventHandler(_.eventHandlerId, _.scopeId, true, this.getEventHandlerMethodsByArtifact(_.type));
+            const eventHandler = new EventHandler(_.eventHandlerId, _.scopeId, _.partitioned, this.getEventHandlerMethodsByArtifact(_.type));
             this.register(eventHandler, this._cancellation);
         });
     }

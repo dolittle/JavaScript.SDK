@@ -9,6 +9,6 @@ import { EventHandlerId } from './index';
  * Represents an event handler created from the decorator
  */
 export class EventHandlerDecoratedType {
-    constructor(readonly eventHandlerId: EventHandlerId, readonly scopeId: ScopeId, readonly type: Function) {
+    constructor(readonly eventHandlerId: EventHandlerId, readonly scopeId: ScopeId, readonly partitioned: boolean, readonly type: Function) {
     }
 }
