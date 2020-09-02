@@ -7,6 +7,7 @@ import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId } from './index';
+import { EventHandlerOptions } from './EventHandlerOptions';
 
 /**
  * Represents an implementation of {@link IEventHandler}.
@@ -48,21 +49,11 @@ export class EventHandler implements IEventHandler {
  * @handles() decorator.
  * @param {Guid | string} eventHandlerId EventHandler's given id
  */
-export function eventHandler(eventHandlerId: Guid | string) {
+export function eventHandler(eventHandlerId: Guid | string, options: EventHandlerOptions) {
     return function (target: any) {
         EventHandlerDecoratedTypes.registerEventHandler(
             EventHandlerId.from(eventHandlerId),
-            target);
-    };
-}
-/**
- * Optional decorator for @eventHandler() decorated classes to specify the wanted scope.
- * @param scopeId
- */
-export function inScope(scopeId: Guid | string) {
-    return function (target: any) {
-        EventHandlerDecoratedTypes.registerScope(
-            ScopeId.from(scopeId),
-            target);
+            target,
+            options);
     };
 }

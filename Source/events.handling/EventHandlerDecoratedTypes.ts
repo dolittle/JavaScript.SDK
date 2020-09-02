@@ -3,6 +3,7 @@
 
 import { ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerDecoratedType, EventHandlerId, EventHandlerIdAlreadyInUse  } from './index';
+import { EventHandlerOptions } from './EventHandlerOptions';
 
 /**
  * Handles registering and mappings between @eventHandler decorated classes and their given id and scope.
@@ -16,9 +17,12 @@ export class EventHandlerDecoratedTypes {
      * @param {EventHandlerId} eventHandlerId EventHandlerId to register the type with.
      * @param {Function} eventHandlerType Type of the event handler.
      */
-    static registerEventHandler(eventHandlerId: EventHandlerId, eventHandlerType: Function) {
+    static registerEventHandler(eventHandlerId: EventHandlerId, eventHandlerType: Function, options: EventHandlerOptions) {
         for (const [func, id] of this._eventHandlers) {
             if (id.equals(eventHandlerId)) throw new EventHandlerIdAlreadyInUse(eventHandlerId, eventHandlerType, func);
+        }
+        if (options.inScope) {
+            this._scopes.set(eventHandlerType, options.inScope);
         }
         this._eventHandlers.set(eventHandlerType, eventHandlerId);
     }
