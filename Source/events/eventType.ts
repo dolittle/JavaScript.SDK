@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { artifact } from '@dolittle/sdk.artifacts';
+import { ArtifactsFromDecorators, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
 import { Guid } from '@dolittle/rudiments';
 
 /**
@@ -9,6 +9,9 @@ import { Guid } from '@dolittle/rudiments';
  */
 export function eventType(identifier: Guid | string, generationNumber?: number) {
     return function (target: any) {
-        artifact(identifier, generationNumber)(target);
+        ArtifactsFromDecorators.associate(
+            target.prototype.constructor,
+            ArtifactId.from(identifier),
+            generationNumber != null ? Generation.from(generationNumber) : Generation.first);
     };
 }

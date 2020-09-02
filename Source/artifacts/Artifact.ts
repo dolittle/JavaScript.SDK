@@ -58,15 +58,3 @@ export class Artifact {
         return `[${this.id.toString()} - ${this.generation.toString()}]`;
     }
 }
-
-/**
- * Decorator for associating a type with an artifact.
- */
-export function artifact(identifier: Guid | string, generationNumber?: number) {
-    return function (target: any) {
-        ArtifactsFromDecorators.associate(
-            target.prototype.constructor,
-            ArtifactId.from(identifier),
-            generationNumber != null ? Generation.from(generationNumber) : Generation.first);
-    };
-}

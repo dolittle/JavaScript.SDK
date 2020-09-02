@@ -4,7 +4,7 @@
 export { GenerationMustBeNaturalNumber } from './GenerationMustBeNaturalNumber';
 export { Generation } from './Generation';
 export { ArtifactId } from './ArtifactId';
-export { Artifact, artifact } from './Artifact';
+export { Artifact } from './Artifact';
 export { UnknownType } from './UnknownType';
 export { UnknownArtifact } from './UnknownArtifact';
 export { UnableToResolveArtifact } from './UnableToResolveArtifact';
