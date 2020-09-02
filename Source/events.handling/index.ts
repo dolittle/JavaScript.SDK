@@ -10,7 +10,7 @@ export { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 export { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 export { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 export { IEventHandler } from './IEventHandler';
-export { EventHandler, eventHandler, inScope, unpartitioned } from './EventHandler';
+export { EventHandler, eventHandler } from './EventHandler';
 export { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
 export { IEventHandlers } from './IEventHandlers';
 export { EventHandlers } from './EventHandlers';

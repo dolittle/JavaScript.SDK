@@ -45,21 +45,15 @@ export class EventHandler implements IEventHandler {
 }
 
 /**
- * Decorator to add to classes containing event handling methods decorate with the
- * @handles() decorator.
+ * Decorator to mark a class as an EventHandler.
  * @param {Guid | string} eventHandlerId EventHandler's given id
+ * @param {EventHandlerOptions} [options={}] Options to give to the EventHandler
  */
-export function eventHandler(eventHandlerId: Guid | string, options: EventHandlerOptions) {
+export function eventHandler(eventHandlerId: Guid | string, options: EventHandlerOptions = {}) {
     return function (target: any) {
         EventHandlerDecoratedTypes.registerEventHandler(
             EventHandlerId.from(eventHandlerId),
-            target,
-            options);
-    };
-}
-export function unpartitioned() {
-    return function (target: any) {
-        EventHandlerDecoratedTypes.registerUnpartitioned(
             target);
+        EventHandlerDecoratedTypes.registerOptions(options, target);
     };
 }

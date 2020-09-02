@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ScopeId } from '@dolittle/sdk.events';
-import { EventHandlerDecoratedType, EventHandlerId, EventHandlerIdAlreadyInUse  } from './index';
-import { EventHandlerOptions } from './EventHandlerOptions';
+import { EventHandlerDecoratedType, EventHandlerId, EventHandlerIdAlreadyInUse, EventHandlerOptions  } from './index';
 
 /**
- * Handles registering and mappings between @eventHandler decorated classes and their given id and scope.
+ * Handles registering and mappings between @eventHandler decorated classes and their given id and options.
  */
 export class EventHandlerDecoratedTypes {
     private static readonly _eventHandlers = new Map<Function, EventHandlerId>() ;
@@ -14,26 +13,29 @@ export class EventHandlerDecoratedTypes {
     private static readonly _unpartitioned  = new Map<Function, boolean>();
 
     /**
-     * Registers an EventHandlerId to a specific type.
+     * Registers an @EventHandlerId to a specific type.
      * @param {EventHandlerId} eventHandlerId EventHandlerId to register the type with.
      * @param {Function} eventHandlerType Type of the event handler.
      */
-    static registerEventHandler(eventHandlerId: EventHandlerId, eventHandlerType: Function, options: EventHandlerOptions) {
+    static registerEventHandler(eventHandlerId: EventHandlerId, eventHandlerType: Function) {
         for (const [func, id] of this._eventHandlers) {
             if (id.equals(eventHandlerId)) throw new EventHandlerIdAlreadyInUse(eventHandlerId, eventHandlerType, func);
-        }
-        if (options.inScope) {
-            this._scopes.set(eventHandlerType, options.inScope);
         }
         this._eventHandlers.set(eventHandlerType, eventHandlerId);
     }
 
-    static registerScope(scopeId: ScopeId, eventHandlerType: Function) {
-        this._scopes.set(eventHandlerType, scopeId);
-    }
-
-    static registerUnpartitioned(type: Function) {
-        this._unpartitioned.set(type, true);
+    /**
+     *  Registers @EventHandlerOptions to a specific type.
+     * @param options EventHandlerOptions to register the type with.
+     * @param eventHandlerType Type of the event handler.
+     */
+    static registerOptions(options: EventHandlerOptions, eventHandlerType: Function) {
+        if (options.inScope) {
+            this._scopes.set(eventHandlerType, ScopeId.from(options.inScope));
+        }
+        if (options.unpartitioned) {
+            this._unpartitioned.set(eventHandlerType, true);
+        }
     }
 
     /**
@@ -45,7 +47,7 @@ export class EventHandlerDecoratedTypes {
         for (const [func, id] of this._eventHandlers) {
             const scopeId = this._scopes.has(func) ? this._scopes.get(func)! : ScopeId.default;
             const partitioned = !this._unpartitioned.has(func);
-            eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(eventHandlerId, scopeId, partitioned, func));
+            eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(id, scopeId, partitioned, func));
         }
 
         for (const eventHandlerDecoratedType of eventHandlerDecoratedTypes) {
