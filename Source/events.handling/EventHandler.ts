@@ -57,3 +57,9 @@ export function eventHandler(eventHandlerId: Guid | string, options: EventHandle
             options);
     };
 }
+export function unpartitioned() {
+    return function (target: any) {
+        EventHandlerDecoratedTypes.registerUnpartitioned(
+            target);
+    };
+}

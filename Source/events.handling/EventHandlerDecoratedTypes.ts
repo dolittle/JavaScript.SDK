@@ -11,6 +11,7 @@ import { EventHandlerOptions } from './EventHandlerOptions';
 export class EventHandlerDecoratedTypes {
     private static readonly _eventHandlers = new Map<Function, EventHandlerId>() ;
     private static readonly _scopes  = new Map<Function, ScopeId>();
+    private static readonly _unpartitioned  = new Map<Function, boolean>();
 
     /**
      * Registers an EventHandlerId to a specific type.
@@ -31,6 +32,10 @@ export class EventHandlerDecoratedTypes {
         this._scopes.set(eventHandlerType, scopeId);
     }
 
+    static registerUnpartitioned(type: Function) {
+        this._unpartitioned.set(type, true);
+    }
+
     /**
      * Creates an array of EventhandlerDecoratedType's and calls the callback on each one of them.
      * @param callback
@@ -39,7 +44,8 @@ export class EventHandlerDecoratedTypes {
         const eventHandlerDecoratedTypes: EventHandlerDecoratedType[] = [];
         for (const [func, id] of this._eventHandlers) {
             const scopeId = this._scopes.has(func) ? this._scopes.get(func)! : ScopeId.default;
-            eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(id, scopeId, func));
+            const partitioned = !this._unpartitioned.has(func);
+            eventHandlerDecoratedTypes.push(new EventHandlerDecoratedType(eventHandlerId, scopeId, partitioned, func));
         }
 
         for (const eventHandlerDecoratedType of eventHandlerDecoratedTypes) {
