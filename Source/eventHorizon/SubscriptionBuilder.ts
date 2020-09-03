@@ -54,7 +54,7 @@ export class SubscriptionBuilder {
      * Specifies from which tenant we should get events from in the other microservice.
      * @param {Guid | string} tenant Tenant for the subscription.
      */
-    fromTenant(tenant: Guid | string): SubscriptionBuilder {
+    fromProducerTenant(tenant: Guid | string): SubscriptionBuilder {
         this._tenant = TenantId.from(tenant);
         return this;
     }
@@ -63,7 +63,7 @@ export class SubscriptionBuilder {
      * Specifies the public stream in the other microservice.
      * @param {Guid | string} stream Stream for the subscription.
      */
-    fromStream(stream: Guid | string): SubscriptionBuilder {
+    fromProducerStream(stream: Guid | string): SubscriptionBuilder {
         this._stream = StreamId.from(stream);
         return this;
     }
@@ -73,7 +73,7 @@ export class SubscriptionBuilder {
      * @param {Guid | string} partition
      * @summary This is optional and only to be used if you're only interested in one specific partition.
      */
-    fromPartition(partition: Guid | string): SubscriptionBuilder {
+    fromProducerPartition(partition: Guid | string): SubscriptionBuilder {
         this._partition = PartitionId.from(partition);
         return this;
     }
