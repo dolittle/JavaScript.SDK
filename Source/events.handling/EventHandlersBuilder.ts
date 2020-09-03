@@ -27,7 +27,7 @@ export class EventHandlersBuilder {
      * @param {Guid | string} eventHandlerId The unique identifier of the event handler.
      * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
      */
-    for(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): void {
+    createEventHandler(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): void {
         const id = EventHandlerId.from(eventHandlerId);
         const builder = new EventHandlerBuilder(id);
         callback(builder);

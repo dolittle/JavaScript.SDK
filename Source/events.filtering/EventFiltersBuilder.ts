@@ -27,7 +27,7 @@ export class EventFiltersBuilder {
      * @param {EventFilterBuilderCallback} callback Callback for building the event filter.
      * @returns {EventFiltersBuilder} Continuation of the builder
      */
-    for(filterId: Guid | string, callback: EventFilterBuilderCallback): EventFiltersBuilder {
+    createFilter(filterId: Guid | string, callback: EventFilterBuilderCallback): EventFiltersBuilder {
         const builder = new EventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._eventFilterBuilders.push(builder);
