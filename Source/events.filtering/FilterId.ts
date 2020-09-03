@@ -19,7 +19,8 @@ export class FilterId extends ConceptAs<Guid, '@dolittle/sdk.events.filtering.Fi
      * @param {(Guid | string)} id
      * @returns {FilterId}
      */
-    static from(id: Guid | string): FilterId {
+    static from(id: string | Guid | FilterId): FilterId {
+        if (id instanceof FilterId) return id;
         return new FilterId(Guid.as(id));
     }
 }

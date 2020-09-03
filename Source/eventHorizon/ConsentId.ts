@@ -19,7 +19,8 @@ export class ConsentId extends ConceptAs<Guid, '@dolittle/sdk.eventhorizon.Conse
      * @param {(string | Guid)} id
      * @returns {ConsentId}
      */
-    static from(id: string | Guid): ConsentId {
+    static from(id: string | Guid | ConsentId): ConsentId {
+        if (id instanceof ConsentId) return id;
         return new ConsentId(Guid.as(id));
     };
 }
