@@ -2,14 +2,20 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReplaySubject } from 'rxjs';
-import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerDecoratedType, EventHandlerId } from './index';
+import { EventHandlerDecoratedType } from './index';
 
+/**
+ * Handles registering and mappings between @eventHandler decorated classes and their given id and options.
+ */
 export class EventHandlerDecoratedTypes {
     static readonly types: ReplaySubject<EventHandlerDecoratedType> = new ReplaySubject<EventHandlerDecoratedType>();
 
-    static register(eventHandlerId: EventHandlerId, scopeId: ScopeId | undefined, type: Function) {
-        this.types.next(new EventHandlerDecoratedType(eventHandlerId, scopeId, type));
+    /**
+     * Registers an decorated event handler class with the Runtime.
+     * @param {EventHandlerDecoratedType} eventHandlerDecoratedType The decorated type to register.
+     */
+    static register(eventHandlerDecoratedType: EventHandlerDecoratedType) {
+        this.types.next(eventHandlerDecoratedType);
     }
 }
