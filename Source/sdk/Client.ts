@@ -159,11 +159,11 @@ export class ClientBuilder {
     }
 
     /**
-     * Configure artifacts through the artifacts builder.
+     * Configure event types through the artifacts builder.
      * @param {ArtifactsBuilderCallback} callback The builder callback.
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    withArtifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
+    withEventTypes(callback: ArtifactsBuilderCallback): ClientBuilder {
         callback(this._artifactsBuilder);
         return this;
     }
@@ -195,18 +195,18 @@ export class ClientBuilder {
      * @returns {ClientBuilder} The client builder for continuation.
      * @summary If not used, the default host of 'localhost' and port 50053 will be used.
      */
-    connectTo(host: string, port: number): ClientBuilder {
+    connectToRuntime(host: string, port: number): ClientBuilder {
         this._host = host;
         this._port = port;
         return this;
     }
 
     /**
-     * Configures logging for the SDK
+     * Configures logging for the SDK.
      * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
      * @returns {ClientBuilder}
      */
-    withLogging(callback: LoggingConfigurationCallback): ClientBuilder {
+    configureLogging(callback: LoggingConfigurationCallback): ClientBuilder {
         callback(this._loggerOptions);
         return this;
     }
