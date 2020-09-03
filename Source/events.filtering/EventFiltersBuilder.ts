@@ -9,28 +9,45 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId, Filters, IFilters, EventFilterBuilder, EventFilterBuilderCallback } from './index';
+import { FilterId, Filters, IFilters, PublicEventFilterBuilder } from './index';
 import { Guid } from '@dolittle/rudiments';
+import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 
 
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
+export type PrivateEventFilterBuilderCallback = (builder: PrivateEventFilterBuilder) => void;
+export type PublicEventFilterBuilderCallback = (builder: PublicEventFilterBuilder) => void;
 
 /**
  * Represents the builder for building event filters.
  */
 export class EventFiltersBuilder {
-    private _eventFilterBuilders: EventFilterBuilder[] = [];
+    private _privateFilterBuilders: PrivateEventFilterBuilder[]  = [];
+    private _publicFilterBuilders: PublicEventFilterBuilder[]  = [];
 
     /**
      * Start building for a specific filter.
      * @param {Guid | string} filterId The identifier of the filter.
-     * @param {EventFilterBuilderCallback} callback Callback for building the event filter.
+     * @param {PrivateEventFilterBuilderCallback} callback Callback for building the event filter.
      * @returns {EventFiltersBuilder} Continuation of the builder
      */
-    createFilter(filterId: Guid | string, callback: EventFilterBuilderCallback): EventFiltersBuilder {
-        const builder = new EventFilterBuilder(FilterId.from(filterId));
+    createPrivateFilter(filterId: Guid | string, callback: PrivateEventFilterBuilderCallback): EventFiltersBuilder {
+        const builder = new PrivateEventFilterBuilder(FilterId.from(filterId));
         callback(builder);
-        this._eventFilterBuilders.push(builder);
+        this._privateFilterBuilders.push(builder);
+        return this;
+    }
+
+    /**
+     * Start building for a specific filter.
+     * @param {Guid | string} filterId The identifier of the filter.
+     * @param {PublicEventFilterBuilderCallback} callback Callback for building the event filter.
+     * @returns {EventFiltersBuilder} Continuation of the builder
+     */
+    createPublicFilter(filterId: Guid | string, callback: PublicEventFilterBuilderCallback): EventFiltersBuilder {
+        const builder = new PublicEventFilterBuilder(FilterId.from(filterId));
+        callback(builder);
+        this._publicFilterBuilders.push(builder);
         return this;
     }
 
@@ -49,8 +66,12 @@ export class EventFiltersBuilder {
         cancellation: Cancellation): IFilters {
         const filters = new Filters(logger);
 
-        for (const eventFilterBuilder of this._eventFilterBuilders) {
-            const filterProcessor = eventFilterBuilder.build(client, executionContextManager, artifacts, logger);
+        for (const privateFilterBuilder of this._privateFilterBuilders) {
+            const filterProcessor = privateFilterBuilder.build(client, executionContextManager, artifacts, logger);
+            filters.register(filterProcessor, cancellation);
+        }
+        for (const publicFilterBuilder of this._publicFilterBuilders) {
+            const filterProcessor = publicFilterBuilder.build(client, executionContextManager, artifacts, logger);
             filters.register(filterProcessor, cancellation);
         }
 
