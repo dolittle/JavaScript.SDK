@@ -24,10 +24,14 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
      * Creates a {ScopeId} from a guid.
      *
      * @static
-     * @param {(Guid | string)} [id]
+     * @param {string | Guid | ScopeId} [id]
      * @returns {ScopeId}
      */
-    static from(id: Guid | string): ScopeId {
+    static from(id: string | Guid | ScopeId): ScopeId {
+        if (id instanceof ScopeId) {
+            return id;
+        }
+
         return new ScopeId(Guid.as(id));
     }
 };

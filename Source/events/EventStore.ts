@@ -75,7 +75,7 @@ export class EventStore implements IEventStore {
             })).toPromise();
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: Guid | string, artifactOrId?: Artifact | Guid | string, isPublic: boolean = false): UncommittedEvent {
+    private toUncommittedEvent(content: any, eventSourceId: Guid | string, artifactOrId?: Artifact | Guid | string, isPublic = false): UncommittedEvent {
         let artifact: Artifact | ArtifactId | undefined;
         if (artifactOrId != null) {
             if (artifactOrId instanceof Artifact) artifact = artifactOrId;

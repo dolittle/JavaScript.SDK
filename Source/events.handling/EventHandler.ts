@@ -6,8 +6,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId } from './index';
-import { EventHandlerOptions } from './EventHandlerOptions';
+import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId, EventHandlerDecoratedType, EventHandlerOptions} from './index';
 
 /**
  * Represents an implementation of {@link IEventHandler}.
@@ -46,14 +45,15 @@ export class EventHandler implements IEventHandler {
 
 /**
  * Decorator to mark a class as an EventHandler.
- * @param {Guid | string} eventHandlerId EventHandler's given id
+ * @param {string | Guid | EventHandlerId} eventHandlerId EventHandler's given id
  * @param {EventHandlerOptions} [options={}] Options to give to the EventHandler
  */
-export function eventHandler(eventHandlerId: Guid | string, options: EventHandlerOptions = {}) {
+export function eventHandler(eventHandlerId: string | Guid | EventHandlerId, options: EventHandlerOptions = {}) {
     return function (target: any) {
-        EventHandlerDecoratedTypes.registerEventHandler(
+        EventHandlerDecoratedTypes.register(new EventHandlerDecoratedType(
             EventHandlerId.from(eventHandlerId),
-            target);
-        EventHandlerDecoratedTypes.registerOptions(options, target);
+            options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
+            !options.unpartitioned,
+            target));
     };
 }
