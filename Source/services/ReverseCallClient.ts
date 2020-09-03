@@ -105,7 +105,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                         const request = this._getMessageRequest(message)!;
                         const context = this._getRequestContext(request)!;
                         const executionContext = executionContexts.toSDK(context.getExecutioncontext()!);
-                        this._executionContextManager.currentFor(executionContext.tenantId, executionContext.claims);
+                        this._executionContextManager.forTenant(executionContext.tenantId, executionContext.claims);
 
                         const response = await this._callback(request);
 
