@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events.processing",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,12 +35,12 @@
         "@dolittle/concepts": "5.0.0",
         "@dolittle/rudiments": "5.0.0",
         "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "4.0.0",
-        "@dolittle/sdk.events": "4.0.0",
-        "@dolittle/sdk.execution": "4.0.0",
-        "@dolittle/sdk.protobuf": "4.0.0",
-        "@dolittle/sdk.services": "4.0.0",
-        "@dolittle/sdk.resilience": "4.0.0",
+        "@dolittle/sdk.artifacts": "5.0.0",
+        "@dolittle/sdk.events": "5.0.0",
+        "@dolittle/sdk.execution": "5.0.0",
+        "@dolittle/sdk.protobuf": "5.0.0",
+        "@dolittle/sdk.services": "5.0.0",
+        "@dolittle/sdk.resilience": "5.0.0",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
