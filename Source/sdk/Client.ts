@@ -63,8 +63,8 @@ export class Client {
     /**
      * Create a client builder for a Microservice
      * @param {Guid | string} microserviceId The unique identifier for the microservice.
-     * @param {Version} [version] Optional version of the software.
-     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @param {Version} [version] Optional version of the software. Defaults to 1.0.0.0.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production). Defaults to 'Development'.
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
     static forMicroservice(microserviceId: MicroserviceId | string, version: Version = Version.first, environment?: string): ClientBuilder {
@@ -129,6 +129,26 @@ export class ClientBuilder {
     }
 
     /**
+     * Sets a version for the software.
+     * @param {Version} version  The version of the software.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withVersion(version: Version): ClientBuilder {
+        this._version = version;
+        return this;
+    }
+
+    /**
+     * Sets the environment where the software is running.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withEnvironment(environment: string): ClientBuilder {
+        this._environment = Environment.from(environment);
+        return this;
+    }
+
+    /**
      * Configure event horizons and any subscriptions.
      * @param {EventHorizonsBuilderCallback} callback The builder callback.
      * @returns {ClientBuilder} The client builder for continuation.
@@ -138,13 +158,12 @@ export class ClientBuilder {
         return this;
     }
 
-
     /**
      * Configure artifacts through the artifacts builder.
      * @param {ArtifactsBuilderCallback} callback The builder callback.
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    artifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
+    withArtifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
         callback(this._artifactsBuilder);
         return this;
     }
@@ -187,7 +206,7 @@ export class ClientBuilder {
      * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
      * @returns {ClientBuilder}
      */
-    configureLogging(callback: LoggingConfigurationCallback): ClientBuilder {
+    withLogging(callback: LoggingConfigurationCallback): ClientBuilder {
         callback(this._loggerOptions);
         return this;
     }
@@ -207,7 +226,7 @@ export class ClientBuilder {
      * @param {IContainer} container Container
      * @returns {ClientBuilder}
      */
-    useContainer(container: IContainer): ClientBuilder {
+    withContainer(container: IContainer): ClientBuilder {
         this._container = container;
         return this;
     }
