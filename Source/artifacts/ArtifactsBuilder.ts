@@ -3,6 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 import { ArtifactId, Artifact, Artifacts, IArtifacts, Generation } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents a builder for building {@link IArtifacts} instances
@@ -16,8 +17,8 @@ export class ArtifactsBuilder {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associate(type: Constructor<any>, identifier: ArtifactId, generation = Generation.first): ArtifactsBuilder {
-        this._artifactsMap.set(type, new Artifact(identifier, generation));
+    associate(type: Constructor<any>, identifier: string | Guid | ArtifactId, generation = Generation.first): ArtifactsBuilder {
+        this._artifactsMap.set(type, new Artifact(ArtifactId.from(identifier), generation));
         return this;
     }
 
