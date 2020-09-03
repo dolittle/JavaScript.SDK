@@ -7,7 +7,6 @@ import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
-import { Claims, Claim } from '@dolittle/sdk.execution';
 
 const client = Client
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
