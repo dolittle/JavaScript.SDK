@@ -5,6 +5,8 @@ import { Constructor } from '@dolittle/types';
 import { ArtifactId, Artifact, Artifacts, IArtifacts, Generation } from './index';
 import { Guid } from '@dolittle/rudiments';
 
+export type ArtifactsBuilderCallback = (builder: ArtifactsBuilder) => void;
+
 /**
  * Represents a builder for building {@link IArtifacts} instances
  */

@@ -10,9 +10,10 @@ import './MyEventHandler';
 
 
 const client = Client
+    .create()
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .withContainer(Container)
-    .configureLogging(_ => _.level = 'debug')
+    .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .build();
 
 client.executionContextManager.forTenant('900893e7-c4cc-4873-8032-884e965e4b97');

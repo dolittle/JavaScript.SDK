@@ -10,7 +10,7 @@ export { UnknownArtifact } from './UnknownArtifact';
 export { UnableToResolveArtifact } from './UnableToResolveArtifact';
 export { ArtifactAssociation } from './ArtifactAssociation';
 export { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
-export { ArtifactsBuilder } from './ArtifactsBuilder';
+export { ArtifactsBuilder, ArtifactsBuilderCallback } from './ArtifactsBuilder';
 export { IArtifacts } from './IArtifacts';
 export { Artifacts } from './Artifacts';
 export { ArtifactMap } from './ArtifactMap';
