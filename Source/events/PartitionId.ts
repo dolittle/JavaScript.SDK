@@ -24,7 +24,8 @@ export class PartitionId extends ConceptAs<Guid, '@dolittle/sdk.events.Partition
      * @param {(Guid | string)} id
      * @returns {PartitionId}
      */
-    static from(id: Guid | string): PartitionId {
+    static from(id: string | Guid | PartitionId): PartitionId {
+        if (id instanceof PartitionId) return id;
         return new PartitionId(Guid.as(id));
     }
 };

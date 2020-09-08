@@ -51,39 +51,39 @@ export class SubscriptionBuilder {
     }
 
     /**
-     * Sets the scope in which the subscription is for.
-     * @param {Guid | string} scope Scope for the subscription.
-     */
-    toScope(scope: Guid | string): SubscriptionBuilder {
-        this._scope = ScopeId.from(scope);
-        return this;
-    }
-
-    /**
-     * Specifies from which tenant we should get events from.
+     * Specifies from which tenant we should get events from in the other microservice.
      * @param {Guid | string} tenant Tenant for the subscription.
      */
-    fromTenant(tenant: Guid | string): SubscriptionBuilder {
+    fromProducerTenant(tenant: Guid | string): SubscriptionBuilder {
         this._tenant = TenantId.from(tenant);
         return this;
     }
 
     /**
-     * Specifies the source stream in the other microservice.
+     * Specifies the public stream in the other microservice.
      * @param {Guid | string} stream Stream for the subscription.
      */
-    forStream(stream: Guid | string): SubscriptionBuilder {
+    fromProducerStream(stream: Guid | string): SubscriptionBuilder {
         this._stream = StreamId.from(stream);
         return this;
     }
 
     /**
-     * Specifies which partition the subscription is for.
+     * Specifies which partition of the public stream the subscription is for.
      * @param {Guid | string} partition
      * @summary This is optional and only to be used if you're only interested in one specific partition.
      */
-    forPartition(partition: Guid | string): SubscriptionBuilder {
+    fromProducerPartition(partition: Guid | string): SubscriptionBuilder {
         this._partition = PartitionId.from(partition);
+        return this;
+    }
+
+    /**
+     * Sets the scope in which the subscription is going to.
+     * @param {Guid | string} scope Scope for the subscription.
+     */
+    toScope(scope: Guid | string): SubscriptionBuilder {
+        this._scope = ScopeId.from(scope);
         return this;
     }
 

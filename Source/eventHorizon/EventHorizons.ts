@@ -60,7 +60,7 @@ export class EventHorizons implements IEventHorizons {
             const consumerTenant = tenantWithSubscriptions.tenant;
 
             for (const subscription of tenantWithSubscriptions.subscriptions) {
-                this._executionContextManager.currentFor(consumerTenant);
+                this._executionContextManager.forTenant(consumerTenant);
 
                 this._logger.debug(`Subscribing to events from ${subscription.partition} in ${subscription.stream} of ${subscription.tenant} in ${subscription.microservice} for ${consumerTenant} into ${subscription.scope}`);
 

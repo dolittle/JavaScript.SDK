@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContext, TenantId, Claims } from './index';
+import { ExecutionContextManager, ExecutionContext, TenantId, Claims } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Defines a manager for working with the {@link ExecutionContext}.
@@ -15,8 +16,8 @@ export interface IExecutionContextManager {
     /**
      * Set the current execution context for a tenant and possibly claims.
      * @param {TenantId | string} tenantId Tenant to set for.
-     * @param [claims] Optional claims to set for.
+     * @param {Claims} [claims] Optional claims to set for.
      * @returns {ExecutionContext} The execution context that was set.
      */
-    currentFor(tenantId: TenantId | string, claims?: Claims): ExecutionContext;
+    forTenant(tenantId: string | Guid | TenantId, claims?: Claims): ExecutionContextManager;
 }

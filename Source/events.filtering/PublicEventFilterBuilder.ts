@@ -18,6 +18,12 @@ export class PublicEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
 
     /**
+     * Initializes a new instance of {@link PublicEventFilterBuilder}.
+     * @param {FilterId} _filterId Identifier of the filter.
+     */
+    constructor(private _filterId: FilterId) {}
+
+    /**
      * Defines a callback for the filter.
      * @param {FilterEventCallback} callback The callback that will be called for each event.
      */
@@ -35,14 +41,13 @@ export class PublicEventFilterBuilder {
      * @returns {IFilterProcessor}
      */
     build(
-        filterId: FilterId,
         client: FiltersClient,
         executionContextManager: IExecutionContextManager,
         artifacts: IArtifacts,
         logger: Logger): IFilterProcessor {
 
-        this.throwIfCallbackIsMissing(filterId);
-        return new internal.PublicEventFilterProcessor(filterId, this._callback!, client, executionContextManager, artifacts, logger);
+        this.throwIfCallbackIsMissing(this._filterId);
+        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContextManager, artifacts, logger);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId) {

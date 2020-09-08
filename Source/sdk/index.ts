@@ -4,4 +4,4 @@
 import '@dolittle/sdk.protobuf';
 
 export { Client, ClientBuilder } from './Client';
-
+export { LoggingBuilder, LoggingBuilderCallback, WinstonOptionsCallback } from './LoggingBuilder';

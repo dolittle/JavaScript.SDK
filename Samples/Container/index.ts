@@ -8,15 +8,15 @@ import { Container } from 'typedi';
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
 
-import { TenantId } from '@dolittle/sdk.execution';
 
 const client = Client
+    .create()
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
-    .useContainer(Container)
-    .configureLogging(_ => _.level = 'debug')
+    .withContainer(Container)
+    .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .build();
 
-client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');
+client.executionContextManager.forTenant('900893e7-c4cc-4873-8032-884e965e4b97');
 
 const event = new MyEvent();
 event.anInteger = 42;

@@ -29,7 +29,8 @@ export class ArtifactId extends ConceptAs<Guid, '@dolittle/sdk.artifacts.Artifac
      * @param {(Guid | string)} id
      * @returns {ArtifactId}
      */
-    static from(id: Guid | string): ArtifactId {
+    static from(id: Guid | string | ArtifactId): ArtifactId {
+        if (id instanceof ArtifactId) return id;
         return new ArtifactId(Guid.as(id));
     }
 };

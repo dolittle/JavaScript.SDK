@@ -18,3 +18,4 @@ export { CommitEventsResponse } from './CommitEventsResponse';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
+export { EventStoreBuilder, EventStoreBuilderCallback } from './EventStoreBuilder';
