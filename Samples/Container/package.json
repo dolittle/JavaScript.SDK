@@ -1,7 +1,7 @@
 {
     "name": "container",
     "private": true,
-    "version": "5.0.0",
+    "version": "6.0.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -11,10 +11,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "5.0.0",
-        "@dolittle/sdk.artifacts": "5.0.0",
-        "@dolittle/sdk.events": "5.0.0",
-        "@dolittle/sdk.events.handling": "5.0.0",
+        "@dolittle/sdk": "6.0.0",
+        "@dolittle/sdk.artifacts": "6.0.0",
+        "@dolittle/sdk.events": "6.0.0",
+        "@dolittle/sdk.events.handling": "6.0.0",
         "reflect-metadata": "^0.1.13",
         "typedi": "0.8.0"
     },
