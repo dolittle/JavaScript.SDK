@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export { eventType } from './eventType';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { MissingExecutionContext } from './MissingExecutionContext';
 export { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNumberMustBeNaturalNumber';
@@ -17,3 +18,4 @@ export { CommitEventsResponse } from './CommitEventsResponse';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
+export { EventStoreBuilder, EventStoreBuilderCallback } from './EventStoreBuilder';

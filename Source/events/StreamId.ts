@@ -27,7 +27,8 @@ export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
      * @param {(Guid | string)} id
      * @returns {StreamId}
      */
-    static from(id: Guid | string): StreamId {
+    static from(id: string | Guid | StreamId): StreamId {
+        if (id instanceof StreamId) return id;
         return new StreamId(Guid.as(id));
     }
 };

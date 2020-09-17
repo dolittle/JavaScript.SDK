@@ -4,6 +4,13 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ * Represents the unique identifier of an event source.
+ *
+ * @export
+ * @class EventSourceId
+ * @extends {ConceptAs<Guid, '@dolittle/sdk.events.EventSourceId'>}
+ */
 export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSourceId'> {
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.EventSourceId');
@@ -15,7 +22,8 @@ export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSo
      * @param {(Guid | string)} id
      * @returns {EventSourceId}
      */
-    static from(id: Guid | string): EventSourceId {
+    static from(id: Guid | string | EventSourceId): EventSourceId {
+        if (id instanceof EventSourceId) return id;
         return new EventSourceId(Guid.as(id));
     }
 };

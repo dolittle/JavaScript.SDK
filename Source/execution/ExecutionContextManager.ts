@@ -3,6 +3,7 @@
 
 import async_hooks from 'async_hooks';
 import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId, Environment } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 
 /**
@@ -46,21 +47,20 @@ export class ExecutionContextManager implements IExecutionContextManager {
     }
 
     /** @inheritdoc */
-    currentFor(tenantId: TenantId | string, claims?: Claims): ExecutionContext {
+    forTenant(tenantId: TenantId | string, claims?: Claims): ExecutionContextManager {
         const asyncId = async_hooks.executionAsyncId();
-
         const current = this.current;
         const executionContext = new ExecutionContext(
-            this._microserviceId,
+            current.microserviceId,
             TenantId.from(tenantId),
-            this._version,
-            this._environment,
+            current.version,
+            current.environment,
             current.correlationId,
             claims ?? this._base.claims
         );
 
         this._executionContextByAsyncId.set(asyncId, executionContext);
-        return executionContext;
+        return this;
     }
 
     private asyncOperationInit(asyncId: number, type: string, triggerAsyncId: number, resource: object): void {

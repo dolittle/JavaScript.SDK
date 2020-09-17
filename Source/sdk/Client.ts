@@ -2,24 +2,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import grpc from 'grpc';
-import { Logger, LoggerOptions, DefaulLevels, format, transports, createLogger } from 'winston';
+import { Logger} from 'winston';
 
-import { IArtifacts, ArtifactsBuilder } from '@dolittle/sdk.artifacts';
+import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { IContainer, Container } from '@dolittle/sdk.common';
-import { IEventStore, EventStore } from '@dolittle/sdk.events';
-import { IFilters, EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { IEventHandlers, EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { IExecutionContextManager, MicroserviceId, Version, ExecutionContextManager, Environment } from '@dolittle/sdk.execution';
+import { IEventStore, EventStore, EventStoreBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
+import { IFilters } from '@dolittle/sdk.events.filtering';
+import { IEventHandlers } from '@dolittle/sdk.events.handling';
+import { IExecutionContextManager, MicroserviceId, ExecutionContextManager, Environment, MicroserviceBuilder, MicroserviceBuilderCallback } from '@dolittle/sdk.execution';
 import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { Guid } from '@dolittle/rudiments';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
+import { LoggingBuilder, LoggingBuilderCallback } from './index';
 
-export type LoggingConfigurationCallback = (options: LoggerOptions) => void;
 
 /**
  * Represents the client for working with the Dolittle Runtime
@@ -47,85 +44,64 @@ export class Client {
     }
 
     /**
-     * Create a default builder - not specifically targeting a Microservice.
-     * @param {Guid | string} [microserviceId] Optional microservice id.
-     * @param {Version} [version] Optional version of the software.
-     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
-     * @returns {ClientBuilder} The builder to build a {Client} from.
-     */
-    static default(
-        microserviceId?: MicroserviceId | string,
-        version?: Version,
-        environment?: string): Client {
-        return Client.forMicroservice(microserviceId || MicroserviceId.notApplicable, version, environment).build();
-    }
-
-    /**
      * Create a client builder for a Microservice
      * @param {Guid | string} microserviceId The unique identifier for the microservice.
-     * @param {Version} [version] Optional version of the software.
-     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @param {Version} [version] Optional version of the software. Defaults to 1.0.0.0.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production). Defaults to 'Development'.
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static forMicroservice(microserviceId: MicroserviceId | string, version: Version = Version.first, environment?: string): ClientBuilder {
-        if (!environment) {
-            environment = process.env.NODE_ENV;
-            if (!environment || environment === '') {
-                environment = Environment.development.value;
-            }
-        }
-
-        const builder = new ClientBuilder(MicroserviceId.from(microserviceId), version, Environment.from(environment));
-        return builder;
+    static create() {
+        return new ClientBuilder();
     }
 }
-
-export type ArtifactsBuilderCallback = (builder: ArtifactsBuilder) => void;
 
 /**
  * Represents a builder for building {Client}.
  */
 export class ClientBuilder {
-    private _microserviceId: MicroserviceId;
     private _host = 'localhost';
     private _port = 50053;
-    private _version: Version;
-    private _environment: Environment;
-    private _loggerOptions: LoggerOptions<DefaulLevels>;
-    private _artifactsBuilder: ArtifactsBuilder;
-    private _eventHandlersBuilder: EventHandlersBuilder;
-    private _eventFiltersBuilder: EventFiltersBuilder;
+    private _environment: Environment = Environment.undetermined;
+    private _microserviceBuilder: MicroserviceBuilder;
     private _eventHorizonsBuilder: EventHorizonsBuilder;
     private _cancellation: Cancellation;
+    private _loggingBuilder: LoggingBuilder;
     private _container: IContainer = new Container();
+    private _eventStoreBuilder: EventStoreBuilder;
 
     /**
      * Creates an instance of client builder.
-     * @param {MicroserviceId} microserviceId The unique identifier of the microservice.
-     * @param {Version} version The version of the currently running software.
-     * @param {Environment} environment The environment the software is running in. (e.g. development, production).
      */
-    constructor(microserviceId: MicroserviceId, version: Version, environment: Environment) {
-        this._microserviceId = microserviceId;
-        this._version = version;
-        this._environment = environment;
-        this._artifactsBuilder = new ArtifactsBuilder();
-        this._eventHandlersBuilder = new EventHandlersBuilder();
-        this._eventFiltersBuilder = new EventFiltersBuilder();
+    constructor() {
+        this._microserviceBuilder = new MicroserviceBuilder(MicroserviceId.notApplicable);
         this._eventHorizonsBuilder = new EventHorizonsBuilder();
         this._cancellation = Cancellation.default;
-        this._loggerOptions = {
-            level: 'info',
-            format: format.prettyPrint(),
-            defaultMeta: {
-                microserviceId: this._microserviceId.toString()
-            },
-            transports: [
-                new transports.Console({
-                    format: format.prettyPrint()
-                })
-            ]
-        };
+        this._loggingBuilder = new LoggingBuilder();
+        this._eventStoreBuilder = new EventStoreBuilder();
+    }
+
+    /**
+     * Configure the microservice.
+     * @param microserviceId The unique identifierfor the microservice.
+     * @param callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    forMicroservice(microserviceId: MicroserviceId | string, callback?: MicroserviceBuilderCallback): ClientBuilder {
+        this._microserviceBuilder = new MicroserviceBuilder(MicroserviceId.from(microserviceId));
+        if (callback) {
+            callback(this._microserviceBuilder);
+        }
+        return this;
+    }
+
+    /**
+     * Sets the environment where the software is running.
+     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    forEnvironment(environment: string): ClientBuilder {
+        this._environment = Environment.from(environment);
+        return this;
     }
 
     /**
@@ -138,34 +114,13 @@ export class ClientBuilder {
         return this;
     }
 
-
     /**
-     * Configure artifacts through the artifacts builder.
-     * @param {ArtifactsBuilderCallback} callback The builder callback.
+     * Configure event types, event handlers and event filters.
+     * @param {EventStoreBuilderCallback} callback The builder callback.
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    artifacts(callback: ArtifactsBuilderCallback): ClientBuilder {
-        callback(this._artifactsBuilder);
-        return this;
-    }
-
-    /**
-     * Configure event handlers through the event handlers builder.
-     * @param {EventHandlersBuilderCallback} callback The builder callback.
-     * @returns {ClientBuilder} The client builder for continuation.
-     */
-    withEventHandlers(callback: EventHandlersBuilderCallback): ClientBuilder {
-        callback(this._eventHandlersBuilder);
-        return this;
-    }
-
-    /**
-     * Configure event filters through the event filters builder.
-     * @param {EventFiltersBuilderCallback} callback The builder callback.
-     * @returns {ClientBuilder} The client builder for continuation.
-     */
-    withFilters(callback: EventFiltersBuilderCallback): ClientBuilder {
-        callback(this._eventFiltersBuilder);
+    withEventStore(callback: EventStoreBuilderCallback): ClientBuilder {
+        callback(this._eventStoreBuilder);
         return this;
     }
 
@@ -176,19 +131,19 @@ export class ClientBuilder {
      * @returns {ClientBuilder} The client builder for continuation.
      * @summary If not used, the default host of 'localhost' and port 50053 will be used.
      */
-    connectTo(host: string, port: number): ClientBuilder {
+    connectToRuntime(host: string, port: number): ClientBuilder {
         this._host = host;
         this._port = port;
         return this;
     }
 
     /**
-     * Configures logging for the SDK
+     * Configures logging for the SDK.
      * @param {LoggingConfigurationCallback} callback Callback for setting Winston {LoggerOptions}.
      * @returns {ClientBuilder}
      */
-    configureLogging(callback: LoggingConfigurationCallback): ClientBuilder {
-        callback(this._loggerOptions);
+    withLogging(callback: LoggingBuilderCallback): ClientBuilder {
+        callback(this._loggingBuilder);
         return this;
     }
 
@@ -207,7 +162,7 @@ export class ClientBuilder {
      * @param {IContainer} container Container
      * @returns {ClientBuilder}
      */
-    useContainer(container: IContainer): ClientBuilder {
+    withContainer(container: IContainer): ClientBuilder {
         this._container = container;
         return this;
     }
@@ -217,32 +172,20 @@ export class ClientBuilder {
      * @returns {Client}
      */
     build(): Client {
-        const logger = createLogger(this._loggerOptions);
-        const executionContextManager = new ExecutionContextManager(this._microserviceId, this._version, this._environment);
-        const artifacts = this._artifactsBuilder.build();
-
+        const [microserviceId, version]  = this._microserviceBuilder.build();
+        const logger = this._loggingBuilder.build(microserviceId);
         const connectionString = `${this._host}:${this._port}`;
         const credentials = grpc.credentials.createInsecure();
+        const executionContextManager = new ExecutionContextManager(microserviceId, version, this._environment);
 
-        const eventHandlersClient = new EventHandlersClient(connectionString, credentials);
-        const eventHandlers = this._eventHandlersBuilder.build(
-            eventHandlersClient,
+        const [artifacts, eventHandlers, filters] = this._eventStoreBuilder.build(
+            connectionString,
+            credentials,
             this._container,
             executionContextManager,
-            artifacts,
             logger,
             this._cancellation
         );
-
-        const filtersClient = new FiltersClient(connectionString, credentials);
-        const filters = this._eventFiltersBuilder.build(
-            filtersClient,
-            executionContextManager,
-            artifacts,
-            logger,
-            this._cancellation
-        );
-
 
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
         const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContextManager, logger);

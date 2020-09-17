@@ -40,7 +40,7 @@ export class TenantWithSubscriptionsBuilder {
      * @param {SubscriptionBuilderCallback} callback Builder callback.
      * @returns {TenantWithSubscriptionsBuilder}
      */
-    forMicroservice(microservice: Guid | string, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
+    forProducerMicroservice(microservice: Guid | string, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
         const builder = new SubscriptionBuilder(MicroserviceId.from(microservice), this.callbacks.responses);
         callback(builder);
         this._subscriptionBuilders.push(builder);

@@ -27,6 +27,12 @@ export class PrivateEventFilterBuilder {
     private _innerBuilder?: PartitionedEventFilterBuilder | UnpartitionedEventFilterBuilder;
 
     /**
+     * Initializes a new instance of {@link PrivateEventFilterBuilder}.
+     * @param {FilterId} _filterId Identifier of the filter.
+     */
+    constructor(private _filterId: FilterId) {}
+
+    /**
      * Get the {@link ScopeId} the filter operates on.
      */
     get scopeId() {
@@ -72,15 +78,14 @@ export class PrivateEventFilterBuilder {
      * @returns {IFilterProcessor}
      */
     build(
-        filterId: FilterId,
         client: FiltersClient,
         executionContextManager: IExecutionContextManager,
         artifacts: IArtifacts,
         logger: Logger): IFilterProcessor {
 
         if (!this._innerBuilder) {
-            throw new FilterDefinitionIncomplete(filterId, 'call partitioned() or handle(...).');
+            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or handle(...).');
         }
-        return this._innerBuilder.build(filterId, this._scopeId, client, executionContextManager, artifacts, logger);
+        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContextManager, artifacts, logger);
     }
 }

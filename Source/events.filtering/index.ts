@@ -14,7 +14,5 @@ export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuild
 export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 export { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 export { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
-export { EventFilterBuilder, EventFilterBuilderCallback } from './EventFilterBuilder';
-export { EventFiltersBuilder, EventFiltersBuilderCallback } from './EventFiltersBuilder';
-
+export { EventFiltersBuilder, EventFiltersBuilderCallback, PrivateEventFilterBuilderCallback, PublicEventFilterBuilderCallback } from './EventFiltersBuilder';
 export * as internal from './Internal';

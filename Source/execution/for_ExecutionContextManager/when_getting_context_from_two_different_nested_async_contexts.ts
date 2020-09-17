@@ -20,11 +20,11 @@ describe('when getting context from two different nested async contexts', async 
     before(() => {
         const promise = new Promise((resolve) => {
             setTimeout(() => {
-                executionContextManager.currentFor(firstLevelTenant);
+                executionContextManager.forTenant(firstLevelTenant);
                 firstLevel = executionContextManager.current;
 
                 setTimeout(() => {
-                    executionContextManager.currentFor(secondLevelTenant);
+                    executionContextManager.forTenant(secondLevelTenant);
                     secondLevel = executionContextManager.current;
 
                     resolve();
