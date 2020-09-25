@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { EventHandlerSignature } from './index';
+import { EventHandlerSignature } from './EventHandlerSignature';
 
 /**
  * Represents methods decorated with the handles decorator.

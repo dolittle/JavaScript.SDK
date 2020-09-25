@@ -1,7 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ArtifactId, ArtifactsBuilder, Generation } from '../../index';
+import { ArtifactId } from '../../ArtifactId';
+import { ArtifactsBuilder } from '../../ArtifactsBuilder';
+import { Generation } from '../../Generation';
 
 class FirstType {}
 

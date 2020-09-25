@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { ArtifactId, Artifact, Generation } from './index';
+import { ArtifactId } from './ArtifactId';
+import { Artifact } from './Artifact';
+import { Generation } from './Generation';
 
 /**
  * Defines the system for working with {Artifact}

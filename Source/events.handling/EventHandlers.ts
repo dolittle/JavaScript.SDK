@@ -12,7 +12,14 @@ import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandler, internal, IEventHandlers, EventHandlerDecoratedTypes, EventHandlerDecoratedType, HandlesDecoratedMethods, EventHandlerSignature, IEventHandler } from './index';
+import * as internal from './Internal';
+import { EventHandler } from './EventHandler';
+import { IEventHandlers } from './IEventHandlers';
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
+import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
+import { EventHandlerSignature } from './EventHandlerSignature';
+import { IEventHandler } from './IEventHandler';
 import { ScopeId } from '@dolittle/sdk.events';
 
 class EventHandlerRegistration {
@@ -84,7 +91,7 @@ export class EventHandlers implements IEventHandlers {
                         return method.method(event, eventContext);
                     });
                 }
-                const eventHandler = new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
+                const eventHandler = new EventHandler(value.eventHandlerId, value.scopeId || ScopeId.default, true, methodsByArtifact);
                 return new EventHandlerRegistration(eventHandler, this._cancellation, value.type);
             })
         ).subscribe(this._eventHandlers);

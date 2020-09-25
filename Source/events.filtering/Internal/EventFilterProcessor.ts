@@ -16,7 +16,7 @@ import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRe
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
 import { FilterId, FilterEventCallback } from '../index';
-import { FilterEventProcessor } from './index';
+import { FilterEventProcessor } from './FilterEventProcessor';
 
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 

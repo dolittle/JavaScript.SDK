@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import no_associations from '../given/no_associations';
-import { Artifact, ArtifactId, Generation } from '../../index';
+import { Artifact } from '../../Artifact';
 
 describe('when resolving from object and input is artifact', () => {
     const artifact = Artifact.from('ec0111e1-84e4-4d1a-b7f3-a2f6c4427609');

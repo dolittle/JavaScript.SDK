@@ -12,7 +12,10 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import { IEventHandlers, EventHandlerId, EventHandlerBuilder, EventHandlerBuilderCallback, EventHandlers } from './index';
+import { IEventHandlers } from './IEventHandlers';
+import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
+import { EventHandlers } from './EventHandlers';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 

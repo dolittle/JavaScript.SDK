@@ -18,7 +18,7 @@ import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } f
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
 import { FilterId, PartitionedFilterEventCallback } from '../index';
-import { FilterEventProcessor } from './index';
+import { FilterEventProcessor } from './FilterEventProcessor';
 
 export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 

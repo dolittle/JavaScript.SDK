@@ -3,7 +3,8 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { HandlesDecoratedMethod, EventHandlerSignature } from './index';
+import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
+import { EventHandlerSignature } from './EventHandlerSignature';
 
 /**
  * Defines the system that knows about all the methods decorated with the handle decorator.

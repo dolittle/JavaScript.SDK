@@ -3,17 +3,15 @@
 
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { Constructor } from '@dolittle/types';
-import {
-    IArtifacts,
-    ArtifactAssociation,
-    Artifact,
-    ArtifactsFromDecorators,
-    ArtifactId,
-    UnknownType,
-    UnableToResolveArtifact,
-    UnknownArtifact,
-    Generation
-} from './index';
+import { IArtifacts } from './IArtifacts';
+import { ArtifactAssociation } from './';
+import { Artifact } from './Artifact';
+import { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
+import { ArtifactId } from './ArtifactId';
+import { UnknownType } from './UnknownType';
+import { UnableToResolveArtifact } from './UnableToResolveArtifact';
+import { UnknownArtifact } from './UnknownArtifact';
+import { Generation } from './Generation';
 
 /**
  * Represents an implementation of {IArtifacts}

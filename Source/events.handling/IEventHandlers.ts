@@ -3,7 +3,7 @@
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { IEventHandler } from './index';
+import { IEventHandler } from './IEventHandler';
 
 /**
  * Defines the system for event handlers

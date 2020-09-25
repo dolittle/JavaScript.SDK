@@ -15,4 +15,3 @@ export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 export { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 export { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 export { EventFiltersBuilder, EventFiltersBuilderCallback, PrivateEventFilterBuilderCallback, PublicEventFilterBuilderCallback } from './EventFiltersBuilder';
-export * as internal from './Internal';

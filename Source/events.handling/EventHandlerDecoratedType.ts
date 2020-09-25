@@ -3,7 +3,7 @@
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerId } from './index';
+import { EventHandlerId } from './EventHandlerId';
 
 /**
  * Represents an event handler created from the decorator

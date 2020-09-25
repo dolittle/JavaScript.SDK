@@ -9,14 +9,12 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import {
-    PartitionedEventFilterBuilder,
-    UnpartitionedEventFilterBuilder,
-    FilterEventCallback,
-    FilterId,
-    IFilterProcessor,
-    FilterDefinitionIncomplete
-} from './index';
+import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+import { FilterEventCallback } from './FilterEventCallback';
+import { FilterId } from './FilterId';
+import { IFilterProcessor } from './IFilterProcessor';
+import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 import { Guid } from '@dolittle/rudiments';
 
 /**

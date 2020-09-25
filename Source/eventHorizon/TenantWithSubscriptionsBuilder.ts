@@ -4,16 +4,9 @@
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
-import {
-    TenantWithSubscriptions,
-    SubscriptionBuilder,
-    SubscriptionCallbacks,
-    SubscriptionCallbackArguments,
-    SubscriptionBuilderCallback,
-    SubscriptionCompleted,
-    SubscriptionSucceeded,
-    SubscriptionFailed
-} from './index';
+import { TenantWithSubscriptions } from './';
+import { SubscriptionBuilder, SubscriptionBuilderCallback } from './SubscriptionBuilder';
+import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
 import { Guid } from '@dolittle/rudiments';
 
 export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;

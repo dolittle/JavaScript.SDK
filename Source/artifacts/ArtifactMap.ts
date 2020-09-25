@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact, ArtifactId, Generation } from './index';
-import { Guid } from '@dolittle/rudiments';
+import { Artifact } from './Artifact';
 
 /**
  * Represents a map for mapping an artifact to a given type and provide.

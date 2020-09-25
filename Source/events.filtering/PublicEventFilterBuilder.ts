@@ -9,7 +9,11 @@ import { ScopeId } from '@dolittle/sdk.events';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId, PartitionedFilterEventCallback, IFilterProcessor, internal, MissingFilterCallback } from './index';
+import { FilterId } from './FilterId';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import * as internal from './Internal';
+import { MissingFilterCallback } from './MissingFilterCallback';
 
 /**
  * Represents the builder for building public event filters.

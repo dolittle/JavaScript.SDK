@@ -9,17 +9,11 @@ import { Guid } from '@dolittle/rudiments';
 import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
-import {
-    Subscription,
-    SubscriptionCallbacks,
-    SubscriptionCallbackArguments,
-    SubscriptionCompleted,
-    SubscriptionSucceeded,
-    SubscriptionFailed,
-    MissingScopeForSubscription,
-    MissingTenantForSubscription,
-    MissingStreamForSubscription
-} from './index';
+import { Subscription } from './Subscription';
+import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded} from './SubscriptionCallbacks';
+import { MissingScopeForSubscription } from './MissingScopeForSubscription';
+import { MissingTenantForSubscription } from './MissingTenantForSubscription';
+import { MissingStreamForSubscription } from './MissingStreamForSubscription';
 
 /**
  * Represents the callback for the {@link SubscriptionBuilder}.

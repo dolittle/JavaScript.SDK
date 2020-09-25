@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { Artifact } from './index';
+import { Artifact } from './Artifact';
 
 /**
  * Exception that gets thrown when an {@link Artifact} is unknown.

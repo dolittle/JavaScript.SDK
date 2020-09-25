@@ -1,7 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Version, MicroserviceId, TenantId, Claims, CorrelationId, Environment } from './index';
+import { Version } from './Version';
+import { MicroserviceId } from './MicroserviceId';
+import { TenantId } from './TenantId';
+import { Claims } from './Claims';
+import { CorrelationId } from './CorrelationId';
+import { Environment } from './Environment';
 
 /**
  * Represents the execution context in a running application.

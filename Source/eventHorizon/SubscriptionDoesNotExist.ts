@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { Subscription } from './index';
+import { Subscription } from './Subscription';
 
 /**
  * Exception that gets thrown when a subscription does not exist.

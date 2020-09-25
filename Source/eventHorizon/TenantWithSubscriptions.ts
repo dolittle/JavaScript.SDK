@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TenantId } from '@dolittle/sdk.execution';
-import { Subscription, SubscriptionCallbacks } from './index';
+import { Subscription } from './Subscription';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 /**
  * Represents an event horizon.

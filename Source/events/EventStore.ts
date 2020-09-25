@@ -13,7 +13,12 @@ import { reactiveUnary } from '@dolittle/sdk.services';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { CommitEventsRequest, CommitEventsResponse as PbCommitEventsResponse } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
-import { CommittedEvents, IEventStore, EventSourceId, UncommittedEvent, EventConverters, CommitEventsResponse } from './index';
+import { CommittedEvents } from './CommittedEvents';
+import { IEventStore } from './IEventStore';
+import { EventSourceId } from './EventSourceId';
+import { UncommittedEvent } from './UncommittedEvent';
+import { EventConverters } from './EventConverters';
+import { CommitEventsResponse } from './CommitEventsResponse';
 import { Guid } from '@dolittle/rudiments';
 
 /**

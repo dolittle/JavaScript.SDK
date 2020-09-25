@@ -9,7 +9,11 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId, internal, PartitionedFilterEventCallback, IFilterProcessor, MissingFilterCallback } from './index';
+import { FilterId } from './FilterId';
+import * as internal from './Internal';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import { MissingFilterCallback } from './MissingFilterCallback';
 import { Guid } from '@dolittle/rudiments';
 
 /**

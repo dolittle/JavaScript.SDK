@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Failure } from '@dolittle/sdk.protobuf';
-;import { CommittedEvents } from './index';
+;import { CommittedEvents } from './CommittedEvents';
 
 /**
  * Represents the response from a commit of events

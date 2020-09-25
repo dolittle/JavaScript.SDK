@@ -3,7 +3,7 @@
 
 import { ReplaySubject } from 'rxjs';
 
-import { EventHandlerDecoratedType } from './index';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 
 /**
  * Handles registering and mappings between @eventHandler decorated classes and their given id and options.

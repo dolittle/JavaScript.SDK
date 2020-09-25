@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ArtifactId, Artifact } from '@dolittle/sdk.artifacts';
+import { Artifact } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { CommitEventsResponse, EventSourceId, UncommittedEvent } from './index';import { Guid } from '@dolittle/rudiments';
+import { CommitEventsResponse } from './CommitEventsResponse';
+import { UncommittedEvent } from './UncommittedEvent';
+import { Guid } from '@dolittle/rudiments';
 ;
 
 /**

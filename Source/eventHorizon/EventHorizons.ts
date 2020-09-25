@@ -9,16 +9,12 @@ import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
 
-import {
-    Subscription,
-    IEventHorizons,
-    SubscriptionResponse,
-    TenantWithSubscriptions,
-    SubscriptionCallbacks,
-    SubscriptionDoesNotExist,
-    ConsentId
-} from './index';
-
+import { Subscription } from './Subscription';
+import { IEventHorizons } from './IEventHorizons';
+import { SubscriptionResponse } from './SubscriptionResponse';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.

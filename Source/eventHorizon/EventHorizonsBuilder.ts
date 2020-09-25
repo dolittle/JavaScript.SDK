@@ -5,16 +5,10 @@ import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Logger } from 'winston';
-import {
-    TenantWithSubscriptionsBuilder,
-    TenantWithSubscriptionsBuilderCallback,
-    SubscriptionCallbacks,
-    SubscriptionCompleted,
-    SubscriptionSucceeded,
-    SubscriptionFailed,
-    EventHorizons,
-    IEventHorizons
-} from './index';
+import { TenantWithSubscriptionsBuilder, TenantWithSubscriptionsBuilderCallback } from './TenantWithSubscriptionsBuilder';
+import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
+import { EventHorizons } from './EventHorizons';
+import { IEventHorizons } from './IEventHorizons';
 import { Guid } from '@dolittle/rudiments';
 
 export type EventHorizonsBuilderCallback = (builder: EventHorizonsBuilder) => void;
