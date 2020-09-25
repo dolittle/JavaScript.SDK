@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk",
-    "version": "7.0.1",
+    "version": "7.0.2",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -36,16 +36,16 @@
     "dependencies": {
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/runtime.contracts": "5.1.19",
-        "@dolittle/sdk.artifacts": "7.0.1",
-        "@dolittle/sdk.common": "7.0.1",
-        "@dolittle/sdk.eventhorizon": "7.0.1",
-        "@dolittle/sdk.events": "7.0.1",
-        "@dolittle/sdk.events.handling": "7.0.1",
-        "@dolittle/sdk.events.filtering": "7.0.1",
-        "@dolittle/sdk.events.processing": "7.0.1",
-        "@dolittle/sdk.execution": "7.0.1",
-        "@dolittle/sdk.protobuf": "7.0.1",
-        "@dolittle/sdk.services": "7.0.1",
+        "@dolittle/sdk.artifacts": "7.0.2",
+        "@dolittle/sdk.common": "7.0.2",
+        "@dolittle/sdk.eventhorizon": "7.0.2",
+        "@dolittle/sdk.events": "7.0.2",
+        "@dolittle/sdk.events.handling": "7.0.2",
+        "@dolittle/sdk.events.filtering": "7.0.2",
+        "@dolittle/sdk.events.processing": "7.0.2",
+        "@dolittle/sdk.execution": "7.0.2",
+        "@dolittle/sdk.protobuf": "7.0.2",
+        "@dolittle/sdk.services": "7.0.2",
         "winston": "3.3.2"
     }
 }
