@@ -15,7 +15,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
-import { LoggingBuilder, LoggingBuilderCallback } from './index';
+import { LoggingBuilder, LoggingBuilderCallback } from './LoggingBuilder';
 
 
 /**
