@@ -3,7 +3,7 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
-import { FilterId } from './index';
+import { FilterId } from './FilterId';
 
 /**
  * Exception that is thrown when a filter callback is not defined.

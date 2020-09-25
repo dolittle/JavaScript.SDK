@@ -16,7 +16,7 @@ import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMe
 import { PartitionedFilterClientToRuntimeMessage, PartitionedFilterRegistrationRequest, PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PartitionedFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { FilterEventProcessor } from './index';
+import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '../index';
 
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {

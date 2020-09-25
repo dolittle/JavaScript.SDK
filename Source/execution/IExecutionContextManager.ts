@@ -1,7 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContextManager, ExecutionContext, TenantId, Claims } from './index';
+import { ExecutionContextManager } from './ExecutionContextManager';
+import { ExecutionContext } from './ExecutionContext';
+import { TenantId } from './TenantId';
+import { Claims } from './Claims';
 import { Guid } from '@dolittle/rudiments';
 
 /**

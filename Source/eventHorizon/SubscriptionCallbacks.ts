@@ -4,7 +4,9 @@
 import { Subject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TenantId } from '@dolittle/sdk.execution';
-import { CallbackShouldBeFunction, Subscription, SubscriptionResponse } from './index';
+import { CallbackShouldBeFunction } from './CallbackShouldBeFunction';
+import { Subscription } from './Subscription';
+import { SubscriptionResponse } from './SubscriptionResponse';
 
 /**
  * Callback that gets called when a subscription has been completed

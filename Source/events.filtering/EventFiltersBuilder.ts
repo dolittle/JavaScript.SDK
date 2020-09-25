@@ -9,7 +9,10 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId, Filters, IFilters, PublicEventFilterBuilder } from './index';
+import { FilterId } from './FilterId';
+import { Filters } from './Filters';
+import { IFilters } from './IFilters';
+import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { Guid } from '@dolittle/rudiments';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 

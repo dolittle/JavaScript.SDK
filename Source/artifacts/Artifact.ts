@@ -1,11 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import {
-    Generation,
-    ArtifactId,
-    ArtifactsFromDecorators
-} from './index';
+import { Generation } from './Generation';
+import { ArtifactId } from './ArtifactId';
 import { Guid } from '@dolittle/rudiments';
 
 /**

@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { MicroserviceId, Version } from './index';
+import { MicroserviceId } from './MicroserviceId';
+import { Version } from './Version';
 
 export type MicroserviceBuilderCallback = (builder: MicroserviceBuilder) => void;
 

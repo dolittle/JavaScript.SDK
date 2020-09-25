@@ -3,7 +3,7 @@
 
 import { PartitionId, ScopeId, StreamId } from '@dolittle/sdk.events';
 import { TenantId, MicroserviceId } from '@dolittle/sdk.execution';
-import { SubscriptionCallbacks } from './index';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 
 /**
  * Represents the configuration of an event horizon subscription.

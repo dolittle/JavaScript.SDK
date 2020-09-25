@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { Artifact } from './index';
+import { Artifact } from './Artifact';
 
 /**
  * Represents an association between a type and an artifact.

@@ -4,7 +4,9 @@
 import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { Guid } from '@dolittle/rudiments';
 
-import { Failure as SdkFailure, FailureId, FailureReason, MissingFailureIdentifier, guids} from './index';
+import { Failure as SdkFailure } from './Failure';
+import { MissingFailureIdentifier } from './MissingFailureIdentifier';
+import guids from './guids';
 
 /**
  * Convert to protobuf representation

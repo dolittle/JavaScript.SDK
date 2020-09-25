@@ -6,7 +6,10 @@ import { Guid } from '@dolittle/rudiments';
 import { Artifact, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerSignature, EventHandlerId, IEventHandler, EventHandler } from './index';
+import { IEventHandler } from './IEventHandler';
+import { EventHandler } from './EventHandler';
+import { EventHandlerSignature } from './EventHandlerSignature';
+import { EventHandlerId } from './EventHandlerId';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 

@@ -2,8 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import async_hooks from 'async_hooks';
-import { Claims, IExecutionContextManager, MicroserviceId, Version, ExecutionContext, TenantId, CorrelationId, Environment } from './index';
-import { Guid } from '@dolittle/rudiments';
+import { Claims } from './Claims';
+import { IExecutionContextManager } from './IExecutionContextManager';
+import { MicroserviceId } from './MicroserviceId';
+import { Version } from './Version';
+import { ExecutionContext } from './ExecutionContext';
+import { TenantId } from './TenantId';
+import { CorrelationId } from './CorrelationId';
+import { Environment } from './Environment';
 
 
 /**

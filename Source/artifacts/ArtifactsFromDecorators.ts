@@ -3,7 +3,10 @@
 
 import { ReplaySubject } from 'rxjs';
 import { Constructor } from '@dolittle/types';
-import { Generation, ArtifactId, Artifact, ArtifactAssociation } from './index';
+import { Generation } from './Generation';
+import { ArtifactId } from './ArtifactId';
+import { Artifact } from './Artifact';
+import { ArtifactAssociation } from './ArtifactAssociation';
 
 /**
  * Represents artifacts coming from decorators.

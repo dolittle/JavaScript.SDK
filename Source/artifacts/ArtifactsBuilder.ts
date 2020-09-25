@@ -2,7 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { ArtifactId, Artifact, Artifacts, IArtifacts, Generation } from './index';
+import { Artifact } from './Artifact';
+import { ArtifactId } from './ArtifactId';
+import { Artifacts } from './Artifacts';
+import { IArtifacts } from './IArtifacts';
+import { Generation } from './Generation';
 import { Guid } from '@dolittle/rudiments';
 
 export type ArtifactsBuilderCallback = (builder: ArtifactsBuilder) => void;

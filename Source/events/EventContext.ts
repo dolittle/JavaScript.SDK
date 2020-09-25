@@ -3,7 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EventSourceId } from './index';
+import { EventSourceId } from './EventSourceId';
 
 /**
  * Represents the context of an event.

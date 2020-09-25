@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FailureId, FailureReason } from './index';
+import { FailureId } from './FailureId';
+import { FailureReason } from './FailureReason';
 import { Guid } from '@dolittle/rudiments';
 
 /**

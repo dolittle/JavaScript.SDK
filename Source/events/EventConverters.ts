@@ -9,7 +9,10 @@ import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contra
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
-import { CommittedEvent as SdkCommittedEvent, EventSourceId, MissingExecutionContext, EventLogSequenceNumber } from './index';
+import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
+import { EventSourceId } from './EventSourceId';
+import { MissingExecutionContext } from './MissingExecutionContext';
+import { EventLogSequenceNumber } from './EventLogSequenceNumber';
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.

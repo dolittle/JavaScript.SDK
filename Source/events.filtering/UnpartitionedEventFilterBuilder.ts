@@ -9,7 +9,11 @@ import { IExecutionContextManager } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
-import { FilterId, FilterEventCallback, IFilterProcessor, MissingFilterCallback, internal } from './index';
+import { FilterId } from './FilterId';
+import { FilterEventCallback } from './FilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import { MissingFilterCallback } from './MissingFilterCallback';
+import * as internal from './Internal';
 
 /**
  * Represents the builder for building public event filters.

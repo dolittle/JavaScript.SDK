@@ -6,7 +6,13 @@ import { Guid } from '@dolittle/rudiments';
 import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerDecoratedTypes, IEventHandler, EventHandlerSignature, MissingEventHandlerForType, EventHandlerId, EventHandlerDecoratedType, EventHandlerOptions} from './index';
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+import { IEventHandler } from './IEventHandler';
+import { EventHandlerSignature } from './EventHandlerSignature';
+import { MissingEventHandlerForType } from './MissingEventHandlerForType';
+import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
+import { EventHandlerOptions } from './EventHandlerOptions';
 
 /**
  * Represents an implementation of {@link IEventHandler}.

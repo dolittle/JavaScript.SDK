@@ -4,7 +4,7 @@
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerId } from './index';
+import { EventHandlerId } from './EventHandlerId';
 
 /**
  * Defines an event handler

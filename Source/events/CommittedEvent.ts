@@ -4,7 +4,8 @@
 import { DateTime } from 'luxon';
 import { Artifact } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EventSourceId, EventLogSequenceNumber } from './index';
+import { EventSourceId } from './EventSourceId';
+import { EventLogSequenceNumber } from './EventLogSequenceNumber';
 
 /**
  * Represents a committed event
