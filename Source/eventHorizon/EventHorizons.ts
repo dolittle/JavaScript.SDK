@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Logger } from 'winston';
 import * as grpc from 'grpc';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
@@ -25,14 +25,14 @@ export class EventHorizons implements IEventHorizons {
     /**
      * Initializes a new instance of {@link EventHorizons}.
      * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
-     * @param {IExecutionContextManager} executionContextManager For Managing execution context.
+     * @param {ExecutionContext} executionContext The execution context.
      * @param {TenantWithSubscriptions[]} tenantSubscriptions Tenant subscriptions to connect.
      * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
      * @param {Logger} logger Logger for logging;
      */
     constructor(
         private _subscriptionsClient: SubscriptionsClient,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         readonly subscriptions: TenantWithSubscriptions[],
         readonly callbacks: SubscriptionCallbacks,
         private _logger: Logger) {
@@ -56,11 +56,11 @@ export class EventHorizons implements IEventHorizons {
             const consumerTenant = tenantWithSubscriptions.tenant;
 
             for (const subscription of tenantWithSubscriptions.subscriptions) {
-                this._executionContextManager.forTenant(consumerTenant);
+                const executionContext = this._executionContext.forTenant(consumerTenant.value);
 
                 this._logger.debug(`Subscribing to events from ${subscription.partition} in ${subscription.stream} of ${subscription.tenant} in ${subscription.microservice} for ${consumerTenant} into ${subscription.scope}`);
 
-                const callContext = callContexts.toProtobuf(this._executionContextManager.current);
+                const callContext = callContexts.toProtobuf(executionContext);
                 callContext.setHeadid(guids.toProtobuf(Guid.create()));
 
                 const pbSubscription = new PbSubscription();

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { callContexts, failures } from '@dolittle/sdk.protobuf';
 import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
@@ -30,13 +30,13 @@ export class EventStore implements IEventStore {
      * Initializes a new instance of {@link EventStore}.
      * @param {EventStoreClient} _eventStoreClient The client to use for connecting to the event store.
      * @param {IArtifacts} _artifacts Artifacts system for working with artifacts.
-     * @param {IExecutionContextManager} _executionContextManager For working with the execution context.
+     * @param {ExecutionContext} _executionContext The execution context.
      * @param {Logger} _logger Logger for logging.
      */
     constructor(
         private _eventStoreClient: EventStoreClient,
         private _artifacts: IArtifacts,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         private _logger: Logger) {
     }
 
@@ -70,7 +70,7 @@ export class EventStore implements IEventStore {
                 !!event.public));
 
         const request = new CommitEventsRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContextManager.current));
+        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setEventsList(uncommittedEvents);
 
         return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)

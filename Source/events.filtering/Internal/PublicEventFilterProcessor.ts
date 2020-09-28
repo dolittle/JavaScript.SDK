@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext } from '@dolittle/sdk.events';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
@@ -26,7 +26,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         filterId: FilterId,
         private _callback: PartitionedFilterEventCallback,
         private _client: FiltersClient,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger
     ) {
@@ -39,7 +39,11 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         return registerArguments;
     }
 
-    protected createClient(registerArguments: PublicFilterRegistrationRequest, callback: (request: FilterEventRequest) => Promise<PartitionedFilterResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+    protected createClient(
+        registerArguments: PublicFilterRegistrationRequest,
+        callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
+        pingTimeout: number,
+        cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<PublicFilterClientToRuntimeMessage, FilterRuntimeToClientMessage, PublicFilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, PartitionedFilterResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connectPublic, requests, cancellation),
             PublicFilterClientToRuntimeMessage,
@@ -52,7 +56,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContextManager,
+            this._executionContext,
             registerArguments,
             pingTimeout,
             callback,

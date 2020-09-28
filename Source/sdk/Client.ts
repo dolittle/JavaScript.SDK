@@ -4,18 +4,20 @@
 import grpc from 'grpc';
 import { Logger} from 'winston';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { ArtifactsBuilder, ArtifactsBuilderCallback, IArtifacts } from '@dolittle/sdk.artifacts';
 import { IContainer, Container } from '@dolittle/sdk.common';
-import { IEventStore, EventStore, EventStoreBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
-import { IFilters } from '@dolittle/sdk.events.filtering';
-import { IEventHandlers } from '@dolittle/sdk.events.handling';
-import { IExecutionContextManager, MicroserviceId, ExecutionContextManager, Environment, MicroserviceBuilder, MicroserviceBuilderCallback } from '@dolittle/sdk.execution';
+import { EventStoreBuilder } from '@dolittle/sdk.events';
+import { EventFiltersBuilder, EventFiltersBuilderCallback, IFilters } from '@dolittle/sdk.events.filtering';
+import { EventHandlersBuilder, EventHandlersBuilderCallback, IEventHandlers } from '@dolittle/sdk.events.handling';
+import { MicroserviceId, Environment, MicroserviceBuilder, MicroserviceBuilderCallback, ExecutionContext, TenantId, CorrelationId, Claims } from '@dolittle/sdk.execution';
 import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { LoggingBuilder, LoggingBuilderCallback } from './LoggingBuilder';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
 
 /**
@@ -26,18 +28,16 @@ export class Client {
     /**
      * Creates an instance of client.
      * @param {Logger} logger Winston Logger for logging.
-     * @param {IExecutionContextManager} executionContextManager The execution context manager.
      * @param {IArtifacts} artifacts All the configured artifacts.
-     * @param {IEventStore} eventStore The event store to work with.
+     * @param {EventStoreBuilder} eventStore The event store builder to work with.
      * @param {IEventHandlers} eventHandlers All the event handlers.
      * @param {IFilters} filters All the filters.
      * @param {IEventHorizons} eventHorizons All event horizons.
      */
     constructor(
         readonly logger: Logger,
-        readonly executionContextManager: IExecutionContextManager,
         readonly artifacts: IArtifacts,
-        readonly eventStore: IEventStore,
+        readonly eventStore: EventStoreBuilder,
         readonly eventHandlers: IEventHandlers,
         readonly filters: IFilters,
         readonly eventHorizons: IEventHorizons) {
@@ -63,11 +63,13 @@ export class ClientBuilder {
     private _port = 50053;
     private _environment: Environment = Environment.undetermined;
     private _microserviceBuilder: MicroserviceBuilder;
-    private _eventHorizonsBuilder: EventHorizonsBuilder;
+    private readonly _eventHorizonsBuilder: EventHorizonsBuilder;
+    private readonly _eventTypesBuilder: ArtifactsBuilder;
+    private readonly _eventHandlersBuilder: EventHandlersBuilder;
+    private readonly _filtersBuilder: EventFiltersBuilder;
     private _cancellation: Cancellation;
     private _loggingBuilder: LoggingBuilder;
     private _container: IContainer = new Container();
-    private _eventStoreBuilder: EventStoreBuilder;
 
     /**
      * Creates an instance of client builder.
@@ -77,7 +79,9 @@ export class ClientBuilder {
         this._eventHorizonsBuilder = new EventHorizonsBuilder();
         this._cancellation = Cancellation.default;
         this._loggingBuilder = new LoggingBuilder();
-        this._eventStoreBuilder = new EventStoreBuilder();
+        this._eventTypesBuilder = new ArtifactsBuilder();
+        this._eventHandlersBuilder = new EventHandlersBuilder();
+        this._filtersBuilder = new EventFiltersBuilder();
     }
 
     /**
@@ -115,14 +119,38 @@ export class ClientBuilder {
     }
 
     /**
-     * Configure event types, event handlers and event filters.
-     * @param {EventStoreBuilderCallback} callback The builder callback.
+     * Configure event types.
+     *
+     * @param {ArtifactsBuilderCallback} callback The builder callback
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    withEventStore(callback: EventStoreBuilderCallback): ClientBuilder {
-        callback(this._eventStoreBuilder);
+    withEventTypes(callback: ArtifactsBuilderCallback): ClientBuilder {
+        callback(this._eventTypesBuilder);
         return this;
     }
+
+    /**
+     * Configure the event handlers.
+     *
+     * @param {EventHandlersBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withEventHandlers(callback: EventHandlersBuilderCallback): ClientBuilder {
+        callback(this._eventHandlersBuilder);
+        return this;
+    }
+
+    /**
+     * Configure the event filters.
+     *
+     * @param {EventFiltersBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withFilters(callback: EventFiltersBuilderCallback): ClientBuilder {
+        callback(this._filtersBuilder);
+        return this;
+    }
+
 
     /**
      * Connect to a specific host and port for the Dolittle runtime.
@@ -176,29 +204,43 @@ export class ClientBuilder {
         const logger = this._loggingBuilder.build(microserviceId);
         const connectionString = `${this._host}:${this._port}`;
         const credentials = grpc.credentials.createInsecure();
-        const executionContextManager = new ExecutionContextManager(microserviceId, version, this._environment);
+        const executionContext = new ExecutionContext(
+            microserviceId,
+            TenantId.system,
+            version,
+            this._environment,
+            CorrelationId.system,
+            Claims.empty);
 
-        const [artifacts, eventHandlers, filters] = this._eventStoreBuilder.build(
-            connectionString,
-            credentials,
+        const eventTypes = this._eventTypesBuilder.build();
+
+        const eventStoreBuilder = new EventStoreBuilder(
+            new EventStoreClient(connectionString, credentials),
+            eventTypes,
+            executionContext,
+            logger);
+        const eventHandlers = this._eventHandlersBuilder.build(
+            new EventHandlersClient(connectionString, credentials),
             this._container,
-            executionContextManager,
+            executionContext,
+            eventTypes,
             logger,
-            this._cancellation
-        );
+            this._cancellation);
+
+        const filters = this._filtersBuilder.build(
+            new FiltersClient(connectionString, credentials),
+            executionContext,
+            eventTypes,
+            logger,
+            this._cancellation);
 
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
-        const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContextManager, logger);
+        const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, logger);
 
         return new Client(
             logger,
-            executionContextManager,
-            artifacts,
-            new EventStore(
-                new EventStoreClient(connectionString, credentials),
-                artifacts,
-                executionContextManager,
-                logger),
+            eventTypes,
+            eventStoreBuilder,
             eventHandlers,
             filters,
             eventHorizons

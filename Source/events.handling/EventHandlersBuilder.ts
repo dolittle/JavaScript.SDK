@@ -6,7 +6,6 @@ import { Logger } from 'winston';
 import { IContainer } from '@dolittle/sdk.common';
 import { Guid } from '@dolittle/rudiments';
 
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
@@ -16,6 +15,7 @@ import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
 import { EventHandlers } from './EventHandlers';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -44,11 +44,11 @@ export class EventHandlersBuilder {
     build(
         client: EventHandlersClient,
         container: IContainer,
-        executionContextManager: IExecutionContextManager,
+        executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger,
         cancellation: Cancellation): IEventHandlers {
-        const eventHandlers = new EventHandlers(client, container, executionContextManager, artifacts, logger, cancellation);
+        const eventHandlers = new EventHandlers(client, container, executionContext, artifacts, logger, cancellation);
 
         for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
             const eventHandler = eventHandlerBuilder.build(artifacts);

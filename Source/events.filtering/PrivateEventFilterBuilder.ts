@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
@@ -70,20 +70,20 @@ export class PrivateEventFilterBuilder {
      * Build an instance of a {@link IFilterProcessor}.
      * @param {FilterId} filterId Unique identifier for the filter.
      * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {IExecutionContextManager} executionContextManager Execution context manager for working with execution context.
+     * @param {ExecutionContext} executionContext Execution context manager for working with execution context.
      * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
      * @param {Logger} logger Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(
         client: FiltersClient,
-        executionContextManager: IExecutionContextManager,
+        executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger): IFilterProcessor {
 
         if (!this._innerBuilder) {
             throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or handle(...).');
         }
-        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContextManager, artifacts, logger);
+        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, artifacts, logger);
     }
 }

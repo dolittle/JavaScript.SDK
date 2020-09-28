@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TenantId, IExecutionContextManager } from '@dolittle/sdk.execution';
+import { TenantId, ExecutionContext } from '@dolittle/sdk.execution';
 
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { Logger } from 'winston';
@@ -70,15 +70,15 @@ export class EventHorizonsBuilder {
     /**
      * Build all configured {@link TenantSubscriptions}
      * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
-     * @param {IExecutionContextManager} executionContextManager For Managing execution context.
+     * @param {ExecutionContext} executionContext The execution context.
      * @param {Logger} logger Logger for logging;
      * @returns {TenantSubscriptions[]}
      */
-    build(subscriptionsClient: SubscriptionsClient, executionContextManager: IExecutionContextManager, logger: Logger): IEventHorizons {
+    build(subscriptionsClient: SubscriptionsClient, executionContext: ExecutionContext, logger: Logger): IEventHorizons {
         const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build());
         return new EventHorizons(
             subscriptionsClient,
-            executionContextManager,
+            executionContext,
             tenantSubscriptions,
             this.callbacks,
             logger);

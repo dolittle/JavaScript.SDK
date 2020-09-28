@@ -32,10 +32,11 @@ const client = Client
     })
     .build();
 
-client.executionContextManager.forTenant('900893e7-c4cc-4873-8032-884e965e4b97');
-
 const event = new MyEvent();
 event.anInteger = 42;
 event.aString = 'Forty two';
 
-client.eventStore.commitPublic(event, 'd8cb7301-4bec-4451-a72b-2db53c6dc05d');
+client
+    .eventStore
+    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+    .commitPublic(event, 'd8cb7301-4bec-4451-a72b-2db53c6dc05d');
