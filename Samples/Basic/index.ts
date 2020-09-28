@@ -21,22 +21,21 @@ const client = Client
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb', microservice => {
         microservice.withVersion(Version.first);
     })
-    .withFilters(filterBuilder => {
-        filterBuilder.createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb => {
-            fb
-                .handle((event: any, context: EventContext) => {
+    .withFilters(filterBuilder =>
+        filterBuilder
+            .createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb =>
+                fb.handle((event: any, context: EventContext) => {
                     return new Promise((resolve, reject) => {
                         console.log('Filtering event', event);
                     });
-                });
-        });
-        filterBuilder.createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb => {
-            fb
-                .handle((event: any, context: EventContext) => {
+                })
+            )
+            .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>
+                fb.handle((event: any, context: EventContext) => {
                     return new PartitionedFilterResult(true, PartitionId.unspecified);
-                });
-        });
-    })
+                })
+            )
+    )
     .build();
 
 
