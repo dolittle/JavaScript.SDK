@@ -3,6 +3,13 @@
 
 import { ArtifactsFromDecorators, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
 import { Guid } from '@dolittle/rudiments';
+import { EventTypeId } from './EventTypeId';
+
+export class EventType {
+    constructor(readonly eventTypeId: EventTypeId, readonly generation?: Generation) {
+        if (generation == null) generation = Generation.first;
+    }
+}
 
 /**
  * Decorator for associating an event with an artifact.

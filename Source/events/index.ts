@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { eventType } from './eventType';
+export { EventTypeId } from './EventTypeId';
+export { EventType, eventType } from './EventType';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { MissingExecutionContext } from './MissingExecutionContext';
 export { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNumberMustBeNaturalNumber';
