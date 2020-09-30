@@ -8,6 +8,7 @@ import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
 import { Version } from '@dolittle/sdk.execution';
+import { eventTypes } from '@dolittle/sdk.protobuf';
 
 const client = Client
     .create()
@@ -21,6 +22,8 @@ const client = Client
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb', microservice => {
         microservice.withVersion(Version.first);
     })
+    .withEventTypes(eventTypes =>
+        eventTypes.register<MyEvent>(MyEvent))
     .withFilters(filterBuilder =>
         filterBuilder
             .createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb =>
