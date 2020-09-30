@@ -3,15 +3,15 @@
 
 import { Constructor } from '@dolittle/types';
 import { Generation } from './Generation';
-import { EventTypeMap } from './EventTypeMap';
 import { EventTypeId } from './EventTypeId';
 import { EventType } from './EventType';
+import { EventTypes } from './EventTypes';
 
 /**
  * Represents event types coming from decorators.
  */
 export class EventTypesFromDecorators {
-    static readonly eventTypes = new EventTypeMap<any>();
+    static readonly eventTypes = new EventTypes();
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
@@ -20,6 +20,6 @@ export class EventTypesFromDecorators {
      * @param {number} generation Optional generation - defaults to 0.
      */
     static associate(type: Constructor<any>, identifier: EventTypeId, generation?: Generation): void {
-        this.eventTypes.set(new EventType(identifier, generation || Generation.first), type);
+        this.eventTypes.associate(type, new EventType(identifier, generation || Generation.first));
     }
 }

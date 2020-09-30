@@ -31,10 +31,11 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
      * Creates a {Generation} from a number.
      *
      * @static
-     * @param {number} num
+     * @param {Generation | number} generation
      * @returns {Generation}
      */
-    static from(num: number): Generation {
-        return new Generation(num);
+    static from(generation: Generation | number): Generation {
+        if (generation instanceof Generation) return generation;
+        return new Generation(generation);
     }
 }

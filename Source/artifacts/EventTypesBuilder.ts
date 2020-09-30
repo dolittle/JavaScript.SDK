@@ -7,6 +7,7 @@ import { Generation } from './Generation';
 import { EventType } from './EventType';
 import { IEventTypes } from './IEventTypes';
 import { EventTypeId } from './EventTypeId';
+import { EventTypesFromDecorators } from './EventTypesFromDecorators';
 
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
@@ -22,8 +23,20 @@ export class EventTypesBuilder {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 1.
      */
-    associate(type: Constructor<any>, identifier: EventTypeId | Guid | string, generation = Generation.first): EventTypesBuilder {
-        this._associations.push([type, new EventType(EventTypeId.from(identifier), generation)]);
+    associate<T = any>(type: Constructor<T>, eventType: EventType): EventTypesBuilder;
+    associate<T = any>(type: Constructor<T>, identifier: EventTypeId | Guid | string, generation?: Generation | number): EventTypesBuilder;
+    associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeId | Guid | string, generation?: Generation | number): EventTypesBuilder {
+        const eventType = eventTypeOrIdentifier instanceof EventType ?
+                            eventTypeOrIdentifier
+                            : new EventType(
+                                EventTypeId.from(eventTypeOrIdentifier),
+                                generation == null? Generation.first : Generation.from(generation));
+        this._associations.push([type, eventType]);
+        return this;
+    }
+
+    register<T = any>(type: Constructor<T>): EventTypesBuilder {
+        this.associate(type, EventTypesFromDecorators.eventTypes.getFor(type));
         return this;
     }
 

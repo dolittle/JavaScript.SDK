@@ -13,11 +13,9 @@ import { Generation } from './Generation';
 export function eventType(identifier: Guid | string, generationNumber?: number) {
     return function (target: any) {
         EventTypesFromDecorators
-            .eventTypes
-            .set(
-                new EventType(
-                    EventTypeId.from(identifier),
-                    generationNumber != null ? Generation.from(generationNumber) : Generation.first),
-                target.prototype.constructor);
+            .associate(
+                target.prototype.constructor,
+                EventTypeId.from(identifier),
+                generationNumber != null ? Generation.from(generationNumber) : Generation.first);
     };
 }
