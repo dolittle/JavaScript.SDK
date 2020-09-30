@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { Artifact as SdkArtifact, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
@@ -12,7 +12,7 @@ import guids from './guids';
  * Convert to protobuf representation
  * @returns {PbArtifact}
  */
-function toProtobuf(input: SdkArtifact): PbArtifact {
+function toProtobuf(input: EventType): PbArtifact {
     const artifact = new PbArtifact();
     artifact.setId(guids.toProtobuf(input.id.value));
     artifact.setGeneration(input.generation.value);
@@ -21,9 +21,9 @@ function toProtobuf(input: SdkArtifact): PbArtifact {
 
 /**
  * Convert to SDK representation
- * @returns {SdkArtifact}
+ * @returns {EventType}
  */
-function toSDK(input?: PbArtifact): SdkArtifact {
+function toSDK(input?: PbArtifact): EventType {
     if (!input) {
         throw new MissingArtifactIdentifier();
     }
@@ -31,7 +31,7 @@ function toSDK(input?: PbArtifact): SdkArtifact {
     if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return SdkArtifact.from(new Guid(uuid), input.getGeneration());
+    return new EventType(EventTypeId.from(new Guid(uuid)), Generation.from(input.getGeneration()));
 }
 
 export default {
@@ -40,7 +40,7 @@ export default {
 };
 
 declare module '@dolittle/sdk.artifacts' {
-    interface Artifact {
+    interface EventType {
         toProtobuf(): PbArtifact;
     }
 }
@@ -49,13 +49,13 @@ declare module '@dolittle/sdk.artifacts' {
  * Convert to protobuf representation
  * @returns {PbArtifact}
  */
-SdkArtifact.prototype.toProtobuf = function () {
+EventType.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
 declare module '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb' {
     interface Artifact {
-        toSDK(): SdkArtifact
+        toSDK(): EventType
     }
 }
 
