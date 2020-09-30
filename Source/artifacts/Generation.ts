@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import isNaturalNumber from 'is-natural-number';
 import { ConceptAs } from '@dolittle/concepts';
 import { GenerationMustBeNaturalNumber } from './GenerationMustBeNaturalNumber';

@@ -20,6 +20,7 @@ import { UncommittedEvent } from './UncommittedEvent';
 import { EventConverters } from './EventConverters';
 import { CommitEventsResponse } from './CommitEventsResponse';
 import { Guid } from '@dolittle/rudiments';
+import { EventType } from './EventType';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -80,8 +81,8 @@ export class EventStore implements IEventStore {
             })).toPromise();
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: Guid | string, artifactOrId?: Artifact | Guid | string, isPublic = false): UncommittedEvent {
-        let artifact: Artifact | ArtifactId | undefined;
+    private toUncommittedEvent(content: any, eventSourceId: Guid | string, artifactOrId?: EventType | Guid | string, isPublic = false): UncommittedEvent {
+        let artifact: EventType | ArtifactId | undefined;
         if (artifactOrId != null) {
             if (artifactOrId instanceof Artifact) artifact = artifactOrId;
             else artifact = ArtifactId.from(artifactOrId);

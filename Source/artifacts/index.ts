@@ -3,14 +3,14 @@
 
 export { GenerationMustBeNaturalNumber } from './GenerationMustBeNaturalNumber';
 export { Generation } from './Generation';
-export { ArtifactId } from './ArtifactId';
-export { Artifact } from './Artifact';
+export { EventTypeId } from './EventTypeId';
+export { EventType } from './EventType';
 export { UnknownType } from './UnknownType';
-export { UnknownArtifact } from './UnknownArtifact';
-export { UnableToResolveArtifact } from './UnableToResolveArtifact';
-export { ArtifactAssociation } from './ArtifactAssociation';
-export { ArtifactsFromDecorators } from './ArtifactsFromDecorators';
-export { ArtifactsBuilder, ArtifactsBuilderCallback } from './ArtifactsBuilder';
-export { IArtifacts } from './IArtifacts';
-export { Artifacts } from './Artifacts';
-export { ArtifactMap } from './ArtifactMap';
+export { UnknownEventType } from './UnknownEventType';
+export { UnableToResolveEventType } from './UnableToResolveEventType';
+export { EventTypeMap } from './EventTypeMap';
+export { IEventTypes } from './IEventTypes';
+export { EventTypes } from './EventTypes';
+export { EventTypesBuilder, EventTypesBuilderCallback } from './EventTypesBuilder';
+export { EventTypesFromDecorators } from './EventTypesFromDecorators';
+export { eventType } from './evenTypeDecorator';
