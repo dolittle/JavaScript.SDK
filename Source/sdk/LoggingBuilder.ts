@@ -34,7 +34,7 @@ export class LoggingBuilder {
 
     /**
      * Builds the configured logger.
-     * @param microserviceId Sets the {@linkMicroserviceId} in the defaultMeta in winston.
+     * @param microserviceId Sets the {@link MicroserviceId} in the defaultMeta in winston.
      */
     build(microserviceId: MicroserviceId) {
         if (!this._options.defaultMeta.microserviceId) {

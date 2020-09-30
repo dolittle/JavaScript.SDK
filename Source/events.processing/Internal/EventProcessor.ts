@@ -10,6 +10,7 @@ import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { IReverseCallClient } from '@dolittle/sdk.services';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 
@@ -31,7 +32,11 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     /** @inheritdoc */
     register(cancellation: Cancellation): Observable<never> {
-        const client = this.createClient(this.registerArguments, (request: TRequest) => this.catchingHandle(request), this._pingTimeout, cancellation);
+        const client = this.createClient(
+            this.registerArguments,
+            (request: TRequest, executionContext: ExecutionContext) => this.catchingHandle(request, executionContext),
+            this._pingTimeout,
+            cancellation);
         return new Observable<never>(subscriber => {
             this._logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
             client.subscribe({
@@ -66,7 +71,11 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     protected abstract get registerArguments (): TRegisterArguments;
 
-    protected abstract createClient (registerArguments: TRegisterArguments, callback: (request: TRequest) => Promise<TResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
+    protected abstract createClient (
+        registerArguments: TRegisterArguments,
+        callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
+        pingTimeout: number,
+        cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     protected abstract getFailureFromRegisterResponse (response: TRegisterResponse): PbFailure | undefined;
 
@@ -74,13 +83,13 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     protected abstract createResponseFromFailure (failure: ProcessorFailure): TResponse;
 
-    protected abstract handle (request: TRequest): Promise<TResponse>;
+    protected abstract handle (request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 
-    private async catchingHandle(request: TRequest): Promise<TResponse> {
+    private async catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse> {
         let retryProcessingState: RetryProcessingState | undefined;
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
-            return await this.handle(request);
+            return await this.handle(request, executionContext);
         } catch (error) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);

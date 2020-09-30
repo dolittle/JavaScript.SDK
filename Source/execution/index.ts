@@ -9,6 +9,6 @@ export { TenantId } from './TenantId';
 export { Claim } from './Claim';
 export { Claims } from './Claims';
 export { ExecutionContext } from './ExecutionContext';
-export { ExecutionContextManager } from './ExecutionContextManager';
-export { IExecutionContextManager } from './IExecutionContextManager';
 export { Version } from './Version';
+
+import './ExecutionContextExtensions';

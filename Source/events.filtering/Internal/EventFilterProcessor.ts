@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
@@ -25,7 +25,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         private _scopeId: ScopeId,
         private _callback: FilterEventCallback,
         private _client: FiltersClient,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger
     ) {
@@ -39,7 +39,11 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         return registerArguments;
     }
 
-    protected createClient(registerArguments: FilterRegistrationRequest, callback: (request: FilterEventRequest) => Promise<FilterResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+    protected createClient(
+        registerArguments: FilterRegistrationRequest,
+        callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
+        pingTimeout: number,
+        cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<FilterClientToRuntimeMessage, FilterRuntimeToClientMessage, FilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, FilterResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
             FilterClientToRuntimeMessage,
@@ -52,7 +56,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContextManager,
+            this._executionContext,
             registerArguments,
             pingTimeout,
             callback,

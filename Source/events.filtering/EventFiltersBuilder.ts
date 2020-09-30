@@ -3,8 +3,10 @@
 
 import { Logger } from 'winston';
 
+import { Guid } from '@dolittle/rudiments';
+
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
@@ -13,7 +15,6 @@ import { FilterId } from './FilterId';
 import { Filters } from './Filters';
 import { IFilters } from './IFilters';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
-import { Guid } from '@dolittle/rudiments';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 
 
@@ -63,18 +64,18 @@ export class EventFiltersBuilder {
      */
     build(
         client: FiltersClient,
-        executionContextManager: IExecutionContextManager,
+        executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger,
         cancellation: Cancellation): IFilters {
         const filters = new Filters(logger);
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContextManager, artifacts, logger);
+            const filterProcessor = privateFilterBuilder.build(client, executionContext, artifacts, logger);
             filters.register(filterProcessor, cancellation);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContextManager, artifacts, logger);
+            const filterProcessor = publicFilterBuilder.build(client, executionContext, artifacts, logger);
             filters.register(filterProcessor, cancellation);
         }
 

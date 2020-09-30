@@ -8,6 +8,7 @@ import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { MissingEventInformation } from '@dolittle/sdk.events.handling';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids, executionContexts, artifacts } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
@@ -35,7 +36,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         return request.getRetryprocessingstate();
     }
 
-    protected async handle(request: FilterEventRequest): Promise<TResponse> {
+    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');
         }
@@ -61,8 +62,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
             pbSequenceNumber,
             EventSourceId.from(guids.toSDK(pbEventSourceId)),
             DateTime.fromJSDate(pbOccurred.toDate()),
-            executionContexts.toSDK(pbExecutionContext)
-        );
+            executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
 

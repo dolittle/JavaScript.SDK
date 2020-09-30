@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 
 import { IArtifacts } from '@dolittle/sdk.artifacts';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
@@ -39,19 +39,19 @@ export class PublicEventFilterBuilder {
      * Build an instance of a {@link IFilterProcessor}.
      * @param {FilterId} filterId Unique identifier for the filter.
      * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {IExecutionContextManager} executionContextManager Execution context manager for working with execution context.
+     * @param {ExecutionContext} executionContext Execution context.
      * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
      * @param {Logger} logger Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(
         client: FiltersClient,
-        executionContextManager: IExecutionContextManager,
+        executionContext: ExecutionContext,
         artifacts: IArtifacts,
         logger: Logger): IFilterProcessor {
 
         this.throwIfCallbackIsMissing(this._filterId);
-        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContextManager, artifacts, logger);
+        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, artifacts, logger);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId) {

@@ -7,7 +7,6 @@ import { Logger } from 'winston';
 
 import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
@@ -21,6 +20,7 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
 import { ScopeId } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 
 class EventHandlerRegistration {
     constructor(
@@ -41,7 +41,7 @@ export class EventHandlers implements IEventHandlers {
      * Initializes an instance of {@link EventHandlers}.
      * @param {EventHandlersClient} _eventHandlersClient Client to use for connecting to the runtime.
      * @param {IContainer} _container The container for creating instances needed.
-     * @param {IExecutionContextManager} _executionContextManager For managing execution context.
+     * @param {IExecutionContext} _executionContext The execution context.
      * @param {IArtifacts} _artifacts For mapping artifacts.
      * @param {Logger} _logger For logging.
      * @param {Cancellation} _cancellation For handling cancellation.
@@ -49,7 +49,7 @@ export class EventHandlers implements IEventHandlers {
     constructor(
         private readonly _eventHandlersClient: EventHandlersClient,
         private readonly _container: IContainer,
-        private readonly _executionContextManager: IExecutionContextManager,
+        private readonly _executionContext: ExecutionContext,
         private readonly _artifacts: IArtifacts,
         private readonly _logger: Logger,
         private readonly _cancellation: Cancellation,
@@ -115,7 +115,7 @@ export class EventHandlers implements IEventHandlers {
                             eventHandler.partitioned,
                             eventHandler,
                             this._eventHandlersClient,
-                            this._executionContextManager,
+                            this._executionContext,
                             this._artifacts,
                             this._logger);
                         this._logger.debug(`Registering a ${eventHandler.partitioned ? 'partitioned' : 'unpartitioned'} EventHandler with Id '${eventHandler.eventHandlerId}' for scope '${eventHandler.scopeId}'.`);

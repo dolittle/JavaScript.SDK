@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { IArtifacts } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -40,7 +40,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
      * @param {boolean} _partitioned Whether or not the handler is partitioned.
      * @param {IEventHandler} _handler The actual handler.
      * @param {EventHandlersClient} _client Client to use for connecting to the runtime.
-     * @param {IExecutionContextManager} _executionContextManager For managing execution contexts.
+     * @param {EventHandlersClient} _executionContext Execution context.
      * @param {IArtifacts} _artifacts Registered Artifacts.
      * @param {ILogger} logger Logger for logging.
      */
@@ -50,7 +50,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         private _partitioned: boolean,
         private _handler: IEventHandler,
         private _client: EventHandlersClient,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         private _artifacts: IArtifacts,
         logger: Logger
     ) {
@@ -71,7 +71,11 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         return registerArguments;
     }
 
-    protected createClient(registerArguments: EventHandlerRegistrationRequest, callback: (request: HandleEventRequest) => Promise<EventHandlerResponse>, pingTimeout: number, cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
+    protected createClient(
+        registerArguments: EventHandlerRegistrationRequest,
+        callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
+        pingTimeout: number,
+        cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
             EventHandlerClientToRuntimeMessage,
@@ -84,7 +88,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContextManager,
+            this._executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -107,7 +111,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         return response;
     }
 
-    protected async handle(request: HandleEventRequest): Promise<EventHandlerResponse> {
+    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }
@@ -133,8 +137,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
             pbSequenceNumber,
             EventSourceId.from(guids.toSDK(pbEventSourceId)),
             DateTime.fromJSDate(pbOccurred.toDate()),
-            executionContexts.toSDK(pbExecutionContext)
-        );
+            executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
 

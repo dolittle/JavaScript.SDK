@@ -11,7 +11,7 @@ import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgum
 import { Ping, Pong } from '@dolittle/runtime.contracts/Fundamentals/Services/Ping_pb';
 
 import { Guid } from '@dolittle/rudiments';
-import { IExecutionContextManager } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { executionContexts, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
@@ -37,7 +37,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         private _setResponseContext: (response: TResponse, context: ReverseCallResponseContext) => void,
         private _getMessagePing: (message: TServerMessage) => Ping | undefined,
         private _setMessagePong: (message: TClientMessage, pong: Pong) => void,
-        private _executionContextManager: IExecutionContextManager,
+        private _executionContext: ExecutionContext,
         private _connectArguments: TConnectArguments,
         private _pingInterval: number,
         private _callback: ReverseCallCallback<TRequest, TResponse>,
@@ -67,7 +67,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         pingInterval.setNanos(pingNanos);
         callContext.setPinginterval(pingInterval);
 
-        const executionContext = executionContexts.toProtobuf(this._executionContextManager.current);
+        const executionContext = executionContexts.toProtobuf(this._executionContext);
         callContext.setExecutioncontext(executionContext);
 
         this._setArgumentsContext(this._connectArguments, callContext);
@@ -104,10 +104,12 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                     try {
                         const request = this._getMessageRequest(message)!;
                         const context = this._getRequestContext(request)!;
-                        const executionContext = executionContexts.toSDK(context.getExecutioncontext()!);
-                        this._executionContextManager.forTenant(executionContext.tenantId, executionContext.claims);
+                        const requestContext = executionContexts.toSDK(context.getExecutioncontext()!);
+                        const executionContext = this._executionContext
+                            .forTenant(requestContext.tenantId.value)
+                            .forClaims(requestContext.claims);
 
-                        const response = await this._callback(request);
+                        const response = await this._callback(request, executionContext);
 
                         const responseContext = new ReverseCallResponseContext();
                         responseContext.setCallid(context.getCallid());
