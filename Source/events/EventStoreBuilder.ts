@@ -10,7 +10,7 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/Eve
 import { IEventStore } from './IEventStore';
 
 /**
- * Represents a builder for building event types, event handlers and event filters.
+ * Represents a builder for building an event store.
  */
 export class EventStoreBuilder {
 
