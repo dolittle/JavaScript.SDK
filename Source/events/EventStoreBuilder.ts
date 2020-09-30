@@ -9,8 +9,6 @@ import { EventStore } from './EventStore';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { IEventStore } from './IEventStore';
 
-export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => void;
-
 /**
  * Represents a builder for building event types, event handlers and event filters.
  */
