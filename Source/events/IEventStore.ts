@@ -1,12 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact } from '@dolittle/sdk.artifacts';
+import { Guid } from '@dolittle/rudiments';
+import { EventType } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { CommitEventsResponse } from './CommitEventsResponse';
 import { UncommittedEvent } from './UncommittedEvent';
-import { Guid } from '@dolittle/rudiments';
 ;
 
 /**
@@ -18,20 +18,20 @@ export interface IEventStore {
      * Commit a single event.
      * @param {*} event The content of the event.
      * @param eventSourceId The source of the event - a unique identifier that is associated with the event.
-     * @param {Artifact|Guid|string} [artifact] An artifact or an identifier representing the artifact.
+     * @param {EventType|Guid|string} [eventType] An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns Promise<CommitEventsResponse>
-     * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
+     * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commit(event: any, eventSourceId: Guid | string, artifact?: Artifact | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
 
     /**
      * Commit a collection of events.
      * @param {UncommittedEvent[]} events Collection of events.
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns Promise<CommitEventsResponse>
-     * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
+     * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * @summary on the actual type of the event.
      */
     commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
@@ -40,11 +40,11 @@ export interface IEventStore {
      * Commit a single public event.
      * @param {*} event The content of the event.
      * @param eventSourceId The source of the event - a unique identifier that is associated with the event.
-     * @param {Artifact|Guid|string} [artifact] An artifact or an identifier representing the artifact.
+     * @param {EventType|Guid|string} [eventType] An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns Promise<CommitEventsResponse>
-     * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
+     * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commitPublic(event: any, eventSourceId: Guid | string, artifact?: Artifact | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
 }

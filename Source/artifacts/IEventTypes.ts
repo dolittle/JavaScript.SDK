@@ -43,10 +43,10 @@ export interface IEventTypes {
      * Resolves an artifact from optional input or the given object.
      * @param object Object to resolve for.
      * @param [input] Optional input as an artifact or representations of artifacts as identifier.
-     * @returns {EventType | EventTypeId | Guid | string} resolved artifacts.
+     * @returns {EventType} Resolved event type.
      * @throws {UnableToResolveArtifact} If not able to resolve artifact.
      */
-    resolveFrom(object: any, input?: EventType | EventTypeId | Guid | string): EventType | Guid | string;
+    resolveFrom(object: any, input?: EventType | EventTypeId | Guid | string): EventType;
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.

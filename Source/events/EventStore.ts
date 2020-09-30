@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 import { map } from 'rxjs/operators';
 
 import { callContexts, failures } from '@dolittle/sdk.protobuf';
-import { ArtifactId, Artifact, IArtifacts } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
@@ -20,7 +20,6 @@ import { UncommittedEvent } from './UncommittedEvent';
 import { EventConverters } from './EventConverters';
 import { CommitEventsResponse } from './CommitEventsResponse';
 import { Guid } from '@dolittle/rudiments';
-import { EventType } from './EventType';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -30,31 +29,31 @@ export class EventStore implements IEventStore {
     /**
      * Initializes a new instance of {@link EventStore}.
      * @param {EventStoreClient} _eventStoreClient The client to use for connecting to the event store.
-     * @param {IArtifacts} _artifacts Artifacts system for working with artifacts.
+     * @param {IEventTypes} _eventTypes Event types system for working with event types.
      * @param {ExecutionContext} _executionContext The execution context.
      * @param {Logger} _logger Logger for logging.
      */
     constructor(
         private _eventStoreClient: EventStoreClient,
-        private _artifacts: IArtifacts,
+        private _eventTypes: IEventTypes,
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: Guid | string, artifact?: Artifact | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
     commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, artifact?: Artifact | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
         if (this.isArrayOfUncommittedEvents(eventOrEvents)) {
             return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
         const eventSourceId = eventSourceIdOrCancellation as Guid | string;
-        return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, artifact, false)], cancellation);
+        return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, eventType, false)], cancellation);
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: Guid | string, artifact?: Artifact | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
-        const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, artifact, true)];
+    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+        const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
     }
 
@@ -67,7 +66,7 @@ export class EventStore implements IEventStore {
             EventConverters.getUncommittedEventFrom(
                 event.content,
                 event.eventSourceId,
-                this._artifacts.resolveFrom(event.content, event.artifact),
+                this._eventTypes.resolveFrom(event.content, event.eventType),
                 !!event.public));
 
         const request = new CommitEventsRequest();
@@ -81,16 +80,16 @@ export class EventStore implements IEventStore {
             })).toPromise();
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: Guid | string, artifactOrId?: EventType | Guid | string, isPublic = false): UncommittedEvent {
-        let artifact: EventType | ArtifactId | undefined;
-        if (artifactOrId != null) {
-            if (artifactOrId instanceof Artifact) artifact = artifactOrId;
-            else artifact = ArtifactId.from(artifactOrId);
+    private toUncommittedEvent(content: any, eventSourceId: Guid | string, eventTypeOrId?: EventType | Guid | string, isPublic = false): UncommittedEvent {
+        let eventType: EventType | EventTypeId | undefined;
+        if (eventTypeOrId != null) {
+            if (eventTypeOrId instanceof EventType) eventType = eventTypeOrId;
+            else eventType = EventTypeId.from(eventTypeOrId);
         }
         return {
             content,
             eventSourceId: EventSourceId.from(eventSourceId),
-            artifact,
+            eventType,
             public: isPublic
         };
     }

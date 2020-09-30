@@ -3,7 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { Claim, Claims, ExecutionContext, Version, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
-import { Artifact, ArtifactId, Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 
 import { CommittedEvent, EventSourceId, EventConverters, EventLogSequenceNumber } from '../index';
 
@@ -35,7 +35,7 @@ describe('when converting committed event to protobuf and back', () => {
         DateTime.utc(),
         EventSourceId.from('3a52080d-c44b-4827-8d65-1325b7f055f2'),
         executionContext,
-        new Artifact(ArtifactId.from('559c3025-fd90-4aad-9508-12a6ee517707'), Generation.from(43)),
+        new EventType(EventTypeId.from('559c3025-fd90-4aad-9508-12a6ee517707'), Generation.from(43)),
         content,
         true,
         true,
