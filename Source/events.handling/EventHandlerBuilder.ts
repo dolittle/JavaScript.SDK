@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 import { Guid } from '@dolittle/rudiments';
-import { Artifact, IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { EventType, IEventTypes, EventTypeMap, EventTypeId } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { IEventHandler } from './IEventHandler';
@@ -17,7 +17,7 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
 export class EventHandlerBuilder {
-    private _handlers: Map<Constructor<any> | Artifact | Guid | string, EventHandlerSignature<any>> = new Map();
+    private _handlers: Map<Constructor<any> | EventType | Guid | string, EventHandlerSignature<any>> = new Map();
     private _scopeId: ScopeId = ScopeId.default;
     private _partitioned = true;
 
@@ -75,34 +75,34 @@ export class EventHandlerBuilder {
     /**
      * Add a handler method for handling the event.
      * @template T Type of event, when using type rather than artifact - default is any.
-     * @param {Constructor<T>|Artifact|Guid|string} typeOrArtifact The type of event or the artifact or identifier of the artifact.
+     * @param {Constructor<T>|EventType|Guid|string} typeOrArtifact The type of event or the artifact or identifier of the artifact.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
-    handle<T = any>(typeOrArtifact: Constructor<T> | Artifact | Guid | string, method: EventHandlerSignature<T>) {
+    handle<T = any>(typeOrArtifact: Constructor<T> | EventType | Guid | string, method: EventHandlerSignature<T>) {
         this._handlers.set(typeOrArtifact, method);
     }
 
     /**
      * Builds the {@link IEventHandler}.
-     * @param {IArtifacts} artifacts Artifacts for resolving artifacts.
+     * @param {IEventTypes} eventTypes Event types for resolving event types.
      * @returns {IEventHandler}
      */
-    build(artifacts: IArtifacts): IEventHandler {
-        const artifactsToMethods = new ArtifactMap<EventHandlerSignature<any>>();
+    build(eventTypes: IEventTypes): IEventHandler {
+        const evenTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
 
-        for (const [typeOrArtifactOrId, method] of this._handlers) {
-            let artifact: Artifact;
-            if (typeOrArtifactOrId instanceof Artifact) {
-                artifact = typeOrArtifactOrId;
-            } else if (typeOrArtifactOrId instanceof Guid || typeof typeOrArtifactOrId === 'string') {
-                artifact = Artifact.from(typeOrArtifactOrId);
+        for (const [typeOrEventTypeOrId, method] of this._handlers) {
+            let eventType: EventType;
+            if (typeOrEventTypeOrId instanceof EventType) {
+                eventType = typeOrEventTypeOrId;
+            } else if (typeOrEventTypeOrId instanceof Guid || typeof typeOrEventTypeOrId === 'string') {
+                eventType = new EventType(EventTypeId.from(typeOrEventTypeOrId));
             } else {
-                artifact = artifacts.getFor(typeOrArtifactOrId);
+                eventType = eventTypes.getFor(typeOrEventTypeOrId);
             }
 
-            artifactsToMethods.set(artifact, method);
+            evenTypeToMethods.set(eventType, method);
         }
 
-        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, artifactsToMethods);
+        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, evenTypeToMethods);
     }
 }

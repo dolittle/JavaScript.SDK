@@ -20,10 +20,7 @@ export class EventHandlerId extends ConceptAs<Guid, '@dolittle/sdk.events.handli
      * @returns {EventHandlerId}
      */
     static from(id: string | Guid | EventHandlerId): EventHandlerId {
-        if (id instanceof EventHandlerId) {
-            return id;
-        }
-
+        if (id instanceof EventHandlerId) return id;
         return new EventHandlerId(Guid.as(id));
     }
 }

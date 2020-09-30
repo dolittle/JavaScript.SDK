@@ -4,12 +4,12 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { EventContext, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { MissingEventInformation } from '@dolittle/sdk.events.handling';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids, executionContexts, artifacts } from '@dolittle/sdk.protobuf';
+import { guids, executionContexts, eventTypes } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
@@ -22,7 +22,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
     constructor(
         kind: string,
         filterId: FilterId,
-        private _artifacts: IArtifacts,
+        private _eventTypes: IEventTypes,
         logger: Logger
     ) {
         super(kind, filterId, logger);
@@ -66,9 +66,9 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const artifact = artifacts.toSDK(pbArtifact);
-        if (this._artifacts.hasTypeFor(artifact)) {
-            const eventType = this._artifacts.getTypeFor(artifact);
+        const artifact = eventTypes.toSDK(pbArtifact);
+        if (this._eventTypes.hasTypeFor(artifact)) {
+            const eventType = this._eventTypes.getTypeFor(artifact);
             event = Object.assign(new eventType(), event);
         }
 

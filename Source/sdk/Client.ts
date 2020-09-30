@@ -4,7 +4,7 @@
 import grpc from 'grpc';
 import { Logger} from 'winston';
 
-import { ArtifactsBuilder, ArtifactsBuilderCallback, IArtifacts } from '@dolittle/sdk.artifacts';
+import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, IEventTypes } from '@dolittle/sdk.artifacts';
 import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventStoreBuilder } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback, IFilters } from '@dolittle/sdk.events.filtering';
@@ -36,7 +36,7 @@ export class Client {
      */
     constructor(
         readonly logger: Logger,
-        readonly artifacts: IArtifacts,
+        readonly eventTypes: IEventTypes,
         readonly eventStore: EventStoreBuilder,
         readonly eventHandlers: IEventHandlers,
         readonly filters: IFilters,
@@ -64,7 +64,7 @@ export class ClientBuilder {
     private _environment: Environment = Environment.undetermined;
     private _microserviceBuilder: MicroserviceBuilder;
     private readonly _eventHorizonsBuilder: EventHorizonsBuilder;
-    private readonly _eventTypesBuilder: ArtifactsBuilder;
+    private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
     private _cancellation: Cancellation;
@@ -79,7 +79,7 @@ export class ClientBuilder {
         this._eventHorizonsBuilder = new EventHorizonsBuilder();
         this._cancellation = Cancellation.default;
         this._loggingBuilder = new LoggingBuilder();
-        this._eventTypesBuilder = new ArtifactsBuilder();
+        this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
     }
@@ -124,7 +124,7 @@ export class ClientBuilder {
      * @param {ArtifactsBuilderCallback} callback The builder callback
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    withEventTypes(callback: ArtifactsBuilderCallback): ClientBuilder {
+    withEventTypes(callback: EventTypesBuilderCallback): ClientBuilder {
         callback(this._eventTypesBuilder);
         return this;
     }
@@ -212,7 +212,8 @@ export class ClientBuilder {
             CorrelationId.system,
             Claims.empty);
 
-        const eventTypes = this._eventTypesBuilder.build();
+        const eventTypes = new EventTypes();
+        this._eventTypesBuilder.addAssociationsInto(eventTypes);
 
         const eventStoreBuilder = new EventStoreBuilder(
             new EventStoreClient(connectionString, credentials),

@@ -9,14 +9,14 @@ import { Generation } from './Generation';
  * Represents a map for mapping an event type to a given type and provide.
  * @template TType Type to map to.
  */
-export class EventTypeMap<TType extends Constructor<any> = Constructor<any>> implements Map<EventType, TType> {
-    private _generationsById: Map<string, Map<number, TType>>;
+export class EventTypeMap<T> implements Map<EventType, T> {
+    private _generationsById: Map<string, Map<number, T>>;
 
     /**
      * Initializes a new instance of {@link EventTypeMap}
      */
     constructor() {
-        this._generationsById = new Map<string, Map<number, TType>>();
+        this._generationsById = new Map<string, Map<number, T>>();
     }
     /** @inheritdoc */
     [Symbol.toStringTag] = 'EvenTypeMap';
@@ -39,20 +39,20 @@ export class EventTypeMap<TType extends Constructor<any> = Constructor<any>> imp
     }
 
     /** @inheritdoc */
-    get(key: EventType): TType | undefined {
+    get(key: EventType): T | undefined {
         const eventTypeId = key.id.toString();
         return this._generationsById.get(eventTypeId)?.get(key.generation.value);
     }
 
     /** @inheritdoc */
-    set(key: EventType, value: TType): this {
+    set(key: EventType, value: T): this {
         const eventTypeId = key.id.toString();
 
-        let generations: Map<number, TType>;
+        let generations: Map<number, T>;
         if (this._generationsById.has(eventTypeId)) {
             generations = this._generationsById.get(eventTypeId)!;
         } else {
-            generations = new Map<number, TType>();
+            generations = new Map<number, T>();
             this._generationsById.set(eventTypeId, generations);
         }
         generations.set(key.generation.value, value);
@@ -81,7 +81,7 @@ export class EventTypeMap<TType extends Constructor<any> = Constructor<any>> imp
     }
 
     /** @inheritdoc */
-    *[Symbol.iterator](): IterableIterator<[EventType, TType]> {
+    *[Symbol.iterator](): IterableIterator<[EventType, T]> {
         for (const [eventTypeId, generations] of this._generationsById) {
             for (const [generation, entry] of generations) {
                 const eventType = new EventType(EventTypeId.from(eventTypeId), Generation.from(generation));
@@ -91,7 +91,7 @@ export class EventTypeMap<TType extends Constructor<any> = Constructor<any>> imp
     }
 
     /** @inheritdoc */
-    entries(): IterableIterator<[EventType, TType]> {
+    entries(): IterableIterator<[EventType, T]> {
         return this[Symbol.iterator]();
     }
 
@@ -103,14 +103,14 @@ export class EventTypeMap<TType extends Constructor<any> = Constructor<any>> imp
     }
 
     /** @inheritdoc */
-    *values(): IterableIterator<TType> {
+    *values(): IterableIterator<T> {
         for (const [_, type] of this.entries()) {
             yield type;
         }
     }
 
     /** @inheritdoc */
-    forEach(callbackfn: (value: TType, key: EventType, map: Map<EventType, TType>) => void, thisArg?: any): void {
+    forEach(callbackfn: (value: T, key: EventType, map: Map<EventType, T>) => void, thisArg?: any): void {
         for (const [eventType, type] of this.entries()) {
             callbackfn.call(thisArg, type, eventType, this);
         }

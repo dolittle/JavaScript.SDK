@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId, EventSourceId } from '@dolittle/sdk.events';
 import { EventProcessor } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -24,7 +24,7 @@ import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failu
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { guids, artifacts, executionContexts } from '@dolittle/sdk.protobuf';
+import { guids, eventTypes, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { EventHandlerId, IEventHandler, MissingEventInformation } from '../index';
 
@@ -41,7 +41,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
      * @param {IEventHandler} _handler The actual handler.
      * @param {EventHandlersClient} _client Client to use for connecting to the runtime.
      * @param {EventHandlersClient} _executionContext Execution context.
-     * @param {IArtifacts} _artifacts Registered Artifacts.
+     * @param {IEventTypes} _eventTypes Registered event types.
      * @param {ILogger} logger Logger for logging.
      */
     constructor(
@@ -51,7 +51,7 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         private _handler: IEventHandler,
         private _client: EventHandlersClient,
         private _executionContext: ExecutionContext,
-        private _artifacts: IArtifacts,
+        private _eventTypes: IEventTypes,
         logger: Logger
     ) {
         super('EventHandler', eventHandlerId, logger);
@@ -64,8 +64,8 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
         registerArguments.setPartitioned(this._partitioned);
 
         const handledArtifacts: Artifact[] = [];
-        for (const artifact of this._handler.handledEvents) {
-            handledArtifacts.push(artifacts.toProtobuf(artifact));
+        for (const eventType of this._handler.handledEvents) {
+            handledArtifacts.push(eventTypes.toProtobuf(eventType));
         }
         registerArguments.setTypesList(handledArtifacts);
         return registerArguments;
@@ -141,13 +141,13 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const artifact = artifacts.toSDK(pbArtifact);
-        if (this._artifacts.hasTypeFor(artifact)) {
-            const eventType = this._artifacts.getTypeFor(artifact);
-            event = Object.assign(new eventType(), event);
+        const eventType = eventTypes.toSDK(pbArtifact);
+        if (this._eventTypes.hasTypeFor(eventType)) {
+            const typeOfEvent = this._eventTypes.getTypeFor(eventType);
+            event = Object.assign(new typeOfEvent(), event);
         }
 
-        await this._handler.handle(event, artifact, eventContext);
+        await this._handler.handle(event, eventType, eventContext);
 
         return new EventHandlerResponse();
     }

@@ -21,7 +21,7 @@ export class EventTypes implements IEventTypes {
      * Initializes a new instance of {@link Artifacts}
      * @param {Map<Function, Artifact>?} associations Known associations
      */
-    constructor(private _associations: EventTypeMap = new EventTypeMap()) {
+    constructor(private _associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
     }
     /** @inheritdoc */
     hasTypeFor(input: EventType): boolean {

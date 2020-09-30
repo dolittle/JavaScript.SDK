@@ -27,7 +27,7 @@ export class Filters implements IFilters {
                 this._logger.error(`Failed to register filter: ${error}`);
             },
             complete: () => {
-                this._logger.error(`Filter registartion completed.`);
+                this._logger.error(`Filter registration completed.`);
             }
         });
     }

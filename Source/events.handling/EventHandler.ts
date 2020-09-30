@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { Artifact, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { EventTypeMap, EventType } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
@@ -24,27 +24,27 @@ export class EventHandler implements IEventHandler {
      * @param {EventHandlerId} eventHandlerId The unique identifier of the event handler.
      * @param {ScopeId} scopeId The identifier of the scope the event handler is in.
      * @param {boolean} partitioned Whether or not the event handler is partitioned.
-     * @param {ArtifactMap<EventHandlerSignature<any>>} handleMethodsByArtifact Handle methods per artifact type.
+     * @param {EventTypeMap<EventHandlerSignature<any>>} handleMethodsByEventType Handle methods per event type.
      */
     constructor(
         readonly eventHandlerId: EventHandlerId,
         readonly scopeId: ScopeId,
         readonly partitioned: boolean,
-        readonly handleMethodsByArtifact: ArtifactMap<EventHandlerSignature<any>>) {
+        readonly handleMethodsByEventType: EventTypeMap<EventHandlerSignature<any>>) {
     }
 
     /** @inheritdoc */
-    get handledEvents(): Iterable<Artifact> {
-        return this.handleMethodsByArtifact.keys();
+    get handledEvents(): Iterable<EventType> {
+        return this.handleMethodsByEventType.keys();
     }
 
     /** @inheritdoc */
-    async handle(event: any, artifact: Artifact, context: EventContext): Promise<void> {
-        if (this.handleMethodsByArtifact.has(artifact)) {
-            const method = this.handleMethodsByArtifact.get(artifact)!;
+    async handle(event: any, eventTypes: EventType, context: EventContext): Promise<void> {
+        if (this.handleMethodsByEventType.has(eventTypes)) {
+            const method = this.handleMethodsByEventType.get(eventTypes)!;
             await method(event, context);
         } else {
-            throw new MissingEventHandlerForType(artifact);
+            throw new MissingEventHandlerForType(eventTypes);
         }
     }
 }

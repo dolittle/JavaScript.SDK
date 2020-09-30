@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
@@ -54,7 +54,7 @@ export class PartitionedEventFilterBuilder {
      * @param {ScopeId} scopeId The identifier of the scope the filter runs on.
      * @param {FiltersClient} client The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext Execution context.
-     * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
+     * @param {IEventTypes} eventTypes Event types for identifying event types.
      * @param {Logger} logger Logger for logging.
      * @returns {IFilterProcessor}
      */
@@ -63,10 +63,10 @@ export class PartitionedEventFilterBuilder {
         scopeId: ScopeId,
         client: FiltersClient,
         executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger): IFilterProcessor {
         this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, artifacts, logger);
+        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, eventTypes, logger);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {
