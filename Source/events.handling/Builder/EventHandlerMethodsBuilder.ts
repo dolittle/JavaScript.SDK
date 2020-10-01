@@ -8,8 +8,7 @@ import { Constructor } from '@dolittle/types';
 
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.artifacts';
 
-import { EventHandlerId } from './EventHandlerId';
-import { EventHandlerSignature } from './EventHandlerSignature';
+import { EventHandlerId, EventHandlerSignature } from '../index';
 
 type TypeOrEventTypeOrId = Constructor<any> | EventType | Guid | string;
 type TypeToMethodPair = [TypeOrEventTypeOrId, EventHandlerSignature<any>];
@@ -20,7 +19,6 @@ export class EventHandlerMethodsBuilder {
     constructor(private readonly _eventHandlerId: EventHandlerId) {
         this._typeToMethodPairs = [];
     }
-
 
     /**
      * Add a handler method for handling the event.

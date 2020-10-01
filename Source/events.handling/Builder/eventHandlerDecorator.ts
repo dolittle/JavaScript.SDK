@@ -5,10 +5,10 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
+import { EventHandlerId } from '../index';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-import { EventHandlerOptions } from './EventHandlerOptions';
+import {EventHandlerOptions } from './EventHandlerOptions';
 
 /**
  * Decorator to mark a class as an EventHandler.

@@ -3,23 +3,24 @@
 
 import { Logger } from 'winston';
 
-import { Constructor } from '@dolittle/types';
 import { Guid } from '@dolittle/rudiments';
-import { EventType, IEventTypes, EventTypeMap, EventTypeId } from '@dolittle/sdk.artifacts';
+import { IEventTypes, EventTypeMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { IEventHandler } from './IEventHandler';
-import { EventHandler } from './EventHandler';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { EventHandlerId } from './EventHandlerId';
+import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers, internal } from '../index';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
+import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
+import { IContainer } from '@dolittle/sdk.common';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
 /**
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
-export class EventHandlerBuilder {
+export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
     private _methodsBuilder!: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
     private _partitioned = true;
@@ -77,25 +78,33 @@ export class EventHandlerBuilder {
         return this;
     }
 
-    /**
-     * Builds the {@link IEventHandler}.
-     * @param {IEventTypes} eventTypes Event types for resolving event types.
-     * @returns {IEventHandler}
-     */
-    tryBuild(eventTypes: IEventTypes, logger: Logger): [IEventHandler, boolean] {
+    /** @inheritdoc */
+    buildAndRegister(
+        client: EventHandlersClient,
+        eventHandlers: IEventHandlers,
+        container: IContainer,
+        executionContext: ExecutionContext,
+        eventTypes: IEventTypes,
+        logger: Logger,
+        cancellation: Cancellation): void {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (this._methodsBuilder == null) {
             logger.warning(`Failed to build event handler ${EventHandlerId}. No event handler methods are configured for event handler`);
-            return [this.createEventHandler(eventTypeToMethods), false];
+            return;
         }
         const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, logger);
-        return [
-            new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods),
-            allMethodsBuilt];
+        if (!allMethodsBuilt) {
+            logger.warning(`Could not build event handler ${this._eventHandlerId}`);
+            return;
+        }
+        const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);
+        eventHandlers.register(
+            new internal.EventHandlerProcessor(
+                eventHandler,
+                client,
+                executionContext,
+                eventTypes,
+                logger
+            ), cancellation);
     }
-
-    private createEventHandler(eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>): IEventHandler {
-        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);
-    }
-
 }

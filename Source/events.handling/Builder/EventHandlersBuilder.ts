@@ -13,11 +13,9 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import { IEventHandlers } from './IEventHandlers';
-import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerId, EventHandlers, IEventHandlers } from '../index';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
-import { EventHandlers } from './EventHandlers';
-import { EventHandlerProcessor } from './Internal';
+import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -25,7 +23,7 @@ export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => vo
  * Represents the builder for configuring event handlers
  */
 export class EventHandlersBuilder {
-    private _eventHandlerBuilders: EventHandlerBuilder[] = [];
+    private _eventHandlerBuilders: ICanBuildAndRegisterAnEventHandler[] = [];
 
     /**
      * Start building an event handler.
@@ -59,18 +57,7 @@ export class EventHandlersBuilder {
         const eventHandlers = new EventHandlers(logger);
 
         for (const eventHandlerBuilder of this._eventHandlerBuilders) {
-            const [eventHandler, succeeded] = eventHandlerBuilder.tryBuild(eventTypes, logger);
-            if (succeeded) {
-                eventHandlers.register(
-                    new EventHandlerProcessor(
-                        eventHandler,
-                        client,
-                        executionContext,
-                        eventTypes,
-                        logger),
-                    cancellation);
-
-            } else logger.warning(``);
+            eventHandlerBuilder.buildAndRegister(client, eventHandlers, container, executionContext, eventTypes, logger, cancellation);
         }
 
         return eventHandlers;
