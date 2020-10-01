@@ -1,9 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import isNaturalNumber from 'is-natural-number';
 import { ConceptAs } from '@dolittle/concepts';
-import { GenerationMustBeNaturalNumber } from './GenerationMustBeNaturalNumber';
+import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 
 /**
  * Represents the generation of an Artifact.
@@ -15,7 +14,7 @@ import { GenerationMustBeNaturalNumber } from './GenerationMustBeNaturalNumber';
 export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>{
 
     constructor(generation: number) {
-        if (!isNaturalNumber(generation, { includeZero: true })) throw new GenerationMustBeNaturalNumber();
+        if (!Number.isSafeInteger(generation) && generation < 0) throw new GenerationMustBePositiveInteger();
         super(generation, '@dolittle/sdk.artifacts.Generation');
     }
 

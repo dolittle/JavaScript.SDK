@@ -19,7 +19,7 @@ export class EventTypesFromDecorators {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 0.
      */
-    static associate(type: Constructor<any>, identifier: EventTypeId, generation?: Generation): void {
-        this.eventTypes.associate(type, new EventType(identifier, generation || Generation.first));
+    static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation = Generation.first): void {
+        this.eventTypes.associate(type, new EventType(identifier, generation));
     }
 }

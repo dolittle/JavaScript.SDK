@@ -12,7 +12,7 @@ const client = Client
     .connectToRuntime('localhost', 50055)
     .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .withEventTypes(eventTypes =>
-        eventTypes.register<MyEvent>(MyEvent))
+        eventTypes.register(MyEvent))
     .withEventHorizons(_ => {
         _.forTenant('900893e7-c4cc-4873-8032-884e965e4b97', ts => {
             ts.forProducerMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb', sb => {

@@ -15,7 +15,7 @@ const client = Client
     .withContainer(Container)
     .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .withEventTypes(eventTypes =>
-        eventTypes.register<MyEvent>(MyEvent))
+        eventTypes.register(MyEvent))
     .build();
 
 const event = new MyEvent();
