@@ -18,7 +18,7 @@ import { IEventStore } from './IEventStore';
 import { EventSourceId } from './EventSourceId';
 import { UncommittedEvent } from './UncommittedEvent';
 import { EventConverters } from './EventConverters';
-import { CommitEventsResponse } from './CommitEventsResponse';
+import {CommitEventsResult } from './CommitEventsResult';
 import { Guid } from '@dolittle/rudiments';
 
 /**
@@ -41,9 +41,9 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
-    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         if (this.isArrayOfUncommittedEvents(eventOrEvents)) {
             return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
@@ -52,7 +52,7 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse> {
+    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
     }
@@ -61,7 +61,7 @@ export class EventStore implements IEventStore {
         return Array.isArray(eventOrEvents) && eventOrEvents.length > 0 && eventOrEvents[0].eventSourceId && eventOrEvents[0].content;
     }
 
-    private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResponse> {
+    private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResult> {
         const uncommittedEvents = events.map(event =>
             EventConverters.getUncommittedEventFrom(
                 event.content,
@@ -76,7 +76,7 @@ export class EventStore implements IEventStore {
         return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
             .pipe(map(response => {
                 const committedEvents = new CommittedEvents(...response.getEventsList().map(event => EventConverters.toSDK(event)));
-                return new CommitEventsResponse(committedEvents, failures.toSDK(response.getFailure()));
+                return new CommitEventsResult(committedEvents, failures.toSDK(response.getFailure()));
             })).toPromise();
     }
 
