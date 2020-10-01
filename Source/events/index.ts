@@ -18,3 +18,15 @@ export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
 export { EventStoreBuilder } from './EventStoreBuilder';
+
+export {
+    eventType,
+    EventType,
+    EventTypeId,
+    EventTypeMap,
+    EventTypes,
+    EventTypesBuilder,
+    EventTypesBuilderCallback,
+    EventTypesFromDecorators,
+    UnableToResolveEventType,UnknownEventType
+} from '@dolittle/sdk.artifacts';
