@@ -14,7 +14,7 @@ import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteg
 export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>{
 
     constructor(generation: number) {
-        if (!Number.isSafeInteger(generation) && generation < 0) throw new GenerationMustBePositiveInteger();
+        if (!Number.isSafeInteger(generation) || generation < 0) throw new GenerationMustBePositiveInteger();
         super(generation, '@dolittle/sdk.artifacts.Generation');
     }
 
