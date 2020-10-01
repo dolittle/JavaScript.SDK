@@ -99,6 +99,3 @@ export class EventHandlerBuilder {
     }
 
 }
-interface ICanBuildAnEventHandler {
-
-}

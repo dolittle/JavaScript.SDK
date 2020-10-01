@@ -3,8 +3,18 @@
 
 import { Constructor } from '@dolittle/types';
 
-export class EventHandlerClassBuilder {
-    constructor(private readonly _eventHandlerType: Constructor<any>) {
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+import { IEventHandler } from './IEventHandler';
 
+export class EventHandlerClassBuilder<T> {
+    constructor(private readonly _eventHandlerType: Constructor<T>, private readonly _instance?: T) {
+    }
+
+    tryBuild(): [IEventHandler, boolean] {
+        let eventHandler: IEventHandler;
+        const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
+        if (decoratedType !== null) {
+        }
+        return [eventHandler, true];
     }
 }

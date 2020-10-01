@@ -9,13 +9,13 @@ import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
  * Handles registering and mappings between @eventHandler decorated classes and their given id and options.
  */
 export class EventHandlerDecoratedTypes {
-    static readonly types: ReplaySubject<EventHandlerDecoratedType> = new ReplaySubject<EventHandlerDecoratedType>();
+    static readonly types: EventHandlerDecoratedType[] = [];
 
     /**
      * Registers an decorated event handler class with the Runtime.
      * @param {EventHandlerDecoratedType} eventHandlerDecoratedType The decorated type to register.
      */
     static register(eventHandlerDecoratedType: EventHandlerDecoratedType) {
-        this.types.next(eventHandlerDecoratedType);
+        this.types.push(eventHandlerDecoratedType);
     }
 }

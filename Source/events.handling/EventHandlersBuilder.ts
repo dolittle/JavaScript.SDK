@@ -40,7 +40,7 @@ export class EventHandlersBuilder {
         return this;
     }
 
-    registerEventHandler<T = any>(type: Constructor<T>, instance?: T): void {
+    registerEventHandler<T = any>(type: Constructor<T>, instance?: T): EventHandlersBuilder {
 
         return this;
     }
