@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { IContainer } from '@dolittle/sdk.common';
 import { Guid } from '@dolittle/rudiments';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
@@ -45,13 +45,13 @@ export class EventHandlersBuilder {
         client: EventHandlersClient,
         container: IContainer,
         executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger,
         cancellation: Cancellation): IEventHandlers {
-        const eventHandlers = new EventHandlers(client, container, executionContext, artifacts, logger, cancellation);
+        const eventHandlers = new EventHandlers(client, container, executionContext, eventTypes, logger, cancellation);
 
         for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
-            const eventHandler = eventHandlerBuilder.build(artifacts);
+            const eventHandler = eventHandlerBuilder.build(eventTypes);
             eventHandlers.register(eventHandler, cancellation);
         }
 

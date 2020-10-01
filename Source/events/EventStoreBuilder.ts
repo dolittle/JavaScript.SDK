@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
@@ -16,7 +16,7 @@ export class EventStoreBuilder {
 
     constructor(
         private _eventStoreClient: EventStoreClient,
-        private _eventTypes: IArtifacts,
+        private _eventTypes: IEventTypes,
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
         }

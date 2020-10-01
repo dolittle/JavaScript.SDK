@@ -2,17 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { Artifact } from './Artifact';
+import { EventType } from './EventType';
 
 /**
- * Exception that gets thrown when an {@link Artifact} is unknown.
+ * Exception that gets thrown when an {@link EventType} is unknown.
  */
 export class UnknownType extends Exception {
     /**
-     * Initializes a new instance of {@link UnknownType}.
-     * @param {Artifact} artifact Artifact that has a missing association.
+     * Initializes a new instance of {@link UnknownEventType}.
+     * @param {EventType} eventType Event type that has a missing association.
      */
-    constructor(artifact: Artifact) {
-        super(`'${artifact}' does not have a type associated.`);
+    constructor(eventType: EventType) {
+        super(`'${eventType}' does not have a type associated.`);
     }
 }

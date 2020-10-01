@@ -6,8 +6,8 @@ import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
 import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
-import { Artifact } from '@dolittle/sdk.artifacts';
-import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
+import { EventType } from '@dolittle/sdk.artifacts';
+import { eventTypes, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
 import { EventSourceId } from './EventSourceId';
@@ -23,13 +23,13 @@ export class EventConverters {
      * Creates an uncommitted event from given parameters.
      * @param {*} event Event content to constructor with.
      * @param {EventSourceId} eventSourceId The unique identifier of the event source that the event is originating from.
-     * @param {Artifact} artifact Artifact of the event type.
+     * @param {EventType} eventType The event type.
      * @param {boolean} isPublic Whether or not it is a public event
      * @returns {UncommittedEvent} Constructed uncommitted event.
      */
-    static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, artifact: Artifact, isPublic: boolean): PbUncommittedEvent {
+    static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
-        uncommittedEvent.setArtifact(artifacts.toProtobuf(artifact));
+        uncommittedEvent.setArtifact(eventTypes.toProtobuf(eventType));
         uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId.value));
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
@@ -53,7 +53,7 @@ export class EventConverters {
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
             EventSourceId.from(guids.toSDK(input.getEventsourceid())),
             executionContexts.toSDK(executionContext),
-            artifacts.toSDK(input.getType()),
+            eventTypes.toSDK(input.getType()),
             JSON.parse(input.getContent()),
             input.getPublic(),
             input.getExternal(),
@@ -80,7 +80,7 @@ export class EventConverters {
         committedEvent.setOccurred(occurred);
         committedEvent.setEventsourceid(guids.toProtobuf(input.eventSourceId.value));
         committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
-        committedEvent.setType(artifacts.toProtobuf(input.type));
+        committedEvent.setType(eventTypes.toProtobuf(input.type));
         committedEvent.setContent(JSON.stringify(input.content));
         committedEvent.setPublic(input.isPublic);
         committedEvent.setExternal(input.isExternal);

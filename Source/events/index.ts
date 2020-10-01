@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { eventType } from './eventType';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { MissingExecutionContext } from './MissingExecutionContext';
-export { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNumberMustBeNaturalNumber';
+export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
 export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventSourceId } from './EventSourceId';
 export { PartitionId } from './PartitionId';
@@ -19,3 +18,15 @@ export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
 export { EventStoreBuilder } from './EventStoreBuilder';
+
+export {
+    eventType,
+    EventType,
+    EventTypeId,
+    EventTypeMap,
+    EventTypes,
+    EventTypesBuilder,
+    EventTypesBuilderCallback,
+    EventTypesFromDecorators,
+    UnableToResolveEventType,UnknownEventType
+} from '@dolittle/sdk.artifacts';

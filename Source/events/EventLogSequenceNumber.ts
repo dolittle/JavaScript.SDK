@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-import isNaturalNumber from 'is-natural-number';
 import { ConceptAs } from '@dolittle/concepts';
-import { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNumberMustBeNaturalNumber';
+import { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
 
 /**
  * Represents the event log sequence number of a Committed Event.
@@ -14,7 +13,7 @@ import { EventLogSequenceNumberMustBeNaturalNumber } from './EventLogSequenceNum
 export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>{
 
     constructor(value: number) {
-        if (!isNaturalNumber(value, { includeZero: true })) throw new EventLogSequenceNumberMustBeNaturalNumber();
+        if (!Number.isSafeInteger(value) || value < 0) throw new EventLogSequenceNumberMustBeAPositiveInteger();
         super(value, '@dolittle/sdk.events.EventLogSequenceNumber');
     }
 

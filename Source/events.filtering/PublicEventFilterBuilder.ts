@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { ScopeId } from '@dolittle/sdk.events';
 
@@ -40,18 +40,18 @@ export class PublicEventFilterBuilder {
      * @param {FilterId} filterId Unique identifier for the filter.
      * @param {FiltersClient} client The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext Execution context.
-     * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
+     * @param {IEventTypes} eventTypes Event types for identifying event types.
      * @param {Logger} logger Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger): IFilterProcessor {
 
         this.throwIfCallbackIsMissing(this._filterId);
-        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, artifacts, logger);
+        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, eventTypes, logger);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId) {

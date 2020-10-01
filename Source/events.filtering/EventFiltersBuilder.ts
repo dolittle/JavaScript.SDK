@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
@@ -59,23 +59,23 @@ export class EventFiltersBuilder {
      * Builds all the event filters.
      * @param {FiltersClient} client The gRPC client for filters.
      * @param {IExecutionContextManager} executionContextManager Execution context manager.
-     * @param {IArtifacts} artifacts For artifacts resolution.
+     * @param {IEventTypes} eventTypes For event types resolution.
      * @param {Logger} logger For logging.
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger,
         cancellation: Cancellation): IFilters {
         const filters = new Filters(logger);
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContext, artifacts, logger);
+            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes, logger);
             filters.register(filterProcessor, cancellation);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContext, artifacts, logger);
+            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes, logger);
             filters.register(filterProcessor, cancellation);
         }
 

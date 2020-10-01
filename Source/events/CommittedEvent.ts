@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
-import { Artifact } from '@dolittle/sdk.artifacts';
+import { EventType } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { EventSourceId } from './EventSourceId';
 import { EventLogSequenceNumber } from './EventLogSequenceNumber';
@@ -18,7 +18,7 @@ export class CommittedEvent {
      * @param {DateTime} occurred Timestamp for when it occurred.
      * @param {EventSourceId} eventSourceId Identifier of the event source.
      * @param {ExecutionContext} executionContext The execution context in which the event happened.
-     * @param {Artifact} type Type of event.
+     * @param {EventType} type Type of event.
      * @param {*} content Actual content of the event.
      * @param {boolean} isPublic Whether or not the event is a public event.
      * @param {boolean} isExternal Whether or not the event is originating externally.
@@ -30,7 +30,7 @@ export class CommittedEvent {
         readonly occurred: DateTime,
         readonly eventSourceId: EventSourceId,
         readonly executionContext: ExecutionContext,
-        readonly type: Artifact,
+        readonly type: EventType,
         readonly content: any,
         readonly isPublic: boolean,
         readonly isExternal: boolean,

@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
@@ -71,19 +71,19 @@ export class PrivateEventFilterBuilder {
      * @param {FilterId} filterId Unique identifier for the filter.
      * @param {FiltersClient} client The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext Execution context manager for working with execution context.
-     * @param {IArtifacts} artifacts Artifacts for identifying artifacts.
+     * @param {IEventTypes} eventTypes Event types for identifying event types.
      * @param {Logger} logger Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger): IFilterProcessor {
 
         if (!this._innerBuilder) {
             throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or handle(...).');
         }
-        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, artifacts, logger);
+        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, eventTypes, logger);
     }
 }

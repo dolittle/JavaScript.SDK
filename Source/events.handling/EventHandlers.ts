@@ -5,7 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { map, filter, delay, groupBy, first, skip } from 'rxjs/operators';
 import { Logger } from 'winston';
 
-import { IArtifacts, ArtifactMap } from '@dolittle/sdk.artifacts';
+import { IEventTypes, EventTypeMap } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
@@ -42,7 +42,7 @@ export class EventHandlers implements IEventHandlers {
      * @param {EventHandlersClient} _eventHandlersClient Client to use for connecting to the runtime.
      * @param {IContainer} _container The container for creating instances needed.
      * @param {IExecutionContext} _executionContext The execution context.
-     * @param {IArtifacts} _artifacts For mapping artifacts.
+     * @param {IEventTypes} _eventTypes For mapping event types.
      * @param {Logger} _logger For logging.
      * @param {Cancellation} _cancellation For handling cancellation.
      */
@@ -50,7 +50,7 @@ export class EventHandlers implements IEventHandlers {
         private readonly _eventHandlersClient: EventHandlersClient,
         private readonly _container: IContainer,
         private readonly _executionContext: ExecutionContext,
-        private readonly _artifacts: IArtifacts,
+        private readonly _eventTypes: IEventTypes,
         private readonly _logger: Logger,
         private readonly _cancellation: Cancellation,
     ) {
@@ -74,9 +74,9 @@ export class EventHandlers implements IEventHandlers {
                 }
             }),
             map((value: EventHandlerDecoratedType) => {
-                const methodsByArtifact = new ArtifactMap<EventHandlerSignature<any>>();
+                const methodsByArtifact = new EventTypeMap<EventHandlerSignature<any>>();
                 for (const method of HandlesDecoratedMethods.methodsPerEventHandler.get(value.type)!) {
-                    const artifact = this._artifacts.getFor(method.eventType);
+                    const artifact = this._eventTypes.getFor(method.eventType);
                     methodsByArtifact.set(artifact, (event, eventContext) => {
                         if (method.owner) {
                             let instance: any;
@@ -116,7 +116,7 @@ export class EventHandlers implements IEventHandlers {
                             eventHandler,
                             this._eventHandlersClient,
                             this._executionContext,
-                            this._artifacts,
+                            this._eventTypes,
                             this._logger);
                         this._logger.debug(`Registering a ${eventHandler.partitioned ? 'partitioned' : 'unpartitioned'} EventHandler with Id '${eventHandler.eventHandlerId}' for scope '${eventHandler.scopeId}'.`);
                         eventProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), registration.cancellation).subscribe({

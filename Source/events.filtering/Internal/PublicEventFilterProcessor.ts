@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
-import { IArtifacts } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { EventContext } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
@@ -27,10 +27,10 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         private _callback: PartitionedFilterEventCallback,
         private _client: FiltersClient,
         private _executionContext: ExecutionContext,
-        artifacts: IArtifacts,
+        eventTypes: IEventTypes,
         logger: Logger
     ) {
-        super('Public Filter', filterId, artifacts, logger);
+        super('Public Filter', filterId, eventTypes, logger);
     }
 
     protected get registerArguments(): PublicFilterRegistrationRequest {

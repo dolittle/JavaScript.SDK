@@ -11,7 +11,7 @@ import callContexts from './callContexts';
 import executionContexts from './executionContexts';
 import failures from './failures';
 import guids from './guids';
-import artifacts from './artifacts';
+import eventTypes from './eventTypes';
 import versions from './versions';
 import claims from './claims';
 
@@ -20,7 +20,7 @@ export {
     executionContexts,
     failures,
     guids,
-    artifacts,
+    eventTypes,
     versions,
     claims
 };
