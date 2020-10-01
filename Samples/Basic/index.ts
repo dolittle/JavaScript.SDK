@@ -8,7 +8,6 @@ import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { MyEvent } from './MyEvent';
 import './MyEventHandler';
 import { Version } from '@dolittle/sdk.execution';
-import { eventTypes } from '@dolittle/sdk.protobuf';
 
 const client = Client
     .create()
