@@ -25,10 +25,7 @@ export class EventTypes implements IEventTypes {
     }
     /** @inheritdoc */
     hasTypeFor(input: EventType): boolean {
-        for (const associatedArtifact of this._associations.keys()) {
-            if (this.eventTypesEquals(input, associatedArtifact)) return true;
-        }
-        return false;
+        return this._associations.has(input);
     }
 
     /** @inheritdoc */
