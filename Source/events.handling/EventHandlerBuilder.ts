@@ -1,6 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
 import { Constructor } from '@dolittle/types';
 import { Guid } from '@dolittle/rudiments';
 import { EventType, IEventTypes, EventTypeMap, EventTypeId } from '@dolittle/sdk.artifacts';
@@ -10,6 +12,7 @@ import { IEventHandler } from './IEventHandler';
 import { EventHandler } from './EventHandler';
 import { EventHandlerSignature } from './EventHandlerSignature';
 import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
@@ -17,7 +20,7 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
 export class EventHandlerBuilder {
-    private _handlers: Map<Constructor<any> | EventType | Guid | string, EventHandlerSignature<any>> = new Map();
+    private _methodsBuilder!: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
     private _partitioned = true;
 
@@ -48,18 +51,20 @@ export class EventHandlerBuilder {
      * Defines the event handler to be partitioned - this is default for a event handler.
      * @returns {EventHandlerBuilder}
      */
-    partitioned(): EventHandlerBuilder {
+    partitioned(): EventHandlerMethodsBuilder {
         this._partitioned = true;
-        return this;
+        this._methodsBuilder = new EventHandlerMethodsBuilder(this._eventHandlerId);
+        return this._methodsBuilder;
     }
 
     /**
      * Defines the event handler to be unpartitioned. By default it will be partitioned.
      * @returns {EventHandlerBuilder}
      */
-    unpartitioned(): EventHandlerBuilder {
+    unpartitioned(): EventHandlerMethodsBuilder {
         this._partitioned = false;
-        return this;
+        this._methodsBuilder = new EventHandlerMethodsBuilder(this._eventHandlerId);
+        return this._methodsBuilder;
     }
 
     /**
@@ -73,36 +78,27 @@ export class EventHandlerBuilder {
     }
 
     /**
-     * Add a handler method for handling the event.
-     * @template T Type of event, when using type rather than artifact - default is any.
-     * @param {Constructor<T>|EventType|Guid|string} typeOrArtifact The type of event or the artifact or identifier of the artifact.
-     * @param {EventHandlerSignature<T>} method Method to call for each event.
-     */
-    handle<T = any>(typeOrArtifact: Constructor<T> | EventType | Guid | string, method: EventHandlerSignature<T>) {
-        this._handlers.set(typeOrArtifact, method);
-    }
-
-    /**
      * Builds the {@link IEventHandler}.
      * @param {IEventTypes} eventTypes Event types for resolving event types.
      * @returns {IEventHandler}
      */
-    build(eventTypes: IEventTypes): IEventHandler {
-        const evenTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
-
-        for (const [typeOrEventTypeOrId, method] of this._handlers) {
-            let eventType: EventType;
-            if (typeOrEventTypeOrId instanceof EventType) {
-                eventType = typeOrEventTypeOrId;
-            } else if (typeOrEventTypeOrId instanceof Guid || typeof typeOrEventTypeOrId === 'string') {
-                eventType = new EventType(EventTypeId.from(typeOrEventTypeOrId));
-            } else {
-                eventType = eventTypes.getFor(typeOrEventTypeOrId);
-            }
-
-            evenTypeToMethods.set(eventType, method);
+    tryBuild(eventTypes: IEventTypes, logger: Logger): [IEventHandler, boolean] {
+        const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
+        if (this._methodsBuilder == null) {
+            logger.warning(`Failed to build event handler ${EventHandlerId}. No event handler methods are configured for event handler`);
+            return [this.createEventHandler(eventTypeToMethods), false];
         }
-
-        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, evenTypeToMethods);
+        const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, logger);
+        return [
+            new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods),
+            allMethodsBuilt];
     }
+
+    private createEventHandler(eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>): IEventHandler {
+        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);
+    }
+
+}
+interface ICanBuildAnEventHandler {
+
 }

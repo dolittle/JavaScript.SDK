@@ -11,7 +11,6 @@ import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import * as internal from './Internal';
 import { EventHandler } from './EventHandler';
 import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
@@ -21,6 +20,7 @@ import { EventHandlerSignature } from './EventHandlerSignature';
 import { IEventHandler } from './IEventHandler';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { EventHandlerProcessor } from './Internal';
 
 class EventHandlerRegistration {
     constructor(
@@ -35,32 +35,25 @@ class EventHandlerRegistration {
  */
 export class EventHandlers implements IEventHandlers {
 
-    private readonly _eventHandlers: Subject<EventHandlerRegistration> = new Subject<EventHandlerRegistration>();
-
     /**
      * Initializes an instance of {@link EventHandlers}.
-     * @param {EventHandlersClient} _eventHandlersClient Client to use for connecting to the runtime.
-     * @param {IContainer} _container The container for creating instances needed.
-     * @param {IExecutionContext} _executionContext The execution context.
-     * @param {IEventTypes} _eventTypes For mapping event types.
      * @param {Logger} _logger For logging.
-     * @param {Cancellation} _cancellation For handling cancellation.
      */
-    constructor(
-        private readonly _eventHandlersClient: EventHandlersClient,
-        private readonly _container: IContainer,
-        private readonly _executionContext: ExecutionContext,
-        private readonly _eventTypes: IEventTypes,
-        private readonly _logger: Logger,
-        private readonly _cancellation: Cancellation,
-    ) {
+    constructor(private readonly _logger: Logger) {
         this.registerEventHandlers();
         this.registerDecoratedEventHandlerTypes();
     }
 
     /** @inheritdoc */
-    register(eventHandler: IEventHandler, cancellation = Cancellation.default): void {
-        this._eventHandlers.next(new EventHandlerRegistration(eventHandler, cancellation));
+    register(eventHandlerProcessor: EventHandlerProcessor, cancellation = Cancellation.default): void {
+        eventHandlerProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+            error: (error: Error) => {
+                this._logger.error(`Failed to register event handler: ${error}`);
+            },
+            complete: () => {
+                this._logger.error(`Event handler registration completed.`);
+            }
+        });
     }
 
     private registerDecoratedEventHandlerTypes() {
