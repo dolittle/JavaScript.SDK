@@ -6,7 +6,7 @@ import { Client } from '@dolittle/sdk';
 import { Container } from 'typedi';
 
 import { MyEvent } from './MyEvent';
-import './MyEventHandler';
+import { MyEventHandler } from './MyEventHandler';
 
 
 const client = Client
@@ -16,6 +16,8 @@ const client = Client
     .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .withEventTypes(eventTypes =>
         eventTypes.register(MyEvent))
+    .withEventHandlers(eventHandlers =>
+        eventHandlers.registerEventHandler(MyEventHandler))
     .build();
 
 const event = new MyEvent();

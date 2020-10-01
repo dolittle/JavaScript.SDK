@@ -15,6 +15,7 @@ import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.
 
 import { EventHandlerId, EventHandlers, IEventHandlers } from '../index';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
+import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
@@ -39,7 +40,7 @@ export class EventHandlersBuilder {
     }
 
     registerEventHandler<T = any>(type: Constructor<T>, instance?: T): EventHandlersBuilder {
-
+        this._eventHandlerBuilders.push(new EventHandlerClassBuilder(type, instance));
         return this;
     }
 
