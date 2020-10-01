@@ -18,8 +18,8 @@ import { CannotHaveMultipleTypesAssociatedWithEventType } from './CannotHaveMult
  */
 export class EventTypes implements IEventTypes {
     /**
-     * Initializes a new instance of {@link Artifacts}
-     * @param {Map<Function, Artifact>?} associations Known associations
+     * Initializes a new instance of {@link EventTypes}
+     * @param {EventTypeMap<Constructor<any>>} [associations] Known associations
      */
     constructor(private _associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
     }
@@ -48,44 +48,44 @@ export class EventTypes implements IEventTypes {
 
     /** @inheritdoc */
     getFor(type: Constructor<any>): EventType {
-        let artifact: EventType | undefined;
-        for (const [associatedArtifact, associatedType] of this._associations) {
-            if (associatedType === type) artifact = associatedArtifact;
+        let eventType: EventType | undefined;
+        for (const [associatedEventType, associatedType] of this._associations) {
+            if (associatedType === type) eventType = associatedEventType;
         }
-        if (!artifact) {
+        if (!eventType) {
             throw new UnknownEventType(type);
         }
-        return artifact;
+        return eventType;
     }
 
     /** @inheritdoc */
     resolveFrom(object: any, input?: EventType | EventTypeId | Guid | string): EventType {
-        let artifact: EventType | undefined;
+        let eventType: EventType | undefined;
         if (input != null) {
-            artifact = input instanceof EventType ? input : new EventType(EventTypeId.from(input));
+            eventType = input instanceof EventType ? input : new EventType(EventTypeId.from(input));
         } else if (object && this.hasFor(object.constructor)) {
-            artifact = this.getFor(object.constructor);
+            eventType = this.getFor(object.constructor);
         }
 
-        if (!artifact) {
+        if (!eventType) {
             throw new UnableToResolveEventType(object, input);
         }
 
-        return artifact;
+        return eventType;
     }
 
     /** @inheritdoc */
-    associate(type: Constructor<any>, artifact: EventType): void {
-        this.throwIfMultipleTypesAssociatedWithEventType(artifact, type);
-        this.throwIfMultipleArtifactsAssociatedWithType(type, artifact);
-        this._associations.set(artifact, type);
+    associate(type: Constructor<any>, eventType: EventType): void {
+        this.throwIfMultipleTypesAssociatedWithEventType(eventType, type);
+        this.throwIfMultipleEventTypesAssociatedWithType(type, eventType);
+        this._associations.set(eventType, type);
     }
 
     protected eventTypesEquals(left: EventType, right: EventType): boolean {
         return left.generation.equals(right.generation) && left.id.toString() === right.id.toString();
     }
 
-    private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, eventType: EventType) {
+    private throwIfMultipleEventTypesAssociatedWithType(type: Constructor<any>, eventType: EventType) {
         if (this.hasFor(type)) {
             throw new CannotHaveMultipleEventTypesAssociatedWithType(type, eventType, this.getFor(type));
         }

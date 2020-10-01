@@ -41,7 +41,6 @@
         "@dolittle/sdk.protobuf": "7.0.2",
         "@dolittle/sdk.services": "7.0.2",
         "@dolittle/sdk.resilience": "7.0.2",
-        "is-natural-number": "4.0.1",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
         "winston": "3.3.2"

@@ -7,11 +7,11 @@ import { Exception } from '@dolittle/rudiments';
  * Exception that gets thrown when {Generation} is not a natural number.
  *
  * @export
- * @class GenerationMustBeNaturalNumber
+ * @class GenerationMustBePositiveInteger
  * @extends {Exception}
  */
-export class GenerationMustBeNaturalNumber extends Exception {
+export class GenerationMustBePositiveInteger extends Exception {
     constructor() {
-        super('The generation of an artifact must be a natural number');
+        super('The generation of an artifact must be a positive integer');
     }
 }

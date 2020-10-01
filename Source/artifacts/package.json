@@ -36,8 +36,7 @@
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "5.1.19",
-        "is-natural-number": "^4.0.1"
+        "@dolittle/runtime.contracts": "5.1.19"
     },
     "devDependencies": {
         "@types/is-natural-number": "^4.0.0"

@@ -7,11 +7,11 @@ import { Exception } from '@dolittle/rudiments';
  * Exception that gets thrown when {EventLogSequenceNumber} is not a natural number.
  *
  * @export
- * @class GenerationMustBeNaturalNumber
+ * @class EventLogSequenceNumberMustBeAPositiveInteger
  * @extends {Exception}
  */
-export class EventLogSequenceNumberMustBeNaturalNumber extends Exception {
+export class EventLogSequenceNumberMustBeAPositiveInteger extends Exception {
     constructor() {
-        super('The event log sequence number must be a natural number');
+        super('The event log sequence number must be a positive integer');
     }
 }

@@ -51,7 +51,7 @@ export interface IEventTypes {
     /**
      * Associate a type with a unique artifact identifier and optional generation.
      * @param {Constructor<any>} type Type to associate.
-     * @param {EventType} artifact Artifact to associate with.
+     * @param {EventType} eventType Artifact to associate with.
      */
-    associate(type: Constructor<any>, artifact: EventType): void;
+    associate(type: Constructor<any>, eventType: EventType): void;
 }
