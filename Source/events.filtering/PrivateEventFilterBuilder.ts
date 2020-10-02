@@ -49,7 +49,7 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Defines the filter to be partitioned.
-     * @returns {PrivateEventFilterBuilder}
+     * @returns {PartitionedEventFilterBuilder}
      */
     partitioned(): PartitionedEventFilterBuilder {
         this._innerBuilder = new PartitionedEventFilterBuilder();
@@ -57,14 +57,13 @@ export class PrivateEventFilterBuilder {
     }
 
     /**
-     * Defines a callback for the filter.
-     * @param {FilterEventCallback} callback The callback that will be called for each event.
+     * Defines the filter to be unpartitioned.
+     * @returns {UnpartitionedEventFilterBuilder}
      */
-    handle(callback: FilterEventCallback) {
+    unpartitioned(): UnpartitionedEventFilterBuilder {
         this._innerBuilder = new UnpartitionedEventFilterBuilder();
-        this._innerBuilder.handle(callback);
+        return this._innerBuilder;
     }
-
 
     /**
      * Build an instance of a {@link IFilterProcessor}.

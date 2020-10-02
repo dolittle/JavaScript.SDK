@@ -111,7 +111,7 @@ export class ClientBuilder {
     withVersion(major: number, minor: number, patch: number): ClientBuilder;
     /**
      *  Sets the version of the microservice.
-     * @param {Version} version Version of the microservice. 
+     * @param {Version} version Version of the microservice.
      * @returns {ClientBuilder} The client builder for continuation.
      */
     withVersion(version: Version): ClientBuilder;

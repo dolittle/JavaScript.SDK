@@ -26,10 +26,12 @@ const client = Client
     .withFilters(filterBuilder =>
         filterBuilder
             .createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb =>
-                fb.handle((event: any, context: EventContext) => {
-                    return new Promise((resolve, reject) => {
-                        console.log('Filtering event', event);
-                    });
+                fb
+                    .unpartitioned()
+                    .handle((event: any, context: EventContext) => {
+                        return new Promise((resolve, reject) => {
+                            console.log('Filtering event', event);
+                        });
                 })
             )
             .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>
