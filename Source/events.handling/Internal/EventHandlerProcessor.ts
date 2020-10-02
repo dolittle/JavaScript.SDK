@@ -35,9 +35,6 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
 
     /**
      * Initializes a new instance of {@link EventHandlerProcessor}
-     * @param {EventHandlerId} eventHandlerId The unique identifier for the event handler.
-     * @param {ScopeId} _scope The scope the event handler is for.
-     * @param {boolean} _partitioned Whether or not the handler is partitioned.
      * @param {IEventHandler} _handler The actual handler.
      * @param {EventHandlersClient} _client Client to use for connecting to the runtime.
      * @param {EventHandlersClient} _executionContext Execution context.
@@ -45,23 +42,20 @@ export class EventHandlerProcessor extends EventProcessor<EventHandlerId, EventH
      * @param {ILogger} logger Logger for logging.
      */
     constructor(
-        eventHandlerId: EventHandlerId,
-        private _scope: ScopeId,
-        private _partitioned: boolean,
         private _handler: IEventHandler,
         private _client: EventHandlersClient,
         private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes,
         logger: Logger
     ) {
-        super('EventHandler', eventHandlerId, logger);
+        super('EventHandler', _handler.eventHandlerId, logger);
     }
 
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._scope.value));
-        registerArguments.setPartitioned(this._partitioned);
+        registerArguments.setScopeid(guids.toProtobuf(this._handler.scopeId.value));
+        registerArguments.setPartitioned(this._handler.partitioned);
 
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {

@@ -1,10 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { EventHandlerSignature } from '../index';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
-import { EventHandlerSignature } from './EventHandlerSignature';
 
 /**
  * Defines the system that knows about all the methods decorated with the handle decorator.
@@ -18,14 +19,21 @@ export class HandlesDecoratedMethods {
     /**
      * Registers handles decorated methods
      * @param {Constructor<any>} target Target that owns the handle method.
-     * @param {Constructor<any>} eventType Type of event the handle method is for.
+     * @param {Constructor<any> | Guid | string} eventTypeOrId Type or event type id of event the handle method is for or the event.
+     * @param {number | undefined} generation Generation of event type or undefined.
      * @param {EventHandlerSignature<any>} method The handle method.
+     * @param {string} name The name of the method.
      */
-    static register(target: Constructor<any>, eventType: Constructor<any>, method: EventHandlerSignature<any>): void {
+    static register(
+        target: Constructor<any>,
+        eventTypeOrId: Constructor<any> | Guid | string,
+        generation: number | undefined,
+        method: EventHandlerSignature<any>,
+        name: string): void {
         let methods = this.methodsPerEventHandler.get(target);
         if (!methods) {
             this.methodsPerEventHandler.set(target, methods = []);
         }
-        methods.push(new HandlesDecoratedMethod(target, eventType, method));
+        methods.push(new HandlesDecoratedMethod(target, eventTypeOrId, generation, method, name));
     }
 }

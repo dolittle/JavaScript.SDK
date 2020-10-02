@@ -3,19 +3,20 @@
 
 import { Logger } from 'winston';
 
-import { IContainer } from '@dolittle/sdk.common';
 import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
 
 import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IContainer } from '@dolittle/sdk.common';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
-import { IEventHandlers } from './IEventHandlers';
-import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerId, EventHandlers, IEventHandlers } from '../index';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
-import { EventHandlers } from './EventHandlers';
-import { ExecutionContext } from '@dolittle/sdk.execution';
+import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
+import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -23,36 +24,41 @@ export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => vo
  * Represents the builder for configuring event handlers
  */
 export class EventHandlersBuilder {
-    private _eventHandlers: Map<string, EventHandlerBuilder> = new Map();
+    private _eventHandlerBuilders: ICanBuildAndRegisterAnEventHandler[] = [];
 
     /**
      * Start building an event handler.
      * @param {Guid | string} eventHandlerId The unique identifier of the event handler.
      * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
      */
-    createEventHandler(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): void {
+    createEventHandler(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
         const id = EventHandlerId.from(eventHandlerId);
         const builder = new EventHandlerBuilder(id);
         callback(builder);
-        this._eventHandlers.set(id.toString(), builder);
+        this._eventHandlerBuilders.push(builder);
+        return this;
+    }
+
+    register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
+        this._eventHandlerBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
+        return this;
     }
 
     /**
      * Builds an instance for holding event handlers.
      * @returns {IEventHandlers} New instance.
      */
-    build(
+    buildAndRegister(
         client: EventHandlersClient,
         container: IContainer,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
         logger: Logger,
         cancellation: Cancellation): IEventHandlers {
-        const eventHandlers = new EventHandlers(client, container, executionContext, eventTypes, logger, cancellation);
+        const eventHandlers = new EventHandlers(logger);
 
-        for (const [eventHandlerId, eventHandlerBuilder] of this._eventHandlers) {
-            const eventHandler = eventHandlerBuilder.build(eventTypes);
-            eventHandlers.register(eventHandler, cancellation);
+        for (const eventHandlerBuilder of this._eventHandlerBuilders) {
+            eventHandlerBuilder.buildAndRegister(client, eventHandlers, container, executionContext, eventTypes, logger, cancellation);
         }
 
         return eventHandlers;

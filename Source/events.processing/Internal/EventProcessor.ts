@@ -100,7 +100,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
             retryTimeout.setSeconds(retrySeconds);
             failure.setRetrytimeout(retryTimeout);
 
-            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. Will retry in ${retrySeconds}`);
+            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
 
             return this.createResponseFromFailure(failure);
         }
