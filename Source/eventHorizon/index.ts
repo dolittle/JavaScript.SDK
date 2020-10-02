@@ -14,4 +14,4 @@ export { SubscriptionBuilder, SubscriptionBuilderCallback } from './Subscription
 export { SubscriptionResponse } from './SubscriptionResponse';
 export { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionCallbackArguments, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 export { TenantWithSubscriptions } from './TenantWithSubscriptions';
-export { TenantWithSubscriptionsBuilder , TenantWithSubscriptionsBuilderCallback } from './TenantWithSubscriptionsBuilder';
+export { SubscriptionBuilderForConsumerTenant as TenantWithSubscriptionsBuilder , TenantWithSubscriptionsBuilderCallback } from './TenantWithSubscriptionsBuilder';

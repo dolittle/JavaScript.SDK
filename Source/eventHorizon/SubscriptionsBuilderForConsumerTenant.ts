@@ -5,36 +5,34 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 import { TenantWithSubscriptions } from './';
-import { SubscriptionBuilder, SubscriptionBuilderCallback } from './SubscriptionBuilder';
+import { SubscriptionBuilderForProducerMicroservice } from './SubscriptionBuilderForProducerMicroservice';
 import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
 import { Guid } from '@dolittle/rudiments';
-
-export type TenantWithSubscriptionsBuilderCallback = (builder: TenantWithSubscriptionsBuilder) => void;
 
 /**
  * Represents the builder of {@link TenantSubscriptions}.
  */
-export class TenantWithSubscriptionsBuilder {
-    readonly _subscriptionBuilders: SubscriptionBuilder[] = [];
-    readonly callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
+export class SubscriptionsBuilderForConsumerTenant {
+    private readonly _callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
+    readonly _subscriptionBuilders: SubscriptionBuilderForProducerMicroservice[] = [];
 
     /**
-     * Initializes a new instance of {@link TenantWithSubscriptionsBuilder}.
-     * @param {TenantId} _consumerTenant The consumer tenant.
+     * Initializes a new instance of {@link SubscriptionsBuilderForConsumerTenant}.
+     * @param {TenantId} _consumerTenantId The consumer tenant.
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
-    constructor(private _consumerTenant: TenantId, responsesSource: Observable<SubscriptionCallbackArguments>) {
-        this.callbacks = new SubscriptionCallbacks(responsesSource.pipe(filter(_ => _.consumerTenant.toString() === _consumerTenant.toString())));
+    constructor(private _consumerTenantId: TenantId, responsesSource: Observable<SubscriptionCallbackArguments>) {
+        this._callbacks = new SubscriptionCallbacks(responsesSource.pipe(filter(_ => _.consumerTenant.toString() === _consumerTenantId.toString())));
     }
 
     /**
      * Build subscriptions for a specific microservice.
      * @param {Guid | string} microservice Microservice to build for.
      * @param {SubscriptionBuilderCallback} callback Builder callback.
-     * @returns {TenantWithSubscriptionsBuilder}
+     * @returns {SubscriptionsBuilderForConsumerTenant}
      */
-    forProducerMicroservice(microservice: Guid | string, callback: SubscriptionBuilderCallback): TenantWithSubscriptionsBuilder {
-        const builder = new SubscriptionBuilder(MicroserviceId.from(microservice), this.callbacks.responses);
+    fromProducerMicroservice(microservice: Guid | string, callback: (builder: SubscriptionBuilderForProducerMicroservice) => void): SubscriptionsBuilderForConsumerTenant {
+        const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microservice));
         callback(builder);
         this._subscriptionBuilders.push(builder);
         return this;
@@ -43,33 +41,33 @@ export class TenantWithSubscriptionsBuilder {
     /**
      * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
      * @param {SubscriptionCompleted} completed The callback method.
-     * @returns {TenantWithSubscriptionsBuilder}
+     * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */
-    onCompleted(completed: SubscriptionCompleted): TenantWithSubscriptionsBuilder {
-        this.callbacks.onCompleted(completed);
+    onCompleted(completed: SubscriptionCompleted): SubscriptionsBuilderForConsumerTenant {
+        this._callbacks.onCompleted(completed);
         return this;
     }
 
     /**
      * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
      * @param {SubscriptionSucceeded} succeeded The callback method.
-     * @returns {TenantWithSubscriptionsBuilder}
+     * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */
-    onSuccess(succeeded: SubscriptionSucceeded): TenantWithSubscriptionsBuilder {
-        this.callbacks.onSucceeded(succeeded);
+    onSuccess(succeeded: SubscriptionSucceeded): SubscriptionsBuilderForConsumerTenant {
+        this._callbacks.onSucceeded(succeeded);
         return this;
     }
 
     /**
      * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
      * @param {SubscriptionFailed} failed The callback method.
-     * @returns {TenantWithSubscriptionsBuilder}
+     * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */
-    onFailure(failed: SubscriptionFailed): TenantWithSubscriptionsBuilder {
-        this.callbacks.onFailed(failed);
+    onFailure(failed: SubscriptionFailed): SubscriptionsBuilderForConsumerTenant {
+        this._callbacks.onFailed(failed);
         return this;
     }
 
@@ -80,9 +78,9 @@ export class TenantWithSubscriptionsBuilder {
     build(): TenantWithSubscriptions {
         const subscriptions = this._subscriptionBuilders.map(_ => _.build());
         const tenantSubscriptions = new TenantWithSubscriptions(
-            this._consumerTenant,
+            this._consumerTenantId,
             subscriptions,
-            this.callbacks);
+            this._callbacks);
         return tenantSubscriptions;
     }
 }
