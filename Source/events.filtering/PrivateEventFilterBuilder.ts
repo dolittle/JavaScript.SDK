@@ -81,7 +81,7 @@ export class PrivateEventFilterBuilder {
         logger: Logger): IFilterProcessor {
 
         if (!this._innerBuilder) {
-            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or handle(...).');
+            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or unpartitioned().');
         }
         return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, eventTypes, logger);
     }
