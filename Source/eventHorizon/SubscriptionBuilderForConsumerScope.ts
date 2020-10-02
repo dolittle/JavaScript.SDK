@@ -2,16 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 
-import { Guid } from '@dolittle/rudiments';
-
 import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { Subscription } from './Subscription';
-import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
-import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
-import { SubscriptionsBuilder } from './SubscriptionsBuilder';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
@@ -32,7 +27,6 @@ export class SubscriptionBuilderForConsumerScope {
         private readonly _producerPartitionId: PartitionId,
         private readonly _consumerScopeId: ScopeId) {
     }
-
 
     /**
      * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
