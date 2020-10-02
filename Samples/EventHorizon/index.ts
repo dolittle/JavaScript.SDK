@@ -18,19 +18,17 @@ const client = Client
         eventHandlers.register(MyEventHandler))
     .withEventHorizons(_ => {
         _.forTenant('900893e7-c4cc-4873-8032-884e965e4b97', ts => {
-            ts.fromProducerMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb', sb => {
-                sb
-                    .fromProducerTenant('900893e7-c4cc-4873-8032-884e965e4b97')
-                    .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
-                    .fromProducerPartition(PartitionId.unspecified.value)
-                    .toScope('406d6473-7cc9-44a6-a55f-775c1021d957')
-                    .onSuccess((t, s, sr) => console.log('Subscription: Success'))
-                    .onFailure((t, s, sr) => console.log(`Subscription: Failed - ${sr.failure?.reason}`))
-                    .onCompleted((t, s, sr) => console.log(`Subscription: Completed`));
-            })
-                .onSuccess((t, s, sr) => console.log('Tenant: Success'))
-                .onFailure((t, s, sr) => console.log(`Tenant: Failed - ${sr.failure?.reason}`))
-                .onCompleted((t, s, sr) => console.log(`Tenant: Completed`));
+            ts.fromProducerMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+                .fromProducerTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+                .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
+                .fromProducerPartition(PartitionId.unspecified.value)
+                .toScope('406d6473-7cc9-44a6-a55f-775c1021d957')
+                .onSuccess((t, s, sr) => console.log('Subscription: Success'))
+                .onFailure((t, s, sr) => console.log(`Subscription: Failed - ${sr.failure?.reason}`))
+                .onCompleted((t, s, sr) => console.log(`Subscription: Completed`));
+            ts.onSuccess((t, s, sr) => console.log('Tenant: Success'));
+            ts.onFailure((t, s, sr) => console.log(`Tenant: Failed - ${sr.failure?.reason}`));
+            ts.onCompleted((t, s, sr) => console.log(`Tenant: Completed`));
             })
         .onSuccess((t, s, sr) => console.log('EventHorizons: Success'))
         .onFailure((t, s, sr) => console.log(`EventHorizons: Failed - ${sr.failure?.reason}`))

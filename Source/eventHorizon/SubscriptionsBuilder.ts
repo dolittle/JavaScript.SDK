@@ -15,6 +15,7 @@ import { EventHorizons } from './EventHorizons';
 import { IEventHorizons } from './IEventHorizons';
 
 export type SubscriptionsBuilderCallback = (builder: SubscriptionsBuilder) => void;
+
 /**
  * Represents a builder for building event horizons
  */

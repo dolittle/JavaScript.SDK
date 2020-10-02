@@ -4,7 +4,7 @@
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
-import { TenantWithSubscriptions } from './';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 import { SubscriptionBuilderForProducerMicroservice } from './SubscriptionBuilderForProducerMicroservice';
 import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
 import { Guid } from '@dolittle/rudiments';
@@ -26,16 +26,14 @@ export class SubscriptionsBuilderForConsumerTenant {
     }
 
     /**
-     * Build subscriptions for a specific microservice.
+     * Sets the producer microservice to subscribe to events from.
      * @param {Guid | string} microservice Microservice to build for.
-     * @param {SubscriptionBuilderCallback} callback Builder callback.
-     * @returns {SubscriptionsBuilderForConsumerTenant}
+     * @returns {SubscriptionBuilderForProducerMicroservice}
      */
-    fromProducerMicroservice(microservice: Guid | string, callback: (builder: SubscriptionBuilderForProducerMicroservice) => void): SubscriptionsBuilderForConsumerTenant {
+    fromProducerMicroservice(microservice: Guid | string): SubscriptionBuilderForProducerMicroservice {
         const builder = new SubscriptionBuilderForProducerMicroservice(this._consumerTenantId, MicroserviceId.from(microservice));
-        callback(builder);
         this._subscriptionBuilders.push(builder);
-        return this;
+        return builder;
     }
 
     /**

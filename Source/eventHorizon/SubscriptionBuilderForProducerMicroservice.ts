@@ -11,11 +11,6 @@ import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomp
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 
 /**
- * Represents the callback for the {@link SubscriptionBuilderForProducerMicroservice}.
- */
-export type SubscriptionBuilderForProducerMicroserviceCallback = (builder: SubscriptionBuilderForProducerMicroservice) => void;
-
-/**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerMicroservice {
