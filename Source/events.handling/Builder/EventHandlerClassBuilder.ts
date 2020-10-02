@@ -21,9 +21,25 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { EventType, EventTypeId, Generation, IEventTypes } from '@dolittle/sdk.artifacts';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
+import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
+import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 
 export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventHandler {
-    constructor(private readonly _eventHandlerType: Constructor<T>, private readonly _instance?: T) {
+    private readonly _eventHandlerType: Constructor<T>;
+    private readonly _getInstance: (container: IContainer) => T;
+
+    constructor(typeOrInstance: Constructor<T> | T) {
+        if (typeOrInstance instanceof Function) {
+            this._eventHandlerType = typeOrInstance;
+            this._getInstance = container => container.get(typeOrInstance);
+
+        } else {
+            this._eventHandlerType = Object.getPrototypeOf(typeOrInstance).constructor;
+            if (this._eventHandlerType === undefined) {
+                throw new CannotRegisterEventHandlerThatIsNotAClass(typeOrInstance);
+            }
+            this._getInstance = _ => typeOrInstance;
+        }
     }
 
     /** @inheritdoc */
@@ -39,17 +55,18 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
         logger.debug(`Building event handler of type ${this._eventHandlerType.name}`);
         const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
         if (decoratedType == null) {
-            logger.warning(`The event handler class ${this._eventHandlerType.name} needs to be decorated with an @${eventHandlerDecorator.name} decorator`);
+            logger.warn(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
             return;
         }
         logger.debug(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
         const methods = HandlesDecoratedMethods.methodsPerEventHandler.get(this._eventHandlerType);
         if (methods == null) {
-            logger.warning(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler method needs to be decorated with @${handlesDecorator.name} or have the name {MethodName}`);
+            logger.warn(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler most to be decorated with @${handlesDecorator.name}`);
             return;
         }
         const eventTypesToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, container, logger)) {
+            logger.warn(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
         const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods);
@@ -65,45 +82,58 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
     private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {
         let allMethodsValid = true;
         for (const method of methods) {
-            let eventType: EventType;
-            if (method.eventTypeOrId instanceof Guid || typeof method.eventTypeOrId === 'string') {
-                eventType = new EventType(
-                    EventTypeId.from(method.eventTypeOrId),
-                    method.generation != null ? Generation.from(method.generation) : undefined);
-            } else if (!eventTypes.hasFor(method.eventTypeOrId)){
+            const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
+
+            if (!hasEventType) {
                 allMethodsValid = false;
-                logger.warning(`Could not create event handler method in event handler ${this._eventHandlerType.name} because it handles an event of type ${method.eventTypeOrId.name} which is not associated to an event type`);
+                logger.warn(`Could not create event handler method ${method.name} in event handler ${this._eventHandlerType.name} because it is not associated to an event type`);
                 continue;
-            } else {
-                eventType = eventTypes.getFor(method.eventTypeOrId);
             }
-            const eventHandlerMethod = this.tryCreateEventHandlerMethod(method, container, logger);
+
+            const eventHandlerMethod = this.createEventHandlerMethod(method, container);
             if (eventHandlerMethod == null) {
                 allMethodsValid = false;
                 continue;
             }
-            if (eventTypesToMethods.has(eventType)) {
+
+            if (eventTypesToMethods.has(eventType!)) {
                 allMethodsValid = false;
-                logger.warning(`Event handler ${this._eventHandlerType.name} has multiple event handler methods handling event type ${eventType}`);
+                logger.warn(`Event handler ${this._eventHandlerType.name} has multiple event handler methods handling event type ${eventType}`);
                 continue;
             }
-            eventTypesToMethods.set(eventType, eventHandlerMethod);
+            eventTypesToMethods.set(eventType!, eventHandlerMethod);
         }
         return allMethodsValid;
     }
-    private tryCreateEventHandlerMethod(method: HandlesDecoratedMethod, container: IContainer, logger: Logger): EventHandlerSignature<any> | undefined {
-        if (method.owner) {
-            let instance = this._instance;
-            if (instance == null) {
-                try {
-                    instance = container.get(method.owner);
-                } catch (ex) {
-                    logger.warning(`Could not create event handler method in event handler ${this._eventHandlerType.name} because event handler could not be instantiated`);
-                    return undefined;
-                }
+
+    private createEventHandlerMethod(method: HandlesDecoratedMethod, container: IContainer): EventHandlerSignature<any> {
+        return (event, eventContext) => {
+            let instance: T;
+            try {
+                instance = this._getInstance(container);
+            } catch (ex) {
+                throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, ex);
             }
-            return (event, eventContext) => method.method.call(instance, event, eventContext);
+            method.method.call(instance, event, eventContext);
+        };
+    }
+
+    private tryGetEventTypeFromMethod(method: HandlesDecoratedMethod, eventTypes: IEventTypes): [boolean, EventType | undefined] {
+        if (this.eventTypeIsId(method.eventTypeOrId)) {
+            return [
+                true,
+                new EventType(
+                    EventTypeId.from(method.eventTypeOrId),
+                    method.generation !== undefined ? Generation.from(method.generation) : undefined)
+            ];
+        } else if (!eventTypes.hasFor(method.eventTypeOrId)) {
+            return [false, undefined];
+        } else {
+            return [true, eventTypes.getFor(method.eventTypeOrId)];
         }
-        return (event, eventContext) => method.method(event, eventContext);
+    }
+
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | Guid | string): eventTypeOrId is Guid | string {
+        return eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
     }
 }

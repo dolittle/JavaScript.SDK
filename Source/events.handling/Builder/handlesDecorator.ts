@@ -11,6 +11,6 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
  */
 export function handles(typeOrId: Constructor<any> | Guid | string, generation?: number) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        HandlesDecoratedMethods.register(target.constructor, typeOrId, generation, descriptor.value);
+        HandlesDecoratedMethods.register(target.constructor, typeOrId, generation, descriptor.value, propertyKey);
     };
 }

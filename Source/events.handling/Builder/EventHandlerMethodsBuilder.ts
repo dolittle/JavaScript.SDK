@@ -37,7 +37,7 @@ export class EventHandlerMethodsBuilder {
             const eventType = this.getEventType(typeOrEventTypeOrId, eventTypes);
             if (eventTypeToMethods.has(eventType)) {
                 allMethodsValid = false;
-                logger.warning(`Event handler ${this._eventHandlerId} already handles event with event type ${eventType}`);
+                logger.warn(`Event handler ${this._eventHandlerId} already handles event with event type ${eventType}`);
             }
             eventTypeToMethods.set(eventType, method);
         }

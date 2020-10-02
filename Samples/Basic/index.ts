@@ -25,7 +25,7 @@ const client = Client
         eventTypes.register(MyEvent))
     .withEventHandlers(eventHandlers =>
         eventHandlers
-            .registerEventHandler(MyEventHandler))
+            .register(MyEventHandler))
     .withFilters(filterBuilder =>
         filterBuilder
             .createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb =>

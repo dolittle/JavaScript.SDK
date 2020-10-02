@@ -17,7 +17,7 @@ const client = Client
     .withEventTypes(eventTypes =>
         eventTypes.register(MyEvent))
     .withEventHandlers(eventHandlers =>
-        eventHandlers.registerEventHandler(MyEventHandler))
+        eventHandlers.register(MyEventHandler))
     .build();
 
 const event = new MyEvent();

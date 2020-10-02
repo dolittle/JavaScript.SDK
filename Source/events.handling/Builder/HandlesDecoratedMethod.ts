@@ -17,11 +17,13 @@ export class HandlesDecoratedMethod {
      * @param {Constructor<any> | Guid | string} eventTypeOrId Type or event type id of event it handles.
      * @param {number | undefined} generation Generation of the event or undefined.
      * @param {EventHandlerSignature<any>} method The actual method that handles the event.
+     * @param {string} name The name of the method.
      */
     constructor(
         readonly owner: Constructor<any>,
         readonly eventTypeOrId: Constructor<any> | Guid | string,
         readonly generation: number | undefined,
-        readonly method: EventHandlerSignature<any>) {
+        readonly method: EventHandlerSignature<any>,
+        readonly name: string) {
     }
 }

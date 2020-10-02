@@ -89,12 +89,12 @@ export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
         cancellation: Cancellation): void {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (this._methodsBuilder == null) {
-            logger.warning(`Failed to build event handler ${EventHandlerId}. No event handler methods are configured for event handler`);
+            logger.warn(`Failed to build event handler ${EventHandlerId}. No event handler methods are configured for event handler`);
             return;
         }
         const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, logger);
         if (!allMethodsBuilt) {
-            logger.warning(`Could not build event handler ${this._eventHandlerId}`);
+            logger.warn(`Could not build event handler ${this._eventHandlerId}`);
             return;
         }
         const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);

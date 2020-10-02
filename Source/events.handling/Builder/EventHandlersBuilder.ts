@@ -39,8 +39,8 @@ export class EventHandlersBuilder {
         return this;
     }
 
-    registerEventHandler<T = any>(type: Constructor<T>, instance?: T): EventHandlersBuilder {
-        this._eventHandlerBuilders.push(new EventHandlerClassBuilder(type, instance));
+    register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
+        this._eventHandlerBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
         return this;
     }
 

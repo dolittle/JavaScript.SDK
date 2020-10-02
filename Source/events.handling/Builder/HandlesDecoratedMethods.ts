@@ -22,16 +22,18 @@ export class HandlesDecoratedMethods {
      * @param {Constructor<any> | Guid | string} eventTypeOrId Type or event type id of event the handle method is for or the event.
      * @param {number | undefined} generation Generation of event type or undefined.
      * @param {EventHandlerSignature<any>} method The handle method.
+     * @param {string} name The name of the method.
      */
     static register(
         target: Constructor<any>,
         eventTypeOrId: Constructor<any> | Guid | string,
         generation: number | undefined,
-        method: EventHandlerSignature<any>): void {
+        method: EventHandlerSignature<any>,
+        name: string): void {
         let methods = this.methodsPerEventHandler.get(target);
         if (!methods) {
             this.methodsPerEventHandler.set(target, methods = []);
         }
-        methods.push(new HandlesDecoratedMethod(target, eventTypeOrId, generation, method));
+        methods.push(new HandlesDecoratedMethod(target, eventTypeOrId, generation, method, name));
     }
 }
