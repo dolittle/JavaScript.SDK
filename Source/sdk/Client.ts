@@ -10,7 +10,7 @@ import { EventStoreBuilder } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback, IFilters } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback, IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, MicroserviceBuilder, MicroserviceBuilderCallback, ExecutionContext, TenantId, CorrelationId, Claims } from '@dolittle/sdk.execution';
-import { EventHorizonsBuilder, EventHorizonsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
+import { SubscriptionsBuilder, SubscriptionsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
@@ -63,7 +63,7 @@ export class ClientBuilder {
     private _port = 50053;
     private _environment: Environment = Environment.undetermined;
     private _microserviceBuilder: MicroserviceBuilder;
-    private readonly _eventHorizonsBuilder: EventHorizonsBuilder;
+    private readonly _eventHorizonsBuilder: SubscriptionsBuilder;
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
@@ -76,7 +76,7 @@ export class ClientBuilder {
      */
     constructor() {
         this._microserviceBuilder = new MicroserviceBuilder(MicroserviceId.notApplicable);
-        this._eventHorizonsBuilder = new EventHorizonsBuilder();
+        this._eventHorizonsBuilder = new SubscriptionsBuilder();
         this._cancellation = Cancellation.default;
         this._loggingBuilder = new LoggingBuilder();
         this._eventTypesBuilder = new EventTypesBuilder();
@@ -113,7 +113,7 @@ export class ClientBuilder {
      * @param {EventHorizonsBuilderCallback} callback The builder callback.
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    withEventHorizons(callback: EventHorizonsBuilderCallback): ClientBuilder {
+    withEventHorizons(callback: SubscriptionsBuilderCallback): ClientBuilder {
         callback(this._eventHorizonsBuilder);
         return this;
     }

@@ -4,20 +4,20 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { StreamId } from '@dolittle/sdk.events';
+import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
-import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
+import { SubscriptionBuilderForConsumerScope } from './SubscriptionBuilderForConsumerScope';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
-export class SubscriptionBuilderForProducerTenant {
-    private _producerStreamId?: StreamId;
-    private _builder?: SubscriptionBuilderForProducerStream;
+export class SubscriptionBuilderForProducerPartition {
+    private _consumerScope?: ScopeId;
+    private _builder?: SubscriptionBuilderForConsumerScope;
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerTenant}.
@@ -27,17 +27,19 @@ export class SubscriptionBuilderForProducerTenant {
     constructor(
         private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
-        private readonly _producerTenantId: TenantId) {
+        private readonly _producerTenantId: TenantId,
+        private readonly _producerStreamId: StreamId,
+        private readonly _producerPartitionId: PartitionId) {
     }
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {Guid | string} tenant Stream to subscribe to events from.
+     * @param {Guid | string} consumerScope Stream to subscribe to events from.
      */
-    fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
-        this.throwIfProducerStreamIsAlreadyDefined();
-        this._producerStreamId = StreamId.from(streamId);
-        this._builder = new SubscriptionBuilderForProducerStream(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
+    toScope(consumerScope: Guid | string): SubscriptionBuilderForConsumerScope {
+        this.throwIfConsumerScopeIsAlreadyDefined();
+        this._consumerScope = ScopeId.from(consumerScope);
+        this._builder = new SubscriptionBuilderForConsumerScope(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._consumerScope);
         return this._builder;
     }
 
@@ -47,18 +49,18 @@ export class SubscriptionBuilderForProducerTenant {
      * @returns {Subscription}''
      */
     build(): Subscription {
-        this.throwIfProducerStreamIsNotDefined();
+        this.throwIfConsumerScopeIsNotDefined();
         return this._builder!.build();
     }
 
-    private throwIfProducerStreamIsAlreadyDefined() {
-        if (this._producerStreamId) {
-            throw new SubscriptionBuilderMethodAlreadyCalled('fromStream()');
+    private throwIfConsumerScopeIsAlreadyDefined() {
+        if (this._consumerScope) {
+            throw new SubscriptionBuilderMethodAlreadyCalled('toScope()');
         }
     }
-    private throwIfProducerStreamIsNotDefined() {
-        if (!this._producerStreamId) {
-            throw new SubscriptionDefinitionIncomplete('Producer Stream', 'Call fromProducerStream()');
+    private throwIfConsumerScopeIsNotDefined() {
+        if (!this._consumerScope) {
+            throw new SubscriptionDefinitionIncomplete('Scope', 'Call toScope() with a non-default scope');
         }
     }
 }

@@ -4,20 +4,20 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { StreamId } from '@dolittle/sdk.events';
+import { StreamId, PartitionId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
-import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
+import { SubscriptionBuilderForProducerPartition } from './SubscriptionBuilderForProducerPartition';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
-export class SubscriptionBuilderForProducerTenant {
-    private _producerStreamId?: StreamId;
-    private _builder?: SubscriptionBuilderForProducerStream;
+export class SubscriptionBuilderForProducerStream {
+    private _producerPartitionId?: PartitionId;
+    private _builder?: SubscriptionBuilderForProducerPartition;
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerTenant}.
@@ -27,17 +27,18 @@ export class SubscriptionBuilderForProducerTenant {
     constructor(
         private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
-        private readonly _producerTenantId: TenantId) {
+        private readonly _producerTenantId: TenantId,
+        private readonly _producerStreamId: StreamId) {
     }
 
     /**
      * Sets the producer stream to subscribe to events from.
      * @param {Guid | string} tenant Stream to subscribe to events from.
      */
-    fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
-        this.throwIfProducerStreamIsAlreadyDefined();
-        this._producerStreamId = StreamId.from(streamId);
-        this._builder = new SubscriptionBuilderForProducerStream(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
+    fromProducerPartition(partitionId: Guid | string): SubscriptionBuilderForProducerPartition {
+        this.throwIfProducerPartitionIsAlreadyDefined();
+        this._producerPartitionId = PartitionId.from(partitionId);
+        this._builder = new SubscriptionBuilderForProducerPartition(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId);
         return this._builder;
     }
 
@@ -47,18 +48,18 @@ export class SubscriptionBuilderForProducerTenant {
      * @returns {Subscription}''
      */
     build(): Subscription {
-        this.throwIfProducerStreamIsNotDefined();
+        this.throwIfProducerPartitionIsNotDefined();
         return this._builder!.build();
     }
 
-    private throwIfProducerStreamIsAlreadyDefined() {
-        if (this._producerStreamId) {
-            throw new SubscriptionBuilderMethodAlreadyCalled('fromStream()');
+    private throwIfProducerPartitionIsAlreadyDefined() {
+        if (this._producerPartitionId) {
+            throw new SubscriptionBuilderMethodAlreadyCalled('fromProducerPartition()');
         }
     }
-    private throwIfProducerStreamIsNotDefined() {
-        if (!this._producerStreamId) {
-            throw new SubscriptionDefinitionIncomplete('Producer Stream', 'Call fromProducerStream()');
+    private throwIfProducerPartitionIsNotDefined() {
+        if (!this._producerPartitionId) {
+            throw new SubscriptionDefinitionIncomplete('Producer Partition', 'Call fromProducerPartition()');
         }
     }
 }

@@ -32,7 +32,7 @@ export class SubscriptionsBuilderForConsumerTenant {
      * @returns {SubscriptionsBuilderForConsumerTenant}
      */
     fromProducerMicroservice(microservice: Guid | string, callback: (builder: SubscriptionBuilderForProducerMicroservice) => void): SubscriptionsBuilderForConsumerTenant {
-        const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microservice));
+        const builder = new SubscriptionBuilderForProducerMicroservice(this._consumerTenantId, MicroserviceId.from(microservice));
         callback(builder);
         this._subscriptionBuilders.push(builder);
         return this;
@@ -72,15 +72,14 @@ export class SubscriptionsBuilderForConsumerTenant {
     }
 
     /**
-     * Build the {@link TenantSubscriptions} instance.
+     * Build the {@link SubscriptionsBuilderForConsumerTenant} instance.
      * @returns {TenantWithSubscriptions}
      */
     build(): TenantWithSubscriptions {
         const subscriptions = this._subscriptionBuilders.map(_ => _.build());
-        const tenantSubscriptions = new TenantWithSubscriptions(
+        return new TenantWithSubscriptions(
             this._consumerTenantId,
             subscriptions,
             this._callbacks);
-        return tenantSubscriptions;
     }
 }

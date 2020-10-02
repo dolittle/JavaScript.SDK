@@ -1,19 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-
 import { Guid } from '@dolittle/rudiments';
 
-import { ScopeId, PartitionId, StreamId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { Subscription } from './Subscription';
-import { SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded} from './SubscriptionCallbacks';
-import { MissingScopeForSubscription } from './MissingScopeForSubscription';
-import { MissingTenantForSubscription } from './MissingTenantForSubscription';
-import { MissingStreamForSubscription } from './MissingStreamForSubscription';
+import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
+import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
+import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 
 /**
  * Represents the callback for the {@link SubscriptionBuilderForProducerMicroservice}.
@@ -24,13 +19,16 @@ export type SubscriptionBuilderForProducerMicroserviceCallback = (builder: Subsc
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerMicroservice {
-    private _tenant?: TenantId;
+    private _producerTenant?: TenantId;
+    private _builder?: SubscriptionBuilderForProducerTenant;
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerMicroservice}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      */
-    constructor(private _producerMicroserviceId: MicroserviceId) {
+    constructor(
+        private readonly _consumerTenantId: TenantId,
+        private readonly _producerMicroserviceId: MicroserviceId) {
     }
 
     /**
@@ -38,8 +36,10 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @param {Guid | string} tenant Tenant for the subscription.
      */
     fromProducerTenant(tenant: Guid | string): SubscriptionBuilderForProducerTenant {
-        this._tenant = TenantId.from(tenant);
-        return this;
+        this.throwIfProducerTenantIsAlreadyDefined();
+        this._producerTenant = TenantId.from(tenant);
+        this._builder = new SubscriptionBuilderForProducerTenant(this._consumerTenantId, this._producerMicroserviceId, this._producerTenant);
+        return this._builder;
     }
 
     /**
@@ -48,20 +48,18 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @returns {Subscription}
      */
     build(): Subscription {
-        this.throwIfMissingTenant();
-
-        return new Subscription(
-            this._scope!,
-            this._producerMicroserviceId!,
-            this._tenant!,
-            this._stream!,
-            this._partition!,
-            this.callbacks);
+        this.throwIfProducerTenantIsNotDefined();
+        return this._builder!.build();
     }
 
-    private throwIfMissingTenant() {
-        if (!this._tenant) {
-            throw new MissingTenantForSubscription(this._producerMicroserviceId);
+    private throwIfProducerTenantIsAlreadyDefined() {
+        if (this._producerTenant) {
+            throw new SubscriptionBuilderMethodAlreadyCalled('fromProducerTenant()');
+        }
+    }
+    private throwIfProducerTenantIsNotDefined() {
+        if (!this._producerTenant) {
+            throw new SubscriptionDefinitionIncomplete('Producer Tenant', 'Call fromProducerTenant()');
         }
     }
 }
