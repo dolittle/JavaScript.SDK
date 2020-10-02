@@ -9,7 +9,7 @@ import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventStoreBuilder } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback, IFilters } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback, IEventHandlers } from '@dolittle/sdk.events.handling';
-import { MicroserviceId, Environment, MicroserviceBuilder, MicroserviceBuilderCallback, ExecutionContext, TenantId, CorrelationId, Claims } from '@dolittle/sdk.execution';
+import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback, IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
@@ -45,13 +45,11 @@ export class Client {
 
     /**
      * Create a client builder for a Microservice
-     * @param {Guid | string} microserviceId The unique identifier for the microservice.
-     * @param {Version} [version] Optional version of the software. Defaults to 1.0.0.0.
-     * @param {string} [environment] The environment the software is running in. (e.g. development, production). Defaults to 'Development'.
+     * @param {MicroserviceId | string} microserviceId The unique identifier for the microservice.
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static create() {
-        return new ClientBuilder();
+    static forMicroservice(microserviceId: MicroserviceId | string) {
+        return new ClientBuilder(MicroserviceId.from(microserviceId));
     }
 }
 
@@ -62,7 +60,7 @@ export class ClientBuilder {
     private _host = 'localhost';
     private _port = 50053;
     private _environment: Environment = Environment.undetermined;
-    private _microserviceBuilder: MicroserviceBuilder;
+    private _version: Version = Version.notSet;
     private readonly _eventHorizonsBuilder: SubscriptionsBuilder;
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
@@ -74,8 +72,7 @@ export class ClientBuilder {
     /**
      * Creates an instance of client builder.
      */
-    constructor() {
-        this._microserviceBuilder = new MicroserviceBuilder(MicroserviceId.notApplicable);
+    constructor(private readonly _microserviceId: MicroserviceId) {
         this._eventHorizonsBuilder = new SubscriptionsBuilder();
         this._cancellation = Cancellation.default;
         this._loggingBuilder = new LoggingBuilder();
@@ -85,26 +82,45 @@ export class ClientBuilder {
     }
 
     /**
-     * Configure the microservice.
-     * @param microserviceId The unique identifierfor the microservice.
-     * @param callback The builder callback.
-     * @returns {ClientBuilder} The client builder for continuation.
-     */
-    forMicroservice(microserviceId: MicroserviceId | string, callback?: MicroserviceBuilderCallback): ClientBuilder {
-        this._microserviceBuilder = new MicroserviceBuilder(MicroserviceId.from(microserviceId));
-        if (callback) {
-            callback(this._microserviceBuilder);
-        }
-        return this;
-    }
-
-    /**
      * Sets the environment where the software is running.
      * @param {string} [environment] The environment the software is running in. (e.g. development, production).
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    forEnvironment(environment: string): ClientBuilder {
+    withEnvironment(environment: string): ClientBuilder {
         this._environment = Environment.from(environment);
+        return this;
+    }
+
+    /**
+     * Sets the version of the microservice.
+     * @param {number} major Major version of the microservice.
+     * @param {number} minor Minor version of the microservice.
+     * @param {number} patch Patch version of the microservice.
+     * @param {number} build Builder number of the microservice.
+     * @param {string} preReleaseString If prerelease - the prerelease string.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withVersion(major: number, minor: number, patch: number, build: number, preReleaseString: string): ClientBuilder;
+    /**
+     * Sets the version of the microservice.
+     * @param {number} major Major version of the microservice.
+     * @param {number} minor Minor version of the microservice.
+     * @param {number} patch Patch version of the microservice.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withVersion(major: number, minor: number, patch: number): ClientBuilder;
+    /**
+     *  Sets the version of the microservice.
+     * @param {Version} version Version of the microservice. 
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withVersion(version: Version): ClientBuilder;
+    withVersion(versionOrMajor: Version | number, minor?: number, patch?: number, build?: number, preReleaseString?: string): ClientBuilder {
+        if (typeof versionOrMajor == 'number') {
+            this._version = new Version(versionOrMajor as number, minor as number, patch as number, build || 0, preReleaseString || '');
+        } else if (versionOrMajor instanceof Version) {
+            this._version = versionOrMajor;
+        }
         return this;
     }
 
@@ -200,14 +216,13 @@ export class ClientBuilder {
      * @returns {Client}
      */
     build(): Client {
-        const [microserviceId, version]  = this._microserviceBuilder.build();
-        const logger = this._loggingBuilder.build(microserviceId);
+        const logger = this._loggingBuilder.build(this._microserviceId);
         const connectionString = `${this._host}:${this._port}`;
         const credentials = grpc.credentials.createInsecure();
         const executionContext = new ExecutionContext(
-            microserviceId,
+            this._microserviceId,
             TenantId.system,
-            version,
+            this._version,
             this._environment,
             CorrelationId.system,
             Claims.empty);
