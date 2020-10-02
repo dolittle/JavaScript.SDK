@@ -5,12 +5,12 @@ import { Failure } from '@dolittle/sdk.protobuf';
 import { CommittedEvents } from './CommittedEvents';
 
 /**
- * Represents the response from a commit of events
+ * Represents the result from a commit of events
  */
-export class CommitEventsResponse {
+export class CommitEventsResult {
 
     /**
-     * Initializes a new instance of {@link CommitEventsResponse}
+     * Initializes a new instance of {@link CommitEventsResult}
      * @param {CommittedEvents} events Events committed.
      * @param {Failure} failure Failure from the response.
      */
