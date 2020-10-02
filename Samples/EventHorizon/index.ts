@@ -10,7 +10,6 @@ import { PartitionId } from '@dolittle/sdk.events';
 const client = Client
     .forMicroservice('a14bb24e-51f3-4d83-9eba-44c4cffe6bb9')
     .connectToRuntime('localhost', 50055)
-    .withLogging(_ => _.useWinston(_ => _.level = 'debug'))
     .withEventTypes(eventTypes =>
         eventTypes.register(MyEvent))
     .withEventHandlers(eventHandlers =>

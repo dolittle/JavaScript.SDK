@@ -12,12 +12,6 @@ const client = Client
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .withVersion(1, 0, 2)
     .withEnvironment('test')
-    .withLogging(logBuilder => {
-        logBuilder
-            .useWinston(winston => {
-                winston.level = 'debug';
-            });
-    })
     .withEventTypes(eventTypes =>
         eventTypes.register(MyEvent))
     .withEventHandlers(eventHandlers =>
