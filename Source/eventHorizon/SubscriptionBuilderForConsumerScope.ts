@@ -20,7 +20,7 @@ export class SubscriptionBuilderForConsumerScope {
 
     private readonly _callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
     /**
-     * Initializes a new instance of {@link SubscriptionBuilderForProducerTenant}.
+     * Initializes a new instance of {@link SubscriptionBuilderForConsumerScope}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
@@ -37,7 +37,7 @@ export class SubscriptionBuilderForConsumerScope {
     /**
      * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
      * @param {SubscriptionCompleted} completed The callback method.
-     * @returns {SubscriptionsBuilder}
+     * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
     onCompleted(completed: SubscriptionCompleted): SubscriptionBuilderForConsumerScope {
@@ -48,7 +48,7 @@ export class SubscriptionBuilderForConsumerScope {
     /**
      * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
      * @param {SubscriptionSucceeded} succeeded The callback method.
-     * @returns {SubscriptionsBuilder}
+     * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
     onSuccess(succeeded: SubscriptionSucceeded): SubscriptionBuilderForConsumerScope {
@@ -59,7 +59,7 @@ export class SubscriptionBuilderForConsumerScope {
     /**
      * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
      * @param {SubscriptionFailed} failed The callback method.
-     * @returns {SubscriptionsBuilder}
+     * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
     onFailure(failed: SubscriptionFailed): SubscriptionBuilderForConsumerScope {

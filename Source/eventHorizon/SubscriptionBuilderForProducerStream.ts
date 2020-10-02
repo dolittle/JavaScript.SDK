@@ -20,7 +20,7 @@ export class SubscriptionBuilderForProducerStream {
     private _builder?: SubscriptionBuilderForProducerPartition;
 
     /**
-     * Initializes a new instance of {@link SubscriptionBuilderForProducerTenant}.
+     * Initializes a new instance of {@link SubscriptionBuilderForProducerStream}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
