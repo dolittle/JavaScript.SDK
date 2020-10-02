@@ -24,7 +24,6 @@ export class SubscriptionBuilderForProducerStream {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
     constructor(
-        private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId) {
@@ -37,14 +36,14 @@ export class SubscriptionBuilderForProducerStream {
     fromProducerPartition(partitionId: Guid | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
         this._producerPartitionId = PartitionId.from(partitionId);
-        this._builder = new SubscriptionBuilderForProducerPartition(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId);
+        this._builder = new SubscriptionBuilderForProducerPartition(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId);
         return this._builder;
     }
 
     /**
      * Builds the subscription.
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}''
+     * @returns {Subscription}
      */
     build(): Subscription {
         this.throwIfProducerPartitionIsNotDefined();

@@ -31,7 +31,7 @@ export class SubscriptionsBuilderForConsumerTenant {
      * @returns {SubscriptionBuilderForProducerMicroservice}
      */
     fromProducerMicroservice(microservice: Guid | string): SubscriptionBuilderForProducerMicroservice {
-        const builder = new SubscriptionBuilderForProducerMicroservice(this._consumerTenantId, MicroserviceId.from(microservice));
+        const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microservice));
         this._subscriptionBuilders.push(builder);
         return builder;
     }

@@ -22,7 +22,6 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      */
     constructor(
-        private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId) {
     }
 
@@ -33,7 +32,7 @@ export class SubscriptionBuilderForProducerMicroservice {
     fromProducerTenant(tenant: Guid | string): SubscriptionBuilderForProducerTenant {
         this.throwIfProducerTenantIsAlreadyDefined();
         this._producerTenant = TenantId.from(tenant);
-        this._builder = new SubscriptionBuilderForProducerTenant(this._consumerTenantId, this._producerMicroserviceId, this._producerTenant);
+        this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenant);
         return this._builder;
     }
 

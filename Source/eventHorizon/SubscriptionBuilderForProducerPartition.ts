@@ -24,7 +24,6 @@ export class SubscriptionBuilderForProducerPartition {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
     constructor(
-        private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
@@ -38,14 +37,14 @@ export class SubscriptionBuilderForProducerPartition {
     toScope(consumerScope: Guid | string): SubscriptionBuilderForConsumerScope {
         this.throwIfConsumerScopeIsAlreadyDefined();
         this._consumerScope = ScopeId.from(consumerScope);
-        this._builder = new SubscriptionBuilderForConsumerScope(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._consumerScope);
+        this._builder = new SubscriptionBuilderForConsumerScope(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._consumerScope);
         return this._builder;
     }
 
     /**
      * Builds the subscription.
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}''
+     * @returns {Subscription}
      */
     build(): Subscription {
         this.throwIfConsumerScopeIsNotDefined();

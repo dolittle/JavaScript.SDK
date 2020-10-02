@@ -24,7 +24,6 @@ export class SubscriptionBuilderForProducerTenant {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
     constructor(
-        private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId) {
     }
@@ -36,14 +35,14 @@ export class SubscriptionBuilderForProducerTenant {
     fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
         this.throwIfProducerStreamIsAlreadyDefined();
         this._producerStreamId = StreamId.from(streamId);
-        this._builder = new SubscriptionBuilderForProducerStream(this._consumerTenantId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
+        this._builder = new SubscriptionBuilderForProducerStream(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
         return this._builder;
     }
 
     /**
      * Builds the subscription.
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}''
+     * @returns {Subscription}
      */
     build(): Subscription {
         this.throwIfProducerStreamIsNotDefined();

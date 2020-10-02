@@ -20,7 +20,6 @@ export class SubscriptionBuilderForConsumerScope {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
     constructor(
-        private readonly _consumerTenantId: TenantId,
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
@@ -64,7 +63,7 @@ export class SubscriptionBuilderForConsumerScope {
     /**
      * Builds the subscription.
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}''
+     * @returns {Subscription}
      */
     build(): Subscription {
         return new Subscription(this._consumerScopeId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._callbacks);
