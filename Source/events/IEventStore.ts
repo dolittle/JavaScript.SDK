@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { EventType } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { CommitEventsResponse } from './CommitEventsResponse';
+import { CommitEventsResult } from './CommitEventsResult';
 import { UncommittedEvent } from './UncommittedEvent';
 ;
 
@@ -20,21 +20,21 @@ export interface IEventStore {
      * @param eventSourceId The source of the event - a unique identifier that is associated with the event.
      * @param {EventType|Guid|string} [eventType] An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResponse>
+     * @returns Promise<CommitEventsResult>
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a collection of events.
      * @param {UncommittedEvent[]} events Collection of events.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResponse>
+     * @returns Promise<CommitEventsResult>
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * @summary on the actual type of the event.
      */
-    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single public event.
@@ -42,9 +42,9 @@ export interface IEventStore {
      * @param eventSourceId The source of the event - a unique identifier that is associated with the event.
      * @param {EventType|Guid|string} [eventType] An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResponse>
+     * @returns Promise<CommitEventsResult>
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResponse>;
+    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
 }

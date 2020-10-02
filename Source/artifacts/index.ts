@@ -13,4 +13,4 @@ export { IEventTypes } from './IEventTypes';
 export { EventTypes } from './EventTypes';
 export { EventTypesBuilder, EventTypesBuilderCallback } from './EventTypesBuilder';
 export { EventTypesFromDecorators } from './EventTypesFromDecorators';
-export { eventType } from './evenTypeDecorator';
+export { eventType } from './eventTypeDecorator';

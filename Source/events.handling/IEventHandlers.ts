@@ -3,7 +3,7 @@
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { IEventHandler } from './IEventHandler';
+import { EventHandlerProcessor } from './Internal';
 
 /**
  * Defines the system for event handlers
@@ -12,8 +12,8 @@ export interface IEventHandlers {
 
     /**
      * Register an event handler
-     * @param {IEventHandler} eventHandler EventHandler to register.
+     * @param {EventHandlerProcessor} eventHandlerProcessor Event handler processor to register.
      * @param {Cancellation} cancellation Used to close the connection to the Runtime.
      */
-    register(eventHandler: IEventHandler, cancellation?: Cancellation): void;
+    register(eventHandlerProcessor: EventHandlerProcessor, cancellation?: Cancellation): void;
 }

@@ -56,13 +56,13 @@ export class EventFiltersBuilder {
     }
 
     /**
-     * Builds all the event filters.
+     * Builds and registers all the event filters.
      * @param {FiltersClient} client The gRPC client for filters.
-     * @param {IExecutionContextManager} executionContextManager Execution context manager.
+     * @param {ExecutionContext} executionContext Execution context.
      * @param {IEventTypes} eventTypes For event types resolution.
      * @param {Logger} logger For logging.
      */
-    build(
+    buildAndRegister(
         client: FiltersClient,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,

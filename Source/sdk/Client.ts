@@ -220,7 +220,7 @@ export class ClientBuilder {
             eventTypes,
             executionContext,
             logger);
-        const eventHandlers = this._eventHandlersBuilder.build(
+        const eventHandlers = this._eventHandlersBuilder.buildAndRegister(
             new EventHandlersClient(connectionString, credentials),
             this._container,
             executionContext,
@@ -228,7 +228,7 @@ export class ClientBuilder {
             logger,
             this._cancellation);
 
-        const filters = this._filtersBuilder.build(
+        const filters = this._filtersBuilder.buildAndRegister(
             new FiltersClient(connectionString, credentials),
             executionContext,
             eventTypes,

@@ -13,7 +13,7 @@ export { EventContext } from './EventContext';
 export { EventStore } from './EventStore';
 export { CommittedEvent } from './CommittedEvent';
 export { CommittedEvents } from './CommittedEvents';
-export { CommitEventsResponse } from './CommitEventsResponse';
+export { CommitEventsResult } from './CommitEventsResult';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
