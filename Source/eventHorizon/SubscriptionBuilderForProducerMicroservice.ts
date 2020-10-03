@@ -9,15 +9,13 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
-import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerMicroservice {
-    private readonly _callbacks: SubscriptionCallbacks;
     private _producerTenantId?: TenantId;
     private _builder?: SubscriptionBuilderForProducerTenant;
 
@@ -27,10 +25,7 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      */
     constructor(
-        private readonly _producerMicroserviceId: MicroserviceId, responsesSource: Observable<SubscriptionCallbackArguments>) {
-            this._callbacks = new SubscriptionCallbacks(
-                responsesSource.pipe(filter(_ =>
-                    _.subscription.microservice.toString() === _producerMicroserviceId.toString())));
+        private readonly _producerMicroserviceId: MicroserviceId) {
     }
 
     /**
@@ -40,7 +35,7 @@ export class SubscriptionBuilderForProducerMicroservice {
     fromProducerTenant(tenantId: Guid | string): SubscriptionBuilderForProducerTenant {
         this.throwIfProducerTenantIsAlreadyDefined();
         this._producerTenantId = TenantId.from(tenantId);
-        this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenantId, this._callbacks.responses);
+        this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenantId);
         return this._builder;
     }
 
@@ -49,9 +44,9 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfProducerTenantIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfProducerTenantIsAlreadyDefined() {

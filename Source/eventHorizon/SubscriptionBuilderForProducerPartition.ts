@@ -10,15 +10,13 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForConsumerScope } from './SubscriptionBuilderForConsumerScope';
-import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerPartition {
-    private readonly _callbacks: SubscriptionCallbacks;
     private _consumerScopeId?: ScopeId;
     private _builder?: SubscriptionBuilderForConsumerScope;
 
@@ -31,11 +29,7 @@ export class SubscriptionBuilderForProducerPartition {
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
-        private readonly _producerPartitionId: PartitionId,
-        responsesSource: Observable<SubscriptionCallbackArguments>) {
-            this._callbacks = new SubscriptionCallbacks(
-                responsesSource.pipe(filter(_ =>
-                    _.subscription.partition.toString() === _producerPartitionId.toString())));
+        private readonly _producerPartitionId: PartitionId) {
     }
 
     /**
@@ -50,8 +44,7 @@ export class SubscriptionBuilderForProducerPartition {
             this._producerTenantId,
             this._producerStreamId,
             this._producerPartitionId,
-            this._consumerScopeId,
-            this._callbacks.responses);
+            this._consumerScopeId);
         return this._builder;
     }
 
@@ -60,9 +53,9 @@ export class SubscriptionBuilderForProducerPartition {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfConsumerScopeIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfConsumerScopeIsAlreadyDefined() {

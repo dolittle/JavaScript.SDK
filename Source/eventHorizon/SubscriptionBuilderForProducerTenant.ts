@@ -11,14 +11,12 @@ import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMet
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
 import { Observable } from 'rxjs';
-import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
-import { filter } from 'rxjs/operators';
+import { SubscriptionCallbackArguments} from './SubscriptionCallbacks';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerTenant {
-    private readonly _callbacks: SubscriptionCallbacks;
     private _producerStreamId?: StreamId;
     private _builder?: SubscriptionBuilderForProducerStream;
 
@@ -29,11 +27,7 @@ export class SubscriptionBuilderForProducerTenant {
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
-        private readonly _producerTenantId: TenantId,
-        responsesSource: Observable<SubscriptionCallbackArguments>) {
-            this._callbacks = new SubscriptionCallbacks(
-                responsesSource.pipe(filter(_ =>
-                    _.subscription.tenant.toString() === _producerTenantId.toString())));
+        private readonly _producerTenantId: TenantId) {
     }
 
     /**
@@ -46,8 +40,7 @@ export class SubscriptionBuilderForProducerTenant {
         this._builder = new SubscriptionBuilderForProducerStream(
             this._producerMicroserviceId,
             this._producerTenantId,
-            this._producerStreamId,
-            this._callbacks.responses);
+            this._producerStreamId);
         return this._builder;
     }
 
@@ -56,9 +49,9 @@ export class SubscriptionBuilderForProducerTenant {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfProducerStreamIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfProducerStreamIsAlreadyDefined() {
