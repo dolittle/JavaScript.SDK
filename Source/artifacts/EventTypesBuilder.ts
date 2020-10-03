@@ -3,6 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 import { Guid } from '@dolittle/rudiments';
+
 import { Generation } from './Generation';
 import { EventType } from './EventType';
 import { IEventTypes } from './IEventTypes';

@@ -32,8 +32,7 @@ export class EventHandlersBuilder {
      * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
      */
     createEventHandler(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
-        const id = EventHandlerId.from(eventHandlerId);
-        const builder = new EventHandlerBuilder(id);
+        const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
         callback(builder);
         this._eventHandlerBuilders.push(builder);
         return this;
