@@ -72,6 +72,7 @@ export class EventStore implements IEventStore {
         const request = new CommitEventsRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setEventsList(uncommittedEvents);
+        this._logger.debug('Committing events');
 
         return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
             .pipe(map(response => {

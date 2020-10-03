@@ -7,20 +7,11 @@ import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 
 import { MyEvent } from './MyEvent';
 import { MyEventHandler } from './MyEventHandler';
-import { Version } from '@dolittle/sdk.execution';
 
 const client = Client
-    .create()
-    .forEnvironment('test')
-    .withLogging(logBuilder => {
-        logBuilder
-            .useWinston(winston => {
-                winston.level = 'debug';
-            });
-    })
-    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb', microservice => {
-        microservice.withVersion(Version.first);
-    })
+    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .withVersion(1, 0, 2)
+    .withEnvironment('test')
     .withEventTypes(eventTypes =>
         eventTypes.register(MyEvent))
     .withEventHandlers(eventHandlers =>
@@ -29,10 +20,12 @@ const client = Client
     .withFilters(filterBuilder =>
         filterBuilder
             .createPrivateFilter('79e12ab3-2751-47e1-b959-d898dc4d6ee8', fb =>
-                fb.handle((event: any, context: EventContext) => {
-                    return new Promise((resolve, reject) => {
-                        console.log('Filtering event', event);
-                    });
+                fb
+                    .unpartitioned()
+                    .handle((event: any, context: EventContext) => {
+                        return new Promise((resolve, reject) => {
+                            console.log('Filtering event', event);
+                        });
                 })
             )
             .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>

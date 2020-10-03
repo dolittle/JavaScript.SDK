@@ -49,7 +49,7 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Defines the filter to be partitioned.
-     * @returns {PrivateEventFilterBuilder}
+     * @returns {PartitionedEventFilterBuilder}
      */
     partitioned(): PartitionedEventFilterBuilder {
         this._innerBuilder = new PartitionedEventFilterBuilder();
@@ -57,14 +57,13 @@ export class PrivateEventFilterBuilder {
     }
 
     /**
-     * Defines a callback for the filter.
-     * @param {FilterEventCallback} callback The callback that will be called for each event.
+     * Defines the filter to be unpartitioned.
+     * @returns {UnpartitionedEventFilterBuilder}
      */
-    handle(callback: FilterEventCallback) {
+    unpartitioned(): UnpartitionedEventFilterBuilder {
         this._innerBuilder = new UnpartitionedEventFilterBuilder();
-        this._innerBuilder.handle(callback);
+        return this._innerBuilder;
     }
-
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
@@ -82,7 +81,7 @@ export class PrivateEventFilterBuilder {
         logger: Logger): IFilterProcessor {
 
         if (!this._innerBuilder) {
-            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or handle(...).');
+            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or unpartitioned().');
         }
         return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, eventTypes, logger);
     }

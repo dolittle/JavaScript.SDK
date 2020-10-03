@@ -14,31 +14,12 @@ import * as internal from './Internal';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
 import { MissingFilterCallback } from './MissingFilterCallback';
-import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents builder for building a partitioned event filter.
  */
 export class PartitionedEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
-    private _scopeId: ScopeId = ScopeId.default;
-
-    /**
-     * Get the {@link ScopeId} the filter operates on.
-     */
-    get scopeId() {
-        return this._scopeId;
-    }
-
-    /**
-     * Defines which {@link ScopeId} the filter operates on.
-     * @param {ScopeId} scopeId Scope the filter operates on.
-     * @returns {PrivateEventFilterBuilder}
-     */
-    inScope(scopeId: Guid | string): PartitionedEventFilterBuilder {
-        this._scopeId = ScopeId.from(scopeId);
-        return this;
-    }
 
     /**
      * Configured the handle callback.
