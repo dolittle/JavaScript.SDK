@@ -151,7 +151,7 @@ export class ClientBuilder {
      * @returns {ClientBuilder} The client builder for continuation.
      * @summary If not used, the default host of 'localhost' and port 50053 will be used.
      */
-    connectToRuntime(host: string, port: number): ClientBuilder {
+    withRuntimeOn(host: string, port: number): ClientBuilder {
         this._host = host;
         this._port = port;
         return this;
