@@ -10,11 +10,15 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
+import { Observable } from 'rxjs';
+import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { filter } from 'rxjs/operators';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerTenant {
+    private readonly _callbacks: SubscriptionCallbacks;
     private _producerStreamId?: StreamId;
     private _builder?: SubscriptionBuilderForProducerStream;
 
@@ -25,7 +29,11 @@ export class SubscriptionBuilderForProducerTenant {
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
-        private readonly _producerTenantId: TenantId) {
+        private readonly _producerTenantId: TenantId,
+        responsesSource: Observable<SubscriptionCallbackArguments>) {
+            this._callbacks = new SubscriptionCallbacks(
+                responsesSource.pipe(filter(_ =>
+                    _.subscription.tenant.toString() === _producerTenantId.toString())));
     }
 
     /**
@@ -35,7 +43,11 @@ export class SubscriptionBuilderForProducerTenant {
     fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
         this.throwIfProducerStreamIsAlreadyDefined();
         this._producerStreamId = StreamId.from(streamId);
-        this._builder = new SubscriptionBuilderForProducerStream(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
+        this._builder = new SubscriptionBuilderForProducerStream(
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId,
+            this._callbacks.responses);
         return this._builder;
     }
 

@@ -4,16 +4,18 @@
 
 import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { Subscription } from './Subscription';
-import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
+import { SubscriptionCallbackArguments, SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForConsumerScope {
 
-    private readonly _callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
+    private readonly _callbacks: SubscriptionCallbacks;
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForConsumerScope}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
@@ -24,7 +26,11 @@ export class SubscriptionBuilderForConsumerScope {
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
         private readonly _producerPartitionId: PartitionId,
-        private readonly _consumerScopeId: ScopeId) {
+        private readonly _consumerScopeId: ScopeId,
+        responsesSource: Observable<SubscriptionCallbackArguments>) {
+            this._callbacks = new SubscriptionCallbacks(
+                responsesSource.pipe(filter(_ =>
+                    _.subscription.scope.toString() === _consumerScopeId.toString())));
     }
 
     /**
@@ -66,6 +72,12 @@ export class SubscriptionBuilderForConsumerScope {
      * @returns {Subscription}
      */
     build(): Subscription {
-        return new Subscription(this._consumerScopeId, this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._callbacks);
+        return new Subscription(
+            this._consumerScopeId,
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId,
+            this._producerPartitionId,
+            this._callbacks);
     }
 }

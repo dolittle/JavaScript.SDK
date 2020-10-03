@@ -10,11 +10,15 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerPartition } from './SubscriptionBuilderForProducerPartition';
+import { Observable } from 'rxjs';
+import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { filter } from 'rxjs/operators';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerStream {
+    private readonly _callbacks: SubscriptionCallbacks;
     private _producerPartitionId?: PartitionId;
     private _builder?: SubscriptionBuilderForProducerPartition;
 
@@ -26,7 +30,11 @@ export class SubscriptionBuilderForProducerStream {
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
-        private readonly _producerStreamId: StreamId) {
+        private readonly _producerStreamId: StreamId,
+        responsesSource: Observable<SubscriptionCallbackArguments>) {
+            this._callbacks = new SubscriptionCallbacks(
+                responsesSource.pipe(filter(_ =>
+                    _.subscription.stream.toString() === _producerStreamId.toString())));
     }
 
     /**
@@ -36,7 +44,12 @@ export class SubscriptionBuilderForProducerStream {
     fromProducerPartition(partitionId: Guid | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
         this._producerPartitionId = PartitionId.from(partitionId);
-        this._builder = new SubscriptionBuilderForProducerPartition(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId);
+        this._builder = new SubscriptionBuilderForProducerPartition(
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId,
+            this._producerPartitionId,
+            this._callbacks.responses);
         return this._builder;
     }
 

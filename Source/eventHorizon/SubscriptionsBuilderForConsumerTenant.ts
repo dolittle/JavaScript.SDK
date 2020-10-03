@@ -13,7 +13,7 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the builder of {@link TenantSubscriptions}.
  */
 export class SubscriptionsBuilderForConsumerTenant {
-    private readonly _callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
+    private readonly _callbacks: SubscriptionCallbacks;
     readonly _subscriptionBuilders: SubscriptionBuilderForProducerMicroservice[] = [];
 
     /**
@@ -22,16 +22,18 @@ export class SubscriptionsBuilderForConsumerTenant {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
      */
     constructor(private _consumerTenantId: TenantId, responsesSource: Observable<SubscriptionCallbackArguments>) {
-        this._callbacks = new SubscriptionCallbacks(responsesSource.pipe(filter(_ => _.consumerTenant.toString() === _consumerTenantId.toString())));
+        this._callbacks = new SubscriptionCallbacks(
+            responsesSource.pipe(filter(_ =>
+                _.consumerTenant.toString() === _consumerTenantId.toString())));
     }
 
     /**
      * Sets the producer microservice to subscribe to events from.
-     * @param {Guid | string} microservice Microservice to build for.
+     * @param {Guid | string} microserviceId Microservice to build for.
      * @returns {SubscriptionBuilderForProducerMicroservice}
      */
-    fromProducerMicroservice(microservice: Guid | string): SubscriptionBuilderForProducerMicroservice {
-        const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microservice));
+    fromProducerMicroservice(microserviceId: Guid | string): SubscriptionBuilderForProducerMicroservice {
+        const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microserviceId), this._callbacks.responses);
         this._subscriptionBuilders.push(builder);
         return builder;
     }

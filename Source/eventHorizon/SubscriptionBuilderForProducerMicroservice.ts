@@ -9,30 +9,38 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
+import { SubscriptionCallbackArguments, SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerMicroservice {
-    private _producerTenant?: TenantId;
+    private readonly _callbacks: SubscriptionCallbacks;
+    private _producerTenantId?: TenantId;
     private _builder?: SubscriptionBuilderForProducerTenant;
+
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerMicroservice}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
      */
     constructor(
-        private readonly _producerMicroserviceId: MicroserviceId) {
+        private readonly _producerMicroserviceId: MicroserviceId, responsesSource: Observable<SubscriptionCallbackArguments>) {
+            this._callbacks = new SubscriptionCallbacks(
+                responsesSource.pipe(filter(_ =>
+                    _.subscription.microservice.toString() === _producerMicroserviceId.toString())));
     }
 
     /**
      * Specifies from which tenant we should get events from in the other microservice.
-     * @param {Guid | string} tenant Tenant for the subscription.
+     * @param {Guid | string} tenantId Tenant for the subscription.
      */
-    fromProducerTenant(tenant: Guid | string): SubscriptionBuilderForProducerTenant {
+    fromProducerTenant(tenantId: Guid | string): SubscriptionBuilderForProducerTenant {
         this.throwIfProducerTenantIsAlreadyDefined();
-        this._producerTenant = TenantId.from(tenant);
-        this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenant);
+        this._producerTenantId = TenantId.from(tenantId);
+        this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenantId, this._callbacks.responses);
         return this._builder;
     }
 
@@ -47,12 +55,12 @@ export class SubscriptionBuilderForProducerMicroservice {
     }
 
     private throwIfProducerTenantIsAlreadyDefined() {
-        if (this._producerTenant) {
+        if (this._producerTenantId) {
             throw new SubscriptionBuilderMethodAlreadyCalled('fromProducerTenant()');
         }
     }
     private throwIfProducerTenantIsNotDefined() {
-        if (!this._producerTenant) {
+        if (!this._producerTenantId) {
             throw new SubscriptionDefinitionIncomplete('Producer Tenant', 'Call fromProducerTenant()');
         }
     }
