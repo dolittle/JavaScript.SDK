@@ -10,12 +10,14 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForConsumerScope } from './SubscriptionBuilderForConsumerScope';
+import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
+import { Observable } from 'rxjs';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
  */
 export class SubscriptionBuilderForProducerPartition {
-    private _consumerScope?: ScopeId;
+    private _consumerScopeId?: ScopeId;
     private _builder?: SubscriptionBuilderForConsumerScope;
 
     /**
@@ -32,12 +34,17 @@ export class SubscriptionBuilderForProducerPartition {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {Guid | string} consumerScope Stream to subscribe to events from.
+     * @param {Guid | string} scopeId Stream to subscribe to events from.
      */
-    toScope(consumerScope: Guid | string): SubscriptionBuilderForConsumerScope {
+    toScope(scopeId: Guid | string): SubscriptionBuilderForConsumerScope {
         this.throwIfConsumerScopeIsAlreadyDefined();
-        this._consumerScope = ScopeId.from(consumerScope);
-        this._builder = new SubscriptionBuilderForConsumerScope(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId, this._consumerScope);
+        this._consumerScopeId = ScopeId.from(scopeId);
+        this._builder = new SubscriptionBuilderForConsumerScope(
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId,
+            this._producerPartitionId,
+            this._consumerScopeId);
         return this._builder;
     }
 
@@ -46,18 +53,18 @@ export class SubscriptionBuilderForProducerPartition {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfConsumerScopeIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfConsumerScopeIsAlreadyDefined() {
-        if (this._consumerScope) {
+        if (this._consumerScopeId) {
             throw new SubscriptionBuilderMethodAlreadyCalled('toScope()');
         }
     }
     private throwIfConsumerScopeIsNotDefined() {
-        if (!this._consumerScope) {
+        if (!this._consumerScopeId) {
             throw new SubscriptionDefinitionIncomplete('Scope', 'Call toScope() with a non-default scope');
         }
     }

@@ -42,10 +42,10 @@ export class EventStore implements IEventStore {
 
     /** @inheritdoc */
     commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
-    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
     commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
-        if (this.isArrayOfUncommittedEvents(eventOrEvents)) {
-            return this.commitInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
+        if (this.isUncommittedEventOrEvents(eventOrEvents)) {
+            return this.commitInternal(this.asArray(eventOrEvents), eventSourceIdOrCancellation as Cancellation);
         }
         const eventSourceId = eventSourceIdOrCancellation as Guid | string;
         return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, eventType, false)], cancellation);
@@ -55,10 +55,6 @@ export class EventStore implements IEventStore {
     commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
-    }
-
-    private isArrayOfUncommittedEvents(eventOrEvents: any): eventOrEvents is UncommittedEvent[] {
-        return Array.isArray(eventOrEvents) && eventOrEvents.length > 0 && eventOrEvents[0].eventSourceId && eventOrEvents[0].content;
     }
 
     private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResult> {
@@ -93,5 +89,21 @@ export class EventStore implements IEventStore {
             eventType,
             public: isPublic
         };
+    }
+
+    private isUncommittedEvent(event: any): event is UncommittedEvent {
+        return event.eventSourceId && event.content;
+    }
+
+    private isArrayOfUncommittedEvents(events: any): events is UncommittedEvent[] {
+        return Array.isArray(events) && events.length > 0 && this.isUncommittedEvent(events[0]);
+    }
+
+    private isUncommittedEventOrEvents(eventOrEvents: any): eventOrEvents is UncommittedEvent | UncommittedEvent[] {
+        return this.isUncommittedEvent(eventOrEvents) || this.isArrayOfUncommittedEvents(eventOrEvents);
+    }
+
+    private asArray<T = any>(obj: T | T[]): T[] {
+        return Array.isArray(obj) ? obj : [obj];
     }
 }

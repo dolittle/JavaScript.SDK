@@ -10,6 +10,8 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerPartition } from './SubscriptionBuilderForProducerPartition';
+import { Observable } from 'rxjs';
+import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
@@ -36,7 +38,11 @@ export class SubscriptionBuilderForProducerStream {
     fromProducerPartition(partitionId: Guid | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
         this._producerPartitionId = PartitionId.from(partitionId);
-        this._builder = new SubscriptionBuilderForProducerPartition(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId, this._producerPartitionId);
+        this._builder = new SubscriptionBuilderForProducerPartition(
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId,
+            this._producerPartitionId);
         return this._builder;
     }
 
@@ -45,9 +51,9 @@ export class SubscriptionBuilderForProducerStream {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfProducerPartitionIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfProducerPartitionIsAlreadyDefined() {

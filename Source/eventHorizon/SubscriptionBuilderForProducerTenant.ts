@@ -10,6 +10,8 @@ import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
+import { Observable } from 'rxjs';
+import { SubscriptionCallbackArguments} from './SubscriptionCallbacks';
 
 /**
  * Represents the builder for building subscriptions on a tenant.
@@ -35,7 +37,10 @@ export class SubscriptionBuilderForProducerTenant {
     fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
         this.throwIfProducerStreamIsAlreadyDefined();
         this._producerStreamId = StreamId.from(streamId);
-        this._builder = new SubscriptionBuilderForProducerStream(this._producerMicroserviceId, this._producerTenantId, this._producerStreamId);
+        this._builder = new SubscriptionBuilderForProducerStream(
+            this._producerMicroserviceId,
+            this._producerTenantId,
+            this._producerStreamId);
         return this._builder;
     }
 
@@ -44,9 +49,9 @@ export class SubscriptionBuilderForProducerTenant {
      * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
      * @returns {Subscription}
      */
-    build(): Subscription {
+    build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfProducerStreamIsNotDefined();
-        return this._builder!.build();
+        return this._builder!.build(callbackArgumentsSource);
     }
 
     private throwIfProducerStreamIsAlreadyDefined() {

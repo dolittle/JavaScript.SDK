@@ -28,13 +28,13 @@ export interface IEventStore {
 
     /**
      * Commit a collection of events.
-     * @param {UncommittedEvent[]} events Collection of events.
+     * @param {UncommittedEvent|UncommittedEvent[]} eventOrEvents The event or events.
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns Promise<CommitEventsResult>
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * @summary on the actual type of the event.
      */
-    commit(events: UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single public event.
