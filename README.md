@@ -59,16 +59,16 @@ You can make this a bit more sophisticated by introducing a type for the event a
 unique artifact identifier. Add a file called `MyEvent.ts` and put the following in it.
 
 ```typescript
-import { artifact } from '@dolittle/sdk.artifacts';
+import { eventType } from '@dolittle/sdk';
 
-@artifact('715eb922-ce14-48f2-b93b-f05d2b2a529b')
+@eventType('715eb922-ce14-48f2-b93b-f05d2b2a529b')
 export class MyEvent {
     anInteger!: number;
     aString!: string;
 }
 ```
 
-This will create an association between the type and the artifact identifier, making it easier to use without having
+This will create an association between the event type and the given GUID, making it easier to use without having
 to pass along the identifier on calls. Change the initial code as follows to make use of the new type:
 
 ```typescript
@@ -77,6 +77,7 @@ import { MyEvent } from './MyEvent';
 
 const client = Client
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .withEventTypes(eventTypes => eventTypes.register(MyEvent))
     .build();
 
 const event = new MyEvent();
@@ -121,5 +122,5 @@ To run the test harness:
 $ yarn test
 ```
 
-## Documentation
+## Documentation and contributing
 More documentation on [dolittle.io](https://dolittle.io/).
