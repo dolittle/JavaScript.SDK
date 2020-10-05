@@ -3,7 +3,7 @@
 [![Build Status](https://dolittle.visualstudio.com/Dolittle%20open-source%20repositories/_apis/build/status/dolittle-runtime.JavaScript.SDK?branchName=master)](https://dolittle.visualstudio.com/Dolittle%20open-source%20repositories/_build/latest?definitionId=60&branchName=master)
 [![npm version](https://badge.fury.io/js/%40dolittle%2Fsdk.svg)](https://badge.fury.io/js/%40dolittle%2Fsdk)
 
-The repository holds the SDK for working with Dolittle for JavaScript.
+The repository holds the Dolittle JavaScript SDK.
 
 ## Requirements
 
@@ -31,15 +31,20 @@ Then you can add the following to commit an event.
 ```typescript
 import { Client } from '@dolittle/sdk';
 
-const client = Client.default();
-client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');
-client.commit({ someProperty:42 }, '88f25363-7ee9-4a6f-99c4-5f0e45495d30', '715eb922-ce14-48f2-b93b-f05d2b2a529b');
+const client = Client.
+    // example microservice id
+    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .build();
+client
+    .eventStore
+    // example tenant id
+    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+    .commit({ someProperty:42 }, '88f25363-7ee9-4a6f-99c4-5f0e45495d30', '715eb922-ce14-48f2-b93b-f05d2b2a529b');
 ```
 
-This gets you the default instance of the client. Dolittle is oriented around microservices and you'll notice that you
-can also pass in a unique identifier for your microservice as a parameter to `default()`.
+Dolittle is oriented around microservices so you have to specify which microservice you are creating a client for.
 
-The `executionContextManager` call is to set the current tenant identifier, as Dolittle is a fully multi-tenant solution.
+The `forTenant()` call is to set the current tenant identifier for the commit, as Dolittle is a fully multi-tenant solution.
 The runtime needs to be configured with a tenant and the MongoDB resource for the event storage, the environment configuration
 has this already and you'll find examples of this in the [tenants.json](./Samples/Environments/tenants.json) and
 the [resources.json](./Samples/Environments/resources.json) files.
@@ -69,13 +74,17 @@ to pass along the identifier on calls. Change the initial code as follows to mak
 import { Client } from '@dolittle/sdk';
 import { MyEvent } from './MyEvent';
 
-const client = Client.default();
-client.executionContextManager.currentFor('900893e7-c4cc-4873-8032-884e965e4b97');
+const client = Client
+    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
+    .build();
 
 const event = new MyEvent();
 event.anInteger = 42;
 event.aString = 'Forty two';
-client.commit(event, '88f25363-7ee9-4a6f-99c4-5f0e45495d30');
+client
+    .eventStore
+    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+    .commit(event, '88f25363-7ee9-4a6f-99c4-5f0e45495d30');
 ```
 
 Using a MongoDB tool, such as [Compass](https://www.mongodb.com/products/compass), you can navigate the event store
@@ -110,3 +119,6 @@ To run the test harness:
 ```shell
 $ yarn test
 ```
+
+## Documentation
+More documentation on [dolittle.io](https://dolittle.io/).
