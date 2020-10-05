@@ -1,9 +1,10 @@
 # JavaScript SDK
 
-[![Build Status](https://dolittle.visualstudio.com/Dolittle%20open-source%20repositories/_apis/build/status/dolittle-runtime.JavaScript.SDK?branchName=master)](https://dolittle.visualstudio.com/Dolittle%20open-source%20repositories/_build/latest?definitionId=60&branchName=master)
 [![npm version](https://badge.fury.io/js/%40dolittle%2Fsdk.svg)](https://badge.fury.io/js/%40dolittle%2Fsdk)
+![Build](https://github.com/dolittle/JavaScript.SDK/workflows/TypeScript%20Library%20CI%2FCD/badge.svg)
+![CodeQl](https://github.com/dolittle/JavaScript.SDK/workflows/CodeQL/badge.svg)
 
-The repository holds the Dolittle JavaScript SDK.
+This repository holds the Dolittle JavaScript SDK.
 
 ## Requirements
 
