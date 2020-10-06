@@ -29,10 +29,10 @@ export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.eve
      * Creates a {EventLogSequenceNumber} from a number.
      *
      * @static
-     * @param {number} value
+     * @param {number | EventLogSequenceNumber} value
      * @returns {Generation}
      */
-    static from(value: number): EventLogSequenceNumber {
-        return new EventLogSequenceNumber(value);
+    static from(value: number | EventLogSequenceNumber): EventLogSequenceNumber {
+        return new EventLogSequenceNumber(value instanceof EventLogSequenceNumber ? value.value : value);
     }
 }

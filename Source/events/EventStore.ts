@@ -41,9 +41,9 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
     commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: Guid | string | Cancellation, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         if (this.isUncommittedEventOrEvents(eventOrEvents)) {
             return this.commitInternal(this.asArray(eventOrEvents), eventSourceIdOrCancellation as Cancellation);
         }
@@ -52,7 +52,7 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: Guid | string, eventType?: EventType | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
     }
@@ -77,9 +77,9 @@ export class EventStore implements IEventStore {
             })).toPromise();
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: Guid | string, eventTypeOrId?: EventType | Guid | string, isPublic = false): UncommittedEvent {
+    private toUncommittedEvent(content: any, eventSourceId: EventSourceId | Guid | string, eventTypeOrId?: EventType | EventTypeId | Guid | string, isPublic = false): UncommittedEvent {
         let eventType: EventType | EventTypeId | undefined;
-        if (eventTypeOrId != null) {
+        if (eventTypeOrId !== undefined) {
             if (eventTypeOrId instanceof EventType) eventType = eventTypeOrId;
             else eventType = EventTypeId.from(eventTypeOrId);
         }

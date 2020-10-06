@@ -34,9 +34,9 @@ export class SubscriptionBuilderForProducerPartition {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {Guid | string} scopeId Stream to subscribe to events from.
+     * @param {ScopeId | Guid | string} scopeId Stream to subscribe to events from.
      */
-    toScope(scopeId: Guid | string): SubscriptionBuilderForConsumerScope {
+    toScope(scopeId: ScopeId | Guid | string): SubscriptionBuilderForConsumerScope {
         this.throwIfConsumerScopeIsAlreadyDefined();
         this._consumerScopeId = ScopeId.from(scopeId);
         this._builder = new SubscriptionBuilderForConsumerScope(

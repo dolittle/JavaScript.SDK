@@ -29,10 +29,10 @@ export class SubscriptionsBuilderForConsumerTenant {
 
     /**
      * Sets the producer microservice to subscribe to events from.
-     * @param {Guid | string} microserviceId Microservice to build for.
+     * @param {Guid | string | MicroserviceId} microserviceId Microservice to build for.
      * @returns {SubscriptionBuilderForProducerMicroservice}
      */
-    fromProducerMicroservice(microserviceId: Guid | string): SubscriptionBuilderForProducerMicroservice {
+    fromProducerMicroservice(microserviceId: MicroserviceId | Guid | string): SubscriptionBuilderForProducerMicroservice {
         const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microserviceId));
         this._subscriptionBuilders.push(builder);
         return builder;

@@ -28,16 +28,26 @@ export class EventHandlersBuilder {
 
     /**
      * Start building an event handler.
-     * @param {Guid | string} eventHandlerId The unique identifier of the event handler.
+     * @param {EventHandlerId | Guid | string} eventHandlerId The unique identifier of the event handler.
      * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
      */
-    createEventHandler(eventHandlerId: Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
+    createEventHandler(eventHandlerId: EventHandlerId | Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
         const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
         callback(builder);
         this._eventHandlerBuilders.push(builder);
         return this;
     }
 
+    /**
+     * Register a type as an event handler.
+     * @param type The type to register as an event handler.
+     */
+    register<T = any>(type: Constructor<T>): EventHandlersBuilder;
+    /**
+     * Register an instance as an event handler.
+     * @param instance The instance to register as an event handler.
+     */
+    register<T = any>(instance: T): EventHandlersBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
         this._eventHandlerBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
         return this;

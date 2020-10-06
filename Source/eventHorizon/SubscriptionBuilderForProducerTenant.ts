@@ -32,9 +32,9 @@ export class SubscriptionBuilderForProducerTenant {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {Guid | string} tenant Stream to subscribe to events from.
+     * @param {StreamId | Guid | string} tenant Stream to subscribe to events from.
      */
-    fromProducerStream(streamId: Guid | string): SubscriptionBuilderForProducerStream {
+    fromProducerStream(streamId: StreamId | Guid | string): SubscriptionBuilderForProducerStream {
         this.throwIfProducerStreamIsAlreadyDefined();
         this._producerStreamId = StreamId.from(streamId);
         this._builder = new SubscriptionBuilderForProducerStream(

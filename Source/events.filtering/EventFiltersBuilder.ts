@@ -31,11 +31,11 @@ export class EventFiltersBuilder {
 
     /**
      * Start building for a specific filter.
-     * @param {Guid | string} filterId The identifier of the filter.
+     * @param {FilterId | Guid | string} filterId The identifier of the filter.
      * @param {PrivateEventFilterBuilderCallback} callback Callback for building the event filter.
      * @returns {EventFiltersBuilder} Continuation of the builder
      */
-    createPrivateFilter(filterId: Guid | string, callback: PrivateEventFilterBuilderCallback): EventFiltersBuilder {
+    createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): EventFiltersBuilder {
         const builder = new PrivateEventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._privateFilterBuilders.push(builder);
@@ -44,11 +44,11 @@ export class EventFiltersBuilder {
 
     /**
      * Start building for a specific filter.
-     * @param {Guid | string} filterId The identifier of the filter.
+     * @param {FilterId | Guid | string} filterId The identifier of the filter.
      * @param {PublicEventFilterBuilderCallback} callback Callback for building the event filter.
      * @returns {EventFiltersBuilder} Continuation of the builder
      */
-    createPublicFilter(filterId: Guid | string, callback: PublicEventFilterBuilderCallback): EventFiltersBuilder {
+    createPublicFilter(filterId: FilterId | Guid | string, callback: PublicEventFilterBuilderCallback): EventFiltersBuilder {
         const builder = new PublicEventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._publicFilterBuilders.push(builder);
