@@ -10,7 +10,7 @@ import { DishPrepared } from './DishPrepared';
 export class DishHandler {
 
     @handles(DishPrepared)
-    DishPrepared(event: DishPrepared, eventContext: EventContext) {
-        console.log(`${event.chef} has prepared ${event.dish}. Yummm!`);
+    dishPrepared(event: DishPrepared, eventContext: EventContext) {
+        console.log(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
     }
 }

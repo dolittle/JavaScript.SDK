@@ -20,7 +20,7 @@ export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, o
         EventHandlerDecoratedTypes.register(new EventHandlerDecoratedType(
             EventHandlerId.from(eventHandlerId),
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
-            !!options.partitioned,
+            options.partitioned === undefined || options.partitioned,
             target));
     };
 }
