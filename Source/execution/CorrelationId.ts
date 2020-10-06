@@ -21,10 +21,13 @@ export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.Corr
      * Creates a {CorrelationId} from a guid.
      *
      * @static
-     * @param {(string | Guid)} id
+     * @param {CorrelationId | Guid | string} id
      * @returns {CorrelationId}
      */
-    static from(id: string | Guid): CorrelationId {
+    static from(id: CorrelationId | Guid | string): CorrelationId {
+        if (id instanceof CorrelationId) {
+            return id;
+        }
         return new CorrelationId(Guid.as(id));
     };
 

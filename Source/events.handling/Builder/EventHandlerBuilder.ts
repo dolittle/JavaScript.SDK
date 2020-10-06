@@ -21,31 +21,15 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
 export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
-    private _methodsBuilder!: EventHandlerMethodsBuilder;
+    private _methodsBuilder?: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
-    private _partitioned = true;
+    private _partitioned!: boolean;
 
     /**
      * Initializes a new instance of {@link EventHandlerBuilder}.
      * @param {EventHandlerId} _eventHandlerId The unique identifier of the event handler to build for.
      */
     constructor(private _eventHandlerId: EventHandlerId) {
-    }
-
-    /**
-     * Gets the {@link ScopeId} the event handler operates on.
-     * @returns {ScopeId}
-     */
-    get scopeId(): ScopeId {
-        return this._scopeId;
-    }
-
-    /**
-     * Gets whether or not the event handler is partitioned.
-     * @returns {boolean}
-     */
-    get isPartitioned(): boolean {
-        return this._partitioned;
     }
 
     /**
@@ -70,10 +54,10 @@ export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Defines the event handler to operate on a specific {@link ScopeId}.
-     * @param {Guid | string} scopeId Scope the event handler operates on.
+     * @param {ScopeId | Guid | string} scopeId Scope the event handler operates on.
      * @returns {EventHandlerBuilder}
      */
-    inScope(scopeId: Guid | string): EventHandlerBuilder {
+    inScope(scopeId: ScopeId | Guid | string): EventHandlerBuilder {
         this._scopeId = ScopeId.from(scopeId);
         return this;
     }
@@ -88,8 +72,8 @@ export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
         logger: Logger,
         cancellation: Cancellation): void {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
-        if (this._methodsBuilder == null) {
-            logger.warn(`Failed to build event handler ${EventHandlerId}. No event handler methods are configured for event handler`);
+        if (this._methodsBuilder === undefined) {
+            logger.warn(`Failed to build event handler ${this._eventHandlerId}. No event handler methods are configured for event handler`);
             return;
         }
         const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, logger);

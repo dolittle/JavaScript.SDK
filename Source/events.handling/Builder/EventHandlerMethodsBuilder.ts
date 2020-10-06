@@ -6,12 +6,12 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.artifacts';
 
 import { EventHandlerId, EventHandlerSignature } from '../index';
 
-type TypeOrEventTypeOrId = Constructor<any> | EventType | Guid | string;
-type TypeToMethodPair = [TypeOrEventTypeOrId, EventHandlerSignature<any>];
+type TypeOrEventType = Constructor<any> | EventType;
+type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];
 export class EventHandlerMethodsBuilder {
 
     private readonly _typeToMethodPairs: TypeToMethodPair[];
@@ -22,14 +22,45 @@ export class EventHandlerMethodsBuilder {
 
     /**
      * Add a handler method for handling the event.
-     * @template T Type of event, when using type rather than artifact - default is any.
-     * @param {Constructor<T>|EventType|Guid|string} typeOrEventTypeOrId The type of event or the artifact or identifier of the artifact.
+     * @template T Type of event.
+     * @param {Constructor<T>} type The type of event.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | Guid | string, method: EventHandlerSignature<T>) {
-        this._typeToMethodPairs.push([typeOrEventTypeOrId, method]);
-    }
+    handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): void;
+    /**
+     * Add a handler method for handling the event.
+     * @param {EventType} eventType The identifier of the event.
+     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     */
+    handle(eventType: EventType, method: EventHandlerSignature): void;
+    /**
+     * Add a handler method for handling the event.
+     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
+     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     */
+    handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
+    /**
+     * Add a handler method for handling the event.
+     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
+     * @param {Geneartion | number} generation The generation of the event type.
+     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     */
+    handle(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: EventHandlerSignature): void;
+    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | Generation | number, maybeMethod?: EventHandlerSignature<T>) {
+        const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
+        if (typeOrEventTypeOrId instanceof EventType) {
+            this._typeToMethodPairs.push([typeOrEventTypeOrId, method]);
+        } else if (typeOrEventTypeOrId instanceof EventTypeId || typeOrEventTypeOrId instanceof Guid || typeof typeOrEventTypeOrId === 'string') {
+            let generation = Generation.first;
+            if (methodOrGeneration instanceof Generation || typeof methodOrGeneration === 'number') {
+                generation = Generation.from(methodOrGeneration);
+            }
+            this._typeToMethodPairs.push([new EventType(EventTypeId.from(typeOrEventTypeOrId), generation), method]);
+        } else {
+            this._typeToMethodPairs.push([typeOrEventTypeOrId, method]);
+        }
+    }
 
     tryAddEventHandlerMethods(eventTypes: IEventTypes, eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>, logger: Logger): boolean {
         let allMethodsValid = true;
@@ -44,12 +75,10 @@ export class EventHandlerMethodsBuilder {
         return allMethodsValid;
     }
 
-    private getEventType(typeOrEventTypeOrId: TypeOrEventTypeOrId, eventTypes: IEventTypes): EventType {
+    private getEventType(typeOrEventTypeOrId: TypeOrEventType, eventTypes: IEventTypes): EventType {
         let eventType: EventType;
         if (typeOrEventTypeOrId instanceof EventType) {
             eventType = typeOrEventTypeOrId;
-        } else if (typeOrEventTypeOrId instanceof Guid || typeof typeOrEventTypeOrId === 'string') {
-            eventType = new EventType(EventTypeId.from(typeOrEventTypeOrId));
         } else {
             eventType = eventTypes.getFor(typeOrEventTypeOrId);
         }

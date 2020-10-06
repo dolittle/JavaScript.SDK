@@ -26,7 +26,8 @@ export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Envi
      */
     static development: Environment = Environment.from('Development');
 
-    static from(env: string): Environment {
+    static from(env: Environment | string): Environment {
+        if (env instanceof Environment) return env;
         return new Environment(env);
     };
 }

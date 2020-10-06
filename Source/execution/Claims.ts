@@ -24,17 +24,8 @@ export class Claims implements Iterable<Claim> {
     }
 
     /** @inheritdoc */
-    [Symbol.iterator](): Iterator<any, any, undefined> {
-        let position = 0;
-        const self = this;
-        return {
-            next() {
-                return {
-                    done: position === self._claims.length,
-                    value: self._claims[position++]
-                };
-            }
-        };
+    [Symbol.iterator](): Iterator<Claim>{
+        return this._claims[Symbol.iterator]();
     }
 
     /**

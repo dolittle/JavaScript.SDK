@@ -4,6 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { EventTypeId } from '@dolittle/sdk.artifacts';
+
 import { EventHandlerSignature } from '../index';
 
 /**
@@ -14,14 +16,14 @@ export class HandlesDecoratedMethod {
     /**
      * Initializes a new instance of {@link HandlesDecoratedMethod}.
      * @param {Constructor<any>} owner Owner of the method.
-     * @param {Constructor<any> | Guid | string} eventTypeOrId Type or event type id of event it handles.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event it handles.
      * @param {number | undefined} generation Generation of the event or undefined.
      * @param {EventHandlerSignature<any>} method The actual method that handles the event.
      * @param {string} name The name of the method.
      */
     constructor(
         readonly owner: Constructor<any>,
-        readonly eventTypeOrId: Constructor<any> | Guid | string,
+        readonly eventTypeOrId: Constructor<any> | EventTypeId | Guid | string,
         readonly generation: number | undefined,
         readonly method: EventHandlerSignature<any>,
         readonly name: string) {
