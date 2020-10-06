@@ -4,6 +4,7 @@
 module.exports = {
     extends: '../../.eslintrc.js',
     rules: {
-        "no-restricted-globals": 'off'
+        'no-restricted-globals': 'off',
+        '@typescript-eslint/naming-convention' : 'off'
     }
 };
