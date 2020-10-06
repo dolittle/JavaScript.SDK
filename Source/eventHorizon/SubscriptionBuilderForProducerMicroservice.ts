@@ -30,9 +30,9 @@ export class SubscriptionBuilderForProducerMicroservice {
 
     /**
      * Specifies from which tenant we should get events from in the other microservice.
-     * @param {Guid | string} tenantId Tenant for the subscription.
+     * @param {TenantId | Guid | string} tenantId Tenant for the subscription.
      */
-    fromProducerTenant(tenantId: Guid | string): SubscriptionBuilderForProducerTenant {
+    fromProducerTenant(tenantId: TenantId | Guid | string): SubscriptionBuilderForProducerTenant {
         this.throwIfProducerTenantIsAlreadyDefined();
         this._producerTenantId = TenantId.from(tenantId);
         this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenantId);

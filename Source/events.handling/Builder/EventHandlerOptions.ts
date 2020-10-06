@@ -2,5 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+import { ScopeId } from '@dolittle/sdk.events';
 
-export type EventHandlerOptions = { inScope?: Guid | string, unpartitioned?: boolean };
+export type EventHandlerOptions = { inScope?: ScopeId | Guid | string, partitioned?: boolean };

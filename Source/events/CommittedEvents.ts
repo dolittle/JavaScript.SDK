@@ -24,17 +24,8 @@ export class CommittedEvents implements Iterable<CommittedEvent> {
     }
 
     /** @inheritdoc */
-    [Symbol.iterator](): Iterator<any, any, undefined> {
-        let position = 0;
-        const self = this;
-        return {
-            next() {
-                return {
-                    done: position === self._events.length,
-                    value: self._events[position++]
-                };
-            }
-        };
+    [Symbol.iterator](): Iterator<CommittedEvent> {
+        return this._events[Symbol.iterator]();
     }
 
     /**

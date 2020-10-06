@@ -9,12 +9,12 @@ import { TenantId } from './TenantId';
 
 declare module './index' {
     interface ExecutionContext {
-        forTenant(tenantId: Guid | string): ExecutionContext;
+        forTenant(tenantId: TenantId | Guid | string): ExecutionContext;
         forCorrelation(correlationId: Guid | string): ExecutionContext;
         forClaims(claims: Claims): ExecutionContext;
     }
 }
-ExecutionContext.prototype.forTenant = function (tenantId: Guid | string) {
+ExecutionContext.prototype.forTenant = function (tenantId: TenantId | Guid | string) {
     return new ExecutionContext(
         this.microserviceId,
         TenantId.from(tenantId),
@@ -23,7 +23,7 @@ ExecutionContext.prototype.forTenant = function (tenantId: Guid | string) {
         this.correlationId,
         this.claims);
 };
-ExecutionContext.prototype.forCorrelation = function (correlationId: Guid | string) {
+ExecutionContext.prototype.forCorrelation = function (correlationId: CorrelationId | Guid | string) {
     return new ExecutionContext(
         this.microserviceId,
         this.tenantId,

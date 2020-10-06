@@ -58,15 +58,19 @@ export class ClientBuilder {
     }
 
     /**
-     * Sets the environment where the software is running.
-     * @param {string} [environment] The environment the software is running in. (e.g. development, production).
+     *  Sets the version of the microservice.
+     * @param {Version} version Version of the microservice.
      * @returns {ClientBuilder} The client builder for continuation.
      */
-    withEnvironment(environment: string): ClientBuilder {
-        this._environment = Environment.from(environment);
-        return this;
-    }
-
+    withVersion(version: Version): ClientBuilder;
+    /**
+     * Sets the version of the microservice.
+     * @param {number} major Major version of the microservice.
+     * @param {number} minor Minor version of the microservice.
+     * @param {number} patch Patch version of the microservice.
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withVersion(major: number, minor: number, patch: number): ClientBuilder;
     /**
      * Sets the version of the microservice.
      * @param {number} major Major version of the microservice.
@@ -77,26 +81,22 @@ export class ClientBuilder {
      * @returns {ClientBuilder} The client builder for continuation.
      */
     withVersion(major: number, minor: number, patch: number, build: number, preReleaseString: string): ClientBuilder;
-    /**
-     * Sets the version of the microservice.
-     * @param {number} major Major version of the microservice.
-     * @param {number} minor Minor version of the microservice.
-     * @param {number} patch Patch version of the microservice.
-     * @returns {ClientBuilder} The client builder for continuation.
-     */
-    withVersion(major: number, minor: number, patch: number): ClientBuilder;
-    /**
-     *  Sets the version of the microservice.
-     * @param {Version} version Version of the microservice.
-     * @returns {ClientBuilder} The client builder for continuation.
-     */
-    withVersion(version: Version): ClientBuilder;
     withVersion(versionOrMajor: Version | number, minor?: number, patch?: number, build?: number, preReleaseString?: string): ClientBuilder {
         if (typeof versionOrMajor == 'number') {
             this._version = new Version(versionOrMajor as number, minor as number, patch as number, build || 0, preReleaseString || '');
         } else if (versionOrMajor instanceof Version) {
             this._version = versionOrMajor;
         }
+        return this;
+    }
+
+    /**
+     * Sets the environment where the software is running.
+     * @param {Environment | string} environment The environment the software is running in. (e.g. development, production).
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withEnvironment(environment: Environment | string): ClientBuilder {
+        this._environment = Environment.from(environment);
         return this;
     }
 
@@ -142,7 +142,6 @@ export class ClientBuilder {
         callback(this._filtersBuilder);
         return this;
     }
-
 
     /**
      * Connect to a specific host and port for the Dolittle runtime.

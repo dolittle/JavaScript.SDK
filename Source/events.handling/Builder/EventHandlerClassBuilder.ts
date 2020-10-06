@@ -54,13 +54,13 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
 
         logger.debug(`Building event handler of type ${this._eventHandlerType.name}`);
         const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
-        if (decoratedType == null) {
+        if (decoratedType === undefined) {
             logger.warn(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
             return;
         }
         logger.debug(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
         const methods = HandlesDecoratedMethods.methodsPerEventHandler.get(this._eventHandlerType);
-        if (methods == null) {
+        if (methods === undefined) {
             logger.warn(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler most to be decorated with @${handlesDecorator.name}`);
             return;
         }
@@ -91,10 +91,6 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
             }
 
             const eventHandlerMethod = this.createEventHandlerMethod(method, container);
-            if (eventHandlerMethod == null) {
-                allMethodsValid = false;
-                continue;
-            }
 
             if (eventTypesToMethods.has(eventType!)) {
                 allMethodsValid = false;
@@ -124,7 +120,7 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
                 true,
                 new EventType(
                     EventTypeId.from(method.eventTypeOrId),
-                    method.generation !== undefined ? Generation.from(method.generation) : undefined)
+                    method.generation ? Generation.from(method.generation) : Generation.first)
             ];
         } else if (!eventTypes.hasFor(method.eventTypeOrId)) {
             return [false, undefined];
@@ -133,7 +129,7 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
         }
     }
 
-    private eventTypeIsId(eventTypeOrId: Constructor<any> | Guid | string): eventTypeOrId is Guid | string {
-        return eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
+        return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
     }
 }

@@ -11,7 +11,6 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Proces
 
 import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
-import { FilterEventCallback } from './FilterEventCallback';
 import { FilterId } from './FilterId';
 import { IFilterProcessor } from './IFilterProcessor';
 import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
@@ -31,18 +30,11 @@ export class PrivateEventFilterBuilder {
     constructor(private _filterId: FilterId) {}
 
     /**
-     * Get the {@link ScopeId} the filter operates on.
-     */
-    get scopeId() {
-        return this._scopeId;
-    }
-
-    /**
      * Defines which {@link ScopeId} the filter operates on.
-     * @param {ScopeId} scopeId Scope the filter operates on.
+     * @param {ScopeId | Guid | string} scopeId Scope the filter operates on.
      * @returns {PrivateEventFilterBuilder}
      */
-    inScope(scopeId: Guid | string): PrivateEventFilterBuilder {
+    inScope(scopeId: ScopeId | Guid | string): PrivateEventFilterBuilder {
         this._scopeId = ScopeId.from(scopeId);
         return this;
     }

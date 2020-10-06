@@ -9,6 +9,7 @@ import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
+import { Guid } from '@dolittle/rudiments';
 
 import { ClientBuilder } from './ClientBuilder';
 
@@ -38,10 +39,10 @@ export class Client {
 
     /**
      * Create a client builder for a Microservice
-     * @param {MicroserviceId | string} microserviceId The unique identifier for the microservice.
+     * @param {MicroserviceId | Guid | string} microserviceId The unique identifier for the microservice.
      * @returns {ClientBuilder} The builder to build a {Client} from.
      */
-    static forMicroservice(microserviceId: MicroserviceId | string) {
+    static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
         return new ClientBuilder(MicroserviceId.from(microserviceId));
     }
 }

@@ -61,7 +61,7 @@ export class EventTypes implements IEventTypes {
     /** @inheritdoc */
     resolveFrom(object: any, input?: EventType | EventTypeId | Guid | string): EventType {
         let eventType: EventType | undefined;
-        if (input != null) {
+        if (input !== undefined) {
             eventType = input instanceof EventType ? input : new EventType(EventTypeId.from(input));
         } else if (object && this.hasFor(Object.getPrototypeOf(object).constructor)) {
             eventType = this.getFor(Object.getPrototypeOf(object).constructor);

@@ -25,12 +25,12 @@ export class SubscriptionsBuilder {
 
     /**
      * Configure subscriptions for a tenant in our microservice.
-     * @param {Guid | string} tenantId The tenant in our microservice.
+     * @param {TenantId | Guid | string} tenantId The tenant in our microservice.
      * @param {TenantWithSubscriptionsBuilderCallback} callback The subscriptions builder callback.
      * @returns {SubscriptionsBuilder}
      * @summary Two microservices does not need to be aligned on tenancy. This allows for that purpose.
      */
-    forTenant(tenantId: Guid | string, callback: (builder: SubscriptionsBuilderForConsumerTenant) => void): SubscriptionsBuilder {
+    forTenant(tenantId: TenantId | Guid | string, callback: (builder: SubscriptionsBuilderForConsumerTenant) => void): SubscriptionsBuilder {
         const builder = new SubscriptionsBuilderForConsumerTenant(TenantId.from(tenantId), this._callbacks.responses);
         callback(builder);
         this._tenantSubscriptionsBuilders.push(builder);
