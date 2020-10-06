@@ -1,8 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-// Sample code for the tutorial at https://dolittle.io/tutorial/getting-started/typescript/
+// Sample code for the tutorial at https://dolittle.io/tutorials/getting-started/typescript/
 
 import { Client } from '@dolittle/sdk';
+import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 
@@ -17,5 +18,5 @@ const client = Client
 const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
 client.eventStore
-    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+    .forTenant(TenantId.development)
     .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
