@@ -63,12 +63,12 @@ export class EventTypes implements IEventTypes {
         let eventType: EventType | undefined;
         if (input != null) {
             eventType = input instanceof EventType ? input : new EventType(EventTypeId.from(input));
-        } else if (object && this.hasFor(object.constructor)) {
-            eventType = this.getFor(object.constructor);
+        } else if (object && this.hasFor(Object.getPrototypeOf(object).constructor)) {
+            eventType = this.getFor(Object.getPrototypeOf(object).constructor);
         }
 
         if (!eventType) {
-            throw new UnableToResolveEventType(object, input);
+            throw new UnableToResolveEventType(object);
         }
 
         return eventType;
