@@ -4,20 +4,15 @@
 import { Exception } from '@dolittle/rudiments';
 
 /**
- * Exception that is thrown when an {@link EventType} is not possible to be resolved
+ * Exception that is thrown when it is not possible to resolve the {@link EventType} from an object.
  */
 export class UnableToResolveEventType extends Exception {
 
     /**
-     * Initializes a new instance of {@link UnknownEventType}
-     * @param {Function} type Type of event that is unknown.
-     * @param {*} [input] Optionally the input that was given
+     * Initializes a new instance of {@link UnableToResolveEventType}
+     * @param {any} object The object that was attempted to resolve the event from.
      */
-    constructor(type: Function, input?: any) {
-        let message = `'${type.name}' does not have an associated event type.`;
-        if (input) {
-            message = `${message}. Following input '${input}' was given in addition.`;
-        }
-        super(message);
+    constructor(object: any) {
+        super(`'${Object.getPrototypeOf(object).constructor.name}' does not have an associated event type.`);
     }
 }
