@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import * as grpc from 'grpc';
+import * as grpc from '@grpc/grpc-js';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
@@ -19,7 +19,8 @@ import { UnaryMethod, ClientStreamMethod, ServerStreamMethod, DuplexMethod } fro
  */
 export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method: UnaryMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
-    const call = method.call(client, argument, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
+    const metadata = new grpc.Metadata();
+    const call = method.call(client, argument, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
             subject.error(error);
         } else {
@@ -41,7 +42,8 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
  */
 export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, method: ClientStreamMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
-    const stream = method.call(client, null, null, (error: grpc.ServiceError | null, message?: TResponse) => {
+    const metadata = new grpc.Metadata();
+    const stream = method.call(client, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
             subject.error(error);
         } else {
@@ -80,7 +82,8 @@ export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, 
  */
 export function reactiveDuplex<TRequest, TResponse>(client: grpc.Client, method: DuplexMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
-    const stream = method.call(client, null, null);
+    const metadata = new grpc.Metadata();
+    const stream = method.call(client, metadata, {});
     handleCancellation(stream, cancellation);
     handleClientRequests(stream, requests, subject);
     handleServerResponses(stream, subject);
