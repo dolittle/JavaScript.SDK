@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { Logger } from 'winston';
-import * as grpc from 'grpc';
+import * as grpc from '@grpc/grpc-js';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Client } from '@dolittle/sdk';
-
+import { TenantId } from '@dolittle/sdk.execution';
 import { MyEventHandler } from './MyEventHandler';
 import { MyEvent } from './MyEvent';
 import { PartitionId } from '@dolittle/sdk.events';
@@ -15,9 +15,9 @@ const client = Client
     .withEventHandlers(eventHandlers =>
         eventHandlers.register(MyEventHandler))
     .withEventHorizons(_ => {
-        _.forTenant('900893e7-c4cc-4873-8032-884e965e4b97', ts => {
+        _.forTenant(TenantId.development, ts => {
             ts.fromProducerMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
-                .fromProducerTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+                .fromProducerTenant(TenantId.development)
                 .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
                 .fromProducerPartition(PartitionId.unspecified.value)
                 .toScope('406d6473-7cc9-44a6-a55f-775c1021d957')
@@ -40,5 +40,5 @@ event.aString = 'Forty two';
 
 client
     .eventStore
-    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
+    .forTenant(TenantId.development)
     .commitPublic(event, 'd8cb7301-4bec-4451-a72b-2db53c6dc05d');

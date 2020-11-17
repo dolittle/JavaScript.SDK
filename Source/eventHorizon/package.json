@@ -34,7 +34,7 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "5.1.19",
+        "@dolittle/runtime.contracts": "5.1.21",
         "@dolittle/sdk.events": "14.0.1",
         "@dolittle/sdk.artifacts": "14.0.1",
         "@dolittle/sdk.execution": "14.0.1",
