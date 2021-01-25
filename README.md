@@ -19,7 +19,7 @@ Dolittle is a decentralized, distributed, event-driven microservice platform bui
 
 This is our C# SDK, install it with:
 ```shell
-npm install @dolittle/SDK 
+npm install @dolittle/sdk 
 ```
 
 ## Requirements
