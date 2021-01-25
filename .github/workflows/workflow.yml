@@ -41,12 +41,13 @@ jobs:
 
     - name: Create GitHub Release
       if: ${{ steps.context.outputs.should-publish == 'true' }}
-      uses: dolittle/github-release-action@v1 # Replace with ./ if used withing dolittle/github-release-action
+      uses: dolittle/github-release-action@v2
       with:
         token: ${{  secrets.BUILD_PAT  }}
-        cascading-release: ${{ steps.context.outputs.cascading-release }}
         version: ${{ steps.increment-version.outputs.next-version }}
-    - name: Release javascript 
+        body: ${{ steps.context.outputs.pr-body }}
+
+    - name: Release JavaScript 
       if: ${{ steps.context.outputs.should-publish == 'true' }}
       uses: dolittle/release-typescript-lib-action@v1
       with:
@@ -54,4 +55,3 @@ jobs:
         root: '.'
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        
