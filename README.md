@@ -1,10 +1,26 @@
-# JavaScript SDK
+<h1 align="center"><img src="https://raw.githubusercontent.com/dolittle/Runtime/master/Documentation/dolittle_negativ_horisontal_RGB.svg" alt="Dolittle"></h1>
 
-[![npm version](https://badge.fury.io/js/%40dolittle%2Fsdk.svg)](https://badge.fury.io/js/%40dolittle%2Fsdk)
-[![Build Status](https://github.com/dolittle/JavaScript.SDK/workflows/TypeScript%20Library%20CI%2FCD/badge.svg)](https://github.com/dolittle/JavaScript.SDK/actions?query=workflow%3A%22TypeScript+Library+CI%2FCD%22)
-[![CodeQl](https://github.com/dolittle/JavaScript.SDK/workflows/CodeQL/badge.svg)](https://github.com/dolittle/JavaScript.SDK/actions?query=workflow%3ACodeQL)
+<h4 align="center">
+    <a href="https:/dolittle.io">Documentation</a> |
+    <a href="https://dolittle.io/docs/tutorials/getting_started/">Tutorial</a> |
+    <a href="https:/github.com/dolittle/Runtime">Runtime</a> |
+    <a href="https:/github.com/dolittle/DotNet.SDK">C# SDK</a>
+</h4>
 
-This repository holds the Dolittle JavaScript SDK.
+---
+
+<p align="center">
+    <a href="https://www.npmjs.com/package/@dolittle/sdk"><img src="https://img.shields.io/npm/v/@dolittle/sdk?logo=npm" alt="Latest Nuget package"></a>
+    <a href="https://github.com/dolittle/JavaScript.SDK/actions?query=workflow%3A%22TypeScript+Library+CI%2FCD%22"><img src="https://github.com/dolittle/JavaScript.SDK/workflows/TypeScript%20Library%20CI%2FCD/badge.svg" alt="Build status"></a>
+    <a href="https://github.com/dolittle/JavaScript.SDK/actions?query=workflow%3ACodeQL"><img src="https://github.com/dolittle/JavaScript.SDK/workflows/CodeQL/badge.svg" alt="CodeQL status"></a>
+</p>
+
+Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.
+
+This is our C# SDK, install it with:
+```shell
+npm install @dolittle/SDK 
+```
 
 ## Requirements
 
