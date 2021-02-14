@@ -1,8 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+
+export { AggregateRootId } from './AggregateRootId';
+export { AggregateRootVersion } from './AggregateRootVersion';
+export { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
+export { CommittedAggregateEvent } from './CommittedAggregateEvent';
+export { CommittedAggregateEvents } from './CommittedAggregateEvents';
+export { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAggregateRoot';
+export { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';
+export { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { MissingExecutionContext } from './MissingExecutionContext';
+export { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
 export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventSourceId } from './EventSourceId';
@@ -28,5 +38,5 @@ export {
     EventTypesBuilder,
     EventTypesBuilderCallback,
     EventTypesFromDecorators,
-    UnableToResolveEventType,UnknownEventType
+    UnableToResolveEventType, UnknownEventType
 } from '@dolittle/sdk.artifacts';
