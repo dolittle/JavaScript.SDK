@@ -50,7 +50,7 @@ export class CommittedAggregateEvent extends CommittedEvent {
             isPublic,
             false,
             EventLogSequenceNumber.first,
-            new DateTime());
+            DateTime.fromJSDate(new Date()));
     }
 }
 
