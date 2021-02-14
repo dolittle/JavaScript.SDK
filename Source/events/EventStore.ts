@@ -18,6 +18,7 @@ import {
     FetchForAggregateRequest
 } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
+import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
 
 import { CommittedEvents } from './CommittedEvents';
 import { IEventStore } from './IEventStore';
@@ -36,6 +37,7 @@ import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 import { Aggregate } from '@dolittle/runtime.contracts/Runtime/Events/Aggregate_pb';
 
 import { syncPromise } from './syncPromise';
+import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -117,22 +119,8 @@ export class EventStore implements IEventStore {
             .pipe(map(response => {
                 const events = response.getEvents();
                 const failure = response.getFailure();
-                let convertedEvents: CommittedAggregateEvent[] = [];
-
-                if (!failure && events) {
-                    const eventsList = events.getEventsList()!;
-                    const startVersion = events.getAggregaterootversion() + 1 - (eventsList.length);
-
-                    convertedEvents = eventsList.map((event, index) =>
-                        EventConverters.toSDKAggregate(
-                            aggregateRootId,
-                            eventSourceId,
-                            AggregateRootVersion.from(startVersion + index),
-                            event));
-                } else {
-                    this._logger.error(`Problems fetching events for aggregate root '${aggregateRootId}' for events source id '${eventSourceId}' with reason '${failure?.getReason()}'`);
-                }
-                return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
+                const committedEvents = this.toCommittedAggregateEvents(aggregateRootId, eventSourceId, events, failure);
+                return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...committedEvents);
             })).toPromise();
     }
 
@@ -188,23 +176,26 @@ export class EventStore implements IEventStore {
                 const events = response.getEvents();
                 const failure = response.getFailure();
 
-                let convertedEvents: CommittedAggregateEvent[] = [];
-                if (!failure && events) {
-                    const eventsList = events.getEventsList()!;
-                    const startVersion = events.getAggregaterootversion() - (eventsList.length - 1);
-
-                    convertedEvents = eventsList.map((event, index) =>
-                        EventConverters.toSDKAggregate(
-                            aggregateRootId,
-                            eventSourceId,
-                            AggregateRootVersion.from(startVersion + index),
-                            event));
-                } else {
-                    this._logger.error(`Problems committing events for aggregate root '${aggregateRootId}' for events source id '${eventSourceId}' with reason '${failure?.getReason()}'`);
-                }
-                const committedEvents = new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
+                const committedEvents = this.toCommittedAggregateEvents(aggregateRootId, eventSourceId, events, failure);
                 return new CommitAggregateEventsResult(committedEvents, failures.toSDK(failure));
             })).toPromise();
+    }
+
+    private toCommittedAggregateEvents(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, events?: PbCommittedAggregatedEvents, failure?: Failure) {
+        let convertedEvents: CommittedAggregateEvent[] = [];
+        if (!failure && events) {
+            const eventsList = events.getEventsList()!;
+            const startVersion = events.getAggregaterootversion() - (eventsList.length - 1);
+
+            convertedEvents = eventsList.map((event, index) => EventConverters.toSDKAggregate(
+                aggregateRootId,
+                eventSourceId,
+                AggregateRootVersion.from(startVersion + index),
+                event));
+        } else {
+            this._logger.error(`Problems with committed events for aggregate root '${aggregateRootId}' for events source id '${eventSourceId}' with reason '${failure?.getReason()}'`);
+        }
+        return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
     }
 
     private toUncommittedEvent(content: any, eventSourceId: EventSourceId | Guid | string, eventTypeOrId?: EventType | EventTypeId | Guid | string, isPublic = false): UncommittedEvent {

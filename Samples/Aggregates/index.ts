@@ -9,8 +9,6 @@ import { DishHandler } from './DishHandler';
 import { Kitchen } from './Kitchen';
 
 (async () => {
-
-
     const client = Client
         .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
         .withEventTypes(eventTypes =>
@@ -24,5 +22,4 @@ import { Kitchen } from './Kitchen';
         .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 
     console.log('Done');
-
 })();
