@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { AggregateRootId } from '../events/AggregateRootId';
+import { AggregateRootId } from '@dolittle/sdk.events';
 import { AggregateRootDecoratedType } from './AggregateRootDecoratedType';
 import { AggregateRootDecoratedTypes } from './AggregateRootDecoratedTypes';
 

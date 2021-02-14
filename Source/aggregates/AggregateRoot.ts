@@ -13,19 +13,37 @@ import {
     EventWasAppliedByOtherAggregateRoot,
     EventWasAppliedToOtherEventSource
 } from '@dolittle/sdk.events';
+import { AggregateRootIdentifierNotSet } from './AggregateRootIdentifierNotSet';
 import { AppliedEvent } from './AppliedEvent';
 
 /**
  * Represents the aggregate root
  */
 export class AggregateRoot {
+    private _aggregateRootId?: AggregateRootId;
     private _appliedEvents: AppliedEvent[] = [];
     private _version: AggregateRootVersion = AggregateRootVersion.initial;
 
     constructor(readonly eventSourceId: EventSourceId) {
     }
 
-    readonly aggregateRootId!: AggregateRootId;
+    /**
+     * Gets aggregate root id
+     */
+    get aggregateRootId(): AggregateRootId {
+        if (!this.aggregateRootId) {
+            throw new AggregateRootIdentifierNotSet();
+        }
+        return this._aggregateRootId!;
+    }
+
+    /**
+     * Sets the aggregate root id - internal use
+     * @internal
+     */
+    set aggregateRootId(value: AggregateRootId) {
+        this._aggregateRootId = value;
+    }
 
     /**
      * Gets the version of the aggregate root
@@ -122,4 +140,3 @@ export class AggregateRoot {
         }
     }
 }
-
