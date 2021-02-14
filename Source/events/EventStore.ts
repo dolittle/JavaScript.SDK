@@ -20,6 +20,8 @@ import { UncommittedEvent } from './UncommittedEvent';
 import { EventConverters } from './EventConverters';
 import {CommitEventsResult } from './CommitEventsResult';
 import { Guid } from '@dolittle/rudiments';
+import { AggregateRootId } from './AggregateRootId';
+import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -56,6 +58,12 @@ export class EventStore implements IEventStore {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
     }
+
+    /** @inheritdoc */
+    forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder {
+        return new CommitForAggregateBuilder(this, this._eventTypes, aggregateRootId, this._logger);
+    }
+
 
     private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResult> {
         const uncommittedEvents = events.map(event =>

@@ -27,6 +27,7 @@ export { CommitEventsResult } from './CommitEventsResult';
 export { EventConverters } from './EventConverters';
 export { IEventStore } from './IEventStore';
 export { UncommittedEvent } from './UncommittedEvent';
+export { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 export { EventStoreBuilder } from './EventStoreBuilder';
 
 export {

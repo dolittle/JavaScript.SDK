@@ -55,5 +55,5 @@ export class CommittedAggregateEvent extends CommittedEvent {
             externalEventLogSequenceNumber,
             externalEventReceived);
     }
-
 }
+

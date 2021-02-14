@@ -8,6 +8,8 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { CommitEventsResult } from './CommitEventsResult';
 import { EventSourceId } from './EventSourceId';
 import { UncommittedEvent } from './UncommittedEvent';
+import { AggregateRootId } from './AggregateRootId';
+import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 ;
 
 /**
@@ -48,4 +50,14 @@ export interface IEventStore {
      * on the actual type of the event.
      */
     commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+
+    /**
+     * Commit for aggregate root.
+     * @param {AggregateRoot} aggregateRootId Aggregate root to commit for.
+     * @param {Cancellation} cancellation The cancellation signal
+     * @returns {CommitForAggregateBuilder}
+     */
+    forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder;
 }
+
+

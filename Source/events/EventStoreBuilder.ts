@@ -19,7 +19,7 @@ export class EventStoreBuilder {
         private _eventTypes: IEventTypes,
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
-        }
+    }
 
     /**
      * Build an {@link IEventStore} for the given tenant.

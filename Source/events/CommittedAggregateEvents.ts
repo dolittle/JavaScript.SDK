@@ -45,6 +45,22 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
         }
     }
 
+    /**
+     * Gets whether or not there are events.
+     * @returns {Boolean}
+     */
+    get hasEvents(): boolean {
+        return this._events.length > 0;
+    }
+
+    /**
+     * Gets the length of the committed events array.
+     * @returns {Number}
+     */
+    get length(): number {
+        return this._events.length;
+    }
+
     /** @inheritdoc */
     [Symbol.iterator](): Iterator<CommittedAggregateEvent> {
         return this._events[Symbol.iterator]();

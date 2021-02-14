@@ -36,6 +36,7 @@
     "dependencies": {
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/runtime.contracts": "5.1.21",
+        "@dolittle/sdk.aggregates": "14.1.0",
         "@dolittle/sdk.artifacts": "14.1.0",
         "@dolittle/sdk.common": "14.1.0",
         "@dolittle/sdk.eventhorizon": "14.1.0",
