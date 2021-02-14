@@ -31,7 +31,7 @@ export class AggregateRoot {
      * Gets aggregate root id
      */
     get aggregateRootId(): AggregateRootId {
-        if (!this.aggregateRootId) {
+        if (!this._aggregateRootId) {
             throw new AggregateRootIdentifierNotSet();
         }
         return this._aggregateRootId!;
