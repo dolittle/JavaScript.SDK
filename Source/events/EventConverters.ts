@@ -78,10 +78,7 @@ export class EventConverters {
             executionContexts.toSDK(executionContext),
             eventTypes.toSDK(input.getType()),
             JSON.parse(input.getContent()),
-            input.getPublic(),
-            false,
-            EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
-            DateTime.fromJSDate(new Date())
+            input.getPublic()
         );
         return committedEvent;
     }

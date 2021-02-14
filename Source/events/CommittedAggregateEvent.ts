@@ -38,10 +38,7 @@ export class CommittedAggregateEvent extends CommittedEvent {
         readonly executionContext: ExecutionContext,
         readonly type: EventType,
         readonly content: any,
-        readonly isPublic: boolean,
-        readonly isExternal: boolean,
-        readonly externalEventLogSequenceNumber: EventLogSequenceNumber,
-        readonly externalEventReceived: DateTime) {
+        readonly isPublic: boolean) {
 
         super(
             eventLogSequenceNumber,
@@ -51,9 +48,9 @@ export class CommittedAggregateEvent extends CommittedEvent {
             type,
             content,
             isPublic,
-            isExternal,
-            externalEventLogSequenceNumber,
-            externalEventReceived);
+            false,
+            EventLogSequenceNumber.first,
+            new DateTime());
     }
 }
 
