@@ -4,14 +4,15 @@
 import { Logger } from 'winston';
 import { map } from 'rxjs/operators';
 
-import { callContexts, failures } from '@dolittle/sdk.protobuf';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { EventType, EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { CommitEventsRequest, CommitEventsResponse as PbCommitEventsResponse } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
+import { CommitEventsRequest, CommitEventsResponse as PbCommitEventsResponse, CommitAggregateEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
+import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
 import { CommittedEvents } from './CommittedEvents';
 import { IEventStore } from './IEventStore';
@@ -24,6 +25,9 @@ import { AggregateRootId } from './AggregateRootId';
 import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
+import { AggregateRootVersion } from './AggregateRootVersion';
+import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
+import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -62,9 +66,25 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    async commitForAggregate(uncommittedAggregateEvents: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommittedAggregateEvents> {
-        this._logger.info('Commit for aggregate');
-        return new CommittedAggregateEvents(uncommittedAggregateEvents.eventSourceId, uncommittedAggregateEvents.aggregateRootId, ...[]);
+    /** @inheritdoc */
+    commitForAggregate(event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    commitForAggregate(events: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    commitForAggregate(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, aggregateRootId?: AggregateRootId, expectedAggregateRootVersion?: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult> {
+        if (this.isUncommittedAggregateEvents(eventOrEvents)) {
+            return this.commitAggregateInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
+        }
+        const eventSourceId = eventSourceIdOrCancellation as Guid | string;
+        return this.commitAggregateInternal(
+            UncommittedAggregateEvents.from(
+                eventSourceId,
+                aggregateRootId!,
+                expectedAggregateRootVersion!,
+                {
+                    content: eventOrEvents,
+                    eventType: eventType instanceof EventType ? eventType : EventTypeId.from(eventType!),
+                    public: false
+                }),
+            cancellation);
     }
 
     /** @inheritdoc */
@@ -95,6 +115,52 @@ export class EventStore implements IEventStore {
             .pipe(map(response => {
                 const committedEvents = new CommittedEvents(...response.getEventsList().map(event => EventConverters.toSDK(event)));
                 return new CommitEventsResult(committedEvents, failures.toSDK(response.getFailure()));
+            })).toPromise();
+    }
+
+    private isUncommittedAggregateEvents(eventOrEvents: any): eventOrEvents is UncommittedAggregateEvents {
+        return eventOrEvents instanceof UncommittedAggregateEvents && eventOrEvents.toArray().length > 0;
+    }
+
+    private async commitAggregateInternal(events: UncommittedAggregateEvents, cancellation = Cancellation.default): Promise<CommitAggregateEventsResult> {
+        const uncommittedAggregateEvents: PbUncommittedAggregateEvents.UncommittedAggregateEvent[] = events.toArray().map(event =>
+            EventConverters.getUncommittedAggregateEventFrom(
+                event.content,
+                this._eventTypes.resolveFrom(event.content, event.eventType),
+                !!event.public));
+
+        const eventSourceId = events.eventSourceId;
+        const aggregateRootId = events.aggregateRootId;
+        const request = new CommitAggregateEventsRequest();
+        const pbEvents = new PbUncommittedAggregateEvents();
+        pbEvents.setEventsList(uncommittedAggregateEvents);
+        pbEvents.setAggregaterootid(guids.toProtobuf(aggregateRootId.value));
+        pbEvents.setEventsourceid(guids.toProtobuf(events.eventSourceId.value));
+        pbEvents.setExpectedaggregaterootversion(events.expectedAggregateRootVersion.value);
+        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setEvents(pbEvents);
+
+        return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commitForAggregate, request, cancellation)
+            .pipe(map(response => {
+                const events = response.getEvents();
+                const failure = response.getFailure();
+
+                let convertedEvents: CommittedAggregateEvent[] = [];
+                if (!failure && events) {
+                    const eventsList = events.getEventsList()!;
+                    const startVersion = events.getAggregaterootversion() - (eventsList.length - 1);
+
+                    convertedEvents = eventsList.map((event, index) =>
+                        EventConverters.toSDKAggregate(
+                            aggregateRootId,
+                            eventSourceId,
+                            AggregateRootVersion.from(startVersion + index),
+                            event));
+                } else {
+                    this._logger.error(`Problems committing events for aggregate root '${aggregateRootId}' for events source id '${eventSourceId}' with reason '${failure?.getReason()}'`);
+                }
+                const committedEvents = new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
+                return new CommitAggregateEventsResult(committedEvents, failures.toSDK(failure));
             })).toPromise();
     }
 

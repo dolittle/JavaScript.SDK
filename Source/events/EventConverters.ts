@@ -3,7 +3,10 @@
 
 import { DateTime } from 'luxon';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
-import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
+import {
+    CommittedEvent as PbCommittedEvent,
+    CommittedAggregateEvents as PbCommittedAggregateEvents
+} from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
 import {
     UncommittedEvent as PbUncommittedEvent,
     UncommittedAggregateEvents as PbUncommittedAggregateEvents
@@ -13,9 +16,13 @@ import { EventType } from '@dolittle/sdk.artifacts';
 import { eventTypes, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
+import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
 import { EventSourceId } from './EventSourceId';
 import { MissingExecutionContext } from './MissingExecutionContext';
 import { EventLogSequenceNumber } from './EventLogSequenceNumber';
+import { AggregateRootId } from './AggregateRootId';
+import { AggregateRootVersion } from './AggregateRootVersion';
+
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.
@@ -37,6 +44,46 @@ export class EventConverters {
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
+    }
+
+    /**
+     * Creates an uncommitted aggregate event from given parameters.
+     * @param {*} event Event content to constructor with.
+     * @param {EventSourceId} eventSourceId The unique identifier of the event source that the event is originating from.
+     * @param {EventType} eventType Artifact of the event type.
+     * @param {boolean} isPublic Whether or not it is a public event
+     * @returns {PbUncommittedAggregateEvents.UncommittedAggregateEvent} Constructed uncommitted event.
+     */
+    static getUncommittedAggregateEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedAggregateEvents.UncommittedAggregateEvent {
+        const uncommittedAggregateEvent = new PbUncommittedAggregateEvents.UncommittedAggregateEvent();
+        uncommittedAggregateEvent.setArtifact(eventTypes.toProtobuf(eventType));
+        uncommittedAggregateEvent.setPublic(isPublic);
+        uncommittedAggregateEvent.setContent(JSON.stringify(event));
+        return uncommittedAggregateEvent;
+    }
+
+
+    static toSDKAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, aggregateRootVersion: AggregateRootVersion, input: PbCommittedAggregateEvents.CommittedAggregateEvent): SdkCommittedAggregateEvent {
+        const executionContext = input.getExecutioncontext();
+        if (!executionContext) {
+            throw new MissingExecutionContext();
+        }
+
+        const committedEvent = new SdkCommittedAggregateEvent(
+            EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
+            DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
+            eventSourceId,
+            aggregateRootId,
+            aggregateRootVersion,
+            executionContexts.toSDK(executionContext),
+            eventTypes.toSDK(input.getType()),
+            JSON.parse(input.getContent()),
+            input.getPublic(),
+            false,
+            EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
+            DateTime.fromJSDate(new Date())
+        );
+        return committedEvent;
     }
 
     /**
