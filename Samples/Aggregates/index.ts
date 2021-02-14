@@ -20,3 +20,5 @@ client
     .aggregateOf(Kitchen,'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9',_  => _.forTenant(TenantId.development))
     .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 
+console.log('Done');
+

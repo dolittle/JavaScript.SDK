@@ -24,7 +24,7 @@ export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
     }
 
     async commit(uncommittedEvents: UncommittedAggregateEvent[]): Promise<CommittedAggregateEvents> {
-        throw new Error('Not implemented');
+        return new CommittedAggregateEvents(this._eventSourceId, this._aggregateRootId, ...[]);
     }
 }
 
