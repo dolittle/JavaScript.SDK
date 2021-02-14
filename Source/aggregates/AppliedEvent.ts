@@ -24,6 +24,6 @@ export class AppliedEvent {
      * @returns {Boolean}
      */
     get hasEventType(): boolean {
-        return !this.eventType.id.equals(EventType.unspecified);
+        return !this.eventType.id.equals(EventType.unspecified.id);
     }
 }
