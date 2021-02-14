@@ -22,6 +22,7 @@ import {CommitEventsResult } from './CommitEventsResult';
 import { Guid } from '@dolittle/rudiments';
 import { AggregateRootId } from './AggregateRootId';
 import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
+import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -62,6 +63,11 @@ export class EventStore implements IEventStore {
     /** @inheritdoc */
     forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder {
         return new CommitForAggregateBuilder(this, this._eventTypes, aggregateRootId, this._logger);
+    }
+
+    /** @inheritdoc */
+    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId): CommittedAggregateEvents {
+        return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...[]);
     }
 
 

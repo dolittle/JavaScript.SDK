@@ -10,6 +10,7 @@ import { EventSourceId } from './EventSourceId';
 import { UncommittedEvent } from './UncommittedEvent';
 import { AggregateRootId } from './AggregateRootId';
 import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
+import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 ;
 
 /**
@@ -58,6 +59,14 @@ export interface IEventStore {
      * @returns {CommitForAggregateBuilder}
      */
     forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder;
+
+    /**
+     * Fetches the {@link CommittedAggregateEvents} for an aggregate root.
+     * @param {AggregateRootId} aggregateRootId The aggregate root to fetch for.
+     * @param {EventSourceId} eventSourceId The event source id to fetch for.
+     * @returns {CommittedAggregateEvents}
+     */
+    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId): CommittedAggregateEvents;
 }
 
 

@@ -54,14 +54,12 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> implements IAggre
             eventSourceId
         );
 
-        //throw new Error('Not implemented');
-        /*
-        const committedEvents: CommittedAggregateEvents = this._eventStore.fetchForAggregate(aggregateRootId, eventSourceId);
+        const committedEvents = this._eventStore.fetchForAggregate(aggregateRootId, eventSourceId);
         if (committedEvents.hasEvents) {
             this._logger.silly(`Re-applying ${committedEvents.length}`, committedEvents.length);
             aggregateRoot.reApply(committedEvents);
         } else {
             this._logger.silly('No events to re-apply');
-        }*/
+        }
     }
 }
