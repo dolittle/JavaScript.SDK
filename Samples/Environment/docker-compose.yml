@@ -11,7 +11,7 @@ services:
       driver: none
  
   runtime-basic:
-    image: dolittle/runtime:5.0.2
+    image: dolittle/runtime:5.3.5
     volumes:
       - ${PWD}/resources-basic.json:/app/.dolittle/resources.json
       - ${PWD}/tenants.json:/app/.dolittle/tenants.json
@@ -24,7 +24,7 @@ services:
       - 50053:50053
 
   runtime-eventhorizon:
-    image: dolittle/runtime:5.0.2
+    image: dolittle/runtime:5.3.5
     volumes:
       - ${PWD}/resources-eventhorizon.json:/app/.dolittle/resources.json
       - ${PWD}/tenants.json:/app/.dolittle/tenants.json
