@@ -11,6 +11,7 @@ import { UncommittedEvent } from './UncommittedEvent';
 import { AggregateRootId } from './AggregateRootId';
 import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
+import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 ;
 
 /**
@@ -24,7 +25,7 @@ export interface IEventStore {
      * @param {EventSourceId | Guid | string} eventSourceId The source of the event - a unique identifier that is associated with the event.
      * @param {EventType | EventTypeId | Guid | string} eventType An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResult>
+     * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
@@ -34,7 +35,7 @@ export interface IEventStore {
      * Commit a collection of events.
      * @param {UncommittedEvent|UncommittedEvent[]} eventOrEvents The event or events.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResult>
+     * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * @summary on the actual type of the event.
      */
@@ -46,11 +47,19 @@ export interface IEventStore {
      * @param {EventSourceId | Guid | string} eventSourceId The source of the event - a unique identifier that is associated with the event.
      * @param {EventType | EventTypeId | Guid | string} eventType An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResult>
+     * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
     commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+
+    /**
+     * Commit a collection of events for an aggregate
+     * @param {UncommittedAggregateEvents} uncommittedAggregateEvents The uncommitted aggregate events
+     * @param {Cancellation} cancellation The cancellation signal.
+     * @returns {Promise<CommittedAggregateEvents>}
+     */
+    commitForAggregate(uncommittedAggregateEvents: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;
 
     /**
      * Commit for aggregate root.

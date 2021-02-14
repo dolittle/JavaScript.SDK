@@ -24,3 +24,5 @@ export interface UncommittedAggregateEvent {
      */
     public?: boolean;
 }
+
+

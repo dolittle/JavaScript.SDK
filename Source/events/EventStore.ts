@@ -13,16 +13,17 @@ import { reactiveUnary } from '@dolittle/sdk.services';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { CommitEventsRequest, CommitEventsResponse as PbCommitEventsResponse } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 
-import { CommittedEvents } from './CommittedEvents';
-import { IEventStore } from './IEventStore';
-import { EventSourceId } from './EventSourceId';
-import { UncommittedEvent } from './UncommittedEvent';
-import { EventConverters } from './EventConverters';
-import {CommitEventsResult } from './CommitEventsResult';
+import { CommittedEvents } from './CommittedEvents';
+import { IEventStore } from './IEventStore';
+import { EventSourceId } from './EventSourceId';
+import { UncommittedEvent } from './UncommittedEvent';
+import { EventConverters } from './EventConverters';
+import { CommitEventsResult } from './CommitEventsResult';
 import { Guid } from '@dolittle/rudiments';
 import { AggregateRootId } from './AggregateRootId';
 import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
+import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 
 /**
  * Represents an implementation of {@link IEventStore}
@@ -44,20 +45,26 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
     commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         if (this.isUncommittedEventOrEvents(eventOrEvents)) {
             return this.commitInternal(this.asArray(eventOrEvents), eventSourceIdOrCancellation as Cancellation);
         }
-        const eventSourceId = eventSourceIdOrCancellation as Guid | string;
+        const eventSourceId = eventSourceIdOrCancellation as Guid | string;
         return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, eventType, false)], cancellation);
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
+    }
+
+    /** @inheritdoc */
+    async commitForAggregate(uncommittedAggregateEvents: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommittedAggregateEvents> {
+        this._logger.info('Commit for aggregate');
+        return new CommittedAggregateEvents(uncommittedAggregateEvents.eventSourceId, uncommittedAggregateEvents.aggregateRootId, ...[]);
     }
 
     /** @inheritdoc */
@@ -91,7 +98,7 @@ export class EventStore implements IEventStore {
             })).toPromise();
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: EventSourceId | Guid | string, eventTypeOrId?: EventType | EventTypeId | Guid | string, isPublic = false): UncommittedEvent {
+    private toUncommittedEvent(content: any, eventSourceId: EventSourceId | Guid | string, eventTypeOrId?: EventType | EventTypeId | Guid | string, isPublic = false): UncommittedEvent {
         let eventType: EventType | EventTypeId | undefined;
         if (eventTypeOrId !== undefined) {
             if (eventTypeOrId instanceof EventType) eventType = eventTypeOrId;

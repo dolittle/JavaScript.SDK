@@ -8,17 +8,21 @@ import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 import { Kitchen } from './Kitchen';
 
-const client = Client
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .build();
+(async () => {
 
-client
-    .aggregateOf(Kitchen,'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9',_  => _.forTenant(TenantId.development))
-    .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 
-console.log('Done');
+    const client = Client
+        .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+        .withEventTypes(eventTypes =>
+            eventTypes.register(DishPrepared))
+        .withEventHandlers(builder =>
+            builder.register(DishHandler))
+        .build();
 
+    await client
+        .aggregateOf(Kitchen, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9', _ => _.forTenant(TenantId.development))
+        .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
+
+    console.log('Done');
+
+})();

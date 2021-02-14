@@ -4,14 +4,17 @@
 import { DateTime } from 'luxon';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { CommittedEvent as PbCommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
-import { UncommittedEvent as PbUncommittedEvent } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
+import {
+    UncommittedEvent as PbUncommittedEvent,
+    UncommittedAggregateEvents as PbUncommittedAggregateEvents
+} from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
 import { EventType } from '@dolittle/sdk.artifacts';
 import { eventTypes, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
-import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
-import { EventSourceId } from './EventSourceId';
-import { MissingExecutionContext } from './MissingExecutionContext';
+import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
+import { EventSourceId } from './EventSourceId';
+import { MissingExecutionContext } from './MissingExecutionContext';
 import { EventLogSequenceNumber } from './EventLogSequenceNumber';
 
 /**
@@ -62,7 +65,6 @@ export class EventConverters {
         );
         return committedEvent;
     }
-
 
     /**
      * Convert a SDK committed event to protobuf representation

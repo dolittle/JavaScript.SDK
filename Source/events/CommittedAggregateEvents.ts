@@ -22,7 +22,7 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
     private _nextAggregateRootVersion: AggregateRootVersion = AggregateRootVersion.initial;
 
     /**
-     * Creates an instance of {@link CommittedEvents}.
+     * Creates an instance of {@link CommittedAggregateEvents}.
      * @param {...CommittedEvent[]} events Events to initialize with.
      */
     constructor(readonly eventSourceId: EventSourceId, readonly aggregateRootId: AggregateRootId, ...events: CommittedAggregateEvent[]) {
