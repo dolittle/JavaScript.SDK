@@ -92,9 +92,20 @@ export interface IEventStore {
      * Fetches the {@link CommittedAggregateEvents} for an aggregate root.
      * @param {AggregateRootId} aggregateRootId The aggregate root to fetch for.
      * @param {EventSourceId} eventSourceId The event source id to fetch for.
-     * @returns {CommittedAggregateEvents}
+     * @param {Cancellation} cancellation The cancellation signal.
+     * @returns {Promise<CommittedAggregateEvents>}
      */
-    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId): CommittedAggregateEvents;
+    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;
+
+
+    /**
+     * Fetches the {@link CommittedAggregateEvents} for an aggregate root - synchronously.
+     * @param {AggregateRootId} aggregateRootId The aggregate root to fetch for.
+     * @param {EventSourceId} eventSourceId The event source id to fetch for.
+     * @param {Cancellation} cancellation The cancellation signal.
+     * @returns {Promise<CommittedAggregateEvents>}
+     */
+    fetchForAggregateSync(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): CommittedAggregateEvents;
 }
 
 

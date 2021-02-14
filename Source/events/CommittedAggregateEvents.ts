@@ -38,6 +38,7 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
             this.throwIfEventWasAppliedToOtherEventSource(event);
             this.throwIfEventWasAppliedByOtherAggreateRoot(event);
             this.throwIfAggregateRootVersionIsOutOfOrder(event);
+            this._nextAggregateRootVersion = this._nextAggregateRootVersion.next();
         });
 
         if (events) {

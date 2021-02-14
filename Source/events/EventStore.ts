@@ -11,7 +11,12 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
-import { CommitEventsRequest, CommitEventsResponse as PbCommitEventsResponse, CommitAggregateEventsRequest } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
+import {
+    CommitEventsRequest,
+    CommitEventsResponse as PbCommitEventsResponse,
+    CommitAggregateEventsRequest,
+    FetchForAggregateRequest
+} from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
 
 import { CommittedEvents } from './CommittedEvents';
@@ -28,11 +33,16 @@ import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
+import { Aggregate } from '@dolittle/runtime.contracts/Runtime/Events/Aggregate_pb';
+
+import { syncPromise } from './syncPromise';
 
 /**
  * Represents an implementation of {@link IEventStore}
  */
 export class EventStore implements IEventStore {
+
+    private _fetchForAggregateSync: Function;
 
     /**
      * Initializes a new instance of {@link EventStore}.
@@ -46,6 +56,8 @@ export class EventStore implements IEventStore {
         private _eventTypes: IEventTypes,
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
+
+        this._fetchForAggregateSync = syncPromise(this, this.fetchForAggregate);
     }
 
     /** @inheritdoc */
@@ -93,10 +105,41 @@ export class EventStore implements IEventStore {
     }
 
     /** @inheritdoc */
-    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId): CommittedAggregateEvents {
-        return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...[]);
+    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation: Cancellation = Cancellation.default): Promise<CommittedAggregateEvents> {
+        const request = new FetchForAggregateRequest();
+        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        const aggregate = new Aggregate();
+        aggregate.setAggregaterootid(guids.toProtobuf(aggregateRootId.value));
+        aggregate.setEventsourceid(guids.toProtobuf(eventSourceId.value));
+        request.setAggregate(aggregate);
+
+        return reactiveUnary(this._eventStoreClient, this._eventStoreClient.fetchForAggregate, request, cancellation)
+            .pipe(map(response => {
+                const events = response.getEvents();
+                const failure = response.getFailure();
+                let convertedEvents: CommittedAggregateEvent[] = [];
+
+                if (!failure && events) {
+                    const eventsList = events.getEventsList()!;
+                    const startVersion = events.getAggregaterootversion() + 1 - (eventsList.length);
+
+                    convertedEvents = eventsList.map((event, index) =>
+                        EventConverters.toSDKAggregate(
+                            aggregateRootId,
+                            eventSourceId,
+                            AggregateRootVersion.from(startVersion + index),
+                            event));
+                } else {
+                    this._logger.error(`Problems fetching events for aggregate root '${aggregateRootId}' for events source id '${eventSourceId}' with reason '${failure?.getReason()}'`);
+                }
+                return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
+            })).toPromise();
     }
 
+    /** @inheritdoc */
+    fetchForAggregateSync(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation: Cancellation = Cancellation.default): CommittedAggregateEvents {
+        return this._fetchForAggregateSync(aggregateRootId, eventSourceId, cancellation);
+    }
 
     private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResult> {
         const uncommittedEvents = events.map(event =>

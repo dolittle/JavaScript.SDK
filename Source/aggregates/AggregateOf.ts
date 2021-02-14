@@ -57,7 +57,7 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> implements IAggre
             eventSourceId
         );
 
-        const committedEvents = this._eventStore.fetchForAggregate(aggregateRootId, eventSourceId);
+        const committedEvents = this._eventStore.fetchForAggregateSync(aggregateRootId, eventSourceId);
         if (committedEvents.hasEvents) {
             this._logger.silly(`Re-applying ${committedEvents.length}`, committedEvents.length);
 
