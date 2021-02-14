@@ -82,32 +82,12 @@ export class AggregateRoot {
     }
 
     /**
-     * Re apply events from the event store
-     * @param {CommittedAggregateEvents} events Events to re apply.
+     * Move to next version
      */
-    reApply(events: CommittedAggregateEvents) {
-        this.throwIfEventWasAppliedToOtherEventSource(events);
-        this.throwIfEventWasAppliedByOtherAggreateRoot(events);
-
-        for (const event of events) {
-            this.throwIfAggregateRootVersionIsOutOfOrder(event);
-            this._version = this._version.next();
-            if (!this.isStateLess) {
-                this.invokeOnMethod(event);
-            }
-        }
+    nextVersion() {
+        this._version = this._version.next();
     }
 
-    /**
-     * Gets whether aggregate root is stateless or not.
-     */
-    get isStateLess() {
-        return true;
-    }
-
-    private invokeOnMethod(event: CommittedAggregateEvent) {
-
-    }
 
     private applyImplementation(event: any, eventType: EventType, isPublic: boolean) {
         this.throwIfEventContentIsNullOrUndefined(event);
@@ -119,24 +99,6 @@ export class AggregateRoot {
     private throwIfEventContentIsNullOrUndefined(event: any) {
         if (!event) {
             throw new EventContentNeedsToBeDefined();
-        }
-    }
-
-    private throwIfAggregateRootVersionIsOutOfOrder(event: CommittedAggregateEvent) {
-        if (event.aggregateRootVersion.value !== this.version.value) {
-            throw new AggregateRootVersionIsOutOfOrder(event.aggregateRootVersion, this.version);
-        }
-    }
-
-    private throwIfEventWasAppliedByOtherAggreateRoot(event: CommittedAggregateEvents) {
-        if (!event.aggregateRootId.equals(this.aggregateRootId)) {
-            throw new EventWasAppliedByOtherAggregateRoot(event.aggregateRootId, this.aggregateRootId);
-        }
-    }
-
-    private throwIfEventWasAppliedToOtherEventSource(event: CommittedAggregateEvents) {
-        if (!event.eventSourceId.equals(this.eventSourceId)) {
-            throw new EventWasAppliedToOtherEventSource(event.eventSourceId, this.eventSourceId);
         }
     }
 }
