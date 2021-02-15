@@ -22,5 +22,6 @@ export class Kitchen extends AggregateRoot {
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared) {
         this._counter++;
+        console.log(`${this._counter} dishes has been prepared so far`);
     }
 }
