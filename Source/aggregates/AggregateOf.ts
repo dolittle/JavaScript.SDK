@@ -86,7 +86,7 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> implements IAggre
                     });
 
                     if (onMethod) {
-                        onMethod.method(event.content);
+                        onMethod.method.call(aggregateRoot, event.content);
                     }
                 }
             }
