@@ -16,12 +16,12 @@ export class Kitchen extends AggregateRoot {
 
     prepareDish(dish: string, chef: string) {
         this.apply(new DishPrepared(dish, chef));
+        console.log(`${this._counter} dishes has been prepared so far`);
     }
 
 
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared) {
         this._counter++;
-        console.log(`${this._counter} dishes has been prepared so far`);
     }
 }
