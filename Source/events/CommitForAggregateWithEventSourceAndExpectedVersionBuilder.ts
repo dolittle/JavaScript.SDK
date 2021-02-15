@@ -36,8 +36,8 @@ export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
             this._expectedVersion
         );
         uncommittedEvents.forEach(_ => uncommittedAggregateEvents.add(_));
-        this._eventStore.commitForAggregate(uncommittedAggregateEvents);
-        return new CommittedAggregateEvents(this._eventSourceId, this._aggregateRootId, ...[]);
+        const result = await this._eventStore.commitForAggregate(uncommittedAggregateEvents);
+        return result.events;
     }
 }
 
