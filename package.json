@@ -2,6 +2,7 @@
   "private": true,
   "workspaces": [
     "Source/*",
+    "Samples/Aggregates",
     "Samples/Kitchen",
     "Samples/Container",
     "Samples/EventHorizon"

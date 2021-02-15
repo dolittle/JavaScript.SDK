@@ -16,6 +16,20 @@
             "outFiles": [
                 "${workspaceFolder}/Samples/Basic/Distribution/*.js"
             ]
+        },
+        {
+            "name": "Launch Aggregates Sample",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+            "args": ["${workspaceFolder}/Samples/Aggregates/index.ts"],
+            "cwd": "${workspaceFolder}/Samples/Aggregates",
+            "preLaunchTask": "tsc: build - Aggregates",
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ]
         }
     ]
 }

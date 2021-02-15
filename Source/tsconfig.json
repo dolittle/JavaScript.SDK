@@ -3,6 +3,7 @@
     "include": [],
     "references": [
         { "path": "./artifacts" },
+        { "path": "./aggregates" },
         { "path": "./common" },
         { "path": "./eventHorizon" },
         { "path": "./events" },

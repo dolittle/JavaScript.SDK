@@ -15,6 +15,15 @@ export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSo
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.EventSourceId');
     }
+
+    /**
+     * Create a new {@link EventSourceId} with a new unique identifier
+     * @returns {EventSourceId}
+     */
+    static new(): EventSourceId {
+        return new EventSourceId(Guid.create());
+    }
+
     /**
      * Creates an {EventSourceId} from a guid.
      *

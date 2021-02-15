@@ -2,6 +2,7 @@
     "files": [],
     "include": [],
     "references": [
+        { "path": "./Aggregates" },
         { "path": "./Kitchen" },
         { "path": "./Container" },
         { "path": "./EventHorizon" }
