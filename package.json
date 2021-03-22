@@ -6,6 +6,7 @@
     "Samples/Tutorials/GettingStarted",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
+    "Samples/Advanced",
     "Samples/Container"
   ],
   "scripts": {
