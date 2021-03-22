@@ -4,7 +4,8 @@
     "Source/*",
     "Samples/Tutorials/Aggregates",
     "Samples/Tutorials/GettingStarted",
-    "Samples/Tutorials/EventHorizon",
+    "Samples/Tutorials/EventHorizon/Consumer",
+    "Samples/Tutorials/EventHorizon/Producer",
     "Samples/Container"
   ],
   "scripts": {
