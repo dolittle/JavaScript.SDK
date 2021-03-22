@@ -18,11 +18,12 @@ const client = Client
                 .fromProducerTenant(TenantId.development)
                 .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
                 .fromProducerPartition(PartitionId.unspecified.value)
-                .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'))})
+                .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'));
+})
     .withEventHandlers(eventHandlers =>
         eventHandlers
-            .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
-                _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
+            .createEventHandler('6c3d358f-3ecc-4c92-a91e-5fc34cacf27e', _ =>
+                _.inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
                 .partitioned()
                 .handle(DishPrepared, (event, context) => console.log(`Handled event ${JSON.stringify(event)} from public stream`))))
     .build();
