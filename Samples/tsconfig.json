@@ -1,0 +1,10 @@
+{
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./Tutorials/Aggregates" },
+        { "path": "./Tutorials/GettingStarted" },
+        { "path": "./Tutorials/EventHorizon/Consumer" },
+        { "path": "./Tutorials/EventHorizon/Producer" },
+    ]
+}

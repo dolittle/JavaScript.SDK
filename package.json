@@ -11,7 +11,7 @@
   "scripts": {
       "prebuild": "yarn clean",
       "postbuild": "yarn lint",
-      "build": "tsc -b Source/tsconfig.json && tsc -b Samples/",
+      "build": "tsc -b Source/tsconfig.json && tsc -b Samples/tsconfig.json",
       "clean": "gulp clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
       "test:run": "gulp test-run --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
       "test:clean": "gulp test-clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
