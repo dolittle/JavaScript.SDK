@@ -2,10 +2,10 @@
   "private": true,
   "workspaces": [
     "Source/*",
-    "Samples/Aggregates",
-    "Samples/Kitchen",
-    "Samples/Container",
-    "Samples/EventHorizon"
+    "Samples/Tutorials/Aggregates",
+    "Samples/Tutorials/GettingStarted",
+    "Samples/Tutorials/EventHorizon",
+    "Samples/Container"
   ],
   "scripts": {
       "prebuild": "yarn clean",
