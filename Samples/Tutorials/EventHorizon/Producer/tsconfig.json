@@ -1,14 +1,15 @@
 {
-    "extends": "../../tsconfig.settings.json",
+    "extends": "../../../../tsconfig.settings.json",
     "compilerOptions": {
         "rootDir": ".",
         "sourceRoot": "../",
-        "outDir": "Distribution",
-        "composite": true
+        "inlineSourceMap": true,
+        "sourceMap": false,
+        "outDir": "Distribution"
     },
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        { "path": "../resilience" }
+        { "path": "../../../../Source/sdk" }
     ]
 }

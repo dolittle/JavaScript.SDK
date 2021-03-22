@@ -3,7 +3,9 @@
     "compilerOptions": {
         "rootDir": ".",
         "sourceRoot": "../",
-        "outDir": "Distribution"
+        "outDir": "Distribution",
+        "composite": true
+
     },
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],

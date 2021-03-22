@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.settings.json",
+    "extends": "../../../tsconfig.settings.json",
     "compilerOptions": {
         "rootDir": ".",
         "sourceRoot": "../",
@@ -10,6 +10,6 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        { "path": "../../Source/sdk" }
+        { "path": "../../../Source/sdk" }
     ]
 }

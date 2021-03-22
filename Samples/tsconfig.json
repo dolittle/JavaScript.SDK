@@ -2,9 +2,11 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./Aggregates" },
-        { "path": "./Kitchen" },
-        { "path": "./Container" },
-        { "path": "./EventHorizon" }
+        { "path": "./Advanced"},
+        { "path": "./Container"},
+        { "path": "./Tutorials/Aggregates" },
+        { "path": "./Tutorials/GettingStarted" },
+        { "path": "./Tutorials/EventHorizon/Consumer" },
+        { "path": "./Tutorials/EventHorizon/Producer" },
     ]
 }
