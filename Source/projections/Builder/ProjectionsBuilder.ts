@@ -1,12 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
 import { Guid } from '@dolittle/rudiments';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IContainer } from '@dolittle/sdk.common';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
+import { IProjections } from '../IProjections';
+// import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Projections/Projections_grpc_pb';
+type ProjectionsClient = any;
 
 import { ProjectionId } from '../ProjectionId';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { ProjectionBuilder } from './ProjectionBuilder';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Projections } from '../Projections';
 
 export type ProjectionsBuilderCallback = (builder: ProjectionsBuilderCallback) => void;
 
@@ -16,7 +26,7 @@ export class ProjectionsBuilder {
     /**
      * Start building a projection.
      * @param {ProjectionId | Guid | string} projectionId  The unique identifier of the projection
-     * @returns 
+     * @returns {ProjectionBuilder}
      */
     createProjection(projectionId: ProjectionId | Guid | string): ProjectionBuilder {
         const builder = new ProjectionBuilder(ProjectionId.from(projectionId));
@@ -39,4 +49,19 @@ export class ProjectionsBuilder {
     //     return this;
     // }
 
+    buildAndRegister(
+        client: ProjectionsClient,
+        container: IContainer,
+        executionContext: ExecutionContext,
+        eventTypes: IEventTypes,
+        logger: Logger,
+        cancellation: Cancellation): IProjections {
+        const projections = new Projections(logger);
+
+        for (const projectionBuilder of this._projectionBuilders) {
+            projectionBuilder.buildAndRegister(client, projections, container, executionContext, eventTypes, logger, cancellation);
+        }
+
+        return projections;
+    }
 }

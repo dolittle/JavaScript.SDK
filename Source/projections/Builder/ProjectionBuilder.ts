@@ -7,6 +7,8 @@ import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@
 import { Guid } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+// import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Projections/Projections_grpc_pb';
+type ProjectionsClient = any;
 
 import { ProjectionId } from '../ProjectionId';
 import { ProjectionSignature } from '../ProjectionSignature';
@@ -16,6 +18,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IContainer } from '@dolittle/sdk.common';
 import { Projection } from '../Projection';
 import { IProjections } from '../IProjections';
+import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, ProjectionSignature<any>];
@@ -44,11 +47,12 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     /**
      * Defines which readmodel to build a projection for.
      * @param {Constructor<T>} readModelType The type of the read model.
-     * @returns 
+     * @returns {ProjectionBuilder}
      */
     forReadModel<T = any>(readModelType: Constructor<T>): ProjectionBuilder {
-        if (this._readModel)
-            throw new Error('ReadModel already set for Projection!')
+        if (this._readModel) {
+            throw new ReadModelAlreadyDefinedForProjection(this._projectionId, readModelType, this._readModel);
+        }
         this._readModel = readModelType;
         return this;
     }

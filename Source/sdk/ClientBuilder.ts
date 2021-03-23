@@ -11,12 +11,13 @@ import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
+import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
-import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Projections/Projections_grpc_pb';
 
 import { Client } from './Client';
 
@@ -236,13 +237,23 @@ export class ClientBuilder {
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
         const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, this._logger);
 
+        const projections = this._projectionsBuilder.buildAndRegister(
+            new ProjectionsClient(connectionString, credentials),
+            this._container,
+            executionContext,
+            eventTypes,
+            this._logger,
+            this._cancellation
+        );
+
         return new Client(
             this._logger,
             eventTypes,
             eventStoreBuilder,
             eventHandlers,
             filters,
-            eventHorizons
+            eventHorizons,
+            projections
         );
     }
 }

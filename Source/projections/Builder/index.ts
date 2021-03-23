@@ -4,3 +4,4 @@
 export { ProjectionsBuilderCallback, ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionBuilder } from './ProjectionBuilder';
 export { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';

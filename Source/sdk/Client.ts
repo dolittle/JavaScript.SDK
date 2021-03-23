@@ -14,6 +14,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ClientBuilder } from './ClientBuilder';
 import { AggregateRoot, IAggregateOf, AggregateOf, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Constructor } from '@dolittle/types';
+import { IProjections } from '@dolittle/sdk.projections';
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
 
@@ -31,6 +32,7 @@ export class Client {
      * @param {IEventHandlers} eventHandlers All the event handlers.
      * @param {IFilters} filters All the filters.
      * @param {IEventHorizons} eventHorizons All event horizons.
+     * @param {IProjections} projections All projections.
      */
     constructor(
         readonly logger: Logger,
@@ -38,7 +40,8 @@ export class Client {
         readonly eventStore: EventStoreBuilder,
         readonly eventHandlers: IEventHandlers,
         readonly filters: IFilters,
-        readonly eventHorizons: IEventHorizons) {
+        readonly eventHorizons: IEventHorizons,
+        readonly projections: IProjections) {
     }
 
     /**
