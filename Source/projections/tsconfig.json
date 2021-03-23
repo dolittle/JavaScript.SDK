@@ -1,0 +1,18 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceRoot": "../",
+        "outDir": "Distribution",
+        "composite": true
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../artifacts" },
+        { "path": "../common" },
+        { "path": "../events" },
+        { "path": "../execution" },
+        { "path": "../resilience"}
+    ]
+}

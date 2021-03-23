@@ -16,6 +16,7 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/Eve
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
 
 import { Client } from './Client';
 
@@ -32,6 +33,7 @@ export class ClientBuilder {
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
+    private readonly _projectionsBuilder: ProjectionsBuilder;
     private _cancellation: Cancellation;
     private _logger: Logger;
     private _container: IContainer = new Container();
@@ -45,6 +47,7 @@ export class ClientBuilder {
         this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
+        this._projectionsBuilder = new ProjectionsBuilder():
         this._logger = createLogger({
             level: 'info',
             format: format.prettyPrint(),
@@ -184,6 +187,11 @@ export class ClientBuilder {
      */
     withContainer(container: IContainer): ClientBuilder {
         this._container = container;
+        return this;
+    }
+
+    withProjections(callback: ProjectionsBuilderCallback): ClientBuilder {
+        callback(this._projectionsBuilder);
         return this;
     }
 
