@@ -34,12 +34,12 @@ export class EventHandler implements IEventHandler {
     }
 
     /** @inheritdoc */
-    async handle(event: any, eventTypes: EventType, context: EventContext): Promise<void> {
-        if (this.handleMethodsByEventType.has(eventTypes)) {
-            const method = this.handleMethodsByEventType.get(eventTypes)!;
+    async handle(event: any, eventType: EventType, context: EventContext): Promise<void> {
+        if (this.handleMethodsByEventType.has(eventType)) {
+            const method = this.handleMethodsByEventType.get(eventType)!;
             await method(event, context);
         } else {
-            throw new MissingEventHandlerForType(eventTypes);
+            throw new MissingEventHandlerForType(eventType);
         }
     }
 }

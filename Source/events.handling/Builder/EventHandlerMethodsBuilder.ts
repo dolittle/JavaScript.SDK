@@ -41,8 +41,8 @@ export class EventHandlerMethodsBuilder {
     handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {Geneartion | number} generation The generation of the event type.
+     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
+     * @param {Generation | number} generation The generation of the event type.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
     handle(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: EventHandlerSignature): void;
