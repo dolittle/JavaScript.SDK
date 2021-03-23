@@ -61,7 +61,7 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
         logger.debug(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
         const methods = HandlesDecoratedMethods.methodsPerEventHandler.get(this._eventHandlerType);
         if (methods === undefined) {
-            logger.warn(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler most to be decorated with @${handlesDecorator.name}`);
+            logger.warn(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
             return;
         }
         const eventTypesToMethods = new EventTypeMap<EventHandlerSignature<any>>();
