@@ -48,7 +48,7 @@ export class ClientBuilder {
         this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
-        this._projectionsBuilder = new ProjectionsBuilder():
+        this._projectionsBuilder = new ProjectionsBuilder();
         this._logger = createLogger({
             level: 'info',
             format: format.prettyPrint(),
