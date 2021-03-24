@@ -77,14 +77,6 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             return;
         }
         const eventHandler = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, eventTypesToMethods);
-        eventHandlers.register(
-            new internal.ProjectionProcessor(
-                eventHandler,
-                client,
-                executionContext,
-                eventTypes,
-                logger), cancellation);
-
     }
 
 
@@ -120,7 +112,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             } catch (ex) {
                 throw new CouldNotCreateInstanceOfProjection(this._projectionType, ex);
             }
-            method.method.call(instance, event, eventContext);
+            // method.method.call(instance, event, eventContext);
         };
     }
 

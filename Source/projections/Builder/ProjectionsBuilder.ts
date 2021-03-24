@@ -19,7 +19,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Projections } from '../Projections';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 
-export type ProjectionsBuilderCallback = (builder: ProjectionsBuilderCallback) => void;
+export type ProjectionsBuilderCallback = (builder: ProjectionsBuilder) => void;
 
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];
@@ -39,16 +39,16 @@ export class ProjectionsBuilder {
      * Register a type as a projection
      * @param type The type to register as a projection.
      */
-    register<T = any>(type: Constructor<T>): ProjectionsBuilder;
+    // register<T = any>(type: Constructor<T>): ProjectionsBuilder;
     /**
      * Register an instance as an event handler.
      * @param instance The instance to register as an event handler.
      */
-    register<T = any>(instance: T): ProjectionsBuilder;
-    register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
-        this._projectionBuilders.push(new ProjectionClassBuilder(typeOrInstance));
-        return this;
-    }
+    // register<T = any>(instance: T): ProjectionsBuilder;
+    // register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
+    //     this._projectionBuilders.push(new ProjectionClassBuilder(typeOrInstance));
+    //     return this;
+    // }
 
     buildAndRegister(
         client: ProjectionsClient,
