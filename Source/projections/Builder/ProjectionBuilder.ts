@@ -63,27 +63,27 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
      * @param {Constructor<T>} type The type of event.
      * @param {ProjectionSignature<T>} method Method to call for each event.
      */
-    handle<T>(type: Constructor<T>, method: ProjectionSignature<T>): void;
+    on<T>(type: Constructor<T>, method: ProjectionSignature<T>): void;
     /**
      * Add an on method for handling the event.
      * @param {EventType} eventType The identifier of the event.
      * @param {ProjectionSignature<T>} method Method to call for each event.
      */
-    handle(eventType: EventType, method: ProjectionSignature): void;
+    on(eventType: EventType, method: ProjectionSignature): void;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId|Guid|string} eventType The identifier of the event.
      * @param {ProjectionSignature<T>} method Method to call for each event.
      */
-    handle(eventTypeId: EventTypeId | Guid | string, method: ProjectionSignature): void;
+    on(eventTypeId: EventTypeId | Guid | string, method: ProjectionSignature): void;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId | Guid | string} eventType The identifier of the event.
      * @param {Generation | number} generation The generation of the event type.
      * @param {ProjectionSignature<T>} method Method to call for each event.
      */
-    handle(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: ProjectionSignature): void;
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
+    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: ProjectionSignature): void;
+    on<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
         methodOrGeneration: ProjectionSignature<T> | Generation | number,
         maybeMethod?: ProjectionSignature<T>) {
         const method = maybeMethod || methodOrGeneration as ProjectionSignature<T>;
