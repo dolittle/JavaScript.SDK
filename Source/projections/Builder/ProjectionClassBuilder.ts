@@ -143,7 +143,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             readModels.filter((readModel, index) => readModels.indexOf(readModel) !== index));
 
         if (duplicateReadmodels) {
-            for (var duplicateReadModel of new Set(duplicateReadmodels)) {
+            for (const duplicateReadModel of new Set(duplicateReadmodels)) {
                 const duplicateTypes = types.filter(type => type.readModel === duplicateReadModel);
                 throw new ReadModelAlreadyRegistered(duplicateReadModel, duplicateTypes);
             }

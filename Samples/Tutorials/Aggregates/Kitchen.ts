@@ -8,7 +8,7 @@ import { DishPrepared } from './DishPrepared';
 
 @aggregateRoot('e5b17be9-4873-4526-99a1-76a5c31c0dad')
 export class Kitchen extends AggregateRoot {
-    private _counter: number = 0;
+    private _counter = 0;
 
     constructor(eventSourceId: EventSourceId) {
         super(eventSourceId);
