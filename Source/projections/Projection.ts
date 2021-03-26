@@ -19,15 +19,13 @@ export class Projection<T> implements IProjection<T> {
     /**
      * Initializes a new instance of {@link Projection}
      * @param {ProjectionId} projectionId The unique identifier for the projection.
-     * @param {Constructor<T>} readModelType The read model type produced by the projection.
-     * @param {T | undefined} initialState The initial state to use when creating new read models.
+     * @param {Constructor<T>|T} readModelTypeOrInstance The read model type or instance produced by the projection.
      * @param {ScopId} scopeId The identifier of the scope the projection is in.
      * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the projection.
      */
     constructor(
         readonly projectionId: ProjectionId,
-        readonly readModelType: Constructor<T>,
-        readonly initialState: T | undefined,
+        readonly readModelTypeOrInstance: Constructor<T> | T,
         readonly scopeId: ScopeId,
         private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>) {
         const eventSelectors: EventSelector[] = [];
@@ -38,7 +36,7 @@ export class Projection<T> implements IProjection<T> {
     }
 
     /** @inheritdoc */
-    async on(readModel: any, event: any, eventType: EventType, context: ProjectionContext): Promise<void> {
+    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<void> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
             await method(readModel, event, context);

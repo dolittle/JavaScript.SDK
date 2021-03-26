@@ -34,6 +34,7 @@ import { IProjection } from '../IProjection';
 import { KeySelectorType } from '../KeySelectorType';
 import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 import { Key } from '../Key';
+import { Constructor } from '@dolittle/types';
 
 export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
@@ -52,7 +53,15 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid();
         registerArguments.setScopeid();
-        registerArguments.setInitialstate(JSON.stringify(this._projection.initialState || {}));
+
+        let readModelInstance;
+        if (typeof this._projection.readModelTypeOrInstance === 'function') {
+            const constructor = this._projection.readModelTypeOrInstance as Constructor<T>;
+            readModelInstance = new constructor();
+        } else {
+            readModelInstance = this._projection.readModelTypeOrInstance;
+        }
+        registerArguments.setInitialstate(JSON.stringify(readModelInstance));
 
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
@@ -70,14 +79,14 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
 
     private getKeySelectorType(type: KeySelectorType): ProjectionEventKeySelectorType {
         switch (type) {
-        case KeySelectorType.EventSourceId:
-            return ProjectionEventKeySelectorType.EVENT_SOURCE_ID;
-        case KeySelectorType.PartitionId:
-            return ProjectionEventKeySelectorType.PARTITION_ID;
-        case KeySelectorType.Property:
-            return ProjectionEventKeySelectorType.PROPERTY;
-        default:
-            throw new UnknownKeySelectorType(type);
+            case KeySelectorType.EventSourceId:
+                return ProjectionEventKeySelectorType.EVENT_SOURCE_ID;
+            case KeySelectorType.PartitionId:
+                return ProjectionEventKeySelectorType.PARTITION_ID;
+            case KeySelectorType.Property:
+                return ProjectionEventKeySelectorType.PROPERTY;
+            default:
+                throw new UnknownKeySelectorType(type);
         }
     }
 
@@ -169,7 +178,10 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             event = Object.assign(new typeOfEvent(), event);
         }
 
-        const state = Object.assign(new this._projection.readModelType(), JSON.parse(request.getCurrentstate()!.getState()));
+        let state = JSON.parse(request.getCurrentstate()!.getState());
+        if (typeof this._projection.readModelTypeOrInstance === 'function') {
+            state = Object.assign(new (this._projection.readModelTypeOrInstance as Constructor<T>)(), state);
+        }
 
         await this._projection.on(state, event, eventType, projectionContext);
 

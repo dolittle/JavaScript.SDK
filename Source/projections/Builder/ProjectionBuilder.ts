@@ -21,7 +21,7 @@ import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedF
 
 export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
-    private _readModelType?: Constructor<any>;
+    private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: ProjectionBuilderForReadModel<any>;
 
     /**
@@ -41,16 +41,17 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     }
 
     /**
-     * Defines which readmodel to build a projection for.
-     * @param {Constructor<T>} readModelType The type of the read model.
+     * Defines which readmodel to build a projection for. The initial readmodel will be generated with default values
+     * defined in the type.
+     * @param {Constructor<T> | T} typeOrInstance The type or an instance of the read model.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    forReadModel<T>(readModelType: Constructor<T>): ProjectionBuilderForReadModel<T> {
-        if (this._readModelType) {
-            throw new ReadModelAlreadyDefinedForProjection(this._projectionId, readModelType, this._readModelType);
+    forReadModel<T>(typeOrInstance: Constructor<T> | T): ProjectionBuilderForReadModel<T> {
+        if (this._readModelTypeOrInstance) {
+            throw new ReadModelAlreadyDefinedForProjection(this._projectionId, typeOrInstance, this._readModelTypeOrInstance);
         }
-        this._readModelType = readModelType;
-        this._builder = new ProjectionBuilderForReadModel(this._projectionId, readModelType, this._scopeId);
+        this._readModelTypeOrInstance = typeOrInstance;
+        this._builder = new ProjectionBuilderForReadModel(this._projectionId, typeOrInstance, this._scopeId);
         return this._builder;
     }
 
@@ -67,7 +68,7 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
             logger.warn(`Failed to register projection ${this._projectionId}. No read models defined for projection.`);
             return;
         }
-        this._builder!.buildAndRegister(
+        this._builder.buildAndRegister(
             client,
             projections,
             container,

@@ -37,7 +37,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      */
     constructor(
         private _projectionId: ProjectionId,
-        private _readModelType: Constructor<T>,
+        private _readModelTypeOrInstance: Constructor<T> | T,
         private _scopeId: ScopeId) { }
 
     /**
@@ -47,20 +47,6 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      */
     inScope(scopeId: ScopeId | Guid | string): ProjectionBuilderForReadModel<T> {
         this._scopeId = ScopeId.from(scopeId);
-        return this;
-    }
-
-    /**
-     * Sets the initial state that will be used when new readmodels are created.
-     * @param {T | InitialStateCallback<T>} state  A new instance of the readmodel with instantiated values or a callback that provides with a new instance to set the values on
-     * @returns {ProjectionBuilderForReadModel<T>}
-     */
-    withInitialState(state: T | InitialStateCallback<T>): ProjectionBuilderForReadModel<T> {
-        if (typeof state === 'function') {
-            this._initialState = (state as InitialStateCallback<T>)(new this._readModelType());
-        } else {
-            this._initialState = state;
-        }
         return this;
     }
 
@@ -151,7 +137,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
             logger.warn(`Failed to register projection ${this._projectionId}. Could not build projection.`);
             return;
         }
-        const projection = new Projection(this._projectionId, this._readModelType, this._initialState, this._scopeId, events);
+        const projection = new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);
         projections.register(
             new ProjectionProcessor(
                 projection,

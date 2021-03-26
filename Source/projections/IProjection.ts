@@ -19,7 +19,7 @@ export interface IProjection<T> {
     /**
      * Gets the read model type the projection is for.
      */
-    readonly readModelType: Constructor<T>;
+    readonly readModelTypeOrInstance: Constructor<T>|T;
 
     /**
      * Gets the initial state of the projection.

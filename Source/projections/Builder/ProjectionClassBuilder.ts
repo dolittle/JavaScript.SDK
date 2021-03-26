@@ -76,7 +76,8 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`);
             return;
         }
-        const eventHandler = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, events);
+        const initialState = new this._projectionType();
+        const projection = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, events);
     }
 
 

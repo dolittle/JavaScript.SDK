@@ -15,20 +15,23 @@ const client = Client
     .withProjections(projections => {
         projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
             .forReadModel(Chef)
-            .on(DishPrepared, _ => _.keyFromProperty('name'), (chef, event, ctx) => {
-                chef.dishes.push(event.Dish);
-                return chef;
-            })
-            .on(DishPrepared, _ => _.keyFromProperty('name'), (chef, event, ctx) => {
-                chef.dishes.push(event.Dish);
-                return chef;
-            })
-            .on<DishPrepared>(DishPrepared, (chef, event, ctx) => {
+            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
                 chef.dishes.push(event.Dish);
                 return chef;
             });
-    })
+           projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
+                .forReadModel({ name: '', dishes: [] as string[] })
+                .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
+                    chef.dishes.push(event.Dish);
+                    return chef;
+                })
+        })
     .build();
+
+// client.projections.Get(Chef, 'Mr. Taco');
+// // client.projections.Get({ chefName: '', dishes: [] }, 'Mr. Taco');
+// // client.projections.Get(new Chef(), 'Mr. Taco');
+// client.projections.Get('686eb643-27e8-4f3b-8036-1ce960ed1e6a', 'Mr. Taco');
 
 const beanBlaster = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 const avocadoArtillery = new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco');

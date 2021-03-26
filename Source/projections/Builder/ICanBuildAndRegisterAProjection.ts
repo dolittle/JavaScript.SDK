@@ -7,8 +7,7 @@ import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
-// import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Projections/Projections_grpc_pb';
-type ProjectionsClient = any;
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 
 import { IProjections } from '../IProjections';
 
