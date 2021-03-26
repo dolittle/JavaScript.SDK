@@ -4,33 +4,43 @@
 import { EventContext, EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 import { IProjection } from './IProjection';
+import { KeySelector } from './KeySelector';
 import { MissingProjectionForType } from './MissingProjectionForType';
 import { ProjectionId } from './ProjectionId';
-import { ProjectionSignature } from './ProjectionSignature';
+import { ProjectionCallback } from './ProjectionCallback';
+import { ProjectionContext } from './ProjectionContext';
+import { EventSelector } from './EventSelector';
 
-export class Projection implements IProjection {
+export class Projection<T> implements IProjection<T> {
+
+    /** @inheritdoc */
+    readonly events: Iterable<EventSelector>;
 
     /**
      * Initializes a new instance of {@link Projection}
      * @param {ProjectionId} projectionId The unique identifier for the projection.
+     * @param {Constructor<T>} readModelType The read model type produced by the projection.
+     * @param {T | undefined} initialState The initial state to use when creating new read models.
      * @param {ScopId} scopeId The identifier of the scope the projection is in.
-     * @param {EventTypeMap<EventHandlerSignature<any>>} onMethodsByEventType Handle methods per event type.
+     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the projection.
      */
     constructor(
         readonly projectionId: ProjectionId,
-        readonly readModel: Constructor<any>,
+        readonly readModelType: Constructor<T>,
+        readonly initialState: T | undefined,
         readonly scopeId: ScopeId,
-        readonly onMethodsByEventType: EventTypeMap<ProjectionSignature<any>>) { }
-
-    /** @inheritdoc */
-    get handledEvents(): Iterable<EventType> {
-        return this.onMethodsByEventType.keys();
+        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>) {
+        const eventSelectors: EventSelector[] = [];
+        for (const [eventType, [, keySelector]] of this._eventMap.entries()) {
+            eventSelectors.push(new EventSelector(eventType, keySelector));
+        }
+        this.events = eventSelectors;
     }
 
     /** @inheritdoc */
-    async on(readModel: any, event: any, eventType: EventType, context: EventContext): Promise<void> {
-        if (this.onMethodsByEventType.has(eventType)) {
-            const method = this.onMethodsByEventType.get(eventType)!;
+    async on(readModel: any, event: any, eventType: EventType, context: ProjectionContext): Promise<void> {
+        if (this._eventMap.has(eventType)) {
+            const [method] = this._eventMap.get(eventType)!;
             await method(readModel, event, context);
         } else {
             throw new MissingProjectionForType(eventType);

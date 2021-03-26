@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
+import { DateTime } from 'luxon';
 
-import { EventProcessor } from '@dolittle/sdk.events.processing';
+import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import {
@@ -12,7 +13,11 @@ import {
     ProjectionClientToRuntimeMessage,
     ProjectionRuntimeToClientMessage,
     ProjectionRequest,
-    ProjectionResponse
+    ProjectionResponse,
+    ProjectionEventSelector,
+    ProjectionEventKeySelector,
+    ProjectionEventKeySelectorType,
+    ProjectionCurrentStateType
 } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
@@ -21,26 +26,59 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 import { ProjectionId } from '../ProjectionId';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
+import { EventContext, EventSourceId } from '@dolittle/sdk.events';
+import { eventTypes, guids } from '@dolittle/sdk.protobuf';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { ProjectionContext } from '../ProjectionContext';
+import { IProjection } from '../IProjection';
+import { KeySelectorType } from '../KeySelectorType';
+import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
+import { Key } from '../Key';
 
-export class ProjectionProcessor extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
+export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
 
     constructor(
+        private _projection: IProjection<T>,
         private _client: ProjectionsClient,
         private _executionContext: ExecutionContext,
+        private _eventTypes: IEventTypes,
         logger: Logger
     ) {
-        super('Projection', ProjectionId.from(''), logger);
+        super('Projection', _projection.projectionId, logger);
     }
 
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid();
         registerArguments.setScopeid();
-        registerArguments.setInitialstate('{}');
+        registerArguments.setInitialstate(JSON.stringify(this._projection.initialState || {}));
 
-        registerArguments.setEventsList([]);
+        const events: ProjectionEventSelector[] = [];
+        for (const eventSelector of this._projection.events) {
+            const selector = new ProjectionEventSelector();
+            selector.setEventtype(eventTypes.toProtobuf(eventSelector.eventType));
+            const keySelector = new ProjectionEventKeySelector();
+            keySelector.setType(this.getKeySelectorType(eventSelector.keySelector.type));
+            keySelector.setExpression(eventSelector.keySelector.expression.value);
+            events.push(selector);
+        }
+
+        registerArguments.setEventsList(events);
         return registerArguments;
+    }
+
+    private getKeySelectorType(type: KeySelectorType): ProjectionEventKeySelectorType {
+        switch (type) {
+        case KeySelectorType.EventSourceId:
+            return ProjectionEventKeySelectorType.EVENT_SOURCE_ID;
+        case KeySelectorType.PartitionId:
+            return ProjectionEventKeySelectorType.PARTITION_ID;
+        case KeySelectorType.Property:
+            return ProjectionEventKeySelectorType.PROPERTY;
+        default:
+            throw new UnknownKeySelectorType(type);
+        }
     }
 
     protected createClient(
@@ -84,6 +122,56 @@ export class ProjectionProcessor extends EventProcessor<ProjectionId, Projection
     }
 
     protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
+        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
+            throw new MissingEventInformation('no event in ProjectionRequest');
+        }
+
+        const pbEvent = request.getEvent()!.getEvent()!;
+
+        const pbSequenceNumber = pbEvent.getEventlogsequencenumber();
+        if (pbSequenceNumber === undefined) throw new MissingEventInformation('Sequence Number');
+
+        const pbEventSourceId = pbEvent.getEventsourceid();
+        if (!pbEventSourceId) throw new MissingEventInformation('EventSourceId');
+
+        const pbExecutionContext = pbEvent.getExecutioncontext();
+        if (!pbExecutionContext) throw new MissingEventInformation('Execution context');
+
+        const pbOccurred = pbEvent.getOccurred();
+        if (!pbOccurred) throw new MissingEventInformation('Occurred');
+
+        const pbArtifact = pbEvent.getType();
+        if (!pbArtifact) throw new MissingEventInformation('Artifact');
+
+        const eventContext = new EventContext(
+            pbSequenceNumber,
+            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            DateTime.fromJSDate(pbOccurred.toDate()),
+            executionContext);
+
+        if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
+            throw new MissingEventInformation('no state in ProjectionRequest');
+        }
+
+        const pbStateType = request.getCurrentstate()!.getType();
+        const pbKey = request.getKey();
+
+        const projectionContext = new ProjectionContext(
+            pbStateType === ProjectionCurrentStateType.CREATED_FROM_INITIAL_STATE,
+            Key.from(pbKey),
+            eventContext);
+
+        let event = JSON.parse(pbEvent.getContent());
+
+        const eventType = eventTypes.toSDK(pbArtifact);
+        if (this._eventTypes.hasTypeFor(eventType)) {
+            const typeOfEvent = this._eventTypes.getTypeFor(eventType);
+            event = Object.assign(new typeOfEvent(), event);
+        }
+
+        const state = Object.assign(new this._projection.readModelType(), JSON.parse(request.getCurrentstate()!.getState()));
+
+        await this._projection.on(state, event, eventType, projectionContext);
 
         return new ProjectionResponse();
     }

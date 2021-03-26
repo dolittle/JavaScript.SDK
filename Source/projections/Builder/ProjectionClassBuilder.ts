@@ -4,28 +4,28 @@
 import { Logger } from 'winston';
 
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.artifacts';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Guid } from '@dolittle/rudiments';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
 
-import { IProjections } from '../IProjections';
-// import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Projections/Projections_grpc_pb';
-type ProjectionsClient = any;
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
+
+import { IProjections, ProjectionCallback, Projection } from '../';
+
 
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
+import { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { Cancellation } from '@dolittle/sdk.resilience';
+import { OnDecoratedMethod } from './OnDecoratedMethod';
+import { OnDecoratedMethods } from './OnDecoratedMethods';
+import { on as onDecorator } from './onDecorator';
+import { ProjectionDecoratedType } from './ProjectionDecoratedType';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
-import { on as onDecorator } from './onDecorator';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
-import { OnDecoratedMethod } from './OnDecoratedMethod';
-import { ProjectionSignature } from '../ProjectionSignature';
-import { Projection } from '../Projection';
-import { ProjectionDecoratedType } from './ProjectionDecoratedType';
-import { Guid } from '@dolittle/rudiments';
 import { ReadModelAlreadyRegistered } from './ReadModelAlreadyRegistered';
-import { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
+import { KeySelector } from '../KeySelector';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
@@ -71,17 +71,17 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             logger.warn(`There are no projection methods to register in projection ${this._projectionType.name}. An projection must to be decorated with @${onDecorator.name}`);
             return;
         }
-        const eventTypesToMethods = new EventTypeMap<ProjectionSignature<any>>();
-        if (!this.tryAddAllProjectionMethods(eventTypesToMethods, methods, eventTypes, container, logger)) {
+        const events = new EventTypeMap<[ProjectionCallback<any>, KeySelector]>();
+        if (!this.tryAddAllProjectionMethods(events, methods, eventTypes, container, logger)) {
             logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`);
             return;
         }
-        const eventHandler = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, eventTypesToMethods);
+        const eventHandler = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, events);
     }
 
 
 
-    private tryAddAllProjectionMethods(eventTypesToMethods: EventTypeMap<ProjectionSignature<any>>, methods: OnDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {
+    private tryAddAllProjectionMethods(events: EventTypeMap<[ProjectionCallback<any>, KeySelector]>, methods: OnDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {
         let allMethodsValid = true;
         for (const method of methods) {
             const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
@@ -93,26 +93,28 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             }
 
             const eventHandlerMethod = this.createProjectionMethod(method, container);
+            const keySelector = method.keySelector;
 
-            if (eventTypesToMethods.has(eventType!)) {
+            if (events.has(eventType!)) {
                 allMethodsValid = false;
                 logger.warn(`Event handler ${this._projectionType.name} has multiple projection methods handling event type ${eventType}`);
                 continue;
             }
-            eventTypesToMethods.set(eventType!, eventHandlerMethod);
+            events.set(eventType!, [eventHandlerMethod, keySelector]);
         }
         return allMethodsValid;
     }
 
-    private createProjectionMethod(method: OnDecoratedMethod, container: IContainer): ProjectionSignature<any> {
-        return (event, eventContext) => {
-            let instance: T;
-            try {
-                instance = this._getInstance(container);
-            } catch (ex) {
-                throw new CouldNotCreateInstanceOfProjection(this._projectionType, ex);
-            }
-            // method.method.call(instance, event, eventContext);
+    private createProjectionMethod(method: OnDecoratedMethod, container: IContainer): ProjectionCallback<any> {
+        return (instance, event, projectionContext) => {
+            // TODO: Should we allow IoC stuff in constructors for ReadModels?
+            // let instance: T;
+            // try {
+            //     instance = this._getInstance(container);
+            // } catch (ex) {
+            //     throw new CouldNotCreateInstanceOfProjection(this._projectionType, ex);
+            // }
+            method.method.call(instance, event, projectionContext);
         };
     }
 

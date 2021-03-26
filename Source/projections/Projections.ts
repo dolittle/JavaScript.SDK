@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { delay } from 'rxjs/operators';
 import { Logger } from 'winston';
 
-import { Cancellation } from '@dolittle/sdk.resilience';
+import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 import { IProjections } from './IProjections';
-import { Projection } from './Projection';
+import { ProjectionProcessor } from './Internal';
 
 /**
  * Represents an implementation of {IProjections}
@@ -20,7 +21,15 @@ export class Projections implements IProjections {
     }
 
     /** @inheritdoc */
-    register(projection: Projection, cancellation?: Cancellation): void {
-        throw new Error('Method not implemented.');
+    register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation: Cancellation = Cancellation.default): void {
+        projectionProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+            error: (error: Error) => {
+                this._logger.error(`Failed to register projection: ${error}`);
+            },
+            complete: () => {
+                this._logger.error(`Projection registration completed.`);
+            }
+        });
     }
 }
+

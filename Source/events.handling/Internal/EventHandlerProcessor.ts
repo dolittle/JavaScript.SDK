@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { EventContext, ScopeId, EventSourceId } from '@dolittle/sdk.events';
-import { EventProcessor } from '@dolittle/sdk.events.processing';
+import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
@@ -26,7 +26,7 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 
 import { guids, eventTypes, executionContexts } from '@dolittle/sdk.protobuf';
 
-import { EventHandlerId, IEventHandler, MissingEventInformation } from '../index';
+import { EventHandlerId, IEventHandler } from '../index';
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.

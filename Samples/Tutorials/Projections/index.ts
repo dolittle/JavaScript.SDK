@@ -14,17 +14,18 @@ const client = Client
         eventTypes.register(DishPrepared))
     .withProjections(projections => {
         projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
-            .forReadModel(Chefs)
-            .on<DishPrepared>(DishPrepared, (chefs, event, ctx) => {
-                console.log(`Updating Chefs readmodel on event ${JSON.stringify(event)}`);
-                const foundIndex = chefs.chefArray.findIndex((chef: Chef) => chef.name === event.Chef);
-                if (foundIndex > 0) {
-                    chefs.chefArray[foundIndex].dishes.push(event.Dish);
-                }
-                else {
-                    chefs.chefArray.push(new Chef(event.Chef, [event.Dish]));
-                }
-                return chefs;
+            .forReadModel(Chef)
+            .on(DishPrepared, _ => _.keyFromProperty('name'), (chef, event, ctx) => {
+                chef.dishes.push(event.Dish);
+                return chef;
+            })
+            .on(DishPrepared, _ => _.keyFromProperty('name'), (chef, event, ctx) => {
+                chef.dishes.push(event.Dish);
+                return chef;
+            })
+            .on<DishPrepared>(DishPrepared, (chef, event, ctx) => {
+                chef.dishes.push(event.Dish);
+                return chef;
             });
     })
     .build();

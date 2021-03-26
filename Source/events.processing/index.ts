@@ -3,4 +3,5 @@
 
 export { IEventProcessor } from './Internal/IEventProcessor';
 export { EventProcessor } from './Internal/EventProcessor';
+export { MissingEventInformation } from './MissingEventInformation';
 export { RegistrationFailed } from './RegistrationFailed';

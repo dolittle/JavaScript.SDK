@@ -5,8 +5,10 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 import { EventTypeId } from '@dolittle/sdk.artifacts';
 
-import { ProjectionSignature } from '../ProjectionSignature';
+import { KeySelector } from '../';
+
 import { OnDecoratedMethod } from './OnDecoratedMethod';
+import { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 
 /**
  * Defines the system that knows about all the methods decorated with the on decorator.
@@ -22,19 +24,21 @@ export class OnDecoratedMethods {
      * @param {Constructor<any>} target Target that owns the haiwondle method.
      * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event the on method is for or the event.
      * @param {number | undefined} generation Generation of event type or undefined.
-     * @param {ProjectionSignature<any>} method The on method.
+     * @param {KeySelector} keySelector The key selector to use for this event type.
+     * @param {ProjectionClassOnMethod} method The on method.
      * @param {string} name The name of the method.
      */
     static register(
         target: Constructor<any>,
         eventTypeOrId: Constructor<any> | EventTypeId | Guid | string,
         generation: number | undefined,
-        method: ProjectionSignature<any>,
+        keySelector: KeySelector,
+        method: ProjectionClassOnMethod,
         name: string): void {
         let methods = this.methodsPerProjection.get(target);
         if (!methods) {
             this.methodsPerProjection.set(target, methods = []);
         }
-        methods.push(new OnDecoratedMethod(target, eventTypeOrId, generation, method, name));
+        methods.push(new OnDecoratedMethod(target, eventTypeOrId, generation, keySelector, method, name));
     }
 }

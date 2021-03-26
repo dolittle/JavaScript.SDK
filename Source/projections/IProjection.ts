@@ -1,40 +1,47 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
+import { EventType, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+import { EventSelector } from './EventSelector';
+import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
 /**
- * Defines a projection
+ * Defines a projection.
  */
-export interface IProjection {
+export interface IProjection<T> {
     /**
-     * Gets the unique identifier for a projection - {@link ProjectionId}
+     * Gets the {@link ProjectionId} for the projection.
      */
     readonly projectionId: ProjectionId;
 
     /**
-     * Gets the readmodel the projection is for
+     * Gets the read model type the projection is for.
      */
-    readonly readModel: Constructor<any>;
+    readonly readModelType: Constructor<T>;
 
     /**
-     * Gets the scope the projection is in
+     * Gets the initial state of the projection.
+     */
+    readonly initialState?: T;
+
+    /**
+     * Gets the scope the projection is in.
      */
     readonly scopeId: ScopeId;
 
     /**
-     * Gets the event types that are handled by this projection
+     * Gets the events used by the projection.
      */
-    readonly handledEvents: Iterable<EventType>;
+    readonly events: Iterable<EventSelector>;
 
     /**
      * Handle an event and update a readmodel.
-     * @param {*} readModel ReadModel to update.
+     * @param {T} readModel ReadModel to update.
      * @param {*} event Event to handle.
      * @param {EventType} eventType The event type.
-     * @param {EventContext} context The context in which the event is in.
+     * @param {ProjectionContext} context The context for the projection processing.
      */
-    on(readModel: any, event: any, eventType: EventType, context: EventContext): Promise<void>;
+    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<void>;
 }

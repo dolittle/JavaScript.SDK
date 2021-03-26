@@ -6,10 +6,9 @@ import { DateTime } from 'luxon';
 
 import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { EventContext, EventSourceId } from '@dolittle/sdk.events';
-import { EventProcessor } from '@dolittle/sdk.events.processing';
-import { MissingEventInformation } from '@dolittle/sdk.events.handling';
+import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids, executionContexts, eventTypes } from '@dolittle/sdk.protobuf';
+import { guids, eventTypes } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
