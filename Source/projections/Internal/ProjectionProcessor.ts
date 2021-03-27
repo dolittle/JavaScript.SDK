@@ -17,7 +17,9 @@ import {
     ProjectionEventSelector,
     ProjectionEventKeySelector,
     ProjectionEventKeySelectorType,
-    ProjectionCurrentStateType
+    ProjectionCurrentStateType,
+    ProjectionNextState,
+    ProjectionNextStateType
 } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
@@ -70,9 +72,9 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             const keySelector = new ProjectionEventKeySelector();
             keySelector.setType(this.getKeySelectorType(eventSelector.keySelector.type));
             keySelector.setExpression(eventSelector.keySelector.expression.value);
+            selector.setKeyselector(keySelector);
             events.push(selector);
         }
-
         registerArguments.setEventsList(events);
         return registerArguments;
     }
@@ -183,8 +185,12 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             state = Object.assign(new (this._projection.readModelTypeOrInstance as Constructor<T>)(), state);
         }
 
-        await this._projection.on(state, event, eventType, projectionContext);
-
-        return new ProjectionResponse();
+        const nextState = await this._projection.on(state, event, eventType, projectionContext);
+        const response = new ProjectionResponse();
+        const projectionNextState = new ProjectionNextState();
+        projectionNextState.setValue(JSON.stringify(nextState));
+        projectionNextState.setType(ProjectionNextStateType.REPLACE); //TODO: THis is hard coded now
+        response.setNextstate(projectionNextState);
+        return response;
     }
 }

@@ -36,10 +36,10 @@ export class Projection<T> implements IProjection<T> {
     }
 
     /** @inheritdoc */
-    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<void> {
+    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
-            await method(readModel, event, context);
+            return method(readModel, event, context);
         } else {
             throw new MissingProjectionForType(eventType);
         }
