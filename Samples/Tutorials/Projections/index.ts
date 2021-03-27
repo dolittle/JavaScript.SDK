@@ -4,7 +4,6 @@
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { Chefs } from './Chefs';
 import { Chef } from './Chef';
 import { DishPrepared } from './DishPrepared';
 
@@ -24,7 +23,7 @@ const client = Client
                 .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
                     chef.dishes.push(event.Dish);
                     return chef;
-                })
+                });
         })
     .build();
 
