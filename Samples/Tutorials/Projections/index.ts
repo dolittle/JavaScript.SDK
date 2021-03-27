@@ -18,12 +18,12 @@ const client = Client
                 chef.dishes.push(event.Dish);
                 return chef;
             });
-           projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
-                .forReadModel({ name: '', dishes: [] as string[] })
-                .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
-                    chef.dishes.push(event.Dish);
-                    return chef;
-                });
+        //    projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
+        //         .forReadModel({ name: '', dishes: [] as string[] })
+        //         .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
+        //             chef.dishes.push(event.Dish);
+        //             return chef;
+        //         });
         })
     .build();
 
