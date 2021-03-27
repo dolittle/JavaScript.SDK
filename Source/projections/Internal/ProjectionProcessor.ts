@@ -38,7 +38,6 @@ import { Constructor } from '@dolittle/types';
 
 export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
-
     constructor(
         private _projection: IProjection<T>,
         private _client: ProjectionsClient,
@@ -51,8 +50,9 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
 
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
-        registerArguments.setProjectionid();
-        registerArguments.setScopeid();
+        registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
+        registerArguments.setScopeid(guids.toProtobuf(this._projection.scopeId.value));
+
 
         let readModelInstance;
         if (typeof this._projection.readModelTypeOrInstance === 'function') {
