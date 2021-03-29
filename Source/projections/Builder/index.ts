@@ -4,7 +4,6 @@
 export { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
 export { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-export { InitialStateCallback } from './InitialStateCallback';
 export { KeySelectorBuilder } from './KeySelectorBuilder';
 export { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 export { OnDecoratedMethod } from './OnDecoratedMethod';

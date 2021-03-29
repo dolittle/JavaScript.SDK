@@ -38,6 +38,7 @@ import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 import { Key } from '../Key';
 import { Constructor } from '@dolittle/types';
 import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { ProjectionResult } from '..';
 
 export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
@@ -64,6 +65,7 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         } else {
             readModelInstance = this._projection.readModelTypeOrInstance;
         }
+        console.log(`projection ${this._projection.projectionId} with initial state ${JSON.stringify(readModelInstance)}`);
         registerArguments.setInitialstate(JSON.stringify(readModelInstance));
 
         const events: ProjectionEventSelector[] = [];
@@ -189,6 +191,7 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         const nextStateOrDelete = await this._projection.on(state, event, eventType, projectionContext);
         const response = new ProjectionResponse();
         const projectionNextState = new ProjectionNextState();
+
         if (nextStateOrDelete instanceof DeleteReadModelInstance) {
             projectionNextState.setType(ProjectionNextStateType.DELETE);
         } else {
@@ -197,9 +200,5 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         projectionNextState.setValue(JSON.stringify(nextStateOrDelete));
         response.setNextstate(projectionNextState);
         return response;
-    }
-
-    private isDeleteReadModelInstance(maybeDelete: any) {
-        return maybeDelete.constructor.name === DeleteReadModelInstance.name;
     }
 }

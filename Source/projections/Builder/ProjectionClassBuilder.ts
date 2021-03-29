@@ -12,7 +12,7 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionCallback, Projection } from '../';
+import { IProjections, ProjectionCallback, Projection, ProjectionResult } from '../';
 
 
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
@@ -26,6 +26,8 @@ import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 import { ReadModelAlreadyRegistered } from './ReadModelAlreadyRegistered';
 import { KeySelector } from '../KeySelector';
+import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
@@ -48,7 +50,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
     /** @inheritdoc */
     buildAndRegister(
         client: ProjectionsClient,
-        eventHandlers: IProjections,
+        projections: IProjections,
         container: IContainer,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
@@ -71,13 +73,20 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             logger.warn(`There are no projection methods to register in projection ${this._projectionType.name}. An projection must to be decorated with @${onDecorator.name}`);
             return;
         }
-        const events = new EventTypeMap<[ProjectionCallback<any>, KeySelector]>();
+        const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
         if (!this.tryAddAllProjectionMethods(events, methods, eventTypes, container, logger)) {
             logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`);
             return;
         }
-        const initialState = new this._projectionType();
-        const projection = new Projection(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, events);
+        const projection = new Projection<T>(decoratedType.projectionId, decoratedType.readModel, decoratedType.scopeId, events);
+        projections.register<T>(
+            new ProjectionProcessor<T>(
+                projection,
+                client,
+                executionContext,
+                eventTypes,
+                logger
+            ), cancellation);
     }
 
 
@@ -93,7 +102,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
                 continue;
             }
 
-            const eventHandlerMethod = this.createProjectionMethod(method, container);
+            const onMethod = this.createProjectionMethod(method, container);
             const keySelector = method.keySelector;
 
             if (events.has(eventType!)) {
@@ -101,21 +110,18 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
                 logger.warn(`Event handler ${this._projectionType.name} has multiple projection methods handling event type ${eventType}`);
                 continue;
             }
-            events.set(eventType!, [eventHandlerMethod, keySelector]);
+            events.set(eventType!, [onMethod, keySelector]);
         }
         return allMethodsValid;
     }
 
     private createProjectionMethod(method: OnDecoratedMethod, container: IContainer): ProjectionCallback<any> {
         return (instance, event, projectionContext) => {
-            // TODO: Should we allow IoC stuff in constructors for ReadModels?
-            // let instance: T;
-            // try {
-            //     instance = this._getInstance(container);
-            // } catch (ex) {
-            //     throw new CouldNotCreateInstanceOfProjection(this._projectionType, ex);
-            // }
-            method.method.call(instance, event, projectionContext);
+            const result = method.method.call(instance, event, projectionContext);
+            if (result instanceof DeleteReadModelInstance) {
+                return result;
+            }
+            return instance;
         };
     }
 

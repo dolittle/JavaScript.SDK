@@ -44,5 +44,5 @@ export interface IProjection<T> {
      * @param {EventType} eventType The event type.
      * @param {ProjectionContext} context The context for the projection processing.
      */
-    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T> | Promise<DeleteReadModelInstance>;
+    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | void;
 }

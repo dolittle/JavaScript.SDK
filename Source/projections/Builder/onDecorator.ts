@@ -9,11 +9,12 @@ import { EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 import { OnDecoratedMethods } from './OnDecoratedMethods';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
 
-type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
+type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 
 /**
- * Decorator for decorating on methods.
+ * Decorator for decorating on methods in a projection class.
  */
 export function on<T>(type: Constructor<T>, keySelectorCallback: KeySelectorBuilderCallback<T>): Returns;
 export function on(eventType: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback): Returns;

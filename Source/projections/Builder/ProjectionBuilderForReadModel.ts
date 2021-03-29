@@ -17,7 +17,6 @@ import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId
 import { ProjectionProcessor } from '../Internal';
 
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { InitialStateCallback } from './InitialStateCallback';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 
@@ -127,7 +126,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
         logger: Logger,
         cancellation: Cancellation): void {
 
-        const events = new EventTypeMap<[ProjectionCallback<any>, KeySelector]>();
+        const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
         if (this._onMethods.length < 1) {
             logger.warn(`Failed to register projection ${this._projectionId}. No on methods are configured`);
             return;
@@ -138,8 +137,8 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
             return;
         }
         const projection = new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);
-        projections.register(
-            new ProjectionProcessor(
+        projections.register<T>(
+            new ProjectionProcessor<T>(
                 projection,
                 client,
                 executionContext,

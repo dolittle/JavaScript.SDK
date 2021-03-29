@@ -11,5 +11,5 @@ export class ProjectionResult {
     /**
      * Signals that the read model instance should be deleted from the read model store.
      */
-    static delete: DeleteReadModelInstance = new DeleteReadModelInstance();
+    static readonly delete: DeleteReadModelInstance = new DeleteReadModelInstance();
 }
