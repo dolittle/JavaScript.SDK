@@ -5,7 +5,7 @@
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { projection, ProjectionResult } from '@dolittle/sdk.projections';
-import { Menu } from './ Menu';
+import { Menu } from './Menu';
 import { Chef } from './Chef';
 import { ChefFired } from './ChefFired';
 import { DishPrepared } from './DishPrepared';
