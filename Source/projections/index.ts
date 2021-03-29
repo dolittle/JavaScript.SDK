@@ -14,5 +14,7 @@ export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';
 export { ProjectionId } from './ProjectionId';
 export { Projections } from './Projections';
+export { ProjectionResult } from './ProjectionResult';
+export { DeleteReadModelInstance } from './DeleteReadModelInstance';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';
 export * from './Builder';

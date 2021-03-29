@@ -10,6 +10,7 @@ import { ProjectionId } from './ProjectionId';
 import { ProjectionCallback } from './ProjectionCallback';
 import { ProjectionContext } from './ProjectionContext';
 import { EventSelector } from './EventSelector';
+import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 
 export class Projection<T> implements IProjection<T> {
 
@@ -36,7 +37,7 @@ export class Projection<T> implements IProjection<T> {
     }
 
     /** @inheritdoc */
-    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T> {
+    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
             return method(readModel, event, context);

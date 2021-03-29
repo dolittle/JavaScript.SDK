@@ -3,6 +3,7 @@
 
 import { EventType, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
@@ -43,5 +44,5 @@ export interface IProjection<T> {
      * @param {EventType} eventType The event type.
      * @param {ProjectionContext} context The context for the projection processing.
      */
-    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T>;
+    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T> | Promise<DeleteReadModelInstance>;
 }
