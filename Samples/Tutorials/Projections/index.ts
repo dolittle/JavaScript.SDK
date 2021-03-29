@@ -27,7 +27,7 @@ const client = Client
             .on(ChefFired, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
                 console.log(`Firing ${chef.name}`);
                 return ProjectionResult.delete;
-            })
+            });
         })
     .build();
 
