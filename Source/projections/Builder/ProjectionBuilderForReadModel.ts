@@ -38,7 +38,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId Scope the projection operates on.
+     * @param {ScopeId | Guid | string} scopeId Scope the projection operates in.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     inScope(scopeId: ScopeId | Guid | string): ProjectionBuilderForReadModel<T> {
