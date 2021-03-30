@@ -3,12 +3,13 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { EventType } from '@dolittle/sdk.artifacts';
+import { ProjectionId } from './';
 
 /**
  * Exception that is thrown when there is no projection for a specific event type.
  */
-export class MissingProjectionForType extends Exception {
-    constructor(eventType: EventType) {
-        super(`Missing projection for '${eventType}'`);
+export class MissingOnMethodForType extends Exception {
+    constructor(projectionId: ProjectionId, eventType: EventType) {
+        super(`Missing on() method for ${eventType} in projection ${projectionId}`);
     }
 }

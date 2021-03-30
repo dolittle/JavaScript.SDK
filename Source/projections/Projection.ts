@@ -4,7 +4,7 @@
 import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { IProjection, KeySelector, MissingProjectionForType, ProjectionId,
+import { IProjection, KeySelector, MissingOnMethodForType, ProjectionId,
     ProjectionCallback, ProjectionContext, EventSelector, DeleteReadModelInstance
 } from './';
 
@@ -38,7 +38,7 @@ export class Projection<T> implements IProjection<T> {
             const [method] = this._eventMap.get(eventType)!;
             return method(readModel, event, context);
         } else {
-            throw new MissingProjectionForType(eventType);
+            throw new MissingOnMethodForType(this.projectionId, eventType);
         }
     }
 }

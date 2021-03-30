@@ -8,7 +8,7 @@ export { Key } from './Key';
 export { KeySelector } from './KeySelector';
 export { KeySelectorExpression } from './KeySelectorExpression';
 export { KeySelectorType } from './KeySelectorType';
-export { MissingProjectionForType } from './MissingProjectionForType';
+export { MissingOnMethodForType } from './MissingOnMethodForType';
 export { Projection } from './Projection';
 export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';
