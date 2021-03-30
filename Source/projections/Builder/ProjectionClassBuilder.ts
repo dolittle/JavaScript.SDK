@@ -131,17 +131,14 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
     }
 
     private ThrowIfReadModelAlreadyRegistered(types: ProjectionDecoratedType[]): void {
-        const readModels = types
-            .map(type => type.readModel);
+        const readModels = types.map(type => type.readModel);
         // make it into a Set so that we only get the unique duplicate values
         const duplicateReadmodels = new Set(
             readModels.filter((readModel, index) => readModels.indexOf(readModel) !== index));
 
-        if (duplicateReadmodels) {
-            for (const duplicateReadModel of new Set(duplicateReadmodels)) {
-                const duplicateTypes = types.filter(type => type.readModel === duplicateReadModel);
-                throw new ReadModelAlreadyRegistered(duplicateReadModel, duplicateTypes);
-            }
+        for (const duplicateReadModel of duplicateReadmodels) {
+            const duplicateTypes = types.filter(type => type.readModel === duplicateReadModel);
+            throw new ReadModelAlreadyRegistered(duplicateReadModel, duplicateTypes);
         }
     }
 }
