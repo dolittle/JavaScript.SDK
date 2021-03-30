@@ -13,7 +13,7 @@ import { ProjectionDecoratedTypes, ProjectionDecoratedType, ProjectionOptions }�
  * @param {ProjectionId | Guid | string} projectionId The id to associate with this Projection
  * @param {ProjectionOptions} [options={}] Options to give to the Projection
  */
-export function projection(projectionId: ProjectionId | Guid | string,  options: ProjectionOptions = {}) {
+export function projection(projectionId: ProjectionId | Guid | string, options: ProjectionOptions = {}) {
     return function (target: any) {
         ProjectionDecoratedTypes.register(new ProjectionDecoratedType(
             ProjectionId.from(projectionId),

@@ -10,6 +10,6 @@ import { ProjectionId } from '../';
  */
 export class ReadModelAlreadyDefinedForProjection extends Exception {
     constructor(projectionId: ProjectionId, newReadModel: Constructor<any> | any, oldReadModel: Constructor<any> | any) {
-        super(`You tried to register the readmodel ${newReadModel} to projection ${projectionId}, when it already had a read model defined to it: ${oldReadModel}`);
+        super(`Cannot assign ${newReadModel} to projection ${projectionId}. It is already associated with ${oldReadModel}`);
     }
 }

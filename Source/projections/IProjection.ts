@@ -17,7 +17,7 @@ export interface IProjection<T> {
     /**
      * Gets the read model type the projection is for.
      */
-    readonly readModelTypeOrInstance: Constructor<T>|T;
+    readonly readModelTypeOrInstance: Constructor<T> | T;
 
     /**
      * Gets the initial state of the projection.
@@ -41,5 +41,5 @@ export interface IProjection<T> {
      * @param {EventType} eventType The event type.
      * @param {ProjectionContext} context The context for the projection processing.
      */
-    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | void;
+    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
 }
