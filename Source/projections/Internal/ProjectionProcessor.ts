@@ -33,8 +33,20 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 
 import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '../';
 
+/**
+ * Represents an implementation of {@link EventProcessor} for {@link Projection}.
+ */
 export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
+    /**
+     * Initializes a new instance of {@link ProjectionProcessor}
+     * @template T
+     * @param {IProjection<T>} _projection The projection
+     * @param {ProjectionsClient} _client The client used to connect to the Runtime
+     * @param {ExecutionContext} _executionContext The execution context
+     * @param {IEventType} _eventTypes The registered event types for this projection
+     * @param {ILogger} logger Logger for logging
+     */
     constructor(
         private _projection: IProjection<T>,
         private _client: ProjectionsClient,
