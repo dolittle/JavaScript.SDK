@@ -60,7 +60,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             return;
         }
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
-        if (!this.tryAddAllProjectionMethods(events, methods, eventTypes, container, logger)) {
+        if (!this.tryAddAllProjectionMethods(events, methods, eventTypes, logger)) {
             logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`);
             return;
         }
@@ -77,7 +77,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
 
 
 
-    private tryAddAllProjectionMethods(events: EventTypeMap<[ProjectionCallback<any>, KeySelector]>, methods: OnDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {
+    private tryAddAllProjectionMethods(events: EventTypeMap<[ProjectionCallback<any>, KeySelector]>, methods: OnDecoratedMethod[], eventTypes: IEventTypes, logger: Logger): boolean {
         let allMethodsValid = true;
         for (const method of methods) {
             const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
@@ -88,7 +88,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
                 continue;
             }
 
-            const onMethod = this.createProjectionMethod(method, container);
+            const onMethod = this.createProjectionMethod(method);
             const keySelector = method.keySelector;
 
             if (events.has(eventType!)) {
@@ -101,7 +101,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
         return allMethodsValid;
     }
 
-    private createProjectionMethod(method: OnDecoratedMethod, container: IContainer): ProjectionCallback<any> {
+    private createProjectionMethod(method: OnDecoratedMethod): ProjectionCallback<any> {
         return (instance, event, projectionContext) => {
             const result = method.method.call(instance, event, projectionContext);
             if (result instanceof DeleteReadModelInstance) {
