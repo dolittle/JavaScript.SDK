@@ -1,16 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventContext, EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
+import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { IProjection } from './IProjection';
-import { KeySelector } from './KeySelector';
-import { MissingProjectionForType } from './MissingProjectionForType';
-import { ProjectionId } from './ProjectionId';
-import { ProjectionCallback } from './ProjectionCallback';
-import { ProjectionContext } from './ProjectionContext';
-import { EventSelector } from './EventSelector';
-import { DeleteReadModelInstance } from './DeleteReadModelInstance';
+
+import { IProjection, KeySelector, MissingProjectionForType, ProjectionId,
+    ProjectionCallback, ProjectionContext, EventSelector, DeleteReadModelInstance
+} from './';
 
 export class Projection<T> implements IProjection<T> {
 

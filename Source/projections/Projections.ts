@@ -5,8 +5,9 @@ import { delay } from 'rxjs/operators';
 import { Logger } from 'winston';
 
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
-import { IProjections } from './IProjections';
-import { ProjectionProcessor } from './Internal/ProjectionProcessor';
+
+import { IProjections } from './';
+import { ProjectionProcessor } from './Internal/';
 
 /**
  * Represents an implementation of {IProjections}

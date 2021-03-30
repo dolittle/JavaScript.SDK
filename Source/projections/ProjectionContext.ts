@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EventContext } from '@dolittle/sdk.events';
-import { Key } from './Key';
+import { Key } from './';
 
 /**
  * Represents the context of a projection.

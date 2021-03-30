@@ -3,10 +3,7 @@
 
 import { EventType, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { DeleteReadModelInstance } from './DeleteReadModelInstance';
-import { EventSelector } from './EventSelector';
-import { ProjectionContext } from './ProjectionContext';
-import { ProjectionId } from './ProjectionId';
+import { DeleteReadModelInstance, EventSelector, ProjectionContext, ProjectionId } from './';
 
 /**
  * Defines a projection.

@@ -3,8 +3,8 @@
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-import { ProjectionProcessor } from './Internal/ProjectionProcessor';
-import { ProjectionId } from './ProjectionId';
+import { ProjectionProcessor } from './Internal/';
+import { ProjectionId } from './';
 
 /**
  * Defines the system for projections
