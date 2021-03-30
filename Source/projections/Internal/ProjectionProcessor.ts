@@ -141,7 +141,7 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
 
     protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
-            throw new MissingEventInformation('no event in ProjectionRequest');
+            throw new MissingEventInformation('No event in ProjectionRequest');
         }
 
         const pbEvent = request.getEvent()!.getEvent()!;
@@ -168,7 +168,7 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             executionContext);
 
         if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
-            throw new MissingEventInformation('no state in ProjectionRequest');
+            throw new MissingEventInformation('No state in ProjectionRequest');
         }
 
         const pbStateType = request.getCurrentstate()!.getType();
