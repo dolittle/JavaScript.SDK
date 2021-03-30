@@ -17,7 +17,6 @@ export function projection(projectionId: ProjectionId | Guid | string,  option
     return function (target: any) {
         ProjectionDecoratedTypes.register(new ProjectionDecoratedType(
             ProjectionId.from(projectionId),
-            target,
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
             target));
     };

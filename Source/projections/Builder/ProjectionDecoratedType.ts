@@ -12,7 +12,6 @@ import { ProjectionId } from '../';
 export class ProjectionDecoratedType {
     constructor(
         readonly projectionId: ProjectionId,
-        readonly readModel: Constructor<any>,
         readonly scopeId: ScopeId,
         readonly type: Constructor<any>) {
     }
