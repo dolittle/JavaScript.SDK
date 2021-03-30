@@ -6,6 +6,12 @@ import { DateTime } from 'luxon';
 
 import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Constructor } from '@dolittle/types';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
+import { EventContext, EventSourceId } from '@dolittle/sdk.events';
+import { eventTypes, guids } from '@dolittle/sdk.protobuf';
+import { IEventTypes } from '@dolittle/sdk.artifacts';
 
 import {
     ProjectionRegistrationRequest,
@@ -25,20 +31,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Pr
 import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
 
-import { ProjectionId } from '../ProjectionId';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
-import { EventContext, EventSourceId } from '@dolittle/sdk.events';
-import { eventTypes, guids } from '@dolittle/sdk.protobuf';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { ProjectionContext } from '../ProjectionContext';
-import { IProjection } from '../IProjection';
-import { KeySelectorType } from '../KeySelectorType';
-import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
-import { Key } from '../Key';
-import { Constructor } from '@dolittle/types';
-import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
-import { ProjectionResult } from '..';
+import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '../';
 
 export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 

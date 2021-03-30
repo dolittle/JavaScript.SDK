@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ProjectionDecoratedType } from './ProjectionDecoratedType';
+import { ProjectionDecoratedType } from './';
 
 /**
  * Handles registering and mappings between @projection decorated classes and their given id and options.
