@@ -20,4 +20,3 @@ export { ProjectionOptions } from './ProjectionOptions';
 export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';
 export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
-export { ReadModelAlreadyRegistered } from './ReadModelAlreadyRegistered';

@@ -15,7 +15,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Pr
 import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '../';
 import { CannotRegisterProjectionThatIsNotAClass, ICanBuildAndRegisterAProjection, ProjectionDecoratedTypes,
     OnDecoratedMethod, OnDecoratedMethods, on as onDecorator, ProjectionDecoratedType, projection as projectionDecorator,
-    ReadModelAlreadyRegistered } from './';
+} from './';
 import { ProjectionProcessor } from '../Internal/';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
@@ -49,8 +49,6 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             logger.warn(`The projection class ${this._projectionType.name} must be decorated with an @${projectionDecorator.name} decorator`);
             return;
         }
-
-        this.ThrowIfReadModelAlreadyRegistered(ProjectionDecoratedTypes.types);
 
         logger.debug(`Building projection ${decoratedType.projectionId} processing events in scope ${decoratedType.scopeId} from type ${this._projectionType.name}`);
 
@@ -128,17 +126,5 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
 
     private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
         return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
-    }
-
-    private ThrowIfReadModelAlreadyRegistered(types: ProjectionDecoratedType[]): void {
-        const readModels = types.map(type => type.readModel);
-        // make it into a Set so that we only get the unique duplicate values
-        const duplicateReadmodels = new Set(
-            readModels.filter((readModel, index) => readModels.indexOf(readModel) !== index));
-
-        for (const duplicateReadModel of duplicateReadmodels) {
-            const duplicateTypes = types.filter(type => type.readModel === duplicateReadModel);
-            throw new ReadModelAlreadyRegistered(duplicateReadModel, duplicateTypes);
-        }
     }
 }
