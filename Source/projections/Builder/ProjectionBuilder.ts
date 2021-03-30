@@ -65,7 +65,7 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
         logger: Logger,
         cancellation: Cancellation): void {
         if (!this._builder) {
-            logger.warn(`Failed to register projection ${this._projectionId}. No read models defined for projection.`);
+            logger.warn(`Failed to register projection ${this._projectionId}. No read model defined for projection.`);
             return;
         }
         this._builder.buildAndRegister(
