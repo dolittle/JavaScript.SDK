@@ -3,6 +3,7 @@
 
 import { DeleteReadModelInstance } from './';
 
+
 /**
  * Represents possible results of a projection.
  */
