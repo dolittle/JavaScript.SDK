@@ -6,7 +6,7 @@ import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { EventStore } from './EventStore';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { IEventStore } from './IEventStore';
 
 /**

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Version as SdkVersion } from '@dolittle/sdk.execution';
-import { Version as PbVersion } from '@dolittle/runtime.contracts/Fundamentals/Versioning/Version_pb';
+import { Version as PbVersion } from '@dolittle/contracts/Versioning/Version_pb';
 
 /**
  * Convert to protobuf representation
@@ -59,7 +59,7 @@ SdkVersion.prototype.toProtobuf = function () {
 };
 
 
-declare module '@dolittle/runtime.contracts/Fundamentals/Versioning/Version_pb' {
+declare module '@dolittle/contracts/Versioning/Version_pb' {
     interface Version {
         toSDK(): SdkVersion;
     }

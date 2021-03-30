@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+
 import { Claims } from './Claims';
 import { CorrelationId } from './CorrelationId';
 import { ExecutionContext } from './ExecutionContext';
@@ -14,6 +15,7 @@ declare module './index' {
         forClaims(claims: Claims): ExecutionContext;
     }
 }
+
 ExecutionContext.prototype.forTenant = function (tenantId: TenantId | Guid | string) {
     return new ExecutionContext(
         this.microserviceId,
@@ -23,6 +25,7 @@ ExecutionContext.prototype.forTenant = function (tenantId: TenantId | Guid | str
         this.correlationId,
         this.claims);
 };
+
 ExecutionContext.prototype.forCorrelation = function (correlationId: CorrelationId | Guid | string) {
     return new ExecutionContext(
         this.microserviceId,
@@ -32,6 +35,7 @@ ExecutionContext.prototype.forCorrelation = function (correlationId: Correlation
         CorrelationId.from(correlationId),
         this.claims);
 };
+
 ExecutionContext.prototype.forClaims = function (claims: Claims) {
     return new ExecutionContext(
         this.microserviceId,

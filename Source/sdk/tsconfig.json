@@ -19,6 +19,7 @@
         { "path": "../events.processing" },
         { "path": "../execution" },
         { "path": "../protobuf" },
+        { "path": "../projections" },
         { "path": "../services" }
     ]
 }

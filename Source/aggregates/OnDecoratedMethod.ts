@@ -2,9 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+import { EventTypeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-
-import { EventTypeId } from '@dolittle/sdk.artifacts';
 
 import { OnMethodSignature } from './OnMethodSignature';
 

@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypeMap, EventType } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId } from '@dolittle/sdk.events';
+import { EventContext, EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 
 import { IEventHandler } from './IEventHandler';
 import { EventHandlerSignature } from './EventHandlerSignature';
@@ -34,12 +33,12 @@ export class EventHandler implements IEventHandler {
     }
 
     /** @inheritdoc */
-    async handle(event: any, eventTypes: EventType, context: EventContext): Promise<void> {
-        if (this.handleMethodsByEventType.has(eventTypes)) {
-            const method = this.handleMethodsByEventType.get(eventTypes)!;
+    async handle(event: any, eventType: EventType, context: EventContext): Promise<void> {
+        if (this.handleMethodsByEventType.has(eventType)) {
+            const method = this.handleMethodsByEventType.get(eventType)!;
             await method(event, context);
         } else {
-            throw new MissingEventHandlerForType(eventTypes);
+            throw new MissingEventHandlerForType(eventType);
         }
     }
 }

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { Uuid } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Uuid_pb';
+import { Uuid } from '@dolittle/contracts/Protobuf/Uuid_pb';
 
 /**
  * Convert to protobuf representation

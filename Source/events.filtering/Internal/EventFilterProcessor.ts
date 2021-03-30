@@ -3,19 +3,17 @@
 
 import { Logger } from 'winston';
 
-import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId } from '@dolittle/sdk.events';
+import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
-import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
-import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
+import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId, FilterEventCallback } from '../index';
+import { FilterId, FilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {

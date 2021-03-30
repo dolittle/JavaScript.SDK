@@ -3,11 +3,10 @@
 
 import { Logger } from 'winston';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { ScopeId } from '@dolittle/sdk.events';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { FilterId } from './FilterId';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';

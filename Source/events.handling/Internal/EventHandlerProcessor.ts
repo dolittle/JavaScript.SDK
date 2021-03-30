@@ -4,9 +4,9 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId, EventSourceId } from '@dolittle/sdk.events';
-import { EventProcessor } from '@dolittle/sdk.events.processing';
+import { EventContext, IEventTypes, EventSourceId } from '@dolittle/sdk.events';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { EventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
@@ -18,15 +18,15 @@ import {
     EventHandlerRuntimeToClientMessage,
     HandleEventRequest,
     EventHandlerResponse
-} from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_pb';
-import { Artifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
-import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+} from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_pb';
+import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { guids, eventTypes, executionContexts } from '@dolittle/sdk.protobuf';
+import { guids, eventTypes } from '@dolittle/sdk.protobuf';
 
-import { EventHandlerId, IEventHandler, MissingEventInformation } from '../index';
+import { EventHandlerId, IEventHandler } from '..';
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
