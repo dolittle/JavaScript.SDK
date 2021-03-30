@@ -14,7 +14,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Pr
 
 import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '../';
 import { CannotRegisterProjectionThatIsNotAClass, ICanBuildAndRegisterAProjection, ProjectionDecoratedTypes,
-    OnDecoratedMethod, OnDecoratedMethods, on as onDecorator, ProjectionDecoratedType, projection as projectionDecorator,
+    OnDecoratedMethod, OnDecoratedMethods, on as onDecorator, projection as projectionDecorator,
 } from './';
 import { ProjectionProcessor } from '../Internal/';
 
