@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EventType } from '@dolittle/sdk.events';
-import { KeySelector } from './';
+
+import { KeySelector } from './KeySelector';
 
 /**
  * Represents a projection event and key selector.

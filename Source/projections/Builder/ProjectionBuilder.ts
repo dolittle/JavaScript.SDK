@@ -13,8 +13,11 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionId } from '../';
-import { ReadModelAlreadyDefinedForProjection, ProjectionBuilderForReadModel, ICanBuildAndRegisterAProjection } from './';
+import { IProjections, ProjectionId } from '..';
+
+import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
+import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
 export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;

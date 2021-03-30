@@ -2,11 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { Constructor } from '@dolittle/types';
 import { EventTypeId, Generation } from '@dolittle/sdk.artifacts';
+import { Constructor } from '@dolittle/types';
 
-import { OnDecoratedMethods, KeySelectorBuilderCallback, KeySelectorBuilder } from './';
-import { DeleteReadModelInstance } from '../';
+import { DeleteReadModelInstance } from '..';
+
+import { KeySelectorBuilder } from './KeySelectorBuilder';
+import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
+import { OnDecoratedMethods } from './OnDecoratedMethods';
 
 type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 

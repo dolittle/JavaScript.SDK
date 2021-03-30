@@ -3,7 +3,7 @@
 
 import { Exception } from '@dolittle/rudiments';
 
-import { KeySelectorType } from './';
+import { KeySelectorType } from './KeySelectorType';
 
 /**
  * Exception that is thrown when trying to register a projection with an unkown key selector type.

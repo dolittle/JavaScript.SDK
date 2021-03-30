@@ -13,9 +13,12 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '../';
+import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { ProjectionProcessor } from '../Internal';
-import { ICanBuildAndRegisterAProjection, KeySelectorBuilder, KeySelectorBuilderCallback } from './';
+
+import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+import { KeySelectorBuilder } from './KeySelectorBuilder';
+import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];

@@ -12,8 +12,11 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionId, Projections } from '../';
-import { ICanBuildAndRegisterAProjection, ProjectionBuilder, ProjectionClassBuilder } from './';
+import { IProjections, ProjectionId, Projections } from '..';
+
+import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+import { ProjectionBuilder } from './ProjectionBuilder';
+import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];

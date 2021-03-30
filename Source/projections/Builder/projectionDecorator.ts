@@ -5,8 +5,11 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { ProjectionId } from '../';
-import { ProjectionDecoratedTypes, ProjectionDecoratedType, ProjectionOptions } from './';
+import { ProjectionId } from '..';
+
+import { ProjectionDecoratedType } from './ProjectionDecoratedType';
+import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
+import { ProjectionOptions } from './ProjectionOptions';
 
 /**
  * Decorator to mark a class as an Projection.

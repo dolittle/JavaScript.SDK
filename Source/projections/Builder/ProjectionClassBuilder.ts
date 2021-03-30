@@ -12,11 +12,16 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '../';
-import { CannotRegisterProjectionThatIsNotAClass, ICanBuildAndRegisterAProjection, ProjectionDecoratedTypes,
-    OnDecoratedMethod, OnDecoratedMethods, on as onDecorator, projection as projectionDecorator,
-} from './';
-import { ProjectionProcessor } from '../Internal/';
+import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '..';
+import { ProjectionProcessor } from '../Internal';
+
+import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
+import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+import { on as onDecorator } from './onDecorator';
+import { OnDecoratedMethod } from './OnDecoratedMethod';
+import { OnDecoratedMethods } from './OnDecoratedMethods';
+import { projection as projectionDecorator } from './projectionDecorator';
+import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;

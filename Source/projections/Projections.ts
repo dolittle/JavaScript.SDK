@@ -6,8 +6,9 @@ import { Logger } from 'winston';
 
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
-import { IProjections } from './';
-import { ProjectionProcessor } from './Internal/';
+import { ProjectionProcessor } from './Internal';
+
+import { IProjections } from './IProjections';
 
 /**
  * Represents an implementation of {IProjections}

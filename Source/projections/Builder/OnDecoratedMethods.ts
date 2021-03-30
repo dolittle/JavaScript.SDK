@@ -5,8 +5,10 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 import { EventTypeId } from '@dolittle/sdk.artifacts';
 
-import { KeySelector } from '../';
-import { OnDecoratedMethod, ProjectionClassOnMethod  } from './';
+import { KeySelector } from '..';
+
+import { OnDecoratedMethod  } from './OnDecoratedMethod';
+import { ProjectionClassOnMethod  } from './ProjectionClassOnMethod';
 
 /**
  * Defines the system that knows about all the methods decorated with the on decorator.

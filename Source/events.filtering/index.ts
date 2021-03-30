@@ -1,17 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { FilterId } from './FilterId';
-export { FilterEventCallback } from './FilterEventCallback';
-export { IFilterProcessor } from './IFilterProcessor';
-export { PartitionedFilterResult } from './PartitionedFilterResult';
+export { EventFiltersBuilder, EventFiltersBuilderCallback, PrivateEventFilterBuilderCallback, PublicEventFilterBuilderCallback } from './EventFiltersBuilder';
 export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
-export { MissingFilterCallback } from './MissingFilterCallback';
-export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
-export { IFilters } from './IFilters';
+export { FilterEventCallback } from './FilterEventCallback';
+export { FilterId } from './FilterId';
 export { Filters } from './Filters';
-export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+export { IFilterProcessor } from './IFilterProcessor';
+export { IFilters } from './IFilters';
+export { MissingFilterCallback } from './MissingFilterCallback';
 export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+export { PartitionedFilterResult } from './PartitionedFilterResult';
 export { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 export { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
-export { EventFiltersBuilder, EventFiltersBuilderCallback, PrivateEventFilterBuilderCallback, PublicEventFilterBuilderCallback } from './EventFiltersBuilder';
+export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';

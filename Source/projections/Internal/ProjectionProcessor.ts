@@ -31,7 +31,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '../';
+import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '..';
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.

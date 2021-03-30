@@ -2,7 +2,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { KeySelectorType, KeySelectorExpression  } from './';
+import { KeySelectorExpression  } from './KeySelectorExpression';
+import { KeySelectorType  } from './KeySelectorType';
 
 /**
  * Represents a projection event key selector.

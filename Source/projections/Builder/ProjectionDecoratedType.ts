@@ -4,7 +4,7 @@
 import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionId } from '../';
+import { ProjectionId } from '..';
 
 /**
  * Represents a projection created from the decorator

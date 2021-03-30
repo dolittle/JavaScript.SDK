@@ -4,9 +4,14 @@
 import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { IProjection, KeySelector, MissingOnMethodForType, ProjectionId,
-    ProjectionCallback, ProjectionContext, EventSelector, DeleteReadModelInstance
-} from './';
+import { DeleteReadModelInstance } from './DeleteReadModelInstance';
+import { EventSelector } from './EventSelector';
+import { IProjection } from './IProjection';
+import { KeySelector } from './KeySelector';
+import { MissingOnMethodForType } from './MissingOnMethodForType';
+import { ProjectionCallback } from './ProjectionCallback';
+import { ProjectionContext } from './ProjectionContext';
+import { ProjectionId } from './ProjectionId';
 
 export class Projection<T> implements IProjection<T> {
 

@@ -3,7 +3,8 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { EventType } from '@dolittle/sdk.artifacts';
-import { ProjectionId } from './';
+
+import { ProjectionId } from './ProjectionId';
 
 /**
  * Exception that is thrown when there is no projection for a specific event type.

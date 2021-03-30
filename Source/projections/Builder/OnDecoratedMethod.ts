@@ -5,8 +5,9 @@ import { Guid } from '@dolittle/rudiments';
 import { EventTypeId } from '@dolittle/sdk.artifacts';
 import { Constructor } from '@dolittle/types';
 
-import { KeySelector } from '../';
-import { ProjectionClassOnMethod } from './';
+import { KeySelector } from '..';
+
+import { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 
 /**
  * Represents methods decorated with the on decorator.
