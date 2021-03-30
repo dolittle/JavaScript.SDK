@@ -58,7 +58,6 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         } else {
             readModelInstance = this._projection.readModelTypeOrInstance;
         }
-        console.log(`projection ${this._projection.projectionId} with initial state ${JSON.stringify(readModelInstance)}`);
         registerArguments.setInitialstate(JSON.stringify(readModelInstance));
 
         const events: ProjectionEventSelector[] = [];
