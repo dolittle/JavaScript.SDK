@@ -191,6 +191,11 @@ export class ClientBuilder {
         return this;
     }
 
+    /**
+     * Configure projections.
+     * @param {ProjectionsBuilderCallback} callback The builder callback
+     * @returns {ClientBuilder}
+     */
     withProjections(callback: ProjectionsBuilderCallback): ClientBuilder {
         callback(this._projectionsBuilder);
         return this;
