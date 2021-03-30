@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ExecutionContext as SdkExecutionContext, Claims, TenantId, MicroserviceId, CorrelationId, Environment } from '@dolittle/sdk.execution';
-import { ExecutionContext as PbExecutionContext } from '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb';
-import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
+import { ExecutionContext as PbExecutionContext } from '@dolittle/contracts/Execution/ExecutionContext_pb';
+import { Claim as PbClaim } from '@dolittle/contracts/Security/Claim_pb';
 
 import claims from './claims';
 import guids from './guids';
@@ -67,7 +67,7 @@ SdkExecutionContext.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
-declare module '@dolittle/runtime.contracts/Fundamentals/Execution/ExecutionContext_pb' {
+declare module '@dolittle/contracts/Execution/ExecutionContext_pb' {
     interface ExecutionContext {
         toSDK(): SdkExecutionContext;
     }

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
-import { Guid } from '@dolittle/rudiments';
 import '../index';
 
 describe('when converting to and from protobuf', () => {

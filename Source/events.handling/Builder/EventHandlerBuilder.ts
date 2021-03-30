@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { IEventTypes, EventTypeMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 

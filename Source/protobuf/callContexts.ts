@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { CallRequestContext } from '@dolittle/runtime.contracts/Fundamentals/Services/CallContext_pb';
+import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
 import executionContexts from './executionContexts';
 
 /**

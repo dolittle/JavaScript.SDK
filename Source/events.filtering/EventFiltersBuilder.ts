@@ -9,7 +9,7 @@ import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { FilterId } from './FilterId';
 import { Filters } from './Filters';

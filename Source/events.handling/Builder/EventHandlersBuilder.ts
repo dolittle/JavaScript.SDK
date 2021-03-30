@@ -11,7 +11,7 @@ import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
 import { EventHandlerId, EventHandlers, IEventHandlers } from '../index';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';

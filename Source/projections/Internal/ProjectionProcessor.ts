@@ -26,10 +26,10 @@ import {
     ProjectionCurrentStateType,
     ProjectionNextState,
     ProjectionNextStateType
-} from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
-import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+} from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '../';
 

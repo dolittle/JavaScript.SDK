@@ -11,11 +11,11 @@ import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
-import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
-import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PartitionedFilters_pb';
-import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Runtime/Events.Processing/PublicFilters_pb';
-import { ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMessage } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
+import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Events.Processing/PartitionedFilters_pb';
+import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Events.Processing/PublicFilters_pb';
+import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { FilterId, PartitionedFilterEventCallback } from '../index';
 import { FilterEventProcessor } from './FilterEventProcessor';

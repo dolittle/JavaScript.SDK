@@ -7,8 +7,8 @@ import { first, skip, map, filter, timeout } from 'rxjs/operators';
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 import { Logger } from 'winston';
 
-import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgumentsContext } from '@dolittle/runtime.contracts/Fundamentals/Services/ReverseCallContext_pb';
-import { Ping, Pong } from '@dolittle/runtime.contracts/Fundamentals/Services/Ping_pb';
+import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgumentsContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
+import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
 
 import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext } from '@dolittle/sdk.execution';

@@ -10,7 +10,7 @@ import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
 import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '../';
 import { CannotRegisterProjectionThatIsNotAClass, ICanBuildAndRegisterAProjection, ProjectionDecoratedTypes,

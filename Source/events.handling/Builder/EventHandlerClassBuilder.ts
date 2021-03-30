@@ -11,7 +11,7 @@ import { EventTypeMap } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
 import { EventHandler, EventHandlerSignature, IEventHandlers, internal } from '../index';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';

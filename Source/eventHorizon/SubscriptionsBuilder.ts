@@ -7,7 +7,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { TenantId, ExecutionContext } from '@dolittle/sdk.execution';
 
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 
 import {SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
 import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';

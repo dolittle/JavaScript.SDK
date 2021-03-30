@@ -7,7 +7,7 @@ import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';

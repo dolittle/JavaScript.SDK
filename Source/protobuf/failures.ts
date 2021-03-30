@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
+import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { Guid } from '@dolittle/rudiments';
 
 import { Failure as SdkFailure } from './Failure';
@@ -53,7 +53,7 @@ SdkFailure.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
-declare module '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb' {
+declare module '@dolittle/contracts/Protobuf/Failure_pb' {
     interface Failure {
         toSDK(): SdkFailure | undefined
     }

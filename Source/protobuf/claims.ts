@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Claim as SdkClaim, Claims } from '@dolittle/sdk.execution';
-import { Claim as PbClaim } from '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb';
+import { Claim as PbClaim } from '@dolittle/contracts/Security/Claim_pb';
 
 /**
  * Convert to protobuf representation
@@ -69,7 +69,7 @@ Claims.prototype.toProtobuf = function () {
 };
 
 
-declare module '@dolittle/runtime.contracts/Fundamentals/Security/Claim_pb' {
+declare module '@dolittle/contracts/Security/Claim_pb' {
     interface Claim {
         toSDK(): SdkClaim;
     }

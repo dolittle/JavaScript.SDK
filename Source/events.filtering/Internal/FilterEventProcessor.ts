@@ -10,9 +10,9 @@ import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.pr
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids, eventTypes } from '@dolittle/sdk.protobuf';
 
-import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
-import { RetryProcessingState } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
+import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { FilterId } from '../index';
 

@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
 import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';

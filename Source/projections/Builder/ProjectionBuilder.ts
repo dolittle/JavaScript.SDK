@@ -11,7 +11,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
 import { IProjections, ProjectionId } from '../';
 import { ReadModelAlreadyDefinedForProjection, ProjectionBuilderForReadModel, ICanBuildAndRegisterAProjection } from './';
