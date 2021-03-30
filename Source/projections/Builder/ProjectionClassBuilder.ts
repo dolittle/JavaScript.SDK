@@ -20,19 +20,16 @@ import { ProjectionProcessor } from '../Internal/';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
-    private readonly _getInstance: (container: IContainer) => T;
 
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;
-            this._getInstance = container => container.get(typeOrInstance);
 
         } else {
             this._projectionType = Object.getPrototypeOf(typeOrInstance).constructor;
             if (this._projectionType === undefined) {
                 throw new CannotRegisterProjectionThatIsNotAClass(typeOrInstance);
             }
-            this._getInstance = _ => typeOrInstance;
         }
     }
 
