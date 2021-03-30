@@ -59,7 +59,7 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
 
         const methods = OnDecoratedMethods.methodsPerProjection.get(this._projectionType);
         if (methods === undefined) {
-            logger.warn(`There are no projection methods to register in projection ${this._projectionType.name}. An projection must to be decorated with @${onDecorator.name}`);
+            logger.warn(`There are no on methods specified in projection ${this._projectionType.name}. An projection must to be decorated with @${onDecorator.name}`);
             return;
         }
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
