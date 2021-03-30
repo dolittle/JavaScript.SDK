@@ -36,13 +36,13 @@ export class ProjectionsBuilder {
      * Register a type as a projection
      * @param type The type to register as a projection.
      */
-    register<T = any>(type: Constructor<T>): ProjectionsBuilder;
+    register(type: Constructor<any>): ProjectionsBuilder;
     /**
      * Register an instance as an event handler.
      * @param instance The instance to register as an event handler.
      */
-    register<T = any>(instance: T): ProjectionsBuilder;
-    register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
+    register(instance: any): ProjectionsBuilder;
+    register<T>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
         this._projectionBuilders.push(new ProjectionClassBuilder<T>(typeOrInstance));
         return this;
     }
