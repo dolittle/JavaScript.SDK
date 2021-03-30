@@ -41,8 +41,9 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     }
 
     /**
-     * Defines which readmodel to build a projection for. The initial readmodel will be generated with default values
-     * defined in the type.
+     * Defines the type of the read model the projection builds. The initial state of a newly
+     * created read model is given by the provided instance or an instance constructed by
+     * the default constructor of the provided type.
      * @param {Constructor<T> | T} typeOrInstance The type or an instance of the read model.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
