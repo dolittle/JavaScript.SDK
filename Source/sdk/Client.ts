@@ -3,8 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventSourceId, EventStoreBuilder, IEventStore } from '@dolittle/sdk.events';
+import { EventSourceId, EventStoreBuilder, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';

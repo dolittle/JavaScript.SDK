@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerId } from '../index';
+import { EventHandlerId } from '..';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerOptions } from './EventHandlerOptions';

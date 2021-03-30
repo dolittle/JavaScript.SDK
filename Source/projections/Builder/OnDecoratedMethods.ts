@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { EventTypeId } from '@dolittle/sdk.artifacts';
+import { EventTypeId } from '@dolittle/sdk.events';
 
 import { KeySelector } from '..';
 

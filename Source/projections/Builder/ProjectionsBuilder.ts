@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';

@@ -17,7 +17,9 @@ import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resili
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { IEventProcessor, RegistrationFailed } from '../index';
+import { RegistrationFailed } from '..';
+
+import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.

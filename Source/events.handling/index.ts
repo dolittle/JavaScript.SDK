@@ -8,3 +8,11 @@ export { EventHandlerSignature } from './EventHandlerSignature';
 export { IEventHandler } from './IEventHandler';
 export { IEventHandlers } from './IEventHandlers';
 export { MissingEventHandlerForType } from './MissingEventHandlerForType';
+
+export {
+    CannotRegisterEventHandlerThatIsNotAClass,
+    CouldNotCreateInstanceOfEventHandler,
+    eventHandler,
+    EventHandlerOptions,
+    handles,
+} from './Builder';

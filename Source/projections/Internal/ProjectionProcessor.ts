@@ -4,14 +4,14 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { EventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
-import { EventContext, EventSourceId } from '@dolittle/sdk.events';
+import { EventContext, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
 import { eventTypes, guids } from '@dolittle/sdk.protobuf';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
 
 import {
     ProjectionRegistrationRequest,

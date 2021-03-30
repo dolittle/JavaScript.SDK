@@ -3,9 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId } from '@dolittle/sdk.events';
+import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -17,7 +15,7 @@ import { PartitionedFilterClientToRuntimeMessage, PartitionedFilterRegistrationR
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId, PartitionedFilterEventCallback } from '../index';
+import { FilterId, PartitionedFilterEventCallback } from '..';
 
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {
 

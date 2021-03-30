@@ -3,7 +3,7 @@
 
 import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
-import { MissingArtifactIdentifier } from '../index';
+import { MissingArtifactIdentifier } from '..';
 
 describe('when converting from protobuf with missing id', () => {
     const pbArtifact = new PbArtifact();

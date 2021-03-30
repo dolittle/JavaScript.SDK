@@ -6,9 +6,9 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.events';
 
-import { EventHandlerId, EventHandlerSignature } from '../index';
+import { EventHandlerId, EventHandlerSignature } from '..';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];

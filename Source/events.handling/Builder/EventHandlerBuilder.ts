@@ -4,13 +4,14 @@
 import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
-import { IEventTypes, EventTypeMap } from '@dolittle/sdk.artifacts';
-import { ScopeId } from '@dolittle/sdk.events';
+import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers, internal } from '../index';
+import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
+import { EventHandlerProcessor } from '../Internal';
+
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 import { IContainer } from '@dolittle/sdk.common';
@@ -83,7 +84,7 @@ export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
         }
         const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);
         eventHandlers.register(
-            new internal.EventHandlerProcessor(
+            new EventHandlerProcessor(
                 eventHandler,
                 client,
                 executionContext,

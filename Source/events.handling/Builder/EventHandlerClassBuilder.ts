@@ -7,18 +7,19 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { IContainer } from '@dolittle/sdk.common';
-import { EventTypeMap } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandler, EventHandlerSignature, IEventHandlers, internal } from '../index';
+import { EventHandler, EventHandlerSignature, IEventHandlers } from '..';
+import { EventHandlerProcessor } from '../Internal';
+
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { eventHandler as eventHandlerDecorator } from './eventHandlerDecorator';
 import { handles as handlesDecorator } from './handlesDecorator';
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
-import { EventType, EventTypeId, Generation, IEventTypes } from '@dolittle/sdk.artifacts';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
@@ -71,7 +72,7 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
         }
         const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods);
         eventHandlers.register(
-            new internal.EventHandlerProcessor(
+            new EventHandlerProcessor(
                 eventHandler,
                 client,
                 executionContext,

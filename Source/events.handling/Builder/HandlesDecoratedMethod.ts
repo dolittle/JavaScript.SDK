@@ -4,9 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventTypeId } from '@dolittle/sdk.artifacts';
+import { EventTypeId } from '@dolittle/sdk.events';
 
-import { EventHandlerSignature } from '../index';
+import { EventHandlerSignature } from '..';
 
 /**
  * Represents methods decorated with the handles decorator.

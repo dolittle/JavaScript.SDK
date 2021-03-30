@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';

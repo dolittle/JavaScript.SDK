@@ -4,14 +4,13 @@
 import * as grpc from '@grpc/grpc-js';
 import { createLogger, format, Logger, transports } from 'winston';
 
-import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.artifacts';
+import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
 import { IContainer, Container } from '@dolittle/sdk.common';
-import { EventStoreBuilder } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling/Builder';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
+import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections/Builder';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';

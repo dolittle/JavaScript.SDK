@@ -4,9 +4,8 @@
 import { Logger } from 'winston';
 
 import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { ScopeId } from '@dolittle/sdk.events';
+import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';

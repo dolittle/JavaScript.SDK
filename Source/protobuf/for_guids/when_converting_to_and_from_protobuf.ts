@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { guids } from '../index';
+import { guids } from '..';
 
 describe('when converting to and from protobuf', () => {
     const guid = Guid.create();

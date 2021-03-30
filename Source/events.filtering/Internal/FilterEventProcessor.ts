@@ -4,9 +4,9 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventContext, EventSourceId } from '@dolittle/sdk.events';
-import { EventProcessor, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { EventContext, IEventTypes, EventSourceId } from '@dolittle/sdk.events';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { EventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { guids, eventTypes } from '@dolittle/sdk.protobuf';
 
@@ -14,7 +14,7 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId } from '../index';
+import { FilterId } from '..';
 
 export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 

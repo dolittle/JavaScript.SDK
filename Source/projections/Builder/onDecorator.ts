@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { EventTypeId, Generation } from '@dolittle/sdk.artifacts';
+import { EventTypeId, Generation } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
 import { DeleteReadModelInstance } from '..';

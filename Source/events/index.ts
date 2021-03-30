@@ -35,3 +35,23 @@ export { syncPromise } from './syncPromise';
 export { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 export { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 export { UncommittedEvent } from './UncommittedEvent';
+
+export {
+    CannotHaveMultipleEventTypesAssociatedWithType,
+    CannotHaveMultipleTypesAssociatedWithEventType,
+    EventType,
+    eventType,
+    EventTypeId,
+    EventTypeMap,
+    EventTypeOptions,
+    EventTypes,
+    EventTypesBuilder,
+    EventTypesBuilderCallback,
+    EventTypesFromDecorators,
+    Generation,
+    GenerationMustBePositiveInteger,
+    IEventTypes,
+    UnableToResolveEventType,
+    UnknownEventType,
+    UnknownType,
+} from '@dolittle/sdk.artifacts';

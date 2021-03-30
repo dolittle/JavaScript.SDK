@@ -17,3 +17,12 @@ export { ProjectionId } from './ProjectionId';
 export { ProjectionResult } from './ProjectionResult';
 export { Projections } from './Projections';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';
+
+export {
+    CannotRegisterProjectionThatIsNotAClass,
+    CouldNotCreateInstanceOfProjection,
+    on,
+    projection,
+    ProjectionOptions,
+    ReadModelAlreadyDefinedForProjection,
+} from './Builder';

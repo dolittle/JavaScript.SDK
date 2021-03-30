@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventSourceId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventStore } from '@dolittle/sdk.events';
+import { AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventSourceId, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 import { IAggregateOf } from './IAggregateOf';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
-import { EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
 import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 import { AggregateRootOperations } from './AggregateRootOperations';

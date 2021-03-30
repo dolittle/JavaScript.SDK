@@ -4,8 +4,7 @@
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 import { AggregateRootAction } from './AggregateRootAction';
 import { AggregateRoot } from './AggregateRoot';
-import { AggregateRootVersion, AggregateRootId, CommittedAggregateEvent, CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent } from '@dolittle/sdk.events';
-import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { AggregateRootVersion, AggregateRootId, CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, IEventTypes } from '@dolittle/sdk.events';
 import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 
