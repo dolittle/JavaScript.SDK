@@ -3,7 +3,7 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { ProjectionId } from '../ProjectionId';
+import { ProjectionId } from '../';
 
 /**
  * Exception that is thrown when you try to register a readmodel for a projection when its already defined.

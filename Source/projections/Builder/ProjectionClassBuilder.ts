@@ -12,22 +12,11 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionCallback, Projection, ProjectionResult } from '../';
-
-
-import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
-import { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
-import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { OnDecoratedMethod } from './OnDecoratedMethod';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
-import { on as onDecorator } from './onDecorator';
-import { ProjectionDecoratedType } from './ProjectionDecoratedType';
-import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
-import { projection as projectionDecorator } from './projectionDecorator';
-import { ReadModelAlreadyRegistered } from './ReadModelAlreadyRegistered';
-import { KeySelector } from '../KeySelector';
-import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
-import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '../';
+import { CannotRegisterProjectionThatIsNotAClass, ICanBuildAndRegisterAProjection, ProjectionDecoratedTypes,
+    OnDecoratedMethod, OnDecoratedMethods, on as onDecorator, ProjectionDecoratedType, projection as projectionDecorator,
+    ReadModelAlreadyRegistered } from './';
+import { ProjectionProcessor } from '../Internal/';
 
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
@@ -140,8 +129,8 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
         }
     }
 
-    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
-        return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
+        return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
     }
 
     private ThrowIfReadModelAlreadyRegistered(types: ProjectionDecoratedType[]): void {

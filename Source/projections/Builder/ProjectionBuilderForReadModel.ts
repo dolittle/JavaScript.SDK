@@ -15,10 +15,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Pr
 
 import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '../';
 import { ProjectionProcessor } from '../Internal';
-
-import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { KeySelectorBuilder } from './KeySelectorBuilder';
-import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
+import { ICanBuildAndRegisterAProjection, KeySelectorBuilder, KeySelectorBuilderCallback } from './';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];

@@ -7,16 +7,13 @@ import { Guid } from '@dolittle/rudiments';
 import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { IProjections } from '../IProjections';
+import { Constructor } from '@dolittle/types';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
 
-import { ProjectionId } from '../ProjectionId';
-import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { ProjectionBuilder } from './ProjectionBuilder';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Projections } from '../Projections';
-import { Constructor } from '@dolittle/types';
-import { ProjectionClassBuilder } from './ProjectionClassBuilder';
+import { IProjections, ProjectionId, Projections } from '../';
+import { ICanBuildAndRegisterAProjection, ProjectionBuilder, ProjectionClassBuilder } from './';
 
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];

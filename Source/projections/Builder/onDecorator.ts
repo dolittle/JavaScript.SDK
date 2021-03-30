@@ -3,13 +3,10 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-
 import { EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 
-import { OnDecoratedMethods } from './OnDecoratedMethods';
-import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-import { KeySelectorBuilder } from './KeySelectorBuilder';
-import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { OnDecoratedMethods, KeySelectorBuilderCallback, KeySelectorBuilder } from './';
+import { DeleteReadModelInstance } from '../';
 
 type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 

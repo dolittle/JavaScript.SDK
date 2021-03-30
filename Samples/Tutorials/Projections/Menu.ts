@@ -12,7 +12,8 @@ export class Menu {
 
     @on(DishPrepared, _ => _.keyFromEventSource())
     on(event: DishPrepared, ctx: EventContext) {
-        if (!this.dishes.includes(event.Dish))
+        if (!this.dishes.includes(event.Dish)) {
             this.dishes.push(event.Dish);
+        }
     }
 }
