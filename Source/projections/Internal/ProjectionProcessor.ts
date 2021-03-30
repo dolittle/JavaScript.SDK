@@ -168,7 +168,7 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             executionContext);
 
         if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
-            throw new MissingEventInformation('no state in ProjectionRequest');
+            throw new MissingEventInformation('No state in ProjectionRequest');
         }
 
         const pbStateType = request.getCurrentstate()!.getType();
