@@ -17,18 +17,18 @@ const client = Client
         eventTypes.register(ChefFired);
     })
     .withProjections(projections => {
-        // projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
-        //     .forReadModel(Chef)
-        //     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
-        //         console.log(`Handling event ${JSON.stringify(event)} and read model ${JSON.stringify(chef)}`);
-        //         chef.name = event.Chef;
-        //         chef.dishes.push(event.Dish);
-        //         return chef;
-        //     });
-            // .on(ChefFired, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
-            //     console.log(`Firing ${chef.name}`);
-            //     return ProjectionResult.delete;
-            // });
+        projections.createProjection('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c')
+            .forReadModel(Chef)
+            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
+                console.log(`Handling event ${JSON.stringify(event)} and read model ${JSON.stringify(chef)}`);
+                chef.name = event.Chef;
+                chef.dishes.push(event.Dish);
+                return chef;
+            })
+            .on(ChefFired, _ => _.keyFromProperty('Chef'), (chef, event, ctx) => {
+                console.log(`Firing ${chef.name}`);
+                return ProjectionResult.delete;
+            });
         projections.register(Menu);
         })
     .build();
@@ -38,7 +38,6 @@ const avocadoArtillery = new DishPrepared('Avocado Artillery Tortilla', 'Mr. Tac
 const chiliCannon = new DishPrepared('Chili Cannon Wrap', 'Ms. TexMex');
 const mrTacoFired = new ChefFired('Mr. Taco');
 
-console.log('starting comit');
 client.eventStore
     .forTenant(TenantId.development)
     .commit(beanBlaster, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
@@ -52,4 +51,12 @@ client.eventStore
 client.eventStore
     .forTenant(TenantId.development)
     .commit(mrTacoFired, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-console.log('done comitng');
+
+const menu = client.projections
+    .forTenant(TenantId.development)
+    .Get(Menu, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+console.log(JSON.stringify(menu));
+
+const chefs = client.projections
+    .forTenant(TenantId.development)
+    .GetAll(Chef);
