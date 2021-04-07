@@ -26,3 +26,11 @@ export {
     ProjectionOptions,
     ReadModelAlreadyDefinedForProjection,
 } from './Builder';
+
+export {
+    CurrentState,
+    IProjectionAssociations,
+    ProjectionAssociations,
+    ProjectionAssociation,
+    ProjectionStoreBuilder
+} from './Store'

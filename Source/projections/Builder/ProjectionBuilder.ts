@@ -12,11 +12,12 @@ import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { IProjections, ProjectionId } from '..';
+import { IProjections, projection, ProjectionId } from '..';
 
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
+import { IProjectionAssociations } from '../Store';
 
 export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
@@ -27,7 +28,7 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
      * Initializes a new instance of {@link ProjectionBuilder}.
      * @param {ProjectionId} _projectionId  The unique identifier of the projection to build for
      */
-    constructor(private _projectionId: ProjectionId) { }
+    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) { }
 
     /**
      * Defines the projection to operate on a specific {@link ScopeId}.
@@ -52,6 +53,9 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
         }
         this._readModelTypeOrInstance = typeOrInstance;
         this._builder = new ProjectionBuilderForReadModel(this._projectionId, typeOrInstance, this._scopeId);
+
+        this._projectionAssociations.associate<T>(this._readModelTypeOrInstance, this._projectionId, this._scopeId);
+
         return this._builder;
     }
 

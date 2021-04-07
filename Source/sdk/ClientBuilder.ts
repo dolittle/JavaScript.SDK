@@ -19,6 +19,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { Client } from './Client';
+import { IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections/Store';
 
 /**
  * Represents a builder for building {Client}.
@@ -34,6 +35,7 @@ export class ClientBuilder {
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
     private readonly _projectionsBuilder: ProjectionsBuilder;
+    private readonly _projectionsAssociations: IProjectionAssociations;
     private _cancellation: Cancellation;
     private _logger: Logger;
     private _container: IContainer = new Container();
@@ -47,7 +49,8 @@ export class ClientBuilder {
         this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
-        this._projectionsBuilder = new ProjectionsBuilder();
+        this._projectionsAssociations = new ProjectionAssociations();
+        this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
             format: format.prettyPrint(),
@@ -241,13 +244,21 @@ export class ClientBuilder {
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
         const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, this._logger);
 
+        const projectionsClient = new ProjectionsClient(connectionString, credentials);
         const projections = this._projectionsBuilder.buildAndRegister(
-            new ProjectionsClient(connectionString, credentials),
+            projectionsClient,
             this._container,
             executionContext,
             eventTypes,
             this._logger,
             this._cancellation
+        );
+
+        const projectionsStore = new ProjectionStoreBuilder(
+            projectionsClient,
+            executionContext,
+            this._projectionsAssociations,
+            this._logger
         );
 
         return new Client(
@@ -257,7 +268,7 @@ export class ClientBuilder {
             eventHandlers,
             filters,
             eventHorizons,
-            projections
+            projectionsStore
         );
     }
 }

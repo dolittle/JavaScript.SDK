@@ -13,6 +13,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ClientBuilder } from './ClientBuilder';
 import { AggregateRoot, IAggregateOf, AggregateOf, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Constructor } from '@dolittle/types';
+import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
 
