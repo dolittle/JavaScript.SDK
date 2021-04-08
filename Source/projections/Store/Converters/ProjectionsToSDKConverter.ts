@@ -1,70 +1,34 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using Dolittle.SDK.Events.Store.Converters;
-using Newtonsoft.Json;
-using PbCurrentState = Dolittle.Runtime.Events.Processing.Contracts.ProjectionCurrentState;
-using PbCurrentStateType = Dolittle.Runtime.Events.Processing.Contracts.ProjectionCurrentStateType;
+import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
+import { CurrentState } from '..';
+import { CurrentStateType } from '../CurrentStateType';
+import { IConvertProjectionsToSDK } from './IConvertProjectionsToSDK';
+import { UnknownCurrentStateType } from './UnknownCurrentStateType';
 
-namespace Dolittle.SDK.Projections.Store.Converters
-{
-    /// <summary>
-    /// Represents an implementation of <see cref="IConvertProjectionsToSDK" />.
-    /// </summary>
-    public class ProjectionsToSDKConverter : IConvertProjectionsToSDK
-    {
-        /// <inheritdoc/>
-        public bool TryConvert<TProjection>(PbCurrentState source, out CurrentState<TProjection> state, out Exception error)
-            where TProjection : class, new()
-            => TryDeserializeWithSettings(source, out state, out error);
+export class ProjectionsToSDKConverter implements IConvertProjectionsToSDK {
 
-        /// <inheritdoc/>
-        public bool TryConvert<TProjection>(IEnumerable<PbCurrentState> source, out IEnumerable<CurrentState<TProjection>> states, out Exception error)
-            where TProjection : class, new()
-        {
-            error = null;
-            states = null;
-            var currentStates = new List<CurrentState<TProjection>>();
-            foreach (var protobufState in source)
-            {
-                if (!TryDeserializeWithSettings<TProjection>(protobufState, out var state, out error)) return false;
-                currentStates.Add(state);
-            }
+    /** @inheritdoc */
+    convert<TProjection>(state: ProjectionCurrentState): CurrentState<TProjection> {
+        const type = this.getStateType(state.getType());
+        const convertedState = JSON.parse(state.getState());
+        return new CurrentState<TProjection>(type, convertedState);
+    }
 
-            states = currentStates;
-            return true;
+    /** @inheritdoc */
+    convertAll<TProjection>(stateArray: ProjectionCurrentState[]): CurrentState<TProjection>[] {
+        return stateArray.map(state => this.convert<TProjection>(state));
+    }
+
+    private getStateType(type: ProjectionCurrentStateType) {
+        switch (type) {
+            case ProjectionCurrentStateType.CREATED_FROM_INITIAL_STATE:
+                return CurrentStateType.CreatedFromInitialState;
+            case ProjectionCurrentStateType.PERSISTED:
+                return CurrentStateType.Persisted;
+            default:
+                throw new UnknownCurrentStateType(type);
         }
-
-        bool TryDeserializeWithSettings<TProjection>(PbCurrentState currentState, out CurrentState<TProjection> projectionState, out Exception deserializationError)
-            where TProjection : class, new()
-        {
-            projectionState = null;
-            var exceptionCatcher = new JsonSerializerExceptionCatcher();
-            var serializerSettings = new JsonSerializerSettings
-            {
-                Error = exceptionCatcher.OnError,
-            };
-            var stateType = GetCurrentStateType(currentState.Type);
-            var state = JsonConvert.DeserializeObject<TProjection>(currentState.State, serializerSettings);
-
-            if (exceptionCatcher.Failed)
-                deserializationError = new CouldNotDeserializeProjection(currentState.State, currentState.Type, exceptionCatcher.Error);
-            else
-                deserializationError = null;
-
-            projectionState = new CurrentState<TProjection>(state, stateType);
-
-            return !exceptionCatcher.Failed;
-        }
-
-        CurrentStateType GetCurrentStateType(PbCurrentStateType type)
-            => type switch
-            {
-                PbCurrentStateType.CreatedFromInitialState => CurrentStateType.CreatedFromInitialState,
-                PbCurrentStateType.Persisted => CurrentStateType.Persisted,
-                _ => throw new InvalidCurrentStateType(type)
-            };
     }
 }

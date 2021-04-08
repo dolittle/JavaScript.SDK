@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { IProjectionAssociations, Projections } from '..';
 import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Projections_grpc_pb';
 
 /**
  * Represents a builder for getting projections.

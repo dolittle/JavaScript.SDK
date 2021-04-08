@@ -3,11 +3,19 @@
 
 
 export { CurrentState } from './CurrentState';
+export { CurrentStateType } from './CurrentStateType';
 export { Projections } from './Projections';
 export { ProjectionAssociations } from './ProjectionAssociations';
 export { IProjectionAssociations } from './IProjectionAssociations';
 export { ProjectionAssociation } from './ProjectionAssociation';
+export { FailedToGetProjection } from './FailedToGetProjection';
 
 export {
     ProjectionStoreBuilder
-} from './Builder'
+} from './Builder';
+
+export {
+    IConvertProjectionsToSDK,
+    ProjectionsToSDKConverter,
+    UnknownCurrentStateType
+} from './Converters';

@@ -14,8 +14,15 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Proje
 import { GetOneRequest, GetOneResponse, GetAllRequest, GetAllResponse } from '@dolittle/runtime.contracts/Projections/Projections_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
+import { FailedToGetProjection } from './FailedToGetProjection';
+import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
+import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
+import { FailedToGetProjectionState } from './FailedToGetProjectionState';
+import { ProjectionAssociation } from './ProjectionAssociation';
 
 export class Projections implements IProjections {
+
+    private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
     constructor(
         private readonly _projectionsClient: ProjectionsClient,
@@ -23,8 +30,12 @@ export class Projections implements IProjections {
         private readonly _projectionAssociations: IProjectionAssociations,
         private readonly _logger: Logger) {}
 
-    get<TProjection>(type: Constructor<TProjection>, key: Key, cancellation: Cancellation = Cancellation.default): Promise<CurrentState<TProjection>> {
+    get<TProjection>(type: Constructor<TProjection>, keyOrString: Key | string, cancellation: Cancellation = Cancellation.default): Promise<CurrentState<TProjection>> {
+        const key = typeof keyOrString === 'string'
+            ? Key.from(keyOrString)
+            : keyOrString;
         const projection = this._projectionAssociations.getFor<TProjection>(type);
+        this._logger.debug(`Getting a projection of type ${type} from projection ${projection.identifier} in scope ${projection.scopeId} with key ${key}`);
         const request = new GetOneRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setKey(key.value);
@@ -32,22 +43,39 @@ export class Projections implements IProjections {
         request.setScopeid(guids.toProtobuf(projection.scopeId.value));
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
             .pipe(map(response => {
-                //TODO: Convert to something the SDK/User can work with. Create Converter as we have in C# SDK
-                const type = response.getState()?.getType();
-                const state = response.getState()?.getState();
-                return new CurrentState<TProjection>(type, state);
+                this.throwIfHasFailure(response, projection, key);
+                this.throwIfNoState(response, projection, key);
+                return this._converter.convert<TProjection>(response.getState()!);
             })).toPromise();
     }
 
     getAll<TProjection>(type: Constructor<TProjection>, cancellation: Cancellation = Cancellation.default): Promise<CurrentState<TProjection>[]> {
         const projection = this._projectionAssociations.getFor<TProjection>(type);
+        this._logger.debug(`Getting all projections of type ${type} from projection ${projection.identifier} in scope ${projection.scopeId}`);
         const request = new GetAllRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setProjectionid(guids.toProtobuf(projection.identifier.value));
-        request.setScopeid(guids.toProtobuf(projection.scopeId.value)));
+        request.setScopeid(guids.toProtobuf(projection.scopeId.value));
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getAll, request, cancellation)
             .pipe(map(response => {
-                //TODO: Convert to something the SDK/User can work with. Create Converter as we have in C# SDK
+                this.throwIfHasFailure(response, projection);
+                return this._converter.convertAll<TProjection>(response.getStatesList());
             })).toPromise();
+    }
+
+    private throwIfHasFailure(response: GetOneResponse | GetAllResponse, projection: ProjectionAssociation, key?: Key) {
+        if (response.hasFailure()) {
+            throw new FailedToGetProjection(
+                projection.identifier,
+                projection.scopeId,
+                key,
+                failures.toSDK(response.getFailure())!);
+        }
+    }
+
+    private throwIfNoState(response: GetOneResponse, projection: ProjectionAssociation, key: Key) {
+        if (!response.hasState()) {
+            throw new FailedToGetProjectionState(projection.identifier, projection.scopeId, key);
+        }
     }
 }

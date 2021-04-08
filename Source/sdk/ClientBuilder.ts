@@ -16,6 +16,7 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Projections_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { Client } from './Client';
@@ -52,7 +53,7 @@ export class ClientBuilder {
         this._projectionsAssociations = new ProjectionAssociations();
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
-            level: 'info',
+            level: 'debug',
             format: format.prettyPrint(),
             defaultMeta: { microserviceId: _microserviceId.toString() },
             transports: [
@@ -244,9 +245,8 @@ export class ClientBuilder {
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
         const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, this._logger);
 
-        const projectionsClient = new ProjectionsClient(connectionString, credentials);
         const projections = this._projectionsBuilder.buildAndRegister(
-            projectionsClient,
+            new ProjectionsClient(connectionString, credentials),
             this._container,
             executionContext,
             eventTypes,
@@ -255,7 +255,7 @@ export class ClientBuilder {
         );
 
         const projectionsStore = new ProjectionStoreBuilder(
-            projectionsClient,
+            new GetProjectionsClient(connectionString, credentials),
             executionContext,
             this._projectionsAssociations,
             this._logger

@@ -3,3 +3,8 @@
 
 export { MissingEventInformation } from './MissingEventInformation';
 export { RegistrationFailed } from './RegistrationFailed';
+
+export {
+    EventProcessor,
+    IEventProcessor
+} from './Internal';

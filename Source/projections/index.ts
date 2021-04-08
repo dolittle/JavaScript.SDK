@@ -25,12 +25,15 @@ export {
     projection,
     ProjectionOptions,
     ReadModelAlreadyDefinedForProjection,
+    ProjectionDecoratedType,
+    ProjectionDecoratedTypes
 } from './Builder';
 
 export {
     CurrentState,
+    CurrentStateType,
     IProjectionAssociations,
     ProjectionAssociations,
     ProjectionAssociation,
     ProjectionStoreBuilder
-} from './Store'
+} from './Store';
