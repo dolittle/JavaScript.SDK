@@ -51,7 +51,7 @@ export class ProjectionStore implements IProjectionStore {
         const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeProjectionOrCancellationOrScope, maybeCancellationOrScope);
         const cancellation = this.getCancellationFrom(maybeProjectionOrCancellationOrScope, maybeCancellationOrScope, maybeCancellation);
 
-        this._logger.debug(`Getting a projection of type ${type} from projection ${projection} in scope ${scope} with key ${key}`);
+        this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
 
         const request = new GetOneRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
@@ -80,7 +80,7 @@ export class ProjectionStore implements IProjectionStore {
         const [projection, scope] = this.getProjectionAndScopeForAll(type, typeOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope);
         const cancellation = this.getCancellationFrom(maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
 
-        this._logger.debug(`Getting all projections of type ${type} from projection ${projection} in scope ${scope}`);
+        this._logger.debug(`Getting all states from projection ${projection} in scope ${scope}`);
 
         const request = new GetAllRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
