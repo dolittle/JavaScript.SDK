@@ -27,10 +27,14 @@ export class EventStoreBuilder {
      * @returns {IEventStore} The event store.
      */
     forTenant(tenantId: TenantId | Guid | string): IEventStore {
+        const executionContext = this._executionContext
+            .forTenant(tenantId)
+            .forCorrelation(Guid.create());
+
         return new EventStore(
             this._eventStoreClient,
             this._eventTypes,
-            this._executionContext.forTenant(tenantId),
+            executionContext,
             this._logger);
     }
 }

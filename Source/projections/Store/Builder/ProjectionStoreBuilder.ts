@@ -8,10 +8,10 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 
-import { IProjectionAssociations, ProjectionStore } from '..';
+import { IProjectionAssociations, IProjectionStore, ProjectionStore } from '..';
 
 /**
- * Represents a builder for getting projections.
+ * Represents a builder for builing a projection store.
  */
 export class ProjectionStoreBuilder {
 
@@ -19,10 +19,15 @@ export class ProjectionStoreBuilder {
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _projectionAssociations: IProjectionAssociations,
-        private readonly _logger: Logger
-    ) { }
+        private readonly _logger: Logger) {
+    }
 
-    forTenant(tenantId: TenantId) {
+    /**
+     * Build an {@link IProjectionStore} for the given tenant.
+     * @param {TenantId | Guid | string} tenantId The tenant id.
+     * @returns {IProjectionStore} The projection store.
+     */
+    forTenant(tenantId: TenantId | Guid | string): IProjectionStore {
         const executionContext = this._executionContext
             .forTenant(tenantId)
             .forCorrelation(Guid.create());
