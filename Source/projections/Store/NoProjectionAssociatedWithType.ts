@@ -9,6 +9,6 @@ import { Constructor } from '@dolittle/types';
  */
 export class NoProjectionAssociatedWithType extends Exception {
     constructor(type: Constructor<any>) {
-        super(`No projection associated with type ${type}`);
+        super(`No projection associated with type ${type.name}`);
     }
 }

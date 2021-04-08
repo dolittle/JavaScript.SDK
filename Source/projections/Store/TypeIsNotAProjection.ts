@@ -9,6 +9,6 @@ import { Constructor } from '@dolittle/types';
  */
 export class TypeIsNotAProjection extends Exception {
     constructor(type: Constructor<any> | any) {
-        super(`Type ${type} is not a projection. Did you add the @projection() decorator to the type?`);
+        super(`Type ${type.name} is not a projection. Did you add the @projection() decorator to the type?`);
     }
 }
