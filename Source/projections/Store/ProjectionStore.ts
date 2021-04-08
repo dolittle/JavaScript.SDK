@@ -102,7 +102,7 @@ export class ProjectionStore implements IProjectionStore {
     }
 
     private getProjectionAndScopeForOne<TProjection>(type: Constructor<TProjection> | undefined, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeProjectionOrCancellationOrScope?: ProjectionId | Cancellation | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string): [ProjectionId, ScopeId] {
-        if (keyOrProjection instanceof ProjectionId || keyOrProjection instanceof Guid || typeof keyOrProjection === 'string') {
+        if (type === undefined) {
             if (maybeProjectionOrCancellationOrScope !== undefined && !(maybeProjectionOrCancellationOrScope instanceof Cancellation)) {
                 return [ProjectionId.from(keyOrProjection), ScopeId.from(maybeProjectionOrCancellationOrScope as (ScopeId | Guid | string))];
             }
