@@ -52,7 +52,7 @@ export class ClientBuilder {
         this._projectionsAssociations = new ProjectionAssociations();
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
-            level: 'debug',
+            level: 'info',
             format: format.prettyPrint(),
             defaultMeta: { microserviceId: _microserviceId.toString() },
             transports: [
