@@ -9,6 +9,7 @@ import { Menu } from './Menu';
 import { Chef } from './Chef';
 import { ChefFired } from './ChefFired';
 import { DishPrepared } from './DishPrepared';
+import { ScopeId } from '@dolittle/sdk.events';
 
 const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
@@ -30,7 +31,7 @@ const client = Client
                 return ProjectionResult.delete;
             });
         projections.register(Menu);
-        })
+    })
     .build();
 
 const beanBlaster = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
@@ -38,26 +39,36 @@ const avocadoArtillery = new DishPrepared('Avocado Artillery Tortilla', 'Mr. Tac
 const chiliCannon = new DishPrepared('Chili Cannon Wrap', 'Ms. TexMex');
 const mrTacoFired = new ChefFired('Mr. Taco');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(beanBlaster, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(avocadoArtillery, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(chiliCannon, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+(async () => {
+    client.eventStore
+        .forTenant(TenantId.development)
+        .commit(beanBlaster, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    client.eventStore
+        .forTenant(TenantId.development)
+        .commit(avocadoArtillery, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    client.eventStore
+        .forTenant(TenantId.development)
+        .commit(chiliCannon, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(mrTacoFired, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    client.eventStore
+        .forTenant(TenantId.development)
+        .commit(mrTacoFired, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 
-const menu = client.projections
-    .forTenant(TenantId.development)
-    .get(Menu, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-console.log(JSON.stringify(menu));
+    const {state: menu} = await client.projections.forTenant(TenantId.development).get(Menu, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    console.log('Got menu', menu);
 
-const chefs = client.projections
-    .forTenant(TenantId.development)
-    .getAll(Chef);
-console.log(JSON.stringify(chefs));
+    console.log('Getting all chefs');
+    for (const [, { key, state: chef }] of await client.projections.forTenant(TenantId.development).getAll(Chef)) {
+        console.log(`Found chef ${key}`, chef);
+    }
+
+    console.log('Getting all chefs but specify ids');
+    for (const [, { key, state: chef }] of await client.projections.forTenant(TenantId.development).getAll(Chef, '4a4c5b13-d4dd-4665-a9df-27b8e9b2054d')) {
+        console.log(`Found chef ${key}`, chef);
+    }
+
+    console.log('Getting all chefs with no type');
+    for (const [, { key, state: chef }] of await client.projections.forTenant(TenantId.development).getAll('4a4c5b13-d4dd-4665-a9df-27b8e9b2054c', ScopeId.default)) {
+        console.log(`Found chef ${key}`, chef);
+    }
+})();
