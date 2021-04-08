@@ -104,8 +104,9 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
             protobufSelector.setEventsourcekeyselector(new ProtobufEventSourceIdKeySelector());
         } else if (selector instanceof PartitionIdKeySelector) {
             protobufSelector.setPartitionkeyselector(new ProtobufPartitionIdKeySelector());
+        } else {
+            throw new UnknownKeySelectorType(selector);
         }
-        throw new UnknownKeySelectorType(selector);
     }
 
     protected createClient(
