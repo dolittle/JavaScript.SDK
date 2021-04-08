@@ -21,17 +21,30 @@ import {
     ProjectionRequest,
     ProjectionResponse,
     ProjectionEventSelector,
-    ProjectionEventKeySelector,
-    ProjectionEventKeySelectorType,
-    ProjectionCurrentStateType,
-    ProjectionNextState,
-    ProjectionNextStateType
+    EventPropertyKeySelector as ProtobufEventPropertyKeySelector,
+    PartitionIdKeySelector as ProtobufPartitionIdKeySelector,
+    EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector,
+    ProjectionDeleteResponse,
+    ProjectionReplaceResponse
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { DeleteReadModelInstance, Key, UnknownKeySelectorType, ProjectionId, ProjectionContext, IProjection, KeySelectorType } from '..';
+import {
+    DeleteReadModelInstance,
+    EventPropertyKeySelector,
+    EventSourceIdKeySelector,
+    IProjection,
+    Key,
+    KeySelector,
+    PartitionIdKeySelector,
+    ProjectionId,
+    ProjectionContext,
+    UnknownKeySelectorType,
+} from '..';
+import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.
@@ -76,27 +89,24 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
         for (const eventSelector of this._projection.events) {
             const selector = new ProjectionEventSelector();
             selector.setEventtype(eventTypes.toProtobuf(eventSelector.eventType));
-            const keySelector = new ProjectionEventKeySelector();
-            keySelector.setType(this.getKeySelectorType(eventSelector.keySelector.type));
-            keySelector.setExpression(eventSelector.keySelector.expression.value);
-            selector.setKeyselector(keySelector);
+            this.setKeySelector(selector, eventSelector.keySelector);
             events.push(selector);
         }
         registerArguments.setEventsList(events);
         return registerArguments;
     }
 
-    private getKeySelectorType(type: KeySelectorType): ProjectionEventKeySelectorType {
-        switch (type) {
-            case KeySelectorType.EventSourceId:
-                return ProjectionEventKeySelectorType.EVENT_SOURCE_ID;
-            case KeySelectorType.PartitionId:
-                return ProjectionEventKeySelectorType.PARTITION_ID;
-            case KeySelectorType.Property:
-                return ProjectionEventKeySelectorType.PROPERTY;
-            default:
-                throw new UnknownKeySelectorType(type);
+    private setKeySelector(protobufSelector: ProjectionEventSelector, selector: KeySelector) {
+        if (selector instanceof EventPropertyKeySelector) {
+            const propertyKeySelector = new ProtobufEventPropertyKeySelector();
+            propertyKeySelector.setPropertyname(selector.propertyName.value);
+            protobufSelector.setEventpropertykeyselector(propertyKeySelector);
+        } else if (selector instanceof EventSourceIdKeySelector) {
+            protobufSelector.setEventsourcekeyselector(new ProtobufEventSourceIdKeySelector());
+        } else if (selector instanceof PartitionIdKeySelector) {
+            protobufSelector.setPartitionkeyselector(new ProtobufPartitionIdKeySelector());
         }
+        throw new UnknownKeySelectorType(selector);
     }
 
     protected createClient(
@@ -171,8 +181,9 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
             throw new MissingEventInformation('No state in ProjectionRequest');
         }
 
-        const pbStateType = request.getCurrentstate()!.getType();
-        const pbKey = request.getKey();
+        const pbCurrentState = request.getCurrentstate()!;
+        const pbStateType = pbCurrentState.getType();
+        const pbKey = pbCurrentState.getKey();
 
         const projectionContext = new ProjectionContext(
             pbStateType === ProjectionCurrentStateType.CREATED_FROM_INITIAL_STATE,
@@ -194,15 +205,15 @@ export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, Project
 
         const nextStateOrDelete = await this._projection.on(state, event, eventType, projectionContext);
         const response = new ProjectionResponse();
-        const projectionNextState = new ProjectionNextState();
 
         if (nextStateOrDelete instanceof DeleteReadModelInstance) {
-            projectionNextState.setType(ProjectionNextStateType.DELETE);
+            response.setDelete(new ProjectionDeleteResponse());
         } else {
-            projectionNextState.setType(ProjectionNextStateType.REPLACE);
+            const replace = new ProjectionReplaceResponse();
+            replace.setState(JSON.stringify(nextStateOrDelete));
+            response.setReplace(replace);
         }
-        projectionNextState.setValue(JSON.stringify(nextStateOrDelete));
-        response.setNextstate(projectionNextState);
+
         return response;
     }
 }

@@ -19,11 +19,13 @@ export class Key extends ConceptAs<string, '@dolittle/sdk.projections.Key'> {
      * Creates a {@link Key} from a string.
      *
      * @static
-     * @param {string | Key} key
+     * @param {Key | any} key
      * @returns {Key}
      */
-    static from(key: string | Key): Key {
-        if (key instanceof Key) {return key;}
-        return new Key(key);
+    static from(key: Key | any): Key {
+        if (key instanceof Key) {
+            return key;
+        }
+        return new Key(key.toString());
     }
 }

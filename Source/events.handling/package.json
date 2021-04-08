@@ -33,9 +33,9 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/contracts": "5.3.0-projections.9",
+        "@dolittle/contracts": "5.3.0-projections.11",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "5.3.0-projections.9",
+        "@dolittle/runtime.contracts": "5.3.0-projections.11",
         "@dolittle/sdk.artifacts": "14.3.0-projections.0",
         "@dolittle/sdk.common": "14.3.0-projections.0",
         "@dolittle/sdk.events": "14.3.0-projections.0",

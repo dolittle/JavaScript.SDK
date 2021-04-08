@@ -1,22 +1,29 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
+import { Constructor } from '@dolittle/types';
+
+import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
+
+import { Key } from '../..';
 import { CurrentState } from '..';
 
 /**
- * Defines a system that is capable of converting projections to SDK.
+ * Defines a system that converts projections to SDK representations.
  */
 export interface IConvertProjectionsToSDK
 {
     /**
      * Convert from the runtime respresentation to the SDK's representation of the current state of a projection.
-     * @param {string} source The JSON string to convert.
+     * @param {Constructor<TProjection> | undefined} type The optional read model type to convert to.
+     * @param {ProjectionCurrentState} source The current state to convert.
      */
-    convert<TProjection>(source: ProjectionCurrentState): CurrentState<TProjection>;
+    convert<TProjection = any>(type: Constructor<TProjection> | undefined, source: ProjectionCurrentState): CurrentState<TProjection>;
+
     /**
-     * Convert from an array of runtime respresentations of the current state of a projection to the SDK's representation.
-     * @param {string} source The JSON string to convert.
+     * Convert from an list of runtime respresentations of the current state of a projection to the SDK's representation.
+     * @param {Constructor<TProjection> | undefined} type The optional read model type to convert to.
+     * @param {ProjectionCurrentState[]} sources A list of states to convert.
      */
-    convertAll<TProjection>(sourceArray: ProjectionCurrentState[]): CurrentState<TProjection>[];
+    convertAll<TProjection = any>(type: Constructor<TProjection> | undefined, sources: ProjectionCurrentState[]): Map<Key, CurrentState<TProjection>>;
 }

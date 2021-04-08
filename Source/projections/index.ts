@@ -2,14 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { DeleteReadModelInstance } from './DeleteReadModelInstance';
+export { EventPropertyKeySelector } from './EventPropertyKeySelector';
 export { EventSelector } from './EventSelector';
+export { EventSourceIdKeySelector } from './EventSourceIdKeySelector';
 export { IProjection } from './IProjection';
 export { IProjections } from './IProjections';
 export { Key } from './Key';
 export { KeySelector } from './KeySelector';
-export { KeySelectorExpression } from './KeySelectorExpression';
-export { KeySelectorType } from './KeySelectorType';
 export { MissingOnMethodForType } from './MissingOnMethodForType';
+export { PartitionIdKeySelector } from './PartitionIdKeySelector';
 export { Projection } from './Projection';
 export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';

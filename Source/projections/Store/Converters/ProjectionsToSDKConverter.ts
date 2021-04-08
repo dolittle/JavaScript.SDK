@@ -1,24 +1,40 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
+import { Constructor } from '@dolittle/types';
+
+import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+
 import { CurrentState } from '..';
+
 import { CurrentStateType } from '../CurrentStateType';
 import { IConvertProjectionsToSDK } from './IConvertProjectionsToSDK';
 import { UnknownCurrentStateType } from './UnknownCurrentStateType';
+import { Key } from '../..';
 
 export class ProjectionsToSDKConverter implements IConvertProjectionsToSDK {
 
     /** @inheritdoc */
-    convert<TProjection>(state: ProjectionCurrentState): CurrentState<TProjection> {
-        const type = this.getStateType(state.getType());
-        const convertedState = JSON.parse(state.getState());
-        return new CurrentState<TProjection>(type, convertedState);
+    convert<TProjection = any>(type: Constructor<TProjection> | undefined, state: ProjectionCurrentState): CurrentState<TProjection> {
+        const stateType = this.getStateType(state.getType());
+        let convertedState = JSON.parse(state.getState());
+        const key = Key.from(state.getKey());
+
+        if (type !== undefined) {
+            convertedState = Object.assign(new type(), convertedState);
+        }
+
+        return new CurrentState<TProjection>(stateType, convertedState, key);
     }
 
     /** @inheritdoc */
-    convertAll<TProjection>(stateArray: ProjectionCurrentState[]): CurrentState<TProjection>[] {
-        return stateArray.map(state => this.convert<TProjection>(state));
+    convertAll<TProjection = any>(type: Constructor<TProjection> | undefined, states: ProjectionCurrentState[]): Map<Key, CurrentState<TProjection>> {
+        const stateMap = new Map();
+        for (const state of states) {
+            const converted = this.convert<TProjection>(type, state);
+            stateMap.set(converted.key, converted);
+        }
+        return stateMap;
     }
 
     private getStateType(type: ProjectionCurrentStateType) {

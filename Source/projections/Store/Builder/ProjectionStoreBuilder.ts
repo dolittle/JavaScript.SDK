@@ -4,9 +4,11 @@
 import { Logger } from 'winston';
 
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { IProjectionAssociations, Projections } from '..';
 import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Projections_grpc_pb';
+
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+
+import { IProjectionAssociations, Projections } from '..';
 
 /**
  * Represents a builder for getting projections.

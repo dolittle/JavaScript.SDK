@@ -16,7 +16,7 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Projections_grpc_pb';
+import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { Client } from './Client';
