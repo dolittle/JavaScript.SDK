@@ -4,8 +4,7 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { EventProcessor } from '@dolittle/sdk.events.processing/Internal';
+import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -49,7 +48,7 @@ import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projecti
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.
  */
-export class ProjectionProcessor<T> extends EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
+export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
      * Initializes a new instance of {@link ProjectionProcessor}

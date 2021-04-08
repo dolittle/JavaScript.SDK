@@ -19,15 +19,14 @@ import { GetOneRequest, GetOneResponse, GetAllRequest, GetAllResponse } from '@d
 import { Key, ProjectionId } from '..';
 
 import { CurrentState } from './CurrentState';
-import { IProjections } from './IProjections';
+import { IProjectionStore } from './IProjectionStore';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { FailedToGetProjection } from './FailedToGetProjection';
 import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
 import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
-import { ProjectionAssociation } from './ProjectionAssociation';
 
-export class Projections implements IProjections {
+export class ProjectionStore implements IProjectionStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 

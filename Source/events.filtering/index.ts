@@ -15,3 +15,5 @@ export { PartitionedFilterResult } from './PartitionedFilterResult';
 export { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 export { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+
+export * as internal from './Internal';

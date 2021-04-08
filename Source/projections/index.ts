@@ -19,22 +19,45 @@ export { ProjectionResult } from './ProjectionResult';
 export { Projections } from './Projections';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';
 
+export * as internal from './Internal';
+
 export {
     CannotRegisterProjectionThatIsNotAClass,
     CouldNotCreateInstanceOfProjection,
+    ICanBuildAndRegisterAProjection,
+    KeySelectorBuilder,
+    KeySelectorBuilderCallback,
+    OnDecoratedMethod,
+    OnDecoratedMethods,
     on,
+    ProjectionBuilder,
+    ProjectionBuilderForReadModel,
+    ProjectionClassBuilder,
+    ProjectionClassOnMethod,
+    ProjectionDecoratedType,
+    ProjectionDecoratedTypes,
     projection,
     ProjectionOptions,
+    ProjectionsBuilder,
+    ProjectionsBuilderCallback,
     ReadModelAlreadyDefinedForProjection,
-    ProjectionDecoratedType,
-    ProjectionDecoratedTypes
 } from './Builder';
 
 export {
     CurrentState,
     CurrentStateType,
+    FailedToGetProjection,
+    FailedToGetProjectionState,
     IProjectionAssociations,
-    ProjectionAssociations,
+    IProjectionStore,
+    NoProjectionAssociatedWithType,
+    NoTypeAssociatedWithProjection,
     ProjectionAssociation,
-    ProjectionStoreBuilder
+    ProjectionAssociations,
+    ProjectionStore,
+    TypeIsNotAProjection,
+    ProjectionStoreBuilder,
+    IConvertProjectionsToSDK,
+    ProjectionsToSDKConverter,
+    UnknownCurrentStateType
 } from './Store';

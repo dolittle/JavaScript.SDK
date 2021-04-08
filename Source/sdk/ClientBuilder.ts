@@ -7,10 +7,10 @@ import { createLogger, format, Logger, transports } from 'winston';
 import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
 import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling/Builder';
+import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections/Builder';
+import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
@@ -20,7 +20,6 @@ import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.con
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { Client } from './Client';
-import { IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections/Store';
 
 /**
  * Represents a builder for building {Client}.

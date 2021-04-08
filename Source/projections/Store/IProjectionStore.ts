@@ -13,7 +13,7 @@ import { CurrentState } from './CurrentState';
 /**
  * Defines the API surface for getting projections.
  */
-export interface IProjections {
+export interface IProjectionStore {
     /**
      * Gets a projection state by key for a projection associated with a type.
      * @template TProjection
