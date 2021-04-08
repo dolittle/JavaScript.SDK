@@ -4,7 +4,7 @@
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { projection, ProjectionResult } from '@dolittle/sdk.projections';
+import { ProjectionResult } from '@dolittle/sdk.projections';
 import { Menu } from './Menu';
 import { Chef } from './Chef';
 import { ChefFired } from './ChefFired';
@@ -54,9 +54,10 @@ client.eventStore
 
 const menu = client.projections
     .forTenant(TenantId.development)
-    .Get(Menu, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    .get(Menu, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 console.log(JSON.stringify(menu));
 
 const chefs = client.projections
     .forTenant(TenantId.development)
-    .GetAll(Chef);
+    .getAll(Chef);
+console.log(JSON.stringify(chefs));
