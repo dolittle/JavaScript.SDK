@@ -10,6 +10,6 @@ import { KeySelector } from './KeySelector';
  */
 export class UnknownKeySelectorType extends Exception {
     constructor(selectorType: KeySelector) {
-        super(`The key selector type '${selectorType}' is not implemented`);
+        super(`The key selector type '${Object.getPrototypeOf(selectorType).constructor.name}' is not implemented`);
     }
 }
