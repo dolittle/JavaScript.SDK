@@ -17,9 +17,12 @@ import { IProjections, ProjectionId, Projections } from '..';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
+import { IProjectionAssociations } from '../Store/IProjectionAssociations';
 
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];
+
+    constructor(private _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building a projection.
@@ -27,7 +30,7 @@ export class ProjectionsBuilder {
      * @returns {ProjectionBuilder}
      */
     createProjection(projectionId: ProjectionId | Guid | string): ProjectionBuilder {
-        const builder = new ProjectionBuilder(ProjectionId.from(projectionId));
+        const builder = new ProjectionBuilder(ProjectionId.from(projectionId), this._projectionAssociations);
         this._projectionBuilders.push(builder);
         return builder;
     }
@@ -36,14 +39,15 @@ export class ProjectionsBuilder {
      * Register a type as a projection
      * @param type The type to register as a projection.
      */
-    register(type: Constructor<any>): ProjectionsBuilder;
+    register<T = any>(type: Constructor<T>): ProjectionsBuilder;
     /**
      * Register an instance as an event handler.
      * @param instance The instance to register as an event handler.
      */
-    register(instance: any): ProjectionsBuilder;
-    register<T>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
+    register<T = any>(instance: T): ProjectionsBuilder;
+    register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
         this._projectionBuilders.push(new ProjectionClassBuilder<T>(typeOrInstance));
+        this._projectionAssociations.associate<T>(typeOrInstance);
         return this;
     }
 

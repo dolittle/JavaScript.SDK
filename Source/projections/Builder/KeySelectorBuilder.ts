@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { KeySelector, KeySelectorType } from '..';
+import { EventPropertyKeySelector, EventSourceIdKeySelector, PartitionIdKeySelector } from '..';
 
 /**
  * Represents a builder for building {@link KeySelector}.
@@ -9,26 +9,26 @@ import { KeySelector, KeySelectorType } from '..';
 export class KeySelectorBuilder<T = any> {
     /**
      * Select projection key from the event source id.
-     * @returns {KeySelector}
+     * @returns {EventSourceIdKeySelector}
      */
-    keyFromEventSource(): KeySelector {
-        return new KeySelector(KeySelectorType.EventSourceId);
+    keyFromEventSource(): EventSourceIdKeySelector {
+        return new EventSourceIdKeySelector();
     }
 
     /**
      * Select projection key from the event stream partition id.
-     * @returns {KeySelector}
+     * @returns {PartitionIdKeySelector}
      */
-    keyFromPartitionId(): KeySelector {
-        return new KeySelector(KeySelectorType.PartitionId);
+    keyFromPartitionId(): PartitionIdKeySelector {
+        return new PartitionIdKeySelector();
     }
 
     /**
      * Select projection key from a property on the event.
      * @param {keyof T} property The property to use as key.
-     * @returns {KeySelector}
+     * @returns {EventPropertyKeySelector}
      */
-    keyFromProperty(property: keyof T): KeySelector {
-        return new KeySelector(KeySelectorType.Property, property as string);
+    keyFromProperty(property: keyof T): EventPropertyKeySelector {
+        return new EventPropertyKeySelector(property as string);
     }
 }

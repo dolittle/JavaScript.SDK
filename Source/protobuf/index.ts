@@ -22,5 +22,5 @@ export {
     executionContexts,
     failures,
     guids,
-    versions,
+    versions
 };

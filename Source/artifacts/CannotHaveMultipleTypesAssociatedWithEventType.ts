@@ -15,6 +15,6 @@ import { EventType } from './EventType';
  */
 export class CannotHaveMultipleTypesAssociatedWithEventType extends Exception {
     constructor(eventType: EventType, type: Constructor<any>, associatedType: Constructor<any>) {
-        super(`${eventType} cannot be associated with ${type} because it is already associated with ${associatedType}`);
+        super(`${eventType} cannot be associated with ${type.name} because it is already associated with ${associatedType}`);
     }
 }

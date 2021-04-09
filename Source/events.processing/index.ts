@@ -3,3 +3,5 @@
 
 export { MissingEventInformation } from './MissingEventInformation';
 export { RegistrationFailed } from './RegistrationFailed';
+
+export * as internal from './Internal';

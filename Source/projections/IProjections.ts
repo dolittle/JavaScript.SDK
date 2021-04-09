@@ -17,8 +17,4 @@ export interface IProjections {
      * @param {Cancellation} cancellation Used to close the connection to the Runtime.
      */
     register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation?: Cancellation): void;
-
-    // get<T>(readModel: Constructor<T>, key: string): T;
-    // get(projectionId: ProjectionId, key: string): object;
-
 }

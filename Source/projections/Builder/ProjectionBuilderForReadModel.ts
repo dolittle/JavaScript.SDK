@@ -26,7 +26,6 @@ type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, Proje
  * Represents a builder for building {@link IProjection}.
  */
 export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAProjection {
-    private _initialState?: T;
     private _onMethods: OnMethodSpecification[] = [];
 
     /**

@@ -3,13 +3,13 @@
 
 import { Exception } from '@dolittle/rudiments';
 
-import { KeySelectorType } from './KeySelectorType';
+import { KeySelector } from './KeySelector';
 
 /**
  * Exception that is thrown when trying to register a projection with an unkown key selector type.
  */
 export class UnknownKeySelectorType extends Exception {
-    constructor(selectorType: KeySelectorType) {
-        super(`The key selector type '${selectorType}' is not implemented`);
+    constructor(selectorType: KeySelector) {
+        super(`The key selector type '${Object.getPrototypeOf(selectorType).constructor.name}' is not implemented`);
     }
 }

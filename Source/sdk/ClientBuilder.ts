@@ -7,15 +7,16 @@ import { createLogger, format, Logger, transports } from 'winston';
 import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
 import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling/Builder';
+import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections/Builder';
+import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
 import { Client } from './Client';
@@ -34,6 +35,7 @@ export class ClientBuilder {
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
     private readonly _projectionsBuilder: ProjectionsBuilder;
+    private readonly _projectionsAssociations: IProjectionAssociations;
     private _cancellation: Cancellation;
     private _logger: Logger;
     private _container: IContainer = new Container();
@@ -47,7 +49,8 @@ export class ClientBuilder {
         this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
-        this._projectionsBuilder = new ProjectionsBuilder();
+        this._projectionsAssociations = new ProjectionAssociations();
+        this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
             format: format.prettyPrint(),
@@ -250,6 +253,13 @@ export class ClientBuilder {
             this._cancellation
         );
 
+        const projectionsStore = new ProjectionStoreBuilder(
+            new GetProjectionsClient(connectionString, credentials),
+            executionContext,
+            this._projectionsAssociations,
+            this._logger
+        );
+
         return new Client(
             this._logger,
             eventTypes,
@@ -257,7 +267,7 @@ export class ClientBuilder {
             eventHandlers,
             filters,
             eventHorizons,
-            projections
+            projectionsStore
         );
     }
 }
