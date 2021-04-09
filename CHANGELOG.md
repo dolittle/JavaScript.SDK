@@ -1,3 +1,19 @@
+# [14.3.0-projections.1] - 2021-4-9 [PR: #45](https://github.com/dolittle/JavaScript.SDK/pull/45)
+## Summary
+
+Upgrade to latest prerelease of Contracts, and implement getting of current projection state from the Runtime through `IProjectionStore`.
+
+### Added
+
+- The `IProjectionStore` interface to get current projection states from the Runtime.
+
+### Changed
+
+- Updated to latest prerelease of Contracts (11).
+- Improve some log messages that referred to a type. It was printing the whole class definition.
+- Reset the default log level back to `info`.
+
+
 # [14.3.0-projections.0] - 2021-3-30 [PR: #43](https://github.com/dolittle/JavaScript.SDK/pull/43)
 - Added a new package `projections` in the project.
 - New `client.withProjections()` for building Projections inline
