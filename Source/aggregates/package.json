@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "14.3.0-projections.0",
+    "version": "14.3.0-projections.1",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,8 +35,8 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.events": "14.3.0-projections.0",
-        "@dolittle/sdk.artifacts": "14.3.0-projections.0"
+        "@dolittle/sdk.events": "14.3.0-projections.1",
+        "@dolittle/sdk.artifacts": "14.3.0-projections.1"
     },
     "devDependencies": {}
 }
