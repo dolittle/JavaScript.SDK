@@ -1,16 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventSourceId } from '.';
 import { AggregateRootId } from './AggregateRootId';
+import { AggregateRootVersion } from './AggregateRootVersion';
+import { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 import { CommittedEvent } from './CommittedEvent';
-import { AggregateRootVersion } from './AggregateRootVersion';
+import { EventSourceId } from './EventSourceId';
+import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 import { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
-import { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
 import { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAggregateRoot';
 import { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';
-import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 
 /**
  * Represents a collection of committed events.

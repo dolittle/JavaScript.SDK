@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType } from '@dolittle/sdk.artifacts';
-import { EventContext, ScopeId } from '@dolittle/sdk.events';
+import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerId } from './EventHandlerId';
 

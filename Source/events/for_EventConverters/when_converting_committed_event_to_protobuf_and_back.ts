@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { Claim, Claims, ExecutionContext, Version, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 
-import { CommittedEvent, EventSourceId, EventConverters, EventLogSequenceNumber } from '../index';
+import { CommittedEvent, EventSourceId, EventConverters, EventLogSequenceNumber } from '..';
 
 describe('when converting committed event to protobuf and back', () => {
     const claimsArray: Claim[] = [

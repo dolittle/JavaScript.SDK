@@ -1,0 +1,23 @@
+{
+    "name": "projections",
+    "private": true,
+    "version": "14.3.0-projections.2",
+    "main": "index.js",
+    "author": "Dolittle",
+    "license": "MIT",
+    "scripts": {
+        "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
+        "start": "ts-node index.ts",
+        "build": "tsc -b ./tsconfig.json"
+    },
+    "dependencies": {
+        "@dolittle/sdk": "14.3.0-projections.2",
+        "@dolittle/sdk.artifacts": "14.3.0-projections.2",
+        "@dolittle/sdk.events": "14.3.0-projections.2",
+        "@dolittle/sdk.events.handling": "14.3.0-projections.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4",
+        "ts-node": "^8.10.1"
+    }
+}

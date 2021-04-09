@@ -3,8 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventSourceId, EventStoreBuilder, IEventStore } from '@dolittle/sdk.events';
+import { EventSourceId, EventStoreBuilder, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
@@ -14,6 +13,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ClientBuilder } from './ClientBuilder';
 import { AggregateRoot, IAggregateOf, AggregateOf, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Constructor } from '@dolittle/types';
+import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
 
@@ -31,6 +31,7 @@ export class Client {
      * @param {IEventHandlers} eventHandlers All the event handlers.
      * @param {IFilters} filters All the filters.
      * @param {IEventHorizons} eventHorizons All event horizons.
+     * @param {ProjectionStoreBuilder} projections All projections.
      */
     constructor(
         readonly logger: Logger,
@@ -38,7 +39,8 @@ export class Client {
         readonly eventStore: EventStoreBuilder,
         readonly eventHandlers: IEventHandlers,
         readonly filters: IFilters,
-        readonly eventHorizons: IEventHorizons) {
+        readonly eventHorizons: IEventHorizons,
+        readonly projections: ProjectionStoreBuilder) {
     }
 
     /**

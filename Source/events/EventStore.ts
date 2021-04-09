@@ -10,15 +10,15 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { EventStoreClient } from '@dolittle/runtime.contracts/Runtime/Events/EventStore_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import {
     CommitEventsRequest,
     CommitEventsResponse as PbCommitEventsResponse,
     CommitAggregateEventsRequest,
     FetchForAggregateRequest
-} from '@dolittle/runtime.contracts/Runtime/Events/EventStore_pb';
-import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Runtime/Events/Uncommitted_pb';
-import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Runtime/Events/Committed_pb';
+} from '@dolittle/runtime.contracts/Events/EventStore_pb';
+import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
 
 import { CommittedEvents } from './CommittedEvents';
 import { IEventStore } from './IEventStore';
@@ -34,10 +34,10 @@ import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
-import { Aggregate } from '@dolittle/runtime.contracts/Runtime/Events/Aggregate_pb';
+import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
 
 import { syncPromise } from './syncPromise';
-import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 
 /**
  * Represents an implementation of {@link IEventStore}

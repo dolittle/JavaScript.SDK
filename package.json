@@ -4,6 +4,7 @@
     "Source/*",
     "Samples/Tutorials/Aggregates",
     "Samples/Tutorials/GettingStarted",
+    "Samples/Tutorials/Projections",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
     "Samples/Advanced",

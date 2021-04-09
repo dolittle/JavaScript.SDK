@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 
-import { executionContexts } from '../index';
+import { executionContexts } from '..';
 
 describe('when converting to protobuf and back', () => {
     const claimsArray: Claim[] = [

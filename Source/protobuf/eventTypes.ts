@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
-import { Artifact as PbArtifact } from '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb';
+import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
 import guids from './guids';
@@ -53,7 +53,7 @@ EventType.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
-declare module '@dolittle/runtime.contracts/Fundamentals/Artifacts/Artifact_pb' {
+declare module '@dolittle/contracts/Artifacts/Artifact_pb' {
     interface Artifact {
         toSDK(): EventType
     }

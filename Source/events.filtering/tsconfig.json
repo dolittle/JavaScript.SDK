@@ -5,16 +5,13 @@
         "sourceRoot": "../",
         "outDir": "Distribution",
         "composite": true
-
     },
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        { "path": "../artifacts" },
         { "path": "../events" },
         { "path": "../events.processing" },
         { "path": "../execution" },
-        { "path": "../protobuf" },
-        { "path": "../resilience" },
+        { "path": "../resilience" }
     ]
 }

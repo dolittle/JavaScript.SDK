@@ -2,8 +2,8 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./artifacts" },
         { "path": "./aggregates" },
+        { "path": "./artifacts" },
         { "path": "./common" },
         { "path": "./eventHorizon" },
         { "path": "./events" },
@@ -11,6 +11,7 @@
         { "path": "./events.handling" },
         { "path": "./events.processing" },
         { "path": "./execution" },
+        { "path": "./projections" },
         { "path": "./protobuf" },
         { "path": "./resilience" },
         { "path": "./sdk" },

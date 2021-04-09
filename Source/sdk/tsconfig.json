@@ -10,15 +10,13 @@
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../aggregates" },
-        { "path": "../artifacts" },
         { "path": "../common" },
-        { "path": "../events" },
         { "path": "../eventHorizon" },
+        { "path": "../events" },
         { "path": "../events.filtering" },
         { "path": "../events.handling" },
-        { "path": "../events.processing" },
         { "path": "../execution" },
-        { "path": "../protobuf" },
-        { "path": "../services" }
+        { "path": "../projections" },
+        { "path": "../resilience" }
     ]
 }

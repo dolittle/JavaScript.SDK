@@ -6,6 +6,7 @@
         { "path": "./Container"},
         { "path": "./Tutorials/Aggregates" },
         { "path": "./Tutorials/GettingStarted" },
+        { "path": "./Tutorials/Projections" },
         { "path": "./Tutorials/EventHorizon/Consumer" },
         { "path": "./Tutorials/EventHorizon/Producer" },
     ]

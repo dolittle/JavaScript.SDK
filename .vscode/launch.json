@@ -18,6 +18,19 @@
             ]
         },
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Projections Sample",
+            "program": "${workspaceFolder}/Samples/Tutorials/Projections/Distribution/index.js",
+            "cwd": "${workspaceFolder}/Samples/Tutorials/Projections",
+            "preLaunchTask": "tsc: build - Samples/Tutorials/Projections/tsconfig.json",
+            "protocol": "inspector",
+            "outputCapture": "std",
+            "outFiles": [
+                "${workspaceFolder}/Samples/Tutorials/Projections/Distribution/*.js"
+            ]
+        },
+        {
             "name": "Launch Aggregates Sample",
             "type": "node",
             "request": "launch",

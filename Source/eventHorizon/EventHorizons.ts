@@ -6,8 +6,8 @@ import { Logger } from 'winston';
 import * as grpc from '@grpc/grpc-js';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
-import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/Runtime/EventHorizon/Subscriptions_pb';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
+import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
 
 import { Subscription } from './Subscription';
 import { IEventHorizons } from './IEventHorizons';

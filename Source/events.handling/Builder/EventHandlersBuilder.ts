@@ -6,14 +6,14 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
+import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandlerId, EventHandlers, IEventHandlers } from '../index';
+import { EventHandlerId, EventHandlers, IEventHandlers } from '..';
 import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';

@@ -9,6 +9,8 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
+        { "path": "../execution" },
+        { "path": "../protobuf" },
         { "path": "../resilience" }
     ]
 }

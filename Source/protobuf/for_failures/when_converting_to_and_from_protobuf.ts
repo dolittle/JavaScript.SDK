@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure } from '../index';
+import { Failure } from '..';
 
 describe('when converting to and from protobuf', () => {
     const failureId = '0c2b9956-cbe8-4ed1-be9c-d2ede0c8ec20';

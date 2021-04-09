@@ -14,10 +14,12 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 
-import { Failure as PbFailure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { IEventProcessor, RegistrationFailed } from '../index';
+import { RegistrationFailed } from '..';
+
+import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.

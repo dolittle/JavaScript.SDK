@@ -4,20 +4,18 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
-import { EventContext, EventSourceId } from '@dolittle/sdk.events';
-import { EventProcessor } from '@dolittle/sdk.events.processing';
-import { MissingEventInformation } from '@dolittle/sdk.events.handling';
+import { EventContext, IEventTypes, EventSourceId } from '@dolittle/sdk.events';
+import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids, executionContexts, eventTypes } from '@dolittle/sdk.protobuf';
+import { guids, eventTypes } from '@dolittle/sdk.protobuf';
 
-import { Failure } from '@dolittle/runtime.contracts/Fundamentals/Protobuf/Failure_pb';
-import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Filters_pb';
-import { RetryProcessingState } from '@dolittle/runtime.contracts/Runtime/Events.Processing/Processors_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
+import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId } from '../index';
+import { FilterId } from '..';
 
-export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
+export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
     constructor(
         kind: string,

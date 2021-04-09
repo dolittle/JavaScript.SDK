@@ -6,9 +6,9 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.events';
 
-import { EventHandlerId, EventHandlerSignature } from '../index';
+import { EventHandlerId, EventHandlerSignature } from '..';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];
@@ -41,8 +41,8 @@ export class EventHandlerMethodsBuilder {
     handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {Geneartion | number} generation The generation of the event type.
+     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
+     * @param {Generation | number} generation The generation of the event type.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
     handle(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: EventHandlerSignature): void;

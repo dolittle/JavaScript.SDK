@@ -12,6 +12,7 @@
         { "path": "../artifacts" },
         { "path": "../execution" },
         { "path": "../protobuf" },
+        { "path": "../resilience" },
         { "path": "../services" }
     ]
 }

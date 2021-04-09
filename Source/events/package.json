@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events",
-    "version": "14.2.0",
+    "version": "14.3.0-projections.2",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -34,20 +34,21 @@
     },
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
+        "@dolittle/contracts": "5.3.0",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "5.1.21",
-        "@dolittle/sdk.artifacts": "14.2.0",
-        "@dolittle/sdk.execution": "14.2.0",
-        "@dolittle/sdk.protobuf": "14.2.0",
-        "@dolittle/sdk.resilience": "14.2.0",
-        "@dolittle/sdk.services": "14.2.0",
-        "deasync": "^0.1.21",
+        "@dolittle/runtime.contracts": "5.3.0",
+        "@dolittle/sdk.artifacts": "14.3.0-projections.2",
+        "@dolittle/sdk.execution": "14.3.0-projections.2",
+        "@dolittle/sdk.protobuf": "14.3.0-projections.2",
+        "@dolittle/sdk.resilience": "14.3.0-projections.2",
+        "@dolittle/sdk.services": "14.3.0-projections.2",
+        "deasync": "0.1.21",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     },
     "devDependencies": {
-        "@types/deasync": "^0.1.1",
+        "@types/deasync": "0.1.1",
         "@types/luxon": "1.24.1"
     }
 }

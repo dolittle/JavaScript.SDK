@@ -1,18 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import {
-    AggregateRootId,
-    AggregateRootVersion,
-    AggregateRootVersionIsOutOfOrder,
-    CommittedAggregateEvent,
-    CommittedAggregateEvents,
-    EventContentNeedsToBeDefined,
-    EventSourceId,
-    EventType,
-    EventWasAppliedByOtherAggregateRoot,
-    EventWasAppliedToOtherEventSource
-} from '@dolittle/sdk.events';
+import { AggregateRootId, AggregateRootVersion, EventContentNeedsToBeDefined, EventSourceId, EventType } from '@dolittle/sdk.events';
+
 import { AggregateRootIdentifierNotSet } from './AggregateRootIdentifierNotSet';
 import { AppliedEvent } from './AppliedEvent';
 
