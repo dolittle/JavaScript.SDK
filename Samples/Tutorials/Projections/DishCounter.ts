@@ -10,7 +10,7 @@ export class DishCounter {
     numberOfTimesPrepared: number = 0;
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))
-    dishPrepared(event: DishPrepared, projectionContext: ProjectionContext) {
+    on(event: DishPrepared, projectionContext: ProjectionContext) {
         this.numberOfTimesPrepared ++;
     }
 }
