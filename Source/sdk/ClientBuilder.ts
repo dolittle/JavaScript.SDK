@@ -9,7 +9,7 @@ import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
-import { EmbeddingBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
+import { EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
 import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -52,7 +52,7 @@ export class ClientBuilder {
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
         this._projectionsAssociations = new ProjectionAssociations();
-        this._embeddingsBuilder = new EmbeddingBuilder();
+        this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations);
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
