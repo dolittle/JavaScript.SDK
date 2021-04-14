@@ -39,6 +39,7 @@
         "@dolittle/sdk.aggregates": "14.3.0",
         "@dolittle/sdk.artifacts": "14.3.0",
         "@dolittle/sdk.common": "14.3.0",
+        "@dolittle/sdk.embeddings": "14.3.0",
         "@dolittle/sdk.eventhorizon": "14.3.0",
         "@dolittle/sdk.events": "14.3.0",
         "@dolittle/sdk.events.handling": "14.3.0",

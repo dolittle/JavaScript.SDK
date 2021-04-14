@@ -9,6 +9,7 @@ import { IContainer, Container } from '@dolittle/sdk.common';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
+import { EmbeddingBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
 import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -36,6 +37,7 @@ export class ClientBuilder {
     private readonly _filtersBuilder: EventFiltersBuilder;
     private readonly _projectionsBuilder: ProjectionsBuilder;
     private readonly _projectionsAssociations: IProjectionAssociations;
+    private readonly _embeddingsBuilder: EmbeddingsBuilder;
     private _cancellation: Cancellation;
     private _logger: Logger;
     private _container: IContainer = new Container();
@@ -50,6 +52,7 @@ export class ClientBuilder {
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
         this._projectionsAssociations = new ProjectionAssociations();
+        this._embeddingsBuilder = new EmbeddingBuilder();
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
@@ -200,6 +203,16 @@ export class ClientBuilder {
      */
     withProjections(callback: ProjectionsBuilderCallback): ClientBuilder {
         callback(this._projectionsBuilder);
+        return this;
+    }
+
+    /**
+     * Configure embeddings.
+     * @param {EmbeddingsBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder}
+     */
+    withEmbeddings(callback: EmbeddingsBuilderCallback): ClientBuilder {
+        callback(this._embeddingsBuilder);
         return this;
     }
 
