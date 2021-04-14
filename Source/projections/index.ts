@@ -30,6 +30,7 @@ export {
     OnDecoratedMethod,
     OnDecoratedMethods,
     on,
+    OnMethodBuilder,
     ProjectionBuilder,
     ProjectionBuilderForReadModel,
     ProjectionClassBuilder,
@@ -40,6 +41,7 @@ export {
     ProjectionOptions,
     ProjectionsBuilder,
     ProjectionsBuilderCallback,
+    TypeOrEventType,
     ReadModelAlreadyDefinedForProjection,
 } from './Builder';
 
