@@ -8,8 +8,10 @@ export { Embedding } from './Embedding';
 export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingId } from './EmbeddingId';
+export { MissingEmbeddingInformation } from './MissingEmbeddingInformation':
+export { UnknownEmbeddingRequestCase } from './UnknownEmbeddingRequestCase';
 
-// export * as internal from './Internal';
+export * as internal from './Internal';
 
 export {
     CannotRegisterEmbeddingThatIsNotAClass,

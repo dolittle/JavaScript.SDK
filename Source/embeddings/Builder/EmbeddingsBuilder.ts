@@ -11,7 +11,7 @@ import { Constructor } from '@dolittle/types';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IProjectionAssociations } from '@dolittle/sdk.projections';
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Events.Processing/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 
 import { IEmbeddings, EmbeddingId, Embeddings } from '..';
 

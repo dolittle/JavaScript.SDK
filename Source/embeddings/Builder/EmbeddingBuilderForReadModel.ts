@@ -10,7 +10,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { KeySelector, OnMethodBuilder, ProjectionCallback } from '@dolittle/sdk.projections';
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Events.Processing/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 
 import { IEmbeddings, Embedding, EmbeddingCompareCallback, EmbeddingId } from '..';
 import { EmbeddingProcessor } from '../Internal';

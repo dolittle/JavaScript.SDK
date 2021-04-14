@@ -2,8 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-
-import { EmbeddingCompareCallback } from '..';
+import { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
 
 /**
  * Represents methods decorated with the on decorator.
@@ -18,7 +17,7 @@ export class CompareDecoratedMethod {
      */
     constructor(
         readonly owner: Constructor<any>,
-        readonly method: EmbeddingCompareCallback,
+        readonly method: EmbeddingClassCompareMethod,
         readonly name: string) {
     }
 }

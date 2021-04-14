@@ -7,7 +7,7 @@ import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Events.Processing/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 
 import { IEmbeddings } from '..';
 

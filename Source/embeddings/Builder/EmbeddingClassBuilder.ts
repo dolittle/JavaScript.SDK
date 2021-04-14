@@ -3,15 +3,14 @@
 
 import { Logger } from 'winston';
 
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { Guid } from '@dolittle/rudiments';
 import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Constructor } from '@dolittle/types';
-import { on as onDecorator, OnDecoratedMethod, OnDecoratedMethods, ProjectionCallback, DeleteReadModelInstance, KeySelector } from '@dolittle/sdk.projections';
+import { on as onDecorator, OnDecoratedMethods, ProjectionCallback, KeySelector } from '@dolittle/sdk.projections';
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Events.Processing/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 
 import { IEmbeddings, Embedding, EmbeddingCompareCallback } from '..';
 import { EmbeddingProcessor } from '../Internal';
@@ -89,7 +88,7 @@ export class EmbeddingClassBuilder<T> extends OnDecoratorResolver implements ICa
 
     private createCompareMethod(method: CompareDecoratedMethod): EmbeddingCompareCallback<any> {
         return (receivedState, currentState, embeddingContext) => {
-            const result = method.method.call(receivedState, currentState, embeddingContext);
+            const result = method.method.call(currentState, receivedState, embeddingContext);
             return result;
         }
     }

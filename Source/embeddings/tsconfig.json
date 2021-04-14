@@ -12,6 +12,7 @@
         { "path": "../events" },
         { "path": "../resilience" },
         { "path": "../execution" },
+        { "path": "../events" },
         { "path": "../projections" }
     ]
 }

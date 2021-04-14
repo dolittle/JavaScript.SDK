@@ -10,6 +10,7 @@ export { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompare
 export { EmbeddingBuilder } from './EmbeddingBuilder';
 export { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 export { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
+export { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
 export { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 export { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 export { embedding } from './embeddingDecorator';
