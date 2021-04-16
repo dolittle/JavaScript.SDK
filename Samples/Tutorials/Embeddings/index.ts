@@ -19,10 +19,13 @@ const client = Client
         builder.register(DishCounter);
         builder.createEmbedding('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
             .forReadModel(Chef)
-            .compare((oldState, newState, embeddingContext )=> {
+            .compare((oldState, newState, embeddingContext) => {
                 return oldState.dishes
-                    .filter((dish: string) => !newState.includes(dish))
-                    .map((missingDish: string) => new DishPrepared(missingDish, embeddingContext.key))
+                    .filter((dish: string) => !newState.dishes.includes(dish))
+                    .map((missingDish: string) => new DishPrepared(missingDish, 'default chef lol'))
+            })
+            .deleteMethod((currentState, embeddingContext) => {
+                return new ChefFired(currentState.name);
             })
             .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
                 chef.name = event.Chef;

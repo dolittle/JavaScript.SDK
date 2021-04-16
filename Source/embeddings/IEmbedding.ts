@@ -45,8 +45,15 @@ export interface IEmbedding<T> {
      * Compares the received state and current state.
      * @param {T} receivedState The received state.
      * @param {T} currentState The current state.
-     * @param {EmbeddingContext} context 
+     * @param {EmbeddingContext} context EmbeddingContext
      * @returns {any | any[]} One or more events to correct the state towards the wanted state.
      */
     compare(receivedState: T, currentState: T, context: EmbeddingContext): any | any[];
+
+    /**
+     * Called, when the readmodel should get deleted. Returns events, that should result in the readmodels deletion.
+     * @param {T} currentState The received state.
+     * @param {EmbeddingContext} context EmbeddingContext
+     */
+    delete(currentState: T, context: EmbeddingContext): any | any[];
 }

@@ -3,6 +3,7 @@
 // Sample code for the tutorial at https://dolittle.io/tutorials/projections/typescript/
 
 import { EmbeddingContext, embedding, compare } from '@dolittle/sdk.embeddings';
+import { deleteMethod } from '@dolittle/sdk.embeddings/Builder';
 import { ProjectionContext, on } from '@dolittle/sdk.projections';
 import { DishPrepared } from './DishPrepared';
 
@@ -11,10 +12,15 @@ export class DishCounter {
     numberOfTimesPrepared: number = 0;
 
     @compare()
-    compare(receivedState, embeddingContext: EmbeddingContext) {
+    compare(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
         if (receivedState.numberOfTimesPrepared > this.numberOfTimesPrepared) {
-            return new DishPrepared(embeddingContext.key, 'default chef');
+            return new DishPrepared(embeddingContext.key.value, 'default chef');
         }
+    }
+
+    @deleteMethod()
+    remove(embeddingContext: EmbeddingContext) {
+        return new DishRemoved(embeddingContext.key.value);
     }
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))

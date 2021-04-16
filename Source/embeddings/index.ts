@@ -6,10 +6,10 @@ export { IEmbeddings } from './IEmbeddings';
 export { Embeddings } from './Embeddings';
 export { Embedding } from './Embedding';
 export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
+export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingId } from './EmbeddingId';
-export { MissingEmbeddingInformation } from './MissingEmbeddingInformation':
-export { UnknownEmbeddingRequestCase } from './UnknownEmbeddingRequestCase';
+export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
 
 export * as internal from './Internal';
 

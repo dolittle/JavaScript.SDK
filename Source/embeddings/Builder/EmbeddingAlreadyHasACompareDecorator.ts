@@ -13,6 +13,6 @@ export class EmbeddingAlreadyHasACompareDecorator extends Exception {
      * @param {any} instance The embedding class that already has a compare method.
      */
     constructor(target: Constructor<any>) {
-        super(`Embedding of type ${target.constructor.name} already has a @compare decorator defined for a method.`)
+        super(`Embedding of type ${target.constructor.name} already has a @compare decorator defined for a method.`);
     }
 }

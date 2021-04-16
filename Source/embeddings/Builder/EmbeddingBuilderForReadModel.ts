@@ -17,12 +17,15 @@ import { EmbeddingProcessor } from '../Internal';
 
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
+import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
+import { EmbeddingAlreadyHasADeleteMethod } from './EmbeddingAlreadyHasADeleteMethod';
 
 /**
  * Represents a builder for building {@link IEmbedding}.
  */
 export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private _compareMethod?: EmbeddingCompareCallback<T> = undefined;
+    private _deleteMethod?: EmbeddingDeleteCallback<T> = undefined;
 
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
@@ -47,6 +50,14 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T> implemen
         return this;
     }
 
+    deleteMethod(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
+        if (this._deleteMethod) {
+            throw new EmbeddingAlreadyHasADeleteMethod(this._embeddingId);
+        }
+        this._deleteMethod = callback;
+        return this;
+    }
+
     /** @inheritdoc */
     buildAndRegister(
         client: EmbeddingsClient,
@@ -68,10 +79,14 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T> implemen
             return;
         }
         if (this._compareMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No @compare method defined.`);
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No compare method defined.`);
             return;
         }
-        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod);
+        if (this._deleteMethod === undefined) {
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No delete method defined.`);
+            return;
+        }
+        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod, this._deleteMethod);
         embeddings.register<T>(
             new EmbeddingProcessor<T>(
                 embedding,

@@ -9,7 +9,7 @@ import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
-import { IReverseCallClient } from '@dolittle/sdk.services';
+import { IReverseCallClient, ClientProcessor, RegistrationFailed  } from '@dolittle/sdk.services';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
@@ -17,20 +17,20 @@ import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resili
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { RegistrationFailed } from '..';
-
 import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
     private _pingTimeout = 1;
 
     constructor(
-        private _kind: string,
+        protected _kind: string,
         protected _identifier: TIdentifier,
-        protected _logger: Logger) {}
+        protected _logger: Logger) {
+            super(_kind, _identifier);
+        }
 
     /** @inheritdoc */
     register(cancellation: Cancellation): Observable<never> {

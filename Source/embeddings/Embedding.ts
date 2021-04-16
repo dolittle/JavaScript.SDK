@@ -1,14 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor } from '@dolittle/types';
 import { EventType, EventTypeMap } from '@dolittle/sdk.events';
-import { DeleteReadModelInstance, ProjectionCallback, MissingOnMethodForType, KeySelector, EventSelector, ProjectionId } from '@dolittle/sdk.projections';
+import {
+    DeleteReadModelInstance,
+    EventSelector,
+    KeySelector,
+    MissingOnMethodForType,
+    ProjectionCallback,
+    ProjectionContext,
+    ProjectionId
+    } from '@dolittle/sdk.projections';
+import { Constructor } from '@dolittle/types';
 
-import { IEmbedding } from './IEmbedding';
-import { EmbeddingContext } from './EmbeddingContext';
-import { EmbeddingId } from './EmbeddingId';
 import { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
+import { EmbeddingContext } from './EmbeddingContext';
+import { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
+import { EmbeddingId } from './EmbeddingId';
+import { IEmbedding } from './IEmbedding';
 
 export class Embedding<T> implements IEmbedding<T> {
 
@@ -26,7 +35,8 @@ export class Embedding<T> implements IEmbedding<T> {
         readonly embeddingId: EmbeddingId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
         private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>,
-        private readonly _compareMethod: EmbeddingCompareCallback) {
+        private readonly _compareMethod: EmbeddingCompareCallback,
+        private readonly _deleteMethod: EmbeddingDeleteCallback) {
         const eventSelectors: EventSelector[] = [];
         for (const [eventType, [, keySelector]] of this._eventMap.entries()) {
             eventSelectors.push(new EventSelector(eventType, keySelector));
@@ -35,7 +45,7 @@ export class Embedding<T> implements IEmbedding<T> {
     }
 
     /** @inheritdoc */
-    async on(readModel: T, event: any, eventType: EventType, context: EmbeddingContext): Promise<T | DeleteReadModelInstance> {
+    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
             return method(readModel, event, context);
@@ -45,7 +55,12 @@ export class Embedding<T> implements IEmbedding<T> {
     }
 
     /** @inheritdoc */
-    compare(receivedState: T, currentState: T, context: any) {
+    compare(receivedState: T, currentState: T, context: EmbeddingContext) {
         return this._compareMethod(receivedState, currentState, context);
+    }
+
+    /** @inheritdoc */
+    delete(currentState: T, context: EmbeddingContext) {
+        return this._deleteMethod(currentState, context);
     }
 }

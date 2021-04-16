@@ -22,7 +22,7 @@ import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 export class EmbeddingsBuilder {
     private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
 
-    constructor(private __projectionAssociations: IProjectionAssociations) {}
+    constructor(private _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building an embedding.
@@ -30,7 +30,7 @@ export class EmbeddingsBuilder {
      * @returns {EmbeddingBuilder}
      */
     createEmbedding(embeddingId: EmbeddingId | Guid | string): EmbeddingBuilder {
-        const builder = new EmbeddingBuilder(EmbeddingId.from(embeddingId), this.__projectionAssociations);
+        const builder = new EmbeddingBuilder(EmbeddingId.from(embeddingId), this._projectionAssociations);
         this._embeddingBuilders.push(builder);
         return builder;
     }
@@ -47,7 +47,7 @@ export class EmbeddingsBuilder {
     register<T = any>(instance: T): EmbeddingsBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
         this._embeddingBuilders.push(new EmbeddingClassBuilder<T>(typeOrInstance));
-        this.__projectionAssociations.associate<T>(typeOrInstance);
+        this._projectionAssociations.associate<T>(typeOrInstance);
         return this;
     }
 
