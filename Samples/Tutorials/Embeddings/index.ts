@@ -32,6 +32,7 @@ const client = Client
                 if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
                 return chef;
             });
+        })
     .build();
 
 (async () => {

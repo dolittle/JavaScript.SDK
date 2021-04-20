@@ -16,6 +16,7 @@ export * as internal from './Internal';
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
     ICanBuildAndRegisterAnEmbedding,
+    compare,
     EmbeddingBuilder,
     EmbeddingBuilderForReadModel,
     EmbeddingClassBuilder,
