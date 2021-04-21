@@ -28,21 +28,10 @@ export {
     ReadModelAlreadyDefinedForEmbedding,
 } from './Builder';
 
-// export {
-//     CurrentState,
-//     CurrentStateType,
-//     FailedToGetEmbedding,
-//     FailedToGetEmbeddingState,
-//     IEmbeddingAssociations,
-//     IEmbeddingStore,
-//     NoEmbeddingAssociatedWithType,
-//     NoTypeAssociatedWithEmbedding,
-//     EmbeddingAssociation,
-//     EmbeddingAssociations,
-//     EmbeddingStore,
-//     TypeIsNotAEmbedding,
-//     EmbeddingStoreBuilder,
-//     IConvertEmbeddingsToSDK,
-//     EmbeddingsToSDKConverter,
-//     UnknownCurrentStateType
-// } from './Store';
+export {
+    FailedToGetEmbedding,
+    FailedToGetEmbeddingState,
+    IEmbeddingStore,
+    EmbeddingStore,
+    EmbeddingStoreBuilder
+} from './Store';

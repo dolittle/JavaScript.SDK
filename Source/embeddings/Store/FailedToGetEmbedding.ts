@@ -11,7 +11,7 @@ import { EmbeddingId } from '..';
  * An exception that gets thrown when an embedding fails to be getted.
  */
 export class FailedToGetEmbedding extends Exception {
-    constructor(embedding: EmbeddingId, scope: ScopeId, key: Key | undefined, failure: Failure) {
+    constructor(embedding: EmbeddingId, key: Key | undefined, failure: Failure) {
         if (key) {
             super(`Failed to get embedding ${embedding} with key ${key} due to failure ${failure.id} with reason: ${failure.reason}`);
         } else {
