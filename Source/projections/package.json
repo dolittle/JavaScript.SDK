@@ -34,9 +34,9 @@
     },
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
-        "@dolittle/contracts": "5.4.0-embeddings.1",
+        "@dolittle/contracts": "5.4.0-embeddings.3",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "5.4.0-embeddings.1",
+        "@dolittle/runtime.contracts": "5.4.0-embeddings.3",
         "@dolittle/types": "5.0.1",
         "luxon": "1.24.1"
     },
