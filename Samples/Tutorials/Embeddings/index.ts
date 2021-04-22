@@ -4,15 +4,20 @@
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
-import { DishCounter } from './DishCounter';
 import { Chef } from './Chef';
+import { ChefFired } from './ChefFired';
+import { DishCounter } from './DishCounter';
+import { DishHandler } from './DishHandler';
+import { DishPrepared } from './DishPrepared';
+import { DishRemoved } from './DishRemoved';
 
 const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
+    .withEventTypes(eventTypes => {
+        eventTypes.register(DishPrepared);
+        eventTypes.register(DishRemoved);
+        eventTypes.register(ChefFired);
+    })
     .withEventHandlers(builder =>
         builder.register(DishHandler))
     .withEmbeddings(builder => {
@@ -22,7 +27,7 @@ const client = Client
             .compare((oldState, newState, embeddingContext) => {
                 return oldState.dishes
                     .filter((dish: string) => !newState.dishes.includes(dish))
-                    .map((missingDish: string) => new DishPrepared(missingDish, 'default chef lol'))
+                    .map((missingDish: string) => new DishPrepared(missingDish, 'default chef lol'));
             })
             .deleteMethod((currentState, embeddingContext) => {
                 return new ChefFired(currentState.name);
