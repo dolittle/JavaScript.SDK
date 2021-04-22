@@ -49,14 +49,14 @@ const client = Client
     await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 
     setTimeout(async () => {
-        for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        for (const [dish, { state: counter }] of await client.embeddings.forTenant(TenantId.development).getAll(DishCounter)) {
             console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
         }
 
-        const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
+        const chef = await client.embeddings.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
         console.log(`${chef.key} has prepared ${chef.state.dishes}`);
 
-        const dishes = await client.embeddings.forTenant(TenantId.development).getAll(DishCounter);
-        console.log(`Got dem dishes ${dishes}`);
+        const dishes = await client.embeddings.forTenant(TenantId.development).getKeys(DishCounter);
+        console.log(`Got dem dish keys: ${dishes}`);
     }, 1000);
 })();
