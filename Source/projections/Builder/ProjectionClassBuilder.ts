@@ -1,33 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
-import { IContainer } from '@dolittle/sdk.common';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Constructor } from '@dolittle/types';
-
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
-import { IProjections, ProjectionCallback, Projection, KeySelector } from '..';
+import { IContainer } from '@dolittle/sdk.common';
+import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import { DeleteReadModelInstance, IProjections, KeySelector, Projection, ProjectionCallback } from '..';
 import { ProjectionProcessor } from '../Internal';
-
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { on as onDecorator } from './onDecorator';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
-import { projection as projectionDecorator } from './projectionDecorator';
+import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
+import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
-import { OnDecoratorResolver } from './OnDecoratorResolver';
+import { projection as projectionDecorator } from './projectionDecorator';
 
-export class ProjectionClassBuilder<T> extends OnDecoratorResolver implements ICanBuildAndRegisterAProjection {
+
+export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
     constructor(typeOrInstance: Constructor<T> | T) {
-        super();
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;
 
@@ -71,5 +66,62 @@ export class ProjectionClassBuilder<T> extends OnDecoratorResolver implements IC
                 eventTypes,
                 logger
             ), cancellation);
+        }
+
+    private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
+        let allMethodsValid = true;
+        const methods = OnDecoratedProjectionMethods.methodsPerProjection.get(type);
+        if (methods === undefined) {
+            allMethodsValid = false;
+            return allMethodsValid;
+        }
+
+        for (const method of methods) {
+            const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
+
+            if (!hasEventType) {
+                allMethodsValid = false;
+                continue;
+            }
+
+            const onMethod = this.createOnMethod(method);
+            const keySelector = method.keySelector;
+
+            if (events.has(eventType!)) {
+                allMethodsValid = false;
+                continue;
+            }
+            events.set(eventType!, [onMethod, keySelector]);
+        }
+        return allMethodsValid;
+    }
+
+    private tryGetEventTypeFromMethod(method: OnDecoratedProjectionMethod, eventTypes: IEventTypes): [boolean, EventType | undefined] {
+        if (this.eventTypeIsId(method.eventTypeOrId)) {
+            return [
+                true,
+                new EventType(
+                    EventTypeId.from(method.eventTypeOrId),
+                    method.generation ? Generation.from(method.generation) : Generation.first)
+            ];
+        } else if (!eventTypes.hasFor(method.eventTypeOrId)) {
+            return [false, undefined];
+        } else {
+            return [true, eventTypes.getFor(method.eventTypeOrId)];
+        }
+    }
+
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
+        return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
+    }
+
+    private createOnMethod(method: OnDecoratedProjectionMethod): ProjectionCallback<T> {
+        return (instance, event, projectionContext) => {
+            const result = method.method.call(instance, event, projectionContext);
+            if (result instanceof DeleteReadModelInstance) {
+                return result;
+            }
+            return instance;
+        };
     }
 }

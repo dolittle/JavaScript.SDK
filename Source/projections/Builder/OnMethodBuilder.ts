@@ -4,62 +4,61 @@
 import { Guid } from '@dolittle/rudiments';
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { KeySelector, KeySelectorBuilder, ProjectionCallback } from '..';
+import { KeySelector, KeySelectorBuilder } from '..';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 
-
 /**
  * Defines a class for building and getting the inline on() methods for inline projections.
  */
-export abstract class OnMethodBuilder<T> {
-    protected onMethods: OnMethodSpecification[] = [];
+export abstract class OnMethodBuilder<T, TCallback> {
+    protected onMethods: OnMethodSpecification<TCallback>[] = [];
 
     /**
      * Add an on method for handling the event.
      * @template U Type of event.
      * @param {Constructor<U>} type The type of event.
      * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T,U>} callback Callback to call for each event.
+     * @param {TCallback<T,U>} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on<U>(type: Constructor<U>, keySelectorCallback: KeySelectorBuilderCallback<U>, callback: ProjectionCallback<T, U>): this;
+    on<U>(type: Constructor<U>, keySelectorCallback: KeySelectorBuilderCallback<U>, callback: TCallback): this;
     /**
      * Add an on method for handling the event.
      * @param {EventType} eventType The identifier of the event.
      * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} callback Callback to call for each event.
+     * @param {TCallback} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
+    on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: TCallback): this;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId|Guid|string} eventType The identifier of the event.
      * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} callback Callback to call for each event.
+     * @param {TCallback} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
+    on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: TCallback): this;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId | Guid | string} eventType The identifier of the event.
      * @param {Generation | number} generation The generation of the event type.
      * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} method Callback to call for each event.
+     * @param {TCallback} method Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
+    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: TCallback): this;
     on<U>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
         keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<U> | Generation | number,
-        keySelectorCallbackOrCallback?: KeySelectorBuilderCallback<U> | ProjectionCallback<T>,
-        maybeCallback?: ProjectionCallback<T, U>): this {
+        keySelectorCallbackOrCallback?: KeySelectorBuilderCallback<U> | TCallback,
+        maybeCallback?: TCallback): this {
 
         const typeOrEventType = this.getTypeOrEventTypeFrom(typeOrEventTypeOrId, keySelectorCallbackOrGeneration);
         const keySelectorCallback = typeof keySelectorCallbackOrGeneration === 'function'
             ? keySelectorCallbackOrGeneration
             : keySelectorCallbackOrCallback as KeySelectorBuilderCallback<U>;
-        const callback = maybeCallback || keySelectorCallbackOrCallback as ProjectionCallback<T, U>;
+        const callback = maybeCallback || keySelectorCallbackOrCallback as TCallback;
 
         this.onMethods.push([typeOrEventType, keySelectorCallback, callback]);
 
@@ -68,7 +67,7 @@ export abstract class OnMethodBuilder<T> {
 
     protected tryAddOnMethods(
         eventTypes: IEventTypes,
-        events: EventTypeMap<[ProjectionCallback<any>, KeySelector]>): boolean {
+        events: EventTypeMap<[TCallback, KeySelector]>): boolean {
         let allMethodsValid = true;
         const keySelectorBuilder = new KeySelectorBuilder();
         for (const [typeOrEventTypeOrId, keySelectorBuilderCallback, method] of this.onMethods) {

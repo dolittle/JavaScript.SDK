@@ -1,12 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType, ScopeId } from '@dolittle/sdk.events';
+import { EventType } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { DeleteReadModelInstance, EventSelector, ProjectionContext  } from '@dolittle/sdk.projections';
+import { DeleteReadModelInstance, EventSelector  } from '@dolittle/sdk.projections';
 import { EmbeddingContext } from './EmbeddingContext';
 import { EmbeddingId } from './EmbeddingId';
+import { EmbeddingProjectContext } from './EmbeddingProjectContext';
 
 /**
  * Defines a embedding.
@@ -37,9 +38,9 @@ export interface IEmbedding<T> {
      * @param {T} readModel ReadModel to update.
      * @param {*} event Event to handle.
      * @param {EventType} eventType The event type.
-     * @param {ProjectionContext} context The context for the embedding processing.
+     * @param {EmbeddingProjectContext} context The context for the embedding processing.
      */
-    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
+    on(readModel: T, event: any, eventType: EventType, context: EmbeddingProjectContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
 
     /**
      * Compares the received state and current state.

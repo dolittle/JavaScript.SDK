@@ -2,30 +2,28 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { Constructor } from '@dolittle/types';
 import { EventTypeId } from '@dolittle/sdk.events';
-
+import { Constructor } from '@dolittle/types';
 import { KeySelector } from '..';
-
-import { OnDecoratedMethod  } from './OnDecoratedMethod';
-import { ProjectionClassOnMethod  } from './ProjectionClassOnMethod';
+import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
+import { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 
 /**
- * Defines the system that knows about all the methods decorated with the on decorator.
+ * Defines the system that knows about all the methods decorated with the on decorator on a projection.
  */
-export class OnDecoratedMethods {
+export class OnDecoratedProjectionMethods {
     /**
      * All on methods grouped by their projection.
      */
-    static readonly methodsPerProjection: Map<Function, OnDecoratedMethod[]> = new Map();
+    static readonly methodsPerProjection: Map<Function, OnDecoratedProjectionMethod[]> = new Map();
 
     /**
-     * Registers on decorated methods
+     * Registers on decorated projection methods
      * @param {Constructor<any>} target Target that owns the on method.
      * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event the on method is for or the event.
      * @param {number | undefined} generation Generation of event type or undefined.
      * @param {KeySelector} keySelector The key selector to use for this event type.
-     * @param {ProjectionClassOnMethod} method The on method.
+     * @param {ProjectionClassOnMethod} method The method that handles the event.
      * @param {string} name The name of the method.
      */
     static register(
@@ -39,6 +37,6 @@ export class OnDecoratedMethods {
         if (!methods) {
             this.methodsPerProjection.set(target, methods = []);
         }
-        methods.push(new OnDecoratedMethod(target, eventTypeOrId, generation, keySelector, method, name));
+        methods.push(new OnDecoratedProjectionMethod(target, eventTypeOrId, generation, keySelector, method, name));
     }
 }

@@ -1,24 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { KeySelector, ProjectionCallback } from '@dolittle/sdk.projections';
-import { OnDecoratorResolver } from '@dolittle/sdk.projections/Builder';
+import { DeleteReadModelInstance, KeySelector } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-
-import { EmbeddingProcessor } from '../Internal';
 import {
     Embedding,
     EmbeddingCompareCallback,
     EmbeddingDeleteCallback,
-    IEmbeddings
-    } from '..';
-
+    EmbeddingProjectCallback,
+    IEmbeddings,
+    OnDecoratedEmbeddingMethods
+} from '..';
+import { EmbeddingProcessor } from '../Internal';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
 import { CompareDecoratedMethods } from './CompareDecoratedMethods';
@@ -29,12 +29,13 @@ import { deleteMethod as deleteDecorator } from './deleteDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 
-export class EmbeddingClassBuilder<T> extends OnDecoratorResolver implements ICanBuildAndRegisterAnEmbedding {
+
+export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private readonly _embeddingType: Constructor<T>;
 
     constructor(typeOrInstance: Constructor<T> | T) {
-        super();
         if (typeOrInstance instanceof Function) {
             this._embeddingType = typeOrInstance;
 
@@ -77,7 +78,7 @@ export class EmbeddingClassBuilder<T> extends OnDecoratorResolver implements ICa
         }
         const deleteMethod = this.createDeleteMethod(getDeleteMethod);
 
-        const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
+        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
         if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
             logger.warn(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
             return;
@@ -93,6 +94,7 @@ export class EmbeddingClassBuilder<T> extends OnDecoratorResolver implements ICa
             ), cancellation);
     }
 
+
     private createCompareMethod(method: CompareDecoratedMethod): EmbeddingCompareCallback<any> {
         return (receivedState, currentState, embeddingContext) => {
             const result = method.method.call(currentState, receivedState, embeddingContext);
@@ -104,6 +106,63 @@ export class EmbeddingClassBuilder<T> extends OnDecoratorResolver implements ICa
         return (currentState, embeddingContext) => {
             const result = method.method.call(currentState, embeddingContext);
             return result;
+        };
+    }
+
+    private tryAddAllOnMethods(events: EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
+        let allMethodsValid = true;
+        const methods = OnDecoratedEmbeddingMethods.methodsPerEmbedding.get(type);
+        if (methods === undefined) {
+            allMethodsValid = false;
+            return allMethodsValid;
+        }
+
+        for (const method of methods) {
+            const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
+
+            if (!hasEventType) {
+                allMethodsValid = false;
+                continue;
+            }
+
+            const onMethod = this.createOnMethod(method);
+            const keySelector = method.keySelector;
+
+            if (events.has(eventType!)) {
+                allMethodsValid = false;
+                continue;
+            }
+            events.set(eventType!, [onMethod, keySelector]);
+        }
+        return allMethodsValid;
+    }
+
+    private tryGetEventTypeFromMethod(method: OnDecoratedEmbeddingMethod, eventTypes: IEventTypes): [boolean, EventType | undefined] {
+        if (this.eventTypeIsId(method.eventTypeOrId)) {
+            return [
+                true,
+                new EventType(
+                    EventTypeId.from(method.eventTypeOrId),
+                    method.generation ? Generation.from(method.generation) : Generation.first)
+            ];
+        } else if (!eventTypes.hasFor(method.eventTypeOrId)) {
+            return [false, undefined];
+        } else {
+            return [true, eventTypes.getFor(method.eventTypeOrId)];
+        }
+    }
+
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
+        return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
+    }
+
+    private createOnMethod(method: OnDecoratedEmbeddingMethod): EmbeddingProjectCallback<T> {
+        return (instance, event, embeddingProjectionContext) => {
+            const result = method.method.call(instance, event, embeddingProjectionContext);
+            if (result instanceof DeleteReadModelInstance) {
+                return result;
+            }
+            return instance;
         };
     }
 }

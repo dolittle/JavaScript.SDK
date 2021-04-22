@@ -24,14 +24,14 @@ export class Embeddings implements IEmbeddings {
 
     /** @inheritdoc */
     register<T>(embeddingProcessor: EmbeddingProcessor<T>, cancellation: Cancellation = Cancellation.default): void {
-        // embeddingProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
-        //     error: (error: Error) => {
-        //         this._logger.error(`Failed to register embedding: ${error}`);
-        //     },
-        //     complete: () => {
-        //         this._logger.error(`Embedding registration completed.`);
-        //     }
-        // });
+        embeddingProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+            error: (error: Error) => {
+                this._logger.error(`Failed to register embedding: ${error}`);
+            },
+            complete: () => {
+                this._logger.error(`Embedding registration completed.`);
+            }
+        });
     }
 
 }

@@ -1,33 +1,29 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-import { map } from 'rxjs/operators';
-
 import { Guid } from '@dolittle/rudiments';
-import { ScopeId } from '@dolittle/sdk.events';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { IConvertProjectionsToSDK, IProjectionAssociations, Key, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Constructor } from '@dolittle/types';
-import { IConvertProjectionsToSDK, IProjectionAssociations, Key, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
-
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { GetOneRequest, GetOneResponse, GetAllRequest, GetAllResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
-
-import { EmbeddingId } from '..';
-
-import { IEmbeddingStore } from './IEmbeddingStore';
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
+import { EmbeddingId, FailedToGetEmbeddingKeys } from '..';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
+import { IEmbeddingStore } from './IEmbeddingStore';
 
+/** @inheritdoc */
 export class EmbeddingStore implements IEmbeddingStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
     constructor(
-        private readonly _embeddingsClient: EmbeddingsClient,
+        private readonly _embeddingsClient: EmbeddingStoreClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _projectionAssociations: IProjectionAssociations,
         private readonly _logger: Logger) {}
@@ -86,6 +82,31 @@ export class EmbeddingStore implements IEmbeddingStore {
             })).toPromise();
     }
 
+    /** @inheritdoc */
+    getKeys<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Key[]>;
+    getKeys<TEmbedding>(type: Constructor<TEmbedding>, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Key[]>;
+    getKeys(embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Key[]>;
+    getKeys<TEmbedding = any>(typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation, maybeCancellation?: Cancellation) {
+        const type = typeof typeOrEmbedding === 'function'
+            ? typeOrEmbedding as Constructor<TEmbedding>
+            : undefined;
+        const embedding = this.getEmbeddingForAll(type, typeOrEmbedding, embeddingOrCancellation);
+
+        const cancellation = this.getCancellation(embeddingOrCancellation, maybeCancellation);
+
+        this._logger.debug(`Getting all keys for embedding ${embedding}`);
+
+        const request = new GetKeysRequest();
+        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+
+        return reactiveUnary(this._embeddingsClient, this._embeddingsClient.getKeys, request, cancellation)
+            .pipe(map(response => {
+                this.throwIfHasFailure(response, embedding);
+                return response.getKeysList().map(pbKey => Key.from(pbKey));
+            })).toPromise();
+    }
+
     private getEmbeddingForOne<TEmbedding>(type: Constructor<any> | undefined, keyOrEmbedding: any | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
         if (embeddingOrCancellation instanceof Cancellation) {
             if (type) {
@@ -117,8 +138,11 @@ export class EmbeddingStore implements IEmbeddingStore {
             : maybeCancellation || Cancellation.default;
     }
 
-    private throwIfHasFailure(response: GetOneResponse | GetAllResponse, embedding: EmbeddingId, key?: Key) {
+    private throwIfHasFailure(response: GetOneResponse | GetAllResponse | GetKeysResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
+            if (response instanceof GetKeysResponse) {
+                throw new FailedToGetEmbeddingKeys(embedding, failures.toSDK(response.getFailure())!);
+            }
             throw new FailedToGetEmbedding(embedding, key, failures.toSDK(response.getFailure())!);
         }
     }

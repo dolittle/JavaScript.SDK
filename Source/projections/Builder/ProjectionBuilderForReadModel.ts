@@ -1,30 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes, ScopeId } from '@dolittle/sdk.events';
+import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
+import { Logger } from 'winston';
 import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { ProjectionProcessor } from '../Internal';
-
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { OnMethodBuilder } from './OnMethodBuilder';
-import { TypeOrEventType } from './TypeOrEventType';
-
 
 /**
  * Represents a builder for building {@link IProjection}.
  */
-export class ProjectionBuilderForReadModel<T> extends OnMethodBuilder<T> implements ICanBuildAndRegisterAProjection {
+export class ProjectionBuilderForReadModel<T> extends OnMethodBuilder<T, ProjectionCallback<T>> implements ICanBuildAndRegisterAProjection {
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.

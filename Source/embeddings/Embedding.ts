@@ -7,18 +7,19 @@ import {
     EventSelector,
     KeySelector,
     MissingOnMethodForType,
-    ProjectionCallback,
-    ProjectionContext,
     ProjectionId
-    } from '@dolittle/sdk.projections';
+} from '@dolittle/sdk.projections';
 import { Constructor } from '@dolittle/types';
-
 import { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
 import { EmbeddingContext } from './EmbeddingContext';
 import { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 import { EmbeddingId } from './EmbeddingId';
+import { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
+import { EmbeddingProjectContext } from './EmbeddingProjectContext';
 import { IEmbedding } from './IEmbedding';
 
+
+/** @inheritdoc */
 export class Embedding<T> implements IEmbedding<T> {
 
     /** @inheritdoc */
@@ -28,13 +29,13 @@ export class Embedding<T> implements IEmbedding<T> {
      * Initializes a new instance of {@link Embedding}
      * @param {EmbeddingId} embeddingId The unique identifier for the embedding.
      * @param {Constructor<T>|T} readModelTypeOrInstance The read model type or instance produced by the embedding.
-     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the embedding.
+     * @param {EventTypeMap<[EmbeddingProjectCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the embedding.
      * @param {EmbeddingCompareCallback} _compareMethod The compare method for the embedding.
      */
     constructor(
         readonly embeddingId: EmbeddingId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
-        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>,
+        private readonly _eventMap: EventTypeMap<[EmbeddingProjectCallback<any>, KeySelector]>,
         private readonly _compareMethod: EmbeddingCompareCallback,
         private readonly _deleteMethod: EmbeddingDeleteCallback) {
         const eventSelectors: EventSelector[] = [];
@@ -45,7 +46,7 @@ export class Embedding<T> implements IEmbedding<T> {
     }
 
     /** @inheritdoc */
-    async on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> {
+    async on(readModel: T, event: any, eventType: EventType, context: EmbeddingProjectContext): Promise<T | DeleteReadModelInstance> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
             return method(readModel, event, context);

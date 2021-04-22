@@ -1,29 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { KeySelector, OnMethodBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-import { KeySelector, OnMethodBuilder, ProjectionCallback } from '@dolittle/sdk.projections';
-
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-
-import { IEmbeddings, Embedding, EmbeddingCompareCallback, EmbeddingId } from '..';
+import { Logger } from 'winston';
+import { Embedding, EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback, IEmbeddings } from '..';
 import { EmbeddingProcessor } from '../Internal';
-
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
-import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
 import { EmbeddingAlreadyHasADeleteMethod } from './EmbeddingAlreadyHasADeleteMethod';
+import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 
 /**
  * Represents a builder for building {@link IEmbedding}.
  */
-export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
+export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, EmbeddingProjectCallback<T>> implements ICanBuildAndRegisterAnEmbedding {
     private _compareMethod?: EmbeddingCompareCallback<T> = undefined;
     private _deleteMethod?: EmbeddingDeleteCallback<T> = undefined;
 
@@ -68,7 +63,7 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T> implemen
         logger: Logger,
         cancellation: Cancellation): void {
 
-        const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
+        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
         if (this.onMethods.length < 1) {
             logger.warn(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
             return;

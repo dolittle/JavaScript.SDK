@@ -3,16 +3,14 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { EventTypeId, Generation } from '@dolittle/sdk.events';
+import { DeleteReadModelInstance, KeySelectorBuilder, KeySelectorBuilderCallback } from '@dolittle/sdk.projections';
 import { Constructor } from '@dolittle/types';
-import { DeleteReadModelInstance } from '..';
-import { KeySelectorBuilder } from './KeySelectorBuilder';
-import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
+import { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
 
 type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 
 /**
- * Decorator for decorating on methods in a projection class.
+ * Decorator for decorating on methods in a embedding class
  */
 export function on<T>(type: Constructor<T>, keySelectorCallback: KeySelectorBuilderCallback<T>): Returns;
 export function on(eventType: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback): Returns;
@@ -22,6 +20,6 @@ export function on<T>(typeOrId: Constructor<T> | EventTypeId | Guid | string, ke
         const generation = typeof keySelectorCallbackOrGeneration === 'number' ? keySelectorCallbackOrGeneration : undefined;
         const keySelectorCallback = typeof keySelectorCallbackOrGeneration === 'function' ? keySelectorCallbackOrGeneration : maybeKeySelectorCallback!;
         const keySelector = keySelectorCallback(new KeySelectorBuilder());
-        OnDecoratedProjectionMethods.register(target.constructor, typeOrId, generation, keySelector, descriptor.value, propertyKey);
+        OnDecoratedEmbeddingMethods.register(target.constructor, typeOrId, generation, keySelector, descriptor.value, propertyKey);
     };
 }

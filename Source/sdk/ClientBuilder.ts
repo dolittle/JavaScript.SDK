@@ -1,27 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import * as grpc from '@grpc/grpc-js';
-import { createLogger, format, Logger, transports } from 'winston';
-
-import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
-import { IContainer, Container } from '@dolittle/sdk.common';
-import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
-import { EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
-import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder, projection } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { Container, IContainer } from '@dolittle/sdk.common';
+import { EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
+import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
+import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
+import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
+import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { IProjectionAssociations, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import * as grpc from '@grpc/grpc-js';
+import { createLogger, format, Logger, transports } from 'winston';
 import { Client } from './Client';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+
+
 
 /**
  * Represents a builder for building {Client}.
@@ -282,7 +283,7 @@ export class ClientBuilder {
             this._logger,
             this._cancellation);
 
-        const embeddingsClient = new EmbeddingsStoreClient(connectionString, credentials);
+        const embeddingsClient = new EmbeddingStoreClient(connectionString, credentials);
         const embeddingsStore = new EmbeddingStoreBuilder(
             embeddingsClient,
             executionContext,

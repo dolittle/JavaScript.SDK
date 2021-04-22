@@ -1,73 +1,49 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Observable } from 'rxjs';
-import { Logger } from 'winston';
-import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
-
-import { Constructor } from '@dolittle/types';
-import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { ClientProcessor, IReverseCallClient, reactiveDuplex, RegistrationFailed, ReverseCallClient } from '@dolittle/sdk.services';
-import { EventSourceId, IEventTypes, EventConverters, EventContext, EventType } from '@dolittle/sdk.events';
-import { eventTypes, guids, failures } from '@dolittle/sdk.protobuf';
+import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import {
-    EventPropertyKeySelector,
-    EventSourceIdKeySelector,
-    PartitionIdKeySelector,
-    KeySelector,
-    Key,
-    UnknownKeySelectorType,
-    DeleteReadModelInstance,
-    ProjectionContext
-} from '@dolittle/sdk.projections';
-
-import {
-    EmbeddingRegistrationRequest,
-    EmbeddingRegistrationResponse,
     EmbeddingClientToRuntimeMessage,
-    EmbeddingRuntimeToClientMessage,
-    EmbeddingRequest,
-    EmbeddingResponse,
     EmbeddingCompareRequest,
     EmbeddingCompareResponse,
-    EmbeddingDeleteRequest,
-    EmbeddingDeleteResponse
+    EmbeddingDeleteResponse,
+    EmbeddingProjectRequest,
+    EmbeddingRegistrationRequest,
+    EmbeddingRegistrationResponse,
+    EmbeddingRequest,
+    EmbeddingResponse,
+    EmbeddingRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
-
-import {
-    ProjectionEventSelector,
-    EventPropertyKeySelector as ProtobufEventPropertyKeySelector,
-    PartitionIdKeySelector as ProtobufPartitionIdKeySelector,
-    EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector,
-    ProjectionReplaceResponse,
-    ProjectionDeleteResponse,
-    ProjectionResponse
-} from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
-
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-
-import {
-    IEmbedding,
-    EmbeddingId,
-    EmbeddingContext
-} from '..';
-import { UncommittedEvent } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
-import { MissingEmbeddingInformation } from '../MissingEmbeddingInformation';
+import { EventConverters, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
 import { MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { DateTime } from 'luxon';
-import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
-
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { DeleteReadModelInstance, Key } from '@dolittle/sdk.projections';
+import { eventTypes, guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import {
+    ClientProcessor,
+    IReverseCallClient,
+    reactiveDuplex,
+    ReverseCallClient
+} from '@dolittle/sdk.services';
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import {
+    EmbeddingContext,
+    EmbeddingId,
+    EmbeddingProjectContext,
+    IEmbedding,
+    MissingEmbeddingInformation
+} from '..';
 
 /**
- * Represents an implementation of {@link EventProcessor} for {@link Embedding}.
+ * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
  */
 export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
-    private _pingTimeout = 1;
 
     /**
      * Initializes a new instance of {@link EmbeddingProcessor}
@@ -83,39 +59,12 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         private _client: EmbeddingsClient,
         private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes,
-        private _logger: Logger
+        protected _logger: Logger
     ) {
-        super('Embedding', _embedding.embeddingId);
+        super('Embedding', _embedding.embeddingId, _logger);
     }
 
-    protected register(cancellation: Cancellation): Observable<never> {
-        const client = this.createClient(
-            this.registerArguments,
-            (request: EmbeddingRequest, executionContext: ExecutionContext) => this.catchingHandle(request, executionContext),
-            this._pingTimeout,
-            cancellation);
-        return new Observable<never>(subscriber => {
-            this._logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
-            client.subscribe({
-                next: (message: EmbeddingRegistrationResponse) => {
-                    const failure = this.getFailureFromRegisterResponse(message);
-                    if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, failures.toSDK(failure)!));
-                    } else {
-                        this._logger.debug(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
-                    }
-                },
-                error: (error: Error) => {
-                    subscriber.error(error);
-                },
-                complete: () => {
-                    this._logger.debug(`Registering ${this._kind} ${this._identifier} handling of requests completed.`);
-                    subscriber.complete();
-                },
-            });
-        });
-    }
-
+    /** @inheritdoc */
     protected get registerArguments(): EmbeddingRegistrationRequest {
         const registerArguments = new EmbeddingRegistrationRequest();
         registerArguments.setEmbeddingid(guids.toProtobuf(this._embedding.embeddingId.value));
@@ -137,20 +86,7 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         return registerArguments;
     }
 
-    private setKeySelector(protobufSelector: ProjectionEventSelector, selector: KeySelector) {
-        if (selector instanceof EventPropertyKeySelector) {
-            const propertyKeySelector = new ProtobufEventPropertyKeySelector();
-            propertyKeySelector.setPropertyname(selector.propertyName.value);
-            protobufSelector.setEventpropertykeyselector(propertyKeySelector);
-        } else if (selector instanceof EventSourceIdKeySelector) {
-            protobufSelector.setEventsourcekeyselector(new ProtobufEventSourceIdKeySelector());
-        } else if (selector instanceof PartitionIdKeySelector) {
-            protobufSelector.setPartitionkeyselector(new ProtobufPartitionIdKeySelector());
-        } else {
-            throw new UnknownKeySelectorType(selector);
-        }
-    }
-
+    /** @inheritdoc */
     protected createClient(
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
@@ -177,16 +113,12 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         );
     }
 
+    /** @inheritdoc */
     protected getFailureFromRegisterResponse(response: EmbeddingRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
-    protected getRetryProcessingStateFromRequest(request: EmbeddingRequest): RetryProcessingState | undefined {
-        if (request.hasProjection() && request.getProjection()?.hasRetryprocessingstate()) {
-            return request.getProjection()?.getRetryprocessingstate();
-        }
-    }
-
+    /** @inheritdoc */
     protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
         const projectionCurrentState = this.getProjectionCurrentState(request);
         const projectionType = projectionCurrentState.getType();
@@ -214,13 +146,12 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         return response;
     }
 
-    private async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
-        let retryProcessingState: RetryProcessingState | undefined;
+    /** @inheritdoc */
+    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
         try {
-            retryProcessingState = this.getRetryProcessingStateFromRequest(request);
             return await this.handle(request, executionContext);
         } catch (error) {
-            return this.createResponseFromError(error, retryProcessingState);
+            return this.createResponseFromError(error);
         }
     }
 
@@ -242,33 +173,17 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         return deleteResponse;
     }
 
-    private async createProjectionResponse(request: EmbeddingRequest.ProjectionRequest, projectionInstance: T, executionContext: ExecutionContext): Promise<ProjectionReplaceResponse | ProjectionDeleteResponse> {
-        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
-            throw new MissingEventInformation('No event in ProjectionRequest');
+    private async createProjectionResponse(request: EmbeddingProjectRequest, projectionInstance: T, executionContext: ExecutionContext): Promise<ProjectionReplaceResponse | ProjectionDeleteResponse> {
+        if (!request.hasEvent()) {
+            throw new MissingEventInformation('No event in EmbeddingProjectRequest');
         }
-
-        const pbEvent = request.getEvent()!.getEvent()!;
-
-        const pbSequenceNumber = pbEvent.getEventlogsequencenumber();
-        if (pbSequenceNumber === undefined) throw new MissingEventInformation('Sequence Number');
+        const pbEvent = request.getEvent()!;
 
         const pbEventSourceId = pbEvent.getEventsourceid();
         if (!pbEventSourceId) throw new MissingEventInformation('EventSourceId');
 
-        const pbExecutionContext = pbEvent.getExecutioncontext();
-        if (!pbExecutionContext) throw new MissingEventInformation('Execution context');
-
-        const pbOccurred = pbEvent.getOccurred();
-        if (!pbOccurred) throw new MissingEventInformation('Occurred');
-
-        const pbArtifact = pbEvent.getType();
+        const pbArtifact = pbEvent.getArtifact();
         if (!pbArtifact) throw new MissingEventInformation('Artifact');
-
-        const eventContext = new EventContext(
-            pbSequenceNumber,
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
-            DateTime.fromJSDate(pbOccurred.toDate()),
-            executionContext);
 
         if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
             throw new MissingEventInformation('No state in ProjectionRequest');
@@ -278,10 +193,11 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         const pbStateType = pbCurrentState.getType();
         const pbKey = pbCurrentState.getKey();
 
-        const projectionContext = new ProjectionContext(
+        const embeddingProjectContext = new EmbeddingProjectContext(
             pbStateType === ProjectionCurrentStateType.CREATED_FROM_INITIAL_STATE,
             Key.from(pbKey),
-            eventContext);
+            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
 
@@ -291,7 +207,7 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
             event = Object.assign(new typeOfEvent(), event);
         }
 
-        const nextStateOrDelete = await this._embedding.on(projectionInstance, event, eventType, projectionContext);
+        const nextStateOrDelete = await this._embedding.on(projectionInstance, event, eventType, embeddingProjectContext);
 
         if (nextStateOrDelete instanceof DeleteReadModelInstance) {
             return new ProjectionDeleteResponse();
@@ -302,25 +218,12 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         }
     }
 
-    private createResponseFromError(error: any, retryProcessing: RetryProcessingState | undefined): EmbeddingResponse {
+    private createResponseFromError(error: any): EmbeddingResponse {
+        this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
         const response = new EmbeddingResponse();
-        if (retryProcessing) {
-            const failure = new ProcessorFailure();
-            failure.setReason(`${error}`);
-            failure.setRetry(true);
-            const retryAttempt = (retryProcessing?.getRetrycount() ?? 0) + 1;
-            const retrySeconds = Math.min(5 * retryAttempt, 60);
-            const retryTimeout = new Duration();
-            retryTimeout.setSeconds(retrySeconds);
-            failure.setRetrytimeout(retryTimeout);
-            response.setProcessorfailure(failure);
-            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
-        } else {
-            const failure = new Failure();
-            failure.setReason(`${error}`);
-            response.setFailure(failure);
-            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
-        }
+        const failure = new Failure();
+        failure.setReason(`${error}`);
+        response.setFailure(failure);
         return response;
     }
 
