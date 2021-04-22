@@ -55,5 +55,8 @@ const client = Client
 
         const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
         console.log(`${chef.key} has prepared ${chef.state.dishes}`);
+
+        const dishes = await client.embeddings.forTenant(TenantId.development).getAll(DishCounter);
+        console.log(`Got dem dishes ${dishes}`);
     }, 1000);
 })();
