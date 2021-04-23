@@ -1,25 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 import { delay } from 'rxjs/operators';
 import { Logger } from 'winston';
-
-import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
-
 import { ProjectionProcessor } from './Internal';
-
 import { IProjections } from './IProjections';
 
 /**
  * Represents an implementation of {IProjections}
  */
-export class Projections implements IProjections {
+export class Projections extends IProjections {
 
     /**
      * Initializes an instance of {@link Projections}.
      * @param {Logger} _logger For logging.
      */
     constructor(private readonly _logger: Logger) {
+        super();
     }
 
     /** @inheritdoc */

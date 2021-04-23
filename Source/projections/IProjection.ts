@@ -3,40 +3,40 @@
 
 import { EventType, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
+
 /**
  * Defines a projection.
  */
-export interface IProjection<T> {
+export abstract class IProjection<T> {
     /**
      * Gets the {@link ProjectionId} for the projection.
      */
-    readonly projectionId: ProjectionId;
+    abstract readonly projectionId: ProjectionId;
 
     /**
      * Gets the read model type the projection is for.
      */
-    readonly readModelTypeOrInstance: Constructor<T> | T;
+    abstract readonly readModelTypeOrInstance: Constructor<T> | T;
 
     /**
      * Gets the initial state of the projection.
      */
-    readonly initialState?: T;
+    abstract readonly initialState?: T;
 
     /**
      * Gets the scope the projection is in.
      */
-    readonly scopeId: ScopeId;
+    abstract readonly scopeId: ScopeId;
 
     /**
      * Gets the events used by the projection.
      */
-    readonly events: Iterable<EventSelector>;
+    abstract readonly events: Iterable<EventSelector>;
 
     /**
      * Handle an event and update a readmodel.
@@ -45,5 +45,5 @@ export interface IProjection<T> {
      * @param {EventType} eventType The event type.
      * @param {ProjectionContext} context The context for the projection processing.
      */
-    on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
+    abstract on (readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
 }

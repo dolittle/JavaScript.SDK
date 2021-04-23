@@ -2,24 +2,24 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { Logger } from 'winston';
-import * as grpc from '@grpc/grpc-js';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription, SubscriptionResponse as PbSubscriptionResponse } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import * as grpc from '@grpc/grpc-js';
+import { Logger } from 'winston';
+import { IEventHorizons } from './IEventHorizons';
+import { Subscription } from './Subscription';
+import { SubscriptionCallbacks } from './SubscriptionCallbacks';
+import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
+import { SubscriptionResponse } from './SubscriptionResponse';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 
-import { Subscription } from './Subscription';
-import { IEventHorizons } from './IEventHorizons';
-import { SubscriptionResponse } from './SubscriptionResponse';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-import { SubscriptionCallbacks } from './SubscriptionCallbacks';
-import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
  */
-export class EventHorizons implements IEventHorizons {
+export class EventHorizons extends IEventHorizons {
     private _subscriptionResponses: Map<Subscription, SubscriptionResponse> = new Map();
 
     /**
@@ -36,6 +36,7 @@ export class EventHorizons implements IEventHorizons {
         readonly subscriptions: TenantWithSubscriptions[],
         readonly callbacks: SubscriptionCallbacks,
         private _logger: Logger) {
+        super();
         this.subscribeAll();
     }
 

@@ -1,18 +1,15 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor } from '@dolittle/types';
-
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-
+import { Constructor } from '@dolittle/types';
 import { CurrentState } from '..';
-
+import { Key } from '../..';
 import { CurrentStateType } from '../CurrentStateType';
 import { IConvertProjectionsToSDK } from './IConvertProjectionsToSDK';
 import { UnknownCurrentStateType } from './UnknownCurrentStateType';
-import { Key } from '../..';
 
-export class ProjectionsToSDKConverter implements IConvertProjectionsToSDK {
+export class ProjectionsToSDKConverter extends IConvertProjectionsToSDK {
 
     /** @inheritdoc */
     convert<TProjection = any>(type: Constructor<TProjection> | undefined, state: ProjectionCurrentState): CurrentState<TProjection> {

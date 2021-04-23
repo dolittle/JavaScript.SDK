@@ -6,13 +6,12 @@ import { Constructor } from '@dolittle/types';
 /**
  * Defines an IoC Container for dependency inversion.
  */
-export interface IContainer {
+export abstract class IContainer {
 
     /**
      * Get the instance of a service.
      * @param {Function} service Type of service by its constructor to get
      * @returns The instance.
      */
-    get(service: Constructor): any;
+    abstract get (service: Constructor): any;
 }
-

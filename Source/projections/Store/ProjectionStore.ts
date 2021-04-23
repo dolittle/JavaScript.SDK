@@ -1,32 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-import { map } from 'rxjs/operators';
-
 import { Guid } from '@dolittle/rudiments';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Constructor } from '@dolittle/types';
-
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetOneRequest, GetOneResponse, GetAllRequest, GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
-
-
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { Key, ProjectionId } from '..';
-
-import { CurrentState } from './CurrentState';
-import { IProjectionStore } from './IProjectionStore';
-import { IProjectionAssociations } from './IProjectionAssociations';
-import { FailedToGetProjection } from './FailedToGetProjection';
-import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
 import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
+import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
+import { CurrentState } from './CurrentState';
+import { FailedToGetProjection } from './FailedToGetProjection';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
+import { IProjectionAssociations } from './IProjectionAssociations';
+import { IProjectionStore } from './IProjectionStore';
 
-export class ProjectionStore implements IProjectionStore {
+
+export class ProjectionStore extends IProjectionStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
@@ -34,7 +30,9 @@ export class ProjectionStore implements IProjectionStore {
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _projectionAssociations: IProjectionAssociations,
-        private readonly _logger: Logger) {}
+        private readonly _logger: Logger) {
+        super();
+    }
 
 
     /** @inheritdoc */

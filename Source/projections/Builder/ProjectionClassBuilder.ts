@@ -1,32 +1,30 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guid } from '@dolittle/rudiments';
-import { IContainer } from '@dolittle/sdk.common';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Constructor } from '@dolittle/types';
-
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
-import { IProjections, ProjectionCallback, Projection, KeySelector, DeleteReadModelInstance } from '..';
+import { IContainer } from '@dolittle/sdk.common';
+import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import { DeleteReadModelInstance, IProjections, KeySelector, Projection, ProjectionCallback } from '..';
 import { ProjectionProcessor } from '../Internal';
-
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { on as onDecorator } from './onDecorator';
 import { OnDecoratedMethod } from './OnDecoratedMethod';
 import { OnDecoratedMethods } from './OnDecoratedMethods';
-import { projection as projectionDecorator } from './projectionDecorator';
+import { on as onDecorator } from './onDecorator';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
+import { projection as projectionDecorator } from './projectionDecorator';
 
-export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
+
+export class ProjectionClassBuilder<T> extends ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
     constructor(typeOrInstance: Constructor<T> | T) {
+        super();
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;
 

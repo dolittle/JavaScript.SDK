@@ -6,7 +6,7 @@ import { EventType, EventTypeId } from '@dolittle/sdk.artifacts';
  * Represents and uncommitted aggregate event
  */
 
-export interface UncommittedAggregateEvent {
+export abstract class UncommittedAggregateEvent {
     /**
      * An event type or an identifier representing the event type.
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
@@ -24,5 +24,3 @@ export interface UncommittedAggregateEvent {
      */
     public?: boolean;
 }
-
-
