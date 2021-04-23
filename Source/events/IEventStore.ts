@@ -4,22 +4,20 @@
 import { Guid } from '@dolittle/rudiments';
 import { EventType, EventTypeId } from '@dolittle/sdk.artifacts';
 import { Cancellation } from '@dolittle/sdk.resilience';
-
-import { CommitEventsResult } from './CommitEventsResult';
-import { EventSourceId } from './EventSourceId';
-import { UncommittedEvent } from './UncommittedEvent';
 import { AggregateRootId } from './AggregateRootId';
-import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
-import { CommittedAggregateEvents } from './CommittedAggregateEvents';
-import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
-;
+import { CommitEventsResult } from './CommitEventsResult';
+import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
+import { CommittedAggregateEvents } from './CommittedAggregateEvents';
+import { EventSourceId } from './EventSourceId';
+import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
+import { UncommittedEvent } from './UncommittedEvent';
 
 /**
  * Defines the API surface for the event store
  */
-export interface IEventStore {
+export abstract class IEventStore {
 
     /**
      * Commit a single event.
@@ -31,7 +29,7 @@ export interface IEventStore {
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commit(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    abstract commit (event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a collection of events.
@@ -41,7 +39,7 @@ export interface IEventStore {
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * @summary on the actual type of the event.
      */
-    commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
+    abstract commit (eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single public event.
@@ -53,7 +51,7 @@ export interface IEventStore {
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    abstract commitPublic (event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single event for an aggregate.
@@ -68,7 +66,7 @@ export interface IEventStore {
      * @summary If no event type identifier or event type is supplied, it will look for associated artifacts based
      * on the actual type of the event.
      */
-    commitForAggregate(event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    abstract commitForAggregate (event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
 
     /**
      * Commit a collection of events.
@@ -78,7 +76,7 @@ export interface IEventStore {
      * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
      * @summary on the actual type of the event.
      */
-    commitForAggregate(events: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    abstract commitForAggregate (events: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
 
     /**
      * Commit for aggregate root.
@@ -86,7 +84,7 @@ export interface IEventStore {
      * @param {Cancellation} cancellation The cancellation signal
      * @returns {CommitForAggregateBuilder}
      */
-    forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder;
+    abstract forAggregate (aggregateRootId: AggregateRootId): CommitForAggregateBuilder;
 
     /**
      * Fetches the {@link CommittedAggregateEvents} for an aggregate root.
@@ -95,7 +93,7 @@ export interface IEventStore {
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns {Promise<CommittedAggregateEvents>}
      */
-    fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;
+    abstract fetchForAggregate (aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;
 
 
     /**
@@ -105,7 +103,5 @@ export interface IEventStore {
      * @param {Cancellation} cancellation The cancellation signal.
      * @returns {Promise<CommittedAggregateEvents>}
      */
-    fetchForAggregateSync(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): CommittedAggregateEvents;
+    abstract fetchForAggregateSync (aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): CommittedAggregateEvents;
 }
-
-

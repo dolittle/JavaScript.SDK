@@ -1,23 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
+import { Logger } from 'winston';
 import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { ProjectionProcessor } from '../Internal';
-
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
+
+
+
+
 
 type TypeOrEventType = Constructor<any> | EventType;
 type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];
@@ -25,7 +25,7 @@ type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, Proje
 /**
  * Represents a builder for building {@link IProjection}.
  */
-export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAProjection {
+export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProjection {
     private _onMethods: OnMethodSpecification[] = [];
 
     /**
@@ -35,7 +35,9 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
     constructor(
         private _projectionId: ProjectionId,
         private _readModelTypeOrInstance: Constructor<T> | T,
-        private _scopeId: ScopeId) { }
+        private _scopeId: ScopeId) {
+        super();
+    }
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.

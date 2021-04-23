@@ -1,36 +1,33 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Observable } from 'rxjs';
-import { repeat } from 'rxjs/operators';
-import { Logger } from 'winston';
-
-import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
-
 import { ConceptAs } from '@dolittle/concepts';
+import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { Guid } from '@dolittle/rudiments';
-import { IReverseCallClient } from '@dolittle/sdk.services';
+import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
-
-import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
-
+import { IReverseCallClient } from '@dolittle/sdk.services';
+import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
+import { Observable } from 'rxjs';
+import { repeat } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { RegistrationFailed } from '..';
-
 import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends IEventProcessor {
     private _pingTimeout = 1;
 
     constructor(
         private _kind: string,
         protected _identifier: TIdentifier,
-        protected _logger: Logger) {}
+        protected _logger: Logger) {
+        super();
+    }
 
     /** @inheritdoc */
     register(cancellation: Cancellation): Observable<never> {

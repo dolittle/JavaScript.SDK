@@ -1,28 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Subject, Observable, Unsubscribable, NextObserver, ErrorObserver, CompletionObserver, partition, merge, concat, TimeoutError } from 'rxjs';
-import { first, skip, map, filter, timeout } from 'rxjs/operators';
-
-import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
-import { Logger } from 'winston';
-
-import { ReverseCallRequestContext, ReverseCallResponseContext, ReverseCallArgumentsContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
 import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
-
+import { ReverseCallArgumentsContext, ReverseCallRequestContext, ReverseCallResponseContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
 import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { executionContexts, guids } from '@dolittle/sdk.protobuf';
+import { executionContexts, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
-
+import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
+import { CompletionObserver, concat, ErrorObserver, merge, NextObserver, Observable, partition, Subject, TimeoutError, Unsubscribable } from 'rxjs';
+import { filter, first, map, skip, timeout } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
 
+
+
+
+
 /**
  * Represents an implementation of {IReverseCallClient}.
  */
-export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments, TConnectResponse, TRequest, TResponse> implements IReverseCallClient<TConnectResponse> {
+export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments, TConnectResponse, TRequest, TResponse> extends IReverseCallClient<TConnectResponse> {
     private _observable: Observable<TConnectResponse>;
 
     constructor(
@@ -43,6 +43,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         private _callback: ReverseCallCallback<TRequest, TResponse>,
         private _cancellation: Cancellation,
         private _logger: Logger) {
+        super();
         this._observable = this.create();
     }
 

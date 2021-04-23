@@ -6,9 +6,9 @@ import { AggregateRootVersion } from './AggregateRootVersion';
 import { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 import { CommittedEvent } from './CommittedEvent';
-import { EventSourceId } from './EventSourceId';
 import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 import { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
+import { EventSourceId } from './EventSourceId';
 import { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAggregateRoot';
 import { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';
 
@@ -26,7 +26,6 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
      * @param {...CommittedEvent[]} events Events to initialize with.
      */
     constructor(readonly eventSourceId: EventSourceId, readonly aggregateRootId: AggregateRootId, ...events: CommittedAggregateEvent[]) {
-
         events.forEach((event, eventIndex) => {
             if (eventIndex === 0) {
                 this._nextAggregateRootVersion = event.aggregateRootVersion;
@@ -115,4 +114,3 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
         }
     }
 }
-

@@ -1,25 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
-import { IProjections, projection, ProjectionId } from '..';
-
+import { Logger } from 'winston';
+import { IProjectionAssociations, IProjections, ProjectionId } from '..';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
-import { IProjectionAssociations } from '../Store';
 
-export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
+export class ProjectionBuilder extends ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
     private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: ProjectionBuilderForReadModel<any>;
@@ -28,7 +23,9 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
      * Initializes a new instance of {@link ProjectionBuilder}.
      * @param {ProjectionId} _projectionId  The unique identifier of the projection to build for
      */
-    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) { }
+    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) {
+        super();
+    }
 
     /**
      * Defines the projection to operate on a specific {@link ScopeId}.

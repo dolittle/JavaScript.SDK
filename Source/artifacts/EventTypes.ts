@@ -3,25 +3,26 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { UnknownType } from './UnknownType';
-import { EventTypeMap } from './EventTypeMap';
-import { IEventTypes } from './IEventTypes';
-import { EventType } from './EventType';
-import { UnknownEventType } from './UnknownEventType';
-import { EventTypeId } from './EventTypeId';
-import { UnableToResolveEventType } from './UnableToResolveEventType';
 import { CannotHaveMultipleEventTypesAssociatedWithType } from './CannotHaveMultipleEventTypesAssociatedWithType';
 import { CannotHaveMultipleTypesAssociatedWithEventType } from './CannotHaveMultipleTypesAssociatedWithEventType';
+import { EventType } from './EventType';
+import { EventTypeId } from './EventTypeId';
+import { EventTypeMap } from './EventTypeMap';
+import { IEventTypes } from './IEventTypes';
+import { UnableToResolveEventType } from './UnableToResolveEventType';
+import { UnknownEventType } from './UnknownEventType';
+import { UnknownType } from './UnknownType';
 
 /**
  * Represents an implementation of {@link IEventTypes}
  */
-export class EventTypes implements IEventTypes {
+export class EventTypes extends IEventTypes {
     /**
      * Initializes a new instance of {@link EventTypes}
      * @param {EventTypeMap<Constructor<any>>} [associations] Known associations
      */
     constructor(private _associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
+        super();
     }
     /** @inheritdoc */
     hasTypeFor(input: EventType): boolean {

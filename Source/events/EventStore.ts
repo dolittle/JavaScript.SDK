@@ -1,48 +1,43 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-import { map } from 'rxjs/operators';
-
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
-import { EventType, EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { reactiveUnary } from '@dolittle/sdk.services';
-
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { Guid } from '@dolittle/rudiments';
+import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
+import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import {
-    CommitEventsRequest,
-    CommitEventsResponse as PbCommitEventsResponse,
     CommitAggregateEventsRequest,
+    CommitEventsRequest,
     FetchForAggregateRequest
 } from '@dolittle/runtime.contracts/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
-import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
-
-import { CommittedEvents } from './CommittedEvents';
-import { IEventStore } from './IEventStore';
-import { EventSourceId } from './EventSourceId';
-import { UncommittedEvent } from './UncommittedEvent';
-import { EventConverters } from './EventConverters';
-import { CommitEventsResult } from './CommitEventsResult';
-import { Guid } from '@dolittle/rudiments';
+import { EventType, EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { AggregateRootId } from './AggregateRootId';
-import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
-import { CommittedAggregateEvents } from './CommittedAggregateEvents';
-import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
+import { CommitEventsResult } from './CommitEventsResult';
+import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
-import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
-
+import { CommittedAggregateEvents } from './CommittedAggregateEvents';
+import { CommittedEvents } from './CommittedEvents';
+import { EventConverters } from './EventConverters';
+import { EventSourceId } from './EventSourceId';
+import { IEventStore } from './IEventStore';
 import { syncPromise } from './syncPromise';
-import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
+import { UncommittedEvent } from './UncommittedEvent';
 
 /**
  * Represents an implementation of {@link IEventStore}
  */
-export class EventStore implements IEventStore {
+export class EventStore extends IEventStore {
 
     private _fetchForAggregateSync: Function;
 
@@ -58,7 +53,7 @@ export class EventStore implements IEventStore {
         private _eventTypes: IEventTypes,
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
-
+        super();
         this._fetchForAggregateSync = syncPromise(this, this.fetchForAggregate);
     }
 
