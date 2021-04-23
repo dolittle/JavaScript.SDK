@@ -1,3 +1,16 @@
+# [14.3.1] - 2021-4-23 [PR: #49](https://github.com/dolittle/JavaScript.SDK/pull/49)
+## Summary
+
+Changes all `interface` types to `abstract class`. Their naming stays the same, as we're still using them like interfaces. 
+The reason for the change is to enable the use of dependency-injection frameworks for TS/JS for developers.
+Transpiling TS -> JS strips away all the interfaces, leaving the DI framework with no token to associate with the type.
+Changing them to abstract classes generates empty classes (that must not be instantiated in JS), that can be used as binding tokens.
+
+### Changed
+
+- All `interfaces` to `abstract class`.
+
+
 # [14.3.0] - 2021-4-9 [PR: #44](https://github.com/dolittle/JavaScript.SDK/pull/44)
 ## Summary
 
