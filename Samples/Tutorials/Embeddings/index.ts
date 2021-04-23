@@ -4,6 +4,7 @@
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
+import { ProjectionResult } from '@dolittle/sdk.projections';
 import { Chef } from './Chef';
 import { ChefFired } from './ChefFired';
 import { DishCounter } from './DishCounter';
@@ -24,18 +25,21 @@ const client = Client
         builder.register(DishCounter);
         builder.createEmbedding('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
             .forReadModel(Chef)
-            .compare((oldState, newState, embeddingContext) => {
-                return oldState.dishes
-                    .filter((dish: string) => !newState.dishes.includes(dish))
-                    .map((missingDish: string) => new DishPrepared(missingDish, 'default chef lol'));
+            .compare((receivedState, currentState, embeddingContext) => {
+                return receivedState.dishes
+                    .filter((dish: string) => !currentState.dishes.includes(dish))
+                    .map((missingDish: string) => new DishPrepared(missingDish, embeddingContext.key.value));
             })
             .deleteMethod((currentState, embeddingContext) => {
                 return new ChefFired(currentState.name);
             })
-            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
+            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, context) => {
                 chef.name = event.Chef;
                 if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
                 return chef;
+            })
+            .on(ChefFired, _ => _.keyFromProperty('Chef'), (chef, event, context) => {
+                return ProjectionResult.delete;
             });
         })
     .build();

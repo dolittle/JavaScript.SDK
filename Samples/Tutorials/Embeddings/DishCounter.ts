@@ -14,7 +14,7 @@ export class DishCounter {
     @compare()
     compare(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
         if (receivedState.numberOfTimesPrepared > this.numberOfTimesPrepared) {
-            return new DishPrepared(embeddingContext.key.value, 'default chef');
+            return new DishPrepared(embeddingContext.key.value, embeddingContext.key.value);
         }
     }
 
