@@ -1,24 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
-import { Guid } from '@dolittle/rudiments';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
-import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
+import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
-
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-
-import { IEmbeddings, embedding, EmbeddingId } from '..';
-
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { Logger } from 'winston';
+import { EmbeddingId, IEmbeddings } from '..';
 import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
+import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 
+
+
+
+
+/**
+ * Represents a builder for building embeddings inline.
+ */
 export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
     private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: EmbeddingBuilderForReadModel<any>;
