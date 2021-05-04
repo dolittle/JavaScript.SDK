@@ -10,7 +10,7 @@ import { EmbeddingId } from './EmbeddingId';
 import { EmbeddingProjectContext } from './EmbeddingProjectContext';
 
 /**
- * Defines a embedding.
+ * Defines an embedding.
  */
 export interface IEmbedding<T> {
     /**

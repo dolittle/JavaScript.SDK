@@ -8,7 +8,7 @@ import { KeySelector } from '@dolittle/sdk.projections';
 import { Constructor } from '@dolittle/types';
 
 /**
- * Defines the system that knows about all the methods decorated with the on decorator.
+ * Represents the system that knows about all the methods decorated with the on decorator.
  */
 export class OnDecoratedEmbeddingMethods {
     /**

@@ -8,7 +8,7 @@ import { EmbeddingAlreadyHasADeleteDecorator } from './EmbeddingAlreadyHasADelet
 import { EmbeddingClassDeleteMethod } from './EmbeddingClassDeleteMethod';
 
 /**
- * Defines the system that knows about all the methods decorated with the delete decorator.
+ * Represents the system that knows about all the methods decorated with the delete decorator.
  */
 export class DeleteDecoratedMethods {
     /**
@@ -19,7 +19,7 @@ export class DeleteDecoratedMethods {
     /**
      * Registers the delete decorated method
      * @param {Constructor<any>} target Target that owns the delete method.
-     * @param {EmbeddingDeleteCallback} method The delete method.
+     * @param {EmbeddingClassDeleteMethod} method The delete method.
      * @param {string} name The name of the method.
      */
     static register(

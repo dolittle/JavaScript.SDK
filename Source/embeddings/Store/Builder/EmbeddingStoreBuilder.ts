@@ -9,10 +9,17 @@ import { Logger } from 'winston';
 import { EmbeddingStore, IEmbeddingStore } from '..';
 
 /**
- * Represents a builder for builing a embedding store.
+ * Represents a builder for builing an embedding store.
  */
 export class EmbeddingStoreBuilder {
 
+    /**
+     * Initialises an instance of {@link EmbeddingStoreBuilder}.
+     * @param {EmbeddingStoreClient} _embeddingsClient The embedding store client.
+     * @param {ExecutionContext} _executionContext The execution context.
+     * @param {IProjectionAssociations} _embeddingAssociations The embedding associations.
+     * @param {Logger} _logger The logger.
+     */
     constructor(
         private readonly _embeddingsClient: EmbeddingStoreClient,
         private readonly _executionContext: ExecutionContext,

@@ -10,7 +10,7 @@ import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 
 /**
- * Defines a class for building and getting the inline on() methods for inline projections.
+ * Represents a builder for building and getting the inline on() methods for inline projections.
  */
 export abstract class OnMethodBuilder<T, TCallback> {
     protected onMethods: OnMethodSpecification<TCallback>[] = [];

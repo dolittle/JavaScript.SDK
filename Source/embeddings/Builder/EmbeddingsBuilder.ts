@@ -19,6 +19,9 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 
+/**
+ * Represents a builder for building multiple embeddings.
+ */
 export class EmbeddingsBuilder {
     private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
 

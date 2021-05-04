@@ -26,6 +26,7 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
      * @param {EmbeddingId} _embeddingId  The unique identifier of the embedding to build for
+     * @param {IProjectionAssociations} _projectionAssociations The projection associations
      */
     constructor(private readonly _embeddingId: EmbeddingId, private readonly _projectionAssociations: IProjectionAssociations) { }
 

@@ -11,11 +11,13 @@ import { EmbeddingId } from '..';
  * An exception that gets thrown when an embedding fails to be getted.
  */
 export class FailedToGetEmbedding extends Exception {
+    /**
+     * Initialises an instance of {@link FailedToGetEmbedding}.
+     * @param {EmbeddingId} embedding The embedding identifier.
+     * @param {Key | undefined} key The optional key.
+     * @param {Failure} failure The failure.
+     */ 
     constructor(embedding: EmbeddingId, key: Key | undefined, failure: Failure) {
-        if (key) {
-            super(`Failed to get embedding ${embedding} with key ${key} due to failure ${failure.id} with reason: ${failure.reason}`);
-        } else {
-            super(`Failed to get embedding ${embedding} due to failure ${failure.id} with reason: ${failure.reason}`);
-        }
+        super(`Failed to get embedding ${embedding} ${key ? `with key ${key}  `: ""}due to failure ${failure.id} with reason: ${failure.reason}`);
     }
 }

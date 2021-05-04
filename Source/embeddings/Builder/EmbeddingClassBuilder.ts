@@ -32,9 +32,16 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 
 
+/*
+ * Represents a builder for building an embedding class.
+ */
 export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private readonly _embeddingType: Constructor<T>;
 
+    /*
+     * Initialises a new instance of {@link  EmbeddingClassBuilder<T>}
+     * @param {Constructor<T> | T} typeOrInstance The embedding type or instance
+     */
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {
             this._embeddingType = typeOrInstance;
@@ -96,17 +103,11 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
 
 
     private createCompareMethod(method: CompareDecoratedMethod): EmbeddingCompareCallback<any> {
-        return (receivedState, currentState, embeddingContext) => {
-            const result = method.method.call(currentState, receivedState, embeddingContext);
-            return result;
-        };
+        return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 
     private createDeleteMethod(method: DeleteDecoratedMethod): EmbeddingDeleteCallback {
-        return (currentState, embeddingContext) => {
-            const result = method.method.call(currentState, embeddingContext);
-            return result;
-        };
+        return (currentState, embeddingContext) => method.method.call(currentState, embeddingContext);
     }
 
     private tryAddAllOnMethods(events: EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {

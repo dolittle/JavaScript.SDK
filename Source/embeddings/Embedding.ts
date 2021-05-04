@@ -19,7 +19,9 @@ import { EmbeddingProjectContext } from './EmbeddingProjectContext';
 import { IEmbedding } from './IEmbedding';
 
 
-/** @inheritdoc */
+/**
+ * Represents an implementation of {@link IEmbedding<T>}.
+ */
 export class Embedding<T> implements IEmbedding<T> {
 
     /** @inheritdoc */
@@ -28,7 +30,7 @@ export class Embedding<T> implements IEmbedding<T> {
     /**
      * Initializes a new instance of {@link Embedding}
      * @param {EmbeddingId} embeddingId The unique identifier for the embedding.
-     * @param {Constructor<T>|T} readModelTypeOrInstance The read model type or instance produced by the embedding.
+     * @param {Constructor<T> | T} readModelTypeOrInstance The read model type or instance produced by the embedding.
      * @param {EventTypeMap<[EmbeddingProjectCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the embedding.
      * @param {EmbeddingCompareCallback} _compareMethod The compare method for the embedding.
      */

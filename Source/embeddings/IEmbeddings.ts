@@ -6,7 +6,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { EmbeddingProcessor } from './Internal';
 
 /**
- * Defines the system for embeddings.
+ * Defines a system for registering embeddings.
  */
 export interface IEmbeddings {
 

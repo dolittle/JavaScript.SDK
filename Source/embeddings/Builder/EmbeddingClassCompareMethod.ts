@@ -3,4 +3,7 @@
 
 import { EmbeddingContext } from '../EmbeddingContext';
 
+/**
+ * Defines the embedding class compare method signature.
+ */
 export type EmbeddingClassCompareMethod<T = any> = (receivedState: T, context: EmbeddingContext) => any | any[];

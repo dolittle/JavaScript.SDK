@@ -9,6 +9,11 @@ import { EmbeddingId } from '..';
  * Represents a embedding created from the decorator
  */
 export class EmbeddingDecoratedType {
+    /**
+     * Initialises a new instance of {@link EmbeddingDecoratedType}.
+     * @param {EmbeddingId} embeddingId The embedding id.
+     * @param {Constructor<any>} type The embedding type.
+     */
     constructor(
         readonly embeddingId: EmbeddingId,
         readonly type: Constructor<any>) {

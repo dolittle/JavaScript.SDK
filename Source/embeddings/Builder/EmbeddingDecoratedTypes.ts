@@ -4,7 +4,7 @@
 import { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 
 /**
- * Handles registering and mappings between @embedding decorated classes and their given id and options.
+ * Represents a system that handles the registering and mappings between @embedding decorated classes and their given id and options.
  */
 export class EmbeddingDecoratedTypes {
     static readonly types: EmbeddingDecoratedType[] = [];

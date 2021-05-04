@@ -11,6 +11,9 @@ import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddi
 
 import { IEmbeddings } from '..';
 
+/**
+ * Defines a system that can build and register an embedding.
+ */
 export interface ICanBuildAndRegisterAnEmbedding {
 
     /**

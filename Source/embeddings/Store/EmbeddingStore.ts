@@ -17,11 +17,20 @@ import { FailedToGetEmbedding } from './FailedToGetEmbedding';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
 
-/** @inheritdoc */
+/**
+ * Represents an implementation of {link IEmbeddingStore}
+ */
 export class EmbeddingStore implements IEmbeddingStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
+    /**
+     * Initialises an instance of {@link EmbeddingStore}.
+     * @param {EmbeddingStoreClient} _embeddingsClient The embedding store client.
+     * @param {ExecutionContext} _executionContext The execution context.
+     * @param {IProjectionAssociations} _projectionAssociations The projection associations.
+     * @param {Logger} _logger The logger.
+     */
     constructor(
         private readonly _embeddingsClient: EmbeddingStoreClient,
         private readonly _executionContext: ExecutionContext,

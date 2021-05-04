@@ -8,6 +8,10 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the unique identifier of a Embedding.
  */
 export class EmbeddingId extends ConceptAs<Guid, '@dolittle/sdk.embeddings.EmbeddingId'> {
+    /**
+     * Initialises a new instance of {@link EmbeddingId}.
+     * @param {Guid} id The embedding id.
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.embeddings.EmbeddingId');
     }

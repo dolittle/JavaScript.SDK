@@ -25,6 +25,7 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
      * @param {EmbeddingId} _embeddingId  The unique identifier of the embedding to build for
+     * @param {Constructor<T> | T} _readModelTypeOrInstance  The read model type or instance
      */
     constructor(
         private _embeddingId: EmbeddingId,

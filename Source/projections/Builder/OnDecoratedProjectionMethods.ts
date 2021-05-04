@@ -9,7 +9,7 @@ import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 
 /**
- * Defines the system that knows about all the methods decorated with the on decorator on a projection.
+ * Represents the system that knows about all the methods decorated with the on decorator on a projection.
  */
 export class OnDecoratedProjectionMethods {
     /**

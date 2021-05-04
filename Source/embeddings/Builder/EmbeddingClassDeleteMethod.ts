@@ -3,4 +3,7 @@
 
 import { EmbeddingContext } from '../EmbeddingContext';
 
+/**
+ * Defines the embedding class delete method signature.
+ */
 export type EmbeddingClassDeleteMethod = (context: EmbeddingContext) => any | any[];

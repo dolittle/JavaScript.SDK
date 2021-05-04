@@ -12,7 +12,7 @@ export class DeleteDecoratedMethod {
     /**
      * Initializes a new instance of {@link OnDecoratedMethod}.
      * @param {Constructor<any>} owner Owner of the method.
-     * @param {EmbeddingDeleteCallback} method The actual method that does the comparison.
+     * @param {EmbeddingClassDeleteMethod} method The actual method that does the comparison.
      * @param {string} name The name of the method.
      */
     constructor(
