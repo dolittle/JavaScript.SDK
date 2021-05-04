@@ -63,26 +63,12 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
         eventTypes: IEventTypes,
         logger: Logger,
         cancellation: Cancellation): void {
-
-        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
-        if (this.onMethods.length < 1) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
+        const events = this.buildOnMethods(eventTypes, logger);
+        const canRegister = this.canRegisterEmbedding(logger);
+        if (!canRegister || !events) {
             return;
         }
-        const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
-        if (!allMethodsBuilt) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. Couldn't build the @on methods. Maybe an event type is handled twice?`);
-            return;
-        }
-        if (this._compareMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No compare method defined.`);
-            return;
-        }
-        if (this._deleteMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No delete method defined.`);
-            return;
-        }
-        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod, this._deleteMethod);
+        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod!, this._deleteMethod!);
         embeddings.register<T>(
             new EmbeddingProcessor<T>(
                 embedding,
@@ -91,5 +77,31 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
                 eventTypes,
                 logger
             ), cancellation);
+    }
+
+    private buildOnMethods(eventTypes: IEventTypes, logger: Logger) {
+        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
+        const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
+        if (!allMethodsBuilt) {
+            logger.warn(`Failed to register embedding ${this._embeddingId}. Couldn't build the @on methods. Maybe an event type is handled twice?`);
+            return false;
+        }
+        return events;
+    }
+
+    private canRegisterEmbedding(logger: Logger): boolean {
+        if (this.onMethods.length < 1) {
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
+            return false;
+        }
+        if (this._compareMethod === undefined) {
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No compare method defined.`);
+            return false;
+        }
+        if (this._deleteMethod === undefined) {
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No delete method defined.`);
+            return false;
+        }
+        return true;
     }
 }
