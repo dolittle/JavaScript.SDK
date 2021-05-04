@@ -51,7 +51,7 @@ export class Embedding<T> implements IEmbedding<T> {
     async on(readModel: T, event: any, eventType: EventType, context: EmbeddingProjectContext): Promise<T | DeleteReadModelInstance> {
         if (this._eventMap.has(eventType)) {
             const [method] = this._eventMap.get(eventType)!;
-            return method(readModel, event, context);
+            return await method(readModel, event, context);
         } else {
             throw new MissingOnMethodForType(ProjectionId.from(this.embeddingId.value), eventType);
         }
