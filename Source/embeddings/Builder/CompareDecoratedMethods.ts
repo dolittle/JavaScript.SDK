@@ -19,7 +19,7 @@ export class CompareDecoratedMethods {
     /**
      * Registers the compare decorated method
      * @param {Constructor<any>} target Target that owns the on method.
-     * @param {EmbeddingCompareCallback} method The compare method.
+     * @param {EmbeddingClassCompareMethod} method The compare method.
      * @param {string} name The name of the method.
      */
     static register(
