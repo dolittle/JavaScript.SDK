@@ -1,23 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '@dolittle/sdk.events';
-import { IContainer } from '@dolittle/sdk.common';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Constructor } from '@dolittle/types';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { IProjectionAssociations } from '@dolittle/sdk.projections';
-
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-
-import { IEmbeddings, EmbeddingId, Embeddings } from '..';
-
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { IContainer } from '@dolittle/sdk.common';
+import { IEventTypes } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { IProjectionAssociations } from '@dolittle/sdk.projections';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import { EmbeddingId, Embeddings, IEmbeddings } from '..';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
+import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+
 
 /**
  * Represents a builder for building multiple embeddings.
@@ -25,6 +22,10 @@ import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 export class EmbeddingsBuilder {
     private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
 
+    /**
+     * Initialises a new instance of {@link EmbeddingsBuilder}
+     * @param {EmbeddingId | Guid | string} embeddingId The unique identifier of the embedding.
+     */
     constructor(private _projectionAssociations: IProjectionAssociations) {}
 
     /**
