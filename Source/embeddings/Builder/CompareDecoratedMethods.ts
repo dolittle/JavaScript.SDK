@@ -8,7 +8,7 @@ import { EmbeddingAlreadyHasACompareDecorator } from './EmbeddingAlreadyHasAComp
 import { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
 
 /**
- * Defines the system that knows about all the methods decorated with the compare decorator.
+ * Represents the system that knows about all the methods decorated with the compare decorator.
  */
 export class CompareDecoratedMethods {
     /**
