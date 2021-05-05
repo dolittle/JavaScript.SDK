@@ -2,6 +2,5 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { MissingEventInformation } from './MissingEventInformation';
-export { RegistrationFailed } from './RegistrationFailed';
 
 export * as internal from './Internal';

@@ -12,6 +12,7 @@
         { "path": "../aggregates" },
         { "path": "../common" },
         { "path": "../eventHorizon" },
+        { "path": "../embeddings" },
         { "path": "../events" },
         { "path": "../events.filtering" },
         { "path": "../events.handling" },

@@ -4,12 +4,10 @@
 import { Guid } from '@dolittle/rudiments';
 import { EventTypeId, Generation } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-
 import { DeleteReadModelInstance } from '..';
-
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
+import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 
 type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 
@@ -24,6 +22,6 @@ export function on<T>(typeOrId: Constructor<T> | EventTypeId | Guid | string, ke
         const generation = typeof keySelectorCallbackOrGeneration === 'number' ? keySelectorCallbackOrGeneration : undefined;
         const keySelectorCallback = typeof keySelectorCallbackOrGeneration === 'function' ? keySelectorCallbackOrGeneration : maybeKeySelectorCallback!;
         const keySelector = keySelectorCallback(new KeySelectorBuilder());
-        OnDecoratedMethods.register(target.constructor, typeOrId, generation, keySelector, descriptor.value, propertyKey);
+        OnDecoratedProjectionMethods.register(target.constructor, typeOrId, generation, keySelector, descriptor.value, propertyKey);
     };
 }

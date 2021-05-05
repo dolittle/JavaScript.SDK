@@ -20,9 +20,9 @@ export class ProjectionAssociations implements IProjectionAssociations {
     associate<T>(typeOrInstance: Constructor<T> | T, projection: ProjectionId, scope: ScopeId): void;
     /** @inheritdoc */
     associate<T>(typeOrInstance: Constructor<T> | T, projection?: ProjectionId, scope?: ScopeId) {
-        if (projection && scope && typeof typeOrInstance  === 'function') {
+        if (projection && typeof typeOrInstance  === 'function') {
             const type = typeOrInstance as Constructor<T>;
-            const association = new ProjectionAssociation(projection, scope);
+            const association = new ProjectionAssociation(projection, scope || ScopeId.default);
             this._associationsToType.set(association, type);
             this._typeToAssociations.set(type, association);
         } else if (typeof typeOrInstance === 'function') {
