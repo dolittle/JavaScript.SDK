@@ -1,7 +1,7 @@
 {
     "name": "kitchen",
     "private": true,
-    "version": "14.3.0",
+    "version": "14.4.0-embeddings.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -11,10 +11,10 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "14.3.0",
-        "@dolittle/sdk.artifacts": "14.3.0",
-        "@dolittle/sdk.events": "14.3.0",
-        "@dolittle/sdk.events.handling": "14.3.0"
+        "@dolittle/sdk": "14.4.0-embeddings.0",
+        "@dolittle/sdk.artifacts": "14.4.0-embeddings.0",
+        "@dolittle/sdk.events": "14.4.0-embeddings.0",
+        "@dolittle/sdk.events.handling": "14.4.0-embeddings.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
