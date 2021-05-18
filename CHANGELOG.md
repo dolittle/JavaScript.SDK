@@ -1,3 +1,13 @@
+# [14.3.2] - 2021-5-18 [PR: #50](https://github.com/dolittle/JavaScript.SDK/pull/50)
+## Summary
+
+Fixes `applyPublic()` to actually be public. It was giving false for the `isPublic` parameter for the committing of the event.
+
+### Fixed
+
+- Fixes `applyPublic()` to actually commit public events.
+
+
 # [14.3.1] - 2021-4-23 [PR: #49](https://github.com/dolittle/JavaScript.SDK/pull/49)
 ## Summary
 
