@@ -1,3 +1,13 @@
+# [14.4.0] - 2021-5-19 [PR: #52](https://github.com/dolittle/JavaScript.SDK/pull/52)
+## Summary
+
+Adds the current `ExecutionContext` as an argument to `IContainer.get(...)` and sends it along from the `EventContext` when instantiating event handler classes.
+
+### Added
+
+- Added `executionContext: ExecutionContext` as an argument in `IContainer.get(...)`.
+
+
 # [14.3.2] - 2021-5-18 [PR: #50](https://github.com/dolittle/JavaScript.SDK/pull/50)
 ## Summary
 
