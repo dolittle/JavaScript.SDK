@@ -23,20 +23,20 @@ import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEven
 
 export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHandler {
     private readonly _eventHandlerType: Constructor<T>;
-    private readonly _getInstance: (container: IContainer) => T;
+    private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
 
     constructor(typeOrInstance: Constructor<T> | T) {
         super();
         if (typeOrInstance instanceof Function) {
             this._eventHandlerType = typeOrInstance;
-            this._getInstance = container => container.get(typeOrInstance);
+            this._getInstance = (container, executionContext) => container.get(typeOrInstance, executionContext);
 
         } else {
             this._eventHandlerType = Object.getPrototypeOf(typeOrInstance).constructor;
             if (this._eventHandlerType === undefined) {
                 throw new CannotRegisterEventHandlerThatIsNotAClass(typeOrInstance);
             }
-            this._getInstance = _ => typeOrInstance;
+            this._getInstance = () => typeOrInstance;
         }
     }
 
@@ -104,7 +104,7 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
         return (event, eventContext) => {
             let instance: T;
             try {
-                instance = this._getInstance(container);
+                instance = this._getInstance(container, eventContext.executionContext);
             } catch (ex) {
                 throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, ex);
             }
