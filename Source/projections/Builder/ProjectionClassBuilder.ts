@@ -13,19 +13,18 @@ import { DeleteReadModelInstance, IProjections, KeySelector, Projection, Project
 import { ProjectionProcessor } from '../Internal';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
-import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
+import { OnDecoratedMethod } from './OnDecoratedMethod';
+import { OnDecoratedMethods } from './OnDecoratedMethods';
+import { on as onDecorator } from './onDecorator';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 
 
-/**
- * Represents a builder for building a projection class.
- */
-export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
+export class ProjectionClassBuilder<T> extends ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
     constructor(typeOrInstance: Constructor<T> | T) {
+        super();
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;
 

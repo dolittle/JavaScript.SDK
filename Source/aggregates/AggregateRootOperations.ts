@@ -1,25 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IAggregateRootOperations } from './IAggregateRootOperations';
-import { AggregateRootAction } from './AggregateRootAction';
-import { AggregateRoot } from './AggregateRoot';
-import { AggregateRootVersion, AggregateRootId, CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, IEventTypes } from '@dolittle/sdk.events';
-import { Logger } from 'winston';
+import { AggregateRootId, AggregateRootVersion, CommittedAggregateEvents, IEventStore, IEventTypes, UncommittedAggregateEvent } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import { AggregateRoot } from './AggregateRoot';
+import { AggregateRootAction } from './AggregateRootAction';
+import { IAggregateRootOperations } from './IAggregateRootOperations';
 
 
 /**
  * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}
  * @template TAggregateRoot
  */
-export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> implements IAggregateRootOperations<TAggregateRoot> {
+export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> extends IAggregateRootOperations<TAggregateRoot> {
     constructor(
         private readonly _aggregateRootType: Constructor<any>,
         private readonly _eventStore: IEventStore,
         private readonly _aggregateRoot: TAggregateRoot,
         private readonly _eventTypes: IEventTypes,
         private readonly _logger: Logger) {
+        super();
     }
 
     /** @inheritdoc */

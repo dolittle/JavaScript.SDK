@@ -3,7 +3,6 @@
 
 import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { IProjection } from './IProjection';
@@ -13,7 +12,9 @@ import { ProjectionCallback } from './ProjectionCallback';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
-export class Projection<T> implements IProjection<T> {
+
+export class Projection<T> extends IProjection<T> {
+    initialState?: T | undefined;
 
     /** @inheritdoc */
     readonly events: Iterable<EventSelector>;
@@ -30,6 +31,7 @@ export class Projection<T> implements IProjection<T> {
         readonly readModelTypeOrInstance: Constructor<T> | T,
         readonly scopeId: ScopeId,
         private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>) {
+        super();
         const eventSelectors: EventSelector[] = [];
         for (const [eventType, [, keySelector]] of this._eventMap.entries()) {
             eventSelectors.push(new EventSelector(eventType, keySelector));

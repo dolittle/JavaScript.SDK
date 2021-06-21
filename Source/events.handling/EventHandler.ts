@@ -2,16 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EventContext, EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
-
-import { IEventHandler } from './IEventHandler';
-import { EventHandlerSignature } from './EventHandlerSignature';
-import { MissingEventHandlerForType } from './MissingEventHandlerForType';
-import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerId } from './EventHandlerId';
+import { EventHandlerSignature } from './EventHandlerSignature';
+import { IEventHandler } from './IEventHandler';
+import { MissingEventHandlerForType } from './MissingEventHandlerForType';
 
 /**
  * Represents an implementation of {@link IEventHandler}.
  */
-export class EventHandler implements IEventHandler {
+export class EventHandler extends IEventHandler {
 
     /**
      * Initializes a new instance of {@link EventHandler}
@@ -25,6 +24,7 @@ export class EventHandler implements IEventHandler {
         readonly scopeId: ScopeId,
         readonly partitioned: boolean,
         readonly handleMethodsByEventType: EventTypeMap<EventHandlerSignature<any>>) {
+        super();
     }
 
     /** @inheritdoc */

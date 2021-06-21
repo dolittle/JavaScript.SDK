@@ -1,27 +1,27 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
-import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-import { Cancellation } from '@dolittle/sdk.resilience';
+import { IContainer } from '@dolittle/sdk.common';
+import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-
-import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Logger } from 'winston';
+import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
 import { EventHandlerProcessor } from '../Internal';
-
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
-import { IContainer } from '@dolittle/sdk.common';
+
+
+
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
 /**
  * Represents a builder for building {@link IEventHandler} - event handlers.
  */
-export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
+export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
     private _methodsBuilder?: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
     private _partitioned!: boolean;
@@ -31,6 +31,7 @@ export class EventHandlerBuilder implements ICanBuildAndRegisterAnEventHandler {
      * @param {EventHandlerId} _eventHandlerId The unique identifier of the event handler to build for.
      */
     constructor(private _eventHandlerId: EventHandlerId) {
+        super();
     }
 
     /**

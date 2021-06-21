@@ -1,23 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 import { delay } from 'rxjs/operators';
 import { Logger } from 'winston';
-import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
-
 import { IEventHandlers } from './IEventHandlers';
 import { EventHandlerProcessor } from './Internal';
 
 /**
  * Represents an implementation of {IEventHandlers}.
  */
-export class EventHandlers implements IEventHandlers {
+export class EventHandlers extends IEventHandlers {
 
     /**
      * Initializes an instance of {@link EventHandlers}.
      * @param {Logger} _logger For logging.
      */
     constructor(private readonly _logger: Logger) {
+        super();
     }
 
     /** @inheritdoc */

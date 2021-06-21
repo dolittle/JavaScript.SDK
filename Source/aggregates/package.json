@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "14.4.0-embeddings.0",
+    "version": "14.4.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,8 +35,13 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
+<<<<<<< HEAD
         "@dolittle/sdk.events": "14.4.0-embeddings.0",
         "@dolittle/sdk.artifacts": "14.4.0-embeddings.0"
+=======
+        "@dolittle/sdk.events": "14.4.0",
+        "@dolittle/sdk.artifacts": "14.4.0"
+>>>>>>> master
     },
     "devDependencies": {}
 }

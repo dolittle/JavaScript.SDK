@@ -68,7 +68,7 @@ export class AggregateRoot {
      */
     applyPublic(event: any, eventType?: EventType): void {
         eventType = eventType || EventType.unspecified;
-        this.applyImplementation(event, eventType, false);
+        this.applyImplementation(event, eventType, true);
     }
 
     /**

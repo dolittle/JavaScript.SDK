@@ -7,12 +7,12 @@ import { IFilterProcessor } from './IFilterProcessor';
 /**
  * Defines the API for working with filters.
  */
-export interface IFilters {
+export abstract class IFilters {
 
     /**
      * Register a {@link IFilterProcessor} for processing events for filtering.
      * @param {IFilterProcessor} filterProcessor The filter processor.
      * @param {Cancellation} [cancellation] Optional cancellation.
      */
-    register(filterProcessor: IFilterProcessor, cancellation?: Cancellation): void;
+    abstract register (filterProcessor: IFilterProcessor, cancellation?: Cancellation): void;
 }

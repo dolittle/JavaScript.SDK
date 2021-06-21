@@ -1,45 +1,42 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
-import { Constructor } from '@dolittle/types';
-
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
-
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
 import { EventHandler, EventHandlerSignature, IEventHandlers } from '..';
 import { EventHandlerProcessor } from '../Internal';
-
+import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
+import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { eventHandler as eventHandlerDecorator } from './eventHandlerDecorator';
-import { handles as handlesDecorator } from './handlesDecorator';
-import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
+import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
+import { handles as handlesDecorator } from './handlesDecorator';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
-import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
-import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 
-export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventHandler {
+
+export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHandler {
     private readonly _eventHandlerType: Constructor<T>;
-    private readonly _getInstance: (container: IContainer) => T;
+    private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
 
     constructor(typeOrInstance: Constructor<T> | T) {
+        super();
         if (typeOrInstance instanceof Function) {
             this._eventHandlerType = typeOrInstance;
-            this._getInstance = container => container.get(typeOrInstance);
+            this._getInstance = (container, executionContext) => container.get(typeOrInstance, executionContext);
 
         } else {
             this._eventHandlerType = Object.getPrototypeOf(typeOrInstance).constructor;
             if (this._eventHandlerType === undefined) {
                 throw new CannotRegisterEventHandlerThatIsNotAClass(typeOrInstance);
             }
-            this._getInstance = _ => typeOrInstance;
+            this._getInstance = () => typeOrInstance;
         }
     }
 
@@ -107,7 +104,7 @@ export class EventHandlerClassBuilder<T> implements ICanBuildAndRegisterAnEventH
         return (event, eventContext) => {
             let instance: T;
             try {
-                instance = this._getInstance(container);
+                instance = this._getInstance(container, eventContext.executionContext);
             } catch (ex) {
                 throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, ex);
             }

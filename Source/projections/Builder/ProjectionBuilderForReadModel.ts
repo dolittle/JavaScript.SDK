@@ -12,12 +12,16 @@ import { Logger } from 'winston';
 import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { ProjectionProcessor } from '../Internal';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { OnMethodBuilder } from './OnMethodBuilder';
+import { KeySelectorBuilder } from './KeySelectorBuilder';
+import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
+type TypeOrEventType = Constructor<any> | EventType;
+type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];
 
 /**
  * Represents a builder for building {@link IProjection}.
  */
-export class ProjectionBuilderForReadModel<T> extends OnMethodBuilder<T, ProjectionCallback<T>> implements ICanBuildAndRegisterAProjection {
+export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProjection {
+    private _onMethods: OnMethodSpecification[] = [];
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
@@ -27,8 +31,8 @@ export class ProjectionBuilderForReadModel<T> extends OnMethodBuilder<T, Project
         private _projectionId: ProjectionId,
         private _readModelTypeOrInstance: Constructor<T> | T,
         private _scopeId: ScopeId) {
-            super();
-        }
+        super();
+    }
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.

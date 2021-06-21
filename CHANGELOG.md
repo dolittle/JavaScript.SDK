@@ -1,3 +1,36 @@
+# [14.4.0] - 2021-5-19 [PR: #52](https://github.com/dolittle/JavaScript.SDK/pull/52)
+## Summary
+
+Adds the current `ExecutionContext` as an argument to `IContainer.get(...)` and sends it along from the `EventContext` when instantiating event handler classes.
+
+### Added
+
+- Added `executionContext: ExecutionContext` as an argument in `IContainer.get(...)`.
+
+
+# [14.3.2] - 2021-5-18 [PR: #50](https://github.com/dolittle/JavaScript.SDK/pull/50)
+## Summary
+
+Fixes `applyPublic()` to actually be public. It was giving false for the `isPublic` parameter for the committing of the event.
+
+### Fixed
+
+- Fixes `applyPublic()` to actually commit public events.
+
+
+# [14.3.1] - 2021-4-23 [PR: #49](https://github.com/dolittle/JavaScript.SDK/pull/49)
+## Summary
+
+Changes all `interface` types to `abstract class`. Their naming stays the same, as we're still using them like interfaces. 
+The reason for the change is to enable the use of dependency-injection frameworks for TS/JS for developers.
+Transpiling TS -> JS strips away all the interfaces, leaving the DI framework with no token to associate with the type.
+Changing them to abstract classes generates empty classes (that must not be instantiated in JS), that can be used as binding tokens.
+
+### Changed
+
+- All `interfaces` to `abstract class`.
+
+
 # [14.3.0] - 2021-4-9 [PR: #44](https://github.com/dolittle/JavaScript.SDK/pull/44)
 ## Summary
 
