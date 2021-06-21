@@ -13,8 +13,8 @@ import { DeleteReadModelInstance, IProjections, KeySelector, Projection, Project
 import { ProjectionProcessor } from '../Internal';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { OnDecoratedMethod } from './OnDecoratedMethod';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
+import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
+import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 import { on as onDecorator } from './onDecorator';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';

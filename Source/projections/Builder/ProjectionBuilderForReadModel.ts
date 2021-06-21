@@ -3,6 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { EventType } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -12,7 +13,6 @@ import { Logger } from 'winston';
 import { IProjections, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { ProjectionProcessor } from '../Internal';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
-import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 type TypeOrEventType = Constructor<any> | EventType;
 type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];
@@ -20,7 +20,7 @@ type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, Proje
 /**
  * Represents a builder for building {@link IProjection}.
  */
-export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProjection {
+export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProjection<T> {
     private _onMethods: OnMethodSpecification[] = [];
 
     /**
@@ -55,7 +55,7 @@ export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProje
         cancellation: Cancellation): void {
 
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
-        if (this.onMethods.length < 1) {
+        if (this._onMethods.length < 1) {
             logger.warn(`Failed to register projection ${this._projectionId}. No on methods are configured`);
             return;
         }

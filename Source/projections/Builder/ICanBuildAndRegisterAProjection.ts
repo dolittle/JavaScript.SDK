@@ -7,9 +7,9 @@ import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
-import { IProjections } from '..';
+import { IProjections, OnMethodBuilder, ProjectionCallback } from '..';
 
-export abstract class ICanBuildAndRegisterAProjection {
+export abstract class ICanBuildAndRegisterAProjection<T = any> extends OnMethodBuilder<T, ProjectionCallback<T>> {
 
     /**
      * Builds and registers a projection
