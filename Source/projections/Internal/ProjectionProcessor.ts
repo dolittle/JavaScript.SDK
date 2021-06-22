@@ -1,35 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-import { DateTime } from 'luxon';
-
-import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import {
+    EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
+    ProjectionRegistrationResponse, ProjectionReplaceResponse, ProjectionRequest,
+    ProjectionResponse, ProjectionRuntimeToClientMessage
+} from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
+import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { EventContext, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
+import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Constructor } from '@dolittle/types';
+import { eventTypes, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
-import { EventContext, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
-import { eventTypes, guids } from '@dolittle/sdk.protobuf';
-
-import {
-    ProjectionRegistrationRequest,
-    ProjectionRegistrationResponse,
-    ProjectionClientToRuntimeMessage,
-    ProjectionRuntimeToClientMessage,
-    ProjectionRequest,
-    ProjectionResponse,
-    ProjectionEventSelector,
-    EventPropertyKeySelector as ProtobufEventPropertyKeySelector,
-    PartitionIdKeySelector as ProtobufPartitionIdKeySelector,
-    EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector,
-    ProjectionDeleteResponse,
-    ProjectionReplaceResponse
-} from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
-
+import { Constructor } from '@dolittle/types';
+import { DateTime } from 'luxon';
+import { Logger } from 'winston';
 import {
     DeleteReadModelInstance,
     EventPropertyKeySelector,
@@ -37,12 +26,8 @@ import {
     IProjection,
     Key,
     KeySelector,
-    PartitionIdKeySelector,
-    ProjectionId,
-    ProjectionContext,
-    UnknownKeySelectorType,
+    PartitionIdKeySelector, ProjectionContext, ProjectionId, UnknownKeySelectorType
 } from '..';
-import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
 
 
 /**

@@ -15,16 +15,14 @@ import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProject
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
-import { on as onDecorator } from './onDecorator';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 
 
-export class ProjectionClassBuilder<T> extends ICanBuildAndRegisterAProjection {
+export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
     constructor(typeOrInstance: Constructor<T> | T) {
-        super();
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;
 
