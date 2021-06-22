@@ -96,9 +96,6 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 return responseMessage;
             }));
 
-            // send the connection request
-            clientToServerMessages.next(clientMessage);
-
             const responses = new Subject<TClientMessage>();
             requests
                 .pipe(filter(this.isValidMessage, this))
@@ -112,6 +109,8 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
 
             concat(connectResponse, errorsAndCompletion)
                 .subscribe(this.handleConnectionResponse(subscriber));
+            // send the connection request
+            clientToServerMessages.next(clientMessage);
         });
     }
 

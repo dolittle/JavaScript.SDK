@@ -10,7 +10,7 @@ import { Failure } from '@dolittle/sdk.protobuf';
 export class RegistrationFailed extends Exception {
 
     /**
-     * Initializes a new instance of {@link DidNotReceRegistrationFailediveConnectResponse}.
+     * Initializes a new instance of {@link RegistrationFailed}.
      */
     constructor(kind: string, identifier: Guid | string, failure: Failure) {
         super(`Failure occurred during registration of ${kind} ${identifier}. ${failure.reason}`);

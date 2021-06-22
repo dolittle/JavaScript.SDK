@@ -75,7 +75,8 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
     }
 
     /**
-     * Registers a processor forever with a policy
+     * Registers a processor forever with a policy. Even if the registration completes, the repeat() call
+     * will try to re-register.
      * @param {RetryPolicy} policy The policy to register with.
      * @param {Cancellation} cancellation The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
