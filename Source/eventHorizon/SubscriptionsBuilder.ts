@@ -1,18 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
-
-import { TenantId, ExecutionContext } from '@dolittle/sdk.execution';
-
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
+import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { Logger } from 'winston';
+import { EventHorizons } from './EventHorizons';
+import { IEventHorizons } from './IEventHorizons';
+import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
+import { SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
 
-import {SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
-import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
-import { EventHorizons } from './EventHorizons';
-import { IEventHorizons } from './IEventHorizons';
+
+
+
 
 export type SubscriptionsBuilderCallback = (builder: SubscriptionsBuilder) => void;
 
@@ -75,15 +76,21 @@ export class SubscriptionsBuilder {
      * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
      * @param {ExecutionContext} executionContext The execution context.
      * @param {Logger} logger Logger for logging;
+     * @param {Cancellation} cancellation The cancellation token.
      * @returns {TenantSubscriptions[]}
      */
-    build(subscriptionsClient: SubscriptionsClient, executionContext: ExecutionContext, logger: Logger): IEventHorizons {
+    build(
+        subscriptionsClient: SubscriptionsClient,
+        executionContext: ExecutionContext,
+        logger: Logger,
+        cancellation: Cancellation): IEventHorizons {
         const tenantSubscriptions = this._tenantSubscriptionsBuilders.map(_ => _.build());
         return new EventHorizons(
             subscriptionsClient,
             executionContext,
             tenantSubscriptions,
             this._callbacks,
-            logger);
+            logger,
+            cancellation);
     }
 }

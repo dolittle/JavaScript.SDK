@@ -257,7 +257,11 @@ export class ClientBuilder {
             this._cancellation);
 
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
-        const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, this._logger);
+        const eventHorizons = this._eventHorizonsBuilder.build(
+            subscriptionsClient,
+            executionContext,
+            this._logger,
+            this._cancellation);
 
         const projections = this._projectionsBuilder.buildAndRegister(
             new ProjectionsClient(connectionString, credentials),
