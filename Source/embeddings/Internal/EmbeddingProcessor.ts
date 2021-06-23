@@ -71,7 +71,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let readModelInstance;
         if (typeof this._embedding.readModelTypeOrInstance === 'function') {
-            const constructor = this._embedding.readModelTypeOrInstance as Constructor<T>;
+            const constructor = this._embedding.readModelTypeOrInstance as Constructor<TReadModel>;
             readModelInstance = new constructor();
         } else {
             readModelInstance = this._embedding.readModelTypeOrInstance;
@@ -251,13 +251,13 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
             executionContext);
     }
 
-    private createInstanceFromString(jsonString: string): T {
+    private createInstanceFromString(jsonString: string): TReadModel {
         let state = JSON.parse(jsonString);
         if (typeof this._embedding.readModelTypeOrInstance === 'function') {
-            state = Object.assign(new (this._embedding.readModelTypeOrInstance as Constructor<T>)(), state);
+            state = Object.assign(new (this._embedding.readModelTypeOrInstance as Constructor<TReadModel>)(), state);
         } else {
             const instanceConstructor = Object.getPrototypeOf(
-                this._embedding.readModelTypeOrInstance).constructor as Constructor<T>;
+                this._embedding.readModelTypeOrInstance).constructor as Constructor<TReadModel>;
             state = Object.assign(new (instanceConstructor)(), state);
         }
         return state;
