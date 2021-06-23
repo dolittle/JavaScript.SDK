@@ -25,6 +25,7 @@ import { TenantWithSubscriptions } from './TenantWithSubscriptions';
  */
 export class EventHorizons extends IEventHorizons {
     private _subscriptionResponses: Map<Subscription, SubscriptionResponse> = new Map();
+    private _retryTimeout = 5;
 
     /**
      * Initializes a new instance of {@link EventHorizons}.
@@ -79,7 +80,7 @@ export class EventHorizons extends IEventHorizons {
     private subscribeWithRetry(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription, cancellation: Cancellation): Observable<void> {
         return retryWithPolicy(
             this.subscribe(tenant, subscription, pbSubscription),
-            retryPipe(delay(1000)),
+            retryPipe(delay(this._retryTimeout * 1e3)),
             cancellation);
     }
 
@@ -95,7 +96,7 @@ export class EventHorizons extends IEventHorizons {
                         try {
                             const response = SubscriptionResponse.from(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
                             if (response.failed) {
-                                this._logger.error(`Failed to subscribe to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}. Failure id:${response.failure?.id}) and reason: '${response.failure?.reason}'. Will retry in 1s.`);
+                                this._logger.error(`Failed to subscribe to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}. Failure id:${response.failure?.id}) and reason: '${response.failure?.reason}'. Will retry in ${this._retryTimeout}s.`);
                                 subscriber.error(new EventHorizonSubscriptionFailed(
                                     subscription.microservice.value,
                                     subscription.tenant.value,
@@ -114,7 +115,7 @@ export class EventHorizons extends IEventHorizons {
                                 subscriber.complete();
                             }
                         } catch (error) {
-                            this._logger.error(`Error while subscribing to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}.\n Error: ${error}. Will retry in 1s.`);
+                            this._logger.error(`Error while subscribing to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}.\n Error: ${error}. Will retry in ${this._retryTimeout}s.`);
                             subscriber.error(error);
                         }
                     },
