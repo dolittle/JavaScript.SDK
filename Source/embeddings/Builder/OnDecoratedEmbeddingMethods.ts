@@ -17,7 +17,7 @@ export class OnDecoratedEmbeddingMethods {
     static readonly methodsPerEmbedding: Map<Function, OnDecoratedEmbeddingMethod[]> = new Map();
 
     /**
-     * Registers on decorated projection methods
+     * Registers on decorated embedding methods
      * @param {Constructor<any>} target Target that owns the on method.
      * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event the on method is for or the event.
      * @param {number | undefined} generation Generation of event type or undefined.

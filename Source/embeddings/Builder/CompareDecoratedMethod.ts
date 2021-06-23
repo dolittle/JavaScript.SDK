@@ -5,12 +5,12 @@ import { Constructor } from '@dolittle/types';
 import { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
 
 /**
- * Represents methods decorated with the on decorator.
+ * Represents methods decorated with the compare decorator.
  */
 export class CompareDecoratedMethod {
 
     /**
-     * Initializes a new instance of {@link OnDecoratedMethod}.
+     * Initializes a new instance of {@link CompareDecoratedMethod}.
      * @param {Constructor<any>} owner Owner of the method.
      * @param {EmbeddingClassCompareMethod} method The actual method that does the comparison.
      * @param {string} name The name of the method.

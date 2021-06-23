@@ -24,9 +24,9 @@ export class EmbeddingsBuilder {
 
     /**
      * Initialises a new instance of {@link EmbeddingsBuilder}
-     * @param {EmbeddingId | Guid | string} embeddingId The unique identifier of the embedding.
+     * @param {IProjectionAssociations} _projectionAssociations The projection associations.
      */
-    constructor(private _projectionAssociations: IProjectionAssociations) {}
+    constructor(private readonly _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building an embedding.

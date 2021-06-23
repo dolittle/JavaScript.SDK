@@ -4,6 +4,6 @@
 import { EmbeddingContext } from './EmbeddingContext';
 
 /**
- * Defines the signature of a embedding class' compare() method
+ * Defines the signature of a embedding class' delete() method
  */
-export type EmbeddingDeleteCallback<T = any> = (currentState: T, context: EmbeddingContext) => any | any[];
+export type EmbeddingDeleteCallback<TReadModel = any> = (currentState: TReadModel, context: EmbeddingContext) => any | any[];

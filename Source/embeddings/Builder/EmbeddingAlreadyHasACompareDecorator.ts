@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 /**
- * Exception that gets thrown when attempting to register a a second compare() decorator on an embedding.
+ * Exception that gets thrown when attempting to register more than one @compare decorator on an embedding.
  */
 export class EmbeddingAlreadyHasACompareDecorator extends Exception {
     /**

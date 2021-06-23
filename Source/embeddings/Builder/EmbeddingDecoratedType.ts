@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 import { EmbeddingId } from '..';
 
 /**
- * Represents a embedding created from the decorator
+ * Represents an embedding created from the decorator
  */
 export class EmbeddingDecoratedType {
     /**

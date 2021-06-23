@@ -28,8 +28,8 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
      * @param {Constructor<T> | T} _readModelTypeOrInstance  The read model type or instance
      */
     constructor(
-        private _embeddingId: EmbeddingId,
-        private _readModelTypeOrInstance: Constructor<T> | T) {
+        private readonly _embeddingId: EmbeddingId,
+        private readonly _readModelTypeOrInstance: Constructor<T> | T) {
             super();
         }
 
@@ -46,6 +46,11 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
         return this;
     }
 
+    /**
+      * Add a delete method for deleting the embedding.
+      * @param {EmbeddingCompareCallback} callback Callback to call until the embedding has been deleted.
+      * @returns {EmbeddingBuilderForReadModel<T>}
+      */
     deleteMethod(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._deleteMethod) {
             throw new EmbeddingAlreadyHasADeleteMethod(this._embeddingId);

@@ -5,14 +5,14 @@ import { Constructor } from '@dolittle/types';
 import { EmbeddingClassDeleteMethod } from './EmbeddingClassDeleteMethod';
 
 /**
- * Represents methods decorated with the on decorator.
+ * Represents methods decorated with the delete decorator.
  */
 export class DeleteDecoratedMethod {
 
     /**
-     * Initializes a new instance of {@link OnDecoratedMethod}.
+     * Initializes a new instance of {@link DeleteDecoratedMethod}.
      * @param {Constructor<any>} owner Owner of the method.
-     * @param {EmbeddingClassDeleteMethod} method The actual method that does the comparison.
+     * @param {EmbeddingClassDeleteMethod} method The actual method that gets the embedding closer to being deleted.
      * @param {string} name The name of the method.
      */
     constructor(

@@ -57,7 +57,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
                     subscriber.error(error);
                 },
                 complete: () => {
-                    this._logger.debug(`Registering ${this._kind} ${this._identifier} handling of requests completed.`);
+                    this._logger.debug(`${this._kind} ${this._identifier} handling of requests completed.`);
                     subscriber.complete();
                 },
             });

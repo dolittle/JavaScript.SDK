@@ -7,4 +7,4 @@ import { EmbeddingProjectContext } from './EmbeddingProjectContext';
 /**
  * Represents the callback for an embeddings on() method
  */
-export type EmbeddingProjectCallback<T,U = any> = (readModel: T, event: U, context: EmbeddingProjectContext) => T | DeleteReadModelInstance | Promise<T | DeleteReadModelInstance>;
+export type EmbeddingProjectCallback<TReadModel, TEvent = any> = (readModel: TReadModel, event: TEvent, context: EmbeddingProjectContext) => TReadModel | DeleteReadModelInstance | Promise<TReadModel | DeleteReadModelInstance>;

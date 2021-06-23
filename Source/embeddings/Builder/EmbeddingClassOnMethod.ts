@@ -7,4 +7,4 @@ import { EmbeddingProjectContext } from '..';
 /**
  * Defines the signature of a embedding class's on() method
  */
-export type EmbeddingClassOnMethod<T = any> = (event: T, context: EmbeddingProjectContext) => void | DeleteReadModelInstance | Promise<void | DeleteReadModelInstance>;
+export type EmbeddingClassOnMethod<TEvent = any> = (event: TEvent, context: EmbeddingProjectContext) => void | DeleteReadModelInstance | Promise<void | DeleteReadModelInstance>;

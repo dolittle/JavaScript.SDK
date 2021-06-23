@@ -16,6 +16,6 @@ export class ReadModelAlreadyDefinedForEmbedding extends Exception {
      * @param {Constructor<any> | any} oldReadModel The old read model.
      */
     constructor(embeddingId: EmbeddingId, newReadModel: Constructor<any> | any, oldReadModel: Constructor<any> | any) {
-        super(`Cannot assign ${newReadModel} to embedding ${embeddingId}. It is already associated with ${oldReadModel}`);
+        super(`Cannot assign readmodel ${newReadModel} to embedding ${embeddingId}. It is already associated with readmodel ${oldReadModel}`);
     }
 }

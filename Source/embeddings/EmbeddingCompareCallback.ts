@@ -6,4 +6,4 @@ import { EmbeddingContext } from './EmbeddingContext';
 /**
  * Defines the signature of a embedding class' compare() method
  */
-export type EmbeddingCompareCallback<T = any> = (receivedState: T, currentState: T, context: EmbeddingContext) => any | any[];
+export type EmbeddingCompareCallback<TReadModel = any> = (receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext) => any | any[];

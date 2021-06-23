@@ -43,19 +43,19 @@ import {
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
  */
-export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
+export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
 
     /**
      * Initializes a new instance of {@link EmbeddingProcessor}
-     * @template T
-     * @param {IEmbedding<T>} _embedding The embedding
+     * @template TReadModel
+     * @param {IEmbedding<TReadModel>} _embedding The embedding
      * @param {EmbeddingsClient} _client The client used to connect to the Runtime
      * @param {ExecutionContext} _executionContext The execution context
      * @param {IEventType} _eventTypes The registered event types for this embedding
      * @param {ILogger} logger Logger for logging
      */
     constructor(
-        private _embedding: IEmbedding<T>,
+        private _embedding: IEmbedding<TReadModel>,
         private _client: EmbeddingsClient,
         private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes,
@@ -155,7 +155,7 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         }
     }
 
-    private async createCompareResponse(request: EmbeddingCompareRequest, projectionInstance: T, context: EmbeddingContext): Promise<EmbeddingCompareResponse> {
+    private async createCompareResponse(request: EmbeddingCompareRequest, projectionInstance: TReadModel, context: EmbeddingContext): Promise<EmbeddingCompareResponse> {
         const entityState = this.createInstanceFromString(request.getEntitystate());
 
         const events = this.getUncommittedEvents(await this._embedding.compare(entityState, projectionInstance, context));
@@ -165,7 +165,7 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         return compareResponse;
     }
 
-    private async createDeleteResponse(projectionInstance: T, context: EmbeddingContext): Promise<EmbeddingDeleteResponse> {
+    private async createDeleteResponse(projectionInstance: TReadModel, context: EmbeddingContext): Promise<EmbeddingDeleteResponse> {
         const events = this.getUncommittedEvents(await this._embedding.delete(projectionInstance, context));
 
         const deleteResponse = new EmbeddingDeleteResponse();
@@ -173,7 +173,7 @@ export class EmbeddingProcessor<T> extends ClientProcessor<EmbeddingId, Embeddin
         return deleteResponse;
     }
 
-    private async createProjectionResponse(request: EmbeddingProjectRequest, projectionInstance: T, executionContext: ExecutionContext): Promise<ProjectionReplaceResponse | ProjectionDeleteResponse> {
+    private async createProjectionResponse(request: EmbeddingProjectRequest, projectionInstance: TReadModel, executionContext: ExecutionContext): Promise<ProjectionReplaceResponse | ProjectionDeleteResponse> {
         if (!request.hasEvent()) {
             throw new MissingEventInformation('No event in EmbeddingProjectRequest');
         }
