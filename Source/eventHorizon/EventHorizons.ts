@@ -76,7 +76,7 @@ export class EventHorizons extends IEventHorizons {
         }
     }
 
-    private subscribeWithRetry(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription, cancellation: Cancellation): Observable<never> {
+    private subscribeWithRetry(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription, cancellation: Cancellation): Observable<void> {
         return retryWithPolicy(
             this.subscribe(tenant, subscription, pbSubscription),
             retryPipe(delay(1000)),
@@ -86,8 +86,8 @@ export class EventHorizons extends IEventHorizons {
     /**
      * Subscribes and returns an Observable, which completes when the Runtime replies with a valid connection response.
      */
-    private subscribe(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription): Observable<never> {
-        return new Observable<never>(subscriber => {
+    private subscribe(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription): Observable<void> {
+        return new Observable<void>(subscriber => {
             this._logger.debug(`Subscribing to events from microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in parttion ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}`);
             reactiveUnary(this._subscriptionsClient, this._subscriptionsClient.subscribe, pbSubscription, this.cancellation)
                 .subscribe({

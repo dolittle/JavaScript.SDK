@@ -36,13 +36,13 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {Cancellation} cancellation Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
-    register(cancellation: Cancellation): Observable<never> {
+    register(cancellation: Cancellation): Observable<void> {
         const client = this.createClient(
             this.registerArguments,
             (request: TRequest, executionContext: ExecutionContext) => this.catchingHandle(request, executionContext),
             this._pingTimeout,
             cancellation);
-        return new Observable<never>(subscriber => {
+        return new Observable<void>(subscriber => {
             this._logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
             client.subscribe({
                 next: (message: TRegisterResponse) => {
@@ -70,7 +70,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {Cancellation} cancellation The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never> {
+    registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void> {
         return retryWithPolicy(this.register(cancellation), policy, cancellation);
     }
 
@@ -81,7 +81,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {Cancellation} cancellation The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<never> {
+    registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void> {
         return this.registerWithPolicy(policy, cancellation).pipe(repeat());
     }
 
