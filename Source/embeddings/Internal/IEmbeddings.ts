@@ -3,7 +3,7 @@
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { EmbeddingProcessor } from './Internal';
+import { EmbeddingProcessor } from './EmbeddingProcessor';
 
 /**
  * Defines a system for registering embeddings.

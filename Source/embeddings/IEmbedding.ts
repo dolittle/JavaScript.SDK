@@ -1,60 +1,85 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType } from '@dolittle/sdk.events';
+import { Guid } from '@dolittle/rudiments';
+import { EmbeddingId } from '@dolittle/sdk.embeddings';
+import { CurrentState, Key } from '@dolittle/sdk.projections';
+import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-
-import { DeleteReadModelInstance, EventSelector  } from '@dolittle/sdk.projections';
-import { EmbeddingContext } from './EmbeddingContext';
-import { EmbeddingId } from './EmbeddingId';
-import { EmbeddingProjectContext } from './EmbeddingProjectContext';
+import { EmbeddingStore } from './Store';
 
 /**
- * Defines an embedding.
+ * Defines a system for working with an embedding.
  */
-export interface IEmbedding<TReadModel> {
+export abstract class IEmbedding extends EmbeddingStore {
     /**
-     * Gets the {@link EmbeddingId} for the embedding.
+     * Updates an embedding state by key for the embedding associated with a type.
+     * @template TEmbedding
+     * @param {Constructor<T>} type The type of the embedding.
+     * @param {Key | string} key The key of the embedding.
+     * @param {TEmbedding} state The updated state of the embedding.
+     * @param {Cancellation} [cancellation] The cancellation token.
+     * @returns {Promise<CurrentState<TEmbedding>>}
      */
-    readonly embeddingId: EmbeddingId;
+    abstract update<TEmbedding> (
+        type: Constructor<TEmbedding>,
+        key: Key | string,
+        state: TEmbedding,
+        cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
-     * Gets the read model type the embedding is for.
+     * Updates an embedding state by key for the embedding specified by embedding identifier.
+     * @template TEmbedding
+     * @param {Constructor<TEmbedding>} type The type of the embedding.
+     * @param {Key | string} key The key of the embedding.
+     * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
+     * @param {TEmbedding} state The updated state of the embedding.
+     * @param {Cancellation} [cancellation] The cancellation token.
+     * @returns {Promise<CurrentState<TEmbedding>>}
      */
-    readonly readModelTypeOrInstance: Constructor<TReadModel> | TReadModel;
+    abstract update<TEmbedding> (
+        type: Constructor<TEmbedding>,
+        key: Key | string,
+        embeddingId: EmbeddingId | Guid | string,
+        state: TEmbedding,
+        cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
-     * Gets the initial state of the embedding.
+     * Updates an embedding state by key for the embedding specified by embedding identifier.
+     * @param {Key | string} key The key of the embedding.
+     * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
+     * @param {any} state The updated state of the embedding.
+     * @param {Cancellation} [cancellation] The cancellation token.
+     * @returns {Promise<CurrentState<any>>}
      */
-    readonly initialState?: TReadModel;
+    abstract update (
+        key: Key | string,
+        embeddingId: EmbeddingId | Guid | string,
+        state: any,
+        cancellation?: Cancellation): Promise<CurrentState<any>>;
 
     /**
-     * Gets the events used by the embedding.
+     * Deletes an embedding state by key for the embedding associated with a type.
+     * @template TEmbedding
+     * @param {Constructor<T>} type The type of the embedding.
+     * @param {Key | string} key The key of the embedding.
+     * @param {Cancellation} [cancellation] The cancellation token.
+     * @returns {Promise<void>}
      */
-    readonly events: Iterable<EventSelector>;
+    abstract delete<TEmbedding> (
+        type: Constructor<TEmbedding>,
+        key: Key | string,
+        cancellation?: Cancellation): Promise<void>;
 
     /**
-     * Handle an event and update a readmodel.
-     * @param {T} readModel ReadModel to update.
-     * @param {*} event Event to handle.
-     * @param {EventType} eventType The event type.
-     * @param {EmbeddingProjectContext} context The context for the embedding processing.
+     * Deletes an embedding state by key for the embedding specified by the embedding identifier.
+     * @param {Key | string} key The key of the embedding.
+     * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
+     * @param {Cancellation} [cancellation] The cancellation token.
+     * @returns {Promise<void>}
      */
-    on(readModel: TReadModel, event: any, eventType: EventType, context: EmbeddingProjectContext): Promise<TReadModel | DeleteReadModelInstance> | TReadModel | DeleteReadModelInstance;
-
-    /**
-     * Compares the received state and current state.
-     * @param {T} receivedState The received state.
-     * @param {T} currentState The current state.
-     * @param {EmbeddingContext} context EmbeddingContext
-     * @returns {any | any[]} One or more events to correct the state towards the wanted state.
-     */
-    compare(receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext): any | any[];
-
-    /**
-     * Called, when the readmodel should get deleted. Returns events, that should result in the readmodels deletion.
-     * @param {T} currentState The received state.
-     * @param {EmbeddingContext} context EmbeddingContext
-     */
-    delete(currentState: TReadModel, context: EmbeddingContext): any | any[];
+    abstract delete (
+        key: Key | string,
+        embeddingId: EmbeddingId | Guid | string,
+        cancellation?: Cancellation): Promise<void>;
 }

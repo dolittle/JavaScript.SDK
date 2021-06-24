@@ -8,13 +8,13 @@ import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
+import { Embeddings } from '@dolittle/sdk.embeddings';
 import { Guid } from '@dolittle/rudiments';
 
 import { ClientBuilder } from './ClientBuilder';
 import { AggregateRoot, IAggregateOf, AggregateOf, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Constructor } from '@dolittle/types';
 import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
 
@@ -33,6 +33,7 @@ export class Client {
      * @param {IFilters} filters All the filters.
      * @param {IEventHorizons} eventHorizons All event horizons.
      * @param {ProjectionStoreBuilder} projections All projections.
+     * @param {Ebmeddings} embeddings All embeddings.
      */
     constructor(
         readonly logger: Logger,
@@ -42,7 +43,7 @@ export class Client {
         readonly filters: IFilters,
         readonly eventHorizons: IEventHorizons,
         readonly projections: ProjectionStoreBuilder,
-        readonly embeddings: EmbeddingStoreBuilder) {
+        readonly embeddings: Embeddings) {
     }
 
     /**

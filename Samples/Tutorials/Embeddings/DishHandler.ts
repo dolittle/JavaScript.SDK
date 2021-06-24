@@ -11,6 +11,6 @@ export class DishHandler {
 
     @handles(DishPrepared)
     dishPrepared(event: DishPrepared, eventContext: EventContext) {
-        console.log(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
+        console.log(`The dish ${event.Dish} has been prepared. Yummm!`);
     }
 }

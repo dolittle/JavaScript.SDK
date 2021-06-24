@@ -10,16 +10,12 @@ import { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
 type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void | DeleteReadModelInstance;
 
 /**
- * Decorator for decorating on methods in a embedding class
+ * Decorator for decorating on methods in an embedding class
  */
-export function on<T>(type: Constructor<T>, keySelectorCallback: KeySelectorBuilderCallback<T>): Returns;
-export function on(eventType: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback): Returns;
-export function on(eventType: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback): Returns;
-export function on<T>(typeOrId: Constructor<T> | EventTypeId | Guid | string, keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<T> | Generation | number, maybeKeySelectorCallback?: KeySelectorBuilderCallback<T>) {
+export function on<T>(type: Constructor<T>): Returns;
+export function on(eventType: EventTypeId | Guid | string): Returns;
+export function on<T>(typeOrId: Constructor<T> | EventTypeId | Guid | string, generation?: Generation | number) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        const generation = typeof keySelectorCallbackOrGeneration === 'number' ? keySelectorCallbackOrGeneration : undefined;
-        const keySelectorCallback = typeof keySelectorCallbackOrGeneration === 'function' ? keySelectorCallbackOrGeneration : maybeKeySelectorCallback!;
-        const keySelector = keySelectorCallback(new KeySelectorBuilder());
-        OnDecoratedEmbeddingMethods.register(target.constructor, typeOrId, generation, keySelector, descriptor.value, propertyKey);
+        OnDecoratedEmbeddingMethods.register(target.constructor, typeOrId, generation, descriptor.value, propertyKey);
     };
 }

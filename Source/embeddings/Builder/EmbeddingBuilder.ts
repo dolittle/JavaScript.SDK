@@ -9,13 +9,11 @@ import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { EmbeddingId, IEmbeddings } from '..';
+import { EmbeddingId } from '..';
+import { IEmbeddings } from '../Internal';
 import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
-
-
-
 
 
 /**

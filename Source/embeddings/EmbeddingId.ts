@@ -9,7 +9,7 @@ import { Guid } from '@dolittle/rudiments';
  */
 export class EmbeddingId extends ConceptAs<Guid, '@dolittle/sdk.embeddings.EmbeddingId'> {
     /**
-     * Initialises a new instance of {@link EmbeddingId}.
+     * Initializes a new instance of {@link EmbeddingId}.
      * @param {Guid} id The embedding id.
      */
     constructor(id: Guid) {

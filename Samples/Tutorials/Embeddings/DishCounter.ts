@@ -10,26 +10,43 @@ import { DishRemoved } from './DishRemoved';
 @embedding('98f9db66-b6ca-4e5f-9fc3-638626c9ecfa')
 export class DishCounter {
     numberOfTimesPrepared: number = 0;
+    dish: string = '';
 
     @compare()
     compare(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
+        console.log(`Comparing embedding. Received state:`);
+        console.log(receivedState);
+        console.log(`Current state:`);
+        console.log(this);
+        console.log(`Context:`);
+        // console.log(embeddingContext);
         if (receivedState.numberOfTimesPrepared > this.numberOfTimesPrepared) {
-            return new DishPrepared(embeddingContext.key.value, embeddingContext.key.value);
+            console.log(`A dish needs to be prepared!`);
+            return new DishPrepared(receivedState.dish);
         }
     }
 
     @deleteMethod()
     remove(embeddingContext: EmbeddingContext) {
-        return new DishRemoved(embeddingContext.key.value);
+        console.log('A dish deens to be removed!');
+        return new DishRemoved(this.dish);
     }
 
-    @on(DishPrepared, _ => _.keyFromProperty('Dish'))
+    @on(DishPrepared)
     onDishPrepared(event: DishPrepared, context: EmbeddingProjectContext) {
-        this.numberOfTimesPrepared ++;
+        console.log(`Handling DishPrepared: ${JSON.stringify(event)}`);
+        // console.log(context);
+        if (!this.dish) {
+            this.dish = event.Dish;//petridish
+        }
+
+        this.numberOfTimesPrepared++;
     }
 
-    @on(DishRemoved, _ => _.keyFromProperty('Dish'))
+    @on(DishRemoved)
     onDishRemoved(event: DishRemoved, context: EmbeddingProjectContext) {
+        console.log(`Handling DishRemoved`);
+        // console.log(`Embedding context: ${context}`);
         return ProjectionResult.delete;
     }
 }
