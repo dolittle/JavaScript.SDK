@@ -33,24 +33,35 @@ const client = Client
             .deleteMethod((currentState, embeddingContext) => {
                 return new ChefFired(currentState.name);
             })
-            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, context) => {
+            .on(DishPrepared, (chef, event, context) => {
                 chef.name = event.Chef;
                 if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
                 return chef;
             })
-            .on(ChefFired, _ => _.keyFromProperty('Chef'), (chef, event, context) => {
+            .on(ChefFired, (chef, event, context) => {
                 return ProjectionResult.delete;
             });
         })
     .build();
 
 (async () => {
-    const eventStore = client.eventStore.forTenant(TenantId.development);
 
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    const updatedState = await client.embeddings
+        .forTenant(TenantId.development)
+        .update<DishCounter>(DishCounter, 'some key', new DishCounter());
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .delete(DishCounter, 'some key');
+    const tacoCounterState = await client.embeddings
+        .forTenant(TenantId.development)
+        .get(DishCounter, 'some key');
+    const allDishCounters = await client.embeddings
+        .forTenant(TenantId.development)
+        .getAll(DishCounter);
+    const dishCounterKeys = await client.embeddings
+        .forTenant(TenantId.development)
+        .getKeys(DishCounter);
+
 
     setTimeout(async () => {
         for (const [dish, { state: counter }] of await client.embeddings.forTenant(TenantId.development).getAll(DishCounter)) {

@@ -23,12 +23,12 @@ export class DishCounter {
         return new DishRemoved(embeddingContext.key.value);
     }
 
-    @on(DishPrepared, _ => _.keyFromProperty('Dish'))
+    @on(DishPrepared)
     onDishPrepared(event: DishPrepared, context: EmbeddingProjectContext) {
         this.numberOfTimesPrepared ++;
     }
 
-    @on(DishRemoved, _ => _.keyFromProperty('Dish'))
+    @on(DishRemoved)
     onDishRemoved(event: DishRemoved, context: EmbeddingProjectContext) {
         return ProjectionResult.delete;
     }
