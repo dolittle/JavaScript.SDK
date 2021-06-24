@@ -3,6 +3,7 @@
 
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import {
     EmbeddingClientToRuntimeMessage,
@@ -14,15 +15,15 @@ import {
     EmbeddingRegistrationResponse,
     EmbeddingRequest,
     EmbeddingResponse,
-    EmbeddingRuntimeToClientMessage
+    EmbeddingRuntimeToClientMessage,
 } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
 import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
 import { EventConverters, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
 import { MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance, Key } from '@dolittle/sdk.projections';
-import { eventTypes, guids } from '@dolittle/sdk.protobuf';
+import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
+import { eventTypes, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import {
     ClientProcessor,
@@ -36,9 +37,9 @@ import {
     EmbeddingContext,
     EmbeddingId,
     EmbeddingProjectContext,
-    IEmbedding,
     MissingEmbeddingInformation
 } from '..';
+import { IEmbedding } from './IEmbedding';
 
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
@@ -79,8 +80,8 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         registerArguments.setInitialstate(JSON.stringify(readModelInstance));
 
         const events: Artifact[] = [];
-        for (const eventSelector of this._embedding.events) {
-            events.push(eventTypes.toProtobuf(eventSelector.eventType));
+        for (const eventType of this._embedding.events) {
+            events.push(eventTypes.toProtobuf(eventType));
         }
         registerArguments.setEventsList(events);
         return registerArguments;

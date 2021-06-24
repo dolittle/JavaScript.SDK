@@ -10,7 +10,6 @@ export {
     on,
     OnDecoratedProjectionMethod,
     OnDecoratedProjectionMethods,
-    OnMethodBuilder,
     projection,
     ProjectionBuilder,
     ProjectionBuilderForReadModel,

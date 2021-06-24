@@ -39,7 +39,6 @@ export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
 export { Embeddings } from './Embeddings';
 export { IEmbedding } from './IEmbedding';
-export { IEmbeddings } from './IEmbeddings';
 export * as internal from './Internal';
 export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
 export {

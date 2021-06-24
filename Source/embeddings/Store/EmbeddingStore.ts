@@ -20,22 +20,22 @@ import { IEmbeddingStore } from './IEmbeddingStore';
 /**
  * Represents an implementation of {link IEmbeddingStore}
  */
-export class EmbeddingStore implements IEmbeddingStore {
-
-    private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
-
+export class EmbeddingStore extends IEmbeddingStore {
     /**
-     * Initialises an instance of {@link EmbeddingStore}.
-     * @param {EmbeddingStoreClient} _embeddingsClient The embedding store client.
+     * Initializes an instance of {@link EmbeddingStore}.
+     * @param {EmbeddingStoreClient} _embeddingsStoreClient The embedding store client.
      * @param {ExecutionContext} _executionContext The execution context.
      * @param {IProjectionAssociations} _projectionAssociations The projection associations.
      * @param {Logger} _logger The logger.
      */
     constructor(
-        private readonly _embeddingsClient: EmbeddingStoreClient,
-        private readonly _executionContext: ExecutionContext,
-        private readonly _projectionAssociations: IProjectionAssociations,
-        private readonly _logger: Logger) {}
+        private readonly _embeddingsStoreClient: EmbeddingStoreClient,
+        protected readonly _executionContext: ExecutionContext,
+        protected readonly _converter: IConvertProjectionsToSDK,
+        protected readonly _projectionAssociations: IProjectionAssociations,
+        protected readonly _logger: Logger) {
+            super();
+        }
 
     /** @inheritdoc */
     get<TEmbedding>(type: Constructor<TEmbedding>, key: any, cancellation?: Cancellation): Promise<any>;
@@ -58,7 +58,7 @@ export class EmbeddingStore implements IEmbeddingStore {
         request.setKey(key.value);
         request.setEmbeddingid(guids.toProtobuf(embedding.value));
 
-        return reactiveUnary(this._embeddingsClient, this._embeddingsClient.getOne, request, cancellation)
+        return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getOne, request, cancellation)
             .pipe(map(response => {
                 this.throwIfHasFailure(response, embedding, key);
                 this.throwIfNoState(response, embedding, key);
@@ -84,7 +84,7 @@ export class EmbeddingStore implements IEmbeddingStore {
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setEmbeddingid(guids.toProtobuf(embedding.value));
 
-        return reactiveUnary(this._embeddingsClient, this._embeddingsClient.getAll, request, cancellation)
+        return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getAll, request, cancellation)
             .pipe(map(response => {
                 this.throwIfHasFailure(response, embedding);
                 return this._converter.convertAll<TEmbedding>(type, response.getStatesList());
@@ -109,7 +109,7 @@ export class EmbeddingStore implements IEmbeddingStore {
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
         request.setEmbeddingid(guids.toProtobuf(embedding.value));
 
-        return reactiveUnary(this._embeddingsClient, this._embeddingsClient.getKeys, request, cancellation)
+        return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getKeys, request, cancellation)
             .pipe(map(response => {
                 this.throwIfHasFailure(response, embedding);
                 return response.getKeysList().map(pbKey => Key.from(pbKey));

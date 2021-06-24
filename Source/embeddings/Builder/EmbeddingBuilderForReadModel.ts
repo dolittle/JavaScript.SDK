@@ -1,26 +1,30 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { KeySelector, OnMethodBuilder } from '@dolittle/sdk.projections';
+import { KeySelector, TypeOrEventType } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { Embedding, EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback, IEmbeddings } from '..';
-import { EmbeddingProcessor } from '../Internal';
+import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback, } from '..';
+import { EmbeddingProcessor, Embedding, IEmbeddings } from '../Internal';
 import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
 import { EmbeddingAlreadyHasADeleteMethod } from './EmbeddingAlreadyHasADeleteMethod';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 
+
+// type OnMethodSpecification<TCallback> = [TypeOrEventType, TCallback];
 /**
  * Represents a builder for building {@link IEmbedding}.
  */
-export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, EmbeddingProjectCallback<T>> implements ICanBuildAndRegisterAnEmbedding {
+export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEmbedding {
     private _compareMethod?: EmbeddingCompareCallback<T> = undefined;
     private _deleteMethod?: EmbeddingDeleteCallback<T> = undefined;
+    private _onMethods: [TypeOrEventType, EmbeddingProjectCallback<T>][] = [];
 
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
@@ -30,7 +34,6 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
     constructor(
         private readonly _embeddingId: EmbeddingId,
         private readonly _readModelTypeOrInstance: Constructor<T> | T) {
-        super();
     }
 
     /**
@@ -59,6 +62,48 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
         return this;
     }
 
+    /**
+     * Add an on method for handling the event.
+     * @template TEvent Type of event.
+     * @param {Constructor<TEvent>} type The type of event.
+     * @param {EmbeddingProjectCallback<T,TEvent>} callback Callback to call for each event.
+     * @returns {ProjectionBuilderForReadModel<T, TEvent>}
+     */
+    on<TEvent>(type: Constructor<TEvent>, callback: EmbeddingProjectCallback<T, TEvent>): this;
+    /**
+     * Add an on method for handling the event.
+     * @param {EventType} eventType The identifier of the event.
+     * @param {EmbeddingProjectCallback} callback Callback to call for each event.
+     * @returns {ProjectionBuilderForReadModel<T>}
+     */
+    on(eventType: EventType, callback: EmbeddingProjectCallback<T>): this;
+    /**
+     * Add an on method for handling the event.
+     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
+     * @param {EmbeddingProjectCallback} callback Callback to call for each event.
+     * @returns {ProjectionBuilderForReadModel<T>}
+     */
+    on(eventTypeId: EventTypeId | Guid | string, callback: EmbeddingProjectCallback<T>): this;
+    /**
+     * Add an on method for handling the event.
+     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
+     * @param {Generation | number} generation The generation of the event type.
+     * @param {EmbeddingProjectCallback} method Callback to call for each event.
+     * @returns {ProjectionBuilderForReadModel<T>}
+     */
+    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, callback: EmbeddingProjectCallback<T>): this;
+    on<TEvent = any>(
+        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
+        callbackOrGeneration: Generation | number | EmbeddingProjectCallback<T, TEvent>,
+        maybeCallback?: EmbeddingProjectCallback<T, TEvent>): this {
+        const typeOrEventType = this.getTypeOrEventTypeFrom<TEvent>(typeOrEventTypeOrId, callbackOrGeneration);
+        const callback = typeof callbackOrGeneration === 'function'
+            ? callbackOrGeneration
+            : maybeCallback!;
+        this._onMethods.push([typeOrEventType, callback]);
+        return this;
+    }
+
     /** @inheritdoc */
     buildAndRegister(
         client: EmbeddingsClient,
@@ -84,8 +129,25 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
             ), cancellation);
     }
 
+    private getTypeOrEventTypeFrom<TEvent>(
+        typeOrEventTypeOrId: string | Constructor<TEvent> | EventType | EventTypeId | Guid,
+        callbackOrGeneration: Generation | number | EmbeddingProjectCallback<T>) {
+        if (typeof typeOrEventTypeOrId === 'function') {
+            return typeOrEventTypeOrId;
+        }
+
+        if (typeOrEventTypeOrId instanceof EventType) {
+            return typeOrEventTypeOrId;
+        }
+
+        const eventTypeId = typeOrEventTypeOrId;
+        const eventTypeGeneration = typeof callbackOrGeneration === 'function' ? Generation.first : callbackOrGeneration;
+
+        return new EventType(EventTypeId.from(eventTypeId), Generation.from(eventTypeGeneration));
+    }
+
     private buildOnMethods(eventTypes: IEventTypes, logger: Logger) {
-        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
+        const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
         if (!allMethodsBuilt) {
             logger.warn(`Failed to register embedding ${this._embeddingId}. Couldn't build the @on methods. Maybe an event type is handled twice?`);
@@ -94,8 +156,24 @@ export class EmbeddingBuilderForReadModel<T> extends OnMethodBuilder<T, Embeddin
         return events;
     }
 
+    private tryAddOnMethods(
+        eventTypes: IEventTypes,
+        events: EventTypeMap<EmbeddingProjectCallback<T>>): boolean {
+        let allMethodsValid = true;
+        for (const [typeOrEventType, callback] of this._onMethods) {
+            const eventType = typeOrEventType instanceof EventType
+                ? typeOrEventType
+                : eventTypes.getFor(typeOrEventType);
+            if (events.has(eventType)) {
+                allMethodsValid = false;
+            }
+            events.set(eventType, callback);
+        }
+        return allMethodsValid;
+    }
+
     private canRegisterEmbedding(logger: Logger): boolean {
-        if (this.onMethods.length < 1) {
+        if (this._onMethods.length < 1) {
             logger.warn(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
             return false;
         }

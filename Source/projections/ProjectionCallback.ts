@@ -7,4 +7,4 @@ import { ProjectionContext } from './ProjectionContext';
 /**
  * Represents the callback for a projection on() method
  */
-export type ProjectionCallback<T,U = any> = (readModel: T, event: U, context: ProjectionContext) => T | DeleteReadModelInstance | Promise<T | DeleteReadModelInstance>;
+export type ProjectionCallback<T, TEvent = any> = (readModel: T, event: TEvent, context: ProjectionContext) => T | DeleteReadModelInstance | Promise<T | DeleteReadModelInstance>;

@@ -10,7 +10,7 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 import { Container, IContainer } from '@dolittle/sdk.common';
-import { EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
+import { Embeddings, EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
@@ -263,7 +263,7 @@ export class ClientBuilder {
             this._logger,
             this._cancellation);
 
-        const projections = this._projectionsBuilder.buildAndRegister(
+        this._projectionsBuilder.buildAndRegister(
             new ProjectionsClient(connectionString, credentials),
             this._container,
             executionContext,
@@ -279,16 +279,18 @@ export class ClientBuilder {
             this._logger
         );
 
-        const embeddings = this._embeddingsBuilder.buildAndRegister(
-            new EmbeddingsClient(connectionString, credentials),
+        const embeddingsClient = new EmbeddingsClient(connectionString, credentials);
+        this._embeddingsBuilder.buildAndRegister(
+            embeddingsClient,
             this._container,
             executionContext,
             eventTypes,
             this._logger,
             this._cancellation);
 
-        const embeddingsClient = new EmbeddingStoreClient(connectionString, credentials);
-        const embeddingsStore = new EmbeddingStoreBuilder(
+        const embeddingsStoreClient = new EmbeddingStoreClient(connectionString, credentials);
+        const embeddings = new Embeddings(
+            embeddingsStoreClient,
             embeddingsClient,
             executionContext,
             this._projectionsAssociations,
@@ -302,7 +304,6 @@ export class ClientBuilder {
             filters,
             eventHorizons,
             projectionsStore,
-            embeddingsStore
-        );
+            embeddings);
     }
 }

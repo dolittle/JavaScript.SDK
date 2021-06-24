@@ -11,14 +11,12 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import {
-    Embedding,
     EmbeddingCompareCallback,
     EmbeddingDeleteCallback,
     EmbeddingProjectCallback,
-    IEmbeddings,
     OnDecoratedEmbeddingMethods
 } from '..';
-import { EmbeddingProcessor } from '../Internal';
+import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
 import { CompareDecoratedMethods } from './CompareDecoratedMethods';
@@ -38,14 +36,13 @@ import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private readonly _embeddingType: Constructor<T>;
 
-    /*
-     * Initialises a new instance of {@link  EmbeddingClassBuilder<T>}
+    /**
+     * Initializes a new instance of {@link  EmbeddingClassBuilder<T>}
      * @param {Constructor<T> | T} typeOrInstance The embedding type or instance
      */
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {
             this._embeddingType = typeOrInstance;
-
         } else {
             this._embeddingType = Object.getPrototypeOf(typeOrInstance).constructor;
             if (this._embeddingType === undefined) {
@@ -85,12 +82,17 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
         const deleteMethod = this.createDeleteMethod(getDeleteMethod);
 
-        const events = new EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>();
+        const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
             logger.warn(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
             return;
         }
-        const embedding = new Embedding<T>(decoratedType.embeddingId, decoratedType.type, events, compareMethod, deleteMethod);
+        const embedding = new Embedding<T>(
+            decoratedType.embeddingId,
+            decoratedType.type,
+            events,
+            compareMethod,
+            deleteMethod);
         embeddings.register<T>(
             new EmbeddingProcessor<T>(
                 embedding,
@@ -110,7 +112,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         return (currentState, embeddingContext) => method.method.call(currentState, embeddingContext);
     }
 
-    private tryAddAllOnMethods(events: EventTypeMap<[EmbeddingProjectCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
+    private tryAddAllOnMethods(events: EventTypeMap<EmbeddingProjectCallback<T>>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
         let allMethodsValid = true;
         const methods = OnDecoratedEmbeddingMethods.methodsPerEmbedding.get(type);
         if (methods === undefined) {
@@ -127,13 +129,12 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
             }
 
             const onMethod = this.createOnMethod(method);
-            const keySelector = method.keySelector;
 
             if (events.has(eventType!)) {
                 allMethodsValid = false;
                 continue;
             }
-            events.set(eventType!, [onMethod, keySelector]);
+            events.set(eventType!, onMethod);
         }
         return allMethodsValid;
     }

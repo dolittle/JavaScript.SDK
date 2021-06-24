@@ -48,7 +48,7 @@ const client = Client
 
     const updatedState = await client.embeddings
         .forTenant(TenantId.development)
-        .update<DishCounter>(DishCounter, 'some key', new DishCounter());
+        .update(DishCounter, 'some key', new DishCounter());
     await client.embeddings
         .forTenant(TenantId.development)
         .delete(DishCounter, 'some key');

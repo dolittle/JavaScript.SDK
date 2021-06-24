@@ -9,7 +9,6 @@ export { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 export { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 export { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 export { on } from './onDecorator';
-export { OnMethodBuilder } from './OnMethodBuilder';
 export { OnMethodSpecification } from './OnMethodSpecification';
 export { ProjectionBuilder } from './ProjectionBuilder';
 export { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
