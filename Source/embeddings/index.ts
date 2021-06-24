@@ -30,20 +30,23 @@ export {
     OnDecoratedEmbeddingMethods,
     ReadModelAlreadyDefinedForEmbedding
 } from './Builder';
+export { EmbeddingId } from './EmbeddingId';
+export { FailedToDelete } from './FailedToDelete';
+export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
+export { IEmbedding } from './IEmbedding';
 export { Embedding } from './Embedding';
+export { Embeddings } from './Embeddings';
 export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
-export { EmbeddingId } from './EmbeddingId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
-export { Embeddings } from './Embeddings';
-export { IEmbedding } from './IEmbedding';
-export * as internal from './Internal';
 export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
+export * as internal from './Internal';
 export {
     EmbeddingStore,
-    EmbeddingStoreBuilder, FailedToGetEmbedding,
+    EmbeddingStoreBuilder,
+    FailedToGetEmbedding,
     FailedToGetEmbeddingKeys,
     FailedToGetEmbeddingState,
     IEmbeddingStore
