@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
 import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { IConvertProjectionsToSDK, IProjectionAssociations, Key, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
+import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
@@ -38,10 +38,14 @@ export class EmbeddingStore extends IEmbeddingStore {
         }
 
     /** @inheritdoc */
-    get<TEmbedding>(type: Constructor<TEmbedding>, key: any, cancellation?: Cancellation): Promise<any>;
-    get<TEmbedding>(type: Constructor<TEmbedding>, key: any, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<any>;
-    get(key: any, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<any>;
-    get<TEmbedding = any>(typeOrKey: any | Constructor<TEmbedding>, keyOrEmbedding: any | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation, maybeCancellation?: Cancellation) {
+    get<TEmbedding>(type: Constructor<TEmbedding>, key: any, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
+    get<TEmbedding>(type: Constructor<TEmbedding>, key: any, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
+    get(key: any, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    get<TEmbedding = any>(
+        typeOrKey: any | Constructor<TEmbedding>,
+        keyOrEmbedding: any | string | EmbeddingId | Guid,
+        embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation,
+        maybeCancellation?: Cancellation): Promise<CurrentState<TEmbedding>> {
         const type = typeof typeOrKey === 'function'
             ? typeOrKey as Constructor<TEmbedding>
             : undefined;
@@ -67,10 +71,13 @@ export class EmbeddingStore extends IEmbeddingStore {
     }
 
     /** @inheritdoc */
-    getAll<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Map<any, any>>;
-    getAll<TEmbedding>(type: Constructor<TEmbedding>, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Map<any, any>>;
-    getAll(embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Map<any, any>>;
-    getAll<TEmbedding = any>(typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation, maybeCancellation?: Cancellation) {
+    getAll<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
+    getAll<TEmbedding>(type: Constructor<TEmbedding>, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
+    getAll(embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Map<Key, CurrentState<any>>>;
+    getAll<TEmbedding = any>(
+        typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid,
+        embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation,
+        maybeCancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>> {
         const type = typeof typeOrEmbedding === 'function'
             ? typeOrEmbedding as Constructor<TEmbedding>
             : undefined;
@@ -95,7 +102,10 @@ export class EmbeddingStore extends IEmbeddingStore {
     getKeys<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Key[]>;
     getKeys<TEmbedding>(type: Constructor<TEmbedding>, embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Key[]>;
     getKeys(embedding: string | EmbeddingId | Guid, cancellation?: Cancellation): Promise<Key[]>;
-    getKeys<TEmbedding = any>(typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation, maybeCancellation?: Cancellation) {
+    getKeys<TEmbedding = any>(
+        typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid,
+        embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation,
+        maybeCancellation?: Cancellation): Promise<Key[]> {
         const type = typeof typeOrEmbedding === 'function'
             ? typeOrEmbedding as Constructor<TEmbedding>
             : undefined;

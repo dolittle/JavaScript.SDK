@@ -1,20 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
+import { Guid } from '@dolittle/rudiments';
+import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
+import { Embeddings } from '@dolittle/sdk.embeddings';
+import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { EventSourceId, EventStoreBuilder, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
-import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { Embeddings } from '@dolittle/sdk.embeddings';
-import { Guid } from '@dolittle/rudiments';
-
-import { ClientBuilder } from './ClientBuilder';
-import { AggregateRoot, IAggregateOf, AggregateOf, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
-import { Constructor } from '@dolittle/types';
 import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { Constructor } from '@dolittle/types';
+import { Logger } from 'winston';
+import { ClientBuilder } from './ClientBuilder';
+
+
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
 
@@ -33,7 +33,7 @@ export class Client {
      * @param {IFilters} filters All the filters.
      * @param {IEventHorizons} eventHorizons All event horizons.
      * @param {ProjectionStoreBuilder} projections All projections.
-     * @param {Ebmeddings} embeddings All embeddings.
+     * @param {Embeddings} embeddings All embeddings.
      */
     constructor(
         readonly logger: Logger,
