@@ -9,35 +9,32 @@ import { DishRemoved } from './DishRemoved';
 
 @embedding('98f9db66-b6ca-4e5f-9fc3-638626c9ecfa')
 export class DishCounter {
-    numberOfTimesPrepared: number = 0;
     dish: string = '';
+    numberOfTimesPrepared: number = 0;
 
     @compare()
     compare(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
-        console.log(`Comparing embedding. Received state:`);
+        console.log(`Call to compare DishCounter. Received state:`);
         console.log(receivedState);
         console.log(`Current state:`);
         console.log(this);
-        console.log(`Context:`);
-        // console.log(embeddingContext);
         if (receivedState.numberOfTimesPrepared > this.numberOfTimesPrepared) {
-            console.log(`A dish needs to be prepared!`);
+            console.log(`State out of sync: A dish needs to be prepared!`);
             return new DishPrepared(receivedState.dish);
         }
     }
 
     @deleteMethod()
     remove(embeddingContext: EmbeddingContext) {
-        console.log('A dish deens to be removed!');
+        console.log('Call to delete DishCounter');
         return new DishRemoved(this.dish);
     }
 
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared, context: EmbeddingProjectContext) {
-        console.log(`Handling DishPrepared: ${JSON.stringify(event)}`);
-        // console.log(context);
+        console.log(`Handling DishPrepared`);
         if (!this.dish) {
-            this.dish = event.Dish;//petridish
+            this.dish = event.Dish;
         }
 
         this.numberOfTimesPrepared++;
@@ -46,7 +43,6 @@ export class DishCounter {
     @on(DishRemoved)
     onDishRemoved(event: DishRemoved, context: EmbeddingProjectContext) {
         console.log(`Handling DishRemoved`);
-        // console.log(`Embedding context: ${context}`);
         return ProjectionResult.delete;
     }
 }

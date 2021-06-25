@@ -4,11 +4,7 @@
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { ProjectionResult } from '@dolittle/sdk.projections';
-import { Chef } from './Chef';
-import { ChefFired } from './ChefFired';
 import { DishCounter } from './DishCounter';
-import { DishHandler } from './DishHandler';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
 
@@ -17,77 +13,63 @@ const client = Client
     .withEventTypes(eventTypes => {
         eventTypes.register(DishPrepared);
         eventTypes.register(DishRemoved);
-        eventTypes.register(ChefFired);
     })
     // .withEventHandlers(builder =>
     //     builder.register(DishHandler))
     .withEmbeddings(builder => {
         builder.register(DishCounter);
-        // builder.createEmbedding('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
-        //     .forReadModel(Chef)
-        //     .compare((receivedState, currentState, embeddingContext) => {
-        //         return receivedState.dishes
-        //             .filter((dish: string) => !currentState.dishes.includes(dish))
-        //             .map((missingDish: string) => new DishPrepared(missingDish, embeddingContext.key.value));
-        //     })
-        //     .deleteMethod((currentState, embeddingContext) => {
-        //         return new ChefFired(currentState.name);
-        //     })
-        //     .on(DishPrepared, (chef, event, context) => {
-        //         chef.name = event.Chef;
-        //         if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
-        //         return chef;
-        //     })
-        //     .on(ChefFired, (chef, event, context) => {
-        //         return ProjectionResult.delete;
-        //     });
-        })
+    })
     .build();
 
 (async () => {
 
     setTimeout(async () => {
 
-        const counter = new DishCounter();
-        counter.numberOfTimesPrepared = 5;
-        counter.dish = 'Taco';
+        const tacoCounter = new DishCounter();
+        tacoCounter.dish = 'Taco';
+        tacoCounter.numberOfTimesPrepared = 5;
 
-        const updatedState = await client.embeddings
-            .forTenant(TenantId.development)
-            .update(DishCounter, counter.dish, counter);
+        const burritoCounter = new DishCounter();
+        burritoCounter.dish = 'Burrito'
+        burritoCounter.numberOfTimesPrepared = 3;
 
-        console.log('Trying to get');
-        const tacoCounterState = await client.embeddings
-            .forTenant(TenantId.development)
-            .get(DishCounter, counter.dish);
-        console.log('Got taco:', JSON.stringify(tacoCounterState));
+        const wrapCounter = new DishCounter();
+        wrapCounter.dish = 'Wrap'
+        wrapCounter.numberOfTimesPrepared = 2;
+
+        [tacoCounter, burritoCounter, wrapCounter]
+            .map(async counter => {
+                // console.log(`Updating dish: ${counter.dish}`);
+                // await client.embeddings
+                //     .forTenant(TenantId.development)
+                //     .update(DishCounter, counter.dish, counter);
+
+                // const counterState = await client.embeddings
+                //     .forTenant(TenantId.development)
+                //     .get(DishCounter, counter.dish);
+                // console.log('Got dish:', counterState.state);
+
+                console.log(`Deleting dish counter: ${counter}`);
+                await client.embeddings
+                    .forTenant(TenantId.development)
+                    .delete(DishCounter, counter.dish);
+
+                const deletedCounter = await client.embeddings
+                    .forTenant(TenantId.development)
+                    .get(DishCounter, counter.dish);
+                console.log(`Got a deleted, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
+            });
 
         // const allDishCounters = await client.embeddings
         //     .forTenant(TenantId.development)
         //     .getAll(DishCounter);
+        // console.log(`Got all dishes: ${JSON.stringify(allDishCounters)}`);
 
         // const dishCounterKeys = await client.embeddings
         //     .forTenant(TenantId.development)
         //     .getKeys(DishCounter);
 
-        console.log('Deleting Taco');
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .delete(DishCounter, counter.dish);
+        // console.log(`Got all keys: ${dishCounterKeys}`);
 
-        const deletedTaco = await client.embeddings
-            .forTenant(TenantId.development)
-            .get(DishCounter, counter.dish);
-        console.log('Got (hopefully) initial taco:', JSON.stringify(deletedTaco));
-
-        // for (const [dish, { state: counter }] of await client.embeddings.forTenant(TenantId.development).getAll(DishCounter)) {
-        //     console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
-        // }
-
-        // const chef = await client.embeddings.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-        // console.log(`${chef.key} has prepared ${chef.state.dishes}`);
-
-        // const dishes = await client.embeddings.forTenant(TenantId.development).getKeys(DishCounter);
-        // console.log(`Got dem dish keys: ${dishes}`);
     }, 5000);
 })();
