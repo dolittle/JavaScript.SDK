@@ -13,13 +13,14 @@ import { EmbeddingStore } from './Store';
  */
 export abstract class IEmbedding extends EmbeddingStore {
     /**
-     * Updates an embedding state by key for the embedding associated with a type.
+     * Updates an embedding state by key by calling the compare method for the embedding associated with a type.
+     * It will keep calling the compare method to commit events until the embedding reaches the desired state.
      * @template TEmbedding
-     * @param {Constructor<T>} type The type of the embedding.
+     * @param {Constructor<TEmbedding>} type The type of the embedding.
      * @param {Key | string} key The key of the embedding.
-     * @param {TEmbedding} state The updated state of the embedding.
+     * @param {TEmbedding} state The desired state of the embedding.
      * @param {Cancellation} [cancellation] The cancellation token.
-     * @returns {Promise<CurrentState<TEmbedding>>}
+     * @returns {Promise<CurrentState<TEmbedding>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
     abstract update<TEmbedding> (
         type: Constructor<TEmbedding>,
@@ -28,14 +29,15 @@ export abstract class IEmbedding extends EmbeddingStore {
         cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
-     * Updates an embedding state by key for the embedding specified by embedding identifier.
+     * Updates an embedding state by key by calling the compare method for the embedding specified by embedding identifier.
+     * It will keep calling the compare method to commit events until the embedding reaches the desired state.
      * @template TEmbedding
      * @param {Constructor<TEmbedding>} type The type of the embedding.
      * @param {Key | string} key The key of the embedding.
      * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
-     * @param {TEmbedding} state The updated state of the embedding.
+     * @param {TEmbedding} state The desired state of the embedding.
      * @param {Cancellation} [cancellation] The cancellation token.
-     * @returns {Promise<CurrentState<TEmbedding>>}
+     * @returns {Promise<CurrentState<TEmbedding>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
     abstract update<TEmbedding> (
         type: Constructor<TEmbedding>,
@@ -45,12 +47,13 @@ export abstract class IEmbedding extends EmbeddingStore {
         cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
-     * Updates an embedding state by key for the embedding specified by embedding identifier.
+     * Updates an embedding state by key by calling the compare method for the embedding specified by embedding identifier.
+     * It will keep calling the compare method to commit events until the embedding reaches the desired state.
      * @param {Key | string} key The key of the embedding.
      * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
-     * @param {any} state The updated state of the embedding.
+     * @param {any} state The desired state of the embedding.
      * @param {Cancellation} [cancellation] The cancellation token.
-     * @returns {Promise<CurrentState<any>>}
+     * @returns {Promise<CurrentState<any>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
     abstract update (
         key: Key | string,
