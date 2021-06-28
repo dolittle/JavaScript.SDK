@@ -49,15 +49,15 @@ const client = Client
                     .get(DishCounter, counter.dish);
                 console.log('Got dish:', counterState.state);
 
-                // console.log(`Deleting dish counter: ${counter}`);
-                // await client.embeddings
-                //     .forTenant(TenantId.development)
-                //     .delete(DishCounter, counter.dish);
+                console.log(`Deleting dish counter: ${counter}`);
+                await client.embeddings
+                    .forTenant(TenantId.development)
+                    .delete(DishCounter, counter.dish);
 
-                // const deletedCounter = await client.embeddings
-                //     .forTenant(TenantId.development)
-                //     .get(DishCounter, counter.dish);
-                // console.log(`Got a deleted, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
+                const deletedCounter = await client.embeddings
+                    .forTenant(TenantId.development)
+                    .get(DishCounter, counter.dish);
+                console.log(`Got a deleted, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
             }));
 
         const allDishCounters = await client.embeddings
@@ -68,8 +68,6 @@ const client = Client
         const dishCounterKeys = await client.embeddings
             .forTenant(TenantId.development)
             .getKeys(DishCounter);
-
         console.log(`Got all keys: ${dishCounterKeys}`);
-
     }, 5000);
 })();
