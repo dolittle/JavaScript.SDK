@@ -37,7 +37,7 @@ const client = Client
         wrapCounter.dish = 'Wrap';
         wrapCounter.numberOfTimesPrepared = 2;
 
-        [tacoCounter, burritoCounter, wrapCounter]
+        await Promise.all([tacoCounter, burritoCounter, wrapCounter]
             .map(async counter => {
                 console.log(`Updating dish: ${counter.dish}`);
                 await client.embeddings
@@ -58,12 +58,12 @@ const client = Client
                 //     .forTenant(TenantId.development)
                 //     .get(DishCounter, counter.dish);
                 // console.log(`Got a deleted, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
-            });
+            }));
 
         const allDishCounters = await client.embeddings
             .forTenant(TenantId.development)
             .getAll(DishCounter);
-        console.log(`Got all dishes: ${JSON.stringify([...allDishCounters])}`);
+        console.log(`Got all dishes:\n${[...allDishCounters].map(([key, value]) => `${key.value}: ${JSON.stringify(value.state, undefined, 2)}`).join('\n')}`);
 
         const dishCounterKeys = await client.embeddings
             .forTenant(TenantId.development)
