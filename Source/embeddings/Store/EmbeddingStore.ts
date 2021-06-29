@@ -66,7 +66,7 @@ export class EmbeddingStore extends IEmbeddingStore {
             .pipe(map(response => {
                 this.throwIfHasFailure(response, embedding, key);
                 this.throwIfNoState(response, embedding, key);
-                return this._converter.convert<TEmbedding>(typeOrKey, response.getState()!);
+                return this._converter.convert<TEmbedding>(type, response.getState()!);
             })).toPromise();
     }
 
@@ -134,9 +134,11 @@ export class EmbeddingStore extends IEmbeddingStore {
             return EmbeddingId.from(keyOrEmbedding);
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
-        } else {
+        }
+        if (type) {
             return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
         }
+        return EmbeddingId.from(keyOrEmbedding);
     }
 
     private getEmbeddingForAll<TEmbedding>(type: Constructor<TEmbedding> | undefined, typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
@@ -148,7 +150,10 @@ export class EmbeddingStore extends IEmbeddingStore {
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
         }
-        return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+        if (type) {
+            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+        }
+        return EmbeddingId.from(typeOrEmbedding as string);
     }
 
     private getCancellation(embeddingOrCancellation: string | EmbeddingId | Guid | Cancellation | undefined, maybeCancellation: Cancellation | undefined) {
