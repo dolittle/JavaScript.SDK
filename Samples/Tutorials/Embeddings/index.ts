@@ -1,9 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-// Sample code for the tutorial at https://dolittle.io/docs/tutorials/projections/
+// Sample code for the tutorial at https://dolittle.io/docs/tutorials/embeddings/
 
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
+import { ProjectionResult } from '@dolittle/sdk.projections';
+import { Chef } from './Chef';
+import { ChefFired } from './ChefFired';
+import { ChefHired } from './ChefHired';
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
@@ -13,11 +17,29 @@ const client = Client
     .withEventTypes(eventTypes => {
         eventTypes.register(DishPrepared);
         eventTypes.register(DishRemoved);
+        eventTypes.register(ChefHired);
+        eventTypes.register(ChefFired);
     })
     // .withEventHandlers(builder =>
     //     builder.register(DishHandler))
     .withEmbeddings(builder => {
         builder.register(DishCounter);
+        builder
+            .createEmbedding('999a6aa4-4412-4eaf-a99b-2842cb191e7c')
+            .forReadModel(Chef)
+            .compare((receivedState, currentState, context) => {
+                if (!currentState.name) {
+                    return new ChefHired(receivedState.name);
+                }
+            })
+            .remove((currentState, context) => new ChefFired(currentState.name))
+            .on(ChefHired, (currentState, event, context) => {
+                currentState.name = event.Chef;
+                return currentState;
+            })
+            .on(ChefFired, (currentState, event, context) => {
+                return ProjectionResult.delete;
+            });
     })
     .build();
 
@@ -69,5 +91,38 @@ const client = Client
             .forTenant(TenantId.development)
             .getKeys(DishCounter);
         console.log(`Got all keys: ${dishCounterKeys}`);
-    }, 5000);
+
+        console.log('Hiring chefs!');
+        const mrTaco = new Chef('Mr. Taco');
+        const mrsTexMex = new Chef('Mrs. TexMex');
+
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .update(mrTaco.name,  '999a6aa4-4412-4eaf-a99b-2842cb191e7c', mrTaco);
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .update(mrsTexMex.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c', mrsTexMex);
+
+        console.log('Getting all chefs!');
+        const allChefs = await client.embeddings
+            .forTenant(TenantId.development)
+            .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+        console.log(`Got all chefs:\n${[...allChefs].map(([key, value]) => `${key.value}: ${JSON.stringify(value.state, undefined, 2)}`).join('\n')}`);
+
+        console.log('Deleting Mr. Taco!');
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .delete(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+        const allChefsAgain = await client.embeddings
+            .forTenant(TenantId.development)
+            .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+        console.log(`Getting all chefs again:\n${[...allChefsAgain].map(([key, value]) => `${key.value}: ${JSON.stringify(value.state, undefined, 2)}`).join('\n')}`);
+
+        console.log('Getting Mr. Taco');
+        const getMrTaco = await client.embeddings
+            .forTenant(TenantId.development)
+            .get(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+        console.log('Got deleted Mr. Taco:', getMrTaco.state);
+
+    }, 1000);
 })();
