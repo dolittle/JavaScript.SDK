@@ -9,6 +9,7 @@ import { Chef } from './Chef';
 import { ChefFired } from './ChefFired';
 import { ChefHired } from './ChefHired';
 import { DishCounter } from './DishCounter';
+import { DishHandler } from './DishHandler';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
 
@@ -20,8 +21,8 @@ const client = Client
         eventTypes.register(ChefHired);
         eventTypes.register(ChefFired);
     })
-    // .withEventHandlers(builder =>
-    //     builder.register(DishHandler))
+    .withEventHandlers(builder =>
+        builder.register(DishHandler))
     .withEmbeddings(builder => {
         builder.register(DishCounter);
         builder
