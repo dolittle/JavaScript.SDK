@@ -1,3 +1,24 @@
+# [15.0.0] - 2021-6-29 [PR: #47](https://github.com/dolittle/JavaScript.SDK/pull/47)
+## Summary
+
+Adds a new feature, Embeddings! They are similar to Projections, but they are meant to be used to event source changes coming from an external system. Check the [sample](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Tutorials/Embeddings) for an example.
+
+Also changes the behavior of the pinging system to be more reliable and to be ready to receive pings immediately upon connecting to the Runtime. This is to deal with a bug that was causing connections between the SDK and the Runtime to be dropped. This is a **breaking behavioral change** and it's related to the [release of version `v6`](https://github.com/dolittle/Runtime/pull/532) of the Runtime. You have to update to version `v6*` of the Runtime, older versions wont work with this release of the SDK. We've added a [compatibility table](https://dolittle.io/docs/reference/runtime/compatibility) for checking the supported versions.
+
+### Added
+
+- Embeddings! You can use them inline with the `withEmbeddings()` method, or with the `@embedding`, `@compare`, `@delete` and `@on` decorators on classes. The embeddings can be updated, deleted and fetched from the `client.embeddings` property.
+
+### Changed
+
+- The reverse call connections are now ready to start receiving pings and writing pongs immediately upon connecting.
+
+### Fixed
+
+- Fix Event Horizon connection to actually retry if it encounters an error in the connection process.
+- Pinging system should now timeout a lot less than before.
+
+
 # [14.4.0] - 2021-5-19 [PR: #52](https://github.com/dolittle/JavaScript.SDK/pull/52)
 ## Summary
 
