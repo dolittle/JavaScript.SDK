@@ -6,7 +6,7 @@ import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddi
 import { IContainer } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance, KeySelector } from '@dolittle/sdk.projections';
+import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
@@ -21,13 +21,13 @@ import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddin
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
 import { CompareDecoratedMethods } from './CompareDecoratedMethods';
 import { compare as compareDecorator } from './compareDecorator';
-import { DeleteDecoratedMethod } from './DeleteDecoratedMethod';
-import { DeleteDecoratedMethods } from './DeleteDecoratedMethods';
-import { deleteMethod as deleteDecorator } from './deleteDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
+import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
+import { RemoveDecoratedMethods } from './RemoveDecoratedMethods';
+import { remove as removeDecorator } from './removeDecorator';
 
 
 /*
@@ -75,12 +75,12 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
         const compareMethod = this.createCompareMethod(getCompareMethod);
 
-        const getDeleteMethod = DeleteDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
-        if (getDeleteMethod === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
+        const getRemoveMethod = RemoveDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        if (getRemoveMethod === undefined) {
+            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${removeDecorator.name} decorator`);
             return;
         }
-        const deleteMethod = this.createDeleteMethod(getDeleteMethod);
+        const deleteMethod = this.createRemoveMethod(getRemoveMethod);
 
         const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
@@ -108,7 +108,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 
-    private createDeleteMethod(method: DeleteDecoratedMethod): EmbeddingDeleteCallback {
+    private createRemoveMethod(method: RemoveDecoratedMethod): EmbeddingDeleteCallback {
         return (currentState, embeddingContext) => method.method.call(currentState, embeddingContext);
     }
 

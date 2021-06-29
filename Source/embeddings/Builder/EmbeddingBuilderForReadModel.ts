@@ -6,14 +6,14 @@ import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddi
 import { IContainer } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { KeySelector, TypeOrEventType } from '@dolittle/sdk.projections';
+import { TypeOrEventType } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback, } from '..';
-import { EmbeddingProcessor, Embedding, IEmbeddings } from '../Internal';
+import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
+import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
-import { EmbeddingAlreadyHasADeleteMethod } from './EmbeddingAlreadyHasADeleteMethod';
+import { EmbeddingAlreadyHasARemoveMethod } from './EmbeddingAlreadyHasARemoveMethod';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 
 
@@ -23,7 +23,7 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
  */
 export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEmbedding {
     private _compareMethod?: EmbeddingCompareCallback<T> = undefined;
-    private _deleteMethod?: EmbeddingDeleteCallback<T> = undefined;
+    private _removeMethod?: EmbeddingDeleteCallback<T> = undefined;
     private _onMethods: [TypeOrEventType, EmbeddingProjectCallback<T>][] = [];
 
     /**
@@ -50,15 +50,15 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
     }
 
     /**
-     * Add a delete method for deleting the embedding.
+     * Add a remove method for deleting the embedding.
      * @param {EmbeddingCompareCallback} callback Callback to call until the embedding has been deleted.
      * @returns {EmbeddingBuilderForReadModel<T>}
      */
-    deleteMethod(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
-        if (this._deleteMethod) {
-            throw new EmbeddingAlreadyHasADeleteMethod(this._embeddingId);
+    remove(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
+        if (this._removeMethod) {
+            throw new EmbeddingAlreadyHasARemoveMethod(this._embeddingId);
         }
-        this._deleteMethod = callback;
+        this._removeMethod = callback;
         return this;
     }
 
@@ -118,7 +118,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
         if (!canRegister || !events) {
             return;
         }
-        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod!, this._deleteMethod!);
+        const embedding = new Embedding<T>(this._embeddingId, this._readModelTypeOrInstance, events, this._compareMethod!, this._removeMethod!);
         embeddings.register<T>(
             new EmbeddingProcessor<T>(
                 embedding,
@@ -181,7 +181,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
             logger.warn(`Failed to register embedding ${this._embeddingId}. No compare method defined.`);
             return false;
         }
-        if (this._deleteMethod === undefined) {
+        if (this._removeMethod === undefined) {
             logger.warn(`Failed to register embedding ${this._embeddingId}. No delete method defined.`);
             return false;
         }

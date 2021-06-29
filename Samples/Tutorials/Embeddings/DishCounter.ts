@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Sample code for the tutorial at https://dolittle.io/tutorials/projections/typescript/
 
-import { compare, deleteMethod, embedding, EmbeddingContext, EmbeddingProjectContext, on } from '@dolittle/sdk.embeddings';
+import { compare, remove, embedding, EmbeddingContext, EmbeddingProjectContext, on } from '@dolittle/sdk.embeddings';
 import { ProjectionResult } from '@dolittle/sdk.projections';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
@@ -24,7 +24,7 @@ export class DishCounter {
         }
     }
 
-    @deleteMethod()
+    @remove()
     remove(embeddingContext: EmbeddingContext) {
         console.log('Call to delete DishCounter');
         return new DishRemoved(this.dish);

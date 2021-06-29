@@ -5,20 +5,16 @@ export {
     CannotRegisterEmbeddingThatIsNotAClass,
     compare,
     CompareDecoratedMethod,
-    CompareDecoratedMethods,
-    DeleteDecoratedMethod,
-    DeleteDecoratedMethods,
-    deleteMethod,
-    embedding,
+    CompareDecoratedMethods, embedding,
     EmbeddingAlreadyHasACompareDecorator,
     EmbeddingAlreadyHasACompareMethod,
-    EmbeddingAlreadyHasADeleteDecorator,
-    EmbeddingAlreadyHasADeleteMethod,
+    EmbeddingAlreadyHasARemoveDecorator,
+    EmbeddingAlreadyHasARemoveMethod,
     EmbeddingBuilder,
     EmbeddingBuilderForReadModel,
     EmbeddingClassBuilder,
     EmbeddingClassCompareMethod,
-    EmbeddingClassDeleteMethod,
+    EmbeddingClassRemoveMethod,
     EmbeddingClassOnMethod,
     EmbeddingDecoratedType,
     EmbeddingDecoratedTypes,
@@ -28,21 +24,22 @@ export {
     on,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
-    ReadModelAlreadyDefinedForEmbedding
+    ReadModelAlreadyDefinedForEmbedding, remove, RemoveDecoratedMethod,
+    RemoveDecoratedMethods
 } from './Builder';
-export { EmbeddingId } from './EmbeddingId';
-export { FailedToDelete } from './FailedToDelete';
-export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
-export { IEmbedding } from './IEmbedding';
 export { Embedding } from './Embedding';
-export { Embeddings } from './Embeddings';
 export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
+export { EmbeddingId } from './EmbeddingId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
-export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
+export { Embeddings } from './Embeddings';
+export { FailedToDelete } from './FailedToDelete';
+export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
+export { IEmbedding } from './IEmbedding';
 export * as internal from './Internal';
+export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
 export {
     EmbeddingStore,
     EmbeddingStoreBuilder,
