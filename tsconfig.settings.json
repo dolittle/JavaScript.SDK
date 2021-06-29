@@ -6,6 +6,7 @@
         "downlevelIteration": true,
         "inlineSourceMap": true,
         "sourceMap": false,
+        "declarationMap": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     }

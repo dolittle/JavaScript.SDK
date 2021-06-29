@@ -1,8 +1,8 @@
 {
     "files.exclude": {
-        
         "**/jspm_packages": true,
         "**/node_modules": true,
+        "**/Distribution": false,
         "**/.git": true,
         "**/.svn": true,
         "**/.DS_Store": true

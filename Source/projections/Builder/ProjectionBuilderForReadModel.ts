@@ -3,8 +3,9 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes, ScopeId } from '@dolittle/sdk.events';
+import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
@@ -14,19 +15,15 @@ import { ProjectionProcessor } from '../Internal';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-
-
-
-
-
-type TypeOrEventType = Constructor<any> | EventType;
-type OnMethodSpecification = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<any>];
+import { OnMethodBuilder } from './OnMethodBuilder';
+import { OnMethodSpecification } from './OnMethodSpecification';
+import { TypeOrEventType } from './TypeOrEventType';
 
 /**
  * Represents a builder for building {@link IProjection}.
  */
-export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProjection {
-    private _onMethods: OnMethodSpecification[] = [];
+export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAProjection {
+    private onMethods: OnMethodSpecification<T>[] = [];
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
@@ -36,7 +33,6 @@ export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProje
         private _projectionId: ProjectionId,
         private _readModelTypeOrInstance: Constructor<T> | T,
         private _scopeId: ScopeId) {
-        super();
     }
 
     /**
@@ -51,69 +47,52 @@ export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProje
 
     /**
      * Add an on method for handling the event.
-     * @template U Type of event.
-     * @param {Constructor<U>} type The type of event.
-     * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T,U>} callback Callback to call for each event.
+     * @template TEvent Type of event.
+     * @param {Constructor<TEvent>} type The type of event.
+     * @param {KeySelectorBuilderCallback<TEvent>} keySelectorCallback Callback for building key selector.
+     * @param {ProjectionCallback<T, TEvent>} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on<U>(type: Constructor<U>, keySelectorCallback: KeySelectorBuilderCallback<U>, callback: ProjectionCallback<T, U>): ProjectionBuilderForReadModel<T>;
+    on<TEvent>(type: Constructor<TEvent>, keySelectorCallback: KeySelectorBuilderCallback<TEvent>, callback: ProjectionCallback<T, TEvent>): this;
     /**
      * Add an on method for handling the event.
      * @param {EventType} eventType The identifier of the event.
-     * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
+     * @param {KeySelectorBuilderCallback} keySelectorCallback Callback for building key selector.
      * @param {ProjectionCallback<T>} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): ProjectionBuilderForReadModel<T>;
+    on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
+     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback Callback for building key selector.
      * @param {ProjectionCallback<T>} callback Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): ProjectionBuilderForReadModel<T>;
+    on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
      * Add an on method for handling the event.
      * @param {EventTypeId | Guid | string} eventType The identifier of the event.
      * @param {Generation | number} generation The generation of the event type.
-     * @param {KeySelectorBuilderCallback<U>} keySelectorCallback Callback for building key selector.
+     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback Callback for building key selector.
      * @param {ProjectionCallback<T>} method Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): ProjectionBuilderForReadModel<T>;
-    on<U>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
-        keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<U> | Generation | number,
-        keySelectorCallbackOrCallback?: KeySelectorBuilderCallback<U> | ProjectionCallback<T>,
-        maybeCallback?: ProjectionCallback<T, U>): ProjectionBuilderForReadModel<T> {
+    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
+    on<TEvent>(typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
+        keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<TEvent> | Generation | number,
+        keySelectorCallbackOrCallback?: KeySelectorBuilderCallback<TEvent> | ProjectionCallback<T, TEvent>,
+        maybeCallback?: ProjectionCallback<T, TEvent>): this {
 
-        const typeOrEventType = this.getTypeEventTypeFrom(typeOrEventTypeOrId, keySelectorCallbackOrGeneration);
+        const typeOrEventType = this.getTypeOrEventTypeFrom(typeOrEventTypeOrId, keySelectorCallbackOrGeneration);
         const keySelectorCallback = typeof keySelectorCallbackOrGeneration === 'function'
             ? keySelectorCallbackOrGeneration
-            : keySelectorCallbackOrCallback as KeySelectorBuilderCallback<U>;
-        const callback = maybeCallback || keySelectorCallbackOrCallback as ProjectionCallback<T, U>;
+            : keySelectorCallbackOrCallback as KeySelectorBuilderCallback<TEvent>;
+        const callback = maybeCallback || keySelectorCallbackOrCallback as ProjectionCallback<T>;
 
-        this._onMethods.push([typeOrEventType, keySelectorCallback, callback]);
+        this.onMethods.push([typeOrEventType, keySelectorCallback, callback]);
 
         return this;
-    }
-
-    private getTypeEventTypeFrom<U>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
-        keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<U> | Generation | number): Constructor<T> | EventType {
-
-        if (typeof typeOrEventTypeOrId === 'function') {
-            return typeOrEventTypeOrId;
-        }
-
-        if (typeOrEventTypeOrId instanceof EventType) {
-            return typeOrEventTypeOrId;
-        }
-
-        const eventTypeId = typeOrEventTypeOrId;
-        const eventTypeGeneration = typeof keySelectorCallbackOrGeneration === 'function' ? Generation.first : keySelectorCallbackOrGeneration;
-
-        return new EventType(EventTypeId.from(eventTypeId), Generation.from(eventTypeGeneration));
     }
 
     /** @inheritdoc */
@@ -127,13 +106,13 @@ export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProje
         cancellation: Cancellation): void {
 
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
-        if (this._onMethods.length < 1) {
+        if (this.onMethods.length < 1) {
             logger.warn(`Failed to register projection ${this._projectionId}. No on methods are configured`);
             return;
         }
-        const allMethodsBuilt = this.tryAddProjectionMethods(eventTypes, events, logger);
+        const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
         if (!allMethodsBuilt) {
-            logger.warn(`Failed to register projection ${this._projectionId}. Could not build projection.`);
+            logger.warn(`Failed to register projection ${this._projectionId}. Could not build projection. Maybe it tries to handle the same type of event twice?`);
             return;
         }
         const projection = new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);
@@ -147,21 +126,36 @@ export class ProjectionBuilderForReadModel<T> extends ICanBuildAndRegisterAProje
             ), cancellation);
     }
 
-    private tryAddProjectionMethods(
+    private tryAddOnMethods(
         eventTypes: IEventTypes,
-        events: EventTypeMap<[ProjectionCallback<any>, KeySelector]>,
-        logger: Logger): boolean {
+        events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>): boolean {
         let allMethodsValid = true;
         const keySelectorBuilder = new KeySelectorBuilder();
-        for (const [typeOrEventTypeOrId, keySelectorBuilderCallback, method] of this._onMethods) {
+        for (const [typeOrEventTypeOrId, keySelectorBuilderCallback, method] of this.onMethods) {
             const eventType = this.getEventType(typeOrEventTypeOrId, eventTypes);
             if (events.has(eventType)) {
                 allMethodsValid = false;
-                logger.warn(`Projection ${this._projectionId} already handles event with event type ${eventType}`);
             }
             events.set(eventType, [method, keySelectorBuilderCallback(keySelectorBuilder)]);
         }
         return allMethodsValid;
+    }
+
+    private getTypeOrEventTypeFrom<T>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
+        keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<T> | Generation | number): Constructor<T> | EventType {
+
+        if (typeof typeOrEventTypeOrId === 'function') {
+            return typeOrEventTypeOrId;
+        }
+
+        if (typeOrEventTypeOrId instanceof EventType) {
+            return typeOrEventTypeOrId;
+        }
+
+        const eventTypeId = typeOrEventTypeOrId;
+        const eventTypeGeneration = typeof keySelectorCallbackOrGeneration === 'function' ? Generation.first : keySelectorCallbackOrGeneration;
+
+        return new EventType(EventTypeId.from(eventTypeId), Generation.from(eventTypeGeneration));
     }
 
     private getEventType(typeOrEventTypeOrId: TypeOrEventType, eventTypes: IEventTypes): EventType {

@@ -3,6 +3,7 @@
   "workspaces": [
     "Source/*",
     "Samples/Tutorials/Aggregates",
+    "Samples/Tutorials/Embeddings",
     "Samples/Tutorials/GettingStarted",
     "Samples/Tutorials/Projections",
     "Samples/Tutorials/EventHorizon/Consumer",

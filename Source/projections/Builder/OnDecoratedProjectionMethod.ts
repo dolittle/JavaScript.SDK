@@ -4,15 +4,13 @@
 import { Guid } from '@dolittle/rudiments';
 import { EventTypeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-
 import { KeySelector } from '..';
-
 import { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 
 /**
- * Represents methods decorated with the on decorator.
+ * Represents projection methods decorated with the on decorator.
  */
-export class OnDecoratedMethod {
+export class OnDecoratedProjectionMethod {
 
     /**
      * Initializes a new instance of {@link OnDecoratedMethod}.

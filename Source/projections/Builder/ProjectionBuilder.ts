@@ -14,7 +14,7 @@ import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjecti
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
-export class ProjectionBuilder extends ICanBuildAndRegisterAProjection {
+export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
     private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: ProjectionBuilderForReadModel<any>;
@@ -23,9 +23,7 @@ export class ProjectionBuilder extends ICanBuildAndRegisterAProjection {
      * Initializes a new instance of {@link ProjectionBuilder}.
      * @param {ProjectionId} _projectionId  The unique identifier of the projection to build for
      */
-    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) {
-        super();
-    }
+    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) { }
 
     /**
      * Defines the projection to operate on a specific {@link ScopeId}.

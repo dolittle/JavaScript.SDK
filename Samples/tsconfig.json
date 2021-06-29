@@ -5,6 +5,7 @@
         { "path": "./Advanced"},
         { "path": "./Container"},
         { "path": "./Tutorials/Aggregates" },
+        { "path": "./Tutorials/Embeddings" },
         { "path": "./Tutorials/GettingStarted" },
         { "path": "./Tutorials/Projections" },
         { "path": "./Tutorials/EventHorizon/Consumer" },

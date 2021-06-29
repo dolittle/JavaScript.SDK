@@ -1,0 +1,23 @@
+{
+    "name": "embeddings",
+    "private": true,
+    "version": "14.4.0-embeddings.1",
+    "main": "index.js",
+    "author": "Dolittle",
+    "license": "MIT",
+    "scripts": {
+        "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
+        "start": "ts-node index.ts",
+        "build": "tsc -b ./tsconfig.json"
+    },
+    "dependencies": {
+        "@dolittle/sdk": "14.4.0-embeddings.1",
+        "@dolittle/sdk.artifacts": "14.4.0-embeddings.1",
+        "@dolittle/sdk.events": "14.4.0-embeddings.1",
+        "@dolittle/sdk.events.handling": "14.4.0-embeddings.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4",
+        "ts-node": "^8.10.2"
+    }
+}

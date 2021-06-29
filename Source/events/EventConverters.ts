@@ -47,6 +47,21 @@ export class EventConverters {
     }
 
     /**
+     * Creates an uncommitted embedding event (aka an event without an eventsourceid) from given parameters.
+     * @param {*} event Event content to constructor with.
+     * @param {EventType} eventType The event type.
+     * @param {boolean} isPublic Whether or not it is a public event
+     * @returns {UncommittedEvent} Constructed uncommitted event.
+     */
+    static getUncommittedEmbeddingEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
+        const uncommittedEvent = new PbUncommittedEvent();
+        uncommittedEvent.setArtifact(eventTypes.toProtobuf(eventType));
+        uncommittedEvent.setPublic(isPublic);
+        uncommittedEvent.setContent(JSON.stringify(event));
+        return uncommittedEvent;
+    }
+
+    /**
      * Creates an uncommitted aggregate event from given parameters.
      * @param {*} event Event content to constructor with.
      * @param {EventSourceId} eventSourceId The unique identifier of the event source that the event is originating from.

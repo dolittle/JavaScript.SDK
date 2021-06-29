@@ -6,9 +6,10 @@ export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfPr
 export { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 export { KeySelectorBuilder } from './KeySelectorBuilder';
 export { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-export { OnDecoratedMethod } from './OnDecoratedMethod';
-export { OnDecoratedMethods } from './OnDecoratedMethods';
+export { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
+export { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 export { on } from './onDecorator';
+export { OnMethodSpecification } from './OnMethodSpecification';
 export { ProjectionBuilder } from './ProjectionBuilder';
 export { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 export { ProjectionClassBuilder } from './ProjectionClassBuilder';
@@ -20,3 +21,4 @@ export { ProjectionOptions } from './ProjectionOptions';
 export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';
 export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
+export { TypeOrEventType } from './TypeOrEventType';

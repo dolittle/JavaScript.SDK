@@ -1,0 +1,46 @@
+{
+    "name": "@dolittle/sdk.embeddings",
+    "version": "14.4.0-embeddings.1",
+    "description": "",
+    "author": "",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dolittle/Javascript.SDK.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dolittle/Javascript.SDK/issues"
+    },
+    "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
+    "files": [
+        "Distribution",
+        "**/*.ts"
+    ],
+    "main": "Distribution/index.js",
+    "types": "Distribution/index.d.ts",
+    "scripts": {
+        "prebuild": "yarn clean",
+        "postbuild": "yarn lint",
+        "build": "tsc -b",
+        "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "test": "yarn build && yarn test:run",
+        "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
+    },
+    "dependencies": {
+        "@dolittle/concepts": "5.0.1",
+        "@dolittle/contracts": "5.4.0",
+        "@dolittle/rudiments": "5.0.1",
+        "@dolittle/runtime.contracts": "5.4.0",
+        "@dolittle/types": "5.0.1",
+        "luxon": "1.24.1"
+    },
+    "devDependencies": {
+        "@types/luxon": "1.24.1"
+    }
+}

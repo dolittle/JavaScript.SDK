@@ -1,25 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import * as grpc from '@grpc/grpc-js';
-import { createLogger, format, Logger, transports } from 'winston';
-
-import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback, EventStoreBuilder } from '@dolittle/sdk.events';
-import { IContainer, Container } from '@dolittle/sdk.common';
-import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { MicroserviceId, Environment, ExecutionContext, TenantId, CorrelationId, Claims, Version } from '@dolittle/sdk.execution';
-import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { ProjectionsBuilder, ProjectionsBuilderCallback, IProjectionAssociations, ProjectionAssociations, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { Container, IContainer } from '@dolittle/sdk.common';
+import { Embeddings, EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
+import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
+import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
+import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
+import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
+import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { IProjectionAssociations, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import * as grpc from '@grpc/grpc-js';
+import { createLogger, format, Logger, transports } from 'winston';
 import { Client } from './Client';
+
+
 
 /**
  * Represents a builder for building {Client}.
@@ -36,6 +39,7 @@ export class ClientBuilder {
     private readonly _filtersBuilder: EventFiltersBuilder;
     private readonly _projectionsBuilder: ProjectionsBuilder;
     private readonly _projectionsAssociations: IProjectionAssociations;
+    private readonly _embeddingsBuilder: EmbeddingsBuilder;
     private _cancellation: Cancellation;
     private _logger: Logger;
     private _container: IContainer = new Container();
@@ -50,6 +54,7 @@ export class ClientBuilder {
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
         this._projectionsAssociations = new ProjectionAssociations();
+        this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations);
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
@@ -204,6 +209,16 @@ export class ClientBuilder {
     }
 
     /**
+     * Configure embeddings.
+     * @param {EmbeddingsBuilderCallback} callback The builder callback.
+     * @returns {ClientBuilder}
+     */
+    withEmbeddings(callback: EmbeddingsBuilderCallback): ClientBuilder {
+        callback(this._embeddingsBuilder);
+        return this;
+    }
+
+    /**
      * Build the {Client}.
      * @returns {Client}
      */
@@ -242,9 +257,13 @@ export class ClientBuilder {
             this._cancellation);
 
         const subscriptionsClient = new SubscriptionsClient(connectionString, credentials);
-        const eventHorizons = this._eventHorizonsBuilder.build(subscriptionsClient, executionContext, this._logger);
+        const eventHorizons = this._eventHorizonsBuilder.build(
+            subscriptionsClient,
+            executionContext,
+            this._logger,
+            this._cancellation);
 
-        const projections = this._projectionsBuilder.buildAndRegister(
+        this._projectionsBuilder.buildAndRegister(
             new ProjectionsClient(connectionString, credentials),
             this._container,
             executionContext,
@@ -260,6 +279,23 @@ export class ClientBuilder {
             this._logger
         );
 
+        const embeddingsClient = new EmbeddingsClient(connectionString, credentials);
+        this._embeddingsBuilder.buildAndRegister(
+            embeddingsClient,
+            this._container,
+            executionContext,
+            eventTypes,
+            this._logger,
+            this._cancellation);
+
+        const embeddingsStoreClient = new EmbeddingStoreClient(connectionString, credentials);
+        const embeddings = new Embeddings(
+            embeddingsStoreClient,
+            embeddingsClient,
+            executionContext,
+            this._projectionsAssociations,
+            this._logger);
+
         return new Client(
             this._logger,
             eventTypes,
@@ -267,7 +303,7 @@ export class ClientBuilder {
             eventHandlers,
             filters,
             eventHorizons,
-            projectionsStore
-        );
+            projectionsStore,
+            embeddings);
     }
 }

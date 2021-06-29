@@ -7,3 +7,5 @@ export { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 export { PingTimeout } from './PingTimeout';
 export { reactiveClientStream, reactiveDuplex, reactiveServerStream, reactiveUnary } from './ReactiveGrpc';
 export { ReverseCallClient } from './ReverseCallClient';
+export { ClientProcessor } from './ClientProcessor';
+export { RegistrationFailed } from './RegistrationFailed';

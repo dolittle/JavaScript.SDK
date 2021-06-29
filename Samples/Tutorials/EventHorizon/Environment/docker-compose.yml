@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 services:
   mongo:
     image: dolittle/mongodb
@@ -9,7 +9,7 @@ services:
       driver: none
  
   consumer-runtime:
-    image: dolittle/runtime
+    image: dolittle/runtime:latest
     volumes:
       - ./consumer-resources.json:/app/.dolittle/resources.json
       - ./consumer-endpoints.json:/app/.dolittle/endpoints.json
@@ -19,7 +19,7 @@ services:
       - 50055:50055
 
   producer-runtime:
-    image: dolittle/runtime
+    image: dolittle/runtime:latest
     volumes:
       - ./producer-resources.json:/app/.dolittle/resources.json
       - ./producer-event-horizon-consents.json:/app/.dolittle/event-horizon-consents.json
