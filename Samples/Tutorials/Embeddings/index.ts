@@ -72,15 +72,15 @@ const client = Client
                     .get(DishCounter, counter.dish);
                 console.log('Got dish:', counterState.state);
 
-                console.log(`Deleting dish counter: ${counter}`);
+                console.log(`Removed dish counter: ${counter}`);
                 await client.embeddings
                     .forTenant(TenantId.development)
-                    .delete(DishCounter, counter.dish);
+                    .remove(DishCounter, counter.dish);
 
                 const deletedCounter = await client.embeddings
                     .forTenant(TenantId.development)
                     .get(DishCounter, counter.dish);
-                console.log(`Got a deleted, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
+                console.log(`Got a removed, initial dish counter: ${JSON.stringify(deletedCounter.state)}`);
             }));
 
         const allDishCounters = await client.embeddings
@@ -110,10 +110,10 @@ const client = Client
             .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');
         console.log(`Got all chefs:\n${[...allChefs].map(([key, value]) => `${key.value}: ${JSON.stringify(value.state, undefined, 2)}`).join('\n')}`);
 
-        console.log('Deleting Mr. Taco!');
+        console.log('Removing Mr. Taco!');
         await client.embeddings
             .forTenant(TenantId.development)
-            .delete(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+            .remove(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
         const allChefsAgain = await client.embeddings
             .forTenant(TenantId.development)
             .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');
@@ -123,7 +123,7 @@ const client = Client
         const getMrTaco = await client.embeddings
             .forTenant(TenantId.development)
             .get(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
-        console.log('Got deleted Mr. Taco:', getMrTaco.state);
+        console.log('Got removed Mr. Taco:', getMrTaco.state);
 
     }, 1000);
 })();

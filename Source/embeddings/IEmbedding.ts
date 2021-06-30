@@ -62,26 +62,26 @@ export abstract class IEmbedding extends EmbeddingStore {
         cancellation?: Cancellation): Promise<CurrentState<any>>;
 
     /**
-     * Deletes an embedding state by key for the embedding associated with a type.
+     * Removes an embedding state by key for the embedding associated with a type.
      * @template TEmbedding
      * @param {Constructor<T>} type The type of the embedding.
      * @param {Key | string} key The key of the embedding.
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract delete<TEmbedding> (
+    abstract remove<TEmbedding> (
         type: Constructor<TEmbedding>,
         key: Key | string,
         cancellation?: Cancellation): Promise<void>;
 
     /**
-     * Deletes an embedding state by key for the embedding specified by the embedding identifier.
+     * Removes an embedding state by key for the embedding specified by the embedding identifier.
      * @param {Key | string} key The key of the embedding.
      * @param {EmbeddingId | Guid | string} embeddingId The id of the embedding.
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract delete (
+    abstract remove (
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         cancellation?: Cancellation): Promise<void>;
