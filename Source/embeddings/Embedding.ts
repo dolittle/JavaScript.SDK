@@ -82,23 +82,23 @@ export class Embedding extends IEmbedding {
     }
 
     /** @inheritdoc */
-    delete<TEmbedding>(
+    remove<TEmbedding>(
         type: Constructor<TEmbedding>,
         key: Key | string,
         cancellation?: Cancellation): Promise<void>;
     /** @inheritdoc */
-    delete(
+    remove(
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         cancellation?: Cancellation): Promise<void>;
-    async delete<TEmbedding = any>(
+    async remove<TEmbedding = any>(
         typeOrKey: Constructor<TEmbedding> | Key | string,
         keyOrEmbeddingId: Key | EmbeddingId | Guid | string,
         maybeCancellation?: Cancellation): Promise<void> {
         const key = this.getKeyFrom(typeOrKey, keyOrEmbeddingId);
         const embedding = this.getEmbeddingForDelete(typeOrKey, keyOrEmbeddingId);
         const cancellation = maybeCancellation || Cancellation.default;
-        this._logger.debug(`Deleting one state from embedding ${embedding} with key ${key}`);
+        this._logger.debug(`Removing one state from embedding ${embedding} with key ${key}`);
 
         const request = new DeleteRequest();
         request.setCallcontext(callContexts.toProtobuf(this._executionContext));
