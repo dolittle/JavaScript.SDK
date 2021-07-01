@@ -1,3 +1,15 @@
+# [16.0.0] - 2021-7-1 [PR: #54](https://github.com/dolittle/JavaScript.SDK/pull/54)
+## Summary
+
+Renames the call to delete an embedding from`embeddings.delete()` to `embeddings.remove()`, so that it's consistent with the `@remove()` decorator and inline builder naming.
+
+Originally the decorators were also supposed to be called `@delete()`, but as `delete` is a reserved keyword in JS, we changed them to `@remove()`, but didn't think of changing the deletion call too to match. Internally the processor and contracts still call it `delete`, this change only affects the outside facing API.
+
+### Changed
+
+- Change the `embeddings.delete()` call to `embeddings.remove()`.
+
+
 # [15.0.0] - 2021-6-29 [PR: #47](https://github.com/dolittle/JavaScript.SDK/pull/47)
 ## Summary
 
