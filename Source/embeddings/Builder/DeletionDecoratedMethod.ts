@@ -7,10 +7,10 @@ import { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
 /**
  * Represents methods decorated with the @resolveDeletionToEvents() decorator.
  */
-export class RemoveDecoratedMethod {
+export class DeletionDecoratedMethod {
 
     /**
-     * Initializes a new instance of {@link RemoveDecoratedMethod}.
+     * Initializes a new instance of {@link DeletionDecoratedMethod}.
      * @param {Constructor<any>} owner Owner of the method.
      * @param {EmbeddingClassDeletionMethod} method The actual method that gets the embedding closer to being deleted.
      * @param {string} name The name of the method.

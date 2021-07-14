@@ -1,10 +1,5 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-import { CouldNotResolveDeletionToEvents } from '@dolittle/sdk.embeddings/CouldNotResolveDeletionToEvents';
-import { CouldNotResolveUpdateToEvents } from '@dolittle/sdk.embeddings/CouldNotResolveUpdateToEvents';
-// Copyright (c) Dolittle. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
     resolveUpdateToEvents,

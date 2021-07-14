@@ -4,17 +4,17 @@
 import { Constructor } from '@dolittle/types';
 import { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
 import { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
-import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
+import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 
 
 /**
  * Represents the system that knows about all the methods decorated with the @resolveDeletionToEvents() decorator.
  */
-export class RemoveDecoratedMethods {
+export class DeletionDecoratedMethods {
     /**
      * All on methods grouped by their embedding.
      */
-    static readonly methodPerEmbedding: Map<Constructor<any>, RemoveDecoratedMethod> = new Map();
+    static readonly methodPerEmbedding: Map<Constructor<any>, DeletionDecoratedMethod> = new Map();
 
     /**
      * Registers the @resolveDeletionToEvents() decorated method
@@ -29,6 +29,6 @@ export class RemoveDecoratedMethods {
         if (this.methodPerEmbedding.get(target)) {
             throw new EmbeddingAlreadyHasADeletionDecorator(target);
         }
-        this.methodPerEmbedding.set(target, new RemoveDecoratedMethod(target, method, name));
+        this.methodPerEmbedding.set(target, new DeletionDecoratedMethod(target, method, name));
     }
 }

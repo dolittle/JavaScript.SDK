@@ -34,13 +34,13 @@ export class Embedding<T> implements IEmbedding<T> {
      * @param {EmbeddingId} embeddingId The unique identifier for the embedding.
      * @param {Constructor<T> | T} readModelTypeOrInstance The read model type or instance produced by the embedding.
      * @param {EventTypeMap<EmbeddingProjectCallback<any>>} events The events with their respective callbacks in the embedding.
-     * @param {EmbeddingUpdateCallback} _compareMethod The compare method for the embedding.
+     * @param {EmbeddingUpdateCallback} _updateMethod The compare method for the embedding.
      */
     constructor(
         readonly embeddingId: EmbeddingId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
         private readonly _eventMap: EventTypeMap<EmbeddingProjectCallback<T>>,
-        private readonly _compareMethod: EmbeddingUpdateCallback,
+        private readonly _updateMethod: EmbeddingUpdateCallback,
         private readonly _deleteMethod: EmbeddingDeleteCallback) {
         this.events = this._eventMap.keys();
     }
@@ -57,7 +57,7 @@ export class Embedding<T> implements IEmbedding<T> {
 
     /** @inheritdoc */
     compare(receivedState: T, currentState: T, context: EmbeddingContext) {
-        return this._compareMethod(receivedState, currentState, context);
+        return this._updateMethod(receivedState, currentState, context);
     }
 
     /** @inheritdoc */
