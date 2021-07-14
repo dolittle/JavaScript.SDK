@@ -34,11 +34,11 @@ const client = Client
                 }
             })
             .resolveDeletionToEvents((currentState, context) => new ChefFired(currentState.name))
-            .on(ChefHired, (currentState, event, context) => {
+            .on<ChefHired>(ChefHired, (currentState, event, context) => {
                 currentState.name = event.Chef;
                 return currentState;
             })
-            .on(ChefFired, (currentState, event, context) => {
+            .on<ChefFired>(ChefFired, (currentState, event, context) => {
                 return ProjectionResult.delete;
             });
     })
