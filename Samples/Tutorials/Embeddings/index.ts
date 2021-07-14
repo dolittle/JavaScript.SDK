@@ -75,7 +75,7 @@ const client = Client
                 console.log(`Removed dish counter: ${counter}`);
                 await client.embeddings
                     .forTenant(TenantId.development)
-                    .resolveDeletionToEvents(DishCounter, counter.dish);
+                    .delete(DishCounter, counter.dish);
 
                 const deletedCounter = await client.embeddings
                     .forTenant(TenantId.development)
@@ -113,7 +113,7 @@ const client = Client
         console.log('Removing Mr. Taco!');
         await client.embeddings
             .forTenant(TenantId.development)
-            .resolveDeletionToEvents(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+            .delete(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
         const allChefsAgain = await client.embeddings
             .forTenant(TenantId.development)
             .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');
