@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { EmbeddingAlreadyHasARemoveDecorator } from './EmbeddingAlreadyHasARemoveDecorator';
+import { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
 import { EmbeddingClassRemoveMethod } from './EmbeddingClassRemoveMethod';
 import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
 
@@ -27,7 +27,7 @@ export class RemoveDecoratedMethods {
         method: EmbeddingClassRemoveMethod,
         name: string): void {
         if (this.methodPerEmbedding.get(target)) {
-            throw new EmbeddingAlreadyHasARemoveDecorator(target);
+            throw new EmbeddingAlreadyHasADeletionDecorator(target);
         }
         this.methodPerEmbedding.set(target, new RemoveDecoratedMethod(target, method, name));
     }

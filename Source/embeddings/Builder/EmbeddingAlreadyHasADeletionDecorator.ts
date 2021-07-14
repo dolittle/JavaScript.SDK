@@ -7,12 +7,12 @@ import { Constructor } from '@dolittle/types';
 /**
  * Exception that gets thrown when attempting to register more than one @resolveDeletionToEvents() decorators on an embedding.
  */
-export class EmbeddingAlreadyHasARemoveDecorator extends Exception {
+export class EmbeddingAlreadyHasADeletionDecorator extends Exception {
     /**
-     * Creates an instance of EmbeddingAlreadyHasARemoveDecorator
-     * @param {Constructor<any>} instance The embedding class that already has a remove method.
+     * Creates an instance of EmbeddingAlreadyHasADeletionDecorator
+     * @param {Constructor<any>} instance The embedding class that already has a resolveDeletionToEvents method.
      */
     constructor(target: Constructor<any>) {
-        super(`Embedding of type ${target.constructor.name} already has a @remove decorator defined for a method.`);
+        super(`Embedding of type ${target.constructor.name} already has a @resolveDeletionToEvents decorator defined for a method.`);
     }
 }

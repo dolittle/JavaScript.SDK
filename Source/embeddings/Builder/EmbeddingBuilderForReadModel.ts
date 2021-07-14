@@ -13,7 +13,7 @@ import { Logger } from 'winston';
 import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
 import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
-import { EmbeddingAlreadyHasARemoveMethod } from './EmbeddingAlreadyHasARemoveMethod';
+import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 
 
@@ -56,7 +56,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
      */
     resolveDeletionToEvents(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._removeMethod) {
-            throw new EmbeddingAlreadyHasARemoveMethod(this._embeddingId);
+            throw new EmbeddingAlreadyHasADeletionMethod(this._embeddingId);
         }
         this._removeMethod = callback;
         return this;

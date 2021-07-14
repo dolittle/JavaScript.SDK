@@ -27,7 +27,7 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
 import { RemoveDecoratedMethods } from './RemoveDecoratedMethods';
-import { resolveDeletionToEvents as removeDecorator } from './removeDecorator';
+import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
 
 
 /*
@@ -77,7 +77,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
 
         const getRemoveMethod = RemoveDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getRemoveMethod === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${removeDecorator.name} decorator`);
+            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
         }
         const deleteMethod = this.createRemoveMethod(getRemoveMethod);
