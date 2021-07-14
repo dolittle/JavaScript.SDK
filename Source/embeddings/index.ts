@@ -28,7 +28,7 @@ export {
     RemoveDecoratedMethods
 } from './Builder';
 export { Embedding } from './Embedding';
-export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
+export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingId } from './EmbeddingId';

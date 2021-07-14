@@ -11,7 +11,7 @@ import {
 } from '@dolittle/sdk.projections';
 import { Constructor } from '@dolittle/types';
 import {
-    EmbeddingCompareCallback,
+    EmbeddingUpdateCallback,
     EmbeddingContext,
     EmbeddingDeleteCallback,
     EmbeddingId,
@@ -34,13 +34,13 @@ export class Embedding<T> implements IEmbedding<T> {
      * @param {EmbeddingId} embeddingId The unique identifier for the embedding.
      * @param {Constructor<T> | T} readModelTypeOrInstance The read model type or instance produced by the embedding.
      * @param {EventTypeMap<EmbeddingProjectCallback<any>>} events The events with their respective callbacks in the embedding.
-     * @param {EmbeddingCompareCallback} _compareMethod The compare method for the embedding.
+     * @param {EmbeddingUpdateCallback} _compareMethod The compare method for the embedding.
      */
     constructor(
         readonly embeddingId: EmbeddingId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
         private readonly _eventMap: EventTypeMap<EmbeddingProjectCallback<T>>,
-        private readonly _compareMethod: EmbeddingCompareCallback,
+        private readonly _compareMethod: EmbeddingUpdateCallback,
         private readonly _deleteMethod: EmbeddingDeleteCallback) {
         this.events = this._eventMap.keys();
     }

@@ -11,7 +11,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import {
-    EmbeddingCompareCallback,
+    EmbeddingUpdateCallback,
     EmbeddingDeleteCallback,
     EmbeddingProjectCallback,
     OnDecoratedEmbeddingMethods
@@ -104,7 +104,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
     }
 
 
-    private createCompareMethod(method: UpdateDecoratedMethod): EmbeddingCompareCallback<any> {
+    private createCompareMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 

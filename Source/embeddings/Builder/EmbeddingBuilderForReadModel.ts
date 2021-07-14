@@ -10,7 +10,7 @@ import { TypeOrEventType } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
+import { EmbeddingUpdateCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
 import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';
 import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
@@ -22,7 +22,7 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
  * Represents a builder for building {@link IEmbedding}.
  */
 export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEmbedding {
-    private _compareMethod?: EmbeddingCompareCallback<T> = undefined;
+    private _compareMethod?: EmbeddingUpdateCallback<T> = undefined;
     private _removeMethod?: EmbeddingDeleteCallback<T> = undefined;
     private _onMethods: [TypeOrEventType, EmbeddingProjectCallback<T>][] = [];
 
@@ -38,10 +38,10 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     /**
      * Add a resolveUpdateToEvents method for comparing the resolveUpdateToEvents received and current states of the embedding.
-     * @param {EmbeddingCompareCallback} callback Callback to call until the current state equals the received state.
+     * @param {EmbeddingUpdateCallback} callback Callback to call until the current state equals the received state.
      * @returns {EmbeddingBuilderForReadModel<T>}
      */
-    resolveUpdateToEvents(callback: EmbeddingCompareCallback<T>): EmbeddingBuilderForReadModel<T> {
+    resolveUpdateToEvents(callback: EmbeddingUpdateCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._compareMethod) {
             throw new EmbeddingAlreadyHasAnUpdateMethod(this._embeddingId);
         }
@@ -51,7 +51,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     /**
      * Add a resolveDeletionToEvents method for deleting the embedding.
-     * @param {EmbeddingCompareCallback} callback Callback to call until the embedding has been deleted.
+     * @param {EmbeddingUpdateCallback} callback Callback to call until the embedding has been deleted.
      * @returns {EmbeddingBuilderForReadModel<T>}
      */
     resolveDeletionToEvents(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
