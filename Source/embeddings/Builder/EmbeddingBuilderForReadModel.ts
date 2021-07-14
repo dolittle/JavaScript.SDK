@@ -12,7 +12,7 @@ import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import { EmbeddingCompareCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
 import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
-import { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
+import { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';
 import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 
@@ -43,7 +43,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
      */
     compare(callback: EmbeddingCompareCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._compareMethod) {
-            throw new EmbeddingAlreadyHasACompareMethod(this._embeddingId);
+            throw new EmbeddingAlreadyHasAnUpdateMethod(this._embeddingId);
         }
         this._compareMethod = callback;
         return this;

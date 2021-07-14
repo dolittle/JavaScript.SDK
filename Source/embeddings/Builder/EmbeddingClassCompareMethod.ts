@@ -6,4 +6,5 @@ import { EmbeddingContext } from '../EmbeddingContext';
 /**
  * Defines the embedding class compare method signature.
  */
+// TODO rename
 export type EmbeddingClassCompareMethod<TReadModel = any> = (receivedState: TReadModel, context: EmbeddingContext) => any | any[];

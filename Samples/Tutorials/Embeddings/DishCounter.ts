@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Sample code for the tutorial at https://dolittle.io/tutorials/projections/typescript/
 
-import { compare, resolveDeletionToEvents, embedding, EmbeddingContext, EmbeddingProjectContext, on } from '@dolittle/sdk.embeddings';
+import { resolveUpdateToEvents, resolveDeletionToEvents, embedding, EmbeddingContext, EmbeddingProjectContext, on } from '@dolittle/sdk.embeddings';
 import { ProjectionResult } from '@dolittle/sdk.projections';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
@@ -12,8 +12,8 @@ export class DishCounter {
     dish: string = '';
     numberOfTimesPrepared: number = 0;
 
-    @compare()
-    compare(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
+    @resolveUpdateToEvents()
+    resolveUpdateToEvents(receivedState: DishCounter, embeddingContext: EmbeddingContext) {
         console.log(`Call to compare DishCounter. Received state:`);
         console.log(receivedState);
         console.log(`Current state:`);

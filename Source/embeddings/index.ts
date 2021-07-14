@@ -3,11 +3,11 @@
 
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
-    compare,
+    resolveUpdateToEvents,
     CompareDecoratedMethod,
     CompareDecoratedMethods, embedding,
-    EmbeddingAlreadyHasACompareDecorator,
-    EmbeddingAlreadyHasACompareMethod,
+    EmbeddingAlreadyHasAnUpdateDecorator,
+    EmbeddingAlreadyHasAnUpdateMethod,
     EmbeddingAlreadyHasADeletionDecorator,
     EmbeddingAlreadyHasADeletionMethod,
     EmbeddingBuilder,

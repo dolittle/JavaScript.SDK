@@ -8,7 +8,7 @@ type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor
 /**
  * Decorator for decorating the compare function in an embedding class.
  */
-export function compare(): Returns {
+export function resolveUpdateToEvents(): Returns {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         CompareDecoratedMethods.register(target.constructor, descriptor.value, propertyKey);
     };

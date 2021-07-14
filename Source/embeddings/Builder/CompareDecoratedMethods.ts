@@ -4,7 +4,7 @@
 import { Constructor } from '@dolittle/types';
 
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
-import { EmbeddingAlreadyHasACompareDecorator } from './EmbeddingAlreadyHasACompareDecorator';
+import { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
 import { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
 
 /**
@@ -27,7 +27,7 @@ export class CompareDecoratedMethods {
         method: EmbeddingClassCompareMethod,
         name: string): void {
         if (this.methodPerEmbedding.get(target)) {
-            throw new EmbeddingAlreadyHasACompareDecorator(target);
+            throw new EmbeddingAlreadyHasAnUpdateDecorator(target);
         }
         this.methodPerEmbedding.set(target, new CompareDecoratedMethod(target, method, name));
     }

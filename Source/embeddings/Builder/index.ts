@@ -4,9 +4,9 @@
 export { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 export { CompareDecoratedMethod } from './CompareDecoratedMethod';
 export { CompareDecoratedMethods } from './CompareDecoratedMethods';
-export { compare } from './compareDecorator';
-export { EmbeddingAlreadyHasACompareDecorator } from './EmbeddingAlreadyHasACompareDecorator';
-export { EmbeddingAlreadyHasACompareMethod } from './EmbeddingAlreadyHasACompareMethod';
+export { resolveUpdateToEvents } from './updateDecorator';
+export { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
+export { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';
 export { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
 export { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 export { EmbeddingBuilder } from './EmbeddingBuilder';

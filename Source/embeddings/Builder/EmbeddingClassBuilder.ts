@@ -20,7 +20,7 @@ import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
 import { CompareDecoratedMethods } from './CompareDecoratedMethods';
-import { compare as compareDecorator } from './compareDecorator';
+import { resolveUpdateToEvents as updateDecorator } from './updateDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
@@ -70,7 +70,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
 
         const getCompareMethod = CompareDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getCompareMethod === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${compareDecorator.name} decorator`);
+            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
         }
         const compareMethod = this.createCompareMethod(getCompareMethod);

@@ -8,9 +8,9 @@ import { EmbeddingId } from '../EmbeddingId';
 /**
  * Exception that gets thrown when attempting to have another compare method on an embedding.
  */
-export class EmbeddingAlreadyHasACompareMethod extends Exception {
+export class EmbeddingAlreadyHasAnUpdateMethod extends Exception {
     /**
-     * Creates an instance of EmbeddingAlreadyHasACompareMethod
+     * Creates an instance of EmbeddingAlreadyHasAnUpdateMethod
      * @param {EmbeddingId} embedding The embedding that already has a compare method.
      */
     constructor(embedding: EmbeddingId) {
