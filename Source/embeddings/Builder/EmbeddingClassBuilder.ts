@@ -18,8 +18,8 @@ import {
 } from '..';
 import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
-import { CompareDecoratedMethod } from './CompareDecoratedMethod';
-import { CompareDecoratedMethods } from './CompareDecoratedMethods';
+import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
+import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
 import { resolveUpdateToEvents as updateDecorator } from './updateDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
@@ -68,7 +68,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
         logger.debug(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
 
-        const getCompareMethod = CompareDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        const getCompareMethod = UpdateDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getCompareMethod === undefined) {
             logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
@@ -104,7 +104,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
     }
 
 
-    private createCompareMethod(method: CompareDecoratedMethod): EmbeddingCompareCallback<any> {
+    private createCompareMethod(method: UpdateDecoratedMethod): EmbeddingCompareCallback<any> {
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 

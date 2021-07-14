@@ -28,7 +28,7 @@ const client = Client
         builder
             .createEmbedding('999a6aa4-4412-4eaf-a99b-2842cb191e7c')
             .forReadModel(Chef)
-            .compare((receivedState, currentState, context) => {
+            .resolveUpdateToEvents((receivedState, currentState, context) => {
                 if (!currentState.name) {
                     return new ChefHired(receivedState.name);
                 }

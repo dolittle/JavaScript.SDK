@@ -37,11 +37,11 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
     }
 
     /**
-     * Add a compare method for comparing the reviced and current states of the embedding.
+     * Add a resolveUpdateToEvents method for comparing the resolveUpdateToEvents received and current states of the embedding.
      * @param {EmbeddingCompareCallback} callback Callback to call until the current state equals the received state.
      * @returns {EmbeddingBuilderForReadModel<T>}
      */
-    compare(callback: EmbeddingCompareCallback<T>): EmbeddingBuilderForReadModel<T> {
+    resolveUpdateToEvents(callback: EmbeddingCompareCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._compareMethod) {
             throw new EmbeddingAlreadyHasAnUpdateMethod(this._embeddingId);
         }

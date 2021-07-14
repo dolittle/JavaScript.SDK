@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
-export { CompareDecoratedMethod } from './CompareDecoratedMethod';
-export { CompareDecoratedMethods } from './CompareDecoratedMethods';
+export { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
+export { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
 export { resolveUpdateToEvents } from './updateDecorator';
 export { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
 export { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';

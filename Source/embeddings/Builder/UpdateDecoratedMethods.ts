@@ -3,23 +3,23 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { CompareDecoratedMethod } from './CompareDecoratedMethod';
+import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 import { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
 import { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 
 /**
- * Represents the system that knows about all the methods decorated with the compare decorator.
+ * Represents the system that knows about all the methods decorated with the @resolveUpdateToEvents decorator.
  */
-export class CompareDecoratedMethods {
+export class UpdateDecoratedMethods {
     /**
      * All on methods grouped by their embedding.
      */
-    static readonly methodPerEmbedding: Map<Constructor<any>, CompareDecoratedMethod> = new Map();
+    static readonly methodPerEmbedding: Map<Constructor<any>, UpdateDecoratedMethod> = new Map();
 
     /**
-     * Registers the compare decorated method
+     * Registers the @resolveUpdateToEvents decorated method
      * @param {Constructor<any>} target Target that owns the on method.
-     * @param {EmbeddingClassUpdateMethod} method The compare method.
+     * @param {EmbeddingClassUpdateMethod} method The update method.
      * @param {string} name The name of the method.
      */
     static register(
@@ -29,6 +29,6 @@ export class CompareDecoratedMethods {
         if (this.methodPerEmbedding.get(target)) {
             throw new EmbeddingAlreadyHasAnUpdateDecorator(target);
         }
-        this.methodPerEmbedding.set(target, new CompareDecoratedMethod(target, method, name));
+        this.methodPerEmbedding.set(target, new UpdateDecoratedMethod(target, method, name));
     }
 }

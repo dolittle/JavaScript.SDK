@@ -4,8 +4,8 @@
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
     resolveUpdateToEvents,
-    CompareDecoratedMethod,
-    CompareDecoratedMethods, embedding,
+    UpdateDecoratedMethod,
+    UpdateDecoratedMethods, embedding,
     EmbeddingAlreadyHasAnUpdateDecorator,
     EmbeddingAlreadyHasAnUpdateMethod,
     EmbeddingAlreadyHasADeletionDecorator,
