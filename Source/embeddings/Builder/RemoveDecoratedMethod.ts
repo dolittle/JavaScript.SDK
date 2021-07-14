@@ -5,7 +5,7 @@ import { Constructor } from '@dolittle/types';
 import { EmbeddingClassRemoveMethod } from './EmbeddingClassRemoveMethod';
 
 /**
- * Represents methods decorated with the @remove() decorator.
+ * Represents methods decorated with the @resolveDeletionToEvents() decorator.
  */
 export class RemoveDecoratedMethod {
 

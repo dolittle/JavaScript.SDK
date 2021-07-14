@@ -82,16 +82,16 @@ export class Embedding extends IEmbedding {
     }
 
     /** @inheritdoc */
-    remove<TEmbedding>(
+    resolveDeletionToEvents<TEmbedding>(
         type: Constructor<TEmbedding>,
         key: Key | string,
         cancellation?: Cancellation): Promise<void>;
     /** @inheritdoc */
-    remove(
+    resolveDeletionToEvents(
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         cancellation?: Cancellation): Promise<void>;
-    async remove<TEmbedding = any>(
+    async resolveDeletionToEvents<TEmbedding = any>(
         typeOrKey: Constructor<TEmbedding> | Key | string,
         keyOrEmbeddingId: Key | EmbeddingId | Guid | string,
         maybeCancellation?: Cancellation): Promise<void> {

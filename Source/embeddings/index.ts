@@ -24,7 +24,7 @@ export {
     on,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
-    ReadModelAlreadyDefinedForEmbedding, remove, RemoveDecoratedMethod,
+    ReadModelAlreadyDefinedForEmbedding, resolveDeletionToEvents, RemoveDecoratedMethod,
     RemoveDecoratedMethods
 } from './Builder';
 export { Embedding } from './Embedding';

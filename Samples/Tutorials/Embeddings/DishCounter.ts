@@ -24,7 +24,7 @@ export class DishCounter {
         }
     }
 
-    @remove()
+    @resolveDeletionToEvents()
     remove(embeddingContext: EmbeddingContext) {
         console.log('Call to delete DishCounter');
         return new DishRemoved(this.dish);

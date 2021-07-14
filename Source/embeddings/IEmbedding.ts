@@ -69,7 +69,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract remove<TEmbedding> (
+    abstract resolveDeletionToEvents<TEmbedding> (
         type: Constructor<TEmbedding>,
         key: Key | string,
         cancellation?: Cancellation): Promise<void>;
@@ -81,7 +81,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract remove (
+    abstract resolveDeletionToEvents (
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         cancellation?: Cancellation): Promise<void>;

@@ -8,7 +8,7 @@ type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor
 /**
  * Decorator for decorating the delete function in an embedding class.
  */
-export function remove(): Returns {
+export function resolveDeletionToEvents(): Returns {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         RemoveDecoratedMethods.register(target.constructor, descriptor.value, propertyKey);
     };

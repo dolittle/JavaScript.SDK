@@ -33,7 +33,7 @@ const client = Client
                     return new ChefHired(receivedState.name);
                 }
             })
-            .remove((currentState, context) => new ChefFired(currentState.name))
+            .resolveDeletionToEvents((currentState, context) => new ChefFired(currentState.name))
             .on(ChefHired, (currentState, event, context) => {
                 currentState.name = event.Chef;
                 return currentState;
@@ -75,7 +75,7 @@ const client = Client
                 console.log(`Removed dish counter: ${counter}`);
                 await client.embeddings
                     .forTenant(TenantId.development)
-                    .remove(DishCounter, counter.dish);
+                    .resolveDeletionToEvents(DishCounter, counter.dish);
 
                 const deletedCounter = await client.embeddings
                     .forTenant(TenantId.development)
@@ -113,7 +113,7 @@ const client = Client
         console.log('Removing Mr. Taco!');
         await client.embeddings
             .forTenant(TenantId.development)
-            .remove(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+            .resolveDeletionToEvents(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
         const allChefsAgain = await client.embeddings
             .forTenant(TenantId.development)
             .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');

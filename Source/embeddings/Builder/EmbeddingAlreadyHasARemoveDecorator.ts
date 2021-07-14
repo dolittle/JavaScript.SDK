@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 /**
- * Exception that gets thrown when attempting to register more than one @remove() decorators on an embedding.
+ * Exception that gets thrown when attempting to register more than one @resolveDeletionToEvents() decorators on an embedding.
  */
 export class EmbeddingAlreadyHasARemoveDecorator extends Exception {
     /**

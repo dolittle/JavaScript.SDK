@@ -8,7 +8,7 @@ import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
 
 
 /**
- * Represents the system that knows about all the methods decorated with the @remove() decorator.
+ * Represents the system that knows about all the methods decorated with the @resolveDeletionToEvents() decorator.
  */
 export class RemoveDecoratedMethods {
     /**
@@ -17,7 +17,7 @@ export class RemoveDecoratedMethods {
     static readonly methodPerEmbedding: Map<Constructor<any>, RemoveDecoratedMethod> = new Map();
 
     /**
-     * Registers the @remove() decorated method
+     * Registers the @resolveDeletionToEvents() decorated method
      * @param {Constructor<any>} target Target that owns the remove method.
      * @param {EmbeddingClassRemoveMethod} method The remove method.
      * @param {string} name The name of the method.
