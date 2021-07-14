@@ -12,7 +12,7 @@ import { DishCounter } from './DishCounter';
 import { DishHandler } from './DishHandler';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
-import { Exception } from '@dolittle/rudiments';
+import { CouldNotResolveUpdateToEvents } from '@dolittle/sdk.embeddings/CouldNotResolveUpdateToEvents';
 
 const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
@@ -33,7 +33,7 @@ const client = Client
                 if (!currentState.name) {
                     return new ChefHired(receivedState.name);
                 }
-                throw new Exception('To fix with real erro');
+                throw new CouldNotResolveUpdateToEvents();
             })
             .resolveDeletionToEvents((currentState, context) => new ChefFired(currentState.name))
             .on<ChefHired>(ChefHired, (currentState, event, context) => {
