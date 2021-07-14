@@ -27,7 +27,7 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
 import { RemoveDecoratedMethods } from './RemoveDecoratedMethods';
-import { remove as removeDecorator } from './removeDecorator';
+import { resolveDeletionToEvents as removeDecorator } from './removeDecorator';
 
 
 /*
