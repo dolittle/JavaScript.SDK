@@ -25,6 +25,6 @@ export { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 export { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
 export { on } from './onDecorator';
 export { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
-export { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
-export { RemoveDecoratedMethods } from './RemoveDecoratedMethods';
+export { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
+export { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 export { resolveDeletionToEvents } from './deleteDecorator';

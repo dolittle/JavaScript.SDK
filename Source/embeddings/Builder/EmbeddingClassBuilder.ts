@@ -25,8 +25,8 @@ import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
-import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
-import { RemoveDecoratedMethods } from './RemoveDecoratedMethods';
+import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
+import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
 
 
@@ -75,7 +75,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
         const compareMethod = this.createCompareMethod(getCompareMethod);
 
-        const getRemoveMethod = RemoveDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        const getRemoveMethod = DeletionDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getRemoveMethod === undefined) {
             logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
@@ -108,7 +108,7 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 
-    private createRemoveMethod(method: RemoveDecoratedMethod): EmbeddingDeleteCallback {
+    private createRemoveMethod(method: DeletionDecoratedMethod): EmbeddingDeleteCallback {
         return (currentState, embeddingContext) => method.method.call(currentState, embeddingContext);
     }
 

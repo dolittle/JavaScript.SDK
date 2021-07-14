@@ -23,8 +23,10 @@ export {
     on,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
-    ReadModelAlreadyDefinedForEmbedding, resolveDeletionToEvents, RemoveDecoratedMethod,
-    RemoveDecoratedMethods
+    ReadModelAlreadyDefinedForEmbedding,
+    resolveDeletionToEvents,
+    DeletionDecoratedMethod,
+    DeletionDecoratedMethods
 } from './Builder';
 export { Embedding } from './Embedding';
 export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
