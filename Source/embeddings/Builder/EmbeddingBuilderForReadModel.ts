@@ -50,11 +50,11 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
     }
 
     /**
-     * Add a remove method for deleting the embedding.
+     * Add a resolveDeletionToEvents method for deleting the embedding.
      * @param {EmbeddingCompareCallback} callback Callback to call until the embedding has been deleted.
      * @returns {EmbeddingBuilderForReadModel<T>}
      */
-    remove(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
+    resolveDeletionToEvents(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._removeMethod) {
             throw new EmbeddingAlreadyHasARemoveMethod(this._embeddingId);
         }
