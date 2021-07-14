@@ -8,8 +8,12 @@
         "**/.DS_Store": true
     },
     "cSpell.words": [
+        "Dolittle",
         "grpc",
-        "protobuf"
+        "microservice",
+        "microservices",
+        "protobuf",
+        "transpiles"
     ],
 
     "editor.formatOnSave": false,
