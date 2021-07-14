@@ -4,6 +4,6 @@
 import { EmbeddingContext } from '../EmbeddingContext';
 
 /**
- * Defines the embedding class remove method signature.
+ * Defines the embedding class deletion method signature.
  */
-export type EmbeddingClassRemoveMethod = (context: EmbeddingContext) => any | any[];
+export type EmbeddingClassDeletionMethod = (context: EmbeddingContext) => any | any[];

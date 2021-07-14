@@ -12,9 +12,9 @@ export { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeleti
 export { EmbeddingBuilder } from './EmbeddingBuilder';
 export { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 export { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
-export { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
+export { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 export { EmbeddingClassOnMethod } from './EmbeddingClassOnMethod';
-export { EmbeddingClassRemoveMethod } from './EmbeddingClassRemoveMethod';
+export { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
 export { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 export { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 export { embedding } from './embeddingDecorator';

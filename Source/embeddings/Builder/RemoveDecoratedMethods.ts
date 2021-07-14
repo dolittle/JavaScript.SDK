@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 import { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
-import { EmbeddingClassRemoveMethod } from './EmbeddingClassRemoveMethod';
+import { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
 import { RemoveDecoratedMethod } from './RemoveDecoratedMethod';
 
 
@@ -19,12 +19,12 @@ export class RemoveDecoratedMethods {
     /**
      * Registers the @resolveDeletionToEvents() decorated method
      * @param {Constructor<any>} target Target that owns the remove method.
-     * @param {EmbeddingClassRemoveMethod} method The remove method.
+     * @param {EmbeddingClassDeletionMethod} method The remove method.
      * @param {string} name The name of the method.
      */
     static register(
         target: Constructor<any>,
-        method: EmbeddingClassRemoveMethod,
+        method: EmbeddingClassDeletionMethod,
         name: string): void {
         if (this.methodPerEmbedding.get(target)) {
             throw new EmbeddingAlreadyHasADeletionDecorator(target);

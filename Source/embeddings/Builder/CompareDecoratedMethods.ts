@@ -5,7 +5,7 @@ import { Constructor } from '@dolittle/types';
 
 import { CompareDecoratedMethod } from './CompareDecoratedMethod';
 import { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
-import { EmbeddingClassCompareMethod } from './EmbeddingClassCompareMethod';
+import { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 
 /**
  * Represents the system that knows about all the methods decorated with the compare decorator.
@@ -19,12 +19,12 @@ export class CompareDecoratedMethods {
     /**
      * Registers the compare decorated method
      * @param {Constructor<any>} target Target that owns the on method.
-     * @param {EmbeddingClassCompareMethod} method The compare method.
+     * @param {EmbeddingClassUpdateMethod} method The compare method.
      * @param {string} name The name of the method.
      */
     static register(
         target: Constructor<any>,
-        method: EmbeddingClassCompareMethod,
+        method: EmbeddingClassUpdateMethod,
         name: string): void {
         if (this.methodPerEmbedding.get(target)) {
             throw new EmbeddingAlreadyHasAnUpdateDecorator(target);
