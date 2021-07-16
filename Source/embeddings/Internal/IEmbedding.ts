@@ -40,13 +40,13 @@ export interface IEmbedding<TReadModel> {
     on(readModel: TReadModel, event: any, eventType: EventType, context: EmbeddingProjectContext): Promise<TReadModel | DeleteReadModelInstance> | TReadModel | DeleteReadModelInstance;
 
     /**
-     * Compares the received state and current state.
+     * Updates the received state and current state.
      * @param {T} receivedState The received state.
      * @param {T} currentState The current state.
      * @param {EmbeddingContext} context EmbeddingContext
      * @returns {any | any[]} One or more events to correct the state towards the wanted state.
      */
-    compare(receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext): any | any[];
+    update(receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext): any | any[];
 
     /**
      * Called, when the readmodel should get deleted. Returns events, that should result in the readmodels deletion.

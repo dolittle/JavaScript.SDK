@@ -12,6 +12,7 @@ import { DishCounter } from './DishCounter';
 import { DishHandler } from './DishHandler';
 import { DishPrepared } from './DishPrepared';
 import { DishRemoved } from './DishRemoved';
+import { CouldNotResolveUpdateToEvents } from '@dolittle/sdk.embeddings/CouldNotResolveUpdateToEvents';
 
 const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
@@ -28,17 +29,18 @@ const client = Client
         builder
             .createEmbedding('999a6aa4-4412-4eaf-a99b-2842cb191e7c')
             .forReadModel(Chef)
-            .compare((receivedState, currentState, context) => {
+            .resolveUpdateToEvents((receivedState, currentState, context) => {
                 if (!currentState.name) {
                     return new ChefHired(receivedState.name);
                 }
+                throw new CouldNotResolveUpdateToEvents();
             })
-            .remove((currentState, context) => new ChefFired(currentState.name))
-            .on(ChefHired, (currentState, event, context) => {
+            .resolveDeletionToEvents((currentState, context) => new ChefFired(currentState.name))
+            .on<ChefHired>(ChefHired, (currentState, event, context) => {
                 currentState.name = event.Chef;
                 return currentState;
             })
-            .on(ChefFired, (currentState, event, context) => {
+            .on<ChefFired>(ChefFired, (currentState, event, context) => {
                 return ProjectionResult.delete;
             });
     })
@@ -75,7 +77,7 @@ const client = Client
                 console.log(`Removed dish counter: ${counter}`);
                 await client.embeddings
                     .forTenant(TenantId.development)
-                    .remove(DishCounter, counter.dish);
+                    .delete(DishCounter, counter.dish);
 
                 const deletedCounter = await client.embeddings
                     .forTenant(TenantId.development)
@@ -113,7 +115,7 @@ const client = Client
         console.log('Removing Mr. Taco!');
         await client.embeddings
             .forTenant(TenantId.development)
-            .remove(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
+            .delete(mrTaco.name, '999a6aa4-4412-4eaf-a99b-2842cb191e7c');
         const allChefsAgain = await client.embeddings
             .forTenant(TenantId.development)
             .getAll('999a6aa4-4412-4eaf-a99b-2842cb191e7c');

@@ -1,20 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
-    compare,
-    CompareDecoratedMethod,
-    CompareDecoratedMethods, embedding,
-    EmbeddingAlreadyHasACompareDecorator,
-    EmbeddingAlreadyHasACompareMethod,
-    EmbeddingAlreadyHasARemoveDecorator,
-    EmbeddingAlreadyHasARemoveMethod,
+    resolveUpdateToEvents,
+    UpdateDecoratedMethod,
+    UpdateDecoratedMethods, embedding,
+    EmbeddingAlreadyHasAnUpdateDecorator,
+    EmbeddingAlreadyHasAnUpdateMethod,
+    EmbeddingAlreadyHasADeletionDecorator,
+    EmbeddingAlreadyHasADeletionMethod,
     EmbeddingBuilder,
     EmbeddingBuilderForReadModel,
     EmbeddingClassBuilder,
-    EmbeddingClassCompareMethod,
-    EmbeddingClassRemoveMethod,
+    EmbeddingClassUpdateMethod,
+    EmbeddingClassDeletionMethod,
     EmbeddingClassOnMethod,
     EmbeddingDecoratedType,
     EmbeddingDecoratedTypes,
@@ -24,11 +23,13 @@ export {
     on,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
-    ReadModelAlreadyDefinedForEmbedding, remove, RemoveDecoratedMethod,
-    RemoveDecoratedMethods
+    ReadModelAlreadyDefinedForEmbedding,
+    resolveDeletionToEvents,
+    DeletionDecoratedMethod,
+    DeletionDecoratedMethods
 } from './Builder';
 export { Embedding } from './Embedding';
-export { EmbeddingCompareCallback } from './EmbeddingCompareCallback';
+export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingId } from './EmbeddingId';
@@ -40,6 +41,8 @@ export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
 export { IEmbedding } from './IEmbedding';
 export * as internal from './Internal';
 export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
+export {CouldNotResolveDeletionToEvents} from './CouldNotResolveDeletionToEvents';
+export {CouldNotResolveUpdateToEvents} from './CouldNotResolveUpdateToEvents';
 export {
     EmbeddingStore,
     EmbeddingStoreBuilder,

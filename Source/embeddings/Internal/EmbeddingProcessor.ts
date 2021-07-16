@@ -159,7 +159,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     private async createCompareResponse(request: EmbeddingCompareRequest, projectionInstance: TReadModel, context: EmbeddingContext): Promise<EmbeddingCompareResponse> {
         const entityState = this.createInstanceFromString(request.getEntitystate());
 
-        const events = this.getUncommittedEvents(await this._embedding.compare(entityState, projectionInstance, context));
+        const events = this.getUncommittedEvents(await this._embedding.update(entityState, projectionInstance, context));
 
         const compareResponse = new EmbeddingCompareResponse();
         compareResponse.setEventsList(events);
