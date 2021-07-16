@@ -178,11 +178,11 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
             return false;
         }
         if (this._updateMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No compare method defined.`);
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No resolveUpdateToEvents() method defined.`);
             return false;
         }
         if (this._deleteMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No delete method defined.`);
+            logger.warn(`Failed to register embedding ${this._embeddingId}. No resolveDeletionToEvents() method defined.`);
             return false;
         }
         return true;

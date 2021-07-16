@@ -56,7 +56,7 @@ export class Embedding<T> implements IEmbedding<T> {
     }
 
     /** @inheritdoc */
-    compare(receivedState: T, currentState: T, context: EmbeddingContext) {
+    update(receivedState: T, currentState: T, context: EmbeddingContext) {
         return this._updateMethod(receivedState, currentState, context);
     }
 
