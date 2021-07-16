@@ -18,8 +18,8 @@ export class DeletionDecoratedMethods {
 
     /**
      * Registers the @resolveDeletionToEvents() decorated method
-     * @param {Constructor<any>} target Target that owns the remove method.
-     * @param {EmbeddingClassDeletionMethod} method The remove method.
+     * @param {Constructor<any>} target Target that owns the deletion method.
+     * @param {EmbeddingClassDeletionMethod} method The deletion method.
      * @param {string} name The name of the method.
      */
     static register(
