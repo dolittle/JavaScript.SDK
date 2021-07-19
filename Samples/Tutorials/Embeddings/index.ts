@@ -23,6 +23,7 @@ const client = Client
 
 (async () => {
 
+    // wait for the registration to complete
     setTimeout(async () => {
         // mock of the state from the external HR system
         const updatedEmployee = new Employee(
@@ -38,5 +39,8 @@ const client = Client
             .forTenant(TenantId.development)
             .delete(Employee, updatedEmployee.name);
         console.log(`Deleted ${updatedEmployee.name}`);
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .getKeys(Employee);
     }, 1000);
 })();

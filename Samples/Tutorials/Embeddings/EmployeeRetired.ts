@@ -4,7 +4,7 @@
 
 import { eventType } from '@dolittle/sdk.events';
 
-@eventType('8fdf45bc-f484-4348-bcb0-4d6f134aaf6c')
+@eventType('1932beb4-c8cd-4fee-9a7e-a92af3693510')
 export class EmployeeRetired {
     constructor(readonly name: string) {}
 }

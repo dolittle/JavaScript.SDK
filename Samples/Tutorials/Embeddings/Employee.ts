@@ -10,12 +10,10 @@ import { EmployeeTransferred } from './EmployeeTransferred';
 
 @embedding('e5577d2c-0de7-481c-b5be-6ef613c2fcd6')
 export class Employee {
-    name: string = '';
-    workplace: string = 'Unassigned';
 
-    constructor(name: string, workplace: string) {
-        name = name;
-        workplace = workplace;
+    constructor(
+        public name: string = '',
+        public workplace: string = 'Unassigned') {
     }
 
     @resolveUpdateToEvents()
@@ -23,7 +21,7 @@ export class Employee {
         if (this.name !== updatedEmployee.name) {
             return new EmployeeHired(updatedEmployee.name);
         } else if (this.workplace !== updatedEmployee.workplace) {
-            return new EmployeeTransferred(this.name, this.workplace, updatedEmployee.name);
+            return new EmployeeTransferred(this.name, this.workplace, updatedEmployee.workplace);
         }
 
         throw new CouldNotResolveUpdateToEvents();
