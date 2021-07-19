@@ -13,6 +13,11 @@ export class Employee {
     name: string = '';
     workplace: string = 'Unassigned';
 
+    constructor(name: string, workplace: string) {
+        name = name;
+        workplace = workplace;
+    }
+
     @resolveUpdateToEvents()
     resolveUpdateToEvents(updatedEmployee: Employee, context: EmbeddingContext) {
         if (this.name !== updatedEmployee.name) {
