@@ -4,8 +4,6 @@
 import { EventType, EventTypeMap } from '@dolittle/sdk.events';
 import {
     DeleteReadModelInstance,
-    EventSelector,
-    KeySelector,
     MissingOnMethodForType,
     ProjectionId
 } from '@dolittle/sdk.projections';

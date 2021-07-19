@@ -3,7 +3,7 @@
 
 import { EventType } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { DeleteReadModelInstance, EventSelector  } from '@dolittle/sdk.projections';
+import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 import { EmbeddingContext, EmbeddingId, EmbeddingProjectContext } from '..';
 
 /**
