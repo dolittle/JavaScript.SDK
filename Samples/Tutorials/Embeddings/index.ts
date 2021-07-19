@@ -39,6 +39,7 @@ const client = Client
             .forTenant(TenantId.development)
             .delete(Employee, updatedEmployee.name);
         console.log(`Deleted ${updatedEmployee.name}`);
+
         await client.embeddings
             .forTenant(TenantId.development)
             .getKeys(Employee);
