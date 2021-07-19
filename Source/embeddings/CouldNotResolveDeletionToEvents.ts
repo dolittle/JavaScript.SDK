@@ -1,6 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-export class CouldNotResolveDeletionToEvents extends Error {
+
+import { Exception } from '@dolittle/rudiments';
+
+export class CouldNotResolveDeletionToEvents extends Exception {
     /**
      * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}
      */
