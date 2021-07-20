@@ -4,8 +4,6 @@
 import { EventType, EventTypeMap } from '@dolittle/sdk.events';
 import {
     DeleteReadModelInstance,
-    EventSelector,
-    KeySelector,
     MissingOnMethodForType,
     ProjectionId
 } from '@dolittle/sdk.projections';
@@ -18,6 +16,8 @@ import {
     EmbeddingProjectCallback,
     EmbeddingProjectContext
 } from '..';
+import { EmbeddingDeleteMethodFailed } from './EmbeddingDeleteMethodFailed';
+import { EmbeddingUpdateMethodFailed } from './EmbeddingUpdateMethodFailed';
 import { IEmbedding } from './IEmbedding';
 
 
@@ -57,11 +57,20 @@ export class Embedding<T> implements IEmbedding<T> {
 
     /** @inheritdoc */
     update(receivedState: T, currentState: T, context: EmbeddingContext) {
-        return this._updateMethod(receivedState, currentState, context);
+        try {
+            return this._updateMethod(receivedState, currentState, context);
+        } catch (error) {
+            throw new EmbeddingUpdateMethodFailed<T>(this.embeddingId, receivedState, currentState, context, error);
+        }
     }
 
     /** @inheritdoc */
     delete(currentState: T, context: EmbeddingContext) {
-        return this._deleteMethod(currentState, context);
+
+        try {
+            return this._deleteMethod(currentState, context);
+        } catch (error) {
+            throw new EmbeddingDeleteMethodFailed<T>(this.embeddingId, currentState, context, error);
+        }
     }
 }

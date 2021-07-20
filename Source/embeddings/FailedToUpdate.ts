@@ -17,6 +17,6 @@ export class FailedToUpdate extends Exception {
      * @param {Failure} failure The failure.
      */
     constructor(embedding: EmbeddingId, key: Key | undefined, failure: Failure) {
-        super(`Failed to update embedding ${embedding} ${key ? `with key ${key} `: ''}due to failure ${failure.id} with reason: ${failure.reason}`);
+        super(`Failed to update embedding ${embedding} ${key ? `with key ${key} `: ''} due to failure ${failure.id} with reason: ${failure.reason}`);
     }
 }

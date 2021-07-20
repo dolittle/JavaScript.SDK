@@ -68,31 +68,33 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
         logger.debug(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
 
-        const getCompareMethod = UpdateDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
-        if (getCompareMethod === undefined) {
+        const getUpdateMethod = UpdateDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        if (getUpdateMethod === undefined) {
             logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
         }
-        const compareMethod = this.createCompareMethod(getCompareMethod);
+        const updateMethod = this.createUpdateMethod(getUpdateMethod);
 
-        const getRemoveMethod = DeletionDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
-        if (getRemoveMethod === undefined) {
+        const getDeletionMethod = DeletionDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        if (getDeletionMethod === undefined) {
             logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
         }
-        const deleteMethod = this.createRemoveMethod(getRemoveMethod);
+        const deleteMethod = this.createDeleteMethod(getDeletionMethod);
 
         const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
             logger.warn(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
             return;
         }
+
         const embedding = new Embedding<T>(
             decoratedType.embeddingId,
             decoratedType.type,
             events,
-            compareMethod,
+            updateMethod,
             deleteMethod);
+
         embeddings.register<T>(
             new EmbeddingProcessor<T>(
                 embedding,
@@ -104,11 +106,11 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
     }
 
 
-    private createCompareMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {
+    private createUpdateMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);
     }
 
-    private createRemoveMethod(method: DeletionDecoratedMethod): EmbeddingDeleteCallback {
+    private createDeleteMethod(method: DeletionDecoratedMethod): EmbeddingDeleteCallback {
         return (currentState, embeddingContext) => method.method.call(currentState, embeddingContext);
     }
 
