@@ -1,3 +1,20 @@
+# [17.0.0] - 2021-7-20 [PR: #55](https://github.com/dolittle/JavaScript.SDK/pull/55)
+## Summary
+
+Renames the `compare` and `remove` builder methods and decorators to `resolveUpdateToEvents` and `resolveDeletionToEvents`, so that the API is consistent with the C# SDK. The new names also are more descriptive of their new function.
+
+Also updated the JS sample code to match the new [embeddings tutorial](https://dolittle.io/docs/tutorials/embeddings/).
+
+### Added
+- A new exception `CouldNotResolveUpdateToEvents`, which can be used as the default exception for when the `resolveUpdateToEvents` couldn't resolve into any events
+- A new exception `CouldNotResolveDeletionToEvents`, which can be used as the default exception for when the `resolveUpdateToEvents` couldn't resolve into any events
+
+### Changed
+- `compare` method and decorator became `resolveUpdateToEvents`
+- `remove` method and decorator became `resolveDeletionToEvents`
+- `resolveUpdateToEvents` and `resolveDeletionToEvents` now has to return an `Object | Object[]` instead of `any | any[]`. This is to enforce the methods always returning one or many events
+
+
 # [16.0.0] - 2021-7-1 [PR: #54](https://github.com/dolittle/JavaScript.SDK/pull/54)
 ## Summary
 
