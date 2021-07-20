@@ -3,7 +3,6 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { Key } from '@dolittle/sdk.projections';
-import { Failure } from '@dolittle/sdk.protobuf';
 import { EmbeddingId } from './EmbeddingId';
 
 /**
