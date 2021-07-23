@@ -1,3 +1,13 @@
+# [17.0.1] - 2021-7-23 [PR: #58](https://github.com/dolittle/JavaScript.SDK/pull/58)
+## Summary
+
+Adding "sdk.embeddings" to the "sdk" package.json.
+
+### Fixed
+
+- Adding sdk.embeddings to sdk, making the npm package include the new embeddings work
+
+
 # [17.0.0] - 2021-7-20 [PR: #55](https://github.com/dolittle/JavaScript.SDK/pull/55)
 ## Summary
 
