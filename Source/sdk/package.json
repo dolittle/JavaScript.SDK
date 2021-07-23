@@ -39,6 +39,7 @@
         "@dolittle/sdk.aggregates": "17.0.0",
         "@dolittle/sdk.artifacts": "17.0.0",
         "@dolittle/sdk.common": "17.0.0",
+        "@dolittle/sdk.embeddings": "17.0.0",
         "@dolittle/sdk.eventhorizon": "17.0.0",
         "@dolittle/sdk.events": "17.0.0",
         "@dolittle/sdk.events.handling": "17.0.0",
