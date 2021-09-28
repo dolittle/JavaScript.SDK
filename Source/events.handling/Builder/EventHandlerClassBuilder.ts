@@ -108,7 +108,7 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
             } catch (ex) {
                 throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, ex);
             }
-            method.method.call(instance, event, eventContext);
+            return method.method.call(instance, event, eventContext);
         };
     }
 
