@@ -116,8 +116,8 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
     }
 
     private createOnMethod(method: OnDecoratedProjectionMethod): ProjectionCallback<T> {
-        return (instance, event, projectionContext) => {
-            const result = method.method.call(instance, event, projectionContext);
+        return async (instance, event, projectionContext) => {
+            const result = await method.method.call(instance, event, projectionContext);
             if (result instanceof DeleteReadModelInstance) {
                 return result;
             }

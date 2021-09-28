@@ -161,8 +161,8 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
     }
 
     private createOnMethod(method: OnDecoratedEmbeddingMethod): EmbeddingProjectCallback<T> {
-        return (instance, event, embeddingProjectionContext) => {
-            const result = method.method.call(instance, event, embeddingProjectionContext);
+        return async (instance, event, embeddingProjectionContext) => {
+            const result = await method.method.call(instance, event, embeddingProjectionContext);
             if (result instanceof DeleteReadModelInstance) {
                 return result;
             }
