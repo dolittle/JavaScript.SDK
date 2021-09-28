@@ -105,8 +105,8 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
             let instance: T;
             try {
                 instance = this._getInstance(container, eventContext.executionContext);
-            } catch (ex) {
-                throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, ex);
+            } catch (error) {
+                throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, error);
             }
             return method.method.call(instance, event, eventContext);
         };
