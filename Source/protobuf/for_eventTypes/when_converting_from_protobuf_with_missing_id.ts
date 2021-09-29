@@ -9,7 +9,7 @@ describe('when converting from protobuf with missing id', () => {
     const pbArtifact = new PbArtifact();
     pbArtifact.setGeneration(42);
 
-    let result: Error = {} as Error;
+    let result: any;
 
     try {
         pbArtifact.toSDK();

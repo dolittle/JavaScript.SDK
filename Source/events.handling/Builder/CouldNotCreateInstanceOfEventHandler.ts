@@ -15,9 +15,9 @@ export class CouldNotCreateInstanceOfEventHandler extends Exception {
     /**
      * Initializes an instance of {@link CouldNotCreateInstanceOfEventHandler}.
      * @param {Constructor<any>} type The event handler type to be instantiated.
-     * @param {Exception} inner The inner exception.
+     * @param {any} error The error.
      */
-    constructor(type: Constructor<any>, inner:  Exception) {
-        super(`Could not create an instance of the event handler ${type.name}. ${inner}`);
+    constructor(type: Constructor<any>, error: any) {
+        super(`Could not create an instance of the event handler ${type.name}. ${error}`);
     }
 }

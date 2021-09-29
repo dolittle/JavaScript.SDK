@@ -62,7 +62,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
             return await this.handle(request, executionContext);
-        } catch (error) {
+        } catch (error: any) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
             failure.setRetry(true);

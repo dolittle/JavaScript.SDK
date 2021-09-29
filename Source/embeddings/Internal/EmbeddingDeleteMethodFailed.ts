@@ -11,9 +11,9 @@ export class EmbeddingDeleteMethodFailed<T> extends Exception {
      * @param {T} receivedState
      * @param {T} currentState
      * @param {EmbeddingContext} context
-     * @param {Error} error
+     * @param {any} error
      */
-     constructor(embeddingId: EmbeddingId, currentState: T, context: EmbeddingContext, error: Error) {
+     constructor(embeddingId: EmbeddingId, currentState: T, context: EmbeddingContext, error: any) {
         super(`The delete method on embedding ${embeddingId} failed to delete key ${context.key}. Current state: ${JSON.stringify(currentState)}. The error was: ${error}`);
     }
 }
