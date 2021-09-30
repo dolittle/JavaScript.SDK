@@ -1,3 +1,13 @@
+# [17.0.3] - 2021-9-30 [PR: #60](https://github.com/dolittle/JavaScript.SDK/pull/60)
+## Summary
+
+Encountered an inconvenience when consuming the SDK where the type of a Commtted Event Result's occurred property was of an `any` type unless you had the @types/luxon package installed locally in your project. We should instead just have that package as a normal dependency so that typescript consumers of the SDK does not need to install that package themselves.
+
+### Changed
+
+- @types/luxon package as a non-dev dependency
+
+
 # [17.0.2] - 2021-9-29 [PR: #59](https://github.com/dolittle/JavaScript.SDK/pull/59)
 ## Summary
 
