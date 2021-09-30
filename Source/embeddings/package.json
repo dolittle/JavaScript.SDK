@@ -38,9 +38,9 @@
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/runtime.contracts": "5.4.0",
         "@dolittle/types": "5.0.1",
-        "luxon": "1.24.1"
+        "luxon": "1.24.1",
+        "@types/luxon": "1.24.1"
     },
     "devDependencies": {
-        "@types/luxon": "1.24.1"
     }
 }

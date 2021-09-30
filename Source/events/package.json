@@ -45,10 +45,10 @@
         "deasync": "0.1.21",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
-        "winston": "3.3.2"
+        "winston": "3.3.2",
+        "@types/luxon": "1.24.1"
     },
     "devDependencies": {
         "@types/deasync": "0.1.1",
-        "@types/luxon": "1.24.1"
     }
 }
