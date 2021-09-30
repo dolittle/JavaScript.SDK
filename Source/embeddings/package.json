@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.embeddings",
-    "version": "17.0.2",
+    "version": "17.0.3",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -41,6 +41,5 @@
         "luxon": "1.24.1",
         "@types/luxon": "1.24.1"
     },
-    "devDependencies": {
-    }
+    "devDependencies": {}
 }
