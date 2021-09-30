@@ -1,3 +1,14 @@
+# [17.0.2] - 2021-9-29 [PR: #59](https://github.com/dolittle/JavaScript.SDK/pull/59)
+## Summary
+
+Fixes a bug where `async` Event Handler methods were not properly awaited (and thus also exceptions ignored) if they did any async work. In the process, also found a bug related to _delete results_ returned from async Projection and Embedding methods, that would not be handled correctly.
+
+### Fixed
+
+- Return the `Promise` from Event Handler methods in the EventHandlerClassBuilder to handle async methods properly.
+- Await results from Projection/Embedding `on()` methods, so that async _delete results_ are handled properly.
+
+
 # [17.0.1] - 2021-7-23 [PR: #58](https://github.com/dolittle/JavaScript.SDK/pull/58)
 ## Summary
 

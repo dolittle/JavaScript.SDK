@@ -14,7 +14,7 @@ export class EmbeddingUpdateMethodFailed<T> extends Exception {
      * @param {EmbeddingContext} context
      * @param {Error} error
      */
-    constructor(embeddingId: EmbeddingId, receivedState: T, currentState: T, context: EmbeddingContext, error: Error) {
+    constructor(embeddingId: EmbeddingId, receivedState: T, currentState: T, context: EmbeddingContext, error: any) {
         super(`The update method on embedding ${embeddingId} failed to update read model with key ${context.key}. Received state: ${JSON.stringify(receivedState)}. Current state: ${JSON.stringify(currentState)}The error was: ${error}`);
     }
 }
