@@ -49,6 +49,6 @@
         "@types/luxon": "1.24.1"
     },
     "devDependencies": {
-        "@types/deasync": "0.1.1",
+        "@types/deasync": "0.1.1"
     }
 }
