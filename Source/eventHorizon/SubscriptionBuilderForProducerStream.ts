@@ -33,9 +33,9 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {PartitionId | Guid | string} tenant Stream to subscribe to events from.
+     * @param {PartitionId | string} partitionId Stream partition to subscribe to events from.
      */
-    fromProducerPartition(partitionId: PartitionId | Guid | string): SubscriptionBuilderForProducerPartition {
+    fromProducerPartition(partitionId: PartitionId | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
         this._producerPartitionId = PartitionId.from(partitionId);
         this._builder = new SubscriptionBuilderForProducerPartition(

@@ -7,25 +7,25 @@ import { ConceptAs } from '@dolittle/concepts';
 /**
  * Represents the unique identifier of a partition.
  */
-export class PartitionId extends ConceptAs<Guid, '@dolittle/sdk.events.PartitionId'> {
-    constructor(id: Guid) {
+export class PartitionId extends ConceptAs<string, '@dolittle/sdk.events.PartitionId'> {
+    constructor(id: string) {
         super(id, '@dolittle/sdk.events.PartitionId');
     }
 
     /**
      * Gets the unspecified partition id
      */
-    static unspecified: PartitionId = PartitionId.from(Guid.empty);
+    static unspecified: PartitionId = PartitionId.from(Guid.empty.toString());
 
     /**
      * Creates a {PartitionId} from a guid.
      *
      * @static
-     * @param {PartitionId | Guid | string} id
+     * @param {PartitionId |  string} id
      * @returns {PartitionId}
      */
-    static from(id: PartitionId | Guid | string): PartitionId {
+    static from(id: PartitionId | string): PartitionId {
         if (id instanceof PartitionId) return id;
-        return new PartitionId(Guid.as(id));
+        return new PartitionId(id);
     }
 };
