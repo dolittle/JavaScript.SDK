@@ -158,7 +158,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContext);
 

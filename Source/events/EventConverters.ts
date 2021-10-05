@@ -40,7 +40,7 @@ export class EventConverters {
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
         uncommittedEvent.setArtifact(eventTypes.toProtobuf(eventType));
-        uncommittedEvent.setEventsourceid(guids.toProtobuf(eventSourceId.value));
+        uncommittedEvent.setEventsourceid(eventSourceId.value);
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -113,7 +113,7 @@ export class EventConverters {
         const committedEvent = new SdkCommittedEvent(
             EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
-            EventSourceId.from(guids.toSDK(input.getEventsourceid())),
+            EventSourceId.from(input.getEventsourceid()),
             executionContexts.toSDK(executionContext),
             eventTypes.toSDK(input.getType()),
             JSON.parse(input.getContent()),
@@ -139,7 +139,7 @@ export class EventConverters {
         const committedEvent = new PbCommittedEvent();
         committedEvent.setEventlogsequencenumber(input.eventLogSequenceNumber.value);
         committedEvent.setOccurred(occurred);
-        committedEvent.setEventsourceid(guids.toProtobuf(input.eventSourceId.value));
+        committedEvent.setEventsourceid(input.eventSourceId.value);
         committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
         committedEvent.setType(eventTypes.toProtobuf(input.type));
         committedEvent.setContent(JSON.stringify(input.content));

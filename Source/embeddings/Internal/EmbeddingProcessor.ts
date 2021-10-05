@@ -197,7 +197,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         const embeddingProjectContext = new EmbeddingProjectContext(
             pbStateType === ProjectionCurrentStateType.CREATED_FROM_INITIAL_STATE,
             Key.from(pbKey),
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(pbEventSourceId),
             executionContext);
 
         let event = JSON.parse(pbEvent.getContent());

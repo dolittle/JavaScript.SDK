@@ -74,7 +74,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
         const response = new PartitionedFilterResponse();
         response.setIsincluded(result.shouldInclude);
-        response.setPartitionid(guids.toProtobuf(result.partitionId.value));
+        response.setPartitionid(result.partitionId.value);
         return response;
     }
 }

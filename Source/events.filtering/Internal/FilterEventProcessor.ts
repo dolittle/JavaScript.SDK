@@ -58,7 +58,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContext);
 
