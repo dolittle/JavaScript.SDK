@@ -31,8 +31,8 @@ export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.Event
      * @param {EventSourceId | Guid | string)} id
      * @returns {EventSourceId}
      */
-    static from(id: EventSourceId | string): EventSourceId {
+    static from(id: EventSourceId | Guid | string): EventSourceId {
         if (id instanceof EventSourceId) return id;
-        return new EventSourceId(id);
+        return new EventSourceId(id.toString());
     }
 };
