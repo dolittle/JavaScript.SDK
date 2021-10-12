@@ -13,9 +13,9 @@ export class PartitionedFilterResult {
     /**
      * Initializes a new instance of {@link PartitionedFilterResult}.
      * @param {boolean} shouldInclude Tells whether or not the event should be included.
-     * @param {PartitionId | string} partitionId Tells which partition the event should be partitioned into.
+     * @param {PartitionId | Guid | string} partitionId Tells which partition the event should be partitioned into.
      */
-    constructor(readonly shouldInclude: boolean, partitionId: PartitionId | string) {
+    constructor(readonly shouldInclude: boolean, partitionId: PartitionId | Guid | string) {
         this.partitionId = PartitionId.from(partitionId);
     }
 }
