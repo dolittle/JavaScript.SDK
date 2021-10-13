@@ -39,7 +39,7 @@ export class EventConverters {
      */
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
-        uncommittedEvent.setArtifact(eventTypes.toProtobuf(eventType));
+        uncommittedEvent.setEventtype(eventTypes.toProtobuf(eventType));
         uncommittedEvent.setEventsourceid(eventSourceId.value);
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
@@ -55,7 +55,7 @@ export class EventConverters {
      */
     static getUncommittedEmbeddingEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
-        uncommittedEvent.setArtifact(eventTypes.toProtobuf(eventType));
+        uncommittedEvent.setEventtype(eventTypes.toProtobuf(eventType));
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -71,7 +71,7 @@ export class EventConverters {
      */
     static getUncommittedAggregateEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedAggregateEvents.UncommittedAggregateEvent {
         const uncommittedAggregateEvent = new PbUncommittedAggregateEvents.UncommittedAggregateEvent();
-        uncommittedAggregateEvent.setArtifact(eventTypes.toProtobuf(eventType));
+        uncommittedAggregateEvent.setEventtype(eventTypes.toProtobuf(eventType));
         uncommittedAggregateEvent.setPublic(isPublic);
         uncommittedAggregateEvent.setContent(JSON.stringify(event));
         return uncommittedAggregateEvent;
@@ -91,7 +91,7 @@ export class EventConverters {
             aggregateRootId,
             aggregateRootVersion,
             executionContexts.toSDK(executionContext),
-            eventTypes.toSDK(input.getType()),
+            eventTypes.toSDK(input.getEventtype()),
             JSON.parse(input.getContent()),
             input.getPublic()
         );
@@ -115,7 +115,7 @@ export class EventConverters {
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
             EventSourceId.from(input.getEventsourceid()),
             executionContexts.toSDK(executionContext),
-            eventTypes.toSDK(input.getType()),
+            eventTypes.toSDK(input.getEventtype()),
             JSON.parse(input.getContent()),
             input.getPublic(),
             input.getExternal(),
@@ -141,7 +141,7 @@ export class EventConverters {
         committedEvent.setOccurred(occurred);
         committedEvent.setEventsourceid(input.eventSourceId.value);
         committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
-        committedEvent.setType(eventTypes.toProtobuf(input.type));
+        committedEvent.setEventtype(eventTypes.toProtobuf(input.type));
         committedEvent.setContent(JSON.stringify(input.content));
         committedEvent.setPublic(input.isPublic);
         committedEvent.setExternal(input.isExternal);

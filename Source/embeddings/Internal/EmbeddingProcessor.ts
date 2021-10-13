@@ -183,8 +183,8 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         const pbEventSourceId = pbEvent.getEventsourceid();
         if (!pbEventSourceId) throw new MissingEventInformation('EventSourceId');
 
-        const pbArtifact = pbEvent.getArtifact();
-        if (!pbArtifact) throw new MissingEventInformation('Artifact');
+        const pbEventType = pbEvent.getEventtype();
+        if (!pbEventType) throw new MissingEventInformation('Event Type');
 
         if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
             throw new MissingEventInformation('No state in ProjectionRequest');
@@ -202,7 +202,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbArtifact);
+        const eventType = eventTypes.toSDK(pbEventType);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

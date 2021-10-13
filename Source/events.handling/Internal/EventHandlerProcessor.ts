@@ -60,7 +60,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         for (const eventType of this._handler.handledEvents) {
             handledArtifacts.push(eventTypes.toProtobuf(eventType));
         }
-        registerArguments.setTypesList(handledArtifacts);
+        registerArguments.setEventtypesList(handledArtifacts);
         return registerArguments;
     }
 
@@ -123,8 +123,8 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         const pbOccurred = pbEvent.getOccurred();
         if (!pbOccurred) throw new MissingEventInformation('Occurred');
 
-        const pbArtifact = pbEvent.getType();
-        if (!pbArtifact) throw new MissingEventInformation('Artifact');
+        const pbEventType = pbEvent.getEventtype();
+        if (!pbEventType) throw new MissingEventInformation('Event Type');
 
         const eventContext = new EventContext(
             pbSequenceNumber,
@@ -134,7 +134,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbArtifact);
+        const eventType = eventTypes.toSDK(pbEventType);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);
