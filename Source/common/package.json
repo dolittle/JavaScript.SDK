@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.common",
-    "version": "18.0.0-eventsource.2",
+    "version": "18.0.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,7 +33,7 @@
     },
     "dependencies": {
         "@dolittle/types": "5.0.1",
-        "@dolittle/sdk.execution": "18.0.0-eventsource.2"
+        "@dolittle/sdk.execution": "18.0.0"
     },
     "devDependencies": {}
 }
