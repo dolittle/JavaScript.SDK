@@ -46,12 +46,12 @@ export interface IEmbedding<TReadModel> {
      * @param {EmbeddingContext} context EmbeddingContext
      * @returns {any | any[]} One or more events to correct the state towards the wanted state.
      */
-    update(receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext): any | any[];
+    update(receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext): Object | Object[];
 
     /**
      * Called, when the readmodel should get deleted. Returns events, that should result in the readmodels deletion.
      * @param {T} currentState The received state.
      * @param {EmbeddingContext} context EmbeddingContext
      */
-    delete(currentState: TReadModel, context: EmbeddingContext): any | any[];
+    delete(currentState: TReadModel, context: EmbeddingContext): Object | Object[];
 }

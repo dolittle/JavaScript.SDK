@@ -264,8 +264,9 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         return state;
     }
 
-    private getUncommittedEvents(...events: any) {
-        return events.map((sdkEvent: any) => EventConverters.getUncommittedEmbeddingEventFrom(
+    private getUncommittedEvents(eventOrEvents: Object | Object[]) {
+        const events = Array.isArray(eventOrEvents) ? eventOrEvents : [ eventOrEvents ];
+        return events.map((sdkEvent: Object) => EventConverters.getUncommittedEmbeddingEventFrom(
             sdkEvent,
             this._eventTypes.resolveFrom(sdkEvent),
             true));
