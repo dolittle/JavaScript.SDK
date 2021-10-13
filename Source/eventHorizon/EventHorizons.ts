@@ -131,7 +131,7 @@ export class EventHorizons extends IEventHorizons {
 
         const pbSubscription = new PbSubscription();
         pbSubscription.setCallcontext(callContext);
-        pbSubscription.setPartitionid(guids.toProtobuf(subscription.partition.value));
+        pbSubscription.setPartitionid(subscription.partition.value);
         pbSubscription.setScopeid(guids.toProtobuf(subscription.scope.value));
         pbSubscription.setStreamid(guids.toProtobuf(subscription.stream.value));
         pbSubscription.setTenantid(guids.toProtobuf(subscription.tenant.value));

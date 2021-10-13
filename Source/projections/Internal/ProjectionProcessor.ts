@@ -153,12 +153,12 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         const pbOccurred = pbEvent.getOccurred();
         if (!pbOccurred) throw new MissingEventInformation('Occurred');
 
-        const pbArtifact = pbEvent.getType();
-        if (!pbArtifact) throw new MissingEventInformation('Artifact');
+        const pbEventType = pbEvent.getEventtype();
+        if (!pbEventType) throw new MissingEventInformation('Event Type');
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContext);
 
@@ -177,7 +177,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbArtifact);
+        const eventType = eventTypes.toSDK(pbEventType);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

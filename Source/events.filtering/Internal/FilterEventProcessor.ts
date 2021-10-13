@@ -53,18 +53,18 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         const pbOccurred = pbEvent.getOccurred();
         if (!pbOccurred) throw new MissingEventInformation('Occurred');
 
-        const pbArtifact = pbEvent.getType();
-        if (!pbArtifact) throw new MissingEventInformation('Artifact');
+        const pbEventType = pbEvent.getEventtype();
+        if (!pbEventType) throw new MissingEventInformation('Event Type');
 
         const eventContext = new EventContext(
             pbSequenceNumber,
-            EventSourceId.from(guids.toSDK(pbEventSourceId)),
+            EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
             executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const artifact = eventTypes.toSDK(pbArtifact);
+        const artifact = eventTypes.toSDK(pbEventType);
         if (this._eventTypes.hasTypeFor(artifact)) {
             const eventType = this._eventTypes.getTypeFor(artifact);
             event = Object.assign(new eventType(), event);

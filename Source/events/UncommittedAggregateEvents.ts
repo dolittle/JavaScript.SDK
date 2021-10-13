@@ -54,7 +54,15 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
     }
 
 
-    static from(eventSourceId: Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {
+    /**
+     * Creates uncommitted aggregate events from the provided events and metadata.
+     * @param eventSourceId The event source id that the uncommitted events will be applied to.
+     * @param aggregateRootId The aggregate root id that the uncommitted events will be applied to.
+     * @param expectedAggregateRootVersion The previous aggregate root version that was used to produce the uncommitted events.
+     * @param events The uncommitted events to apply.
+     * @returns {UncommittedAggregateEvents} Uncommitted aggregate events
+     */
+    static from(eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {
         return new UncommittedAggregateEvents(EventSourceId.from(eventSourceId), aggregateRootId, expectedAggregateRootVersion, ...events);
     }
 

@@ -9,10 +9,10 @@ import { Guid } from '@dolittle/rudiments';
  *
  * @export
  * @class EventSourceId
- * @extends {ConceptAs<Guid, '@dolittle/sdk.events.EventSourceId'>}
+ * @extends {ConceptAs<string, '@dolittle/sdk.events.EventSourceId'>}
  */
-export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSourceId'> {
-    constructor(id: Guid) {
+export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.EventSourceId'> {
+    constructor(id: string) {
         super(id, '@dolittle/sdk.events.EventSourceId');
     }
 
@@ -21,7 +21,7 @@ export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSo
      * @returns {EventSourceId}
      */
     static new(): EventSourceId {
-        return new EventSourceId(Guid.create());
+        return new EventSourceId(Guid.create().toString());
     }
 
     /**
@@ -33,6 +33,6 @@ export class EventSourceId extends ConceptAs<Guid, '@dolittle/sdk.events.EventSo
      */
     static from(id: EventSourceId | Guid | string): EventSourceId {
         if (id instanceof EventSourceId) return id;
-        return new EventSourceId(Guid.as(id));
+        return new EventSourceId(id.toString());
     }
 };
