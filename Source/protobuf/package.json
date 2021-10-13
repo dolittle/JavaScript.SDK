@@ -35,7 +35,7 @@
     },
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
-        "@dolittle/contracts": "6.0.0-eventsource.0",
+        "@dolittle/contracts": "6.0.0",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/sdk.artifacts": "18.0.0-eventsource.1",
         "@dolittle/sdk.execution": "18.0.0-eventsource.1"
