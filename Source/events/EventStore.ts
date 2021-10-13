@@ -64,7 +64,7 @@ export class EventStore extends IEventStore {
         if (this.isUncommittedEventOrEvents(eventOrEvents)) {
             return this.commitInternal(this.asArray(eventOrEvents), eventSourceIdOrCancellation as Cancellation);
         }
-        const eventSourceId = eventSourceIdOrCancellation as string;
+        const eventSourceId = eventSourceIdOrCancellation as EventSourceId | Guid | string;
         return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, eventType, false)], cancellation);
     }
 
@@ -82,7 +82,7 @@ export class EventStore extends IEventStore {
         if (this.isUncommittedAggregateEvents(eventOrEvents)) {
             return this.commitAggregateInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
-        const eventSourceId = eventSourceIdOrCancellation as string;
+        const eventSourceId = eventSourceIdOrCancellation as EventSourceId | Guid | string;
         return this.commitAggregateInternal(
             UncommittedAggregateEvents.from(
                 eventSourceId,
