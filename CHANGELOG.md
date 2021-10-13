@@ -1,3 +1,23 @@
+# [18.0.0] - 2021-10-13 [PR: #61](https://github.com/dolittle/JavaScript.SDK/pull/61)
+## Summary
+
+Implementing the changes introduced by https://github.com/dolittle/Contracts/pull/53. Allowing EventSourceID and PartitionID to be strings, to more easily integrate with events from existing systems.
+
+Also fixed a small bug when returning an array of events from an Embedding Update/Delete method.
+
+This is considered a breaking change because it requires a Runtime compatible with Contracts v6 to function.
+
+### Added
+
+- EventSourceID is now a string instead of a Guid.
+- PartitionID is now also a string instead of a Guid.
+
+### Fixed
+
+- Aligned names of event type fields throughout messages from Contracts v6.0.0
+- Allow Embedding Update/Delete method to return an array of events.
+
+
 # [17.0.3] - 2021-9-30 [PR: #60](https://github.com/dolittle/JavaScript.SDK/pull/60)
 ## Summary
 
