@@ -6,6 +6,7 @@
     "Samples/Tutorials/Embeddings",
     "Samples/Tutorials/GettingStarted",
     "Samples/Tutorials/Projections",
+    "Samples/Tutorials/SchemaStore",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
     "Samples/Advanced",

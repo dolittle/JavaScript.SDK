@@ -28,7 +28,9 @@ $ npm install @dolittle/sdk
 
 In the [./Samples/Tutorial](./Samples/Tutorial) folder you can find sample code on how to use the SDK. 
 
-# Building
+# Developing
+
+## Building
 
 This project relies on [NodeJS](https://nodejs.org/en/) `>= 14.16` and leverages [Yarn](http://yarnpkg.com/) `>= 1.22`.
 The code is written using [TypeScript](http://www.typescriptlang.org) and transpiles
@@ -51,6 +53,10 @@ To run the test harness:
 ```shell
 $ yarn test
 ```
+
+## Adding a new package/sample
+
+Add the new project to root `package.json`'s `"workspaces"` array, so that it gets built together with the others. Also add it to either `Source/tsconfig.json` or `Samples/tsconfig.json`, depending on if it's a new SDK package or sample package. After this, the new packages are linked for easier development.
 
 # Issues and Contributing
 Issues and contributions are always welcome!

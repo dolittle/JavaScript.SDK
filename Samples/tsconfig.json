@@ -8,6 +8,7 @@
         { "path": "./Tutorials/Embeddings" },
         { "path": "./Tutorials/GettingStarted" },
         { "path": "./Tutorials/Projections" },
+        { "path": "./Tutorials/SchemaStore" },
         { "path": "./Tutorials/EventHorizon/Consumer" },
         { "path": "./Tutorials/EventHorizon/Producer" },
     ]

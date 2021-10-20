@@ -1,0 +1,16 @@
+{
+    "type": "object",
+    "properties": {
+        "Dish": {
+            "type": "string"
+        },
+        "Chef": {
+            "type": "string"
+        }
+    },
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "EventTypeId": "551bbdc1-6ef2-4a9d-9a2e-91b380632b59",
+    "EventTypeGeneration": 1,
+    "$id": "https://dolittle.io/DishCreated/1",
+    "title": "DishCreated"
+}

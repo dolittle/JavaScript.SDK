@@ -1,0 +1,23 @@
+{
+    "name": "schema-store",
+    "private": true,
+    "version": "17.0.1",
+    "main": "index.js",
+    "author": "Dolittle",
+    "license": "MIT",
+    "scripts": {
+        "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
+        "start": "ts-node index.ts",
+        "build": "tsc -b ./tsconfig.json"
+    },
+    "dependencies": {
+        "@dolittle/sdk": "17.0.1",
+        "@dolittle/sdk.artifacts": "17.0.1",
+        "@dolittle/sdk.events": "17.0.1",
+        "@dolittle/sdk.events.handling": "17.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4",
+        "ts-node": "^8.10.1"
+    }
+}

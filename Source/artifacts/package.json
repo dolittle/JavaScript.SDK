@@ -35,8 +35,10 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
+        "@dolittle/runtime.contracts": "5.4.0",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "5.4.0"
+        "quicktype-core": "^6.0.70",
+        "typescript-json-schema": "^0.50.1"
     },
     "devDependencies": {
         "@types/is-natural-number": "^4.0.0"
