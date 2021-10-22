@@ -32,10 +32,10 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/contracts": "6.0.0",
+        "@dolittle/contracts": "6.1.0",
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "6.0.0",
+        "@dolittle/runtime.contracts": "6.1.0",
         "@dolittle/sdk.artifacts": "18.0.0",
         "@dolittle/sdk.events": "18.0.0",
         "@dolittle/sdk.execution": "18.0.0",
