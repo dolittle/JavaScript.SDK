@@ -14,7 +14,7 @@ export class EventHandlerDecoratedType {
         readonly eventHandlerId: EventHandlerId,
         readonly scopeId: ScopeId,
         readonly partitioned: boolean,
-        readonly alias: EventHandlerAlias | undefined,
+        readonly alias: EventHandlerAlias,
         readonly type: Constructor<any>) {
     }
 }
