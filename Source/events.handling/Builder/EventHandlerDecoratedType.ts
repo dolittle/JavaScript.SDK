@@ -4,7 +4,7 @@
 import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { EventHandlerId } from '..';
+import { EventHandlerAlias, EventHandlerId } from '..';
 
 /**
  * Represents an event handler created from the decorator
@@ -14,6 +14,7 @@ export class EventHandlerDecoratedType {
         readonly eventHandlerId: EventHandlerId,
         readonly scopeId: ScopeId,
         readonly partitioned: boolean,
+        readonly alias: EventHandlerAlias | undefined,
         readonly type: Constructor<any>) {
     }
 }

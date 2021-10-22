@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
+import { EventHandlerAlias } from './EventHandlerAlias';
 import { EventHandlerId } from './EventHandlerId';
 
 
@@ -28,6 +29,16 @@ export abstract class IEventHandler {
      * Gets the event types identified by its artifact that is handled by this event handler.
      */
     abstract readonly handledEvents: Iterable<EventType>;
+
+    /**
+     * Gets the alias for the event handler.
+     */
+    abstract readonly alias: EventHandlerAlias | undefined;
+
+    /**
+     * Gets a value indicating whether this event handler has an alias or not.
+     */
+    abstract readonly hasAlias: boolean;
 
     /**
      * Handle an event.

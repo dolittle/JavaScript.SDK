@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerId } from '..';
+import { EventHandlerAlias, EventHandlerId } from '..';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerOptions } from './EventHandlerOptions';
@@ -21,6 +21,7 @@ export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, o
             EventHandlerId.from(eventHandlerId),
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
             options.partitioned === undefined || options.partitioned,
+            options.alias !== undefined ? EventHandlerAlias.from(options.alias) : undefined,
             target));
     };
 }
