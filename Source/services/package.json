@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.services",
-    "version": "18.0.0",
+    "version": "18.1.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,9 +35,9 @@
     "dependencies": {
         "@dolittle/contracts": "6.1.0",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.execution": "18.0.0",
-        "@dolittle/sdk.resilience": "18.0.0",
-        "@dolittle/sdk.protobuf": "18.0.0",
+        "@dolittle/sdk.execution": "18.1.0",
+        "@dolittle/sdk.resilience": "18.1.0",
+        "@dolittle/sdk.protobuf": "18.1.0",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
