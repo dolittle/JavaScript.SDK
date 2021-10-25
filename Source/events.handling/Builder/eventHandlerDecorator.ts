@@ -5,10 +5,11 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerId } from '..';
+import { EventHandlerAlias, EventHandlerId } from '..';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerOptions } from './EventHandlerOptions';
+import { Constructor } from '@dolittle/types';
 
 /**
  * Decorator to mark a class as an EventHandler.
@@ -17,10 +18,12 @@ import { EventHandlerOptions } from './EventHandlerOptions';
  */
 export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}) {
     return function (target: any) {
+        const targetConstructor = target as Constructor<any>;
         EventHandlerDecoratedTypes.register(new EventHandlerDecoratedType(
             EventHandlerId.from(eventHandlerId),
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
             options.partitioned === undefined || options.partitioned,
-            target));
+            EventHandlerAlias.from(options.alias ?? targetConstructor.name),
+            targetConstructor));
     };
 }
