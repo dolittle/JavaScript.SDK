@@ -36,7 +36,7 @@
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "6.1.0"
+        "@dolittle/runtime.contracts": "6.2.0-aragorn.2"
     },
     "devDependencies": {
         "@types/is-natural-number": "^4.0.0"
