@@ -55,7 +55,9 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
         registerArguments.setScopeid(guids.toProtobuf(this._handler.scopeId.value));
         registerArguments.setPartitioned(this._handler.partitioned);
-
+        if (this._handler.hasAlias) {
+            registerArguments.setAlias(this._handler.alias!.value);
+        }
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {
             handledArtifacts.push(eventTypes.toProtobuf(eventType));

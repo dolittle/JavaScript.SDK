@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events.processing",
-    "version": "18.0.0",
+    "version": "18.1.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -32,16 +32,16 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/contracts": "6.0.0",
+        "@dolittle/contracts": "6.1.0",
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "6.0.0",
-        "@dolittle/sdk.artifacts": "18.0.0",
-        "@dolittle/sdk.events": "18.0.0",
-        "@dolittle/sdk.execution": "18.0.0",
-        "@dolittle/sdk.protobuf": "18.0.0",
-        "@dolittle/sdk.services": "18.0.0",
-        "@dolittle/sdk.resilience": "18.0.0",
+        "@dolittle/runtime.contracts": "6.1.0",
+        "@dolittle/sdk.artifacts": "18.1.0",
+        "@dolittle/sdk.events": "18.1.0",
+        "@dolittle/sdk.execution": "18.1.0",
+        "@dolittle/sdk.protobuf": "18.1.0",
+        "@dolittle/sdk.services": "18.1.0",
+        "@dolittle/sdk.resilience": "18.1.0",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
