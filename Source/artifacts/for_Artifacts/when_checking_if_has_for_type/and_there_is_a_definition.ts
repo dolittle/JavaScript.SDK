@@ -4,7 +4,7 @@
 import one_association from '../given/one_association';
 
 describe('when checking if has for type and there is a definition', () => {
-    const result = one_association.eventTypes.hasFor(one_association.type);
+    const result = one_association.artifacts.hasFor(one_association.class_type);
 
     it('should have it', () => result.should.be.true);
 });

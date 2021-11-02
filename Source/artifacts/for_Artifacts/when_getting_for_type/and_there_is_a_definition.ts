@@ -4,7 +4,7 @@
 import one_association from '../given/one_association';
 
 describe('when checking if has for type and there is a definition', () => {
-    const result = one_association.eventTypes.getFor(one_association.type);
+    const result = one_association.artifacts.getFor(one_association.class_type);
 
     it('should return an instance', () => (result !== null || result !== undefined).should.be.true);
 });

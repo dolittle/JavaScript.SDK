@@ -1,29 +1,29 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { EventType } from './EventType';
-import { EventTypeId } from './EventTypeId';
+import { Artifact, ArtifactIdLike } from './Artifact';
 
+export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> = TArtifact | TId | Guid | string;
 /**
- * Defines the system for working with {@link EventType}
+ * Defines the system for working with {@link Artifact}
  */
-export abstract class IEventTypes {
+
+export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> {
 
     /**
      * Check if there is a type associated with an artifact.
-     * @param {EventType} input Artifact.
+     * @param {TArtifact} input Artifact.
      * @returns {boolean} true if there is, false if not.
      */
-    abstract hasTypeFor (input: EventType): boolean;
+    abstract hasTypeFor (input: TArtifact): boolean;
 
     /**
      * Get type for a given artifact.
-     * @param {EventType} input Artifact.
+     * @param {TArtifact} input Artifact.
      * @returns type for artifact.
      */
-    abstract getTypeFor (input: EventType): Constructor<any>;
+    abstract getTypeFor (input: TArtifact): Constructor<any>;
 
     /**
      * Check if there is an {Artifact} definition for a given type.
@@ -35,23 +35,23 @@ export abstract class IEventTypes {
     /**
      * Get {Artifact} definition for a given type.
      * @param {Function} type Type to get for.
-     * @returns {EventType} The artifact associated.
+     * @returns {TArtifact} The artifact associated.
      */
-    abstract getFor (type: Constructor<any>): EventType;
+    abstract getFor (type: Constructor<any>): TArtifact;
 
     /**
      * Resolves an artifact from optional input or the given object.
      * @param object Object to resolve for.
      * @param [input] Optional input as an artifact or representations of artifacts as identifier.
-     * @returns {EventType} Resolved event type.
+     * @returns {TArtifact} Resolved event type.
      * @throws {UnableToResolveArtifact} If not able to resolve artifact.
      */
-    abstract resolveFrom (object: any, input?: EventType | EventTypeId | Guid | string): EventType;
+    abstract resolveFrom (object: any, input?: ArtifactOrId<TArtifact, TId>): TArtifact;
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
      * @param {Constructor<any>} type Type to associate.
-     * @param {EventType} eventType Artifact to associate with.
+     * @param {TArtifact} eventType Artifact to associate with.
      */
-    abstract associate (type: Constructor<any>, eventType: EventType): void;
+    abstract associate (type: Constructor<any>, eventType: TArtifact): void;
 }

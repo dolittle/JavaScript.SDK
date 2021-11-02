@@ -4,8 +4,8 @@
 import one_association from '../given/one_association';
 
 describe('when resolving from object with no input', () => {
-    const object = new one_association.type();
-    const result = one_association.eventTypes.resolveFrom(object);
+    const object = new one_association.class_type();
+    const result = one_association.artifacts.resolveFrom(object);
 
     it('should return an instance', () => (result !== null || result !== undefined).should.be.true);
 });
