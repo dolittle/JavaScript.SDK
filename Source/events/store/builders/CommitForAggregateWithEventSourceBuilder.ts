@@ -1,13 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IEventTypes } from '@dolittle/sdk.artifacts';
 import { Logger } from 'winston';
-import { AggregateRootId } from './AggregateRootId';
-import { IEventStore } from './IEventStore';
-import { EventSourceId } from './EventSourceId';
+import { AggregateRootId, AggregateRootVersion, EventSourceId, IEventTypes } from '../../index';
+import { IEventStore } from '../index';
 import { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCalled';
-import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitForAggregateWithEventSourceAndExpectedVersionBuilder } from './CommitForAggregateWithEventSourceAndExpectedVersionBuilder';
 
 /**

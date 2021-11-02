@@ -4,19 +4,20 @@
 import { DateTime } from 'luxon';
 import { EventType } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EventSourceId } from './EventSourceId';
-import { EventLogSequenceNumber } from './EventLogSequenceNumber';
+import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId } from '../index';
+import { CommittedEvent } from './CommittedEvent';
 
 /**
- * Represents a committed event
+ * Represents an event that was applied to an Event Source by an Aggregate Root and is committed to the Event Store.
  */
-export class CommittedEvent {
-
+export class CommittedAggregateEvent extends CommittedEvent {
     /**
      * Initializes a new instance of {@link CommittedEvent}.
      * @param {EventLogSequenceNumber} eventLogSequenceNumber The sequence number in the event log.
      * @param {DateTime} occurred Timestamp for when it occurred.
      * @param {EventSourceId} eventSourceId Identifier of the event source.
+     * @param {AggregateRootId} aggregateRootId Identifier of the aggregate root.
+     * @param {AggregateRootVersion} aggregateRootVersion The version of the aggregate root that applied the event.
      * @param {ExecutionContext} executionContext The execution context in which the event happened.
      * @param {EventType} type Type of event.
      * @param {*} content Actual content of the event.
@@ -29,12 +30,24 @@ export class CommittedEvent {
         readonly eventLogSequenceNumber: EventLogSequenceNumber,
         readonly occurred: DateTime,
         readonly eventSourceId: EventSourceId,
+        readonly aggregateRootId: AggregateRootId,
+        readonly aggregateRootVersion: AggregateRootVersion,
         readonly executionContext: ExecutionContext,
         readonly type: EventType,
         readonly content: any,
-        readonly isPublic: boolean,
-        readonly isExternal: boolean,
-        readonly externalEventLogSequenceNumber: EventLogSequenceNumber,
-        readonly externalEventReceived: DateTime) {
+        readonly isPublic: boolean) {
+
+        super(
+            eventLogSequenceNumber,
+            occurred,
+            eventSourceId,
+            executionContext,
+            type,
+            content,
+            isPublic,
+            false,
+            EventLogSequenceNumber.first,
+            DateTime.fromJSDate(new Date()));
     }
 }
+

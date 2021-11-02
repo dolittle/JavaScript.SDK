@@ -15,13 +15,10 @@ import {
 import { EventType } from '@dolittle/sdk.artifacts';
 import { eventTypes, guids, executionContexts } from '@dolittle/sdk.protobuf';
 
+import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId } from '../index';
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
 import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
-import { EventSourceId } from './EventSourceId';
 import { MissingExecutionContext } from './MissingExecutionContext';
-import { EventLogSequenceNumber } from './EventLogSequenceNumber';
-import { AggregateRootId } from './AggregateRootId';
-import { AggregateRootVersion } from './AggregateRootVersion';
 
 
 /**

@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-import { EventType, EventTypeId } from '@dolittle/sdk.artifacts';
+
+import { EventType, EventTypeId } from '../index';
 
 /**
  * Represents and uncommitted aggregate event

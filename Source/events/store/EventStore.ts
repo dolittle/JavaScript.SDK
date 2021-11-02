@@ -12,27 +12,25 @@ import {
     FetchForAggregateRequest
 } from '@dolittle/runtime.contracts/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
-import { EventType, EventTypeId, IEventTypes } from '@dolittle/sdk.artifacts';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
+import { CommitForAggregateBuilder } from './builders';
+import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId, IEventTypes } from '../index';
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
-import { AggregateRootId } from './AggregateRootId';
-import { AggregateRootVersion } from './AggregateRootVersion';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
-import { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 import { CommittedEvents } from './CommittedEvents';
 import { EventConverters } from './EventConverters';
-import { EventSourceId } from './EventSourceId';
 import { IEventStore } from './IEventStore';
 import { syncPromise } from './syncPromise';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
+
 
 /**
  * Represents an implementation of {@link IEventStore}
