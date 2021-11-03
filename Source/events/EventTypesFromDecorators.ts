@@ -21,6 +21,6 @@ export class EventTypesFromDecorators {
      * @param {number} generation Optional generation - defaults to 0.
      */
     static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation = Generation.first, alias: EventTypeAlias | undefined): void {
-        this.eventTypes.associate(type, new EventType(identifier, generation));
+        this.eventTypes.associate(type, new EventType(identifier, generation, alias));
     }
 }

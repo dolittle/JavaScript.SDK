@@ -12,9 +12,9 @@ export type EventTypeAliasLike = string | EventTypeAlias;
  * @class EventTypeAlias
  * @extends {ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
-export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeAlias'> {
+export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.events.EventTypeAlias'> {
     constructor(alias: string) {
-        super(alias, '@dolittle/sdk.artifacts.EventTypeAlias');
+        super(alias, '@dolittle/sdk.events.EventTypeAlias');
     }
     /**
      * Creates an {@link EventTypeAlias} from a guid.

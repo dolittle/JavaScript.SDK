@@ -1,14 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Exception } from '@dolittle/rudiments';
+import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 import { Artifact, ArtifactIdLike } from './Artifact';
+import { ArtifactNotAssociatedToAType } from './ArtifactNotAssociatedToAType';
 import { ArtifactTypeMap } from './ArtifactTypeMap';
+import { CannotHaveMultipleArtifactsAssociatedWithType } from './CannotHaveMultipleArtifactsAssociatedWithType';
+import { CannotHaveMultipleTypesAssociatedWithArtifact } from './CannotHaveMultipleTypesAssociatedWithArtifact';
 import { IArtifacts, ArtifactOrId } from './IArtifacts';
+import { TypeNotAssociatedToArtifact } from './TypeNotAssociatedToArtifact';
+import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 
 /**
- * Represents an implementation of {@link IEventTypes}
+ * Represents an implementation of {@link IArtifacts}
  */
 export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends IArtifacts<TArtifact, TId> {
     /**
@@ -33,7 +38,7 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
     getTypeFor(input: TArtifact): Constructor<any> {
         const type = this._associations.get(input);
         if (!type) {
-            throw this.createNoTypeAssociatedWithArtifact(input);
+            throw new ArtifactNotAssociatedToAType(input);
         }
         return type;
     }
@@ -58,7 +63,7 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
             }
         }
         if (!artifact) {
-            throw this.createNoArtifactAssociatedWithType(type);
+            throw new TypeNotAssociatedToArtifact(this.getArtifactTypeName(), type);
         }
         return artifact;
     }
@@ -72,7 +77,7 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         }
 
         if (!artifact) {
-            throw this.createUnableToResolveArtifact(object);
+            throw new UnableToResolveArtifact(this.getArtifactTypeName(), object);
         }
 
         return artifact;
@@ -85,27 +90,27 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         this._associations.set(artifact, type);
     }
 
+    protected abstract createArtifact (artifactOrId: ArtifactOrId<TArtifact, TId>): TArtifact;
+
     private artifactsEquals(left: TArtifact, right: TArtifact): boolean {
         return left.generation.equals(right.generation)
             && left.id.toString() === right.id.toString();
     }
 
-    protected abstract createArtifact (artifactOrId: ArtifactOrId<TArtifact, TId>): TArtifact;
-    protected abstract createNoArtifactAssociatedWithType (type: Constructor<any>): Exception;
-    protected abstract createNoTypeAssociatedWithArtifact (artifact: TArtifact): Exception;
-    protected abstract createUnableToResolveArtifact (object: any): Exception;
-    protected abstract createCannotAssociateMultipleArtifactsWithType (type: Constructor<any>, artifact: TArtifact, existing: TArtifact): Exception;
-    protected abstract createCannotAssociateMultipleTypesWithArtifact (artifact: TArtifact, type: Constructor<any>, existing: Constructor<any>): Exception;
+    private getArtifactTypeName() {
+        // This is some hacky stuff.
+        return this.createArtifact(Guid.create()).constructor.name;
+    }
 
     private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, artifact: TArtifact) {
         if (this.hasFor(type)) {
-            throw this.createCannotAssociateMultipleArtifactsWithType(type, artifact, this.getFor(type));
+            throw new CannotHaveMultipleArtifactsAssociatedWithType(type, artifact, this.getFor(type));
         }
     }
 
     private throwIfMultipleTypesAssociatedWithArtifact(artifact: TArtifact, type: Constructor<any>) {
         if (this.hasTypeFor(artifact)) {
-            throw this.createCannotAssociateMultipleTypesWithArtifact(artifact, type, this.getTypeFor(artifact));
+            throw new CannotHaveMultipleTypesAssociatedWithArtifact(artifact, type, this.getTypeFor(artifact));
         }
     }
 

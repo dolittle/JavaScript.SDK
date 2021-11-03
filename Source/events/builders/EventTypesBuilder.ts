@@ -3,8 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes } from '../index';
-import { EventTypeAliasLike } from '../EventTypeAlias';
+import { EventType, EventTypeAlias, EventTypeAliasLike, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes } from '../index';
 
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
@@ -33,12 +32,14 @@ export class EventTypesBuilder {
      * @param {Generation | number} generation The generation to associate with.
      */
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, generation: GenerationLike, alias?: EventTypeAliasLike): EventTypesBuilder;
-    associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, generation?: GenerationLike, alias?: EventTypeAliasLike): EventTypesBuilder {
+    associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, maybeGenerationOrMaybeAlias?: GenerationLike | EventTypeAliasLike | undefined, maybeAlias?: EventTypeAliasLike): EventTypesBuilder {
+        const [generation, alias] = this.getGenerationAndAlias(maybeGenerationOrMaybeAlias, maybeAlias);
         const eventType = eventTypeOrIdentifier instanceof EventType ?
                             eventTypeOrIdentifier
                             : new EventType(
                                 EventTypeId.from(eventTypeOrIdentifier),
-                                generation ? Generation.from(generation) : Generation.first);
+                                generation,
+                                alias);
         this._associations.push([type, eventType]);
         return this;
     }
@@ -61,4 +62,21 @@ export class EventTypesBuilder {
             eventTypes.associate(type, eventType);
         }
     }
+
+    private getGenerationAndAlias(maybeGenerationOrMaybeAlias: GenerationLike | EventTypeAliasLike | undefined, maybeAlias: EventTypeAliasLike | undefined): [Generation, EventTypeAlias | undefined] {
+        let generation: Generation | undefined;
+        let alias: EventTypeAlias | undefined;
+        if (maybeAlias !== undefined) {
+            alias = EventTypeAlias.from(maybeAlias);
+        }
+        if (maybeGenerationOrMaybeAlias !== undefined) {
+            if (maybeGenerationOrMaybeAlias instanceof Generation || typeof maybeGenerationOrMaybeAlias === 'number') {
+                generation = Generation.from(maybeGenerationOrMaybeAlias);
+            } else if (maybeGenerationOrMaybeAlias instanceof EventTypeAlias || typeof maybeGenerationOrMaybeAlias === 'string') {
+                alias = EventTypeAlias.from(maybeGenerationOrMaybeAlias);
+            }
+        }
+        return [generation ?? Generation.first, alias];
+    }
+
 }

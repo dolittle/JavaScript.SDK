@@ -15,8 +15,8 @@ import {
 } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
+import { AggregateRootTypesFromDecorators } from '.';
 import { AggregateRoot } from './AggregateRoot';
-import { AggregateRootDecoratedTypes } from './AggregateRootDecoratedTypes';
 import { AggregateRootOperations } from './AggregateRootOperations';
 import { IAggregateOf } from './IAggregateOf';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
@@ -57,7 +57,7 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> extends IAggregat
 
     private reApplyEvents(aggregateRoot: TAggregateRoot) {
         const eventSourceId = aggregateRoot.eventSourceId;
-        const aggregateRootId = AggregateRootDecoratedTypes.getFor(this._type).aggregateRootId;
+        const aggregateRootId = AggregateRootTypesFromDecorators.aggregateRootTypes.getFor(this._type).id;
         aggregateRoot.aggregateRootId = aggregateRootId;
 
         this._logger.debug(

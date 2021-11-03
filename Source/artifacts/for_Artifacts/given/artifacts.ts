@@ -50,46 +50,4 @@ export class artifacts extends Artifacts<artifact_type, artifact_type_id> {
                 ? artifactOrId
                 : new artifact_type(artifact_type_id.from(artifactOrId));
     }
-    protected createNoArtifactAssociatedWithType(type: Constructor<any>): Exception {
-        throw new no_artifact_type_associated_with_type();
-    }
-    protected createNoTypeAssociatedWithArtifact(artifact: artifact_type): Exception {
-        throw new no_type_associated_with_artifact_type();
-    }
-    protected createUnableToResolveArtifact(object: any): Exception {
-        throw new unable_to_resolve_artifact();
-    }
-    protected createCannotAssociateMultipleArtifactsWithType(type: Constructor<any>, artifact: artifact_type, existing: artifact_type): Exception {
-        throw new cannot_associate_multiple_artifact_types_with_type();
-    }
-    protected createCannotAssociateMultipleTypesWithArtifact(artifact: artifact_type, type: Constructor<any>, existing: Constructor<any>): Exception {
-        throw new cannot_associate_multiple_types_with_artifact_type();
-    }
-}
-
-export class no_artifact_type_associated_with_type extends Exception {
-    constructor() {
-        super('');
-    }
-}
-export class no_type_associated_with_artifact_type extends Exception {
-    constructor() {
-        super('');
-    }
-}
-export class unable_to_resolve_artifact extends Exception {
-    constructor() {
-        super('');
-    }
-}
-
-export class cannot_associate_multiple_artifact_types_with_type extends Exception {
-    constructor() {
-        super('');
-    }
-}
-export class cannot_associate_multiple_types_with_artifact_type extends Exception {
-    constructor() {
-        super('');
-    }
 }
