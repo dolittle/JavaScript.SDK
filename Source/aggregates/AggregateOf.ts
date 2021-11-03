@@ -1,27 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import {
-    AggregateRootVersionIsOutOfOrder,
-    CommittedAggregateEvent,
-    CommittedAggregateEvents,
-    EventSourceId,
-    EventTypeId,
-    EventWasAppliedByOtherAggregateRoot,
-    EventWasAppliedToOtherEventSource,
-    IEventStore,
-    IEventTypes
-} from '@dolittle/sdk.events';
+import { EventSourceId, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { AggregateRootTypesFromDecorators } from '.';
 import { AggregateRoot } from './AggregateRoot';
 import { AggregateRootOperations } from './AggregateRootOperations';
 import { IAggregateOf } from './IAggregateOf';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
-import { OnDecoratedMethod } from './OnDecoratedMethod';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
 
 /**
  * Represents an implementation of {@link IAggregateOf<TAggregateRoot>}.

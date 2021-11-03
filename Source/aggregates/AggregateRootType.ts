@@ -25,7 +25,7 @@ export class AggregateRootType extends Artifact<AggregateRootId> {
      * Gets a value indicating whether there is an alias for the Event Type.
      */
      hasAlias() {
-        return this.alias;
+        return this.alias !== undefined;
     }
 
     /** @inheritdoc */

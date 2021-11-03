@@ -44,7 +44,7 @@ export class EventTypes {
     }
 
     private async sendRequest(eventType: EventType, cancellation: Cancellation): Promise<any> {
-    const request = this.createRequest(eventType);
+        const request = this.createRequest(eventType);
         this._logger.debug(`Registering Event Type ${eventType.id.value.toString()} with Alias ${eventType.alias?.value}`);
         try {
             const response = await reactiveUnary(this._client, this._client.register, request, cancellation)

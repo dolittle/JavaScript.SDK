@@ -30,7 +30,8 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
 
     /** @inheritdoc */
     async perform(action: AggregateRootAction<TAggregateRoot>, cancellation: Cancellation = Cancellation.default): Promise<void> {
-        const aggregateRootId = this._aggregateRoot.aggregateRootId;
+        const aggregateRootId = AggregateRootTypesFromDecorators.aggregateRootTypes.getFor(this._aggregateRootType).id;
+        this._aggregateRoot.aggregateRootId = aggregateRootId;
         this._logger.debug(
             `Performing operation on ${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} applying events to event source ${this._aggregateRoot.eventSourceId}`,
             this._aggregateRootType,
@@ -72,17 +73,15 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
 
     private async reApplyEvents(cancellation: Cancellation) {
         const eventSourceId = this._aggregateRoot.eventSourceId;
-        const aggregateRootId = AggregateRootTypesFromDecorators.aggregateRootTypes.getFor(this._aggregateRootType).id;
-        this._aggregateRoot.aggregateRootId = aggregateRootId;
 
         this._logger.debug(
-            `Re-applying events for ${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} with event source id ${eventSourceId}`,
+            `Re-applying events for ${this._aggregateRootType.name} with aggregate root id ${this._aggregateRoot.aggregateRootId} with event source id ${eventSourceId}`,
             this._aggregateRootType,
-            aggregateRootId,
+            this._aggregateRoot.aggregateRootId,
             eventSourceId
         );
 
-        const committedEvents = await this._eventStore.fetchForAggregate(aggregateRootId, eventSourceId, cancellation);
+        const committedEvents = await this._eventStore.fetchForAggregate(this._aggregateRoot.aggregateRootId, eventSourceId, cancellation);
         if (committedEvents.hasEvents) {
             this._logger.silly(`Re-applying ${committedEvents.length}`, committedEvents.length);
 

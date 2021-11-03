@@ -57,9 +57,9 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
     /** @inheritdoc */
     getFor(type: Constructor<any>): TArtifact {
         let artifact: TArtifact | undefined;
-        for (const [associatedEventType, associatedType] of this._associations) {
+        for (const [associatedArtifact, associatedType] of this._associations) {
             if (associatedType === type) {
-                artifact = associatedEventType;
+                artifact = associatedArtifact;
             }
         }
         if (!artifact) {
