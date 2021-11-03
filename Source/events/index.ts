@@ -26,8 +26,7 @@ export {
     MissingExecutionContext,
     UncommittedAggregateEvent,
     UncommittedAggregateEvents,
-    UncommittedEvent,
-    syncPromise
+    UncommittedEvent
 } from './store';
 
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';

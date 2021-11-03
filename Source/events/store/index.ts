@@ -24,7 +24,6 @@ export { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAgg
 export { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';
 export { IEventStore } from './IEventStore';
 export { MissingExecutionContext } from './MissingExecutionContext';
-export { syncPromise } from './syncPromise';
 export { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 export { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 export { UncommittedEvent } from './UncommittedEvent';

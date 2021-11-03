@@ -91,14 +91,4 @@ export abstract class IEventStore {
      * @returns {Promise<CommittedAggregateEvents>}
      */
     abstract fetchForAggregate (aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;
-
-
-    /**
-     * Fetches the {@link CommittedAggregateEvents} for an aggregate root - synchronously.
-     * @param {AggregateRootId} aggregateRootId The aggregate root to fetch for.
-     * @param {EventSourceId} eventSourceId The event source id to fetch for.
-     * @param {Cancellation} cancellation The cancellation signal.
-     * @returns {Promise<CommittedAggregateEvents>}
-     */
-    abstract fetchForAggregateSync (aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): CommittedAggregateEvents;
 }

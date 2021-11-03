@@ -27,7 +27,6 @@ import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 import { CommittedEvents } from './CommittedEvents';
 import { EventConverters } from './EventConverters';
 import { IEventStore } from './IEventStore';
-import { syncPromise } from './syncPromise';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
 
@@ -36,8 +35,6 @@ import { UncommittedEvent } from './UncommittedEvent';
  * Represents an implementation of {@link IEventStore}
  */
 export class EventStore extends IEventStore {
-
-    private _fetchForAggregateSync: Function;
 
     /**
      * Initializes a new instance of {@link EventStore}.
@@ -52,7 +49,6 @@ export class EventStore extends IEventStore {
         private _executionContext: ExecutionContext,
         private _logger: Logger) {
         super();
-        this._fetchForAggregateSync = syncPromise(this, this.fetchForAggregate);
     }
 
     /** @inheritdoc */
@@ -115,11 +111,6 @@ export class EventStore extends IEventStore {
                 const committedEvents = this.toCommittedAggregateEvents(aggregateRootId, eventSourceId, events, failure);
                 return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...committedEvents);
             })).toPromise();
-    }
-
-    /** @inheritdoc */
-    fetchForAggregateSync(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation: Cancellation = Cancellation.default): CommittedAggregateEvents {
-        return this._fetchForAggregateSync(aggregateRootId, eventSourceId, cancellation);
     }
 
     private async commitInternal(events: UncommittedEvent[], cancellation = Cancellation.default): Promise<CommitEventsResult> {
