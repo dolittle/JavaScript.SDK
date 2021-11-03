@@ -17,10 +17,11 @@ export class AggregateRootTypesFromDecorators {
     /**
      * Associate a type with a unique artifact identifier and optional generation.
      * @param {Constructor} type Type to associate.
-     * @param {ArtifactId} identifier Identifier to associate with.
-     * @param {number} generation Optional generation - defaults to 0.
+     * @param {AggregateRootId} identifier Identifier to associate with.
+     * @param {Generation} generation Optional generation - defaults to 0.
+     * @param {AggregateRootTypeAlias} alias The alias of the aggregate root type.
      */
-    static associate(type: Constructor<any>, identifier: AggregateRootId, generation: Generation = Generation.first, alias: AggregateRootTypeAlias | undefined): void {
+    static associate(type: Constructor<any>, identifier: AggregateRootId, generation: Generation, alias: AggregateRootTypeAlias): void {
         this.aggregateRootTypes.associate(type, new AggregateRootType(identifier, generation, alias));
     }
 }

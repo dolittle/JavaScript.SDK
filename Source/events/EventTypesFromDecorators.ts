@@ -17,10 +17,11 @@ export class EventTypesFromDecorators {
     /**
      * Associate a type with a unique artifact identifier and optional generation.
      * @param {Constructor} type Type to associate.
-     * @param {ArtifactId} identifier Identifier to associate with.
-     * @param {number} generation Optional generation - defaults to 0.
+     * @param {EventTypeId} identifier Identifier to associate with.
+     * @param {Generation} generation Optional generation - defaults to 0.
+     * @param {EventTypeAlias} alias Optional generation - defaults to 0.
      */
-    static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation = Generation.first, alias: EventTypeAlias | undefined): void {
+    static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation, alias: EventTypeAlias): void {
         this.eventTypes.associate(type, new EventType(identifier, generation, alias));
     }
 }

@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Constructor } from '@dolittle/types';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { AggregateRootId, AggregateRootIdLike } from '@dolittle/sdk.events';
 import { AggregateRootTypeAlias } from './AggregateRootTypeAlias';
@@ -13,11 +14,13 @@ import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecora
  */
 export function aggregateRoot(aggregateRootId: AggregateRootIdLike, options: AggregateRootTypeOptions = {}) {
     return function (target: any) {
+        const constructor: Constructor<any> = target.prototype.constructor;
+        const alias = options.alias !== undefined ? options.alias : constructor.name;
         AggregateRootTypesFromDecorators
             .associate(
-                target.prototype.constructor,
+                constructor,
                 AggregateRootId.from(aggregateRootId),
                 Generation.first,
-                options.alias !== undefined ? AggregateRootTypeAlias.from(options.alias) : undefined);
+                AggregateRootTypeAlias.from(alias));
     };
 }
