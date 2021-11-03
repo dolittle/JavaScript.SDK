@@ -2,13 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { Guid } from '@dolittle/rudiments';
-import { Generation } from '@dolittle/sdk.artifacts';
-
-import { EventType } from '../EventType';
-import { IEventTypes } from '../IEventTypes';
-import { EventTypeId } from '../EventTypeId';
-import { EventTypesFromDecorators } from '../EventTypesFromDecorators';
+import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes } from '../index';
+import { EventTypeAliasLike } from '../EventTypeAlias';
 
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
@@ -29,15 +25,15 @@ export class EventTypesBuilder {
      * @param {Constructor} type Type to associate.
      * @param {EventTypeId | Guid | string} identifier Identifier to associate with.
      */
-    associate<T = any>(type: Constructor<T>, identifier: EventTypeId | Guid | string): EventTypesBuilder;
+    associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, alias?: EventTypeAliasLike): EventTypesBuilder;
     /**
      * Associate a type with an unique event type identifier and optional generation.
      * @param {Constructor} type Type to associate.
      * @param {EventTypeId | Guid | string} identifier Identifier to associate with.
      * @param {Generation | number} generation The generation to associate with.
      */
-    associate<T = any>(type: Constructor<T>, identifier: EventTypeId | Guid | string, generation: Generation | number): EventTypesBuilder;
-    associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeId | Guid | string, generation?: Generation | number): EventTypesBuilder {
+    associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, generation: GenerationLike, alias?: EventTypeAliasLike): EventTypesBuilder;
+    associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, generation?: GenerationLike, alias?: EventTypeAliasLike): EventTypesBuilder {
         const eventType = eventTypeOrIdentifier instanceof EventType ?
                             eventTypeOrIdentifier
                             : new EventType(

@@ -6,6 +6,7 @@ import { Generation } from '@dolittle/sdk.artifacts';
 import { EventTypeId } from './EventTypeId';
 import { EventType } from './EventType';
 import { EventTypes } from './EventTypes';
+import { EventTypeAlias } from './EventTypeAlias';
 
 /**
  * Represents event types coming from decorators.
@@ -19,7 +20,7 @@ export class EventTypesFromDecorators {
      * @param {ArtifactId} identifier Identifier to associate with.
      * @param {number} generation Optional generation - defaults to 0.
      */
-    static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation = Generation.first): void {
+    static associate(type: Constructor<any>, identifier: EventTypeId, generation: Generation = Generation.first, alias: EventTypeAlias | undefined): void {
         this.eventTypes.associate(type, new EventType(identifier, generation));
     }
 }

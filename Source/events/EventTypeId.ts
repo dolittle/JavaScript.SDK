@@ -13,9 +13,9 @@ export type EventTypeIdLike = Guid | string | EventTypeId;
  * @class EventTypeId
  * @extends {ConceptAs<Guid, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
-export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.artifacts.EventTypeId'> {
+export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.events.EventTypeId'> {
     constructor(id: Guid) {
-        super(id, '@dolittle/sdk.artifacts.EventTypeId');
+        super(id, '@dolittle/sdk.events.EventTypeId');
     }
     /**
      * Creates an {@link EventTypeId} from a guid.

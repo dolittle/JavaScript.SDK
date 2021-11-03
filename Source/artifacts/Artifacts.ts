@@ -18,6 +18,12 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
     constructor(private _associations: ArtifactTypeMap<TArtifact, TId, Constructor<any>>) {
         super();
     }
+
+    /** @inheritdoc */
+    getAll() {
+        return Array.from(this._associations.keys());
+    }
+
     /** @inheritdoc */
     hasTypeFor(input: TArtifact): boolean {
         return this._associations.has(input);

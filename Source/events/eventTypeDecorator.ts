@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { EventTypeIdLike } from '.';
-import { EventTypeId } from './EventTypeId';
+import { EventTypeAlias } from './EventTypeAlias';
+import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 import { EventTypeOptions } from './EventTypeOptions';
 import { EventTypesFromDecorators } from './EventTypesFromDecorators';
 
@@ -18,6 +18,7 @@ export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions
             .associate(
                 target.prototype.constructor,
                 EventTypeId.from(identifier),
-                options.generation ? Generation.from(options.generation) : Generation.first);
+                options.generation ? Generation.from(options.generation) : Generation.first,
+                options.alias !== undefined ? EventTypeAlias.from(options.alias) : undefined);
     };
 }

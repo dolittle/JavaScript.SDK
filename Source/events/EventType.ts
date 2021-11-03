@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { Guid } from '@dolittle/rudiments';
 import { Artifact, Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { EventTypeAlias } from './EventTypeAlias';
 import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 
 /**
@@ -20,10 +21,18 @@ export class EventType extends Artifact<EventTypeId> {
     /**
      * Initializes a new instance of {@link EventType}
      * @param {EventTypeId} id The unique identifier of the event type.
-     * @param {Generation} [generation] Optional generation - will default to {@link generation.first}
+     * @param {Generation} [generation] Optional generation - will default to {@link generation.first}.
+     * @param {EventTypeAlias} [alias] Optional alias
      */
-    constructor(id: EventTypeId, generation: Generation = Generation.first) {
+    constructor(id: EventTypeId, generation: Generation = Generation.first, readonly alias?: EventTypeAlias) {
         super(id, generation);
+    }
+
+    /**
+     * Gets a value indicating whether there is an alias for the Event Type.
+     */
+     hasAlias() {
+        return this.alias;
     }
 
     /** @inheritdoc */

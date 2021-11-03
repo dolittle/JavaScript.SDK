@@ -5,11 +5,16 @@ import { Constructor } from '@dolittle/types';
 import { Artifact, ArtifactIdLike } from './Artifact';
 
 export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> = TArtifact | TId | Guid | string;
+
 /**
  * Defines the system for working with {@link Artifact}
  */
-
 export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> {
+
+    /**
+     * Gets all artifacts.
+     */
+    abstract getAll (): TArtifact[];
 
     /**
      * Check if there is a type associated with an artifact.
