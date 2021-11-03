@@ -3,7 +3,6 @@
 
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import {
     EmbeddingClientToRuntimeMessage,
@@ -19,11 +18,11 @@ import {
 } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
 import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventConverters, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
+import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
 import { MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
-import { eventTypes, failures, guids } from '@dolittle/sdk.protobuf';
+import { artifacts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import {
     ClientProcessor,
@@ -81,7 +80,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         const events: Artifact[] = [];
         for (const eventType of this._embedding.events) {
-            events.push(eventTypes.toProtobuf(eventType));
+            events.push(artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventsList(events);
         return registerArguments;
@@ -202,7 +201,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbEventType);
+        const eventType = artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

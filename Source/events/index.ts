@@ -1,6 +1,35 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export { EventTypesBuilder, EventTypesBuilderCallback } from './builders';
+
+export {
+    AggregateRootVersionIsOutOfOrder,
+    CommitAggregateEventsResult,
+    CommitEventsResult,
+    CommitForAggregateBuilder,
+    CommitForAggregateWithEventSourceAndExpectedVersionBuilder,
+    CommitForAggregateWithEventSourceBuilder,
+    CommittedAggregateEvent,
+    CommittedAggregateEvents,
+    CommittedEvent,
+    CommittedEvents,
+    EventBuilderMethodAlreadyCalled,
+    EventContentNeedsToBeDefined,
+    EventConverters,
+    EventLogSequenceNumberIsOutOfOrder,
+    EventStore,
+    EventStoreBuilder,
+    EventWasAppliedByOtherAggregateRoot,
+    EventWasAppliedToOtherEventSource,
+    IEventStore,
+    MissingExecutionContext,
+    UncommittedAggregateEvent,
+    UncommittedAggregateEvents,
+    UncommittedEvent,
+    syncPromise
+} from './store';
+
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
 export { AggregateRootId } from './AggregateRootId';
 export { AggregateRootVersion } from './AggregateRootVersion';
@@ -15,7 +44,7 @@ export { CannotHaveMultipleEventTypesAssociatedWithType } from './CannotHaveMult
 export { CannotHaveMultipleTypesAssociatedWithEventType } from './CannotHaveMultipleTypesAssociatedWithEventType';
 export { EventType } from './EventType';
 export { eventType } from './eventTypeDecorator';
-export { EventTypeId } from './EventTypeId';
+export { EventTypeId, EventTypeIdLike } from './EventTypeId';
 export { EventTypeMap } from './EventTypeMap';
 export { EventTypeOptions } from './EventTypeOptions';
 export { EventTypes } from './EventTypes';

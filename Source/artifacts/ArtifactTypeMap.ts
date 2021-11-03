@@ -19,7 +19,7 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
         this._generationsById = new Map<string, Map<number, TType>>();
     }
     /** @inheritdoc */
-    abstract [Symbol.toStringTag];
+    abstract [Symbol.toStringTag]: string;
 
     /**
      * Gets the size of the map.

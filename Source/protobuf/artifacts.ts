@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
+import { Artifact as SdkArtifact, ArtifactIdLike, Generation } from '@dolittle/sdk.artifacts';
 import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
@@ -12,18 +12,19 @@ import guids from './guids';
  * Convert to protobuf representation
  * @returns {PbArtifact}
  */
-function toProtobuf(input: EventType): PbArtifact {
+function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: TArtifact): PbArtifact {
     const artifact = new PbArtifact();
     artifact.setId(guids.toProtobuf(input.id.value));
     artifact.setGeneration(input.generation.value);
     return artifact;
+
 }
 
 /**
  * Convert to SDK representation
- * @returns {EventType}
+ * @returns {TArtifact}
  */
-function toSDK(input?: PbArtifact): EventType {
+function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: PbArtifact | undefined, artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact {
     if (!input) {
         throw new MissingArtifactIdentifier();
     }
@@ -31,7 +32,7 @@ function toSDK(input?: PbArtifact): EventType {
     if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return new EventType(EventTypeId.from(new Guid(uuid)), Generation.from(input.getGeneration()));
+    return artifactFactory(new Guid(uuid), Generation.from(input.getGeneration()));
 }
 
 export default {
@@ -40,7 +41,7 @@ export default {
 };
 
 declare module '@dolittle/sdk.artifacts' {
-    interface EventType {
+    interface Artifact<TId> {
         toProtobuf(): PbArtifact;
     }
 }
@@ -49,13 +50,13 @@ declare module '@dolittle/sdk.artifacts' {
  * Convert to protobuf representation
  * @returns {PbArtifact}
  */
-EventType.prototype.toProtobuf = function () {
+ SdkArtifact.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
 declare module '@dolittle/contracts/Artifacts/Artifact_pb' {
     interface Artifact {
-        toSDK(): EventType
+        toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact
     }
 }
 
@@ -63,6 +64,6 @@ declare module '@dolittle/contracts/Artifacts/Artifact_pb' {
  * Convert to SDK representation
  * @returns {SdkArtifact}
  */
-PbArtifact.prototype.toSDK = function () {
-    return toSDK(this);
+PbArtifact.prototype.toSDK = function<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike> (artifactFactory: (id: Guid, generation: Generation) => TArtifact) {
+    return toSDK(this, artifactFactory);
 };

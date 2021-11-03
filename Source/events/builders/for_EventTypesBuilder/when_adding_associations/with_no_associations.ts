@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypes } from '../../EventTypes';
-import { EventTypesBuilder } from '../../builders/EventTypesBuilder';
+import { EventTypes } from '../../../EventTypes';
+import { EventTypesBuilder } from '../../EventTypesBuilder';
 
 describe('when adding associations with no associations', () => {
     const builder = new EventTypesBuilder();

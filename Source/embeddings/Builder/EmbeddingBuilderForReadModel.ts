@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { TypeOrEventType } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -15,6 +15,7 @@ import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
 import { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';
 import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
 
 // type OnMethodSpecification<TCallback> = [TypeOrEventType, TCallback];
@@ -86,15 +87,15 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
     on(eventTypeId: EventTypeId | Guid | string, callback: EmbeddingProjectCallback<T>): this;
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
-     * @param {Generation | number} generation The generation of the event type.
+     * @param {EventTypeIdLike} eventType The identifier of the event.
+     * @param {GenerationLike} generation The generation of the event type.
      * @param {EmbeddingProjectCallback} method Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
-    on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, callback: EmbeddingProjectCallback<T>): this;
+    on(eventTypeId: EventTypeIdLike, generation: GenerationLike, callback: EmbeddingProjectCallback<T>): this;
     on<TEvent = any>(
         typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
-        callbackOrGeneration: Generation | number | EmbeddingProjectCallback<T, TEvent>,
+        callbackOrGeneration: GenerationLike | EmbeddingProjectCallback<T, TEvent>,
         maybeCallback?: EmbeddingProjectCallback<T, TEvent>): this {
         const typeOrEventType = this.getTypeOrEventTypeFrom<TEvent>(typeOrEventTypeOrId, callbackOrGeneration);
         const callback = typeof callbackOrGeneration === 'function'
@@ -131,7 +132,7 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     private getTypeOrEventTypeFrom<TEvent>(
         typeOrEventTypeOrId: string | Constructor<TEvent> | EventType | EventTypeId | Guid,
-        callbackOrGeneration: Generation | number | EmbeddingProjectCallback<T>) {
+        callbackOrGeneration: GenerationLike | EmbeddingProjectCallback<T>) {
         if (typeof typeOrEventTypeOrId === 'function') {
             return typeOrEventTypeOrId;
         }

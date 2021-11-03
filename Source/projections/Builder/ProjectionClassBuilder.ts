@@ -3,13 +3,14 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { DeleteReadModelInstance, IProjections, KeySelector, Projection, ProjectionCallback } from '..';
+import { DeleteReadModelInstance, IProjections, KeySelector, Projection, ProjectionCallback } from '../index';
 import { ProjectionProcessor } from '../Internal';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';

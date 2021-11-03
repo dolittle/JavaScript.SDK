@@ -2,7 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventSourceId, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventStore, IEventTypes } from '@dolittle/sdk.events';
+import {
+    AggregateRootVersionIsOutOfOrder,
+    CommittedAggregateEvent,
+    CommittedAggregateEvents,
+    EventSourceId,
+    EventTypeId,
+    EventWasAppliedByOtherAggregateRoot,
+    EventWasAppliedToOtherEventSource,
+    IEventStore,
+    IEventTypes
+} from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import { AggregateRoot } from './AggregateRoot';

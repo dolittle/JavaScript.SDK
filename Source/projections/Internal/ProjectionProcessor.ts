@@ -10,10 +10,10 @@ import {
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventContext, EventSourceId, IEventTypes } from '@dolittle/sdk.events';
+import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
 import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { eventTypes, guids } from '@dolittle/sdk.protobuf';
+import { artifacts, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
@@ -72,7 +72,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
             const selector = new ProjectionEventSelector();
-            selector.setEventtype(eventTypes.toProtobuf(eventSelector.eventType));
+            selector.setEventtype(artifacts.toProtobuf(eventSelector.eventType));
             this.setKeySelector(selector, eventSelector.keySelector);
             events.push(selector);
         }
@@ -177,7 +177,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbEventType);
+        const eventType = artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypeId } from '../../EventTypeId';
-import { EventTypes } from '../../EventTypes';
-import { EventTypesBuilder } from '../../builders/EventTypesBuilder';
-import { Generation } from '@dolittle/sdk.artifacts/Generation';
+import { EventTypeId, EventTypes } from '../../../index';
+import { EventTypesBuilder } from '../../EventTypesBuilder';
+import { Generation } from '@dolittle/sdk.artifacts';
 
 class FirstType {}
 

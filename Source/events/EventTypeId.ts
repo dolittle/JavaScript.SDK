@@ -4,6 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+export type EventTypeIdLike = Guid | string | EventTypeId;
+
 /**
  * Represents the unique identifier of an event type.
  *
@@ -22,7 +24,7 @@ export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.artifacts.EventT
      * @param {(Guid | string)} id
      * @returns {EventSourceId}
      */
-    static from(id: Guid | string | EventTypeId): EventTypeId {
+    static from(id: EventTypeIdLike): EventTypeId {
         if (id instanceof EventTypeId) return id;
         return new EventTypeId(Guid.as(id));
     }

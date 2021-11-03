@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { Guid } from '@dolittle/rudiments';
-import { Artifact, Generation } from '@dolittle/sdk.artifacts';
-import { EventTypeId } from './EventTypeId';
+import { Artifact, Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 
 /**
  * Represents the type of an event.
@@ -10,7 +10,6 @@ import { EventTypeId } from './EventTypeId';
  * @export
  * @class EventType
  */
-
 export class EventType extends Artifact<EventTypeId> {
 
     /**
@@ -30,5 +29,19 @@ export class EventType extends Artifact<EventTypeId> {
     /** @inheritdoc */
     toString() {
         return `EventType(${this.id}, ${this.generation})`;
+    }
+
+    /**
+     * Creates an instance of {@link EventType}.
+     * @param id The Event Type Id.
+     * @param generation The generation of the Event Type.
+     * @returns The created {@link EventType}
+     */
+    static from(id: EventTypeIdLike, generation?: GenerationLike): EventType {
+        if (generation === undefined) {
+            generation = Generation.first;
+        }
+
+        return new EventType(EventTypeId.from(id), Generation.from(generation));
     }
 }

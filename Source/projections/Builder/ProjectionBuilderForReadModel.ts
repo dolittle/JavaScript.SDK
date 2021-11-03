@@ -3,9 +3,9 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { EventType, EventTypeId, Generation } from '@dolittle/sdk.artifacts';
+import { Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
@@ -15,7 +15,6 @@ import { ProjectionProcessor } from '../Internal';
 import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-import { OnMethodBuilder } from './OnMethodBuilder';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 

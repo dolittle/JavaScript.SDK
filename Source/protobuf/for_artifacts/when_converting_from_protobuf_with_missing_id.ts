@@ -4,6 +4,7 @@
 import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from '..';
+import { artifact_type, artifact_type_id } from './given/artifact_type';
 
 describe('when converting from protobuf with missing id', () => {
     const pbArtifact = new PbArtifact();
@@ -12,7 +13,7 @@ describe('when converting from protobuf with missing id', () => {
     let result: any;
 
     try {
-        pbArtifact.toSDK();
+        pbArtifact.toSDK(artifact_type.from);
     } catch (ex) {
         result = ex;
     }
