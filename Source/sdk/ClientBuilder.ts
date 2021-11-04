@@ -251,8 +251,8 @@ export class ClientBuilder {
 
         const eventTypes = new EventTypes();
         this._eventTypesBuilder.addAssociationsInto(eventTypes);
-        new eventsInternal.EventTypes(new EventTypesClient(connectionString, credentials), executionContext, this._logger).register(eventTypes, this._cancellation);
-        this._aggregateRootsBuilder.build(new aggregatesInternal.AggregateRoots(new AggregateRootsClient(connectionString, credentials), executionContext, this._logger), this._cancellation);
+        this._eventTypesBuilder.buildAndRegister(new eventsInternal.EventTypes(new EventTypesClient(connectionString, credentials), executionContext, this._logger), this._cancellation);
+        this._aggregateRootsBuilder.buildAndRegister(new aggregatesInternal.AggregateRoots(new AggregateRootsClient(connectionString, credentials), executionContext, this._logger), this._cancellation);
         const eventStoreBuilder = new EventStoreBuilder(
             new EventStoreClient(connectionString, credentials),
             eventTypes,

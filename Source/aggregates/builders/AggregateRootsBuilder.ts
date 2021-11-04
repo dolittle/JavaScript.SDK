@@ -26,10 +26,10 @@ export class AggregateRootsBuilder {
 
     /**
      * Builds the aggregate roots by registering them with the Runtime.
-     * @param aggregateRoots The aggregate roots.
+     * @param aggregateRoots The aggregate roots client.
      * @param cancellation The cancellation.
      */
-    build(aggregateRoots: internal.AggregateRoots, cancellation: Cancellation) {
+    buildAndRegister(aggregateRoots: internal.AggregateRoots, cancellation: Cancellation) {
         aggregateRoots.register(this._aggregateRootTypes, cancellation);
     }
 }

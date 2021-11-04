@@ -29,8 +29,8 @@ export class EventTypes {
      * @param eventTypes The event types to register.
      * @param cancellation The cancellation.
      */
-    register(eventTypes: IEventTypes, cancellation: Cancellation): Promise<any> {
-        return Promise.all(eventTypes.getAll().map(eventType => this.sendRequest(eventType, cancellation)));
+    register(eventTypes: EventType[], cancellation: Cancellation): Promise<any> {
+        return Promise.all(eventTypes.map(eventType => this.sendRequest(eventType, cancellation)));
     }
 
     private createRequest(eventType: EventType): EventTypeRegistrationRequest {

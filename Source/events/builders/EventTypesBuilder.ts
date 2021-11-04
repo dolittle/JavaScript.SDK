@@ -3,7 +3,8 @@
 
 import { Constructor } from '@dolittle/types';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeAlias, EventTypeAliasLike, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes } from '../index';
+import { EventType, EventTypeAlias, EventTypeAliasLike, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes, internal } from '../index';
+import { Cancellation } from '@dolittle/sdk.resilience';
 
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
@@ -61,6 +62,15 @@ export class EventTypesBuilder {
         for (const [type, eventType] of this._associations) {
             eventTypes.associate(type, eventType);
         }
+    }
+
+    /**
+     * Builds the event types by registering them with the Runtime.
+     * @param eventTypes The event types client.
+     * @param cancellation The cancellation.
+     */
+    buildAndRegister(eventTypes: internal.EventTypes, cancellation: Cancellation) {
+        eventTypes.register(this._associations.map(_ => _[1]), cancellation);
     }
 
     private getGenerationAndAlias(maybeGenerationOrMaybeAlias: GenerationLike | EventTypeAliasLike | undefined, maybeAlias: EventTypeAliasLike | undefined): [Generation, EventTypeAlias | undefined] {
