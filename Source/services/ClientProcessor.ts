@@ -50,7 +50,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
                     if (failure) {
                         subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, failures.toSDK(failure)!));
                     } else {
-                        this._logger.debug(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
+                        this._logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
                     }
                 },
                 error: (error: Error) => {
