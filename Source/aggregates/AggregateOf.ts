@@ -31,9 +31,9 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> extends IAggregat
     /** @inheritdoc */
     get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregateRoot> {
         return new AggregateRootOperations<TAggregateRoot>(
-            this._type,
+            eventSourceId,
             this._eventStore,
-            new this._type(eventSourceId),
+            this._type,
             this._eventTypes,
             this._logger);
     }

@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { AggregateRootId, AggregateRootVersion, AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventStore, IEventTypes, UncommittedAggregateEvent } from '@dolittle/sdk.events';
-import { Cancellation } from '@dolittle/sdk.resilience';
+import { AggregateRootId, AggregateRootVersion, AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventSourceId, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventStore, IEventTypes, UncommittedAggregateEvent } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
 import { AggregateRoot } from './AggregateRoot';
 import { AggregateRootAction } from './AggregateRootAction';
@@ -20,9 +20,9 @@ import { OnDecoratedMethods } from './OnDecoratedMethods';
  */
 export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> extends IAggregateRootOperations<TAggregateRoot> {
     constructor(
-        private readonly _aggregateRootType: Constructor<any>,
+        private readonly _eventSourceId: EventSourceId,
         private readonly _eventStore: IEventStore,
-        private readonly _aggregateRoot: TAggregateRoot,
+        private readonly _aggregateRootType: Constructor<TAggregateRoot>,
         private readonly _eventTypes: IEventTypes,
         private readonly _logger: Logger) {
         super();
@@ -30,37 +30,39 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
 
     /** @inheritdoc */
     async perform(action: AggregateRootAction<TAggregateRoot>, cancellation: Cancellation = Cancellation.default): Promise<void> {
+        const aggregateRoot = new this._aggregateRootType(this._eventSourceId);
         const aggregateRootId = AggregateRootTypesFromDecorators.aggregateRootTypes.getFor(this._aggregateRootType).id;
-        this._aggregateRoot.aggregateRootId = aggregateRootId;
+        aggregateRoot.aggregateRootId = aggregateRootId;
         this._logger.debug(
-            `Performing operation on ${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} applying events to event source ${this._aggregateRoot.eventSourceId}`,
+            `Performing operation on ${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} applying events to event source ${aggregateRoot.eventSourceId}`,
             this._aggregateRootType,
             aggregateRootId,
-            this._aggregateRoot.eventSourceId);
-        await this.reApplyEvents(cancellation);
-        await action(this._aggregateRoot);
-        if (this._aggregateRoot.appliedEvents.length > 0) {
-            await this.commitAppliedEvents(aggregateRootId);
+            aggregateRoot.eventSourceId);
+        await this.reApplyEvents(aggregateRoot, cancellation);
+        await action(aggregateRoot);
+        if (aggregateRoot.appliedEvents.length > 0) {
+            await this.commitAppliedEvents(aggregateRoot);
         }
     }
 
-    private commitAppliedEvents(aggregateRootId: AggregateRootId): Promise<CommittedAggregateEvents> {
+    private commitAppliedEvents(aggregateRoot: TAggregateRoot): Promise<CommittedAggregateEvents> {
+        const aggregateRootId = aggregateRoot.aggregateRootId;
         this._logger.debug(
-            `${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} is committing ${this._aggregateRoot.appliedEvents.length} events to the event source ${this._aggregateRoot.eventSourceId}`,
+            `${this._aggregateRootType.name} with aggregate root id ${aggregateRootId} is committing ${aggregateRoot.appliedEvents.length} events to the event source ${aggregateRoot.eventSourceId}`,
             this._aggregateRootType,
             aggregateRootId,
-            this._aggregateRoot.appliedEvents.length,
-            this._aggregateRoot.eventSourceId);
+            aggregateRoot.appliedEvents.length,
+            this._eventSourceId);
 
         return this._eventStore
             .forAggregate(aggregateRootId)
-            .withEventSource(this._aggregateRoot.eventSourceId)
-            .expectVersion(AggregateRootVersion.from(this._aggregateRoot.version.value - this._aggregateRoot.appliedEvents.length))
-            .commit(this.getUncommittedAggregateEvents());
+            .withEventSource(aggregateRoot.eventSourceId)
+            .expectVersion(AggregateRootVersion.from(aggregateRoot.version.value - aggregateRoot.appliedEvents.length))
+            .commit(this.getUncommittedAggregateEvents(aggregateRoot));
     }
 
-    private getUncommittedAggregateEvents(): UncommittedAggregateEvent[] {
-        return this._aggregateRoot.appliedEvents.map(_ => {
+    private getUncommittedAggregateEvents(aggregateRoot: TAggregateRoot): UncommittedAggregateEvent[] {
+        return aggregateRoot.appliedEvents.map(_ => {
             const uncommitted: UncommittedAggregateEvent = {
                 content: _.event,
                 eventType: _.hasEventType ? _.eventType : this._eventTypes.getFor(_.event.constructor),
@@ -71,22 +73,22 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
     }
 
 
-    private async reApplyEvents(cancellation: Cancellation) {
-        const eventSourceId = this._aggregateRoot.eventSourceId;
+    private async reApplyEvents(aggregateRoot: TAggregateRoot, cancellation: Cancellation) {
+        const eventSourceId = aggregateRoot.eventSourceId;
 
         this._logger.debug(
-            `Re-applying events for ${this._aggregateRootType.name} with aggregate root id ${this._aggregateRoot.aggregateRootId} with event source id ${eventSourceId}`,
+            `Re-applying events for ${this._aggregateRootType.name} with aggregate root id ${aggregateRoot.aggregateRootId} with event source id ${eventSourceId}`,
             this._aggregateRootType,
-            this._aggregateRoot.aggregateRootId,
+            aggregateRoot.aggregateRootId,
             eventSourceId
         );
 
-        const committedEvents = await this._eventStore.fetchForAggregate(this._aggregateRoot.aggregateRootId, eventSourceId, cancellation);
+        const committedEvents = await this._eventStore.fetchForAggregate(aggregateRoot.aggregateRootId, eventSourceId, cancellation);
         if (committedEvents.hasEvents) {
-            this._logger.silly(`Re-applying ${committedEvents.length}`, committedEvents.length);
+            this._logger.debug(`Re-applying ${committedEvents.length}`, committedEvents.length);
 
             this.throwIfEventWasAppliedToOtherEventSource(committedEvents);
-            this.throwIfEventWasAppliedByOtherAggreateRoot(committedEvents);
+            this.throwIfEventWasAppliedByOtherAggreateRoot(aggregateRoot.aggregateRootId, committedEvents);
 
             let onMethods: OnDecoratedMethod[] = [];
             const hasState = OnDecoratedMethods.methodsPerAggregate.has(this._aggregateRootType);
@@ -95,8 +97,8 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
             }
 
             for (const event of committedEvents) {
-                this.throwIfAggregateRootVersionIsOutOfOrder(event);
-                this._aggregateRoot.nextVersion();
+                this.throwIfAggregateRootVersionIsOutOfOrder(aggregateRoot.version, event);
+                aggregateRoot.nextVersion();
                 if (hasState) {
                     const onMethod = onMethods.find(_ => {
                         let eventTypeId = EventTypeId.from(Guid.empty);
@@ -110,31 +112,31 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
                     });
 
                     if (onMethod) {
-                        onMethod.method.call(this._aggregateRoot, event.content);
+                        onMethod.method.call(aggregateRoot, event.content);
                     }
                 }
             }
         } else {
-            this._logger.silly('No events to re-apply');
+            this._logger.debug('No events to re-apply');
         }
     }
 
 
-    private throwIfAggregateRootVersionIsOutOfOrder(event: CommittedAggregateEvent) {
-        if (event.aggregateRootVersion.value !== this._aggregateRoot.version.value) {
-            throw new AggregateRootVersionIsOutOfOrder(event.aggregateRootVersion, this._aggregateRoot.version);
+    private throwIfAggregateRootVersionIsOutOfOrder(version: AggregateRootVersion, event: CommittedAggregateEvent) {
+        if (event.aggregateRootVersion.value !== version.value) {
+            throw new AggregateRootVersionIsOutOfOrder(event.aggregateRootVersion, version);
         }
     }
 
-    private throwIfEventWasAppliedByOtherAggreateRoot(event: CommittedAggregateEvents) {
-        if (!event.aggregateRootId.equals(this._aggregateRoot.aggregateRootId)) {
-            throw new EventWasAppliedByOtherAggregateRoot(event.aggregateRootId, this._aggregateRoot.aggregateRootId);
+    private throwIfEventWasAppliedByOtherAggreateRoot(aggregateRootId: AggregateRootId, event: CommittedAggregateEvents) {
+        if (!event.aggregateRootId.equals(aggregateRootId)) {
+            throw new EventWasAppliedByOtherAggregateRoot(event.aggregateRootId, aggregateRootId);
         }
     }
 
     private throwIfEventWasAppliedToOtherEventSource(event: CommittedAggregateEvents) {
-        if (!event.eventSourceId.equals(this._aggregateRoot.eventSourceId)) {
-            throw new EventWasAppliedToOtherEventSource(event.eventSourceId, this._aggregateRoot.eventSourceId);
+        if (!event.eventSourceId.equals(this._eventSourceId)) {
+            throw new EventWasAppliedToOtherEventSource(event.eventSourceId, this._eventSourceId);
         }
     }
 }
