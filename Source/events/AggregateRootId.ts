@@ -4,6 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+export type AggregateRootIdLike = Guid | string | AggregateRootId;
+
 /**
  * Represents the unique identifier of an event type.
  *
@@ -19,10 +21,10 @@ export class AggregateRootId extends ConceptAs<Guid, '@dolittle/sdk.events.Aggre
      * Creates an {@link AggregateRootId} from a guid.
      *
      * @static
-     * @param {(Guid | string)} id
+     * @param {AggregateRootIdLike} id
      * @returns {EventSourceId}
      */
-    static from(id: Guid | string | AggregateRootId): AggregateRootId {
+    static from(id: AggregateRootIdLike): AggregateRootId {
         if (id instanceof AggregateRootId) return id;
         return new AggregateRootId(Guid.as(id));
     }

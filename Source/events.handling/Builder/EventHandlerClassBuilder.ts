@@ -3,13 +3,14 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap, Generation, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { EventHandler, EventHandlerSignature, IEventHandlers } from '..';
+import { EventHandler, EventHandlerAlias, EventHandlerSignature, IEventHandlers } from '..';
 import { EventHandlerProcessor } from '../Internal';
 import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
@@ -67,7 +68,7 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
             logger.warn(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
-        const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods);
+        const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
         eventHandlers.register(
             new EventHandlerProcessor(
                 eventHandler,

@@ -1,3 +1,19 @@
+# [18.1.0] - 2021-10-25 [PR: #66](https://github.com/dolittle/JavaScript.SDK/pull/66)
+## Summary
+
+Updates Grpc, protobuf and contracts dependency versions and adds the possibility to register event handlers with aliases that is useful for when using the Dolittle CLI.
+
+### Added
+
+- `withAlias` build step on the fluent builder for event handlers.
+- `alias` argument on the `eventHandler` decorator
+- Event handler classes without the `alias` argument gets registered with an alias that is the class name.
+
+### Changed
+
+- Updated Grpc, protobuf and contracts dependency versions
+
+
 # [18.0.0] - 2021-10-13 [PR: #61](https://github.com/dolittle/JavaScript.SDK/pull/61)
 ## Summary
 

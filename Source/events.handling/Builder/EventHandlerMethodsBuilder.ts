@@ -6,9 +6,10 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventType, EventTypeId, EventTypeMap, IEventTypes, Generation } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandlerId, EventHandlerSignature } from '..';
+import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];
@@ -45,8 +46,8 @@ export class EventHandlerMethodsBuilder {
      * @param {Generation | number} generation The generation of the event type.
      * @param {EventHandlerSignature<T>} method Method to call for each event.
      */
-    handle(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, method: EventHandlerSignature): void;
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | Generation | number, maybeMethod?: EventHandlerSignature<T>) {
+    handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): void;
+    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {
         const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
         if (typeOrEventTypeOrId instanceof EventType) {

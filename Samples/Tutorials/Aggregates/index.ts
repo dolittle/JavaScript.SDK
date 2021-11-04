@@ -15,6 +15,7 @@ import { Kitchen } from './Kitchen';
             eventTypes.register(DishPrepared))
         .withEventHandlers(builder =>
             builder.register(DishHandler))
+        .withAggregateRoots(_ => _.register(Kitchen))
         .build();
 
     await client
@@ -23,3 +24,5 @@ import { Kitchen } from './Kitchen';
 
     console.log('Done');
 })();
+setInterval(function () {
+}, 1000 * 60 * 60);

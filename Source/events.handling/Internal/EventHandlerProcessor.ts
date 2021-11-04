@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
-import { EventContext, IEventTypes, EventSourceId } from '@dolittle/sdk.events';
+import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -23,7 +23,7 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { guids, eventTypes } from '@dolittle/sdk.protobuf';
+import { guids, artifacts } from '@dolittle/sdk.protobuf';
 
 import { EventHandlerId, IEventHandler } from '..';
 
@@ -55,10 +55,12 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
         registerArguments.setScopeid(guids.toProtobuf(this._handler.scopeId.value));
         registerArguments.setPartitioned(this._handler.partitioned);
-
+        if (this._handler.hasAlias) {
+            registerArguments.setAlias(this._handler.alias!.value);
+        }
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {
-            handledArtifacts.push(eventTypes.toProtobuf(eventType));
+            handledArtifacts.push(artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventtypesList(handledArtifacts);
         return registerArguments;
@@ -134,7 +136,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = eventTypes.toSDK(pbEventType);
+        const eventType = artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

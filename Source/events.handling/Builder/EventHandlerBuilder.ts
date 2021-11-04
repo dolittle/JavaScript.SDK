@@ -8,13 +8,10 @@ import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
-import { EventHandler, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
+import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
 import { EventHandlerProcessor } from '../Internal';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
-
-
-
 
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
@@ -24,6 +21,7 @@ export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void
 export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
     private _methodsBuilder?: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
+    private _alias?: EventHandlerAlias;
     private _partitioned!: boolean;
 
     /**
@@ -64,6 +62,11 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
         return this;
     }
 
+    withAlias(alias: EventHandlerAliasLike): EventHandlerBuilder {
+        this._alias = EventHandlerAlias.from(alias);
+        return this;
+    }
+
     /** @inheritdoc */
     buildAndRegister(
         client: EventHandlersClient,
@@ -83,7 +86,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
             logger.warn(`Could not build event handler ${this._eventHandlerId}`);
             return;
         }
-        const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods);
+        const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods, this._alias);
         eventHandlers.register(
             new EventHandlerProcessor(
                 eventHandler,

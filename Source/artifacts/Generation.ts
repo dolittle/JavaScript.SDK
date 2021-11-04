@@ -4,6 +4,8 @@
 import { ConceptAs } from '@dolittle/concepts';
 import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 
+export type GenerationLike = Generation | number;
+
 /**
  * Represents the generation of an Artifact.
  *
@@ -33,7 +35,7 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
      * @param {Generation | number} generation
      * @returns {Generation}
      */
-    static from(generation: Generation | number): Generation {
+    static from(generation: GenerationLike): Generation {
         if (generation instanceof Generation) return generation;
         return new Generation(generation);
     }

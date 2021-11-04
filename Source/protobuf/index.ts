@@ -9,7 +9,7 @@ export { MissingFailureIdentifier } from './MissingFailureIdentifier';
 
 import callContexts from './callContexts';
 import claims from './claims';
-import eventTypes from './eventTypes';
+import artifacts from './artifacts';
 import executionContexts from './executionContexts';
 import failures from './failures';
 import guids from './guids';
@@ -18,7 +18,7 @@ import versions from './versions';
 export {
     callContexts,
     claims,
-    eventTypes,
+    artifacts,
     executionContexts,
     failures,
     guids,

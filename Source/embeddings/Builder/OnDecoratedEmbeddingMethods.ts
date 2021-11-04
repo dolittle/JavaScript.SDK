@@ -1,9 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EventTypeId, Generation } from '@dolittle/sdk.events';
-import { KeySelector } from '@dolittle/sdk.projections';
+import { GenerationLike } from '@dolittle/sdk.artifacts';
+import { EventTypeIdLike } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 import { EmbeddingClassOnMethod } from './EmbeddingClassOnMethod';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
@@ -27,8 +26,8 @@ export class OnDecoratedEmbeddingMethods {
      */
     static register(
         target: Constructor<any>,
-        eventTypeOrId: Constructor<any> | EventTypeId | Guid | string,
-        generation: Generation | number | undefined,
+        eventTypeOrId: Constructor<any> | EventTypeIdLike,
+        generation: GenerationLike | undefined,
         method: EmbeddingClassOnMethod,
         name: string): void {
         let methods = this.methodsPerEmbedding.get(target);

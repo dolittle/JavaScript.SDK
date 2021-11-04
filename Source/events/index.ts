@@ -1,57 +1,52 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { AggregateRootId } from './AggregateRootId';
-export { AggregateRootVersion } from './AggregateRootVersion';
-export { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
-export { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
-export { CommitEventsResult } from './CommitEventsResult';
-export { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
-export { CommitForAggregateWithEventSourceAndExpectedVersionBuilder } from './CommitForAggregateWithEventSourceAndExpectedVersionBuilder';
-export { CommitForAggregateWithEventSourceBuilder } from './CommitForAggregateWithEventSourceBuilder';
-export { CommittedAggregateEvent } from './CommittedAggregateEvent';
-export { CommittedAggregateEvents } from './CommittedAggregateEvents';
-export { CommittedEvent } from './CommittedEvent';
-export { CommittedEvents } from './CommittedEvents';
-export { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCalled';
-export { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
-export { EventContext } from './EventContext';
-export { EventConverters } from './EventConverters';
-export { EventLogSequenceNumber } from './EventLogSequenceNumber';
-export { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
+export { EventTypesBuilder, EventTypesBuilderCallback } from './builders';
+
+export {
+    AggregateRootVersionIsOutOfOrder,
+    CommitAggregateEventsResult,
+    CommitEventsResult,
+    CommitForAggregateBuilder,
+    CommitForAggregateWithEventSourceAndExpectedVersionBuilder,
+    CommitForAggregateWithEventSourceBuilder,
+    CommittedAggregateEvent,
+    CommittedAggregateEvents,
+    CommittedEvent,
+    CommittedEvents,
+    EventBuilderMethodAlreadyCalled,
+    EventContentNeedsToBeDefined,
+    EventConverters,
+    EventLogSequenceNumberIsOutOfOrder,
+    EventStore,
+    EventStoreBuilder,
+    EventWasAppliedByOtherAggregateRoot,
+    EventWasAppliedToOtherEventSource,
+    IEventStore,
+    MissingExecutionContext,
+    UncommittedAggregateEvent,
+    UncommittedAggregateEvents,
+    UncommittedEvent
+} from './store';
+
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
+export { AggregateRootId, AggregateRootIdLike } from './AggregateRootId';
+export { AggregateRootVersion } from './AggregateRootVersion';
+export { EventContext } from './EventContext';
+export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventSourceId } from './EventSourceId';
-export { EventStore } from './EventStore';
-export { EventStoreBuilder } from './EventStoreBuilder';
-export { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAggregateRoot';
-export { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';
-export { IEventStore } from './IEventStore';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
-export { MissingExecutionContext } from './MissingExecutionContext';
 export { PartitionId } from './PartitionId';
 export { ScopeId } from './ScopeId';
 export { StreamId } from './StreamId';
-export { syncPromise } from './syncPromise';
-export { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
-export { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
-export { UncommittedEvent } from './UncommittedEvent';
+export { EventType } from './EventType';
+export { eventType } from './eventTypeDecorator';
+export { EventTypeId, EventTypeIdLike } from './EventTypeId';
+export { EventTypeAlias, EventTypeAliasLike } from './EventTypeAlias';
+export { EventTypeMap } from './EventTypeMap';
+export { EventTypeOptions } from './EventTypeOptions';
+export { EventTypes } from './EventTypes';
+export { EventTypesFromDecorators } from './EventTypesFromDecorators';
+export { IEventTypes } from './IEventTypes';
 
-export {
-    CannotHaveMultipleEventTypesAssociatedWithType,
-    CannotHaveMultipleTypesAssociatedWithEventType,
-    EventType,
-    eventType,
-    EventTypeId,
-    EventTypeMap,
-    EventTypeOptions,
-    EventTypes,
-    EventTypesBuilder,
-    EventTypesBuilderCallback,
-    EventTypesFromDecorators,
-    Generation,
-    GenerationMustBePositiveInteger,
-    IEventTypes,
-    UnableToResolveEventType,
-    UnknownEventType,
-    UnknownType,
-} from '@dolittle/sdk.artifacts';
+export * as internal from './internal';
