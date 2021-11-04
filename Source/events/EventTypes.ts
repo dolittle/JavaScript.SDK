@@ -20,10 +20,16 @@ export class EventTypes extends IEventTypes {
     constructor(associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
         super(associations);
     }
+
     /** @inheritdoc */
     protected createArtifact(artifactOrId: ArtifactOrId<EventType, EventTypeId>): EventType {
         return artifactOrId instanceof EventType
                 ? artifactOrId
                 : new EventType(EventTypeId.from(artifactOrId));
+    }
+
+    /** @inheritdoc */
+    protected getArtifactTypeName(): string {
+        return 'EventType';
     }
 }

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { AggregateRootsBuilder, AggregateRootsBuilderCallback } from './builders';
-
+export { EventTypesNotSet } from './EventTypesNotSet';
 export { AggregateOf } from './AggregateOf';
 export { AggregateRoot } from './AggregateRoot';
 export { AggregateRootAction } from './AggregateRootAction';

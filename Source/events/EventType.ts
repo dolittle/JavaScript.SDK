@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { Guid } from '@dolittle/rudiments';
 import { Artifact, Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventTypeAlias } from './EventTypeAlias';
@@ -12,12 +13,6 @@ import { EventTypeId, EventTypeIdLike } from './EventTypeId';
  * @class EventType
  */
 export class EventType extends Artifact<EventTypeId> {
-
-    /**
-     * Represents an unspecified {@link EventType}
-     */
-    static readonly unspecified: EventType = new EventType(EventTypeId.from(Guid.empty));
-
     /**
      * Initializes a new instance of {@link EventType}
      * @param {EventTypeId} id The unique identifier of the event type.

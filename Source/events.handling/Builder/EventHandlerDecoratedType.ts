@@ -4,7 +4,7 @@
 import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
 
-import { EventHandlerAlias, EventHandlerId } from '..';
+import { EventHandlerAlias, EventHandlerId } from '../index';
 
 /**
  * Represents an event handler created from the decorator

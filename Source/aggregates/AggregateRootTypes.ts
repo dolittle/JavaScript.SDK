@@ -19,10 +19,16 @@ export class AggregateRootTypes extends IAggregateRootTypes {
     constructor(associations: AggregateRootTypeMap<Constructor<any>> = new AggregateRootTypeMap()) {
         super(associations);
     }
+
     /** @inheritdoc */
     protected createArtifact(artifactOrId: ArtifactOrId<AggregateRootType, AggregateRootId>): AggregateRootType {
         return artifactOrId instanceof AggregateRootType
                 ? artifactOrId
                 : new AggregateRootType(AggregateRootId.from(artifactOrId));
+    }
+
+    /** @inheritdoc */
+    protected getArtifactTypeName(): string {
+        return 'AggregateRootType';
     }
 }

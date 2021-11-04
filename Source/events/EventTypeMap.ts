@@ -7,7 +7,7 @@ import { EventTypeId } from './EventTypeId';
 
 /**
  * Represents a map for mapping an event type to a given type and provide.
- * @template TType Type to map to.
+ * @template T Type to map to.
  */
 export class EventTypeMap<T> extends ArtifactTypeMap<EventType, EventTypeId, T> {
     /**

@@ -7,7 +7,7 @@ import { AggregateRootType } from './AggregateRootType';
 
 /**
  * Represents a map for mapping an aggregate root type to a given type and provide.
- * @template TType Type to map to.
+ * @template T Type to map to.
  */
 export class AggregateRootTypeMap<T> extends ArtifactTypeMap<AggregateRootType, AggregateRootId, T> {
     /**

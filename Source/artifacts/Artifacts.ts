@@ -18,7 +18,7 @@ import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends IArtifacts<TArtifact, TId> {
     /**
      * Initializes a new instance of {@link EventTypes}
-     * @param {EventTypeMap<Constructor<any>>} [associations] Known associations
+     * @param {ArtifactTypeMap<Constructor<any>>} [associations] Known associations
      */
     constructor(private _associations: ArtifactTypeMap<TArtifact, TId, Constructor<any>>) {
         super();
@@ -92,15 +92,13 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
 
     protected abstract createArtifact (artifactOrId: ArtifactOrId<TArtifact, TId>): TArtifact;
 
+    protected abstract getArtifactTypeName (): string;
+
     private artifactsEquals(left: TArtifact, right: TArtifact): boolean {
         return left.generation.equals(right.generation)
             && left.id.toString() === right.id.toString();
     }
 
-    private getArtifactTypeName() {
-        // This is some hacky stuff.
-        return this.createArtifact(Guid.create()).constructor.name;
-    }
 
     private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, artifact: TArtifact) {
         if (this.hasFor(type)) {

@@ -68,7 +68,7 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
             logger.warn(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
-        const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, EventHandlerAlias.from(decoratedType.alias));
+        const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
         eventHandlers.register(
             new EventHandlerProcessor(
                 eventHandler,
