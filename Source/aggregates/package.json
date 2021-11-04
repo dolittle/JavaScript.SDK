@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "18.1.0",
+    "version": "19.0.0-aragorn.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,8 +35,8 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.events": "18.1.0",
-        "@dolittle/sdk.artifacts": "18.1.0"
+        "@dolittle/sdk.events": "19.0.0-aragorn.0",
+        "@dolittle/sdk.artifacts": "19.0.0-aragorn.0"
     },
     "devDependencies": {}
 }
