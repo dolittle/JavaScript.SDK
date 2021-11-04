@@ -63,11 +63,10 @@ export class ClientBuilder {
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
-            format: format.prettyPrint(),
-            defaultMeta: { microserviceId: _microserviceId.toString() },
+            format: format.simple(),
             transports: [
                 new transports.Console({
-                    format: format.prettyPrint()
+                    format: format.simple()
                 })
             ]
         });
