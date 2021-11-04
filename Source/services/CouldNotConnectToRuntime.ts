@@ -9,7 +9,7 @@ import { Exception } from '@dolittle/rudiments';
 export class CouldNotConnectToRuntime extends Exception {
 
     /**
-     * Initializes a new instance of {@link PingTimeout}.
+     * Initializes a new instance of {@link CouldNotConnectToRuntime}.
      */
     constructor(address: string) {
         super(`Could not connect to a Runtime on '${address}'. PLease make sure a Runtime is running, and that the private port (usually 50053) is accessible on the specified port.`);
