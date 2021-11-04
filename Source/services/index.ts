@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 export { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 export { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
 export { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';

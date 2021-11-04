@@ -5,6 +5,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import * as grpc from '@grpc/grpc-js';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
 
 
@@ -21,7 +22,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
     const metadata = new grpc.Metadata();
     const call = method.call(client, argument, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
-            subject.error(error);
+            subject.error(getErrorFromGrpc(error, client.getChannel().getTarget()));
         } else {
             subject.next(message);
             subject.complete();
@@ -44,14 +45,14 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
     const metadata = new grpc.Metadata();
     const stream = method.call(client, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
-            subject.error(error);
+            subject.error(getErrorFromGrpc(error, client.getChannel().getTarget()));
         } else {
             subject.next(message);
             subject.complete();
         }
     });
     handleCancellation(stream, cancellation);
-    handleClientRequests(stream, requests, subject);
+    handleClientRequests(stream, requests, subject, client.getChannel().getTarget());
     return subject;
 }
 
@@ -84,7 +85,7 @@ export function reactiveDuplex<TRequest, TResponse>(client: grpc.Client, method:
     const metadata = new grpc.Metadata();
     const stream = method.call(client, metadata, {});
     handleCancellation(stream, cancellation);
-    handleClientRequests(stream, requests, subject);
+    handleClientRequests(stream, requests, subject, client.getChannel().getTarget());
     handleServerResponses(stream, subject);
     return subject;
 }
@@ -107,7 +108,7 @@ function handleCancellation(call: grpc.Call, cancellation: Cancellation) {
  * @param {Observable} requests The requests to write to the Runtime.
  * @param {Subject} subject The Subject which contains the responses from the Runtime.
  */
-function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableStream<TRequest>, requests: Observable<TRequest>, subject: Subject<TResponse>) {
+function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableStream<TRequest>, requests: Observable<TRequest>, subject: Subject<TResponse>, address: string) {
     requests.pipe(concatMap((message: TRequest) => {
         const subject = new Subject<void>();
         stream.write(message, undefined, () => {
@@ -120,6 +121,9 @@ function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableSt
         },
         error: (error: any) => {
             stream.cancel();
+            if (isGrpcError(error)) {
+                error = getErrorFromGrpc(error, address);
+            }
             subject.error(error);
         }
     });
@@ -140,4 +144,16 @@ function handleServerResponses<TResponse>(stream: grpc.ClientReadableStream<TRes
     stream.on('error', (error: Error) => {
         subject.error(error);
     });
+}
+
+function getErrorFromGrpc(error: grpc.ServiceError, address: string) {
+    if (error.code === grpc.status.UNAVAILABLE) {
+        return new CouldNotConnectToRuntime(address);
+    } else {
+        return error;
+    }
+}
+
+function isGrpcError(error: any): error is grpc.ServiceError {
+    return error.code !== undefined;
 }
