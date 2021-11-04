@@ -47,8 +47,7 @@ export class EventTypes {
         const request = this.createRequest(eventType);
         this._logger.debug(`Registering Event Type ${eventType.id.value.toString()} with Alias ${eventType.alias?.value}`);
         try {
-            const response = await reactiveUnary(this._client, this._client.register, request, cancellation)
-                .pipe().toPromise();
+            const response = await reactiveUnary(this._client, this._client.register, request, cancellation).toPromise();
             if (response.hasFailure()) {
                 this._logger.warn(`An error occurred while registering Event Type ${eventType.id.value.toString()} with Alias ${eventType.alias?.value} because ${response.getFailure()?.getReason()}`);
             }

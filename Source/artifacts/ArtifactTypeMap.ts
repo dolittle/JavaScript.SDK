@@ -10,13 +10,13 @@ import { Generation } from './Generation';
  * @template TType Type to map to.
  */
 export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike, TType> implements Map<TArtifact, TType> {
-    private _generationsById: Map<string, Map<number, TType>>;
+    private _generationsById: Map<string, Map<number, [TType, TArtifact]>>;
 
     /**
      * Initializes a new instance of {@link EventTypeMap}
      */
     constructor() {
-        this._generationsById = new Map<string, Map<number, TType>>();
+        this._generationsById = new Map<string, Map<number, [TType, TArtifact]>>();
     }
     /** @inheritdoc */
     abstract [Symbol.toStringTag]: string;
@@ -41,21 +41,21 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
     /** @inheritdoc */
     get(key: TArtifact): TType | undefined {
         const artifactId = key.id.toString();
-        return this._generationsById.get(artifactId)?.get(key.generation.value);
+        return this._generationsById.get(artifactId)?.get(key.generation.value)?.[0];
     }
 
     /** @inheritdoc */
     set(key: TArtifact, value: TType): this {
         const artifactId = key.id.toString();
 
-        let generations: Map<number, TType>;
+        let generations: Map<number, [TType, TArtifact]>;
         if (this._generationsById.has(artifactId)) {
             generations = this._generationsById.get(artifactId)!;
         } else {
-            generations = new Map<number, TType>();
+            generations = new Map<number, [TType, TArtifact]>();
             this._generationsById.set(artifactId, generations);
         }
-        generations.set(key.generation.value, value);
+        generations.set(key.generation.value, [value, key]);
 
         return this;
     }
@@ -83,9 +83,8 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
     /** @inheritdoc */
     *[Symbol.iterator](): IterableIterator<[TArtifact, TType]> {
         for (const [artifactId, generations] of this._generationsById) {
-            for (const [generation, entry] of generations) {
-                const artifact = this.createArtifact(artifactId, Generation.from(generation));
-                yield [artifact, entry];
+            for (const [generation, [type, artifact]] of generations) {
+                yield [artifact, type];
             }
         }
     }

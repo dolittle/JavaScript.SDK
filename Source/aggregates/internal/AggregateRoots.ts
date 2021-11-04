@@ -46,8 +46,7 @@ export class AggregateRoots {
     const request = this.createRequest(aggregateRootType);
         this._logger.debug(`Registering Alias ${aggregateRootType.alias?.value} for Aggregate Root ${aggregateRootType.id.value.toString()}`);
         try {
-            const response = await reactiveUnary(this._client, this._client.registerAlias, request, cancellation)
-                .pipe().toPromise();
+            const response = await reactiveUnary(this._client, this._client.registerAlias, request, cancellation).toPromise();
             if (response.hasFailure()) {
                 this._logger.warn(`An error occurred while registering Alias ${aggregateRootType.alias?.value} for Aggregate Root ${aggregateRootType.id.value.toString()} because ${response.getFailure()?.getReason()}`);
             }
