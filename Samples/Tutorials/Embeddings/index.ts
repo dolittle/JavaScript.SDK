@@ -38,12 +38,12 @@ const client = Client
         const mrTaco = await client.embeddings
             .forTenant(TenantId.development)
             .get(Employee, 'Mr. Taco');
-        console.log('Mr. Taco is now', mrTaco.state);
+        console.log(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
 
         const allEmployeeNames = await client.embeddings
             .forTenant(TenantId.development)
             .getKeys(Employee);
-        console.log('All current employees are', allEmployeeNames.map(_ => _.value));
+        console.log(`All current employees are ${allEmployeeNames}`);
 
         await client.embeddings
             .forTenant(TenantId.development)
