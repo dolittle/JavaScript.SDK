@@ -35,13 +35,19 @@ const client = Client
             .update(Employee, updatedEmployee.name, updatedEmployee);
         console.log(`Updated ${updatedEmployee.name}`);
 
+        const mrTaco = await client.embeddings
+            .forTenant(TenantId.development)
+            .get(Employee, 'Mr. Taco');
+        console.log('Mr. Taco is now', mrTaco.state);
+
+        const allEmployeeNames = await client.embeddings
+            .forTenant(TenantId.development)
+            .getKeys(Employee);
+        console.log('All current employees are', allEmployeeNames.map(_ => _.value));
+
         await client.embeddings
             .forTenant(TenantId.development)
             .delete(Employee, updatedEmployee.name);
         console.log(`Deleted ${updatedEmployee.name}`);
-
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .getKeys(Employee);
     }, 1000);
 })();
