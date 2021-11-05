@@ -1,3 +1,30 @@
+# [19.0.0] - 2021-11-5 [PR: #67](https://github.com/dolittle/JavaScript.SDK/pull/67)
+## Summary
+
+Fixes a problem with aggregates so that it now can be used in an async way. Registration of event types and aggregate roots to the Runtime.
+
+
+### Added
+
+- Registration of alias for event types through the attribute or builder
+- Registration of alias fro aggregate roots through the attribute
+- Default alias registration for event type classes and aggregate root classes. Default is the name of the class
+
+### Changed
+
+- Log Level for registered Event Processors to Information
+- The Getting Started, Aggregates, Projections and Embeddings tutorials updated to reflect new features of the SDK
+
+### Fixed
+
+- A problem where you couldn't use an aggregate root in an asynchronous manner
+- Calling `apply()` in an aggregate root now invokes the corresponding `on()` method
+
+### Removed
+- `EventSourceId.unspecified`. This value was used internally, but should not really ever be used - so it is now gone.
+- `IEventStore.fetchForAggregateSync()`. No longer needed after fixing the aggregate root implementation. Relied on a NodeJS hack that we weren't really happy with.
+
+
 # [18.1.0] - 2021-10-25 [PR: #66](https://github.com/dolittle/JavaScript.SDK/pull/66)
 ## Summary
 
