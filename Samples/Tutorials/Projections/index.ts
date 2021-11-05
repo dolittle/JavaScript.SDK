@@ -31,10 +31,10 @@ const client = Client
 (async () => {
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
     setTimeout(async () => {
         for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
