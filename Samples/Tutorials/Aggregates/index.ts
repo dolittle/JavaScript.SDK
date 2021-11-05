@@ -15,11 +15,12 @@ import { Kitchen } from './Kitchen';
             eventTypes.register(DishPrepared))
         .withEventHandlers(builder =>
             builder.register(DishHandler))
-        .withAggregateRoots(_ => _.register(Kitchen))
+        .withAggregateRoots(aggregateRoots =>
+            aggregateRoots.register(Kitchen))
         .build();
 
     await client
-        .aggregateOf(Kitchen, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9', _ => _.forTenant(TenantId.development))
+        .aggregateOf(Kitchen, 'Dolittle Tacos', _ => _.forTenant(TenantId.development))
         .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 
     console.log('Done');
