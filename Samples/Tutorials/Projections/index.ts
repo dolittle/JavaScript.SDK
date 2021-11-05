@@ -5,7 +5,6 @@
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 import { DishCounter } from './DishCounter';
 import { Chef } from './Chef';
 
@@ -13,8 +12,6 @@ const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
     .withProjections(builder => {
         builder.register(DishCounter);
 
