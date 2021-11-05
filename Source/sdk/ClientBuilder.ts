@@ -9,10 +9,11 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Fil
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 import { ProjectionsClient as GetProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
 import { Container, IContainer } from '@dolittle/sdk.common';
-import { Embeddings, EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingStoreBuilder } from '@dolittle/sdk.embeddings';
+import { Embeddings, EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
+import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback, internal as eventsInternal } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
@@ -21,6 +22,8 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import * as grpc from '@grpc/grpc-js';
 import { createLogger, format, Logger, transports } from 'winston';
 import { Client } from './Client';
+import { AggregateRootsBuilder, AggregateRootsBuilderCallback, internal as aggregatesInternal } from '@dolittle/sdk.aggregates';
+import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 
 
 
@@ -34,6 +37,7 @@ export class ClientBuilder {
     private _environment: Environment = Environment.undetermined;
     private _version: Version = Version.notSet;
     private readonly _eventHorizonsBuilder: SubscriptionsBuilder;
+    private readonly _aggregateRootsBuilder: AggregateRootsBuilder;
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
     private readonly _filtersBuilder: EventFiltersBuilder;
@@ -50,6 +54,7 @@ export class ClientBuilder {
     constructor(private readonly _microserviceId: MicroserviceId) {
         this._eventHorizonsBuilder = new SubscriptionsBuilder();
         this._cancellation = Cancellation.default;
+        this._aggregateRootsBuilder = new AggregateRootsBuilder();
         this._eventTypesBuilder = new EventTypesBuilder();
         this._eventHandlersBuilder = new EventHandlersBuilder();
         this._filtersBuilder = new EventFiltersBuilder();
@@ -58,11 +63,10 @@ export class ClientBuilder {
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._logger = createLogger({
             level: 'info',
-            format: format.prettyPrint(),
-            defaultMeta: { microserviceId: _microserviceId.toString() },
+            format: format.simple(),
             transports: [
                 new transports.Console({
-                    format: format.prettyPrint()
+                    format: format.simple()
                 })
             ]
         });
@@ -118,6 +122,17 @@ export class ClientBuilder {
      */
     withEventHorizons(callback: SubscriptionsBuilderCallback): ClientBuilder {
         callback(this._eventHorizonsBuilder);
+        return this;
+    }
+
+    /**
+     * Configure event types.
+     *
+     * @param {ArtifactsBuilderCallback} callback The builder callback
+     * @returns {ClientBuilder} The client builder for continuation.
+     */
+    withAggregateRoots(callback: AggregateRootsBuilderCallback): ClientBuilder {
+        callback(this._aggregateRootsBuilder);
         return this;
     }
 
@@ -235,7 +250,8 @@ export class ClientBuilder {
 
         const eventTypes = new EventTypes();
         this._eventTypesBuilder.addAssociationsInto(eventTypes);
-
+        this._eventTypesBuilder.buildAndRegister(new eventsInternal.EventTypes(new EventTypesClient(connectionString, credentials), executionContext, this._logger), this._cancellation);
+        this._aggregateRootsBuilder.buildAndRegister(new aggregatesInternal.AggregateRoots(new AggregateRootsClient(connectionString, credentials), executionContext, this._logger), this._cancellation);
         const eventStoreBuilder = new EventStoreBuilder(
             new EventStoreClient(connectionString, credentials),
             eventTypes,

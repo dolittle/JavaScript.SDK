@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.common",
-    "version": "18.1.0",
+    "version": "19.0.0-aragorn.2",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,7 +33,7 @@
     },
     "dependencies": {
         "@dolittle/types": "5.0.1",
-        "@dolittle/sdk.execution": "18.1.0"
+        "@dolittle/sdk.execution": "19.0.0-aragorn.2"
     },
     "devDependencies": {}
 }

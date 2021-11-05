@@ -6,22 +6,22 @@ import { aggregateRoot, AggregateRoot, on } from '@dolittle/sdk.aggregates';
 import { EventSourceId } from '@dolittle/sdk.events';
 import { DishPrepared } from './DishPrepared';
 
-@aggregateRoot('e5b17be9-4873-4526-99a1-76a5c31c0dad')
+@aggregateRoot('01ad9a9f-711f-47a8-8549-43320f782a1e')
 export class Kitchen extends AggregateRoot {
-    private _counter = 0;
+    private _ingredients: number = 2;
 
     constructor(eventSourceId: EventSourceId) {
         super(eventSourceId);
     }
 
     prepareDish(dish: string, chef: string) {
+        if (this._ingredients <= 0) throw new Error('We have run out of ingredients, sorry!');
         this.apply(new DishPrepared(dish, chef));
-        console.log(`${this._counter} dishes has been prepared so far`);
+        console.log(`Kitchen ${this.eventSourceId} prepared a ${dish}, there are ${this._ingredients} ingredients left.`);
     }
-
 
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared) {
-        this._counter++;
+        this._ingredients--;
     }
 }

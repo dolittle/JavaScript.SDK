@@ -19,4 +19,4 @@ const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
 client.eventStore
     .forTenant(TenantId.development)
-    .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    .commit(preparedTaco, 'Dolittle Tacos');

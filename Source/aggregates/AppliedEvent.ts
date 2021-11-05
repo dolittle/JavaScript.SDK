@@ -12,10 +12,10 @@ export class AppliedEvent {
     /**
      * Initializes a new instance of {@link AppliedEvent}.
      * @param {*} event The event content.
-     * @param {EventType} eventType The {@link EventType}.
+     * @param {EventType | undefined} eventType The {@link EventType}.
      * @param {boolean} isPublic Whether the event is public or not.
      */
-    constructor(readonly event: any, readonly eventType: EventType, readonly isPublic: boolean) {
+    constructor(readonly event: any, readonly eventType: EventType | undefined, readonly isPublic: boolean) {
     }
 
     /**
@@ -24,6 +24,6 @@ export class AppliedEvent {
      * @returns {Boolean}
      */
     get hasEventType(): boolean {
-        return !this.eventType.id.equals(EventType.unspecified.id);
+        return this.eventType !== undefined;
     }
 }
