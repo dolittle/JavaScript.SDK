@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Claim } from '@dolittle/sdk.execution';
-import '../index';
+import '../claims';
 
 describe('when converting claim to and from protobuf', () => {
     const claim = new Claim('my-claim','forty two', 'string');

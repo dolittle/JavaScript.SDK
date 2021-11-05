@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import '../index';
+import '../artifacts';
 import { artifact_type, artifact_type_id } from './given/artifact_type';
 
 describe('when converting to and from protobuf', () => {
