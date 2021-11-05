@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 module.exports = {
-    extends: '@dolittle/typescript',
+    extends: '@dolittle',
     root: true,
     parserOptions: {
         project: './Sources/*/tsconfig.json',

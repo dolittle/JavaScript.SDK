@@ -1,8 +1,7 @@
 {
     "extends": "@dolittle/typescript.config",
     "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES2015",
+        "target": "ES2017",
         "downlevelIteration": true,
         "inlineSourceMap": true,
         "sourceMap": false,
