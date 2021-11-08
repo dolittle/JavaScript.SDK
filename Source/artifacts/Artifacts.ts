@@ -90,9 +90,9 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         this._associations.set(artifact, type);
     }
 
-    protected abstract createArtifact (artifactOrId: ArtifactOrId<TArtifact, TId>): TArtifact;
+    protected abstract createArtifact(artifactOrId: ArtifactOrId<TArtifact, TId>): TArtifact;
 
-    protected abstract getArtifactTypeName (): string;
+    protected abstract getArtifactTypeName(): string;
 
     private artifactsEquals(left: TArtifact, right: TArtifact): boolean {
         return left.generation.equals(right.generation)

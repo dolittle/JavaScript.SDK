@@ -14,5 +14,5 @@ export abstract class IFilters {
      * @param {IFilterProcessor} filterProcessor The filter processor.
      * @param {Cancellation} [cancellation] Optional cancellation.
      */
-    abstract register (filterProcessor: IFilterProcessor, cancellation?: Cancellation): void;
+    abstract register(filterProcessor: IFilterProcessor, cancellation?: Cancellation): void;
 }

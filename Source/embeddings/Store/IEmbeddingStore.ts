@@ -19,7 +19,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TEmbedding>>}
      */
-    abstract get<TEmbedding> (type: Constructor<TEmbedding>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
+    abstract get<TEmbedding>(type: Constructor<TEmbedding>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
      * Gets an embedding state by key for an embedding specified by embedding identifier.
@@ -30,7 +30,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TEmbedding>>}
      */
-    abstract get<TEmbedding> (type: Constructor<TEmbedding>, key: Key | any, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
+    abstract get<TEmbedding>(type: Constructor<TEmbedding>, key: Key | any, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;
 
     /**
      * Gets an embedding state by key for an embedding specified by embedding identifier.
@@ -39,7 +39,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<any>>}
      */
-    abstract get (key: Key | any, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    abstract get(key: Key | any, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
 
     /**
      * Gets all embedding states for an embedding associated with a type.
@@ -48,7 +48,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getAll<TEmbedding> (type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
+    abstract getAll<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
 
     /**
      * Gets all embedding states for an embedding specified by embedding identifier.
@@ -58,7 +58,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getAll<TEmbedding> (type: Constructor<TEmbedding>, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
+    abstract getAll<TEmbedding>(type: Constructor<TEmbedding>, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TEmbedding>>>;
 
     /**
      * Gets all embedding states for an embedding specified by embedding identifier.
@@ -66,7 +66,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<Map<Key, CurrentState<any>>}
      */
-    abstract getAll (embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Map<Key,CurrentState<any>>>;
+    abstract getAll(embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Map<Key,CurrentState<any>>>;
 
     /**
      * Gets all the keys for an embedding associated with a type.
@@ -75,7 +75,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getKeys<TEmbedding> (type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Key[]>;
+    abstract getKeys<TEmbedding>(type: Constructor<TEmbedding>, cancellation?: Cancellation): Promise<Key[]>;
 
     /**
      * Gets all the keys for an embedding specified by embedding identifier.
@@ -85,7 +85,7 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getKeys<TEmbedding> (type: Constructor<TEmbedding>, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Key[]>;
+    abstract getKeys<TEmbedding>(type: Constructor<TEmbedding>, embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Key[]>;
 
     /**
      * Gets all the keys for an embedding specified by embedding identifier.
@@ -93,5 +93,5 @@ export abstract class IEmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<Key[]}
      */
-    abstract getKeys (embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Key[]>;
+    abstract getKeys(embedding: EmbeddingId | Guid | string, cancellation?: Cancellation): Promise<Key[]>;
 }

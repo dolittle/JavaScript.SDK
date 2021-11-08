@@ -18,5 +18,5 @@ export abstract class IAggregateRootOperations<TAggregate extends AggregateRoot>
      * @param {Cancellation} [cancellation] The optional cancellation token.
      * @returns {Promise<void>}
      */
-    abstract perform (action: AggregateRootAction<TAggregate>, cancellation?: Cancellation): Promise<void>;
+    abstract perform(action: AggregateRootAction<TAggregate>, cancellation?: Cancellation): Promise<void>;
 }

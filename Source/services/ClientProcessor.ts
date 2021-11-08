@@ -88,14 +88,14 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
     /**
      * Get the registration arguments for a processor.
      */
-    protected abstract get registerArguments (): TRegisterArguments;
+    protected abstract get registerArguments(): TRegisterArguments;
 
     /**
      * Get a failure from the registration response.
      * @param {TRegisterResponse} response The registration response
      * @returns {Failure} The failure to return to Runtime.
      */
-    protected abstract getFailureFromRegisterResponse (response: TRegisterResponse): Failure | undefined;
+    protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): Failure | undefined;
 
     /**
      * Creates a reverse call client.
@@ -104,7 +104,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param pingTimeout
      * @param cancellation
      */
-    protected abstract createClient (
+    protected abstract createClient(
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         pingTimeout: number,
@@ -115,12 +115,12 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {TRequest} request The request from the Runtime.
      * @param {ExecutionContext} executionContext The execution context.
      */
-    protected abstract handle (request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
+    protected abstract handle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 
     /**
      * Wrapper around the handle() method to catch errors and set them to the response.
      * @param {TRequest} request The request from the Runtime.
      * @param {ExecutionContext} executionContext The execution context.
      */
-    protected abstract catchingHandle (request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
+    protected abstract catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 }

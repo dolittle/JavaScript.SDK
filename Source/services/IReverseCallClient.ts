@@ -10,10 +10,10 @@ export type ReverseCallCallback<TRequest, TResponse> = (request: TRequest, execu
  * Defines a client for reverse calls coming from the server to the client.
  */
 export abstract class IReverseCallClient<TConnectResponse> implements Subscribable<TConnectResponse> {
-    abstract subscribe (observer?: PartialObserver<TConnectResponse>): Unsubscribable;
-    abstract subscribe (next: null | undefined, error: null | undefined, complete: () => void): Unsubscribable;
-    abstract subscribe (next: null | undefined, error: (error: any) => void, complete?: () => void): Unsubscribable;
-    abstract subscribe (next: (value: TConnectResponse) => void, error: null | undefined, complete: () => void): Unsubscribable;
-    abstract subscribe (next?: (value: TConnectResponse) => void, error?: (error: any) => void, complete?: () => void): Unsubscribable;
-    abstract subscribe (next?: any, error?: any, complete?: any): Unsubscribable;
+    abstract subscribe(observer?: PartialObserver<TConnectResponse>): Unsubscribable;
+    abstract subscribe(next: null | undefined, error: null | undefined, complete: () => void): Unsubscribable;
+    abstract subscribe(next: null | undefined, error: (error: any) => void, complete?: () => void): Unsubscribable;
+    abstract subscribe(next: (value: TConnectResponse) => void, error: null | undefined, complete: () => void): Unsubscribable;
+    abstract subscribe(next?: (value: TConnectResponse) => void, error?: (error: any) => void, complete?: () => void): Unsubscribable;
+    abstract subscribe(next?: any, error?: any, complete?: any): Unsubscribable;
 }

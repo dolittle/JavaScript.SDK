@@ -15,5 +15,5 @@ export abstract class IContainer {
      * @param {ExecutionContext} executionContext The current execution context to use for resolving tenant-dependant services.
      * @returns The instance.
      */
-    abstract get (service: Constructor, executionContext: ExecutionContext): any;
+    abstract get(service: Constructor, executionContext: ExecutionContext): any;
 }

@@ -45,5 +45,5 @@ export abstract class IProjection<T> {
      * @param {EventType} eventType The event type.
      * @param {ProjectionContext} context The context for the projection processing.
      */
-    abstract on (readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
+    abstract on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
 }
