@@ -6,7 +6,9 @@ import { TypeNotAssociatedToArtifact } from '../../TypeNotAssociatedToArtifact';
 
 class MyType { }
 
-describe('when checking if has for type and there is no definition', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     let result: any;
     try {
         no_associations.artifacts.getFor(MyType);

@@ -3,7 +3,9 @@
 
 import one_association from '../given/one_association';
 
-describe('when checking if has for event type and there is a definition', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const result = one_association.artifacts.hasTypeFor(one_association.artifact_type);
 
     it('should have it', () => result.should.be.true);

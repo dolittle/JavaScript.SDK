@@ -4,7 +4,9 @@
 import { Failure } from '../Failure';
 import '../failures';
 
-describe('when converting to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const failureId = '0c2b9956-cbe8-4ed1-be9c-d2ede0c8ec20';
     const reason = 'MyReason';
     const failure = Failure.from(failureId, reason);

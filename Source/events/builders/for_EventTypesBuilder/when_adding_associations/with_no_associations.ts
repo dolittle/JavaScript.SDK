@@ -4,7 +4,9 @@
 import { EventTypes } from '../../../EventTypes';
 import { EventTypesBuilder } from '../../EventTypesBuilder';
 
-describe('when adding associations with no associations', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const builder = new EventTypesBuilder();
     const eventTypes = new EventTypes();
 

@@ -3,7 +3,9 @@
 
 import one_association from '../given/one_association';
 
-describe('when checking if has for type and there is a definition', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const result = one_association.artifacts.hasFor(one_association.class_type);
 
     it('should have it', () => result.should.be.true);

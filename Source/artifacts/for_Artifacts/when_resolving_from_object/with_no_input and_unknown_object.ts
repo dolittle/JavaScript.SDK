@@ -4,7 +4,9 @@
 import { UnableToResolveArtifact } from '../../UnableToResolveArtifact';
 import no_association from '../given/no_associations';
 
-describe('when resolving from object with no input and unknown', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const object = {};
     let result: any;
 

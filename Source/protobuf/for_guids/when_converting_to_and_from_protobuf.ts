@@ -4,7 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import '../guids';
 
-describe('when converting to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const guid = Guid.create();
     const uuid = guid.toProtobuf();
     const result = uuid.toSDK();

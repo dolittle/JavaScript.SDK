@@ -4,7 +4,9 @@
 import { Claim } from '@dolittle/sdk.execution';
 import '../claims';
 
-describe('when converting claim to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const claim = new Claim('my-claim','forty two', 'string');
     const result = claim.toProtobuf().toSDK();
 

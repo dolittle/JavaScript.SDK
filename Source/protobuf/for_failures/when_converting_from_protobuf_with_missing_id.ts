@@ -5,7 +5,9 @@ import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import '../failures';
 import { MissingFailureIdentifier } from '../MissingFailureIdentifier';
 
-describe('when converting from protobuf with missing id', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const reason = 'MyReason';
     const pbFailure = new PbFailure();
     pbFailure.setReason(reason);

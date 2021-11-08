@@ -8,7 +8,9 @@ import { EventLogSequenceNumber, EventSourceId, EventType, EventTypeId } from '.
 import { CommittedEvent } from '../CommittedEvent';
 import { EventConverters } from '../EventConverters';
 
-describe('when converting committed event to protobuf and back', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const claimsArray: Claim[] = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')

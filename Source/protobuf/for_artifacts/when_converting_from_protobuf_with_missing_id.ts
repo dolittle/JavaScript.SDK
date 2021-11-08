@@ -7,7 +7,9 @@ import '../artifacts';
 import { MissingArtifactIdentifier } from '../MissingArtifactIdentifier';
 import { artifact_type } from './given/artifact_type';
 
-describe('when converting from protobuf with missing id', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const pbArtifact = new PbArtifact();
     pbArtifact.setGeneration(42);
 
