@@ -21,7 +21,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TProjection>>}
      */
-    abstract get<TProjection> (type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    abstract get<TProjection>(type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
 
     /**
      * Gets a projection state by key for a projection specified by projection identifier.
@@ -32,7 +32,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TProjection>>}
      */
-    abstract get<TProjection> (type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    abstract get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
 
     /**
      * Gets a projection state by key for a projection specified by projection and scope identifier.
@@ -44,7 +44,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TProjection>>}
      */
-    abstract get<TProjection> (type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    abstract get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
 
     /**
      * Gets a projection state by key for a projection specified by projection identifier.
@@ -53,7 +53,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<any>>}
      */
-    abstract get (key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    abstract get(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
 
     /**
      * Gets a projection state by key for a projection specified by projection and scope identifier.
@@ -63,7 +63,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<any>>}
      */
-    abstract get (key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    abstract get(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
 
     /**
      * Gets all projection states for a projection associated with a type.
@@ -72,7 +72,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getAll<TProjection> (type: Constructor<TProjection>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
+    abstract getAll<TProjection>(type: Constructor<TProjection>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
 
     /**
      * Gets all projection states for a projection specified by projection identifier.
@@ -82,7 +82,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TPRojection>>}
      */
-    abstract getAll<TProjection> (type: Constructor<TProjection>, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
+    abstract getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
 
     /**
      * Gets all projection states for a projection specified by projection and scope identifier.
@@ -93,7 +93,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<Map<Key, CurrentState<TProjection>>}
      */
-    abstract getAll<TProjection> (type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
+    abstract getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
 
     /**
      * Gets all projection states for a projection specified by projection identifier.
@@ -101,7 +101,7 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<Map<Key, CurrentState<any>>}
      */
-    abstract getAll (projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key,CurrentState<any>>>;
+    abstract getAll(projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key,CurrentState<any>>>;
 
     /**
      * Gets all projection states for a projection specified by projection and scope identifier.
@@ -110,5 +110,5 @@ export abstract class IProjectionStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<Map<Key, CurrentState<any>>}
      */
-    abstract getAll (projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<any>>>;
+    abstract getAll(projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<any>>>;
 }

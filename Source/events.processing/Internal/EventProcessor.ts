@@ -29,32 +29,32 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
         }
 
     /** @inheritdoc */
-    protected abstract get registerArguments (): TRegisterArguments;
+    protected abstract get registerArguments(): TRegisterArguments;
 
     /** @inheritdoc */
-    protected abstract createClient (
+    protected abstract createClient(
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         pingTimeout: number,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     /** @inheritdoc */
-    protected abstract getFailureFromRegisterResponse (response: TRegisterResponse): PbFailure | undefined;
+    protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): PbFailure | undefined;
 
     /**
      * Get the retry processing state from the request.
      * @param {TRequest} request The request to get the retry processing state from
      */
-    protected abstract getRetryProcessingStateFromRequest (request: TRequest): RetryProcessingState | undefined;
+    protected abstract getRetryProcessingStateFromRequest(request: TRequest): RetryProcessingState | undefined;
 
     /**
      * Create a response from a processor failure
      * @param {ProcessorFailure} failure The processor failure.
      */
-    protected abstract createResponseFromFailure (failure: ProcessorFailure): TResponse;
+    protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 
     /** @inheritdoc */
-    protected abstract handle (request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
+    protected abstract handle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 
     /** @inheritdoc */
     protected async catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse> {

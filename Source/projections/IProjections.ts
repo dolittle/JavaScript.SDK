@@ -16,5 +16,5 @@ export abstract class IProjections {
      * @param {ProjectionProcessor} projectionProcessor Projection processor to register.
      * @param {Cancellation} cancellation Used to close the connection to the Runtime.
      */
-    abstract register<T> (projectionProcessor: ProjectionProcessor<T>, cancellation?: Cancellation): void;
+    abstract register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation?: Cancellation): void;
 }

@@ -16,12 +16,12 @@ export abstract class IAggregateOf<TAggregate extends AggregateRoot> {
      * Create a new {@link AggregateRoot} with a random {@link EventSourceId}
      * @returns {IAggregateRootOperations<TAggregate>}
      */
-    abstract create (): IAggregateRootOperations<TAggregate>;
+    abstract create(): IAggregateRootOperations<TAggregate>;
 
     /**
      * Gets an {@link AggregateRoot} with a given {@link EventSourceId}
      * @param {EventSourceId} eventSourceId {@link EventSourceId} of the {@link AggregateRoot}
      * @returns {IAggregateRootOperations<TAggregate>}
      */
-    abstract get (eventSourceId: EventSourceId): IAggregateRootOperations<TAggregate>;
+    abstract get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregate>;
 }

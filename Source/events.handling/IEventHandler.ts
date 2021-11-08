@@ -46,5 +46,5 @@ export abstract class IEventHandler {
      * @param {EventType} eventType The event type.
      * @param {EventContext} context The context in which the event is in.
      */
-    abstract handle (event: any, eventType: EventType, context: EventContext): Promise<void>;
+    abstract handle(event: any, eventType: EventType, context: EventContext): Promise<void>;
 }

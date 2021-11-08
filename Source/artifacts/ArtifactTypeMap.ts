@@ -120,5 +120,5 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
      * @param id The artifact id as a string.
      * @param generation The {@link Generation}.
      */
-    protected abstract createArtifact (id: string, generation: Generation): TArtifact;
+    protected abstract createArtifact(id: string, generation: Generation): TArtifact;
 }
