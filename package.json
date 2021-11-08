@@ -17,14 +17,16 @@
     "build": "tsc -b Source/tsconfig.json && tsc -b Samples/tsconfig.json",
     "clean": "tsc -b Source/tsconfig.json --clean && tsc -b Samples/tsconfig.json --clean",
     "test": "TS_NODE_PROJECT=tsconfig.settings.json mocha",
+    "test:clean": "rimraf **/Distribution/**/for_*",
     "lint": "eslint --quiet --ext .ts ./",
     "lint:fix": "eslint --quiet --ext .ts ./ --fix",
-    "ci": "yarn build && yarn test:run && yarn test:clean"
+    "ci": "yarn build && yarn test && yarn test:clean"
   },
   "devDependencies": {
     "@dolittle/typescript.build": "6.0.2",
     "@dolittle/typescript.testing": "6.0.2",
     "glob": "7.2.0",
-    "module-alias": "2.2.2"
+    "module-alias": "2.2.2",
+    "rimraf": "3.0.2"
   }
 }
