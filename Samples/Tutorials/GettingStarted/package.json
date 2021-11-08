@@ -8,6 +8,7 @@
     "scripts": {
         "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
         "start": "ts-node index.ts",
+        "test": "mocha",
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {

@@ -27,7 +27,6 @@
         "build": "tsc -b",
         "clean": "tsc -b --clean",
         "test": "mocha",
-        "test": "mocha",
         "lint": "eslint --quiet --ext .ts ./",
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
