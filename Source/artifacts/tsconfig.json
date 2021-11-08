@@ -1,7 +1,6 @@
 {
     "extends": "../../tsconfig.settings.json",
     "compilerOptions": {
-        "rootDir": ".",
         "sourceRoot": "../",
         "outDir": "Distribution",
         "composite": true
