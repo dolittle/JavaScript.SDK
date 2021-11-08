@@ -4,6 +4,8 @@
 module.exports = function (w) {
     return {
         files: [
+            { pattern: 'package.json', instrument: false },
+            { pattern: 'Source/*/package.json', instrument: false },
             '!Distribution',
             '!**/Distribution',
             'Source/**/*.ts',
@@ -26,17 +28,33 @@ module.exports = function (w) {
         },
 
         compilers: {
-            'Source/**/*.ts?(x)': w.compilers.typeScript({
-                module: 'commonjs',
+            '**/*.ts': w.compilers.typeScript({        
+                target: "ES2017",
+                module: "CommonJS",
                 downlevelIteration: true,
                 experimentalDecorators: true,
-                jsx: "react",
                 esModuleInterop: true,
-                target: 'es6'
             })
         },
 
         setup: (w) => {
+            const rootFolder = w.projectCacheDir;
+            const getAliases = () => {
+                const { glob } = require('glob');
+                const aliases = {};
+                const rootPackage = require('./package.json');
+                rootPackage.workspaces.forEach(workspaceGlob => {
+                    glob.sync(workspaceGlob).forEach(workspaceRoot => {
+                        const relativeWorkspaceRoot = `./${workspaceRoot}`
+                        const absoluteWorkspaceRoot = `${rootFolder}/${workspaceRoot}`;
+                        const packageName = require(`${relativeWorkspaceRoot}/package.json`).name;
+                        aliases[packageName] = absoluteWorkspaceRoot;
+                    });
+                });
+                return aliases;
+            }
+            const { addAliases } = require('module-alias');
+            addAliases(getAliases());
             global.expect = chai.expect;
             const should = chai.should();
             global.sinon = require('sinon');
@@ -47,3 +65,5 @@ module.exports = function (w) {
         }
     };
 };
+
+
