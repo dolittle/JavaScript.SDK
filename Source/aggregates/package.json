@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "19.0.0",
+    "version": "19.0.1-newbuild.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,8 +33,8 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.events": "19.0.0",
-        "@dolittle/sdk.artifacts": "19.0.0"
+        "@dolittle/sdk.events": "19.0.1-newbuild.0",
+        "@dolittle/sdk.artifacts": "19.0.1-newbuild.0"
     },
     "devDependencies": {}
 }
