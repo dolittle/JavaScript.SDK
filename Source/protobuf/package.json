@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.protobuf",
-    "version": "20.0.0-legolas.1",
+    "version": "20.0.0-legolas.2",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -35,7 +35,7 @@
         "@dolittle/concepts": "5.0.1",
         "@dolittle/contracts": "6.3.0-legolas.0",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.artifacts": "20.0.0-legolas.1",
-        "@dolittle/sdk.execution": "20.0.0-legolas.1"
+        "@dolittle/sdk.artifacts": "20.0.0-legolas.2",
+        "@dolittle/sdk.execution": "20.0.0-legolas.2"
     }
 }
