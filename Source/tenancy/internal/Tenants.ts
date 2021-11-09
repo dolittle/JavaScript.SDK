@@ -25,7 +25,7 @@ export class Tenants extends ITenants {
     }
 
     /** @inheritdoc */
-    async getAll(cancellation: Cancellation): Promise<Tenant[]> {
+    async getAll(cancellation: Cancellation = Cancellation.default): Promise<Tenant[]> {
         this._logger.debug('Getting all tenants');
         try {
             const response = await reactiveUnary(this._client, this._client.getAll, new GetAllRequest(), cancellation).toPromise();
