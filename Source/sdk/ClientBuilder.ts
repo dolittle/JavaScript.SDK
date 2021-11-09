@@ -19,11 +19,13 @@ import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sd
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
 import { IProjectionAssociations, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
+import { internal as tenancyInternal } from '@dolittle/sdk.tenancy';
 import * as grpc from '@grpc/grpc-js';
 import { createLogger, format, Logger, transports } from 'winston';
 import { Client } from './Client';
 import { AggregateRootsBuilder, AggregateRootsBuilderCallback, internal as aggregatesInternal } from '@dolittle/sdk.aggregates';
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
 
 
@@ -312,6 +314,8 @@ export class ClientBuilder {
             this._projectionsAssociations,
             this._logger);
 
+        const tenants = new tenancyInternal.Tenants(new TenantsClient(connectionString, credentials), this._logger);
+
         return new Client(
             this._logger,
             eventTypes,
@@ -320,6 +324,7 @@ export class ClientBuilder {
             filters,
             eventHorizons,
             projectionsStore,
-            embeddings);
+            embeddings,
+            tenants);
     }
 }
