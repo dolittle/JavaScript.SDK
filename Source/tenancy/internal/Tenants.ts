@@ -3,7 +3,7 @@
 
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 import { GetAllRequest, GetAllResponse, Tenant as PbTenant } from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';;
+import { TenantId } from '@dolittle/sdk.execution';;
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
@@ -20,7 +20,7 @@ export class Tenants extends ITenants {
      * @param _executionContext The execution context.
      * @param _logger The logger.
      */
-    constructor(private readonly _client: TenantsClient, private readonly _executionContext: ExecutionContext, private readonly _logger: Logger) {
+    constructor(private readonly _client: TenantsClient, private readonly _logger: Logger) {
         super();
     }
 

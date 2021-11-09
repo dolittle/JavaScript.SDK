@@ -10,6 +10,7 @@ import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
 import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import { ClientBuilder } from './ClientBuilder';
@@ -34,6 +35,7 @@ export class Client {
      * @param {IEventHorizons} eventHorizons All event horizons.
      * @param {ProjectionStoreBuilder} projections All projections.
      * @param {Embeddings} embeddings All embeddings.
+     * @param {ITenants} tenants All tenants.
      */
     constructor(
         readonly logger: Logger,
@@ -43,7 +45,8 @@ export class Client {
         readonly filters: IFilters,
         readonly eventHorizons: IEventHorizons,
         readonly projections: ProjectionStoreBuilder,
-        readonly embeddings: Embeddings) {
+        readonly embeddings: Embeddings,
+        readonly tenants: ITenants) {
     }
 
     /**

@@ -17,6 +17,7 @@
         { "path": "../events.handling" },
         { "path": "../execution" },
         { "path": "../projections" },
-        { "path": "../resilience" }
+        { "path": "../resilience" },
+        { "path": "../tenancy" },
     ]
 }
