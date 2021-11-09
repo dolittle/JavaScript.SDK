@@ -16,6 +16,7 @@
         { "path": "./protobuf" },
         { "path": "./resilience" },
         { "path": "./sdk" },
-        { "path": "./services" }
+        { "path": "./services" },
+        { "path": "./tenancy" },
     ]
 }
