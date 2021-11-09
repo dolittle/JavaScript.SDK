@@ -2,18 +2,20 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import '../failures';
+import { MissingFailureIdentifier } from '../MissingFailureIdentifier';
 
-import { MissingFailureIdentifier } from '..';
+import { describeThis } from '@dolittle/typescript.testing';
 
-describe('when converting from protobuf with missing id', () => {
+describeThis(__filename, () => {
     const reason = 'MyReason';
-    const pbArtifact = new PbFailure();
-    pbArtifact.setReason(reason);
+    const pbFailure = new PbFailure();
+    pbFailure.setReason(reason);
 
     let result: any;
 
     try {
-        pbArtifact.toSDK();
+        pbFailure.toSDK();
     } catch (ex) {
         result = ex;
     }

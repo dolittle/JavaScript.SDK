@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import '../index';
+import '../artifacts';
 import { artifact_type, artifact_type_id } from './given/artifact_type';
 
-describe('when converting to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const artifactTypeId = '5e865826-abd5-43b8-b6a2-589be9e9d1f5';
     const generation = 42;
     const artifactType = new artifact_type(artifact_type_id.from(artifactTypeId), Generation.from(generation));

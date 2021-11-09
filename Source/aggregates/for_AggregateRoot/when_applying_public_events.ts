@@ -4,8 +4,9 @@
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventSourceId, EventType, EventTypeId, EventTypes } from '@dolittle/sdk.events';
 import { AggregateRoot } from '../AggregateRoot';
+import { describeThis } from '@dolittle/typescript.testing';
 
-describe('when applying public events', () => {
+describeThis(__filename, () => {
     const event = { something: 42 };
 
     const eventType = new EventType(EventTypeId.from('7b078c73-5843-434e-9b4d-ecae4e91469e'), Generation.first);

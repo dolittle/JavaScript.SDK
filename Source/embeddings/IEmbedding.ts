@@ -22,7 +22,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TEmbedding>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
-    abstract update<TEmbedding> (
+    abstract update<TEmbedding>(
         type: Constructor<TEmbedding>,
         key: Key | string,
         state: TEmbedding,
@@ -39,7 +39,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<TEmbedding>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
-    abstract update<TEmbedding> (
+    abstract update<TEmbedding>(
         type: Constructor<TEmbedding>,
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
@@ -55,7 +55,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<CurrentState<any>>} The updated state. If no events were committed by the compare method, it will instead return the state passed into the call.
      */
-    abstract update (
+    abstract update(
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         state: any,
@@ -69,7 +69,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract delete<TEmbedding> (
+    abstract delete<TEmbedding>(
         type: Constructor<TEmbedding>,
         key: Key | string,
         cancellation?: Cancellation): Promise<void>;
@@ -81,7 +81,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      * @param {Cancellation} [cancellation] The cancellation token.
      * @returns {Promise<void>}
      */
-    abstract delete (
+    abstract delete(
         key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         cancellation?: Cancellation): Promise<void>;

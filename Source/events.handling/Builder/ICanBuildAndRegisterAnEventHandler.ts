@@ -22,7 +22,7 @@ export abstract class ICanBuildAndRegisterAnEventHandler {
      * @param {Logger} logger The logger
      * @param {Cancellation} cancellation The cancellation token.
      */
-    abstract buildAndRegister (
+    abstract buildAndRegister(
         client: EventHandlersClient,
         eventHandlers: IEventHandlers,
         container: IContainer,

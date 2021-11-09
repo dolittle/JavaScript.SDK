@@ -23,5 +23,5 @@ export abstract class Artifact<TId extends ArtifactIdLike> {
     }
 
     /** @inheritdoc */
-    abstract toString (): string;
+    abstract toString(): string;
 }

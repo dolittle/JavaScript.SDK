@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Sample code for the tutorial at https://dolittle.io/tutorials/aggregates/
 
-
 import { eventType } from '@dolittle/sdk.events';
 
 @eventType('1844473f-d714-4327-8b7f-5b3c2bdfc26a')

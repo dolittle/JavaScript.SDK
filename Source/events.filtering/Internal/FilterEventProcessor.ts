@@ -73,5 +73,5 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         return this.filter(event, eventContext);
     }
 
-    protected abstract filter (event: any, context: EventContext): Promise<TResponse>;
+    protected abstract filter(event: any, context: EventContext): Promise<TResponse>;
 }

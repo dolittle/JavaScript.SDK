@@ -5,7 +5,9 @@ import no_associations from '../given/no_associations';
 import { Generation } from '../../Generation';
 import { artifact_type_id } from '../given/artifacts';
 
-describe('when resolving from object and input is artifact type id', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const id = artifact_type_id.from('ec0111e1-84e4-4d1a-b7f3-a2f6c4427609');
     const result = no_associations.artifacts.resolveFrom({}, id);
 

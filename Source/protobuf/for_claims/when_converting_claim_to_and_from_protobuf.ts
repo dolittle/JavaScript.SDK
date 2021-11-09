@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Claim } from '@dolittle/sdk.execution';
-import '../index';
+import '../claims';
 
-describe('when converting claim to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const claim = new Claim('my-claim','forty two', 'string');
     const result = claim.toProtobuf().toSDK();
 

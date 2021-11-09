@@ -9,7 +9,9 @@ class FirstType {}
 
 class SecondType {}
 
-describe('when building with two associations', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const firstTypeIdentifier = EventTypeId.from('21ef6f8d-4871-48b0-9567-4d576b6a12da');
     const secondTypeIdentifier = EventTypeId.from('1c385ede-49ce-4266-a752-e1a85587758e');
     const firstTypeGeneration = Generation.from(42);

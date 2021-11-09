@@ -3,7 +3,9 @@
 
 import one_association from '../given/one_association';
 
-describe('when resolving from object with no input', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const object = new one_association.class_type();
     const result = one_association.artifacts.resolveFrom(object);
 

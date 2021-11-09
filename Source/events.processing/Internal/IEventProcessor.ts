@@ -13,9 +13,9 @@ export abstract class IEventProcessor {
      * @param {Cancellation} cancellation Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
-    abstract register (cancellation: Cancellation): Observable<void>;
+    abstract register(cancellation: Cancellation): Observable<void>;
 
-    abstract registerWithPolicy (policy: RetryPolicy, cancellation: Cancellation): Observable<void>;
+    abstract registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void>;
 
-    abstract registerForeverWithPolicy (policy: RetryPolicy, cancellation: Cancellation): Observable<void>;
+    abstract registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void>;
 }

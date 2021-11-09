@@ -3,9 +3,11 @@
 
 import { Claims, Claim } from '@dolittle/sdk.execution';
 
-import '../index';
+import '../claims';
 
-describe('when converting claims to protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const claimsArray: Claim[] = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')

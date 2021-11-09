@@ -29,3 +29,29 @@ export default {
     toProtobuf,
     toSDK
 };
+
+declare module '@dolittle/rudiments' {
+    interface Guid {
+        toProtobuf(): Uuid
+    }
+}
+/**
+ * Convert to protobuf representation
+ * @returns {Uuid}
+ */
+Guid.prototype.toProtobuf = function () {
+    return toProtobuf(this);
+};
+
+declare module '@dolittle/contracts/Protobuf/Uuid_pb' {
+    interface Uuid {
+        toSDK(): Guid
+    }
+}
+/**
+ * Convert to SDK representation
+ * @returns {Guid}
+ */
+Uuid.prototype.toSDK = function () {
+    return toSDK(this);
+};

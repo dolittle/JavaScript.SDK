@@ -15,5 +15,5 @@ export abstract class IEventHandlers {
      * @param {EventHandlerProcessor} eventHandlerProcessor Event handler processor to register.
      * @param {Cancellation} cancellation Used to close the connection to the Runtime.
      */
-    abstract register (eventHandlerProcessor: EventHandlerProcessor, cancellation?: Cancellation): void;
+    abstract register(eventHandlerProcessor: EventHandlerProcessor, cancellation?: Cancellation): void;
 }

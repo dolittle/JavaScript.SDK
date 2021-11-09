@@ -1,21 +1,22 @@
 {
     "name": "eventhorizon-consumer",
     "private": true,
-    "version": "19.0.0",
+    "version": "19.0.1-newbuild.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
     "scripts": {
         "watch": "nodemon --watch **/*.ts --exec 'ts-node' index.ts",
         "start": "ts-node index.ts",
+        "test": "mocha",
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "19.0.0",
-        "@dolittle/sdk.artifacts": "19.0.0",
-        "@dolittle/sdk.eventhorizon": "19.0.0",
-        "@dolittle/sdk.events": "19.0.0",
-        "@dolittle/sdk.events.handling": "19.0.0"
+        "@dolittle/sdk": "19.0.1-newbuild.0",
+        "@dolittle/sdk.artifacts": "19.0.1-newbuild.0",
+        "@dolittle/sdk.eventhorizon": "19.0.1-newbuild.0",
+        "@dolittle/sdk.events": "19.0.1-newbuild.0",
+        "@dolittle/sdk.events.handling": "19.0.1-newbuild.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",

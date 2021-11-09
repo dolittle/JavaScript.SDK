@@ -3,9 +3,11 @@
 
 import { Version } from '@dolittle/sdk.execution';
 
-import '../index';
+import '../versions';
 
-describe('when converting to and from protobuf', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const version = new Version(42,43,44,45,'alpha');
     const result = version.toProtobuf().toSDK();
 

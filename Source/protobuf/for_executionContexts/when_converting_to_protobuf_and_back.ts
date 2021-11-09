@@ -3,9 +3,11 @@
 
 import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 
-import { executionContexts } from '..';
+import '../executionContexts';
 
-describe('when converting to protobuf and back', () => {
+import { describeThis } from '@dolittle/typescript.testing';
+
+describeThis(__filename, () => {
     const claimsArray: Claim[] = [
         new Claim('first', 'first value', 'first value type'),
         new Claim('second', 'second value', 'second value type')
@@ -21,7 +23,7 @@ describe('when converting to protobuf and back', () => {
         claims
     );
 
-    const result = executionContexts.toSDK(executionContexts.toProtobuf(original));
+    const result = original.toProtobuf().toSDK();
     const resultClaims = result.claims.toArray();
 
     it('should hold the same microservice identifier', () => result.microserviceId.toString().should.equal(original.microserviceId.toString()));

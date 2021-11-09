@@ -19,5 +19,5 @@ export abstract class IEventHorizons {
      * @param {Subscription} subscription Subscription to get response for.
      * @throws {SubscriptionDoesNotExist} If subscription does not exist.
      */
-    abstract getResponseFor (subscription: Subscription): SubscriptionResponse;
+    abstract getResponseFor(subscription: Subscription): SubscriptionResponse;
 }

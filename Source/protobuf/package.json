@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.protobuf",
-    "version": "19.0.0",
+    "version": "19.0.1-newbuild.0",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -26,18 +26,16 @@
         "prebuild": "yarn clean",
         "postbuild": "yarn lint",
         "build": "tsc -b",
-        "clean": "gulp clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "test": "yarn build && yarn test:run",
-        "test:run": "gulp test-run --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "test:clean": "gulp test-clean --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint": "gulp lint --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
+        "clean": "tsc -b --clean",
+        "test": "mocha",
+        "lint": "eslint --quiet --ext .ts ./",
+        "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/contracts": "6.2.0",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.artifacts": "19.0.0",
-        "@dolittle/sdk.execution": "19.0.0"
+        "@dolittle/sdk.artifacts": "19.0.1-newbuild.0",
+        "@dolittle/sdk.execution": "19.0.1-newbuild.0"
     }
 }
