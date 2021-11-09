@@ -1,3 +1,26 @@
+# [19.0.1] - 2021-11-9 [PR: #71](https://github.com/dolittle/JavaScript.SDK/pull/71)
+## Summary
+
+Reducing the development foot print by using a more streamlined and slim version of our @doluttle/typescript.build package.  The only controversial thing here is targeting ES2017 instead of ES2015, I don't think that this change is strictly necessary in order for this PR to work, but most it will reduce the size of the output and all modern browsers should support it.
+
+### Added
+
+- Extension methods for converting guids to and from protobuf
+
+### Changed
+
+- Target ES2017 instead of ES2015
+- Upgrade to newest version of @dolittle/typescript.build
+- Change package.json scripts to be more streamlined and using mocha, eslint and tsc for testing, linting and compiling the code instead of using gulp
+- Changed specs to use @dolittle/typescript.testing describeThis function that generates a more useful output when running the tests
+- Apply lint fix to fix lint errors
+
+### Fixed
+
+- Fixed some specs in @dolittle/sdk.protobuf
+- Fixes the wallaby configuration
+
+
 # [19.0.0] - 2021-11-5 [PR: #67](https://github.com/dolittle/JavaScript.SDK/pull/67)
 ## Summary
 
