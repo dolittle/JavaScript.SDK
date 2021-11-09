@@ -2,13 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
-import { GetAllRequest, GetAllResponse, Tenant as PbTenant } from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
+import { GetAllRequest, Tenant as PbTenant } from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
 import { TenantId } from '@dolittle/sdk.execution';;
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
-import { FailedToGetAllTenants } from '../FailedToGetAllTenants';
-import { Tenant, ITenants } from '../index';
+import { Tenant, ITenants, FailedToGetAllTenants } from '../index';
 
 /**
  * Represents a client for Tenants and an implementation of @link } that knows how to register Event Types with the Runtime.
