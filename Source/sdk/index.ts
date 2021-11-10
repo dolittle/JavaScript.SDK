@@ -3,5 +3,7 @@
 
 import '@dolittle/sdk.protobuf';
 
-export { DolittleClient as Client, } from './DolittleClient';
-export { DolittleClientBuilder as ClientBuilder } from './DolittleClientBuilder';
+export { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
+export { IDolittleClient } from './IDolittleClient';
+export { DolittleClient } from './DolittleClient';
+export { DolittleClientBuilder } from './DolittleClientBuilder';

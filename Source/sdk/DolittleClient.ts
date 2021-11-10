@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Embeddings } from '@dolittle/sdk.embeddings';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, EventStoreBuilder, IEventStore, IEventTypes } from '@dolittle/sdk.events';
+import { EventSourceId, EventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
@@ -14,14 +14,13 @@ import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
 import { DolittleClientBuilder } from './DolittleClientBuilder';
-
-export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
+import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
+import { IDolittleClient } from './IDolittleClient';
 
 /**
  * Represents the client for working with the Dolittle Runtime
  */
-export class DolittleClient {
-
+export class DolittleClient extends IDolittleClient {
     /**
      * Creates an instance of client.
      * @param {Logger} logger Winston Logger for logging.
@@ -44,6 +43,7 @@ export class DolittleClient {
         readonly projections: ProjectionStoreBuilder,
         readonly embeddings: Embeddings,
         readonly tenants: ITenants) {
+            super();
     }
 
     /**
