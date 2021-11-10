@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Sample code for the tutorial at https://dolittle.io/tutorials/event-horizon/
 
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { PartitionId } from '@dolittle/sdk.events';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('a14bb24e-51f3-4d83-9eba-44c4cffe6bb9')
     .withRuntimeOn('localhost', 50055)
     .withEventTypes(eventTypes =>
