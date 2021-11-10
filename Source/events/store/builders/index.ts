@@ -5,4 +5,5 @@ export { CommitForAggregateBuilder } from './CommitForAggregateBuilder';
 export { CommitForAggregateWithEventSourceAndExpectedVersionBuilder } from './CommitForAggregateWithEventSourceAndExpectedVersionBuilder';
 export { CommitForAggregateWithEventSourceBuilder } from './CommitForAggregateWithEventSourceBuilder';
 export { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCalled';
+export { IEventStoreBuilder } from './IEventStoreBuilder';
 export { EventStoreBuilder } from './EventStoreBuilder';

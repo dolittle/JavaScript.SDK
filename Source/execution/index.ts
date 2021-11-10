@@ -7,7 +7,7 @@ export { CorrelationId } from './CorrelationId';
 export { Environment } from './Environment';
 export { ExecutionContext } from './ExecutionContext';
 export { MicroserviceId } from './MicroserviceId';
-export { TenantId } from './TenantId';
+export { TenantId, TenantIdLike } from './TenantId';
 export { Version } from './Version';
 
 import './ExecutionContextExtensions';

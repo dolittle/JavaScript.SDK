@@ -4,18 +4,18 @@
 import { Guid } from '@dolittle/rudiments';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 import { IProjectionAssociations, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
 import { Logger } from 'winston';
 import { Embedding } from './Embedding';
 import { IEmbedding } from './IEmbedding';
-import { EmbeddingStore, IEmbeddingStore, EmbeddingStoreBuilder } from './Store';
+import { IEmbeddings } from './IEmbeddings';
+import { EmbeddingStoreBuilder } from './Store';
 
 /**
- * Represents a builder for building an embedding sdk client.
+ * Represents an implementation of {@link IEmbeddings}.
  */
-export class Embeddings {
-
+export class Embeddings extends IEmbeddings {
     /**
      * Initializes an instance of {@link EmbeddingStoreBuilder}.
      * @param {EmbeddingStoreClient} _embeddingsStoreClient The embedding store client.
@@ -29,14 +29,11 @@ export class Embeddings {
         private readonly _executionContext: ExecutionContext,
         private readonly _embeddingAssociations: IProjectionAssociations,
         private readonly _logger: Logger) {
+            super();
     }
 
-    /**
-     * Build an {@link IEmbeddingStore} for the given tenant.
-     * @param {TenantId | Guid | string} tenantId The tenant id.
-     * @returns {IEmbeddingStore} The embedding store.
-     */
-    forTenant(tenantId: TenantId | Guid | string): IEmbedding {
+    /** @inheritdoc */
+    forTenant(tenantId: TenantIdLike): IEmbedding {
         const executionContext = this._executionContext
             .forTenant(tenantId)
             .forCorrelation(Guid.create());

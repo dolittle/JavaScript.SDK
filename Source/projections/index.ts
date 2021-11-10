@@ -21,7 +21,8 @@ export {
     ProjectionsBuilder,
     ProjectionsBuilderCallback,
     ReadModelAlreadyDefinedForProjection,
-    TypeOrEventType
+    TypeOrEventType,
+    OnMethodSpecification
 } from './Builder';
 export { DeleteReadModelInstance } from './DeleteReadModelInstance';
 export { EventPropertyKeySelector } from './EventPropertyKeySelector';
@@ -56,6 +57,7 @@ export {
     ProjectionStoreBuilder,
     ProjectionsToSDKConverter,
     TypeIsNotAProjection,
-    UnknownCurrentStateType
+    UnknownCurrentStateType,
+    IProjectionStoreBuilder
 } from './Store';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';

@@ -2,14 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import 'reflect-metadata';
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { Container } from 'typedi';
 
 import { MyEvent } from './MyEvent';
 import { MyEventHandler } from './MyEventHandler';
 
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .withContainer(Container)
     .withEventTypes(eventTypes =>

@@ -4,6 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+export type TenantIdLike = string | Guid | TenantId;
+
 /**
  * Represents the unique identifier of a tenant.
  */
@@ -31,10 +33,10 @@ export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'
      * Creates a {TenantId} from a guid.
      *
      * @static
-     * @param {string | Guid | TenantId} id
+     * @param {TenantIdLike} id
      * @returns {TenantId}
      */
-    static from(id: string | Guid | TenantId): TenantId {
+    static from(id: TenantIdLike): TenantId {
         if (id instanceof TenantId) return id;
         return new TenantId(Guid.as(id));
     };

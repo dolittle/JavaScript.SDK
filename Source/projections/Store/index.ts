@@ -16,7 +16,8 @@ export { ProjectionStore } from './ProjectionStore';
 export { TypeIsNotAProjection } from './TypeIsNotAProjection';
 
 export {
-    ProjectionStoreBuilder
+    ProjectionStoreBuilder,
+    IProjectionStoreBuilder
 } from './Builder';
 
 export {

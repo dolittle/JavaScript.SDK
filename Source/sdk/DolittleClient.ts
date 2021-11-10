@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
 import { Embeddings } from '@dolittle/sdk.embeddings';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, EventStoreBuilder, IEventStore, IEventTypes } from '@dolittle/sdk.events';
+import { EventSourceId, EventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
@@ -13,18 +13,14 @@ import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { ClientBuilder } from './ClientBuilder';
-
-
-
-export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
-
+import { DolittleClientBuilder } from './DolittleClientBuilder';
+import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
+import { IDolittleClient } from './IDolittleClient';
 
 /**
  * Represents the client for working with the Dolittle Runtime
  */
-export class Client {
-
+export class DolittleClient extends IDolittleClient {
     /**
      * Creates an instance of client.
      * @param {Logger} logger Winston Logger for logging.
@@ -47,15 +43,16 @@ export class Client {
         readonly projections: ProjectionStoreBuilder,
         readonly embeddings: Embeddings,
         readonly tenants: ITenants) {
+            super();
     }
 
     /**
      * Create a client builder for a Microservice
      * @param {MicroserviceId | Guid | string} microserviceId The unique identifier for the microservice.
-     * @returns {ClientBuilder} The builder to build a {Client} from.
+     * @returns {DolittleClientBuilder} The builder to build a {Client} from.
      */
     static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
-        return new ClientBuilder(MicroserviceId.from(microserviceId));
+        return new DolittleClientBuilder(MicroserviceId.from(microserviceId));
     }
 
     /**
