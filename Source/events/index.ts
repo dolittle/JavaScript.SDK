@@ -26,7 +26,8 @@ export {
     MissingExecutionContext,
     UncommittedAggregateEvent,
     UncommittedAggregateEvents,
-    UncommittedEvent
+    UncommittedEvent,
+    IEventStoreBuilder
 } from './store';
 
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';

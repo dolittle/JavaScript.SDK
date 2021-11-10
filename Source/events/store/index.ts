@@ -6,6 +6,7 @@ export {
     CommitForAggregateWithEventSourceAndExpectedVersionBuilder,
     CommitForAggregateWithEventSourceBuilder,
     EventBuilderMethodAlreadyCalled,
+    IEventStoreBuilder,
     EventStoreBuilder
 } from './builders';
 
