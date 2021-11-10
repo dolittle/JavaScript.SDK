@@ -35,6 +35,7 @@ export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingId } from './EmbeddingId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
+export { IEmbeddings } from './IEmbeddings';
 export { Embeddings } from './Embeddings';
 export { FailedToDelete } from './FailedToDelete';
 export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
