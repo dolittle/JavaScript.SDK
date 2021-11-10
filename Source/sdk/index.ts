@@ -3,5 +3,5 @@
 
 import '@dolittle/sdk.protobuf';
 
-export { Client, } from './Client';
-export { ClientBuilder } from './ClientBuilder';
+export { DolittleClient as Client, } from './DolittleClient';
+export { DolittleClientBuilder as ClientBuilder } from './DolittleClientBuilder';

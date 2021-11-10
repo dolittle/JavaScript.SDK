@@ -13,17 +13,14 @@ import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { ClientBuilder } from './ClientBuilder';
-
-
+import { DolittleClientBuilder } from './DolittleClientBuilder';
 
 export type EventStoreBuilderCallback = (builder: EventStoreBuilder) => IEventStore;
-
 
 /**
  * Represents the client for working with the Dolittle Runtime
  */
-export class Client {
+export class DolittleClient {
 
     /**
      * Creates an instance of client.
@@ -52,10 +49,10 @@ export class Client {
     /**
      * Create a client builder for a Microservice
      * @param {MicroserviceId | Guid | string} microserviceId The unique identifier for the microservice.
-     * @returns {ClientBuilder} The builder to build a {Client} from.
+     * @returns {DolittleClientBuilder} The builder to build a {Client} from.
      */
     static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
-        return new ClientBuilder(MicroserviceId.from(microserviceId));
+        return new DolittleClientBuilder(MicroserviceId.from(microserviceId));
     }
 
     /**
