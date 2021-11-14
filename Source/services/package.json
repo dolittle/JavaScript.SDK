@@ -32,7 +32,7 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/contracts": "6.3.0-legolas.0",
+        "@dolittle/contracts": "6.3.0-legolas.3",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/sdk.execution": "20.0.0-legolas.3",
         "@dolittle/sdk.resilience": "20.0.0-legolas.3",
