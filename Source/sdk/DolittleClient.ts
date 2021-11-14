@@ -10,6 +10,7 @@ import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
 import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { IResources } from '@dolittle/sdk.resources';
 import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
@@ -42,7 +43,8 @@ export class DolittleClient extends IDolittleClient {
         readonly eventHorizons: IEventHorizons,
         readonly projections: ProjectionStoreBuilder,
         readonly embeddings: Embeddings,
-        readonly tenants: ITenants) {
+        readonly tenants: ITenants,
+        readonly resources: IResources) {
             super();
     }
 

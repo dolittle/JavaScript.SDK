@@ -31,9 +31,9 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/contracts": "6.3.0-legolas.0",
+        "@dolittle/contracts": "6.3.0-legolas.3",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "6.3.0-legolas.0",
+        "@dolittle/runtime.contracts": "6.3.0-legolas.3",
         "@dolittle/sdk.artifacts": "20.0.0-legolas.3",
         "@dolittle/sdk.common": "20.0.0-legolas.3",
         "@dolittle/sdk.events": "20.0.0-legolas.3",

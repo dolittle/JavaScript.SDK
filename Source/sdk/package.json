@@ -33,7 +33,7 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/runtime.contracts": "6.3.0-legolas.0",
+        "@dolittle/runtime.contracts": "6.3.0-legolas.3",
         "@dolittle/sdk.aggregates": "20.0.0-legolas.3",
         "@dolittle/sdk.artifacts": "20.0.0-legolas.3",
         "@dolittle/sdk.common": "20.0.0-legolas.3",
@@ -46,6 +46,7 @@
         "@dolittle/sdk.execution": "20.0.0-legolas.3",
         "@dolittle/sdk.protobuf": "20.0.0-legolas.3",
         "@dolittle/sdk.projections": "20.0.0-legolas.3",
+        "@dolittle/sdk.resources": "20.0.0-legolas.3",
         "@dolittle/sdk.services": "20.0.0-legolas.3",
         "@dolittle/sdk.tenancy": "20.0.0-legolas.3",
         "winston": "3.3.2"
