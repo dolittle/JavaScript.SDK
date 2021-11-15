@@ -3,7 +3,7 @@ name: Microsoft Teams Release Notification
 on:
   release:
     types:
-      - released
+      - published
 
 jobs:
   notify:
