@@ -14,6 +14,7 @@ import { Container, IContainer } from '@dolittle/sdk.common';
 import { Embeddings, EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, EventTypes, EventTypesBuilder, EventTypesBuilderCallback, internal as eventsInternal } from '@dolittle/sdk.events';
+import { Resources } from '@dolittle/sdk.resources';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
@@ -26,6 +27,7 @@ import { AggregateRootsBuilder, AggregateRootsBuilderCallback, internal as aggre
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 import { DolittleClient } from './DolittleClient';
+import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 
 
 
@@ -315,6 +317,7 @@ export class DolittleClientBuilder {
             this._logger);
 
         const tenants = new tenancyInternal.Tenants(new TenantsClient(connectionString, credentials), this._logger);
+        const resources = new Resources(new ResourcesClient(connectionString, credentials), executionContext, this._logger);
 
         return new DolittleClient(
             this._logger,
@@ -325,6 +328,7 @@ export class DolittleClientBuilder {
             eventHorizons,
             projectionsStore,
             embeddings,
-            tenants);
+            tenants,
+            resources);
     }
 }
