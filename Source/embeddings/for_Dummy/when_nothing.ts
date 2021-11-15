@@ -4,5 +4,5 @@
 import { describeThis } from '@dolittle/typescript.testing';
 
 describeThis(__filename, () => {
-    it('should be fine', () => true.should.be.true);
+    it('should be fine, mkay', () => true.should.be.true);
 });
