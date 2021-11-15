@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-producer",
     "private": true,
-    "version": "20.0.0-legolas.5",
+    "version": "20.0.0-legolas.6",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "20.0.0-legolas.5",
-        "@dolittle/sdk.artifacts": "20.0.0-legolas.5",
-        "@dolittle/sdk.eventhorizon": "20.0.0-legolas.5",
-        "@dolittle/sdk.events": "20.0.0-legolas.5",
-        "@dolittle/sdk.events.handling": "20.0.0-legolas.5"
+        "@dolittle/sdk": "20.0.0-legolas.6",
+        "@dolittle/sdk.artifacts": "20.0.0-legolas.6",
+        "@dolittle/sdk.eventhorizon": "20.0.0-legolas.6",
+        "@dolittle/sdk.events": "20.0.0-legolas.6",
+        "@dolittle/sdk.events.handling": "20.0.0-legolas.6"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
