@@ -8,10 +8,10 @@ import { IContainer } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { IEmbeddings } from '../Internal';
+import { IEmbeddings, IEmbedding } from '../Internal';
 
 /**
- * Defines a system that can build and register an embedding.
+ * Defines a system that can build and register instances of {@link IEmbedding}.
  */
 export interface ICanBuildAndRegisterAnEmbedding {
 

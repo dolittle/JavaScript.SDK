@@ -4,11 +4,7 @@
 import { EventSourceId } from '../index';
 
 /**
- * The exception that gets thrown when a an event is applied to an event source other than the one expected.
- */
-
-/**
- *
+ * Exception that gets thrown when a an event is applied to an event source other than the one expected.
  */
 export class EventWasAppliedToOtherEventSource extends Error {
 

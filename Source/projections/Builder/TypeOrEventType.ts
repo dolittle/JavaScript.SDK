@@ -5,6 +5,6 @@ import { Constructor } from '@dolittle/types';
 import { EventType } from '@dolittle/sdk.events';
 
 /**
- *
+ * Represents an event type as either a class or an {@link EventType}.
  */
 export type TypeOrEventType = Constructor<any> | EventType;

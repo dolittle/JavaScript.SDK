@@ -10,7 +10,7 @@ import { IConvertProjectionsToSDK } from './IConvertProjectionsToSDK';
 import { UnknownCurrentStateType } from './UnknownCurrentStateType';
 
 /**
- *
+ * Represents an implementation of {@link IConvertProjectionsToSDK}.
  */
 export class ProjectionsToSDKConverter extends IConvertProjectionsToSDK {
 

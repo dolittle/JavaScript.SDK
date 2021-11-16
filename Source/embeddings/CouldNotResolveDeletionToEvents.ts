@@ -4,7 +4,7 @@
 import { Exception } from '@dolittle/rudiments';
 
 /**
- *
+ * Exception to be thrown by users of the SDK when it is not possible to resolve an embedding delete call to events.
  */
 export class CouldNotResolveDeletionToEvents extends Exception {
     /**

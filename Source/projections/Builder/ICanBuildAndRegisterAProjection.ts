@@ -7,8 +7,11 @@ import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
-import { IProjections } from '..';
+import { IProjections, IProjection } from '..';
 
+/**
+ * Defines a system that can build and register instances of {@link IProjection}.
+ */
 export interface ICanBuildAndRegisterAProjection {
 
     /**

@@ -8,7 +8,7 @@ import { Cancellation } from './Cancellation';
 import { RetryOperator } from './RetryOperator';
 
 /**
- *
+ * Defines a retry policy for observables by passing along the errors that should result in a re-subscription of the original observable.
  */
 export type RetryPolicy = (errors: Observable<Error>) => Observable<Error>;
 

@@ -42,7 +42,6 @@ module.exports = {
         'jsdoc/multiline-blocks': 'error',
         'jsdoc/no-multi-asterisks': 'error',
         'jsdoc/require-asterisk-prefix': 'error',
-        'jsdoc/require-description': 'error',
         'jsdoc/require-description-complete-sentence': 'error',
         'jsdoc/require-param': 'error',
         'jsdoc/require-param-description': 'error',
@@ -54,6 +53,7 @@ module.exports = {
             },
             'contexts': [
                 'ExportNamedDeclaration>TSTypeAliasDeclaration',
+                'ExportNamedDeclaration>TSInterfaceDeclaration',
                 'ExportNamedDeclaration>ClassDeclaration',
                 'ExportNamedDeclaration[declaration.type="TSDeclareFunction"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="TSDeclareFunction"])',
                 'ExportNamedDeclaration[declaration.type="FunctionDeclaration"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="FunctionDeclaration"])',
@@ -68,6 +68,11 @@ module.exports = {
                 'FunctionDeclaration',
                 'MethodDefinition[kind!="get"]'
             ]
+        }],
+
+        'jsdoc/require-description': ['error', {
+            'descriptionStyle': 'body',
+            'contexts': ['any']
         }],
     },
     overrides: [

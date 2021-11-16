@@ -4,6 +4,6 @@
 import { EventContext } from '@dolittle/sdk.events';
 
 /**
- *
+ * Defines the callback for a filter that creates an unpartitioned stream.
  */
 export type FilterEventCallback = (event: any, context: EventContext) => boolean | Promise<boolean>;

@@ -6,6 +6,6 @@ import { EventContext } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from './PartitionedFilterResult';
 
 /**
- *
+ * Defines the callback for a filter that creates a partitioned stream.
  */
 export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult | Promise<PartitionedFilterResult>;
