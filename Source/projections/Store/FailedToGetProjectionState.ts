@@ -5,7 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
 import { Key, ProjectionId } from '..';
 
-
 export class FailedToGetProjectionState extends Exception {
     constructor(projection: ProjectionId, scope: ScopeId, key: Key) {
         super(`Failed to get projection ${projection} in scope ${scope} with key ${key}. No state returned for projection.`);

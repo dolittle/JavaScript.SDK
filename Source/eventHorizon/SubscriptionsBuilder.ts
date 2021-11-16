@@ -11,10 +11,6 @@ import { IEventHorizons } from './IEventHorizons';
 import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 import { SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
 
-
-
-
-
 export type SubscriptionsBuilderCallback = (builder: SubscriptionsBuilder) => void;
 
 /**

@@ -11,5 +11,3 @@ export abstract class IResourcesForTenant {
      */
     abstract readonly mongoDB: IMongoDBResource;
 }
-
-

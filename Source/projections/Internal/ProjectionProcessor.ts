@@ -29,7 +29,6 @@ import {
     PartitionIdKeySelector, ProjectionContext, ProjectionId, UnknownKeySelectorType
 } from '..';
 
-
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.
  */
@@ -58,7 +57,6 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
         registerArguments.setScopeid(guids.toProtobuf(this._projection.scopeId.value));
-
 
         let readModelInstance;
         if (typeof this._projection.readModelTypeOrInstance === 'function') {

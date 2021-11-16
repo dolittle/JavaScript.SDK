@@ -8,7 +8,6 @@ import { Constructor } from '@dolittle/types';
 import { Key, ProjectionId } from '..';
 import { CurrentState } from './CurrentState';
 
-
 /**
  * Defines the API surface for getting projections.
  */

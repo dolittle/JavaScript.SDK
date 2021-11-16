@@ -20,7 +20,6 @@ import { EmbeddingDeleteMethodFailed } from './EmbeddingDeleteMethodFailed';
 import { EmbeddingUpdateMethodFailed } from './EmbeddingUpdateMethodFailed';
 import { IEmbedding } from './IEmbedding';
 
-
 /**
  * Represents an implementation of {@link IEmbedding<T>}.
  */

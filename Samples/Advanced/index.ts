@@ -36,7 +36,6 @@ const client = DolittleClient
     )
     .build();
 
-
 const event = new MyEvent();
 event.anInteger = 42;
 event.aString = 'Forty two';

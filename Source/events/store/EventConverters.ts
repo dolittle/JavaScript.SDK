@@ -12,13 +12,12 @@ import {
     UncommittedAggregateEvents as PbUncommittedAggregateEvents
 } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 
-import { artifacts, guids, executionContexts } from '@dolittle/sdk.protobuf';
+import { artifacts, executionContexts } from '@dolittle/sdk.protobuf';
 
 import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '../index';
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
 import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
 import { MissingExecutionContext } from './MissingExecutionContext';
-
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.
@@ -72,7 +71,6 @@ export class EventConverters {
         uncommittedAggregateEvent.setContent(JSON.stringify(event));
         return uncommittedAggregateEvent;
     }
-
 
     static toSDKAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, aggregateRootVersion: AggregateRootVersion, input: PbCommittedAggregateEvents.CommittedAggregateEvent): SdkCommittedAggregateEvent {
         const executionContext = input.getExecutioncontext();

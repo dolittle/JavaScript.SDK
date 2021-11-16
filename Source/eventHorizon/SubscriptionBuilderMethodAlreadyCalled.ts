@@ -19,4 +19,3 @@ export class SubscriptionBuilderMethodAlreadyCalled extends Exception {
         super(`The method ${method} can only be called once while building an Event Horizon Subscription.`);
     }
 }
-

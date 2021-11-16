@@ -20,7 +20,6 @@ export class artifact_type_id extends ConceptAs<Guid, 'artifact_type_id'> {
     }
 };
 
-
 export class artifact_type extends Artifact<artifact_type_id> {
     constructor(id: artifact_type_id, generation: Generation = Generation.first) {
         super(id, generation);

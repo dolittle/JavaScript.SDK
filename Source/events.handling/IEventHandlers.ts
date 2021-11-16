@@ -4,7 +4,6 @@
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventHandlerProcessor } from './Internal';
 
-
 /**
  * Defines the system for event handlers
  */

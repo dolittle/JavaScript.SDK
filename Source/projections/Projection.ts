@@ -12,7 +12,6 @@ import { ProjectionCallback } from './ProjectionCallback';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
-
 export class Projection<T> extends IProjection<T> {
     initialState?: T | undefined;
 

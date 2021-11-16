@@ -43,7 +43,6 @@ export default {
     toSDK
 };
 
-
 declare module '@dolittle/sdk.execution' {
     interface Version {
         toProtobuf(): PbVersion;
@@ -57,7 +56,6 @@ declare module '@dolittle/sdk.execution' {
 SdkVersion.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
-
 
 declare module '@dolittle/contracts/Versioning/Version_pb' {
     interface Version {

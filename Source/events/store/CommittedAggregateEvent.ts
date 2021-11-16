@@ -49,4 +49,3 @@ export class CommittedAggregateEvent extends CommittedEvent {
             DateTime.fromJSDate(new Date()));
     }
 }
-

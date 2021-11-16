@@ -16,7 +16,6 @@ export class CallbackShouldBeFunction extends Exception {
         super(`Argument '${typeof callback}' is not a function`);
     }
 
-
     /**
      * Asserts an alleged callback for being a function. Throws {@link CallbackShouldBeFunction} if it is not a function.
      * @param {*} callback Callback to check.

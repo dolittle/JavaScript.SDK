@@ -5,7 +5,6 @@ import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerAlias } from './EventHandlerAlias';
 import { EventHandlerId } from './EventHandlerId';
 
-
 /**
  * Defines an event handler
  */

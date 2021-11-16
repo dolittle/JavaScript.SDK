@@ -13,7 +13,7 @@ export class artifact_type_id extends ConceptAs<Guid, 'artifact_type_id'> {
         if (id instanceof artifact_type_id) return id;
         return new artifact_type_id(Guid.as(id));
     }
-};
+}
 
 export class artifact_type extends Artifact<artifact_type_id> {
     toString() {
@@ -22,5 +22,4 @@ export class artifact_type extends Artifact<artifact_type_id> {
     static from(id: Guid | string | artifact_type_id, generation: Generation | number) {
         return new artifact_type(artifact_type_id.from(id), Generation.from(generation));
     }
-
 }

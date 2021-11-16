@@ -81,7 +81,6 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
         return this._events.length === 0 ? AggregateRootVersion.initial : this._events[this._events.length - 1].aggregateRootVersion;
     }
 
-
     private throwIfEventLogVersionIsOutOfOrder(event: CommittedAggregateEvent, previousEvent: CommittedAggregateEvent) {
         if (event.eventLogSequenceNumber.value <= previousEvent.eventLogSequenceNumber.value) {
             throw new EventLogSequenceNumberIsOutOfOrder(event.eventLogSequenceNumber, previousEvent.eventLogSequenceNumber);

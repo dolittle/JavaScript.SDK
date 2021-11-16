@@ -4,7 +4,6 @@
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { ProjectionProcessor } from './Internal';
 
-
 /**
  * Defines the system for projections
  */

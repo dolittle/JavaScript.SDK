@@ -30,7 +30,6 @@ import { IEventStore } from './IEventStore';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
 
-
 /**
  * Represents an implementation of {@link IEventStore}
  */

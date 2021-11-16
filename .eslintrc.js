@@ -10,8 +10,10 @@ module.exports = {
         tsconfigRootDir: __dirname,
     },
     rules: {
-        "@typescript-eslint/unified-signatures": 'off',
-        "import/no-extraneous-dependencies": 'off'
+        '@typescript-eslint/unified-signatures': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'eol-last': 'error',
+        'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }]
     },
     overrides: [
         {

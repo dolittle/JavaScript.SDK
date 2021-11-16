@@ -5,7 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 import { Key } from '@dolittle/sdk.projections';
 import { EmbeddingId } from '..';
 
-
 /**
  * Exception that gets thrown when embedding state fails to be getted.
  */

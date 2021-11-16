@@ -110,7 +110,6 @@ export class AggregateRoot {
         this._version = this._version.next();
     }
 
-
     private applyImplementation(event: any, eventType: EventType | undefined, isPublic: boolean) {
         this.throwIfEventContentIsNullOrUndefined(event);
         this._appliedEvents.push(new AppliedEvent(event, eventType, isPublic));
@@ -152,7 +151,6 @@ export class AggregateRoot {
             return appliedEventType.id.equals(decoratorEventTypeId);
         });
     }
-
 
     private throwIfAggregateRootVersionIsOutOfOrder(event: CommittedAggregateEvent) {
         if (event.aggregateRootVersion.value !== this.version.value) {

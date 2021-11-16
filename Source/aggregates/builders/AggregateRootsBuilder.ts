@@ -6,7 +6,6 @@ import { AggregateRootTypesFromDecorators, internal } from '../index';
 import { AggregateRootTypes } from '../AggregateRootTypes';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-
 export type AggregateRootsBuilderCallback = (builder: AggregateRootsBuilder) => void;
 
 /**

@@ -14,4 +14,3 @@ export class Tenant {
     constructor(readonly id: TenantId) {
     }
 }
-

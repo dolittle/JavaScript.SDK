@@ -6,7 +6,6 @@ import { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADel
 import { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 
-
 /**
  * Represents the system that knows about all the methods decorated with the @resolveDeletionToEvents() decorator.
  */
