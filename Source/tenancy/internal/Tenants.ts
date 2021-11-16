@@ -10,7 +10,7 @@ import { Logger } from 'winston';
 import { Tenant, ITenants, FailedToGetAllTenants } from '../index';
 
 /**
- * Represents a client for Tenants and an implementation of @link ITenants} that knows how to register Event Types with the Runtime.
+ * Represents a client for Tenants and an implementation of {@link ITenants} that knows how to register Event Types with the Runtime.
  */
 export class Tenants extends ITenants {
     /**
