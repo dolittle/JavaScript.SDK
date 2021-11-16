@@ -3,4 +3,7 @@
 
 import { AggregateRoot } from './AggregateRoot';
 
+/**
+ * Defines the callback for performing an action on an implementation of {@link AggregateRoot}.
+ */
 export type AggregateRootAction<TAggregate extends AggregateRoot> = (aggregateRoot: TAggregate) => void | Promise<void>;

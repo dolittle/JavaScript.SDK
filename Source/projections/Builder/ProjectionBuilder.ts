@@ -14,6 +14,9 @@ import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjecti
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
+/**
+ * Represents a builder for building {@link IProjection}.
+ */
 export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
     private _readModelTypeOrInstance?: Constructor<any> | any;
@@ -21,14 +24,15 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
-     * @param {ProjectionId} _projectionId  The unique identifier of the projection to build for
+     * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations to use for associating read model types with projections.
      */
     constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) { }
 
     /**
      * Defines the projection to operate on a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId Scope the projection operates on.
-     * @returns {ProjectionBuilder}
+     * @param {ScopeId | Guid | string} scopeId - Scope the projection operates on.
+     * @returns {ProjectionBuilder} The builder for continuation.
      */
     inScope(scopeId: ScopeId | Guid | string): ProjectionBuilder {
         this._scopeId = ScopeId.from(scopeId);
@@ -39,8 +43,9 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
      * Defines the type of the read model the projection builds. The initial state of a newly
      * created read model is given by the provided instance or an instance constructed by
      * the default constructor of the provided type.
-     * @param {Constructor<T> | T} typeOrInstance The type or an instance of the read model.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the read model.
+     * @returns {ProjectionBuilderForReadModel<T>} The projection builder for the specified read model type.
+     * @template T The type of the projection read model.
      */
     forReadModel<T>(typeOrInstance: Constructor<T> | T): ProjectionBuilderForReadModel<T> {
         if (this._readModelTypeOrInstance) {

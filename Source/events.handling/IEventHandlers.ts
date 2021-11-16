@@ -5,14 +5,14 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { EventHandlerProcessor } from './Internal';
 
 /**
- * Defines the system for event handlers
+ * Defines the system for event handlers.
  */
 export abstract class IEventHandlers {
 
     /**
-     * Register an event handler
-     * @param {EventHandlerProcessor} eventHandlerProcessor Event handler processor to register.
-     * @param {Cancellation} cancellation Used to close the connection to the Runtime.
+     * Register an event handler.
+     * @param {EventHandlerProcessor} eventHandlerProcessor - Event handler processor to register.
+     * @param {Cancellation} cancellation - Used to close the connection to the Runtime.
      */
     abstract register(eventHandlerProcessor: EventHandlerProcessor, cancellation?: Cancellation): void;
 }

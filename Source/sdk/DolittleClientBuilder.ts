@@ -30,9 +30,8 @@ import { DolittleClient } from './DolittleClient';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 
 /**
- * Represents a builder for building {DolittleClient}.
+ * Represents a builder for building {@link DolittleClient}.
  */
-
 export class DolittleClientBuilder {
     private _host = 'localhost';
     private _port = 50053;
@@ -52,6 +51,7 @@ export class DolittleClientBuilder {
 
     /**
      * Creates an instance of client builder.
+     * @param {MicroserviceId} _microserviceId - The unique identifier of the microservice to build an {@link IDolittleClient} for.
      */
     constructor(private readonly _microserviceId: MicroserviceId) {
         this._eventHorizonsBuilder = new SubscriptionsBuilder();
@@ -75,26 +75,26 @@ export class DolittleClientBuilder {
     }
 
     /**
-     *  Sets the version of the microservice.
-     * @param {Version} version Version of the microservice.
+     * Sets the version of the microservice.
+     * @param {Version} version - Version of the microservice.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withVersion(version: Version): DolittleClientBuilder;
     /**
      * Sets the version of the microservice.
-     * @param {number} major Major version of the microservice.
-     * @param {number} minor Minor version of the microservice.
-     * @param {number} patch Patch version of the microservice.
+     * @param {number} major - Major version of the microservice.
+     * @param {number} minor - Minor version of the microservice.
+     * @param {number} patch - Patch version of the microservice.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withVersion(major: number, minor: number, patch: number): DolittleClientBuilder;
     /**
      * Sets the version of the microservice.
-     * @param {number} major Major version of the microservice.
-     * @param {number} minor Minor version of the microservice.
-     * @param {number} patch Patch version of the microservice.
-     * @param {number} build Builder number of the microservice.
-     * @param {string} preReleaseString If prerelease - the prerelease string.
+     * @param {number} major - Major version of the microservice.
+     * @param {number} minor - Minor version of the microservice.
+     * @param {number} patch - Patch version of the microservice.
+     * @param {number} build - Builder number of the microservice.
+     * @param {string} preReleaseString - If prerelease - the prerelease string.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withVersion(major: number, minor: number, patch: number, build: number, preReleaseString: string): DolittleClientBuilder;
@@ -109,7 +109,7 @@ export class DolittleClientBuilder {
 
     /**
      * Sets the environment where the software is running.
-     * @param {Environment | string} environment The environment the software is running in. (e.g. development, production).
+     * @param {Environment | string} environment - The environment the software is running in. (e.g. Development, production).
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withEnvironment(environment: Environment | string): DolittleClientBuilder {
@@ -119,7 +119,7 @@ export class DolittleClientBuilder {
 
     /**
      * Configure event horizons and any subscriptions.
-     * @param {EventHorizonsBuilderCallback} callback The builder callback.
+     * @param {SubscriptionsBuilderCallback} callback - The builder callback.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withEventHorizons(callback: SubscriptionsBuilderCallback): DolittleClientBuilder {
@@ -130,7 +130,7 @@ export class DolittleClientBuilder {
     /**
      * Configure event types.
      *
-     * @param {ArtifactsBuilderCallback} callback The builder callback
+     * @param {AggregateRootsBuilderCallback} callback - The builder callback.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withAggregateRoots(callback: AggregateRootsBuilderCallback): DolittleClientBuilder {
@@ -141,7 +141,7 @@ export class DolittleClientBuilder {
     /**
      * Configure event types.
      *
-     * @param {ArtifactsBuilderCallback} callback The builder callback
+     * @param {EventTypesBuilderCallback} callback - The builder callback.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withEventTypes(callback: EventTypesBuilderCallback): DolittleClientBuilder {
@@ -152,7 +152,7 @@ export class DolittleClientBuilder {
     /**
      * Configure the event handlers.
      *
-     * @param {EventHandlersBuilderCallback} callback The builder callback.
+     * @param {EventHandlersBuilderCallback} callback - The builder callback.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withEventHandlers(callback: EventHandlersBuilderCallback): DolittleClientBuilder {
@@ -163,7 +163,7 @@ export class DolittleClientBuilder {
     /**
      * Configure the event filters.
      *
-     * @param {EventFiltersBuilderCallback} callback The builder callback.
+     * @param {EventFiltersBuilderCallback} callback - The builder callback.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withFilters(callback: EventFiltersBuilderCallback): DolittleClientBuilder {
@@ -173,8 +173,8 @@ export class DolittleClientBuilder {
 
     /**
      * Connect to a specific host and port for the Dolittle runtime.
-     * @param {string} host The host name to connect to.
-     * @param {number} port The port to connect to.
+     * @param {string} host - The host name to connect to.
+     * @param {number} port - The port to connect to.
      * @returns {DolittleClientBuilder} The client builder for continuation.
      * @summary If not used, the default host of 'localhost' and port 50053 will be used.
      */
@@ -186,8 +186,8 @@ export class DolittleClientBuilder {
 
     /**
      * Set the winston logger to use in the microservice.
-     * @param {Logger} logger A winston logger.
-     * @returns {DolittleClientBuilder}
+     * @param {Logger} logger - A winston logger.
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      * @see {@link https://github.com/winstonjs/winston|winston} for further information.
      */
     withLogging(logger: Logger): DolittleClientBuilder {
@@ -197,8 +197,8 @@ export class DolittleClientBuilder {
 
     /**
      * Configures cancellation for closing open connections to the Runtime.
-     * @param {Cancellation} cancellation The cancellation that will be passed to Filters and Event Handlers.
-     * @returns {DolittleClientBuilder}
+     * @param {Cancellation} cancellation - The cancellation that will be passed to Filters and Event Handlers.
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withCancellation(cancellation: Cancellation): DolittleClientBuilder {
         this._cancellation = cancellation;
@@ -207,8 +207,8 @@ export class DolittleClientBuilder {
 
     /**
      * Use a specific IoC container for creating instances of types.
-     * @param {IContainer} container Container
-     * @returns {DolittleClientBuilder}
+     * @param {IContainer} container - Container.
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withContainer(container: IContainer): DolittleClientBuilder {
         this._container = container;
@@ -217,8 +217,8 @@ export class DolittleClientBuilder {
 
     /**
      * Configure projections.
-     * @param {ProjectionsBuilderCallback} callback The builder callback
-     * @returns {DolittleClientBuilder}
+     * @param {ProjectionsBuilderCallback} callback - The builder callback.
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withProjections(callback: ProjectionsBuilderCallback): DolittleClientBuilder {
         callback(this._projectionsBuilder);
@@ -227,8 +227,8 @@ export class DolittleClientBuilder {
 
     /**
      * Configure embeddings.
-     * @param {EmbeddingsBuilderCallback} callback The builder callback.
-     * @returns {DolittleClientBuilder}
+     * @param {EmbeddingsBuilderCallback} callback - The builder callback.
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     withEmbeddings(callback: EmbeddingsBuilderCallback): DolittleClientBuilder {
         callback(this._embeddingsBuilder);
@@ -237,7 +237,7 @@ export class DolittleClientBuilder {
 
     /**
      * Build the {Client}.
-     * @returns {DolittleClient}
+     * @returns {DolittleClientBuilder} The client builder for continuation.
      */
     build(): DolittleClient {
         const connectionString = `${this._host}:${this._port}`;

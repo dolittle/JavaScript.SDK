@@ -8,9 +8,11 @@ import { IResourcesForTenant } from './IResourcesForTenant';
  * Represents an implementation of {@link IResourcesForTenant}.
  */
 export class ResourcesForTenant extends IResourcesForTenant {
-
-    constructor(readonly mongoDB: IMongoDBResource
-    ) {
+    /**
+     * Initialises a new instance of the {@link ResourcesForTenant} class.
+     * @param {IMongoDBResource} mongoDB - The MongoDB resource for the tenant.
+     */
+    constructor(readonly mongoDB: IMongoDBResource) {
         super();
     }
 }

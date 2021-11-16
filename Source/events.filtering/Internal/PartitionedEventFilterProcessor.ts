@@ -17,8 +17,21 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '..';
 
+/**
+ * Represents an implementation of {@link FilterEventProcessor} that filters events to a partitioned stream.
+ */
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {
 
+    /**
+     * Initialises a new instance of the {@link PartitionedEventFilterProcessor} class.
+     * @param {FilterId} filterId - The filter id.
+     * @param {ScopeId} _scopeId - The filter scope id.
+     * @param {PartitionedFilterEventCallback} _callback - The filter callback.
+     * @param {FiltersClient} _client - The filters client to use to register the filter.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All registered event types.
+     * @param {Logger} logger - The logger to use for logging.
+     */
     constructor(
         filterId: FilterId,
         private _scopeId: ScopeId,
@@ -31,6 +44,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         super('Partitioned Filter', filterId, eventTypes, logger);
     }
 
+    /** @inheritdoc */
     protected get registerArguments(): PartitionedFilterRegistrationRequest {
         const registerArguments = new PartitionedFilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
@@ -38,6 +52,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         return registerArguments;
     }
 
+    /** @inheritdoc */
     protected createClient(
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
@@ -64,12 +79,14 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         );
     }
 
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): PartitionedFilterResponse {
         const response = new PartitionedFilterResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /** @inheritdoc */
     protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 

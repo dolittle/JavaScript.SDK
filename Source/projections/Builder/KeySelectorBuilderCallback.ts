@@ -6,6 +6,6 @@ import { KeySelector } from '..';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 
 /**
- * Represents the signature for a projection's key selector expression
+ * Represents the signature for a projection's key selector expression.
  */
 export type KeySelectorBuilderCallback<T = any> = (builder: KeySelectorBuilder<T>) => KeySelector;

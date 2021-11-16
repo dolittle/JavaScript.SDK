@@ -10,10 +10,10 @@ import { EmbeddingId } from '..';
  */
 export class ReadModelAlreadyDefinedForEmbedding extends Exception {
     /**
-     * Initialises a new instance of {@link ReadModelAlreadyDefinedForEmbedding}
-     * @param {EmbeddingId} embeddingId The unique identifier of the embedding.
-     * @param {Constructor<any> | any} newReadModel The new read model.
-     * @param {Constructor<any> | any} oldReadModel The old read model.
+     * Initialises a new instance of {@link ReadModelAlreadyDefinedForEmbedding}.
+     * @param {EmbeddingId} embeddingId - The unique identifier of the embedding.
+     * @param {Constructor<any> | any} newReadModel - The new read model.
+     * @param {Constructor<any> | any} oldReadModel - The old read model.
      */
     constructor(embeddingId: EmbeddingId, newReadModel: Constructor<any> | any, oldReadModel: Constructor<any> | any) {
         super(`Cannot assign readmodel ${newReadModel} to embedding ${embeddingId}. It is already associated with readmodel ${oldReadModel}`);

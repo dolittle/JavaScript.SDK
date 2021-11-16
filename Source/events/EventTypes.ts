@@ -10,12 +10,12 @@ import { EventTypeMap } from './EventTypeMap';
 import { IEventTypes } from './IEventTypes';
 
 /**
- * Represents an implementation of {@link IEventTypes}
+ * Represents an implementation of {@link IEventTypes}.
  */
 export class EventTypes extends IEventTypes {
     /**
-     * Initializes a new instance of {@link EventTypes}
-     * @param {EventTypeMap<Constructor<any>>} [associations] Known associations
+     * Initializes a new instance of {@link EventTypes}.
+     * @param {EventTypeMap<Constructor<any>>} [associations] - Known associations.
      */
     constructor(associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
         super(associations);

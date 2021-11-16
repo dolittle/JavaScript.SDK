@@ -7,9 +7,16 @@ import { Failure } from '@dolittle/sdk.protobuf';
 import { ProjectionId, Key  } from '..';
 
 /**
- * An exception that gets thrown when a projection fails to be getted.
+ * Exception that gets thrown when getting a projection fails.
  */
 export class FailedToGetProjection extends Exception {
+    /**
+     * Initialises a new instance of the {@link FailedToGetProjection} class.
+     * @param {ProjectionId} projection - The id of the projection to get.
+     * @param {ScopeId} scope - The scope of the projection to get.
+     * @param {Key | undefined} key - The optional key of the projection to get.
+     * @param {Failure} failure - The failure that occured.
+     */
     constructor(projection: ProjectionId, scope: ScopeId, key: Key | undefined, failure: Failure) {
         if (key) {
             super(`Failed to get projection ${projection} in scope ${scope} with key ${key} due to failure ${failure.id} with reason: ${failure.reason}`);

@@ -6,22 +6,22 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { EventSourceId, EventLogSequenceNumber, EventType } from '../index';
 
 /**
- * Represents a committed event
+ * Represents a committed event.
  */
 export class CommittedEvent {
 
     /**
      * Initializes a new instance of {@link CommittedEvent}.
-     * @param {EventLogSequenceNumber} eventLogSequenceNumber The sequence number in the event log.
-     * @param {DateTime} occurred Timestamp for when it occurred.
-     * @param {EventSourceId} eventSourceId Identifier of the event source.
-     * @param {ExecutionContext} executionContext The execution context in which the event happened.
-     * @param {EventType} type Type of event.
-     * @param {*} content Actual content of the event.
-     * @param {boolean} isPublic Whether or not the event is a public event.
-     * @param {boolean} isExternal Whether or not the event is originating externally.
-     * @param {number} externalEventLogSequenceNumber If external; the external event log sequence number.
-     * @param {DateTime} externalEventReceived If external; timestamp for when it was received.
+     * @param {EventLogSequenceNumber} eventLogSequenceNumber - The sequence number in the event log.
+     * @param {DateTime} occurred - Timestamp for when it occurred.
+     * @param {EventSourceId} eventSourceId - Identifier of the event source.
+     * @param {ExecutionContext} executionContext - The execution context in which the event happened.
+     * @param {EventType} type - Type of event.
+     * @param {*} content - Actual content of the event.
+     * @param {boolean} isPublic - Whether or not the event is a public event.
+     * @param {boolean} isExternal - Whether or not the event is originating externally.
+     * @param {number} externalEventLogSequenceNumber - If external; the external event log sequence number.
+     * @param {DateTime} externalEventReceived - If external; timestamp for when it was received.
      */
     constructor(
         readonly eventLogSequenceNumber: EventLogSequenceNumber,

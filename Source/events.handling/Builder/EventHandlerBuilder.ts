@@ -13,10 +13,13 @@ import { EventHandlerProcessor } from '../Internal';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
+/**
+ * Defines the callback for building instances of {@link IEventHandler}.
+ */
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
 /**
- * Represents a builder for building {@link IEventHandler} - event handlers.
+ * Represents a builder for building instances of {@link IEventHandler}.
  */
 export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
     private _methodsBuilder?: EventHandlerMethodsBuilder;
@@ -26,7 +29,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Initializes a new instance of {@link EventHandlerBuilder}.
-     * @param {EventHandlerId} _eventHandlerId The unique identifier of the event handler to build for.
+     * @param {EventHandlerId} _eventHandlerId - The unique identifier of the event handler to build for.
      */
     constructor(private _eventHandlerId: EventHandlerId) {
         super();
@@ -34,7 +37,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Defines the event handler to be partitioned - this is default for a event handler.
-     * @returns {EventHandlerBuilder}
+     * @returns {EventHandlerBuilder} The builder for continuation.
      */
     partitioned(): EventHandlerMethodsBuilder {
         this._partitioned = true;
@@ -44,7 +47,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Defines the event handler to be unpartitioned. By default it will be partitioned.
-     * @returns {EventHandlerBuilder}
+     * @returns {EventHandlerBuilder} The builder for continuation.
      */
     unpartitioned(): EventHandlerMethodsBuilder {
         this._partitioned = false;
@@ -54,14 +57,19 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Defines the event handler to operate on a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId Scope the event handler operates on.
-     * @returns {EventHandlerBuilder}
+     * @param {ScopeId | Guid | string} scopeId - Scope the event handler operates on.
+     * @returns {EventHandlerBuilder} The builder for continuation.
      */
     inScope(scopeId: ScopeId | Guid | string): EventHandlerBuilder {
         this._scopeId = ScopeId.from(scopeId);
         return this;
     }
 
+    /**
+     * Defines and alias for the event handler.
+     * @param {EventHandlerAliasLike} alias - The event handler alias.
+     * @returns {EventHandlerBuilder} The builder for continuation.
+     */
     withAlias(alias: EventHandlerAliasLike): EventHandlerBuilder {
         this._alias = EventHandlerAlias.from(alias);
         return this;

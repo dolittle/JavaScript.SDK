@@ -28,12 +28,12 @@ export class EventHorizons extends IEventHorizons {
 
     /**
      * Initializes a new instance of {@link EventHorizons}.
-     * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
-     * @param {ExecutionContext} executionContext The execution context.
-     * @param {TenantWithSubscriptions[]} tenantSubscriptions Tenant subscriptions to connect.
-     * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
-     * @param {Logger} logger Logger for logging;
-     * @param {Cancellation} cancellation Used to cancel all the subscriptions.
+     * @param {SubscriptionsClient} _subscriptionsClient - The runtime client for working with subscriptions.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {TenantWithSubscriptions[]} subscriptions - Tenant subscriptions to connect.
+     * @param {SubscriptionCallbacks} callbacks - Callbacks for handling responses of subscribing.
+     * @param {Logger} _logger - Logger for logging;.
+     * @param {Cancellation} cancellation - Used to cancel all the subscriptions.
      */
     constructor(
         private _subscriptionsClient: SubscriptionsClient,
@@ -83,9 +83,6 @@ export class EventHorizons extends IEventHorizons {
             cancellation);
     }
 
-    /**
-     * Subscribes and returns an Observable, which completes when the Runtime replies with a valid connection response.
-     */
     private subscribe(tenant: TenantId, subscription: Subscription, pbSubscription: PbSubscription): Observable<void> {
         return new Observable<void>(subscriber => {
             this._logger.debug(`Subscribing to events from microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in parttion ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}`);

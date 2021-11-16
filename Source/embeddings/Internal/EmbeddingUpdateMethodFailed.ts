@@ -4,17 +4,21 @@
 import { Exception } from '@dolittle/rudiments';
 import { EmbeddingContext, EmbeddingId } from '@dolittle/sdk.embeddings';
 
-export class EmbeddingUpdateMethodFailed<T> extends Exception {
+/**
+ * Exception that gets thrown when calling update on an embedding fails.
+ * @template TReadModel The type of the embedding read model.
+ */
+export class EmbeddingUpdateMethodFailed<TReadModel> extends Exception {
 
     /**
-     * Initializes a new instance of {@link EmbeddingUpdateMethodFailed}
-     * @param {EmbeddingId} embeddingId
-     * @param {T} receivedState
-     * @param {T} currentState
-     * @param {EmbeddingContext} context
-     * @param {Error} error
+     * Initializes a new instance of the {@link EmbeddingUpdateMethodFailed} class.
+     * @param {EmbeddingId} embeddingId - The embedding identifier.
+     * @param {TReadModel} receivedState - The state received by the update call.
+     * @param {TReadModel} currentState - The current state of the embedding.
+     * @param {EmbeddingContext} context - The embedding context.
+     * @param {Error} error - The error that occured.
      */
-    constructor(embeddingId: EmbeddingId, receivedState: T, currentState: T, context: EmbeddingContext, error: any) {
-        super(`The update method on embedding ${embeddingId} failed to update read model with key ${context.key}. Received state: ${JSON.stringify(receivedState)}. Current state: ${JSON.stringify(currentState)}The error was: ${error}`);
+    constructor(embeddingId: EmbeddingId, receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext, error: any) {
+        super(`The update method on embedding ${embeddingId} failed to update read model with key ${context.key}. Received state: ${JSON.stringify(receivedState)}. Current state: ${JSON.stringify(currentState)} The error was: ${error}`);
     }
 }

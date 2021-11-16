@@ -4,6 +4,6 @@
 import { EmbeddingContext } from './EmbeddingContext';
 
 /**
- * Defines the signature of a embedding class' resolveDeletionToEvents() method
+ * Defines the signature of a embedding class' resolveDeletionToEvents() method.
  */
 export type EmbeddingDeleteCallback<TReadModel = any> = (currentState: TReadModel, context: EmbeddingContext) => Object | Object[];

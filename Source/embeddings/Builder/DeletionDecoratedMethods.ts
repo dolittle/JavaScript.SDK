@@ -16,10 +16,10 @@ export class DeletionDecoratedMethods {
     static readonly methodPerEmbedding: Map<Constructor<any>, DeletionDecoratedMethod> = new Map();
 
     /**
-     * Registers the @resolveDeletionToEvents() decorated method
-     * @param {Constructor<any>} target Target that owns the deletion method.
-     * @param {EmbeddingClassDeletionMethod} method The deletion method.
-     * @param {string} name The name of the method.
+     * Registers the @resolveDeletionToEvents() decorated method.
+     * @param {Constructor<any>} target - Target that owns the deletion method.
+     * @param {EmbeddingClassDeletionMethod} method - The deletion method.
+     * @param {string} name - The name of the method.
      */
     static register(
         target: Constructor<any>,

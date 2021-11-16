@@ -4,6 +4,7 @@
 module.exports = {
     extends: '../../.eslintrc.js',
     rules: {
-        "no-restricted-globals": 'off'
+        "no-restricted-globals": 'off',
+        'jsdoc/require-jsdoc': 'off',
     }
 };

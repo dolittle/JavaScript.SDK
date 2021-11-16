@@ -4,7 +4,7 @@
 import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-/**
+/**.
  * Exception that gets thrown when the {@link IContainer} could not create an instance of the event handler
  *
  * @export
@@ -14,8 +14,8 @@ import { Constructor } from '@dolittle/types';
 export class CouldNotCreateInstanceOfEventHandler extends Exception {
     /**
      * Initializes an instance of {@link CouldNotCreateInstanceOfEventHandler}.
-     * @param {Constructor<any>} type The event handler type to be instantiated.
-     * @param {any} error The error.
+     * @param {Constructor<any>} type - The event handler type to be instantiated.
+     * @param {any} error - The error.
      */
     constructor(type: Constructor<any>, error: any) {
         super(`Could not create an instance of the event handler ${type.name}. ${error}`);

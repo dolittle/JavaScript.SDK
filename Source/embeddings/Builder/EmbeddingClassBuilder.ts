@@ -30,15 +30,16 @@ import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
 import { Generation } from '@dolittle/sdk.artifacts';
 
-/*
- * Represents a builder for building an embedding class.
+/**
+ * Represents an implementation of {@link ICanBuildAndRegisterAnEmbedding} that builds embeddings from classes.
+ * @template T The embedding class type.
  */
 export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private readonly _embeddingType: Constructor<T>;
 
     /**
-     * Initializes a new instance of {@link  EmbeddingClassBuilder<T>}
-     * @param {Constructor<T> | T} typeOrInstance The embedding type or instance
+     * Initializes a new instance of {@link  EmbeddingClassBuilder<T>}.
+     * @param {Constructor<T> | T} typeOrInstance - The embedding type or instance.
      */
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {

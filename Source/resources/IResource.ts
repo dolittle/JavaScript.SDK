@@ -14,7 +14,7 @@ export abstract class IResource {
     protected abstract readonly name: ResourceName;
 
     /**
-     * Gets the {@link TenantId} that this resource belongs to..
+     * Gets the {@link TenantId} that this resource belongs to.
      */
     protected abstract readonly tenant: TenantId;
 }

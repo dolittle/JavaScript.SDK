@@ -11,7 +11,7 @@ import { EventTypeId } from './EventTypeId';
  */
 export class EventTypeMap<T> extends ArtifactTypeMap<EventType, EventTypeId, T> {
     /**
-     * Initializes a new instance of {@link EventTypeMap}
+     * Initializes a new instance of {@link EventTypeMap}.
      */
     constructor() {
         super();

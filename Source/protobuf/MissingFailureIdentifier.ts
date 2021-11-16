@@ -9,7 +9,7 @@ import { Exception } from '@dolittle/rudiments';
 export class MissingFailureIdentifier extends Exception {
 
     /**
-     * Initializes a new instance ofe {MissingFailureIdentifier}.
+     * Initializes a new instance of the {@link MissingFailureIdentifier} class.
      */
     constructor() {
         super('Missing failure identifier during conversion from Protobuf');

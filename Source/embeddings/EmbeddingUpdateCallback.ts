@@ -4,6 +4,6 @@
 import { EmbeddingContext } from './EmbeddingContext';
 
 /**
- * Defines the signature of a embedding class' resolveUpdateToEvents() method
+ * Defines the signature of a embedding class' resolveUpdateToEvents() method.
  */
 export type EmbeddingUpdateCallback<TReadModel = any> = (receivedState: TReadModel, currentState: TReadModel, context: EmbeddingContext) => Object | Object[];

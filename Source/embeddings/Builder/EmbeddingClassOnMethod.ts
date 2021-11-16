@@ -5,6 +5,6 @@ import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 import { EmbeddingProjectContext } from '..';
 
 /**
- * Defines the signature of a embedding class's on() method
+ * Defines the signature of a embedding class's on() method.
  */
 export type EmbeddingClassOnMethod<TEvent = any> = (event: TEvent, context: EmbeddingProjectContext) => void | DeleteReadModelInstance | Promise<void | DeleteReadModelInstance>;

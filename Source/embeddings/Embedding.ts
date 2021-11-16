@@ -24,6 +24,15 @@ import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
  */
 export class Embedding extends IEmbedding {
 
+    /**
+     * Initialises a new instance of the {@link Embedding} class.
+     * @param {EmbeddingStoreClient} storeClient - The embedding store client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IConvertProjectionsToSDK} _converter - The converter to use to convert projections.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {EmbeddingsClient} _embeddingsClient - The embeddings client.
+     * @param {Logger} _logger - The logger.
+     */
     constructor(
         storeClient: EmbeddingStoreClient,
         protected readonly _executionContext: ExecutionContext,

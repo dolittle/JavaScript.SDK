@@ -7,19 +7,22 @@ import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
-import { IProjections } from '..';
+import { IProjections, IProjection } from '..';
 
+/**
+ * Defines a system that can build and register instances of {@link IProjection}.
+ */
 export interface ICanBuildAndRegisterAProjection {
 
     /**
-     * Builds and registers a projection
-     * @param {ProjectionsClient} client The projections client.
-     * @param {IProjections} projections  The projections.
-     * @param {IContainer} container The IoC container.
-     * @param {ExcecutionContext} executionContext The execution context.
-     * @param {IEventTypes} eventTypes The event types.
-     * @param {Logger} logger The logger.
-     * @param {Cancellation} cancellation The cancellation token.
+     * Builds and registers a projection.
+     * @param {ProjectionsClient} client - The projections client.
+     * @param {IProjections} projections - The projections.
+     * @param {IContainer} container - The IoC container.
+     * @param {ExecutionContext} executionContext - The execution context.
+     * @param {IEventTypes} eventTypes - The event types.
+     * @param {Logger} logger - The logger.
+     * @param {Cancellation} cancellation - The cancellation token.
      */
     buildAndRegister (
         client: ProjectionsClient,

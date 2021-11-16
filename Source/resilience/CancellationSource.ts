@@ -5,14 +5,14 @@ import { Subject } from 'rxjs';
 import { Cancellation } from './Cancellation';
 
 /**
- * Represents the source of a {@link Cancellation}
+ * Represents the source of a {@link Cancellation}.
  */
 export class CancellationSource {
     private _subject: Subject<void>;
 
     /**
-     * Initializes a new instance of {@link CancellationSource}
-     * @param sources
+     * Initializes a new instance of {@link CancellationSource}.
+     * @param {Cancellation[]} sources - A set of {@link Cancellation} to link to this source.
      */
     constructor(...sources: Cancellation[]) {
         this._subject = new Subject();
@@ -30,7 +30,6 @@ export class CancellationSource {
 
     /**
      * Gets the cancellation subject.
-     * @returns {Subject<void>}
      */
     get cancellation(): Cancellation {
         return this._subject;

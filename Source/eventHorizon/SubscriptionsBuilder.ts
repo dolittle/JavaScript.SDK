@@ -11,10 +11,13 @@ import { IEventHorizons } from './IEventHorizons';
 import { SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 import { SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
 
+/**
+ * Defines the callback for building event horizon subscriptions.
+ */
 export type SubscriptionsBuilderCallback = (builder: SubscriptionsBuilder) => void;
 
 /**
- * Represents a builder for building event horizons
+ * Represents a builder for building event horizons.
  */
 export class SubscriptionsBuilder {
     private readonly _callbacks: SubscriptionCallbacks = new SubscriptionCallbacks();
@@ -22,9 +25,9 @@ export class SubscriptionsBuilder {
 
     /**
      * Configure subscriptions for a tenant in our microservice.
-     * @param {TenantId | Guid | string} tenantId The tenant in our microservice.
-     * @param {TenantWithSubscriptionsBuilderCallback} callback The subscriptions builder callback.
-     * @returns {SubscriptionsBuilder}
+     * @param {TenantId | Guid | string} tenantId - The tenant in our microservice.
+     * @param {(SubscriptionsBuilderForConsumerTenant) => void} callback - The subscriptions builder callback.
+     * @returns {SubscriptionsBuilder} The builder for continuation.
      * @summary Two microservices does not need to be aligned on tenancy. This allows for that purpose.
      */
     forTenant(tenantId: TenantId | Guid | string, callback: (builder: SubscriptionsBuilderForConsumerTenant) => void): SubscriptionsBuilder {
@@ -35,9 +38,9 @@ export class SubscriptionsBuilder {
     }
 
     /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
-     * @param {SubscriptionCompleted} completed The callback method.
-     * @returns {SubscriptionsBuilder}
+     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionCompleted} completed - The callback method.
+     * @returns {SubscriptionsBuilder} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onCompleted(completed: SubscriptionCompleted): SubscriptionsBuilder {
@@ -46,9 +49,9 @@ export class SubscriptionsBuilder {
     }
 
     /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
-     * @param {SubscriptionSucceeded} succeeded The callback method.
-     * @returns {SubscriptionsBuilder}
+     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionSucceeded} succeeded - The callback method.
+     * @returns {SubscriptionsBuilder} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onSuccess(succeeded: SubscriptionSucceeded): SubscriptionsBuilder {
@@ -57,9 +60,9 @@ export class SubscriptionsBuilder {
     }
 
     /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
-     * @param {SubscriptionFailed} failed The callback method.
-     * @returns {SubscriptionsBuilder}
+     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionFailed} failed - The callback method.
+     * @returns {SubscriptionsBuilder} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onFailure(failed: SubscriptionFailed): SubscriptionsBuilder {
@@ -68,12 +71,12 @@ export class SubscriptionsBuilder {
     }
 
     /**
-     * Build all configured {@link TenantSubscriptions}
-     * @param {SubscriptionsClient} subscriptionsClient The runtime client for working with subscriptions.
-     * @param {ExecutionContext} executionContext The execution context.
-     * @param {Logger} logger Logger for logging;
-     * @param {Cancellation} cancellation The cancellation token.
-     * @returns {TenantSubscriptions[]}
+     * Build all configured {@link TenantSubscriptions}.
+     * @param {SubscriptionsClient} subscriptionsClient - The runtime client for working with subscriptions.
+     * @param {ExecutionContext} executionContext - The execution context.
+     * @param {Logger} logger - Logger for logging;.
+     * @param {Cancellation} cancellation - The cancellation token.
+     * @returns {IEventHorizons} The built event horizons.
      */
     build(
         subscriptionsClient: SubscriptionsClient,

@@ -10,8 +10,8 @@ export class EventPropertyKeySelector {
     readonly propertyName: PropertyNameKeySelector;
 
     /**
-     * Initializes a new instance of {@link PropertyNameKeySelector}
-     * @param {PropertyNameKeySelector | string} propertyName The property on the event to use as key
+     * Initializes a new instance of {@link PropertyNameKeySelector}.
+     * @param {PropertyNameKeySelector | string} propertyName - The property on the event to use as key.
      */
     constructor(propertyName: PropertyNameKeySelector | string) {
         this.propertyName = PropertyNameKeySelector.from(propertyName);

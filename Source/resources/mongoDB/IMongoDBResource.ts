@@ -3,7 +3,7 @@
 
 import { GetMongoDbResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { Resource, ResourceName } from '../index';
+import { Resource } from '../index';
 import { MongoDBConnectionString } from './MongoDBConnectionString';
 
 /**
@@ -12,7 +12,8 @@ import { MongoDBConnectionString } from './MongoDBConnectionString';
 export abstract class IMongoDBResource extends Resource<GetRequest, GetMongoDbResponse> {
     /**
      * Gets the the MongoDB connection string.
-     * @param {Cancellation} [cancellation] The optional {@link Cancellation}.
+     * @param {Cancellation} cancellation - The optional {@link Cancellation}.
+     * @returns {Promise<MongoDBConnectionString>} A {@link Promise} that when resolved returns the MongoDB connection string.
      */
     abstract getConnectionString(cancellation?: Cancellation): Promise<MongoDBConnectionString>;
 }

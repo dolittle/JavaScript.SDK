@@ -11,8 +11,8 @@ export class FilterDefinitionIncomplete extends Exception {
 
     /**
      * Initializes a new instance of {@link FilterDefinitionIncomplete}.
-     * @param {FilterId} filterId Identifier of the filter.
-     * @param {string} action Suggested action to complete the definition.
+     * @param {FilterId} filterId - Identifier of the filter.
+     * @param {string} action - Suggested action to complete the definition.
      */
     constructor(filterId: FilterId, action: string) {
         super(`Filter definition for filter '${filterId}' is incomplete: ${action}`);

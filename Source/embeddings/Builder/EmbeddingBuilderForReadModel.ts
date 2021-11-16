@@ -19,6 +19,7 @@ import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
 /**
  * Represents a builder for building {@link IEmbedding}.
+ * @template T The type of the embedding read model.
  */
 export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEmbedding {
     private _updateMethod?: EmbeddingUpdateCallback<T> = undefined;
@@ -27,8 +28,8 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
-     * @param {EmbeddingId} _embeddingId  The unique identifier of the embedding to build for
-     * @param {Constructor<T> | T} _readModelTypeOrInstance  The read model type or instance
+     * @param {EmbeddingId} _embeddingId - The unique identifier of the embedding to build for.
+     * @param {Constructor<T> | T} _readModelTypeOrInstance - The read model type or instance.
      */
     constructor(
         private readonly _embeddingId: EmbeddingId,
@@ -37,8 +38,8 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     /**
      * Add the resolveUpdateToEvents method for resolving the received and current states of the embedding into events.
-     * @param {EmbeddingUpdateCallback} callback Callback to call until the current state equals the received state.
-     * @returns {EmbeddingBuilderForReadModel<T>}
+     * @param {EmbeddingUpdateCallback} callback - Callback to call until the current state equals the received state.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
     resolveUpdateToEvents(callback: EmbeddingUpdateCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._updateMethod) {
@@ -50,8 +51,8 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
 
     /**
      * Add a resolveDeletionToEvents method for deleting the embedding.
-     * @param {EmbeddingUpdateCallback} callback Callback to call until the embedding has been deleted.
-     * @returns {EmbeddingBuilderForReadModel<T>}
+     * @param {EmbeddingUpdateCallback} callback - Callback to call until the embedding has been deleted.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
     resolveDeletionToEvents(callback: EmbeddingDeleteCallback<T>): EmbeddingBuilderForReadModel<T> {
         if (this._deleteMethod) {
@@ -64,33 +65,33 @@ export class EmbeddingBuilderForReadModel<T> implements ICanBuildAndRegisterAnEm
     /**
      * Add an on method for handling the event.
      * @template TEvent Type of event.
-     * @param {Constructor<TEvent>} type The type of event.
-     * @param {EmbeddingProjectCallback<T,TEvent>} callback Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T, TEvent>}
+     * @param {Constructor<TEvent>} type - The type of event.
+     * @param {EmbeddingProjectCallback<T,TEvent>} callback - Callback to call for each event.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
-    on<TEvent>(type: Constructor<TEvent>, callback: EmbeddingProjectCallback<T, TEvent>): this;
+    on<TEvent>(type: Constructor<TEvent>, callback: EmbeddingProjectCallback<T, TEvent>): EmbeddingBuilderForReadModel<T>;
     /**
      * Add an on method for handling the event.
-     * @param {EventType} eventType The identifier of the event.
-     * @param {EmbeddingProjectCallback} callback Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @param {EventType} eventType - The identifier of the event.
+     * @param {EmbeddingProjectCallback} callback - Callback to call for each event.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
-    on(eventType: EventType, callback: EmbeddingProjectCallback<T>): this;
+    on(eventType: EventType, callback: EmbeddingProjectCallback<T>): EmbeddingBuilderForReadModel<T>;
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {EmbeddingProjectCallback} callback Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {EmbeddingProjectCallback} callback - Callback to call for each event.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
-    on(eventTypeId: EventTypeId | Guid | string, callback: EmbeddingProjectCallback<T>): this;
+    on(eventTypeId: EventTypeId | Guid | string, callback: EmbeddingProjectCallback<T>): EmbeddingBuilderForReadModel<T>;
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeIdLike} eventType The identifier of the event.
-     * @param {GenerationLike} generation The generation of the event type.
-     * @param {EmbeddingProjectCallback} method Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
+     * @param {GenerationLike} generation - The generation of the event type.
+     * @param {EmbeddingProjectCallback} method - Callback to call for each event.
+     * @returns {EmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
-    on(eventTypeId: EventTypeIdLike, generation: GenerationLike, callback: EmbeddingProjectCallback<T>): this;
+    on(eventTypeId: EventTypeIdLike, generation: GenerationLike, callback: EmbeddingProjectCallback<T>): EmbeddingBuilderForReadModel<T>;
     on<TEvent = any>(
         typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
         callbackOrGeneration: GenerationLike | EmbeddingProjectCallback<T, TEvent>,

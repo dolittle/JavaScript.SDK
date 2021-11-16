@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export abstract class IEventProcessor {
     /**
      * Registers the event processor with the Runtime, and if successful starts handling requests.
-     * @param {Cancellation} cancellation Used to cancel the registration and processing.
+     * @param {Cancellation} cancellation - Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
     abstract register(cancellation: Cancellation): Observable<void>;

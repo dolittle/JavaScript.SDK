@@ -13,12 +13,18 @@ export class SubscriptionResponse {
 
     /**
      * Initializes a new instance of {@link SubscriptionResponse}.
-     * @param {ConsentId} consentId The identifier of the consent.
-     * @param {Failure} [failure] Optional failure details if failed.
+     * @param {ConsentId} consentId - The identifier of the consent.
+     * @param {Failure} [failure] - Optional failure details if failed.
      */
     constructor(readonly consentId: ConsentId, readonly failure?: Failure) {
     }
 
+    /**
+     * Creates a {@link SubscriptionResponse} from a consent and a potential failure.
+     * @param {Guid | string} consentId - The consent identifier for the subscription.
+     * @param {Failure} failure - The optional failure that occured during subscription.
+     * @returns {SubscriptionResponse} The created subscription response.
+     */
     static from(consentId: Guid | string, failure?: Failure): SubscriptionResponse {
         return new SubscriptionResponse(ConsentId.from(consentId), failure);
     }

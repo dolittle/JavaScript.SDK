@@ -11,7 +11,7 @@ export class SubscriptionDoesNotExist extends Exception {
 
     /**
      * Initializes a new instance of {@link SubscriptionDoesNotExist}.
-     * @param {Subscription} subscription The subscription that does not exist.
+     * @param {Subscription} subscription - The subscription that does not exist.
      */
     constructor(subscription: Subscription) {
         super(`Subscription from ${subscription.partition} in ${subscription.stream} of ${subscription.tenant} in ${subscription.microservice} into ${subscription.scope} does not exist`);

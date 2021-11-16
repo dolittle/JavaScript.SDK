@@ -46,13 +46,13 @@ import { IEmbedding } from './IEmbedding';
 export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
 
     /**
-     * Initializes a new instance of {@link EmbeddingProcessor}
+     * Initializes a new instance of {@link EmbeddingProcessor}.
      * @template TReadModel
-     * @param {IEmbedding<TReadModel>} _embedding The embedding
-     * @param {EmbeddingsClient} _client The client used to connect to the Runtime
-     * @param {ExecutionContext} _executionContext The execution context
-     * @param {IEventType} _eventTypes The registered event types for this embedding
-     * @param {ILogger} logger Logger for logging
+     * @param {IEmbedding<TReadModel>} _embedding - The embedding.
+     * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
+     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,

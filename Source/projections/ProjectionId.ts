@@ -8,16 +8,18 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the unique identifier of a Projection.
  */
 export class ProjectionId extends ConceptAs<Guid, '@dolittle/sdk.projections.ProjectionId'> {
+    /**
+     * Initialises a new instance of the {@link ProjectionId} class.
+     * @param {Guid} id - The projection id.
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.projections.ProjectionId');
     }
 
     /**
-     * Creates a {ProjectionId} from a guid.
-     *
-     * @static
-     * @param {string | Guid | ProjectionId} id
-     * @returns {ProjectionId}
+     * Creates a {@link ProjectionId} from a {@link Guid} or a {@link string}.
+     * @param {string | Guid | ProjectionId} id - The projection id.
+     * @returns {ProjectionId} The created projection id concept.
      */
     static from(id: string | Guid | ProjectionId): ProjectionId {
         if (id instanceof ProjectionId) return id;

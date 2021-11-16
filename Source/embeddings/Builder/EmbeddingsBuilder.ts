@@ -23,15 +23,15 @@ export class EmbeddingsBuilder {
     private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
 
     /**
-     * Initialises a new instance of {@link EmbeddingsBuilder}
-     * @param {IProjectionAssociations} _projectionAssociations The projection associations.
+     * Initialises a new instance of {@link EmbeddingsBuilder}.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      */
     constructor(private readonly _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building an embedding.
-     * @param {EmbeddingId | Guid | string} embeddingId  The unique identifier of the embedding.
-     * @returns {EmbeddingBuilder}
+     * @param {EmbeddingId | Guid | string} embeddingId - The unique identifier of the embedding.
+     * @returns {EmbeddingBuilder} The builder for continuation.
      */
     createEmbedding(embeddingId: EmbeddingId | Guid | string): EmbeddingBuilder {
         const builder = new EmbeddingBuilder(EmbeddingId.from(embeddingId), this._projectionAssociations);
@@ -40,13 +40,15 @@ export class EmbeddingsBuilder {
     }
 
     /**
-     * Register a type as an embedding
-     * @param type The type to register as a embedding.
+     * Register a type as an embedding.
+     * @param type - The type to register as a embedding.
+     * @returns {EmbeddingBuilder} The builder for continuation.
      */
     register<T = any>(type: Constructor<T>): EmbeddingsBuilder;
     /**
      * Register an instance as an embedding.
-     * @param instance The instance to register as an event handler.
+     * @param instance - The instance to register as an event handler.
+     * @returns {EmbeddingBuilder} The builder for continuation.
      */
     register<T = any>(instance: T): EmbeddingsBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
@@ -55,6 +57,16 @@ export class EmbeddingsBuilder {
         return this;
     }
 
+    /**
+     * Builds and registers the embeddings created with the builder.
+     * @param {EmbeddingsClient} client - The client to use to register embeddings.
+     * @param {IContainer} container - The container to use to create new instances of embedding classes.
+     * @param {ExecutionContext} executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All registered event types.
+     * @param {Logger} logger - The logger to use for logging.
+     * @param {Cancellation} cancellation - The cancellation token.
+     * @returns {IEmbeddings} The built embeddings.
+     */
     buildAndRegister(
         client: EmbeddingsClient,
         container: IContainer,

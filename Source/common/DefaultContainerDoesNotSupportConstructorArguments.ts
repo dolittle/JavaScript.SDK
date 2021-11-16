@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * The exception that is thrown when the default container implementation gets asked for an instance that
- * has a constructor that require arguments
+ * has a constructor that require arguments.
  */
 export class DefaultContainerDoesNotSupportConstructorArguments extends Exception {
 

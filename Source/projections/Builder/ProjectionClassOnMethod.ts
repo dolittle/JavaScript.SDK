@@ -4,6 +4,6 @@
 import { ProjectionContext, DeleteReadModelInstance } from '..';
 
 /**
- * Defines the signature of a projection class's on() method
+ * Defines the signature of a projection class's on() method.
  */
 export type ProjectionClassOnMethod<T = any> = (event: T, context: ProjectionContext) => void | DeleteReadModelInstance | Promise<void | DeleteReadModelInstance>;

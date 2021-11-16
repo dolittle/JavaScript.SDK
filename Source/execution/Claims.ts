@@ -15,7 +15,7 @@ export class Claims implements Iterable<Claim> {
 
     /**
      * Creates an instance of claims.
-     * @param {Claim[]} [claims] Claims to initialize with.
+     * @param {Claim[]} [claims] - Claims to initialize with.
      */
     constructor(claims?: Claim[]) {
         if (claims) {

@@ -14,7 +14,7 @@ export class EventHandlers extends IEventHandlers {
 
     /**
      * Initializes an instance of {@link EventHandlers}.
-     * @param {Logger} _logger For logging.
+     * @param {Logger} _logger - For logging.
      */
     constructor(private readonly _logger: Logger) {
         super();

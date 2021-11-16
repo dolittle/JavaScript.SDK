@@ -18,13 +18,13 @@ export class OnDecoratedProjectionMethods {
     static readonly methodsPerProjection: Map<Function, OnDecoratedProjectionMethod[]> = new Map();
 
     /**
-     * Registers on decorated projection methods
-     * @param {Constructor<any>} target Target that owns the on method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event the on method is for or the event.
-     * @param {number | undefined} generation Generation of event type or undefined.
-     * @param {KeySelector} keySelector The key selector to use for this event type.
-     * @param {ProjectionClassOnMethod} method The method that handles the event.
-     * @param {string} name The name of the method.
+     * Registers on decorated projection methods.
+     * @param {Constructor<any>} target - Target that owns the on method.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the on method is for or the event.
+     * @param {number | undefined} generation - Generation of event type or undefined.
+     * @param {KeySelector} keySelector - The key selector to use for this event type.
+     * @param {ProjectionClassOnMethod} method - The method that handles the event.
+     * @param {string} name - The name of the method.
      */
     static register(
         target: Constructor<any>,

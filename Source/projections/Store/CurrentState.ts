@@ -11,9 +11,10 @@ export class CurrentState<TProjection> {
 
     /**
      * Creates an instance of a projections current state.
-     * @template T
-     * @param {CurrentStateType} type The type of the projections current state.
-     * @param {TProjection} state State of the projection.
+     * @param {CurrentStateType} type - The type of the projections current state.
+     * @param {TProjection} state - State of the projection.
+     * @param {Key} key - The key of the projection.
+     * @template TProjection The type of the projection.
      */
     constructor(readonly type: CurrentStateType, readonly state: TProjection, readonly key: Key) {}
 }

@@ -11,10 +11,18 @@ import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecora
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 
 /**
- * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}
+ * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}.
  * @template TAggregateRoot
  */
 export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> extends IAggregateRootOperations<TAggregateRoot> {
+    /**
+     * Initialises a new instance of the {@link AggregateRootOperations} class.
+     * @param {EventSourceId} _eventSourceId - The event source id of the aggregate root to perform operations on.
+     * @param {IEventStore} _eventStore - The event store to fetch committed events from and commit aggregate events with.
+     * @param {Constructor<TAggregateRoot>} _aggregateRootType - The type of the aggregate root implementation.
+     * @param {IEventTypes} _eventTypes - All registered event types.
+     * @param {Logger} _logger - The logger to use for logging.
+     */
     constructor(
         private readonly _eventSourceId: EventSourceId,
         private readonly _eventStore: IEventStore,

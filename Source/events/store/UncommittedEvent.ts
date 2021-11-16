@@ -4,7 +4,7 @@
 import { EventSourceId, EventType, EventTypeId } from '../index';
 
 /**
- * Represents and uncommitted event
+ * Represents and uncommitted event.
  */
 export abstract class UncommittedEvent {
     /**

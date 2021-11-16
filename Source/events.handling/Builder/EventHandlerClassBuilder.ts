@@ -21,10 +21,18 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { handles as handlesDecorator } from './handlesDecorator';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
+/**
+ * Represents an implementation of {@link ICanBuildAndRegisterAnEventHandler} that builds event handlers from classes.
+ * @template T The event handler class type.
+ */
 export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHandler {
     private readonly _eventHandlerType: Constructor<T>;
     private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
 
+    /**
+     * Initialises a new instance of the {@link FailureReason} class.
+     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the event handler.
+     */
     constructor(typeOrInstance: Constructor<T> | T) {
         super();
         if (typeOrInstance instanceof Function) {

@@ -3,9 +3,12 @@
 
 import { Exception } from '@dolittle/rudiments';
 
+/**
+ * Exception to be thrown by users of the SDK when it is not possible to resolve an embedding delete call to events.
+ */
 export class CouldNotResolveDeletionToEvents extends Exception {
     /**
-     * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}
+     * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}.
      */
     constructor() {
         super('resolveDeletionToEvents has failed to process');

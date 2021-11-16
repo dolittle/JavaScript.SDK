@@ -24,14 +24,14 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Initializes a new instance of {@link PrivateEventFilterBuilder}.
-     * @param {FilterId} _filterId Identifier of the filter.
+     * @param {FilterId} _filterId - Identifier of the filter.
      */
     constructor(private _filterId: FilterId) {}
 
     /**
      * Defines which {@link ScopeId} the filter operates on.
-     * @param {ScopeId | Guid | string} scopeId Scope the filter operates on.
-     * @returns {PrivateEventFilterBuilder}
+     * @param {ScopeId | Guid | string} scopeId - Scope the filter operates on.
+     * @returns {PrivateEventFilterBuilder} The builder for continuation.
      */
     inScope(scopeId: ScopeId | Guid | string): PrivateEventFilterBuilder {
         this._scopeId = ScopeId.from(scopeId);
@@ -40,7 +40,7 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Defines the filter to be partitioned.
-     * @returns {PartitionedEventFilterBuilder}
+     * @returns {PrivateEventFilterBuilder} The builder for continuation.
      */
     partitioned(): PartitionedEventFilterBuilder {
         this._innerBuilder = new PartitionedEventFilterBuilder();
@@ -49,7 +49,7 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Defines the filter to be unpartitioned.
-     * @returns {UnpartitionedEventFilterBuilder}
+     * @returns {PrivateEventFilterBuilder} The builder for continuation.
      */
     unpartitioned(): UnpartitionedEventFilterBuilder {
         this._innerBuilder = new UnpartitionedEventFilterBuilder();
@@ -58,12 +58,11 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
-     * @param {FilterId} filterId Unique identifier for the filter.
-     * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext Execution context manager for working with execution context.
-     * @param {IEventTypes} eventTypes Event types for identifying event types.
-     * @param {Logger} logger Logger for logging.
-     * @returns {IFilterProcessor}
+     * @param {FiltersClient} client - The client for working with the filters in the runtime.
+     * @param {ExecutionContext} executionContext - Execution context manager for working with execution context.
+     * @param {IEventTypes} eventTypes - Event types for identifying event types.
+     * @param {Logger} logger - Logger for logging.
+     * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         client: FiltersClient,

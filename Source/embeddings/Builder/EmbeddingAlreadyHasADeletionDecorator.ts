@@ -9,8 +9,8 @@ import { Constructor } from '@dolittle/types';
  */
 export class EmbeddingAlreadyHasADeletionDecorator extends Exception {
     /**
-     * Creates an instance of EmbeddingAlreadyHasADeletionDecorator
-     * @param {Constructor<any>} instance The embedding class that already has a resolveDeletionToEvents method.
+     * Creates an instance of EmbeddingAlreadyHasADeletionDecorator.
+     * @param {Constructor<any>} target - The embedding class that already has a resolveDeletionToEvents method.
      */
     constructor(target: Constructor<any>) {
         super(`Embedding of type ${target.constructor.name} already has a @resolveDeletionToEvents decorator defined for a method.`);

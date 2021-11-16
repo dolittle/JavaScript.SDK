@@ -6,7 +6,7 @@ import { EventType } from './EventType';
 import { EventTypeId } from './EventTypeId';
 
 /**
- * Defines the system for working with {@link EventType}
+ * Defines the system for working with {@link EventType}.
  */
 export abstract class IEventTypes extends Artifacts<EventType, EventTypeId> {
 }

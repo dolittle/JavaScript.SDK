@@ -12,10 +12,10 @@ export class EventContext {
 
     /**
      * Initializes a new instance of {@link EventContext}.
-     * @param {number} sequenceNumber Sequence number in the event log the event belongs to.
-     * @param {EventSourceId} eventSourceId Unique identifier of the event source it originates from.
-     * @param {DateTime} occurred DateTime in UTC for when the event occurred.
-     * @param {ExecutionContext} executionContext The execution context the event happened in.
+     * @param {number} sequenceNumber - Sequence number in the event log the event belongs to.
+     * @param {EventSourceId} eventSourceId - Unique identifier of the event source it originates from.
+     * @param {DateTime} occurred - DateTime in UTC for when the event occurred.
+     * @param {ExecutionContext} executionContext - The execution context the event happened in.
      */
     constructor(
         readonly sequenceNumber: number,

@@ -11,7 +11,7 @@ import { AggregateRootType } from './AggregateRootType';
  */
 export class AggregateRootTypeMap<T> extends ArtifactTypeMap<AggregateRootType, AggregateRootId, T> {
     /**
-     * Initializes a new instance of {@link EventTypeMap}
+     * Initializes a new instance of {@link EventTypeMap}.
      */
     constructor() {
         super();

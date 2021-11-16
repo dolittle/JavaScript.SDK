@@ -8,21 +8,23 @@ import { ConceptAs } from '@dolittle/concepts';
  * A unique identifier to allow us to trace actions and their consequences throughout the system.
  */
 export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.CorrelationId'> {
+    /**
+     * Initialises a new instance of the {@link CorrelationId} class.
+     * @param {Guid} id - The correlation id.
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.CorrelationId');
     }
 
     /**
-     * Represents the system correlation identifier
+     * Represents the system correlation identifier.
      */
     static system = CorrelationId.from('868ff40f-a133-4d0f-bfdd-18d726181e01');
 
     /**
-     * Creates a {CorrelationId} from a guid.
-     *
-     * @static
-     * @param {CorrelationId | Guid | string} id
-     * @returns {CorrelationId}
+     * Creates a {@link CorrelationId} from a {@link Guid} or a {@link string}.
+     * @param {CorrelationId | Guid | string} id - The correlation id.
+     * @returns {CorrelationId} The created correlation id concept.
      */
     static from(id: CorrelationId | Guid | string): CorrelationId {
         if (id instanceof CorrelationId) {
@@ -31,11 +33,9 @@ export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.Corr
         return new CorrelationId(Guid.as(id));
     };
 
-    /**
-     * Creates a new {CorrelationId}
-     *
-     * @static
-     * @returns {CorrelationId}
+    /**.
+     * Generates a new {@link CorrelationId}
+     * @returns {CorrelationId} A new random correlation id.
      */
     static new(): CorrelationId {
         return CorrelationId.from(Guid.create());
