@@ -21,8 +21,9 @@ export class EventType extends Artifact<EventTypeId> {
 
     /**
      * Gets a value indicating whether there is an alias for the Event Type.
+     * @returns {boolean} A value indicating whether there is an alias for the Event Type.
      */
-    get hasAlias() {
+    hasAlias() {
         return this.alias !== undefined;
     }
 
