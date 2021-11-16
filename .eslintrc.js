@@ -13,7 +13,16 @@ module.exports = {
         '@typescript-eslint/unified-signatures': 'off',
         'import/no-extraneous-dependencies': 'off',
         'eol-last': 'error',
-        'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }]
+        'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
+        'header/header': [
+            2,
+            'line',
+            [
+                ' Copyright (c) Dolittle. All rights reserved.',
+                ' Licensed under the MIT license. See LICENSE file in the project root for full license information.',
+            ],
+            2
+        ],
     },
     overrides: [
         {
