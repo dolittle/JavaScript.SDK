@@ -4,18 +4,12 @@
 import { EventLogSequenceNumber } from '../index';
 
 /**
- * The exception that gets thrown when a sequence of events are not valid for the Aggregate Root it is being used with.
- */
-
-/**
- *
+ * Exception that gets thrown when a sequence of events are not valid for the Aggregate Root it is being used with.
  */
 export class EventLogSequenceNumberIsOutOfOrder extends Error {
-
     /**
-     * Initializes a new instance of {@link AggregateRootVersionIsOutOfOrder}.
-     * @param {EventLogSequenceNumber} version - The attempted sequence number.
-     * @param sequenceNumber
+     * Initializes a new instance of the {@link AggregateRootVersionIsOutOfOrder} class.
+     * @param {EventLogSequenceNumber}sequenceNumber - The attempted sequence number.
      * @param {EventLogSequenceNumber} expectedSequenceNumber - The expected sequence number.
      */
     constructor(sequenceNumber: EventLogSequenceNumber, expectedSequenceNumber: EventLogSequenceNumber) {

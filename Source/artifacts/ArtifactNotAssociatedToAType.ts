@@ -6,10 +6,11 @@ import { Artifact, ArtifactIdLike } from './Artifact';
 
 /**
  * Exception that gets thrown when getting the type associated with an artifact and the artifact is not associated to any type.
+ * @template TArtifact The type of the artifact.
  */
 export class ArtifactNotAssociatedToAType<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends Exception {
     /**
-     * Initializes a new instance of {@link ArtifactNotAssociatedToAType}.
+     * Initializes a new instance of the {@link ArtifactNotAssociatedToAType} class.
      * @param {TArtifact} artifact - Artifact that has a missing association.
      */
     constructor(artifact: TArtifact) {

@@ -10,8 +10,7 @@ import { Constructor } from '@dolittle/types';
 export class EmbeddingAlreadyHasAnUpdateDecorator extends Exception {
     /**
      * Creates an instance of EmbeddingAlreadyHasAnUpdateDecorator.
-     * @param {Constructor<any>} instance - The embedding class that already has a resolveUpdateToEvents method.
-     * @param target
+     * @param {Constructor<any>} target - The embedding class that already has a resolveUpdateToEvents method.
      */
     constructor(target: Constructor<any>) {
         super(`Embedding of type ${target.constructor.name} already has a @resolveUpdateToEvents decorator defined for a method.`);

@@ -1,13 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeAlias, EventTypeAliasLike, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes, internal } from '../index';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 /**
- *
+ * Defines the callback for registering event types.
  */
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
@@ -50,7 +51,9 @@ export class EventTypesBuilder {
 
     /**
      * Register the type as an {@link EventType}.
-     * @param type - The type to register as an {@link EventType}.
+     * @param {Constructor<T> }type - The type to register as an {@link EventType}.
+     * @returns {EventTypesBuilder} The builder for continuation.
+     * @template T The type of the event to register.
      */
     register<T = any>(type: Constructor<T>): EventTypesBuilder {
         this.associate(type, EventTypesFromDecorators.eventTypes.getFor(type));
@@ -58,9 +61,8 @@ export class EventTypesBuilder {
     }
 
     /**
-     * Build an artifacts instance.
-     * @param eventTypes
-     * @returns {IArtifacts} Artifacts to work with.
+     * Adds the registered associations into an instance of {@link IEventTypes}.
+     * @param {IEventTypes} eventTypes - The event types to add associations into.
      */
     addAssociationsInto(eventTypes: IEventTypes): void {
         for (const [type, eventType] of this._associations) {
@@ -70,8 +72,8 @@ export class EventTypesBuilder {
 
     /**
      * Builds the event types by registering them with the Runtime.
-     * @param eventTypes - The event types client.
-     * @param cancellation - The cancellation.
+     * @param {internal.EventTypes} eventTypes - The event types client.
+     * @param {Cancellation} cancellation - The cancellation.
      */
     buildAndRegister(eventTypes: internal.EventTypes, cancellation: Cancellation) {
         eventTypes.register(this._associations.map(_ => _[1]), cancellation);

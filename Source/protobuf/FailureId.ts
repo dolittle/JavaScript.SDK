@@ -9,7 +9,8 @@ import { Guid } from '@dolittle/rudiments';
  */
 export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link FailureId} class.
+     * @param {Guid} id - The failure id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.protobuf.FailureId');

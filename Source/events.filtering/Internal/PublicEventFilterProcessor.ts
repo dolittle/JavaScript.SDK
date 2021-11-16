@@ -19,17 +19,18 @@ import { FilterId, PartitionedFilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
 /**
- *
+ * Represents an implementation of {@link FilterEventProcessor} that filters public events to a public stream.
  */
 export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 
     /**
-     * @param filterId
-     * @param _callback
-     * @param _client
-     * @param _executionContext
-     * @param eventTypes
-     * @param logger
+     * Initialises a new instance of the {@link PublicEventFilterProcessor} class.
+     * @param {FilterId} filterId - The filter id.
+     * @param {PartitionedFilterEventCallback} _callback - The filter callback.
+     * @param {FiltersClient} _client - The filters client to use to register the filter.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All registered event types.
+     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         filterId: FilterId,
@@ -42,21 +43,14 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         super('Public Filter', filterId, eventTypes, logger);
     }
 
-    /**
-     *
-     */
+    /** @inheritdoc */
     protected get registerArguments(): PublicFilterRegistrationRequest {
         const registerArguments = new PublicFilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
         return registerArguments;
     }
 
-    /**
-     * @param registerArguments
-     * @param callback
-     * @param pingTimeout
-     * @param cancellation
-     */
+    /** @inheritdoc */
     protected createClient(
         registerArguments: PublicFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
@@ -83,19 +77,14 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         );
     }
 
-    /**
-     * @param failure
-     */
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): PartitionedFilterResponse {
         const response = new PartitionedFilterResponse();
         response.setFailure(failure);
         return response;
     }
 
-    /**
-     * @param event
-     * @param context
-     */
+    /** @inheritdoc */
     protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 

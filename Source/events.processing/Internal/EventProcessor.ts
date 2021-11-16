@@ -18,13 +18,16 @@ import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
+ * @template TIdentifier The type of the event processor identifier.
+ * @template TRequest The type of the event processor requests.
  */
 export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
 
     /**
-     * @param _kind
-     * @param _identifier
-     * @param _logger
+     * Initialises a new instance of the {@link EventProcessor} class.
+     * @param {string} _kind - The kind of the event processor.
+     * @param {TIdentifier} _identifier - The identifier of the event processor.
+     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         protected _kind: string,

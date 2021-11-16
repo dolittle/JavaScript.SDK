@@ -19,8 +19,8 @@ export class OnDecoratedEmbeddingMethods {
     /**
      * Registers on decorated embedding methods.
      * @param {Constructor<any>} target - Target that owns the on method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the on method is for or the event.
-     * @param {Generation | number | undefined} generation - Generation of event type or undefined.
+     * @param {Constructor<any> | EventTypeIdLike} eventTypeOrId - Type or event type id of event the on method is for or the event.
+     * @param {GenerationLike | undefined} generation - Generation of event type or undefined.
      * @param {EmbeddingClassOnMethod} method - The method that handles the event.
      * @param {string} name - The name of the method.
      */

@@ -9,7 +9,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.CorrelationId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link CorrelationId} class.
+     * @param {Guid} id - The correlation id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.CorrelationId');
@@ -21,11 +22,9 @@ export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.Corr
     static system = CorrelationId.from('868ff40f-a133-4d0f-bfdd-18d726181e01');
 
     /**
-     * Creates a {CorrelationId} from a guid.
-     *
-     * @static
-     * @param {CorrelationId | Guid | string} id
-     * @returns {CorrelationId}
+     * Creates a {@link CorrelationId} from a {@link Guid} or a {@link string}.
+     * @param {CorrelationId | Guid | string} id - The correlation id.
+     * @returns {CorrelationId} The created correlation id concept.
      */
     static from(id: CorrelationId | Guid | string): CorrelationId {
         if (id instanceof CorrelationId) {
@@ -35,10 +34,8 @@ export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.Corr
     };
 
     /**.
-     * Creates a new {CorrelationId}
-     *
-     * @static
-     * @returns {CorrelationId}
+     * Generates a new {@link CorrelationId}
+     * @returns {CorrelationId} A new random correlation id.
      */
     static new(): CorrelationId {
         return CorrelationId.from(Guid.create());

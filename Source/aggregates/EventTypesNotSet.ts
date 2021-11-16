@@ -6,13 +6,9 @@ import { Exception } from '@dolittle/rudiments';
 /**
  * The exception that gets thrown when a event types is not set and is expected.
  */
-
-/**
- *
- */
 export class EventTypesNotSet extends Exception {
     /**
-     *
+     * Initialises a new instance of the {@link EventTypesNotSet} class.
      */
     constructor() {
         super('Event types is not set on the Aggregate Root. Aggregate Roots must be constructed through the Client.');

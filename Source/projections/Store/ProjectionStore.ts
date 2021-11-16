@@ -29,10 +29,11 @@ export class ProjectionStore extends IProjectionStore {
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
     /**
-     * @param _projectionsClient
-     * @param _executionContext
-     * @param _projectionAssociations
-     * @param _logger
+     * Initialises a new instance of the {@link ProjectionStore} class.
+     * @param {ProjectionsClient} _projectionsClient - The projections client to use to get projection states.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {IProjectionAssociations} _projectionAssociations - All the types associated with projections.
+     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,

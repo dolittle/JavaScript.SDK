@@ -5,9 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * Exception that gets thrown when attempting to register a projection by instance, that is not a class.
- *
- * @export
- * @class CannotRegisterProjectionThatIsNotAClass
  * @augments {Exception}
  */
 export class CannotRegisterProjectionThatIsNotAClass extends Exception {

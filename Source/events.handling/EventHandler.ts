@@ -20,7 +20,7 @@ export class EventHandler extends IEventHandler {
      * @param {ScopeId} scopeId - The identifier of the scope the event handler is in.
      * @param {boolean} partitioned - Whether or not the event handler is partitioned.
      * @param {EventTypeMap<EventHandlerSignature<any>>} handleMethodsByEventType - Handle methods per event type.
-     * @param alias
+     * @param {EventHandlerAlias | undefined} alias - The optional event handler alias.
      */
     constructor(
         readonly eventHandlerId: EventHandlerId,

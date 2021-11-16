@@ -38,7 +38,8 @@ export class Version {
     static readonly first = new Version(1, 0, 0, 0);
 
     /**
-     *
+     * Converts the {@link Version} to a string.
+     * @returns {string} The version as a string.
      */
     toString() {
         let version = `${this.major}.${this.minor}.${this.patch}`;

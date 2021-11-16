@@ -9,27 +9,29 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
 import { AggregateRootType, IAggregateRootTypes } from '../index';
+
 /**
  * Represents a system that knows how to register Aggregate Roots with the Runtime.
  */
 export class AggregateRoots {
 
     /**
-     * Initializes an instance of the {@link EventTypes} class.
-     * @param _client - The event types client.
-     * @param _executionContext - The execution context.
-     * @param _logger - The logger.
+     * Initializes an instance of the {@link AggregateRoots} class.
+     * @param {AggregateRootsClient} _client - The aggregate roots client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {Logger} _logger - The logger.
      */
     constructor(readonly _client: AggregateRootsClient, readonly _executionContext: ExecutionContext, readonly _logger: Logger) {
     }
 
     /**
-     * Registers event types.
-     * @param eventTypes - The event types to register.
-     * @param cancellation - The cancellation.
+     * Registers aggregate roots.
+     * @param {IAggregateRootTypes} aggregateRootTypes - The aggregate root types to register.
+     * @param {Cancellation} cancellation - The cancellation.
+     * @returns {Promise<void>} A {@link Promise} that represents the asynchronous operation.
      */
-    register(eventTypes: IAggregateRootTypes, cancellation: Cancellation): Promise<any> {
-        return Promise.all(eventTypes.getAll().map(eventType => this.sendRequest(eventType, cancellation)));
+    register(aggregateRootTypes: IAggregateRootTypes, cancellation: Cancellation): Promise<void> {
+        return Promise.all(aggregateRootTypes.getAll().map(eventType => this.sendRequest(eventType, cancellation))) as unknown as Promise<void>;
     }
 
     private createRequest(aggregateRootType: AggregateRootType): AggregateRootAliasRegistrationRequest {
@@ -42,8 +44,8 @@ export class AggregateRoots {
         return result;
     }
 
-    private async sendRequest(aggregateRootType: AggregateRootType, cancellation: Cancellation): Promise<any> {
-    const request = this.createRequest(aggregateRootType);
+    private async sendRequest(aggregateRootType: AggregateRootType, cancellation: Cancellation): Promise<void> {
+        const request = this.createRequest(aggregateRootType);
         this._logger.debug(`Registering Alias ${aggregateRootType.alias?.value} for Aggregate Root ${aggregateRootType.id.value.toString()}`);
         try {
             const response = await reactiveUnary(this._client, this._client.registerAlias, request, cancellation).toPromise();

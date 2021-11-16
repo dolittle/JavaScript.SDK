@@ -30,7 +30,7 @@ export class SubscriptionsBuilderForConsumerTenant {
     /**
      * Sets the producer microservice to subscribe to events from.
      * @param {Guid | string | MicroserviceId} microserviceId - Microservice to build for.
-     * @returns {SubscriptionBuilderForProducerMicroservice}
+     * @returns {SubscriptionBuilderForProducerMicroservice} The builder for creating event horizon subscriptions.
      */
     fromProducerMicroservice(microserviceId: MicroserviceId | Guid | string): SubscriptionBuilderForProducerMicroservice {
         const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microserviceId));
@@ -41,7 +41,7 @@ export class SubscriptionsBuilderForConsumerTenant {
     /**
      * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
      * @param {SubscriptionCompleted} completed - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant}
+     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
      * @summary The callback will be called on each subscription for the tenant.
      */
     onCompleted(completed: SubscriptionCompleted): SubscriptionsBuilderForConsumerTenant {
@@ -52,7 +52,7 @@ export class SubscriptionsBuilderForConsumerTenant {
     /**
      * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
      * @param {SubscriptionSucceeded} succeeded - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant}
+     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
      * @summary The callback will be called on each subscription for the tenant.
      */
     onSuccess(succeeded: SubscriptionSucceeded): SubscriptionsBuilderForConsumerTenant {
@@ -63,7 +63,7 @@ export class SubscriptionsBuilderForConsumerTenant {
     /**
      * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
      * @param {SubscriptionFailed} failed - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant}
+     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
      * @summary The callback will be called on each subscription for the tenant.
      */
     onFailure(failed: SubscriptionFailed): SubscriptionsBuilderForConsumerTenant {
@@ -73,7 +73,7 @@ export class SubscriptionsBuilderForConsumerTenant {
 
     /**
      * Build the {@link SubscriptionsBuilderForConsumerTenant} instance.
-     * @returns {TenantWithSubscriptions}
+     * @returns {TenantWithSubscriptions} The built subscriptions for the specified tenant.
      */
     build(): TenantWithSubscriptions {
         const subscriptions = this._subscriptionBuilders.map(_ => _.build(this._callbacks.responses));

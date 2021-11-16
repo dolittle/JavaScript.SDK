@@ -7,12 +7,13 @@ import { EventType } from '@dolittle/sdk.events';
 import { ProjectionId } from './ProjectionId';
 
 /**
- * Exception that is thrown when there is no projection for a specific event type.
+ * Exception that is thrown when there is no on() method for a specific event type on a projection.
  */
 export class MissingOnMethodForType extends Exception {
     /**
-     * @param projectionId
-     * @param eventType
+     * Initialises a new instance of the {@link MissingOnMethodForType} class.
+     * @param {ProjectionId} projectionId - The projection that is missing the on() method.
+     * @param {EventType} eventType - The event type that the method is missing for.
      */
     constructor(projectionId: ProjectionId, eventType: EventType) {
         super(`Missing on() method for ${eventType} in projection ${projectionId}`);

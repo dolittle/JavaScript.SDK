@@ -21,9 +21,6 @@ export class CommittedAggregateEvent extends CommittedEvent {
      * @param {EventType} type - Type of event.
      * @param {*} content - Actual content of the event.
      * @param {boolean} isPublic - Whether or not the event is a public event.
-     * @param {boolean} isExternal - Whether or not the event is originating externally.
-     * @param {number} externalEventLogSequenceNumber - If external; the external event log sequence number.
-     * @param {DateTime} externalEventReceived - If external; timestamp for when it was received.
      */
     constructor(
         readonly eventLogSequenceNumber: EventLogSequenceNumber,

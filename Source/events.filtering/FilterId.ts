@@ -9,18 +9,17 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class FilterId extends ConceptAs<Guid, '@dolittle/sdk.events.filtering.FilterId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link FilterId} class.
+     * @param {Guid} id - The filter id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.filtering.FilterId');
     }
 
     /**
-     * Creates a {FilterId} from a guid.
-     *
-     * @static
-     * @param {(Guid | string)} id
-     * @returns {FilterId}
+     * Creates a {@link FilterId} from a {@link Guid} or a {@link string}.
+     * @param {Guid | string} id - The filter id.
+     * @returns {FilterId} The created filter id concept.
      */
     static from(id: string | Guid | FilterId): FilterId {
         if (id instanceof FilterId) return id;

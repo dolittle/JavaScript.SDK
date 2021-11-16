@@ -10,7 +10,8 @@ import { KeySelector } from './KeySelector';
  */
 export class UnknownKeySelectorType extends Exception {
     /**
-     * @param selectorType
+     * Initialises a new instance of the {@link UnknownKeySelectorType} class.
+     * @param {KeySelector} selectorType - The key selector type that is not implemented.
      */
     constructor(selectorType: KeySelector) {
         super(`The key selector type '${Object.getPrototypeOf(selectorType).constructor.name}' is not implemented`);

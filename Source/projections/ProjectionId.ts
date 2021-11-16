@@ -9,7 +9,8 @@ import { Guid } from '@dolittle/rudiments';
  */
 export class ProjectionId extends ConceptAs<Guid, '@dolittle/sdk.projections.ProjectionId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link ProjectionId} class.
+     * @param {Guid} id - The projection id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.projections.ProjectionId');

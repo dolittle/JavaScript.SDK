@@ -5,21 +5,19 @@ import { Guid } from '@dolittle/rudiments';
 import { Generation } from './Generation';
 
 /**
- *
+ * Defines the types that can be used as artifact identifiers.
  */
 export type ArtifactIdLike = { value: Guid };
 
 /**
  * Represents the base representation of an Artifact.
- *
- * @export
- * @class Artifact
+ * @template TId The artifact identifier type.
  */
 export abstract class Artifact<TId extends ArtifactIdLike> {
 
     /**
      * Initializes a new instance of {@link EventType}.
-     * @param {EventTypeId} id - The unique identifier of the artifact.
+     * @param {TId} id - The unique identifier of the artifact.
      * @param {Generation} [generation] - Optional generation - will default to {@link generation.first}.
      */
     constructor(readonly id: TId, readonly generation: Generation = Generation.first) {

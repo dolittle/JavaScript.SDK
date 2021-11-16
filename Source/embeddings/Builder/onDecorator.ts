@@ -14,10 +14,6 @@ type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor
  */
 export function on<T>(type: Constructor<T>): Returns;
 export function on(eventType: EventTypeIdLike): Returns;
-/**
- * @param typeOrId
- * @param generation
- */
 export function on<T>(typeOrId: Constructor<T> | EventTypeIdLike, generation?: GenerationLike) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         OnDecoratedEmbeddingMethods.register(target.constructor, typeOrId, generation, descriptor.value, propertyKey);

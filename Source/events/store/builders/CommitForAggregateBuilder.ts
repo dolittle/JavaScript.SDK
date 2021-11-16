@@ -14,10 +14,11 @@ export class CommitForAggregateBuilder {
     private _builder?: CommitForAggregateWithEventSourceBuilder;
 
     /**
-     * @param _eventStore
-     * @param _eventTypes
-     * @param _aggregateRootId
-     * @param _logger
+     * Initialises a new instance of the {@link CommitForAggregateBuilder} class.
+     * @param {IEventStore} _eventStore - The event store to use for committing events.
+     * @param {IEventTypes} _eventTypes - All registered event types.
+     * @param {AggregateRootId} _aggregateRootId - The aggregate root type identifier to commit events for.
+     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         private readonly _eventStore: IEventStore,

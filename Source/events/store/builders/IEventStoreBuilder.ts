@@ -7,10 +7,6 @@ import { IEventStore } from '../index';
 /**
  * Defines a builder for {@link IEventStore}.
  */
-
-/**
- *
- */
 export abstract class IEventStoreBuilder {
     /**
      * Build an {@link IEventStore} for the given tenant.

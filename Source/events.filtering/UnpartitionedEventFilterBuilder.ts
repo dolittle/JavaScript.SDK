@@ -31,12 +31,12 @@ export class UnpartitionedEventFilterBuilder {
     /**
      * Build an instance of a {@link IFilterProcessor}.
      * @param {FilterId} filterId - Unique identifier for the filter.
-     * @param scopeId
+     * @param {ScopeId} scopeId - The scope of the filter.
      * @param {FiltersClient} client - The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
      * @param {Logger} logger - Logger for logging.
-     * @returns {IFilterProcessor}
+     * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         filterId: FilterId,

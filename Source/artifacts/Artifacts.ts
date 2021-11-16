@@ -18,8 +18,7 @@ import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends IArtifacts<TArtifact, TId> {
     /**
      * Initializes a new instance of {@link EventTypes}.
-     * @param {ArtifactTypeMap<Constructor<any>>} [associations] - Known associations.
-     * @param _associations
+     * @param {ArtifactTypeMap<Constructor<any>>} _associations - Known associations.
      */
     constructor(private _associations: ArtifactTypeMap<TArtifact, TId, Constructor<any>>) {
         super();

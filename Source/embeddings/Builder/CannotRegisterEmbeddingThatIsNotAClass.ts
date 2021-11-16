@@ -5,10 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * Exception that gets thrown when attempting to register a embedding by instance, that is not a class.
- *
- * @export
- * @class CannotRegisterEmbeddingThatIsNotAClass
- * @augments {Exception}
  */
 export class CannotRegisterEmbeddingThatIsNotAClass extends Exception {
     /**

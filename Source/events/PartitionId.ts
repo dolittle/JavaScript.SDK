@@ -9,7 +9,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class PartitionId extends ConceptAs<string, '@dolittle/sdk.events.PartitionId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link PartitionId} class.
+     * @param {string} id - The partition id.
      */
     constructor(id: string) {
         super(id, '@dolittle/sdk.events.PartitionId');
@@ -21,11 +22,9 @@ export class PartitionId extends ConceptAs<string, '@dolittle/sdk.events.Partiti
     static unspecified: PartitionId = PartitionId.from(Guid.empty.toString());
 
     /**
-     * Creates a {PartitionId} from a guid.
-     *
-     * @static
-     * @param {PartitionId | Guid | string} id
-     * @returns {PartitionId}
+     * Creates a {@link PartitionId} from a {@link Guid} or a {@link string}.
+     * @param {PartitionId | Guid | string} id - The partition id.
+     * @returns {PartitionId} The created partition id concept.
      */
     static from(id: PartitionId | Guid | string): PartitionId {
         if (id instanceof PartitionId) return id;

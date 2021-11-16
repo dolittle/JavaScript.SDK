@@ -11,11 +11,12 @@ import { EventHandlerAlias, EventHandlerId } from '../index';
  */
 export class EventHandlerDecoratedType {
     /**
-     * @param eventHandlerId
-     * @param scopeId
-     * @param partitioned
-     * @param alias
-     * @param type
+     * Initialises a new instance of the {@link EventHandlerDecoratedType} class.
+     * @param {EventHandlerId} eventHandlerId - The event handler id.
+     * @param {ScopeId} scopeId - The event handler scope id.
+     * @param {boolean} partitioned - Whether the event handler is partitioned or not.
+     * @param {EventHandlerAlias} alias - The alias of the event handler.
+     * @param {Constructor<any>} type - The type that implements the event handler.
      */
     constructor(
         readonly eventHandlerId: EventHandlerId,

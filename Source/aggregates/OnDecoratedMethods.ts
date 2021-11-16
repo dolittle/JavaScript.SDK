@@ -10,20 +10,20 @@ import { OnMethodSignature } from './OnMethodSignature';
 import { OnDecoratedMethod } from './OnDecoratedMethod';
 
 /**
- * Defines the system that knows about all the methods decorated with the handle decorator.
+ * Defines the system that knows about all the methods decorated with the on decorator.
  */
 export class OnDecoratedMethods {
     /**
-     * All handle methods grouped by their event handler.
+     * All on methods grouped by their aggregate root.
      */
     static readonly methodsPerAggregate: Map<Function, OnDecoratedMethod[]> = new Map();
 
     /**
-     * Registers handles decorated methods.
-     * @param {Constructor<any>} target - Target that owns the handle method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the handle method is for or the event.
+     * Registers on decorated methods.
+     * @param {Constructor<any>} target - Target that owns the on method.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the handle on is for or the event.
      * @param {number | undefined} generation - Generation of event type or undefined.
-     * @param {EventHandlerSignature<any>} method - The handle method.
+     * @param {OnMethodSignature<any>} method - The on method.
      * @param {string} name - The name of the method.
      */
     static register(

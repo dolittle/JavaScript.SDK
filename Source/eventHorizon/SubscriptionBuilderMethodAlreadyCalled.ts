@@ -5,10 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * Exception that gets thrown when a method is called more than once while building an event horizon subscription.
- *
- * @export
- * @class SubscriptionBuilderMethodAlreadyCalled
- * @augments {Exception}
  */
 export class SubscriptionBuilderMethodAlreadyCalled extends Exception {
     /**

@@ -16,7 +16,7 @@ import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbeddi
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 
 /**
- * Represents a builder for building embeddings inline.
+ * Represents a builder for building {@link IEmbedding}.
  */
 export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
     private _readModelTypeOrInstance?: Constructor<any> | any;
@@ -34,7 +34,8 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
      * created read model is given by the provided instance or an instance constructed by
      * the default constructor of the provided type.
      * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the read model.
-     * @returns {EmbeddingBuilderForReadModel<T>}
+     * @returns {EmbeddingBuilderForReadModel<T>} The embedding builder for the specified read model type.
+     * @template T The type of the embedding read model.
      */
     forReadModel<T>(typeOrInstance: Constructor<T> | T): EmbeddingBuilderForReadModel<T> {
         if (this._readModelTypeOrInstance) {

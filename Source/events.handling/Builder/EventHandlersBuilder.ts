@@ -19,7 +19,7 @@ import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
 /**
- *
+ * Defines the callback for configuring event handlers.
  */
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
@@ -33,6 +33,7 @@ export class EventHandlersBuilder {
      * Start building an event handler.
      * @param {EventHandlerId | Guid | string} eventHandlerId - The unique identifier of the event handler.
      * @param {EventHandlerBuilderCallback} callback - Callback for building out the event handler.
+     * @returns {EventHandlersBuilder} The builder for continuation.
      */
     createEventHandler(eventHandlerId: EventHandlerId | Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
         const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
@@ -57,14 +58,14 @@ export class EventHandlersBuilder {
     }
 
     /**
-     * Builds an instance for holding event handlers.
-     * @param client
-     * @param container
-     * @param executionContext
-     * @param eventTypes
-     * @param logger
-     * @param cancellation
-     * @returns {IEventHandlers} New instance.
+     * Builds and registers the event handlers created with the builder.
+     * @param {EventHandlersClient} client - The event handlers client to use to register the event handlers.
+     * @param {IContainer} container - The container to use to create new instances of event handler types.
+     * @param {ExecutionContext} executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All the registered event types.
+     * @param {Logger} logger - The logger to use for logging.
+     * @param {Cancellation} cancellation - The cancellation token.
+     * @returns {IEventHandlers} The built event handlers.
      */
     buildAndRegister(
         client: EventHandlersClient,

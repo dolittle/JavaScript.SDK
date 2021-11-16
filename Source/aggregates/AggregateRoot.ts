@@ -21,7 +21,8 @@ export class AggregateRoot {
     private _eventTypes!: IEventTypes;
 
     /**
-     * @param eventSourceId
+     * Initialises a new instance of the {@link AggregateRoot} class.
+     * @param {EventSourceId} eventSourceId - The event source id of the aggregate root.
      */
     constructor(readonly eventSourceId: EventSourceId) {
         this._aggregateRootType = Object.getPrototypeOf(this).constructor;
@@ -39,7 +40,6 @@ export class AggregateRoot {
 
     /**
      * Sets the aggregate root id - internal use.
-     * @internal
      */
     set aggregateRootId(value: AggregateRootId) {
         this._aggregateRootId = value;
@@ -47,7 +47,6 @@ export class AggregateRoot {
 
     /**
      * Sets the event types - internal use.
-     * @internal
      */
     set eventTypes(value: IEventTypes) {
         this._eventTypes = value;
@@ -55,7 +54,6 @@ export class AggregateRoot {
 
     /**
      * Gets the version of the aggregate root.
-     * @returns {AggregateRootVersion}
      */
     get version(): AggregateRootVersion {
         return this._version;
@@ -63,7 +61,6 @@ export class AggregateRoot {
 
     /**
      * Gets all applied events.
-     * @returns {AppliedEvent[]}
      */
     get appliedEvents(): AppliedEvent[] {
         return this._appliedEvents;
@@ -88,7 +85,8 @@ export class AggregateRoot {
     }
 
     /**
-     * @param committedEvents
+     * Re-applies the committed aggregate events to rehydrate the state of the aggregate root by calling on()-methods and incrementing the in-memory version.
+     * @param {CommittedAggregateEvents} committedEvents - The events to re-apply.
      */
     reApply(committedEvents: CommittedAggregateEvents) {
         this.throwIfEventWasAppliedToOtherEventSource(committedEvents);

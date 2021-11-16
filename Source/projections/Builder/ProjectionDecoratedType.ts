@@ -11,9 +11,10 @@ import { ProjectionId } from '..';
  */
 export class ProjectionDecoratedType {
     /**
-     * @param projectionId
-     * @param scopeId
-     * @param type
+     * Initialises a new instance of the {@link ProjectionDecoratedType} class.
+     * @param {ProjectionId} projectionId - The identifier of the projection.
+     * @param {ScopeId} scopeId - The scope of the projection.
+     * @param {Constructor<any>} type - The decorated type.
      */
     constructor(
         readonly projectionId: ProjectionId,

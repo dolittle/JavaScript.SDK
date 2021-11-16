@@ -9,10 +9,6 @@ import { IAggregateRootOperations } from './IAggregateRootOperations';
  * Defines a way to work with an {@link AggregateRoot}.
  * @template TAggregate
  */
-
-/**
- *
- */
 export abstract class IAggregateOf<TAggregate extends AggregateRoot> {
 
     /**

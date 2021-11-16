@@ -6,12 +6,13 @@ import { Constructor } from '@dolittle/types';
 import { Artifact, ArtifactIdLike } from './Artifact';
 
 /**
- *
+ * Represents a reference to an artifact through the artifact itself or just the id.
  */
 export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> = TArtifact | TId | Guid | string;
 
 /**
  * Defines the system for working with {@link Artifact}.
+ * @template TArtifact The type of the artifact.
  */
 export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> {
 
@@ -53,7 +54,6 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Ar
      * @param object - Object to resolve for.
      * @param [input] - Optional input as an artifact or representations of artifacts as identifier.
      * @returns {TArtifact} Resolved event type.
-     * @throws {UnableToResolveArtifact} If not able to resolve artifact.
      */
     abstract resolveFrom(object: any, input?: ArtifactOrId<TArtifact, TId>): TArtifact;
 

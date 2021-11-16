@@ -22,7 +22,7 @@ export class PartitionedEventFilterBuilder {
 
     /**
      * Configured the handle callback.
-     * @param {PartitionedFilterEventCallback} callback
+     * @param {PartitionedFilterEventCallback} callback - The callback that will be called for each event.
      */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
@@ -36,7 +36,7 @@ export class PartitionedEventFilterBuilder {
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
      * @param {Logger} logger - Logger for logging.
-     * @returns {IFilterProcessor}
+     * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         filterId: FilterId,

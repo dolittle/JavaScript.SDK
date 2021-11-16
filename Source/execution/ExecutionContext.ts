@@ -16,14 +16,11 @@ export class ExecutionContext {
 
     /**
      * Creates an instance of execution context.
-     * @param {MicroserviceId} microserviceId - The microservice identifier.
-     * @param {TenantId} tenantId - The current tenant identifier.
-     * @param _microserviceId
-     * @param _tenantId
+     * @param {MicroserviceId}_microserviceId - The microservice identifier.
+     * @param {TenantId} _tenantId - The current tenant identifier.
      * @param {Version} version - The current version of the software.
      * @param {string} environment - The current environment running in.
-     * @param {CorrelationId} correlationId - The current correlation id for execution context being performed.
-     * @param _correlationId
+     * @param {CorrelationId} _correlationId - The current correlation id for execution context being performed.
      * @param {Claims} claims - The current claims for the context.
      */
     constructor(
@@ -37,19 +34,16 @@ export class ExecutionContext {
 
     /**
      * Gets the microservice identifier.
-     * @returns {MicroserviceId}
      */
     get microserviceId(): MicroserviceId { return this._microserviceId; }
 
     /**
      * Gets the tenant identifier.
-     * @returns {Guid}
      */
     get tenantId(): TenantId { return this._tenantId; }
 
     /**
      * Gets the correlation identifier.
-     * @returns {CorrelationId}
      */
     get correlationId(): CorrelationId { return this._correlationId; }
 

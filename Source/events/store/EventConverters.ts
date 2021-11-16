@@ -26,11 +26,11 @@ export class EventConverters {
 
     /**
      * Creates an uncommitted event from given parameters.
-     * @param {*} event - Event content to constructor with.
+     * @param {any} event - Event content to constructor with.
      * @param {EventSourceId} eventSourceId - The unique identifier of the event source that the event is originating from.
      * @param {EventType} eventType - The event type.
      * @param {boolean} isPublic - Whether or not it is a public event.
-     * @returns {UncommittedEvent} Constructed uncommitted event.
+     * @returns {PbUncommittedEvent} Constructed uncommitted event.
      */
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
@@ -43,10 +43,10 @@ export class EventConverters {
 
     /**
      * Creates an uncommitted embedding event (aka an event without an eventsourceid) from given parameters.
-     * @param {*} event - Event content to constructor with.
+     * @param {any} event - Event content to constructor with.
      * @param {EventType} eventType - The event type.
      * @param {boolean} isPublic - Whether or not it is a public event.
-     * @returns {UncommittedEvent} Constructed uncommitted event.
+     * @returns {PbUncommittedEvent} Constructed uncommitted event.
      */
     static getUncommittedEmbeddingEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
@@ -58,8 +58,7 @@ export class EventConverters {
 
     /**
      * Creates an uncommitted aggregate event from given parameters.
-     * @param {*} event - Event content to constructor with.
-     * @param {EventSourceId} eventSourceId - The unique identifier of the event source that the event is originating from.
+     * @param {any} event - Event content to constructor with.
      * @param {EventType} eventType - Artifact of the event type.
      * @param {boolean} isPublic - Whether or not it is a public event.
      * @returns {PbUncommittedAggregateEvents.UncommittedAggregateEvent} Constructed uncommitted event.
@@ -73,10 +72,12 @@ export class EventConverters {
     }
 
     /**
-     * @param aggregateRootId
-     * @param eventSourceId
-     * @param aggregateRootVersion
-     * @param input
+     * Convert a protobuf committed aggregate event to SDK representation.
+     * @param {AggregateRootId} aggregateRootId - The aggregate root id that committed the event.
+     * @param {EventSourceId} eventSourceId - The event source id that the event was committed to.
+     * @param {AggregateRootVersion} aggregateRootVersion - The aggregate root version that commited the event.
+     * @param {PbCommittedAggregateEvents.CommittedAggregateEvent} input - Committed aggregate event.
+     * @returns {SdkCommittedAggregateEvent} SDK representation.
      */
     static toSDKAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, aggregateRootVersion: AggregateRootVersion, input: PbCommittedAggregateEvents.CommittedAggregateEvent): SdkCommittedAggregateEvent {
         const executionContext = input.getExecutioncontext();

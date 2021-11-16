@@ -7,6 +7,7 @@ type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor
 
 /**
  * Decorator for decorating the compare function in an embedding class.
+ * @returns {(any) => void} The decorator to apply.
  */
 export function resolveUpdateToEvents(): Returns {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {

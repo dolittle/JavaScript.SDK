@@ -59,7 +59,7 @@ export abstract class IEventStore {
      * The events can only be committed to the Event Store if the version of Aggregate Root has not changed.
      * @param {EventType|Guid|string} [eventType] - An artifact or an identifier representing the artifact.
      * @param {Cancellation} cancellation - The cancellation signal.
-     * @returns {Promise<CommitEventsResponse>}
+     * @returns {Promise<CommitAggregateEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated artifacts based
      * on the actual type of the event.
      */
@@ -77,7 +77,7 @@ export abstract class IEventStore {
 
     /**
      * Commit for aggregate root.
-     * @param {AggregateRoot} aggregateRootId - Aggregate root to commit for.
+     * @param {AggregateRootId} aggregateRootId - Aggregate root to commit for.
      * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {CommitForAggregateBuilder}
      */

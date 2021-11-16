@@ -8,7 +8,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class FailureReason extends ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'> {
     /**
-     * @param reason
+     * Initialises a new instance of the {@link FailureReason} class.
+     * @param {string} reason - The failure reason.
      */
     constructor(reason: string) {
         super(reason, '@dolittle/sdk.protobuf.FailureReason');

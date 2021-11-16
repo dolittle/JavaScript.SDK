@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
 /**
- *
+ * Defines the types that can be converted to a {@link TenantId}.
  */
 export type TenantIdLike = string | Guid | TenantId;
 
@@ -14,7 +14,8 @@ export type TenantIdLike = string | Guid | TenantId;
  */
 export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link TenantId} class.
+     * @param {Guid} id - The tenant id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.TenantId');
@@ -36,10 +37,9 @@ export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'
     static development: TenantId = TenantId.from('445f8ea8-1a6f-40d7-b2fc-796dba92dc44');
 
     /**
-     * Creates a {@link TenantId} from a guid.
-     *
-     * @param id - Hello.
-     * @returns {TenantId}
+     * Creates a {@link TenantId} from a {@link TenantIdLike}.
+     * @param {TenantIdLike} id - The tenant id.
+     * @returns {TenantId} The created tenant id concept.
      */
     static from(id: TenantIdLike): TenantId {
         if (id instanceof TenantId) return id;

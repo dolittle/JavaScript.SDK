@@ -8,7 +8,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Environment'> {
     /**
-     * @param env
+     * Initialises a new instance of the {@link Environment} class.
+     * @param {string} env - The environment.
      */
     constructor(env: string) {
         super(env, '@dolittle/sdk.execution.Environment');
@@ -30,7 +31,9 @@ export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Envi
     static development: Environment = Environment.from('Development');
 
     /**
-     * @param env
+     * Creates an {@link Environment} from a {@link string}.
+     * @param {Environment | string} env - The environment.
+     * @returns {Environment} The created environement concept.
      */
     static from(env: Environment | string): Environment {
         if (env instanceof Environment) return env;

@@ -51,9 +51,8 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
      * @param {IEmbedding<TReadModel>} _embedding - The embedding.
      * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param {IEventType} _eventTypes - The registered event types for this embedding.
-     * @param _logger
-     * @param {ILogger} logger - Logger for logging.
+     * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
+     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,

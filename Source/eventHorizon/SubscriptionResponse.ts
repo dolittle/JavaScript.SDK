@@ -20,8 +20,10 @@ export class SubscriptionResponse {
     }
 
     /**
-     * @param consentId
-     * @param failure
+     * Creates a {@link SubscriptionResponse} from a consent and a potential failure.
+     * @param {Guid | string} consentId - The consent identifier for the subscription.
+     * @param {Failure} failure - The optional failure that occured during subscription.
+     * @returns {SubscriptionResponse} The created subscription response.
      */
     static from(consentId: Guid | string, failure?: Failure): SubscriptionResponse {
         return new SubscriptionResponse(ConsentId.from(consentId), failure);

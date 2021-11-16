@@ -21,12 +21,11 @@ export class SubscriptionBuilderForProducerPartition {
     private _builder?: SubscriptionBuilderForConsumerScope;
 
     /**
-     * Initializes a new instance of {@link SubscriptionBuilderForProducerTenant}.
+     * Initializes a new instance of the {@link SubscriptionBuilderForProducerTenant} class.
      * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
-     * @param {Observable<SubscriptionCallbackArguments>} responsesSource - The source of responses.
-     * @param _producerTenantId
-     * @param _producerStreamId
-     * @param _producerPartitionId
+     * @param {TenantId} _producerTenantId - The producer tenant id the subscriptions are for.
+     * @param {StreamId} _producerStreamId - The producer stream id the subscriptions are for.
+     * @param {PartitionId} _producerPartitionId - The producer partition id the subscriptions are for.
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
@@ -38,6 +37,7 @@ export class SubscriptionBuilderForProducerPartition {
     /**
      * Sets the producer stream to subscribe to events from.
      * @param {ScopeId | Guid | string} scopeId - Stream to subscribe to events from.
+     * @returns {SubscriptionBuilderForConsumerScope} The builder for creating event horizon subscriptions.
      */
     toScope(scopeId: ScopeId | Guid | string): SubscriptionBuilderForConsumerScope {
         this.throwIfConsumerScopeIsAlreadyDefined();
@@ -53,8 +53,8 @@ export class SubscriptionBuilderForProducerPartition {
 
     /**
      * Builds the subscription.
-     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource - The observable source of responses.
-     * @returns {Subscription}
+     * @param {Observable<SubscriptionCallbackArguments>} callbackArgumentsSource - The observable source of responses.
+     * @returns {Subscription} The built subscription.
      */
     build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfConsumerScopeIsNotDefined();

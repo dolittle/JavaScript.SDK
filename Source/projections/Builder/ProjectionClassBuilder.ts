@@ -20,13 +20,15 @@ import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 
 /**
- *
+ * Represents an implementation of {@link ICanBuildAndRegisterAProjection} that build a projection from a class.
+ * @template T The type of the projection class.
  */
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
     /**
-     * @param typeOrInstance
+     * Initialises a new instance of the {@link FailureReason} class.
+     * @param {Constructor<T> | T} typeOrInstance - The type or instance of the class to build the projection from.
      */
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {

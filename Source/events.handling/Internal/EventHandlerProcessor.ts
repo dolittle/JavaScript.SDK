@@ -38,7 +38,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
      * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
      * @param {EventHandlersClient} _executionContext - Execution context.
      * @param {IEventTypes} _eventTypes - Registered event types.
-     * @param {ILogger} logger - Logger for logging.
+     * @param {Logger} logger - Logger for logging.
      */
     constructor(
         private _handler: IEventHandler,
@@ -50,9 +50,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         super('EventHandler', _handler.eventHandlerId, logger);
     }
 
-    /**
-     *
-     */
+    /** @inheritdoc */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
@@ -69,12 +67,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         return registerArguments;
     }
 
-    /**
-     * @param registerArguments
-     * @param callback
-     * @param pingTimeout
-     * @param cancellation
-     */
+    /** @inheritdoc */
     protected createClient(
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
@@ -101,33 +94,24 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         );
     }
 
-    /**
-     * @param response
-     */
+    /** @inheritdoc */
     protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
-    /**
-     * @param request
-     */
+    /** @inheritdoc */
     protected getRetryProcessingStateFromRequest(request: HandleEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
-    /**
-     * @param failure
-     */
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): EventHandlerResponse {
         const response = new EventHandlerResponse();
         response.setFailure(failure);
         return response;
     }
 
-    /**
-     * @param request
-     * @param executionContext
-     */
+    /** @inheritdoc */
     protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');

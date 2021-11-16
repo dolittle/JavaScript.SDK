@@ -22,10 +22,10 @@ import { IEmbeddingStore } from './IEmbeddingStore';
  */
 export class EmbeddingStore extends IEmbeddingStore {
     /**
-     * Initializes an instance of {@link EmbeddingStore}.
+     * Initializes an instance of the {@link EmbeddingStore} class.
      * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param _converter
+     * @param {IConvertProjectionsToSDK} _converter - The converter to use to convert projections.
      * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      * @param {Logger} _logger - The logger.
      */

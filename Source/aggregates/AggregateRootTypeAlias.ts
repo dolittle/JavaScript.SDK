@@ -4,33 +4,28 @@
 import { ConceptAs } from '@dolittle/concepts';
 
 /**
- *
+ * Defines types that can be converted to a {@link AggregateRootTypeAlias}.
  */
 export type AggregateRootTypeAliasLike = string | AggregateRootTypeAlias;
 
 /**
  * Represents the alias of an aggregate root type.
- *
- * @export
- * @class EventTypeAlias
- * @augments {ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'>}
  */
 export class AggregateRootTypeAlias extends ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'> {
     /**
-     * @param alias
+     * Initialises a new instance of the {@link AggregateRootTypeAlias} class.
+     * @param {string} alias - The aggregate root alias.
      */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.aggregates.AggregateRootTypeAlias');
     }
     /**
-     * Creates an {@link AggregateRootTypeAlias} from a string.
-     *
-     * @static
-     * @param {(Guid | string)} id
-     * @returns {EventSourceId}
+     * Creates an {@link AggregateRootTypeAlias} from an {@link AggregateRootTypeAliasLike}.
+     * @param {AggregateRootTypeAliasLike} alias - The aggregate root type alias.
+     * @returns {AggregateRootTypeAlias} The created aggregate root type alias concept.
      */
-    static from(id: AggregateRootTypeAliasLike): AggregateRootTypeAlias {
-        if (id instanceof AggregateRootTypeAlias) return id;
-        return new AggregateRootTypeAlias(id);
+    static from(alias: AggregateRootTypeAliasLike): AggregateRootTypeAlias {
+        if (alias instanceof AggregateRootTypeAlias) return alias;
+        return new AggregateRootTypeAlias(alias);
     }
 };

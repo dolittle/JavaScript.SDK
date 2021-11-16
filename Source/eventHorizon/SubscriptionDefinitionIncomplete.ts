@@ -5,10 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * Exception that gets thrown when trying to build an event horizon subscription that is not completely defined.
- *
- * @export
- * @class SubscriptionDefinitionIncomplete
- * @augments {Exception}
  */
 export class SubscriptionDefinitionIncomplete extends Exception {
     /**

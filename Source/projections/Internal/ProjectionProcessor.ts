@@ -36,12 +36,12 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
     /**
      * Initializes a new instance of {@link ProjectionProcessor}.
-     * @template T
      * @param {IProjection<T>} _projection - The projection.
      * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param {IEventType} _eventTypes - The registered event types for this projection.
-     * @param {ILogger} logger - Logger for logging.
+     * @param {IEventTypes} _eventTypes - The registered event types for this projection.
+     * @param {Logger} logger - Logger for logging.
+     * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
@@ -53,9 +53,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         super('Projection', _projection.projectionId, logger);
     }
 
-    /**
-     *
-     */
+    /** @inheritdoc */
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
@@ -95,12 +93,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         }
     }
 
-    /**
-     * @param registerArguments
-     * @param callback
-     * @param pingTimeout
-     * @param cancellation
-     */
+    /** @inheritdoc */
     protected createClient(
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
@@ -127,33 +120,24 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         );
     }
 
-    /**
-     * @param response
-     */
+    /** @inheritdoc */
     protected getFailureFromRegisterResponse(response: ProjectionRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
-    /**
-     * @param request
-     */
+    /** @inheritdoc */
     protected getRetryProcessingStateFromRequest(request: ProjectionRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
-    /**
-     * @param failure
-     */
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): ProjectionResponse {
         const response = new ProjectionResponse();
         response.setFailure(failure);
         return response;
     }
 
-    /**
-     * @param request
-     * @param executionContext
-     */
+    /** @inheritdoc */
     protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');

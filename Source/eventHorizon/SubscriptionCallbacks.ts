@@ -28,9 +28,10 @@ export type SubscriptionSucceeded = (consumerTenant: TenantId, subscription: Sub
  */
 export class SubscriptionCallbackArguments {
     /**
-     * @param consumerTenant
-     * @param subscription
-     * @param response
+     * Initialises a new instance of the {@link SubscriptionCallbackArguments} class.
+     * @param {TenantId} consumerTenant - The consumer tenant id of the subscription.
+     * @param {Subscription} subscription - The subscription.
+     * @param {SubscriptionResponse} response - The subscription response.
      */
     constructor(readonly consumerTenant: TenantId, readonly subscription: Subscription, readonly response: SubscriptionResponse) { }
 }

@@ -17,18 +17,19 @@ import { FilterId, FilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
 /**
- *
+ * Represents an implementation of {@link FilterEventProcessor} that filters events to an unpartitioned stream.
  */
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 
     /**
-     * @param filterId
-     * @param _scopeId
-     * @param _callback
-     * @param _client
-     * @param _executionContext
-     * @param eventTypes
-     * @param logger
+     * Initialises a new instance of the {@link EventFilterProcessor} class.
+     * @param {FilterId} filterId - The filter id.
+     * @param {ScopeId} _scopeId - The filter scope id.
+     * @param {FilterEventCallback} _callback - The filter callback.
+     * @param {FiltersClient} _client - The filters client to use to register the filter.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All registered event types.
+     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         filterId: FilterId,
@@ -42,9 +43,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         super('Filter', filterId, eventTypes, logger);
     }
 
-    /**
-     *
-     */
+    /** @inheritdoc */
     protected get registerArguments(): FilterRegistrationRequest {
         const registerArguments = new FilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
@@ -52,12 +51,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         return registerArguments;
     }
 
-    /**
-     * @param registerArguments
-     * @param callback
-     * @param pingTimeout
-     * @param cancellation
-     */
+    /** @inheritdoc */
     protected createClient(
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
@@ -84,19 +78,14 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         );
     }
 
-    /**
-     * @param failure
-     */
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): FilterResponse {
         const response = new FilterResponse();
         response.setFailure(failure);
         return response;
     }
 
-    /**
-     * @param event
-     * @param context
-     */
+    /** @inheritdoc */
     protected async filter(event: any, context: EventContext): Promise<FilterResponse> {
         const shouldInclude = await this._callback(event, context);
 

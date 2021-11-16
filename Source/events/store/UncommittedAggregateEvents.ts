@@ -13,11 +13,11 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
     private _events: UncommittedAggregateEvent[] = [];
 
     /**
-     * Creates an instance of {@link UncommittedAggregateEvents}.
-     * @param eventSourceId
-     * @param aggregateRootId
-     * @param expectedAggregateRootVersion
-     * @param {...any} events
+     * Initialises a new instance of the {@link UncommittedAggregateEvents} class.
+     * @param {EventSourceId} eventSourceId - The event source id.
+     * @param {AggregateRootId} aggregateRootId - The aggreagate root type id.
+     * @param {AggregateRootVersion} expectedAggregateRootVersion - The aggregate root version.
+     * @param {...any} events - The events.
      */
     constructor(
         readonly eventSourceId: EventSourceId,
@@ -31,7 +31,6 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Gets whether or not there are events.
-     * @returns {boolean}
      */
     get hasEvents(): boolean {
         return this._events.length > 0;
@@ -39,7 +38,6 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Gets the length of the committed events array.
-     * @returns {number}
      */
     get length(): number {
         return this._events.length;
@@ -51,7 +49,8 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
     }
 
     /**
-     * @param event
+     * Adds an {@link UncommittedAggregateEvent} to the uncommitted events.
+     * @param {UncommittedAggregateEvent} event - The event to add.
      */
     add(event: UncommittedAggregateEvent) {
         this.throwIfEventContentIsNullOrUndefined(event);
@@ -60,10 +59,10 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Creates uncommitted aggregate events from the provided events and metadata.
-     * @param eventSourceId - The event source id that the uncommitted events will be applied to.
-     * @param aggregateRootId - The aggregate root id that the uncommitted events will be applied to.
-     * @param expectedAggregateRootVersion - The previous aggregate root version that was used to produce the uncommitted events.
-     * @param events - The uncommitted events to apply.
+     * @param {EventSourceId | Guid | string} eventSourceId - The event source id that the uncommitted events will be applied to.
+     * @param {AggregateRootId} aggregateRootId - The aggregate root id that the uncommitted events will be applied to.
+     * @param {AggregateRootVersion} expectedAggregateRootVersion - The previous aggregate root version that was used to produce the uncommitted events.
+     * @param {UncommittedAggregateEvent[]} events - The uncommitted events to apply.
      * @returns {UncommittedAggregateEvents} Uncommitted aggregate events.
      */
     static from(eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {

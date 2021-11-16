@@ -20,6 +20,7 @@ import { TypeOrEventType } from './TypeOrEventType';
 
 /**
  * Represents a builder for building {@link IProjection}.
+ * @template T The type of the projection read model.
  */
 export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAProjection {
     private onMethods: OnMethodSpecification<T>[] = [];
@@ -27,8 +28,8 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
      * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
-     * @param _readModelTypeOrInstance
-     * @param _scopeId
+     * @param {Constructor<T> | T} _readModelTypeOrInstance - The type or instance of the read model to build a projection for.
+     * @param {ScopeId} _scopeId - The scope of the projection.
      */
     constructor(
         private _projectionId: ProjectionId,
@@ -39,7 +40,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.
      * @param {ScopeId | Guid | string} scopeId - Scope the projection operates in.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @returns {ProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     inScope(scopeId: ScopeId | Guid | string): ProjectionBuilderForReadModel<T> {
         this._scopeId = ScopeId.from(scopeId);
@@ -52,7 +53,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      * @param {Constructor<TEvent>} type - The type of event.
      * @param {KeySelectorBuilderCallback<TEvent>} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T, TEvent>} callback - Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @returns {ProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     on<TEvent>(type: Constructor<TEvent>, keySelectorCallback: KeySelectorBuilderCallback<TEvent>, callback: ProjectionCallback<T, TEvent>): this;
     /**
@@ -60,7 +61,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      * @param {EventType} eventType - The identifier of the event.
      * @param {KeySelectorBuilderCallback} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T>} callback - Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @returns {ProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
@@ -68,7 +69,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
      * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T>} callback - Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @returns {ProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
@@ -77,7 +78,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
      * @param {Generation | number} generation - The generation of the event type.
      * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T>} method - Callback to call for each event.
-     * @returns {ProjectionBuilderForReadModel<T>}
+     * @returns {ProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     on<TEvent>(typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,

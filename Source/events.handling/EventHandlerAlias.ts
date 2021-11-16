@@ -4,7 +4,7 @@
 import { ConceptAs } from '@dolittle/concepts';
 
 /**
- *
+ * Defines the types that can be converted to an {@link EventHandlerAlias}.
  */
 export type EventHandlerAliasLike = string | EventHandlerAlias;
 
@@ -13,18 +13,17 @@ export type EventHandlerAliasLike = string | EventHandlerAlias;
  */
 export class EventHandlerAlias extends ConceptAs<string, '@dolittle/sdk.events.handling.EventHandlerAlias'> {
     /**
-     * @param alias
+     * Initialises a new instance of the {@link EventHandlerAlias} class.
+     * @param {string} alias - The event handler alias.
      */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.events.handling.EventHandlerAlias');
     }
 
     /**
-     * Creates an {EventHandlerAlias} from a string.
-     *
-     * @static
-     * @param {EventHandlerAliasLike} alias
-     * @returns {EventHandlerAlias}
+     * Creates an {@link EventHandlerAlias} from an {@link EventHandlerAliasLike}.
+     * @param {EventHandlerAliasLike} alias - The event handler alias.
+     * @returns {EventHandlerAlias} The created event handler alias concept.
      */
     static from(alias: EventHandlerAliasLike): EventHandlerAlias {
         if (alias instanceof EventHandlerAlias) return alias;

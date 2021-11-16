@@ -19,7 +19,7 @@ export class Embeddings extends IEmbeddings {
     /**
      * Initializes an instance of {@link EmbeddingStoreBuilder}.
      * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
-     * @param _embeddingsClient
+     * @param {EmbeddingsClient} _embeddingsClient - The embeddings client.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IProjectionAssociations} _embeddingAssociations - The embedding associations.
      * @param {Logger} _logger - The logger.

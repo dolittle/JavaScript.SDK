@@ -6,33 +6,28 @@ import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents the unique identifier of an event source.
- *
- * @export
- * @class EventSourceId
- * @augments {ConceptAs<string, '@dolittle/sdk.events.EventSourceId'>}
  */
 export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.EventSourceId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link EventSourceId} class.
+     * @param {string} id - The event source id.
      */
     constructor(id: string) {
         super(id, '@dolittle/sdk.events.EventSourceId');
     }
 
     /**
-     * Create a new {@link EventSourceId} with a new unique identifier.
-     * @returns {EventSourceId}
+     * Generates a new {@link EventSourceId} with a new random unique identifier.
+     * @returns {EventSourceId} The generated event source id.
      */
     static new(): EventSourceId {
         return new EventSourceId(Guid.create().toString());
     }
 
     /**
-     * Creates an {EventSourceId} from a guid.
-     *
-     * @static
-     * @param {EventSourceId | Guid | string)} id
-     * @returns {EventSourceId}
+     * Creates an {@link EventSourceId} from a {@link Guid} or a {@link string}.
+     * @param {EventSourceId | Guid | string} id - The event source id.
+     * @returns {EventSourceId} The created event source id concept.
      */
     static from(id: EventSourceId | Guid | string): EventSourceId {
         if (id instanceof EventSourceId) return id;

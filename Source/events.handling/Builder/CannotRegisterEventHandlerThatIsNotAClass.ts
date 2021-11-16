@@ -5,10 +5,6 @@ import { Exception } from '@dolittle/rudiments';
 
 /**
  * Exception that gets thrown when attempting to register an event handler by instance, that is not a class.
- *
- * @export
- * @class CannotRegisterEventHandlerThatIsNotAClass
- * @augments {Exception}
  */
 export class CannotRegisterEventHandlerThatIsNotAClass extends Exception {
     /**

@@ -5,11 +5,12 @@ import { EventPropertyKeySelector, EventSourceIdKeySelector, PartitionIdKeySelec
 
 /**
  * Represents a builder for building {@link KeySelector}.
+ * @template T The type of the projection read model.
  */
 export class KeySelectorBuilder<T = any> {
     /**
      * Select projection key from the event source id.
-     * @returns {EventSourceIdKeySelector}
+     * @returns {EventSourceIdKeySelector} A key selector.
      */
     keyFromEventSource(): EventSourceIdKeySelector {
         return new EventSourceIdKeySelector();
@@ -17,7 +18,7 @@ export class KeySelectorBuilder<T = any> {
 
     /**
      * Select projection key from the event stream partition id.
-     * @returns {PartitionIdKeySelector}
+     * @returns {PartitionIdKeySelector} A key selector.
      */
     keyFromPartitionId(): PartitionIdKeySelector {
         return new PartitionIdKeySelector();
@@ -26,7 +27,7 @@ export class KeySelectorBuilder<T = any> {
     /**
      * Select projection key from a property on the event.
      * @param {keyof T} property - The property to use as key.
-     * @returns {EventPropertyKeySelector}
+     * @returns {EventPropertyKeySelector} A key selector.
      */
     keyFromProperty(property: keyof T): EventPropertyKeySelector {
         return new EventPropertyKeySelector(property as string);

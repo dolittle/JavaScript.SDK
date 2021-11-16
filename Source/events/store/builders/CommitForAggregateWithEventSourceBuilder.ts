@@ -14,11 +14,12 @@ export class CommitForAggregateWithEventSourceBuilder {
     private _builder?: CommitForAggregateWithEventSourceAndExpectedVersionBuilder;
 
     /**
-     * @param _eventStore
-     * @param _eventTypes
-     * @param _aggregateRootId
-     * @param _eventSourceId
-     * @param _logger
+     * Initialises a new instance of the {@link CommitForAggregateWithEventSourceBuilder} class.
+     * @param {IEventStore} _eventStore - The event store to use for committing events.
+     * @param {IEventTypes} _eventTypes - All registered event types.
+     * @param {AggregateRootId} _aggregateRootId - The aggregate root type identifier to commit events for.
+     * @param {EventSourceId} _eventSourceId - The aggeraget root event source id to commit events for.
+     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         private readonly _eventStore: IEventStore,
@@ -31,7 +32,7 @@ export class CommitForAggregateWithEventSourceBuilder {
     /**
      * Configure the expected {@link AggregateRootVersion} for the {@link UncommittedAggregateEvents}.
      * @param {AggregateRootVersion} expectedVersion - Expected {@link AggregateRootVersion}.
-     * @returns {CommitForAggregateWithEventSourceAndExpectedVersionBuilder}
+     * @returns {CommitForAggregateWithEventSourceAndExpectedVersionBuilder} A builder with expected version to use for building aggregate event commit.
      */
     expectVersion(expectedVersion: AggregateRootVersion): CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
         if (this._builder) {

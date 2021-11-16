@@ -55,7 +55,8 @@ module.exports = {
             'contexts': [
                 'ExportNamedDeclaration>TSTypeAliasDeclaration',
                 'ExportNamedDeclaration>ClassDeclaration',
-                'ExportNamedDeclaration>FunctionDeclaration',
+                'ExportNamedDeclaration[declaration.type="TSDeclareFunction"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="TSDeclareFunction"])',
+                'ExportNamedDeclaration[declaration.type="FunctionDeclaration"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="FunctionDeclaration"])',
 		        'MethodDefinition[accessibility!="private"][value.type="TSEmptyBodyFunctionExpression"]:not(MethodDefinition[value.type="TSEmptyBodyFunctionExpression"] + MethodDefinition[value.type="TSEmptyBodyFunctionExpression"])',
 		        'MethodDefinition[accessibility!="private"][value.type="FunctionExpression"]:not(MethodDefinition[value.type="TSEmptyBodyFunctionExpression"] + MethodDefinition[value.type="FunctionExpression"])',
             ]

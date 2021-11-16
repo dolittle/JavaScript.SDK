@@ -8,7 +8,7 @@ import { Exception } from '@dolittle/rudiments';
  */
 export class AggregateRootIdentifierNotSet extends Exception {
     /**
-     *
+     * Initialises a new instance of the {@link AggregateRootIdentifierNotSet} class.
      */
     constructor() {
         super('Aggregate root identifier is not set on the Aggregate Root. Aggregate Roots must be constructed through the Client.');

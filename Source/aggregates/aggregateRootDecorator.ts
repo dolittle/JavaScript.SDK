@@ -11,7 +11,8 @@ import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecora
 /**
  * Decorator to mark a class as an aggregate root.
  * @param {AggregateRootIdLike} aggregateRootId - The identifier of the aggregate root.
- * @param options
+ * @param {AggregateRootTypeOptions} [options={}] - Options to give to the aggregate root.
+ * @returns {(any) => void} The decorator to apply.
  */
 export function aggregateRoot(aggregateRootId: AggregateRootIdLike, options: AggregateRootTypeOptions = {}) {
     return function (target: any) {

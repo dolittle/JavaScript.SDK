@@ -7,13 +7,10 @@ import { ConceptAs } from '@dolittle/concepts';
 /**
  * Represents the unique identifier for a Microservice.
  */
-
-/**
- *
- */
 export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.MicroserviceId'> {
     /**
-     * @param id
+     * Initialises a new instance of the {@link MicroserviceId} class.
+     * @param {Guid} id - The microservice id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.MicroserviceId');
@@ -25,11 +22,9 @@ export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.Mic
     static notApplicable = MicroserviceId.from(Guid.empty);
 
     /**
-     * Creates a {MicroserviceId} from a guid.
-     *
-     * @static
-     * @param {(string | Guid)} id
-     * @returns {MicroserviceId}
+     * Creates a {@link MicroserviceId} from a {@link string} or a {@link Guid}.
+     * @param {string | Guid | MicroserviceId} id - The microservice id.
+     * @returns {MicroserviceId} The created microservice id concept.
      */
     static from(id: string | Guid | MicroserviceId): MicroserviceId {
         if (id instanceof MicroserviceId) return id;

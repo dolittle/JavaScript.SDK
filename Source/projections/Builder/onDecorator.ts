@@ -18,11 +18,6 @@ type Returns = (target: any, propertyKey: string, descriptor: PropertyDescriptor
 export function on<T>(type: Constructor<T>, keySelectorCallback: KeySelectorBuilderCallback<T>): Returns;
 export function on(eventType: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback): Returns;
 export function on(eventType: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback): Returns;
-/**
- * @param typeOrId
- * @param keySelectorCallbackOrGeneration
- * @param maybeKeySelectorCallback
- */
 export function on<T>(typeOrId: Constructor<T> | EventTypeId | Guid | string, keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<T> | Generation | number, maybeKeySelectorCallback?: KeySelectorBuilderCallback<T>) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         const generation = typeof keySelectorCallbackOrGeneration === 'number' ? keySelectorCallbackOrGeneration : undefined;
