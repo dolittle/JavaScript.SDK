@@ -18,6 +18,9 @@ export type GenerationLike = Generation | number;
  */
 export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>{
 
+    /**
+     * @param generation
+     */
     constructor(generation: number) {
         if (!Number.isSafeInteger(generation) || generation < 0) throw new GenerationMustBePositiveInteger();
         super(generation, '@dolittle/sdk.artifacts.Generation');

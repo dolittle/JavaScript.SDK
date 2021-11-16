@@ -5,6 +5,9 @@
  * The exception that is called when build methods that does not allow for multiple calls gets called multiple times.
  */
 export class EventBuilderMethodAlreadyCalled extends Error {
+    /**
+     * @param method
+     */
     constructor(method: string) {
         super(`The method '${method}' can only be called once while building.`);
     }

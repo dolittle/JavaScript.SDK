@@ -50,6 +50,9 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         super('EventHandler', _handler.eventHandlerId, logger);
     }
 
+    /**
+     *
+     */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
@@ -66,6 +69,12 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         return registerArguments;
     }
 
+    /**
+     * @param registerArguments
+     * @param callback
+     * @param pingTimeout
+     * @param cancellation
+     */
     protected createClient(
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
@@ -92,20 +101,33 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         );
     }
 
+    /**
+     * @param response
+     */
     protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
+    /**
+     * @param request
+     */
     protected getRetryProcessingStateFromRequest(request: HandleEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
+    /**
+     * @param failure
+     */
     protected createResponseFromFailure(failure: ProcessorFailure): EventHandlerResponse {
         const response = new EventHandlerResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /**
+     * @param request
+     * @param executionContext
+     */
     protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');

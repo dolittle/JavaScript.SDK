@@ -13,6 +13,13 @@ import { CommitForAggregateWithEventSourceAndExpectedVersionBuilder } from './Co
 export class CommitForAggregateWithEventSourceBuilder {
     private _builder?: CommitForAggregateWithEventSourceAndExpectedVersionBuilder;
 
+    /**
+     * @param _eventStore
+     * @param _eventTypes
+     * @param _aggregateRootId
+     * @param _eventSourceId
+     * @param _logger
+     */
     constructor(
         private readonly _eventStore: IEventStore,
         private readonly _eventTypes: IEventTypes,

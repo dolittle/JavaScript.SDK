@@ -33,6 +33,9 @@ import { Generation } from '@dolittle/sdk.artifacts';
 /*
  * Represents a builder for building an embedding class.
  */
+/**
+ *
+ */
 export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
     private readonly _embeddingType: Constructor<T>;
 

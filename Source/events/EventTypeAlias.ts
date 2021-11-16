@@ -16,6 +16,9 @@ export type EventTypeAliasLike = string | EventTypeAlias;
  * @augments {ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
 export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.events.EventTypeAlias'> {
+    /**
+     * @param alias
+     */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.events.EventTypeAlias');
     }

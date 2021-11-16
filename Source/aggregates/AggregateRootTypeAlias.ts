@@ -16,6 +16,9 @@ export type AggregateRootTypeAliasLike = string | AggregateRootTypeAlias;
  * @augments {ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'>}
  */
 export class AggregateRootTypeAlias extends ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'> {
+    /**
+     * @param alias
+     */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.aggregates.AggregateRootTypeAlias');
     }

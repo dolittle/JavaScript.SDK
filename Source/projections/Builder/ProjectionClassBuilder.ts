@@ -19,9 +19,15 @@ import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 
+/**
+ *
+ */
 export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
     private readonly _projectionType: Constructor<T>;
 
+    /**
+     * @param typeOrInstance
+     */
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {
             this._projectionType = typeOrInstance;

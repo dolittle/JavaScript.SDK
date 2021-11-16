@@ -9,6 +9,9 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
 import { IEventHandlers } from '..';
 
+/**
+ *
+ */
 export abstract class ICanBuildAndRegisterAnEventHandler {
 
     /**.

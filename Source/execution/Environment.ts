@@ -7,6 +7,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a tenant.
  */
 export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Environment'> {
+    /**
+     * @param env
+     */
     constructor(env: string) {
         super(env, '@dolittle/sdk.execution.Environment');
     }
@@ -26,6 +29,9 @@ export class Environment extends ConceptAs<string, '@dolittle/sdk.execution.Envi
      */
     static development: Environment = Environment.from('Development');
 
+    /**
+     * @param env
+     */
     static from(env: Environment | string): Environment {
         if (env instanceof Environment) return env;
         return new Environment(env);

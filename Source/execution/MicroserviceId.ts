@@ -8,7 +8,13 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier for a Microservice.
  */
 
+/**
+ *
+ */
 export class MicroserviceId extends ConceptAs<Guid, '@dolittle/sdk.execution.MicroserviceId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.MicroserviceId');
     }

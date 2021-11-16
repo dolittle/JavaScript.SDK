@@ -12,6 +12,9 @@ export type EventHandlerAliasLike = string | EventHandlerAlias;
  * Represents the alias for a EventHandler.
  */
 export class EventHandlerAlias extends ConceptAs<string, '@dolittle/sdk.events.handling.EventHandlerAlias'> {
+    /**
+     * @param alias
+     */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.events.handling.EventHandlerAlias');
     }

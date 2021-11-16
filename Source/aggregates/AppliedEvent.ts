@@ -7,6 +7,9 @@ import { EventType } from '@dolittle/sdk.events';
  * Represents an uncommitted event that is applied on an aggregate.
  */
 
+/**
+ *
+ */
 export class AppliedEvent {
 
     /**

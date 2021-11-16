@@ -13,10 +13,16 @@ import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];
+/**
+ *
+ */
 export class EventHandlerMethodsBuilder {
 
     private readonly _typeToMethodPairs: TypeToMethodPair[];
 
+    /**
+     * @param _eventHandlerId
+     */
     constructor(private readonly _eventHandlerId: EventHandlerId) {
         this._typeToMethodPairs = [];
     }
@@ -63,6 +69,11 @@ export class EventHandlerMethodsBuilder {
         }
     }
 
+    /**
+     * @param eventTypes
+     * @param eventTypeToMethods
+     * @param logger
+     */
     tryAddEventHandlerMethods(eventTypes: IEventTypes, eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>, logger: Logger): boolean {
         let allMethodsValid = true;
         for (const [typeOrEventTypeOrId, method] of this._typeToMethodPairs){

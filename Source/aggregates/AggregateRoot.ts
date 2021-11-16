@@ -20,6 +20,9 @@ export class AggregateRoot {
     private _version: AggregateRootVersion = AggregateRootVersion.initial;
     private _eventTypes!: IEventTypes;
 
+    /**
+     * @param eventSourceId
+     */
     constructor(readonly eventSourceId: EventSourceId) {
         this._aggregateRootType = Object.getPrototypeOf(this).constructor;
     }
@@ -84,6 +87,9 @@ export class AggregateRoot {
         this.applyImplementation(event, eventType, true);
     }
 
+    /**
+     * @param committedEvents
+     */
     reApply(committedEvents: CommittedAggregateEvents) {
         this.throwIfEventWasAppliedToOtherEventSource(committedEvents);
         this.throwIfEventWasAppliedByOtherAggreateRoot(committedEvents);

@@ -3,6 +3,9 @@
 
 import { Exception } from '@dolittle/rudiments';
 
+/**
+ *
+ */
 export class CouldNotResolveDeletionToEvents extends Exception {
     /**
      * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}.

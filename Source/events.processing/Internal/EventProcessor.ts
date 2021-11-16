@@ -21,6 +21,11 @@ import { IEventProcessor } from './IEventProcessor';
  */
 export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
 
+    /**
+     * @param _kind
+     * @param _identifier
+     * @param _logger
+     */
     constructor(
         protected _kind: string,
         protected _identifier: TIdentifier,

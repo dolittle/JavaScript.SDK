@@ -19,9 +19,15 @@ import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { IProjectionAssociations } from '../Store/IProjectionAssociations';
 
+/**
+ *
+ */
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];
 
+    /**
+     * @param _projectionAssociations
+     */
     constructor(private _projectionAssociations: IProjectionAssociations) {}
 
     /**
@@ -51,6 +57,14 @@ export class ProjectionsBuilder {
         return this;
     }
 
+    /**
+     * @param client
+     * @param container
+     * @param executionContext
+     * @param eventTypes
+     * @param logger
+     * @param cancellation
+     */
     buildAndRegister(
         client: ProjectionsClient,
         container: IContainer,

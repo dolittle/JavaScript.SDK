@@ -13,6 +13,9 @@ export type TenantIdLike = string | Guid | TenantId;
  * Represents the unique identifier of a tenant.
  */
 export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.TenantId');
     }

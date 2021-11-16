@@ -53,6 +53,9 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         super('Projection', _projection.projectionId, logger);
     }
 
+    /**
+     *
+     */
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
@@ -92,6 +95,12 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         }
     }
 
+    /**
+     * @param registerArguments
+     * @param callback
+     * @param pingTimeout
+     * @param cancellation
+     */
     protected createClient(
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
@@ -118,20 +127,33 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         );
     }
 
+    /**
+     * @param response
+     */
     protected getFailureFromRegisterResponse(response: ProjectionRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
+    /**
+     * @param request
+     */
     protected getRetryProcessingStateFromRequest(request: ProjectionRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
+    /**
+     * @param failure
+     */
     protected createResponseFromFailure(failure: ProcessorFailure): ProjectionResponse {
         const response = new ProjectionResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /**
+     * @param request
+     * @param executionContext
+     */
     protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');

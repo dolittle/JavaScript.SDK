@@ -8,6 +8,9 @@ import { IProjectionStore } from '..';
  * Defines a builder for {@link IProjectionStore}.
  */
 
+/**
+ *
+ */
 export abstract class IProjectionStoreBuilder {
     /**
      * Build an {@link IProjectionStore} for the given tenant.

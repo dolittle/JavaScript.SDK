@@ -15,8 +15,17 @@ import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Process
 
 import { FilterId } from '..';
 
+/**
+ *
+ */
 export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
+    /**
+     * @param kind
+     * @param filterId
+     * @param _eventTypes
+     * @param logger
+     */
     constructor(
         kind: string,
         filterId: FilterId,
@@ -26,14 +35,24 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
         super(kind, filterId, logger);
     }
 
+    /**
+     * @param response
+     */
     protected getFailureFromRegisterResponse(response: FilterRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
+    /**
+     * @param request
+     */
     protected getRetryProcessingStateFromRequest(request: FilterEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
+    /**
+     * @param request
+     * @param executionContext
+     */
     protected async handle(request: FilterEventRequest, executionContext: ExecutionContext): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');

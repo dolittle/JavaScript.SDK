@@ -7,6 +7,9 @@ import { EventLogSequenceNumber } from '../index';
  * The exception that gets thrown when a sequence of events are not valid for the Aggregate Root it is being used with.
  */
 
+/**
+ *
+ */
 export class EventLogSequenceNumberIsOutOfOrder extends Error {
 
     /**

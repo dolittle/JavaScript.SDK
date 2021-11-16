@@ -12,6 +12,9 @@ import { Guid } from '@dolittle/rudiments';
  * @augments {ConceptAs<string, '@dolittle/sdk.events.EventSourceId'>}
  */
 export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.EventSourceId'> {
+    /**
+     * @param id
+     */
     constructor(id: string) {
         super(id, '@dolittle/sdk.events.EventSourceId');
     }

@@ -13,6 +13,11 @@ import { Artifact, ArtifactIdLike } from './Artifact';
  * @augments {Exception}
  */
 export class CannotHaveMultipleArtifactsAssociatedWithType<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends Exception {
+    /**
+     * @param type
+     * @param artifact
+     * @param associatedArtifact
+     */
     constructor(type: Constructor<any>, artifact: TArtifact, associatedArtifact: TArtifact) {
         super(`${type.name} cannot be associated with ${artifact} because it is already associated with ${associatedArtifact}`);
     }

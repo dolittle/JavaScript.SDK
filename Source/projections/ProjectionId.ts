@@ -8,6 +8,9 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the unique identifier of a Projection.
  */
 export class ProjectionId extends ConceptAs<Guid, '@dolittle/sdk.projections.ProjectionId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.projections.ProjectionId');
     }

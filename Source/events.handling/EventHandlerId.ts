@@ -8,6 +8,9 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the unique identifier for a EventHandler.
  */
 export class EventHandlerId extends ConceptAs<Guid, '@dolittle/sdk.events.handling.EventHandlerId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.handling.EventHandlerId');
     }

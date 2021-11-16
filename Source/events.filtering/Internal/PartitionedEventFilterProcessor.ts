@@ -17,8 +17,20 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '..';
 
+/**
+ *
+ */
 export class PartitionedEventFilterProcessor extends FilterEventProcessor<PartitionedFilterRegistrationRequest, PartitionedFilterResponse> {
 
+    /**
+     * @param filterId
+     * @param _scopeId
+     * @param _callback
+     * @param _client
+     * @param _executionContext
+     * @param eventTypes
+     * @param logger
+     */
     constructor(
         filterId: FilterId,
         private _scopeId: ScopeId,
@@ -31,6 +43,9 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         super('Partitioned Filter', filterId, eventTypes, logger);
     }
 
+    /**
+     *
+     */
     protected get registerArguments(): PartitionedFilterRegistrationRequest {
         const registerArguments = new PartitionedFilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
@@ -38,6 +53,12 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         return registerArguments;
     }
 
+    /**
+     * @param registerArguments
+     * @param callback
+     * @param pingTimeout
+     * @param cancellation
+     */
     protected createClient(
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
@@ -64,12 +85,19 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         );
     }
 
+    /**
+     * @param failure
+     */
     protected createResponseFromFailure(failure: ProcessorFailure): PartitionedFilterResponse {
         const response = new PartitionedFilterResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /**
+     * @param event
+     * @param context
+     */
     protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 

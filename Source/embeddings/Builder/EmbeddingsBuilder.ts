@@ -55,6 +55,14 @@ export class EmbeddingsBuilder {
         return this;
     }
 
+    /**
+     * @param client
+     * @param container
+     * @param executionContext
+     * @param eventTypes
+     * @param logger
+     * @param cancellation
+     */
     buildAndRegister(
         client: EmbeddingsClient,
         container: IContainer,

@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a stream.
  */
 export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.StreamId');
     }

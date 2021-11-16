@@ -9,6 +9,10 @@ import { ProjectionId } from '../ProjectionId';
  * Exception that gets thrown when trying to get a type that isn't associated to a projection.
  */
 export class NoTypeAssociatedWithProjection extends Exception {
+    /**
+     * @param projection
+     * @param scope
+     */
     constructor(projection: ProjectionId, scope: ScopeId) {
         super(`No type associated with projection ${projection} in scope ${scope}`);
     }

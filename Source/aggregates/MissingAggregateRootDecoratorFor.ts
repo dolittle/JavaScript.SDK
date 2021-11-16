@@ -7,6 +7,9 @@ import { Constructor } from '@dolittle/types';
  * Exception that is thrown when missing the aggregate root decorator for a type.
  */
 export class MissingAggregateRootDecoratorFor extends Error {
+    /**
+     * @param type
+     */
     constructor(type: Constructor<any>) {
         super(`Missing aggregate root decorator for type '${type.name}'`);
     }

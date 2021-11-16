@@ -9,6 +9,14 @@ import { CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, Uncom
  * Represents the builder for an aggregate event commit.
  */
 export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
+    /**
+     * @param _eventStore
+     * @param _eventTypes
+     * @param _aggregateRootId
+     * @param _eventSourceId
+     * @param _expectedVersion
+     * @param _logger
+     */
     constructor(
         private readonly _eventStore: IEventStore,
         private readonly _eventTypes: IEventTypes,

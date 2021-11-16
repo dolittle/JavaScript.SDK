@@ -4,6 +4,9 @@
 import { Exception } from '@dolittle/rudiments';
 import { EmbeddingContext, EmbeddingId } from '@dolittle/sdk.embeddings';
 
+/**
+ *
+ */
 export class EmbeddingUpdateMethodFailed<T> extends Exception {
 
     /**

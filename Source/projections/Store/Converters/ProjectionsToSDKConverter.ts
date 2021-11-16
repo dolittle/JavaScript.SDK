@@ -9,6 +9,9 @@ import { CurrentStateType } from '../CurrentStateType';
 import { IConvertProjectionsToSDK } from './IConvertProjectionsToSDK';
 import { UnknownCurrentStateType } from './UnknownCurrentStateType';
 
+/**
+ *
+ */
 export class ProjectionsToSDKConverter extends IConvertProjectionsToSDK {
 
     /** @inheritdoc */

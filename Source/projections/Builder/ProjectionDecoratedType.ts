@@ -10,6 +10,11 @@ import { ProjectionId } from '..';
  * Represents a projection created from the decorator.
  */
 export class ProjectionDecoratedType {
+    /**
+     * @param projectionId
+     * @param scopeId
+     * @param type
+     */
     constructor(
         readonly projectionId: ProjectionId,
         readonly scopeId: ScopeId,

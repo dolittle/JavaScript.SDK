@@ -7,6 +7,9 @@ import { Exception, Guid } from '@dolittle/rudiments';
  * Exception that gets thrown when a failure occurs during event horizon subscription.
  */
 
+/**
+ *
+ */
 export class EventHorizonSubscriptionFailed extends Exception {
 
     /**

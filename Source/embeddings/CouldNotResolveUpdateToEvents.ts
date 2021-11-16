@@ -3,6 +3,9 @@
 
 import { Exception } from '@dolittle/rudiments';
 
+/**
+ *
+ */
 export class CouldNotResolveUpdateToEvents extends Exception {
 
     /**

@@ -9,6 +9,11 @@ import { ProjectionId } from '..';
  * Exception that is thrown when you try to register a readmodel for a projection when its already defined.
  */
 export class ReadModelAlreadyDefinedForProjection extends Exception {
+    /**
+     * @param projectionId
+     * @param newReadModel
+     * @param oldReadModel
+     */
     constructor(projectionId: ProjectionId, newReadModel: Constructor<any> | any, oldReadModel: Constructor<any> | any) {
         super(`Cannot assign ${newReadModel} to projection ${projectionId}. It is already associated with ${oldReadModel}`);
     }

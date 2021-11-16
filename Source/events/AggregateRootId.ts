@@ -17,6 +17,9 @@ export type AggregateRootIdLike = Guid | string | AggregateRootId;
  * @augments {ConceptAs<Guid, '@dolittle/sdk.events.AggregateRootId'>}
  */
 export class AggregateRootId extends ConceptAs<Guid, '@dolittle/sdk.events.AggregateRootId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.AggregateRootId');
     }

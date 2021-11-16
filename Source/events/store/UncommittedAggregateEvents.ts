@@ -50,6 +50,9 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
         return this._events[Symbol.iterator]();
     }
 
+    /**
+     * @param event
+     */
     add(event: UncommittedAggregateEvent) {
         this.throwIfEventContentIsNullOrUndefined(event);
         this._events.push(event);

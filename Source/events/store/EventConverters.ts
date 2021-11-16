@@ -72,6 +72,12 @@ export class EventConverters {
         return uncommittedAggregateEvent;
     }
 
+    /**
+     * @param aggregateRootId
+     * @param eventSourceId
+     * @param aggregateRootVersion
+     * @param input
+     */
     static toSDKAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, aggregateRootVersion: AggregateRootVersion, input: PbCommittedAggregateEvents.CommittedAggregateEvent): SdkCommittedAggregateEvent {
         const executionContext = input.getExecutioncontext();
         if (!executionContext) {

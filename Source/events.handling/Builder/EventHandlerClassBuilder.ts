@@ -21,10 +21,16 @@ import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { handles as handlesDecorator } from './handlesDecorator';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
+/**
+ *
+ */
 export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHandler {
     private readonly _eventHandlerType: Constructor<T>;
     private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
 
+    /**
+     * @param typeOrInstance
+     */
     constructor(typeOrInstance: Constructor<T> | T) {
         super();
         if (typeOrInstance instanceof Function) {

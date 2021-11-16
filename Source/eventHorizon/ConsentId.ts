@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier for a consent.
  */
 export class ConsentId extends ConceptAs<Guid, '@dolittle/sdk.eventhorizon.ConsentId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.eventhorizon.ConsentId');
     }

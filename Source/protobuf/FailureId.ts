@@ -8,6 +8,9 @@ import { Guid } from '@dolittle/rudiments';
  * Represents the unique identifier for a {Failure}.
  */
 export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.protobuf.FailureId');
     }

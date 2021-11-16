@@ -65,6 +65,9 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
         return this;
     }
 
+    /**
+     * @param alias
+     */
     withAlias(alias: EventHandlerAliasLike): EventHandlerBuilder {
         this._alias = EventHandlerAlias.from(alias);
         return this;

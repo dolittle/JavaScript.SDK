@@ -19,6 +19,10 @@ export class SubscriptionResponse {
     constructor(readonly consentId: ConsentId, readonly failure?: Failure) {
     }
 
+    /**
+     * @param consentId
+     * @param failure
+     */
     static from(consentId: Guid | string, failure?: Failure): SubscriptionResponse {
         return new SubscriptionResponse(ConsentId.from(consentId), failure);
     }

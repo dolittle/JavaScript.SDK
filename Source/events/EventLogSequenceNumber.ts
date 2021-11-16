@@ -13,6 +13,9 @@ import { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequence
  */
 export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>{
 
+    /**
+     * @param value
+     */
     constructor(value: number) {
         if (!Number.isSafeInteger(value) || value < 0) throw new EventLogSequenceNumberMustBeAPositiveInteger();
         super(value, '@dolittle/sdk.events.EventLogSequenceNumber');

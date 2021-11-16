@@ -17,6 +17,9 @@ export type EventTypeIdLike = Guid | string | EventTypeId;
  * @augments {ConceptAs<Guid, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
 export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.events.EventTypeId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.EventTypeId');
     }

@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a scope.
  */
 export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.ScopeId');
     }

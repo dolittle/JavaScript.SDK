@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * A unique identifier to allow us to trace actions and their consequences throughout the system.
  */
 export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.CorrelationId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.CorrelationId');
     }

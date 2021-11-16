@@ -10,6 +10,13 @@ import { EventHandlerAlias, EventHandlerId } from '../index';
  * Represents an event handler created from the decorator.
  */
 export class EventHandlerDecoratedType {
+    /**
+     * @param eventHandlerId
+     * @param scopeId
+     * @param partitioned
+     * @param alias
+     * @param type
+     */
     constructor(
         readonly eventHandlerId: EventHandlerId,
         readonly scopeId: ScopeId,

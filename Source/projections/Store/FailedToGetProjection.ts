@@ -10,6 +10,12 @@ import { ProjectionId, Key  } from '..';
  * An exception that gets thrown when a projection fails to be getted.
  */
 export class FailedToGetProjection extends Exception {
+    /**
+     * @param projection
+     * @param scope
+     * @param key
+     * @param failure
+     */
     constructor(projection: ProjectionId, scope: ScopeId, key: Key | undefined, failure: Failure) {
         if (key) {
             super(`Failed to get projection ${projection} in scope ${scope} with key ${key} due to failure ${failure.id} with reason: ${failure.reason}`);

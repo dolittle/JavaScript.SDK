@@ -4,7 +4,13 @@
 import { Exception } from '@dolittle/rudiments';
 import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
 
+/**
+ *
+ */
 export class UnknownCurrentStateType extends Exception {
+    /**
+     * @param type
+     */
     constructor(type: ProjectionCurrentStateType) {
         super(`Unknown current state type ${type}`);
     }

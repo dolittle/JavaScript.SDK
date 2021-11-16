@@ -8,6 +8,9 @@ import { EventType } from '@dolittle/sdk.events';
  * Exception that is thrown when there is no event handler for a specific event type.
  */
 export class MissingEventHandlerForType extends Exception {
+    /**
+     * @param eventType
+     */
     constructor(eventType: EventType) {
         super(`Missing event handler for '${eventType}'`);
     }

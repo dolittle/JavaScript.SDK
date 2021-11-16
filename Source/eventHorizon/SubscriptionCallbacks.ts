@@ -27,6 +27,11 @@ export type SubscriptionSucceeded = (consumerTenant: TenantId, subscription: Sub
  * Represents the arguments related to {@link SubscriptionCallbacks}.
  */
 export class SubscriptionCallbackArguments {
+    /**
+     * @param consumerTenant
+     * @param subscription
+     * @param response
+     */
     constructor(readonly consumerTenant: TenantId, readonly subscription: Subscription, readonly response: SubscriptionResponse) { }
 }
 

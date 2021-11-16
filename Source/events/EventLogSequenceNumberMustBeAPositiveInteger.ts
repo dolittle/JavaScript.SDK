@@ -11,6 +11,9 @@ import { Exception } from '@dolittle/rudiments';
  * @augments {Exception}
  */
 export class EventLogSequenceNumberMustBeAPositiveInteger extends Exception {
+    /**
+     *
+     */
     constructor() {
         super('The event log sequence number must be a positive integer');
     }

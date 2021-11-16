@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier for a Filter.
  */
 export class FilterId extends ConceptAs<Guid, '@dolittle/sdk.events.filtering.FilterId'> {
+    /**
+     * @param id
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.filtering.FilterId');
     }

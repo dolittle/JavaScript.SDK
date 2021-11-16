@@ -8,6 +8,9 @@ import { Constructor } from '@dolittle/types';
  * Exception that gets thrown when trying to associate a type that isn't a projection.
  */
 export class TypeIsNotAProjection extends Exception {
+    /**
+     * @param type
+     */
     constructor(type: Constructor<any> | any) {
         super(`Type ${type.name} is not a projection. Did you add the @projection() decorator to the type?`);
     }

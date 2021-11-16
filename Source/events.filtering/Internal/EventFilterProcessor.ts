@@ -16,8 +16,20 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 import { FilterId, FilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
+/**
+ *
+ */
 export class EventFilterProcessor extends FilterEventProcessor<FilterRegistrationRequest, FilterResponse> {
 
+    /**
+     * @param filterId
+     * @param _scopeId
+     * @param _callback
+     * @param _client
+     * @param _executionContext
+     * @param eventTypes
+     * @param logger
+     */
     constructor(
         filterId: FilterId,
         private _scopeId: ScopeId,
@@ -30,6 +42,9 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         super('Filter', filterId, eventTypes, logger);
     }
 
+    /**
+     *
+     */
     protected get registerArguments(): FilterRegistrationRequest {
         const registerArguments = new FilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
@@ -37,6 +52,12 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         return registerArguments;
     }
 
+    /**
+     * @param registerArguments
+     * @param callback
+     * @param pingTimeout
+     * @param cancellation
+     */
     protected createClient(
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
@@ -63,12 +84,19 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         );
     }
 
+    /**
+     * @param failure
+     */
     protected createResponseFromFailure(failure: ProcessorFailure): FilterResponse {
         const response = new FilterResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /**
+     * @param event
+     * @param context
+     */
     protected async filter(event: any, context: EventContext): Promise<FilterResponse> {
         const shouldInclude = await this._callback(event, context);
 

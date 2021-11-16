@@ -18,8 +18,19 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 import { FilterId, PartitionedFilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
+/**
+ *
+ */
 export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilterRegistrationRequest, PartitionedFilterResponse> {
 
+    /**
+     * @param filterId
+     * @param _callback
+     * @param _client
+     * @param _executionContext
+     * @param eventTypes
+     * @param logger
+     */
     constructor(
         filterId: FilterId,
         private _callback: PartitionedFilterEventCallback,
@@ -31,12 +42,21 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         super('Public Filter', filterId, eventTypes, logger);
     }
 
+    /**
+     *
+     */
     protected get registerArguments(): PublicFilterRegistrationRequest {
         const registerArguments = new PublicFilterRegistrationRequest();
         registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
         return registerArguments;
     }
 
+    /**
+     * @param registerArguments
+     * @param callback
+     * @param pingTimeout
+     * @param cancellation
+     */
     protected createClient(
         registerArguments: PublicFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
@@ -63,12 +83,19 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         );
     }
 
+    /**
+     * @param failure
+     */
     protected createResponseFromFailure(failure: ProcessorFailure): PartitionedFilterResponse {
         const response = new PartitionedFilterResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /**
+     * @param event
+     * @param context
+     */
     protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 

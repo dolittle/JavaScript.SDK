@@ -37,6 +37,9 @@ export class Version {
      */
     static readonly first = new Version(1, 0, 0, 0);
 
+    /**
+     *
+     */
     toString() {
         let version = `${this.major}.${this.minor}.${this.patch}`;
         if (this.preReleaseString) {

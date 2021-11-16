@@ -10,6 +10,9 @@ import { AggregateRootAction } from './AggregateRootAction';
  * @template TAggregate {@link AggregateRoot} Type.
  */
 
+/**
+ *
+ */
 export abstract class IAggregateRootOperations<TAggregate extends AggregateRoot> {
 
     /**

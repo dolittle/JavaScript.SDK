@@ -7,6 +7,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents a version of an aggregate root as a natural number, corresponding to the number of events the Aggregate Root has applied to an Event Source.
  */
 
+/**
+ *
+ */
 export class AggregateRootVersion extends ConceptAs<number, '@dolittle/sdk.aggregates.AggregateRoot'> {
 
     /**

@@ -14,6 +14,9 @@ import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjecti
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
+/**
+ *
+ */
 export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
     private _scopeId: ScopeId = ScopeId.default;
     private _readModelTypeOrInstance?: Constructor<any> | any;

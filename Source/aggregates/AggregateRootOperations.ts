@@ -15,6 +15,13 @@ import { IAggregateRootOperations } from './IAggregateRootOperations';
  * @template TAggregateRoot
  */
 export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> extends IAggregateRootOperations<TAggregateRoot> {
+    /**
+     * @param _eventSourceId
+     * @param _eventStore
+     * @param _aggregateRootType
+     * @param _eventTypes
+     * @param _logger
+     */
     constructor(
         private readonly _eventSourceId: EventSourceId,
         private readonly _eventStore: IEventStore,

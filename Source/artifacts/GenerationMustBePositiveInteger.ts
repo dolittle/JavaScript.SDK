@@ -11,6 +11,9 @@ import { Exception } from '@dolittle/rudiments';
  * @augments {Exception}
  */
 export class GenerationMustBePositiveInteger extends Exception {
+    /**
+     *
+     */
     constructor() {
         super('The generation of an artifact must be a positive integer');
     }

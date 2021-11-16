@@ -8,6 +8,9 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a partition.
  */
 export class PartitionId extends ConceptAs<string, '@dolittle/sdk.events.PartitionId'> {
+    /**
+     * @param id
+     */
     constructor(id: string) {
         super(id, '@dolittle/sdk.events.PartitionId');
     }
