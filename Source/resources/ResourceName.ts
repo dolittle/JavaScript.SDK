@@ -12,6 +12,10 @@ export type ResourceNameLike = string | ResourceName;
  * Represents the name of a resource.
  */
 export class ResourceName extends ConceptAs<string, '@dolittle/sdk.resources.ResourceName'> {
+    /**
+     * Initialises a new instance of the {@link ResourceName} class.
+     * @param {string} name - The resource name.
+     */
     constructor(name: string) {
         super(name, '@dolittle/sdk.resources.ResourceName');
     }

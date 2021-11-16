@@ -10,8 +10,10 @@ import guids from './guids';
 
 /**
  * Convert to protobuf representation.
- * @param input
- * @returns {PbArtifact}
+ * @param {TArtifact} input - The artifact to convert.
+ * @returns {PbArtifact} The converted artifact.
+ * @template TArtifact The type of the artifact.
+ * @template TId The type of the artifact id.
  */
 function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: TArtifact): PbArtifact {
     const artifact = new PbArtifact();
@@ -23,9 +25,11 @@ function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLi
 
 /**
  * Convert to SDK representation.
- * @param input
- * @param artifactFactory
- * @returns {TArtifact}
+ * @param {PbArtifact | undefined} input - The artifact to convert.
+ * @param {(Guid, Generation) => TArtifact} artifactFactory - The callback to use to construct the converted artifact type.
+ * @returns {TArtifact} The converted artifact.
+ * @template TArtifact The type of the artifact.
+ * @template TId The type of the artifact id.
  */
 function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: PbArtifact | undefined, artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact {
     if (!input) {
@@ -51,7 +55,7 @@ declare module '@dolittle/sdk.artifacts' {
 
 /**
  * Convert to protobuf representation.
- * @returns {PbArtifact}
+ * @returns {PbArtifact} The converted artifact.
  */
  SdkArtifact.prototype.toProtobuf = function () {
     return toProtobuf(this);
@@ -65,8 +69,10 @@ declare module '@dolittle/contracts/Artifacts/Artifact_pb' {
 
 /**
  * Convert to SDK representation.
- * @param artifactFactory
- * @returns {SdkArtifact}
+ * @param {(Guid, Generation) => TArtifact} artifactFactory - The callback to use to construct the converted artifact type.
+ * @returns {TArtifact} The converted artifact.
+ * @template TArtifact The type of the artifact.
+ * @template TId The type of the artifact id.
  */
 PbArtifact.prototype.toSDK = function<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike> (artifactFactory: (id: Guid, generation: Generation) => TArtifact) {
     return toSDK(this, artifactFactory);

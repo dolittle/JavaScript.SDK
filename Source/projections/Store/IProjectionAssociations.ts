@@ -6,6 +6,9 @@ import { Constructor } from '@dolittle/types';
 import { ProjectionId } from '..';
 import { ProjectionAssociation } from './ProjectionAssociation';
 
+/**
+ * Defines a system that can associate types with projections.
+ */
 export abstract class IProjectionAssociations {
 
     /**

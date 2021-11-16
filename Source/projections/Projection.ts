@@ -12,6 +12,10 @@ import { ProjectionCallback } from './ProjectionCallback';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
+/**
+ * Represents an implementation of {@link IProjection<T>}.
+ * @template T The type of the projection read model.
+ */
 export class Projection<T> extends IProjection<T> {
     initialState?: T | undefined;
 
@@ -22,9 +26,8 @@ export class Projection<T> extends IProjection<T> {
      * Initializes a new instance of {@link Projection}.
      * @param {ProjectionId} projectionId - The unique identifier for the projection.
      * @param {Constructor<T>|T} readModelTypeOrInstance - The read model type or instance produced by the projection.
-     * @param {ScopId} scopeId - The identifier of the scope the projection is in.
-     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events - The events with respective callbacks and keyselectors used by the projection.
-     * @param _eventMap
+     * @param {ScopeId} scopeId - The identifier of the scope the projection is in.
+     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} _eventMap - The events with respective callbacks and keyselectors used by the projection.
      */
     constructor(
         readonly projectionId: ProjectionId,

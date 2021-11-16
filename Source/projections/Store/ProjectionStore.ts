@@ -21,6 +21,9 @@ import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { IProjectionStore } from './IProjectionStore';
 
+/**
+ * Represents an implementation of {@link IProjectionStore}.
+ */
 export class ProjectionStore extends IProjectionStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();

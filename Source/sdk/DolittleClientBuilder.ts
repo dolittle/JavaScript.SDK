@@ -32,7 +32,6 @@ import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources
 /**
  * Represents a builder for building {DolittleClient}.
  */
-
 export class DolittleClientBuilder {
     private _host = 'localhost';
     private _port = 50053;

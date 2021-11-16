@@ -14,10 +14,8 @@ export class ProjectionId extends ConceptAs<Guid, '@dolittle/sdk.projections.Pro
 
     /**
      * Creates a {ProjectionId} from a guid.
-     *
-     * @static
-     * @param {string | Guid | ProjectionId} id
-     * @returns {ProjectionId}
+     * @param {string | Guid | ProjectionId} id - The projection id.
+     * @returns {ProjectionId} The created projection id concept.
      */
     static from(id: string | Guid | ProjectionId): ProjectionId {
         if (id instanceof ProjectionId) return id;

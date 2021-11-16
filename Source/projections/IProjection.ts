@@ -10,6 +10,7 @@ import { ProjectionId } from './ProjectionId';
 
 /**
  * Defines a projection.
+ * @template T The type of the projection read model.
  */
 export abstract class IProjection<T> {
     /**

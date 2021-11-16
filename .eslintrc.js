@@ -54,7 +54,10 @@ module.exports = {
             },
             'contexts': [
                 'ExportNamedDeclaration>TSTypeAliasDeclaration',
-                'ExportNamedDeclaration>FunctionDeclaration'
+                'ExportNamedDeclaration>ClassDeclaration',
+                'ExportNamedDeclaration>FunctionDeclaration',
+		        'MethodDefinition[accessibility!="private"][value.type="TSEmptyBodyFunctionExpression"]:not(MethodDefinition[value.type="TSEmptyBodyFunctionExpression"] + MethodDefinition[value.type="TSEmptyBodyFunctionExpression"])',
+		        'MethodDefinition[accessibility!="private"][value.type="FunctionExpression"]:not(MethodDefinition[value.type="TSEmptyBodyFunctionExpression"] + MethodDefinition[value.type="FunctionExpression"])',
             ]
         }],
         
@@ -62,7 +65,7 @@ module.exports = {
             'contexts': [
                 'ArrowFunctionExpression',
                 'FunctionDeclaration',
-                'MethodDefinition[kind!=get]'
+                'MethodDefinition[kind!="get"]'
             ]
         }],
     },
@@ -71,36 +74,10 @@ module.exports = {
             files: ['**/for_*/**'],
             rules: {
                 '@typescript-eslint/naming-convention': 'off',
-            },
-        },
-        {
-            files: ['**/for_*/**'],
-            rules: {
+                'import/no-extraneous-dependencies': 'off',
                 '@typescript-eslint/no-unused-expressions': 'off',
-            },
-        },
-        {
-            files: ['**/for_*/**'],
-            rules: {
-                'import/no-extraneous-dependencies': 'off',
-            },
-        },
-        {
-            files: ['**/for_*/**'],
-            rules: {
                 'no-restricted-globals': 'off',
-            },
-        },
-        {
-            files: ['Source/sdk/**'],
-            rules: {
-                'import/no-extraneous-dependencies': 'off',
-            },
-        },
-        {
-            files: ['Samples/Basic/**'],
-            rules: {
-                'import/no-extraneous-dependencies': 'off',
+                'jsdoc/require-jsdoc': 'off',
             },
         },
     ],

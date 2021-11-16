@@ -9,7 +9,6 @@ import { FailureReason } from './FailureReason';
  * Represents a unique failure that occurred when performing operations with the runtime.
  */
 export class Failure {
-
     /**
      * Initializes an instance of failure.
      * @param {Failure} id - Unique identifier of the failure.
@@ -20,11 +19,9 @@ export class Failure {
 
     /**
      * Creates a {Failure} from a guid and a string.
-     *
-     * @static
-     * @param {(Guid | string)} id
-     * @param {string} reason
-     * @returns
+     * @param {(Guid | string)} id - Unique identifier of the failure.
+     * @param {string} reason - Reason for failing.
+     * @returns {Failure} The created failure.
      */
     static from(id: Guid | string, reason: string) {
         return new Failure(FailureId.from(id), FailureReason.from(reason));

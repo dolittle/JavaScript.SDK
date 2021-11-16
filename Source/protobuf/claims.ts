@@ -6,8 +6,8 @@ import { Claim as PbClaim } from '@dolittle/contracts/Security/Claim_pb';
 
 /**
  * Convert to protobuf representation.
- * @param input
- * @returns {PbClaim}
+ * @param {SdkClaim | Claims} input - The claim(s) to convert.
+ * @returns {PbClaim} The converted claims.
  */
 function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
     if (input instanceof SdkClaim) {
@@ -29,8 +29,8 @@ function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
 
 /**
  * Convert to SDK representation.
- * @param input
- * @returns {SdkClaim}
+ * @param {PbClaim} input - The claim to convert.
+ * @returns {SdkClaim} The converted claim.
  */
 function toSDK(input: PbClaim): SdkClaim {
     const claim = new SdkClaim(input.getKey(), input.getValue(), input.getValuetype());
@@ -54,7 +54,7 @@ declare module '@dolittle/sdk.execution' {
 
 /**
  * Convert to protobuf representation.
- * @returns {PbClaim}
+ * @returns {PbClaim} The converted claim.
  */
 SdkClaim.prototype.toProtobuf = function () {
     return toProtobuf(this) as PbClaim;
@@ -62,7 +62,7 @@ SdkClaim.prototype.toProtobuf = function () {
 
 /**
  * Convert to protobuf representation.
- * @returns {PbClaim[]}
+ * @returns {PbClaim[]} The converted claims.
  */
 Claims.prototype.toProtobuf = function () {
     return toProtobuf(this) as PbClaim[];
@@ -76,7 +76,7 @@ declare module '@dolittle/contracts/Security/Claim_pb' {
 
 /**
  * Convert to SDK representation.
- * @returns {SdkClaim}
+ * @returns {SdkClaim} The converted claim.
  */
 PbClaim.prototype.toSDK = function () {
     return toSDK(this);

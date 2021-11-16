@@ -6,10 +6,6 @@ import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents the unique identifier for a {Failure}.
- *
- * @export
- * @class FailureId
- * @augments {ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'>}
  */
 export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'> {
     constructor(id: Guid) {
@@ -18,10 +14,8 @@ export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId
 
     /**
      * Creates a {FailureId} from a guid.
-     *
-     * @static
-     * @param {(string | Guid)} id
-     * @returns {FailureId}
+     * @param {(string | Guid)} id - The failure id.
+     * @returns {FailureId} The failure id concept.
      */
     static from(id: string | Guid): FailureId {
         return new FailureId(Guid.as(id));

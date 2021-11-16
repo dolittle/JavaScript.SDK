@@ -60,7 +60,6 @@ declare module '@dolittle/sdk.execution' {
 
 /**
  * Convert to protobuf representation.
- * @param {SdkExecutionContext} input - Input execution context.
  * @returns {PbExecutionContext} Protobuf representation.
  */
 SdkExecutionContext.prototype.toProtobuf = function () {
@@ -75,7 +74,6 @@ declare module '@dolittle/contracts/Execution/ExecutionContext_pb' {
 
 /**
  * Convert to SDK representation.
- * @param {SdkExecutionContext} input - Input execution context.
  * @returns {PbExecutionContext} SDK representation.
  */
 PbExecutionContext.prototype.toSDK = function () {

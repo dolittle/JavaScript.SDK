@@ -5,10 +5,6 @@ import { ConceptAs } from '@dolittle/concepts';
 
 /**
  * Represents the reason for a {Failure}.
- *
- * @export
- * @class FailureReason
- * @augments {ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'>}
  */
 export class FailureReason extends ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'> {
     constructor(reason: string) {
@@ -17,10 +13,8 @@ export class FailureReason extends ConceptAs<string, '@dolittle/sdk.protobuf.Fai
 
     /**
      * Creates a {FailureReason} from a string.
-     *
-     * @static
-     * @param {string} reason
-     * @returns {FailureReason}
+     * @param {string} reason - The failure reason.
+     * @returns {FailureReason} The failure reason concept.
      */
     static from(reason: string): FailureReason {
         return new FailureReason(reason);

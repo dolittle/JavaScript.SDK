@@ -12,9 +12,14 @@ export type MongoDBConnectionStringLike = string | MongoDBConnectionString;
  * Represents the MongoDB connection string.
  */
 export class MongoDBConnectionString extends ConceptAs<string, '@dolittle/sdk.resources.mongoDB.MongoDBConnectionString'> {
+    /**
+     * Initialises a new instance of the {@link MongoDBConnectionString} class.
+     * @param {string} connectionString - The connection string.
+     */
     constructor(connectionString: string) {
         super(connectionString, '@dolittle/sdk.resources.mongoDB.MongoDBConnectionString');
     }
+
     /**
      * Creates an {@link MongoDBConnectionString} from a string.
      * @param {MongoDBConnectionStringLike} connectionString - The connection string.

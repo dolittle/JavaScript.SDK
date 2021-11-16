@@ -15,10 +15,16 @@ import { Guid } from '@dolittle/rudiments';
  * Defines a system that knows about Resources provided by the Runtime.
  */
 export class Resources extends IResources {
-
+    /**
+     * Initialises a new instance of the {@link Resources} class.
+     * @param {ResourcesClient} _client - The resources client to use to get resources from the Runtime.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {Logger} _logger - The logger to use for logging.
+     */
     constructor(private readonly _client: ResourcesClient, private readonly _executionContext: ExecutionContext, private readonly _logger: Logger) {
         super();
     }
+
     /**
      * Gets the the {@link IResourcesForTenant} resources for a specific tenant.
      * @param {TenantId} tenant - The Tenant to get the {@link IResourcesForTenant} for.
