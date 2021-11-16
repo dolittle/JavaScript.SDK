@@ -24,8 +24,8 @@ export interface ResponseLike {
 
 /**
  * Represents the base implementation of a {@link IResource}.
- * @typedef TRequest - The type of the request.
- * @typedef TResponse - The type of the response.
+ * @template TRequest - The type of the request.
+ * @template TResponse - The type of the response.
  */
 export abstract class Resource<TRequest, TResponse extends ResponseLike> extends IResource {
     /**
@@ -47,11 +47,11 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
 
     /**
      * Gets the resource.
-     * @typedef TResult - The type of the resource.
      * @param {UnaryMethod<TRequest, TResponse>} method - The method to call.
      * @param {(TResponse) => TResult} getResult - The callback for retrieving the result from the response.
      * @param {Cancellation} cancellation - The optional cancellation token.
      * @returns {Promise<TResult>} The resource.
+     * @template TResult - The type of the resource.
      */
     protected async get<TResult>(
         method: UnaryMethod<TRequest, TResponse>,

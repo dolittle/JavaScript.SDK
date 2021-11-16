@@ -15,8 +15,8 @@ import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } fro
  * @param {TArgument} argument - The argument to send to the server.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The response from the server.
- * @typedef TArgument - The type of the argument.
- * @typedef TResponse - The type of the response.
+ * @template TArgument - The type of the argument.
+ * @template TResponse - The type of the response.
  */
 export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method: UnaryMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -40,8 +40,8 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
  * @param {Observable<TRequest>} requests - The requests to send to the server.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The response from the server.
- * @typedef TRequest - The type of the argument.
- * @typedef TResponse - The type of the response.
+ * @template TRequest - The type of the argument.
+ * @template TResponse - The type of the response.
  */
 export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, method: ClientStreamMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -66,8 +66,8 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
  * @param {TArgument} argument - The argument to send to the server.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The responses from the server.
- * @typedef TArgument - The type of the argument.
- * @typedef TResponse - The type of the response.
+ * @template TArgument - The type of the argument.
+ * @template TResponse - The type of the response.
  */
 export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, method: ServerStreamMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -84,8 +84,8 @@ export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, 
  * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The responses from the Runtime and errors from the requests.
- * @typedef TRequest - The type of the argument.
- * @typedef TResponse - The type of the response.
+ * @template TRequest - The type of the argument.
+ * @template TResponse - The type of the response.
  */
 export function reactiveDuplex<TRequest, TResponse>(client: grpc.Client, method: DuplexMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -115,8 +115,8 @@ function handleCancellation(call: grpc.Call, cancellation: Cancellation) {
  * @param {Observable<TRequest>} requests - The requests to write to the Runtime.
  * @param {Subject<TResponse>} subject - The Subject which contains the responses from the Runtime.
  * @param {string} address - The address of the Runtime that was connected to.
- * @typedef TRequest - The type of the argument.
- * @typedef TResponse - The type of the response.
+ * @template TRequest - The type of the argument.
+ * @template TResponse - The type of the response.
  */
 function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableStream<TRequest>, requests: Observable<TRequest>, subject: Subject<TResponse>, address: string) {
     requests.pipe(concatMap((message: TRequest) => {

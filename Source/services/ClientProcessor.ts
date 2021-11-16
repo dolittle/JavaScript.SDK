@@ -15,11 +15,11 @@ import { RegistrationFailed } from './RegistrationFailed';
 
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
- * @typedef TIdentifier - The type of the identifier.
- * @typedef TRegisterArguments - The type of the registration arguments.
- * @typedef TRegisterResponse - The type of the registration response.
- * @typedef TRequest - The type of the requests.
- * @typedef TResponse - The type of the responses.
+ * @template TIdentifier - The type of the identifier.
+ * @template TRegisterArguments - The type of the registration arguments.
+ * @template TRegisterResponse - The type of the registration response.
+ * @template TRequest - The type of the requests.
+ * @template TResponse - The type of the responses.
  */
 export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> {
     private _pingTimeout = 1;

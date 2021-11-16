@@ -63,7 +63,7 @@ export abstract class IDolittleClient {
      * @param {Constructor<any>} type - Type of aggregate - corresponding to the generic type.
      * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
      * @returns {IAggregateRootOperations<TAggregateRoot>}
-     * @typedef TAggregateRoot - The type of the aggregate root.
+     * @template TAggregateRoot - The type of the aggregate root.
      */
     abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
 
@@ -74,7 +74,7 @@ export abstract class IDolittleClient {
      * @param {EventSourceId} eventSourceId - The event source id of the aggregate.
      * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
      * @returns {IAggregateRootOperations<TAggregateRoot>}
-     * @typedef TAggregateRoot - The type of the aggregate root.
+     * @template TAggregateRoot - The type of the aggregate root.
      */
     abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
 }
