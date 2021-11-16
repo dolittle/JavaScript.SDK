@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "20.0.0-legolas.8",
+    "version": "20.0.0-legolas.9",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,8 +33,8 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.events": "20.0.0-legolas.8",
-        "@dolittle/sdk.artifacts": "20.0.0-legolas.8"
+        "@dolittle/sdk.events": "20.0.0-legolas.9",
+        "@dolittle/sdk.artifacts": "20.0.0-legolas.9"
     },
     "devDependencies": {}
 }
