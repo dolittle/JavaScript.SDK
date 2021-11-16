@@ -15,7 +15,6 @@ import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 
-
 /**
  * Represents a builder for building embeddings inline.
  */

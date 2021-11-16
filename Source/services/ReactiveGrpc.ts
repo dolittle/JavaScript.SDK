@@ -8,7 +8,6 @@ import { concatMap } from 'rxjs/operators';
 import { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
 
-
 /**
  * Performs a unary call.
  * @param {grpc.Client} client The Runtime client.

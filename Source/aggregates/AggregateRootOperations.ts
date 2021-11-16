@@ -10,7 +10,6 @@ import { AggregateRootAction } from './AggregateRootAction';
 import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecorators';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 
-
 /**
  * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}
  * @template TAggregateRoot
@@ -69,7 +68,6 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
             return uncommitted;
         });
     }
-
 
     private async reApplyEvents(aggregateRoot: TAggregateRoot, cancellation: Cancellation) {
         const eventSourceId = aggregateRoot.eventSourceId;

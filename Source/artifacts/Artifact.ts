@@ -4,8 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { Generation } from './Generation';
 
-
 export type ArtifactIdLike = { value: Guid };
+
 /**
  * Represents the base representation of an Artifact.
  *

@@ -15,7 +15,6 @@ import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
 
-
 /**
  * Represents an implementation of {IReverseCallClient}.
  */

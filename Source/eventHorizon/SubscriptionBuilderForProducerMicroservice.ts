@@ -19,7 +19,6 @@ export class SubscriptionBuilderForProducerMicroservice {
     private _producerTenantId?: TenantId;
     private _builder?: SubscriptionBuilderForProducerTenant;
 
-
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerMicroservice}.
      * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.

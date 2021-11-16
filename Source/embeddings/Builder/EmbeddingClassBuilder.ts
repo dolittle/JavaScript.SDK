@@ -30,7 +30,6 @@ import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
 import { Generation } from '@dolittle/sdk.artifacts';
 
-
 /*
  * Represents a builder for building an embedding class.
  */
@@ -105,7 +104,6 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
                 logger
             ), cancellation);
     }
-
 
     private createUpdateMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {
         return (receivedState, currentState, embeddingContext) => method.method.call(currentState, receivedState, embeddingContext);

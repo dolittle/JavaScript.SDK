@@ -21,7 +21,6 @@ import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { IProjectionStore } from './IProjectionStore';
 
-
 export class ProjectionStore extends IProjectionStore {
 
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
@@ -33,7 +32,6 @@ export class ProjectionStore extends IProjectionStore {
         private readonly _logger: Logger) {
         super();
     }
-
 
     /** @inheritdoc */
     get<TProjection>(type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;

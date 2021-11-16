@@ -17,7 +17,6 @@ import { IFilters } from './IFilters';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 
-
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
 export type PrivateEventFilterBuilderCallback = (builder: PrivateEventFilterBuilder) => void;
 export type PublicEventFilterBuilderCallback = (builder: PublicEventFilterBuilder) => void;

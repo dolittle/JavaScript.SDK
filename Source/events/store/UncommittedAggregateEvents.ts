@@ -51,7 +51,6 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
         this._events.push(event);
     }
 
-
     /**
      * Creates uncommitted aggregate events from the provided events and metadata.
      * @param eventSourceId The event source id that the uncommitted events will be applied to.

@@ -10,7 +10,6 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { IEmbeddings } from '../Internal';
 
-
 /**
  * Defines a system that can build and register an embedding.
  */

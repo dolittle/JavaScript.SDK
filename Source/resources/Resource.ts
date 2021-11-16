@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';

@@ -8,7 +8,6 @@ import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
-
 /**
  * Defines a projection.
  */

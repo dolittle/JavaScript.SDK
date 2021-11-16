@@ -17,8 +17,6 @@ import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeleti
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
-
-// type OnMethodSpecification<TCallback> = [TypeOrEventType, TCallback];
 /**
  * Represents a builder for building {@link IEmbedding}.
  */

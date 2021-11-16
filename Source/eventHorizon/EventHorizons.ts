@@ -19,7 +19,6 @@ import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 import { SubscriptionResponse } from './SubscriptionResponse';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 
-
 /**
  * Represents an implementation of {@link IEventHorizons}.
  */

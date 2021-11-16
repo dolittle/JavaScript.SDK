@@ -43,7 +43,6 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         return type;
     }
 
-
     /** @inheritdoc */
     hasFor(type: Constructor<any>): boolean {
         for (const associatedType of this._associations.values()) {
@@ -98,7 +97,6 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         return left.generation.equals(right.generation)
             && left.id.toString() === right.id.toString();
     }
-
 
     private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, artifact: TArtifact) {
         if (this.hasFor(type)) {

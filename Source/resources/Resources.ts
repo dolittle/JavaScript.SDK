@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';

@@ -29,8 +29,6 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 import { DolittleClient } from './DolittleClient';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 
-
-
 /**
  * Represents a builder for building {DolittleClient}.
  */

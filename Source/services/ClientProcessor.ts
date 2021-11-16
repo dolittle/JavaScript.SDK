@@ -13,7 +13,6 @@ import { Logger } from 'winston';
 import { IReverseCallClient } from './IReverseCallClient';
 import { RegistrationFailed } from './RegistrationFailed';
 
-
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
  */

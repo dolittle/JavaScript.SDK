@@ -40,7 +40,6 @@ export default {
     toSDK
 };
 
-
 declare module '@dolittle/sdk.execution' {
     interface Claim {
         toProtobuf(): PbClaim;
@@ -50,7 +49,6 @@ declare module '@dolittle/sdk.execution' {
         toProtobuf(): PbClaim[];
     }
 }
-
 
 /**
  * Convert to protobuf representation
@@ -67,7 +65,6 @@ SdkClaim.prototype.toProtobuf = function () {
 Claims.prototype.toProtobuf = function () {
     return toProtobuf(this) as PbClaim[];
 };
-
 
 declare module '@dolittle/contracts/Security/Claim_pb' {
     interface Claim {

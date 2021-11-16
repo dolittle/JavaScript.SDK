@@ -34,4 +34,3 @@ export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
         return result.events;
     }
 }
-
