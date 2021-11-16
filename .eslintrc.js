@@ -30,7 +30,6 @@ module.exports = {
         'jsdoc/valid-types': 'error',
         'jsdoc/require-hyphen-before-param-description': 'error',
         'jsdoc/check-line-alignment': 'error',
-        'jsdoc/require-returns': 'error',
         'jsdoc/require-returns-check': 'error',
         'jsdoc/require-returns-description': 'error',
         'jsdoc/require-returns-type': 'error',
@@ -57,7 +56,15 @@ module.exports = {
                 'ExportNamedDeclaration>TSTypeAliasDeclaration',
                 'ExportNamedDeclaration>FunctionDeclaration'
             ]
-        }]
+        }],
+        
+        'jsdoc/require-returns': ['error', {
+            'contexts': [
+                'ArrowFunctionExpression',
+                'FunctionDeclaration',
+                'MethodDefinition[kind!=get]'
+            ]
+        }],
     },
     overrides: [
         {

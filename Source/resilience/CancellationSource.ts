@@ -12,7 +12,7 @@ export class CancellationSource {
 
     /**
      * Initializes a new instance of {@link CancellationSource}.
-     * @param sources
+     * @param {Cancellation[]} sources - A set of {@link Cancellation} to link to this source.
      */
     constructor(...sources: Cancellation[]) {
         this._subject = new Subject();
@@ -30,7 +30,6 @@ export class CancellationSource {
 
     /**
      * Gets the cancellation subject.
-     * @returns {Subject<void>}
      */
     get cancellation(): Cancellation {
         return this._subject;
