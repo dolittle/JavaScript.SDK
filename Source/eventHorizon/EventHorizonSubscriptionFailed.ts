@@ -11,6 +11,14 @@ export class EventHorizonSubscriptionFailed extends Exception {
 
     /**
      * Initializes a new instance of {@link EventHorizonSubscriptionFailed}.
+     * @param microservice
+     * @param producerTenant
+     * @param producerStream
+     * @param partition
+     * @param consumerTenant
+     * @param scope
+     * @param reason
+     * @param identifier
      */
     constructor(microservice: Guid | string, producerTenant: Guid | string, producerStream: Guid | string, partition: Guid | string, consumerTenant: Guid | string, scope: Guid | string, reason?: string, identifier?: Guid | string) {
         super(`Failed to subscribe to events from producer microservice ${microservice} in producer tenant ${producerTenant} in producer stream ${producerStream} in partition ${partition} for consumer tenant ${consumerTenant} into scope ${scope}. Failed with '${reason}' = (id:${identifier})`);

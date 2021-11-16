@@ -5,4 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerAliasLike } from '../';
 
+/**
+ *
+ */
 export type EventHandlerOptions = { inScope?: ScopeId | Guid | string, partitioned?: boolean, alias?: EventHandlerAliasLike };

@@ -23,14 +23,14 @@ export class EmbeddingsBuilder {
     private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
 
     /**
-     * Initialises a new instance of {@link EmbeddingsBuilder}
-     * @param {IProjectionAssociations} _projectionAssociations The projection associations.
+     * Initialises a new instance of {@link EmbeddingsBuilder}.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      */
     constructor(private readonly _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building an embedding.
-     * @param {EmbeddingId | Guid | string} embeddingId  The unique identifier of the embedding.
+     * @param {EmbeddingId | Guid | string} embeddingId - The unique identifier of the embedding.
      * @returns {EmbeddingBuilder}
      */
     createEmbedding(embeddingId: EmbeddingId | Guid | string): EmbeddingBuilder {
@@ -40,13 +40,13 @@ export class EmbeddingsBuilder {
     }
 
     /**
-     * Register a type as an embedding
-     * @param type The type to register as a embedding.
+     * Register a type as an embedding.
+     * @param type - The type to register as a embedding.
      */
     register<T = any>(type: Constructor<T>): EmbeddingsBuilder;
     /**
      * Register an instance as an embedding.
-     * @param instance The instance to register as an event handler.
+     * @param instance - The instance to register as an event handler.
      */
     register<T = any>(instance: T): EmbeddingsBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {

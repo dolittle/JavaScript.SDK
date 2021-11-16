@@ -11,10 +11,10 @@ export class EmbeddingContext {
 
     /**
      * Initializes a new instance of {@link EmbeddingContext}.
-     * @param {boolean} wasCreatedFromInitialState Whether the projection state was created from the initial state or retrieved from a persisted state.
-     * @param {Key} key The key for the embeddings projection.
-     * @param {boolean} isDelete Whether this is a call for a deletion.
-     * @param {ExecutionContext} executionContext The execution context for this embedding.
+     * @param {boolean} wasCreatedFromInitialState - Whether the projection state was created from the initial state or retrieved from a persisted state.
+     * @param {Key} key - The key for the embeddings projection.
+     * @param {boolean} isDelete - Whether this is a call for a deletion.
+     * @param {ExecutionContext} executionContext - The execution context for this embedding.
      */
     constructor(
         readonly wasCreatedFromInitialState: boolean,

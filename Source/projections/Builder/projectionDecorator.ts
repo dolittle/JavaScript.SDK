@@ -13,8 +13,8 @@ import { ProjectionOptions } from './ProjectionOptions';
 
 /**
  * Decorator to mark a class as an Projection.
- * @param {ProjectionId | Guid | string} projectionId The id to associate with this Projection
- * @param {ProjectionOptions} [options={}] Options to give to the Projection
+ * @param {ProjectionId | Guid | string} projectionId - The id to associate with this Projection.
+ * @param {ProjectionOptions} [options={}] - Options to give to the Projection.
  */
 export function projection(projectionId: ProjectionId | Guid | string, options: ProjectionOptions = {}) {
     return function (target: any) {

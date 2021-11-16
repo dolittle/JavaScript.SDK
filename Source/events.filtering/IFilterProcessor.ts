@@ -3,4 +3,7 @@
 
 import { internal } from '@dolittle/sdk.events.processing';
 
+/**
+ *
+ */
 export type IFilterProcessor = internal.IEventProcessor;

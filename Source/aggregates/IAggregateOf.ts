@@ -6,21 +6,21 @@ import { AggregateRoot } from './AggregateRoot';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 
 /**
- * Defines a way to work with an {@link AggregateRoot}
+ * Defines a way to work with an {@link AggregateRoot}.
  * @template TAggregate
  */
 
 export abstract class IAggregateOf<TAggregate extends AggregateRoot> {
 
     /**
-     * Create a new {@link AggregateRoot} with a random {@link EventSourceId}
+     * Create a new {@link AggregateRoot} with a random {@link EventSourceId}.
      * @returns {IAggregateRootOperations<TAggregate>}
      */
     abstract create(): IAggregateRootOperations<TAggregate>;
 
     /**
-     * Gets an {@link AggregateRoot} with a given {@link EventSourceId}
-     * @param {EventSourceId} eventSourceId {@link EventSourceId} of the {@link AggregateRoot}
+     * Gets an {@link AggregateRoot} with a given {@link EventSourceId}.
+     * @param {EventSourceId} eventSourceId - {@link EventSourceId} Of the {@link AggregateRoot}.
      * @returns {IAggregateRootOperations<TAggregate>}
      */
     abstract get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregate>;

@@ -6,7 +6,7 @@ import { AggregateRootId, AggregateRootVersion, EventSourceId, IEventTypes } fro
 import { CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, UncommittedAggregateEvents } from '../index';
 
 /**
- * Represents the builder for an aggregate event commit
+ * Represents the builder for an aggregate event commit.
  */
 export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
     constructor(
@@ -19,8 +19,8 @@ export class CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
     }
 
     /**
-     * Commits uncommitted aggregate events to the Event Store
-     * @param {UncommittedAggregateEvent[]} uncommittedEvents Uncommitted events.
+     * Commits uncommitted aggregate events to the Event Store.
+     * @param {UncommittedAggregateEvent[]} uncommittedEvents - Uncommitted events.
      * @returns {Promise<CommittedAggregateEvents>}
      */
     async commit(uncommittedEvents: UncommittedAggregateEvent[]): Promise<CommittedAggregateEvents> {

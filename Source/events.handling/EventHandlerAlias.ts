@@ -3,6 +3,9 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type EventHandlerAliasLike = string | EventHandlerAlias;
 
 /**

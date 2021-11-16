@@ -12,10 +12,10 @@ export class EmbeddingProjectContext {
 
     /**
      * Initializes a new instance of {@link EmbeddingProjectContext}.
-     * @param {boolean} wasCreatedFromInitialState Whether the projection state was created from the initial state or retrieved from a persisted state.
-     * @param {Key} key The key for the embeddings projection.
-     * @param {EventSourceId} eventSourceId Unique identifier of the event source it originates from.
-     * @param {ExecutionContext} executionContext The execution context for this embedding.
+     * @param {boolean} wasCreatedFromInitialState - Whether the projection state was created from the initial state or retrieved from a persisted state.
+     * @param {Key} key - The key for the embeddings projection.
+     * @param {EventSourceId} eventSourceId - Unique identifier of the event source it originates from.
+     * @param {ExecutionContext} executionContext - The execution context for this embedding.
      */
     constructor(
         readonly wasCreatedFromInitialState: boolean,

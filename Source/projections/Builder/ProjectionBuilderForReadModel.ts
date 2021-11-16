@@ -26,7 +26,9 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
-     * @param {ProjectionId} _projectionId  The unique identifier of the projection to build for
+     * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
+     * @param _readModelTypeOrInstance
+     * @param _scopeId
      */
     constructor(
         private _projectionId: ProjectionId,
@@ -36,7 +38,7 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId Scope the projection operates in.
+     * @param {ScopeId | Guid | string} scopeId - Scope the projection operates in.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     inScope(scopeId: ScopeId | Guid | string): ProjectionBuilderForReadModel<T> {
@@ -47,34 +49,34 @@ export class ProjectionBuilderForReadModel<T> implements ICanBuildAndRegisterAPr
     /**
      * Add an on method for handling the event.
      * @template TEvent Type of event.
-     * @param {Constructor<TEvent>} type The type of event.
-     * @param {KeySelectorBuilderCallback<TEvent>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T, TEvent>} callback Callback to call for each event.
+     * @param {Constructor<TEvent>} type - The type of event.
+     * @param {KeySelectorBuilderCallback<TEvent>} keySelectorCallback - Callback for building key selector.
+     * @param {ProjectionCallback<T, TEvent>} callback - Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     on<TEvent>(type: Constructor<TEvent>, keySelectorCallback: KeySelectorBuilderCallback<TEvent>, callback: ProjectionCallback<T, TEvent>): this;
     /**
      * Add an on method for handling the event.
-     * @param {EventType} eventType The identifier of the event.
-     * @param {KeySelectorBuilderCallback} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} callback Callback to call for each event.
+     * @param {EventType} eventType - The identifier of the event.
+     * @param {KeySelectorBuilderCallback} keySelectorCallback - Callback for building key selector.
+     * @param {ProjectionCallback<T>} callback - Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} callback Callback to call for each event.
+     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
+     * @param {ProjectionCallback<T>} callback - Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
-     * @param {Generation | number} generation The generation of the event type.
-     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback Callback for building key selector.
-     * @param {ProjectionCallback<T>} method Callback to call for each event.
+     * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
+     * @param {Generation | number} generation - The generation of the event type.
+     * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
+     * @param {ProjectionCallback<T>} method - Callback to call for each event.
      * @returns {ProjectionBuilderForReadModel<T>}
      */
     on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): this;

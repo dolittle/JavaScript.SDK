@@ -9,7 +9,8 @@ import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
 import guids from './guids';
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
+ * @param input
  * @returns {PbArtifact}
  */
 function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: TArtifact): PbArtifact {
@@ -21,7 +22,9 @@ function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLi
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param input
+ * @param artifactFactory
  * @returns {TArtifact}
  */
 function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: PbArtifact | undefined, artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact {
@@ -47,7 +50,7 @@ declare module '@dolittle/sdk.artifacts' {
 }
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {PbArtifact}
  */
  SdkArtifact.prototype.toProtobuf = function () {
@@ -61,7 +64,8 @@ declare module '@dolittle/contracts/Artifacts/Artifact_pb' {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param artifactFactory
  * @returns {SdkArtifact}
  */
 PbArtifact.prototype.toSDK = function<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike> (artifactFactory: (id: Guid, generation: Generation) => TArtifact) {

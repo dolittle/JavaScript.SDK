@@ -12,9 +12,9 @@ export class TenantWithSubscriptions {
 
     /**
      * Initializes a new instance of {EventHorizon}.
-     * @param {TenantId} tenant The tenant in our microservice.
-     * @param {Subscription[]} subscriptions The subscriptions to
-     * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
+     * @param {TenantId} tenant - The tenant in our microservice.
+     * @param {Subscription[]} subscriptions - The subscriptions to.
+     * @param {SubscriptionCallbacks} callbacks - Callbacks for handling responses of subscribing.
      */
     constructor(
         readonly tenant: TenantId,

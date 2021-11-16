@@ -4,6 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type TenantIdLike = string | Guid | TenantId;
 
 /**
@@ -15,24 +18,24 @@ export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'
     }
 
     /**
-     * Gets the unknown tenant
+     * Gets the unknown tenant.
      */
     static unknown: TenantId = TenantId.from('762a4bd5-2ee8-4d33-af06-95806fb73f4e');
 
     /**
-     * Gets the system tenant
+     * Gets the system tenant.
      */
     static system: TenantId = TenantId.from('08831584-e016-42f6-bc5e-c4f098fed42b');
 
     /**
-     * Gets the development tenant
+     * Gets the development tenant.
      */
     static development: TenantId = TenantId.from('445f8ea8-1a6f-40d7-b2fc-796dba92dc44');
 
     /**
      * Creates a {@link TenantId} from a guid.
      *
-     * @param id - Hello
+     * @param id - Hello.
      * @returns {TenantId}
      */
     static from(id: TenantIdLike): TenantId {

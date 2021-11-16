@@ -18,8 +18,8 @@ export class SubscriptionsBuilderForConsumerTenant {
 
     /**
      * Initializes a new instance of {@link SubscriptionsBuilderForConsumerTenant}.
-     * @param {TenantId} _consumerTenantId The consumer tenant.
-     * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
+     * @param {TenantId} _consumerTenantId - The consumer tenant.
+     * @param {Observable<SubscriptionCallbackArguments>} responsesSource - The source of responses.
      */
     constructor(private _consumerTenantId: TenantId, responsesSource: Observable<SubscriptionCallbackArguments>) {
         this._callbacks = new SubscriptionCallbacks(
@@ -29,7 +29,7 @@ export class SubscriptionsBuilderForConsumerTenant {
 
     /**
      * Sets the producer microservice to subscribe to events from.
-     * @param {Guid | string | MicroserviceId} microserviceId Microservice to build for.
+     * @param {Guid | string | MicroserviceId} microserviceId - Microservice to build for.
      * @returns {SubscriptionBuilderForProducerMicroservice}
      */
     fromProducerMicroservice(microserviceId: MicroserviceId | Guid | string): SubscriptionBuilderForProducerMicroservice {
@@ -39,8 +39,8 @@ export class SubscriptionsBuilderForConsumerTenant {
     }
 
     /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
-     * @param {SubscriptionCompleted} completed The callback method.
+     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionCompleted} completed - The callback method.
      * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */
@@ -50,8 +50,8 @@ export class SubscriptionsBuilderForConsumerTenant {
     }
 
     /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
-     * @param {SubscriptionSucceeded} succeeded The callback method.
+     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionSucceeded} succeeded - The callback method.
      * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */
@@ -61,8 +61,8 @@ export class SubscriptionsBuilderForConsumerTenant {
     }
 
     /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
-     * @param {SubscriptionFailed} failed The callback method.
+     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionFailed} failed - The callback method.
      * @returns {SubscriptionsBuilderForConsumerTenant}
      * @summary The callback will be called on each subscription for the tenant.
      */

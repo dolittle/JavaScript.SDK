@@ -8,7 +8,7 @@ import { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCall
 import { CommitForAggregateWithEventSourceBuilder } from './CommitForAggregateWithEventSourceBuilder';
 
 /**
- * Represents the builder for an aggregate event commit
+ * Represents the builder for an aggregate event commit.
  */
 export class CommitForAggregateBuilder {
     private _builder?: CommitForAggregateWithEventSourceBuilder;
@@ -21,9 +21,9 @@ export class CommitForAggregateBuilder {
     }
 
     /**
-     * Build aggregate events with event source id
-     * @param {EventSourceId} eventSourceId The {@link EventSourceId}
-     * @returns {CommitForAggregateWithEventSourceBuilder} for continuation.
+     * Build aggregate events with event source id.
+     * @param {EventSourceId} eventSourceId - The {@link EventSourceId}.
+     * @returns {CommitForAggregateWithEventSourceBuilder} For continuation.
      */
     withEventSource(eventSourceId: EventSourceId): CommitForAggregateWithEventSourceBuilder {
         if (this._builder) {

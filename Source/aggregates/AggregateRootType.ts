@@ -13,10 +13,10 @@ import { AggregateRootTypeAlias } from './AggregateRootTypeAlias';
  */
 export class AggregateRootType extends Artifact<AggregateRootId> {
     /**
-     * Initializes a new instance of {@link EventType}
-     * @param {AggregateRootType} id The unique identifier of the aggregate root type.
-     * @param {Generation} [generation] Optional generation - will default to {@link generation.first}.
-     * @param {AggregateRootTypeAlias} [alias] Optional alias
+     * Initializes a new instance of {@link EventType}.
+     * @param {AggregateRootType} id - The unique identifier of the aggregate root type.
+     * @param {Generation} [generation] - Optional generation - will default to {@link generation.first}.
+     * @param {AggregateRootTypeAlias} [alias] - Optional alias.
      */
     constructor(id: AggregateRootId, generation: Generation = Generation.first, readonly alias?: AggregateRootTypeAlias) {
         super(id, generation);
@@ -36,9 +36,9 @@ export class AggregateRootType extends Artifact<AggregateRootId> {
 
     /**
      * Creates an instance of {@link EventType}.
-     * @param id The Event Type Id.
-     * @param generation The generation of the Event Type.
-     * @returns The created {@link EventType}
+     * @param id - The Event Type Id.
+     * @param generation - The generation of the Event Type.
+     * @returns The created {@link EventType}.
      */
     static from(id: AggregateRootIdLike, generation?: GenerationLike): AggregateRootType {
         if (generation === undefined) {

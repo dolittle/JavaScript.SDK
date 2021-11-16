@@ -18,10 +18,14 @@ export class ProjectionStoreBuilder extends IProjectionStoreBuilder {
 
     /**
      * Initializes a new instance of {@link ProjectionStoreBuilder}.
-     * @param {ProjectionsClient} projectionsClient The client for the projections.
-     * @param {ExecutionContext} executionContext The execution context.
-     * @param {IProjectionAssociations} projectionAssociations The projection associations.
-     * @param {Logger} logger The logger.
+     * @param {ProjectionsClient} projectionsClient - The client for the projections.
+     * @param {ExecutionContext} executionContext - The execution context.
+     * @param {IProjectionAssociations} projectionAssociations - The projection associations.
+     * @param {Logger} logger - The logger.
+     * @param _projectionsClient
+     * @param _executionContext
+     * @param _projectionAssociations
+     * @param _logger
      */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,

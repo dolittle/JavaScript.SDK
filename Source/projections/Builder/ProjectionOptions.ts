@@ -4,4 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
 
+/**
+ *
+ */
 export type ProjectionOptions = { inScope?: ScopeId | Guid | string };

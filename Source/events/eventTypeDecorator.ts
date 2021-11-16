@@ -10,8 +10,9 @@ import { EventTypesFromDecorators } from './EventTypesFromDecorators';
 
 /**
  * Decorator for associating an event with an artifact.
- * @param {EventTypeId | Guid | string} identifier The id to associate with this type
- * @param {EventTypeOptions} [options={} Options to give to the EventHandler
+ * @param {EventTypeId | Guid | string} identifier - The id to associate with this type.
+ * @param {EventTypeOptions} - - [options={} Options to give to the EventHandler.
+ * @param options
  */
 export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}) {
     return function (target: any) {

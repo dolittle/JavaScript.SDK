@@ -29,13 +29,13 @@ export class PartitionedEventFilterBuilder {
     }
 
     /**
-     * Builds partitioned event filter builder
-     * @param {FilterId} filterId Unique identifier for the filter.
-     * @param {ScopeId} scopeId The identifier of the scope the filter runs on.
-     * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext Execution context.
-     * @param {IEventTypes} eventTypes Event types for identifying event types.
-     * @param {Logger} logger Logger for logging.
+     * Builds partitioned event filter builder.
+     * @param {FilterId} filterId - Unique identifier for the filter.
+     * @param {ScopeId} scopeId - The identifier of the scope the filter runs on.
+     * @param {FiltersClient} client - The client for working with the filters in the runtime.
+     * @param {ExecutionContext} executionContext - Execution context.
+     * @param {IEventTypes} eventTypes - Event types for identifying event types.
+     * @param {Logger} logger - Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(

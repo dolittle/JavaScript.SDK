@@ -8,8 +8,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class Key extends ConceptAs<string, '@dolittle/sdk.projections.Key'> {
     /**
-     * Initializes a new instance of {@link Key}
-     * @param key The expression that specifices the key selection.
+     * Initializes a new instance of {@link Key}.
+     * @param key - The expression that specifices the key selection.
      */
     constructor(key: string) {
         super(key, '@dolittle/sdk.projections.Key');

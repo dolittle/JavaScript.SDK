@@ -17,17 +17,17 @@ export class EventTypes {
 
     /**
      * Initializes an instance of the {@link EventTypes} class.
-     * @param _client The event types client.
-     * @param _executionContext The execution context.
-     * @param _logger The logger.
+     * @param _client - The event types client.
+     * @param _executionContext - The execution context.
+     * @param _logger - The logger.
      */
     constructor(readonly _client: EventTypesClient, readonly _executionContext: ExecutionContext, readonly _logger: Logger) {
     }
 
     /**
      * Registers event types.
-     * @param eventTypes The event types to register.
-     * @param cancellation The cancellation.
+     * @param eventTypes - The event types to register.
+     * @param cancellation - The cancellation.
      */
     register(eventTypes: EventType[], cancellation: Cancellation): Promise<any> {
         return Promise.all(eventTypes.map(eventType => this.sendRequest(eventType, cancellation)));

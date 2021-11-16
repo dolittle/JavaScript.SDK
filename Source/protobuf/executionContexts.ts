@@ -10,9 +10,9 @@ import guids from './guids';
 import versions from './versions';
 
 /**
- * Convert to protobuf representation
- * @param {SdkExecutionContext} input Input execution context
- * @returns {PbExecutionContext} protobuf representation
+ * Convert to protobuf representation.
+ * @param {SdkExecutionContext} input - Input execution context.
+ * @returns {PbExecutionContext} Protobuf representation.
  */
 function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     const result = new PbExecutionContext();
@@ -26,9 +26,9 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
 }
 
 /**
- * Convert to SDK representation
- * @param {SdkExecutionContext} input Input execution context
- * @returns {PbExecutionContext} SDK representation
+ * Convert to SDK representation.
+ * @param {SdkExecutionContext} input - Input execution context.
+ * @returns {PbExecutionContext} SDK representation.
  */
 function toSDK(input: PbExecutionContext): SdkExecutionContext {
     const microserviceId = MicroserviceId.from(guids.toSDK(input.getMicroserviceid()));
@@ -59,9 +59,9 @@ declare module '@dolittle/sdk.execution' {
 }
 
 /**
- * Convert to protobuf representation
- * @param {SdkExecutionContext} input Input execution context
- * @returns {PbExecutionContext} protobuf representation
+ * Convert to protobuf representation.
+ * @param {SdkExecutionContext} input - Input execution context.
+ * @returns {PbExecutionContext} Protobuf representation.
  */
 SdkExecutionContext.prototype.toProtobuf = function () {
     return toProtobuf(this);
@@ -74,9 +74,9 @@ declare module '@dolittle/contracts/Execution/ExecutionContext_pb' {
 }
 
 /**
- * Convert to SDK representation
- * @param {SdkExecutionContext} input Input execution context
- * @returns {PbExecutionContext} SDK representation
+ * Convert to SDK representation.
+ * @param {SdkExecutionContext} input - Input execution context.
+ * @returns {PbExecutionContext} SDK representation.
  */
 PbExecutionContext.prototype.toSDK = function () {
     return toSDK(this);

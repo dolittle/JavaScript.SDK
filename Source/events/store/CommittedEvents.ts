@@ -15,7 +15,7 @@ export class CommittedEvents implements Iterable<CommittedEvent> {
 
     /**
      * Creates an instance of {@link CommittedEvents}.
-     * @param {...CommittedEvent[]} events Events to initialize with.
+     * @param {...CommittedEvent[]} events - Events to initialize with.
      */
     constructor(...events: CommittedEvent[]) {
         if (events) {

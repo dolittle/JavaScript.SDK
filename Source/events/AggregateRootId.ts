@@ -4,6 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type AggregateRootIdLike = Guid | string | AggregateRootId;
 
 /**
@@ -11,7 +14,7 @@ export type AggregateRootIdLike = Guid | string | AggregateRootId;
  *
  * @export
  * @class AggregateRootId
- * @extends {ConceptAs<Guid, '@dolittle/sdk.events.AggregateRootId'>}
+ * @augments {ConceptAs<Guid, '@dolittle/sdk.events.AggregateRootId'>}
  */
 export class AggregateRootId extends ConceptAs<Guid, '@dolittle/sdk.events.AggregateRootId'> {
     constructor(id: Guid) {

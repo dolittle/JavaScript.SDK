@@ -16,17 +16,17 @@ export class AggregateRoots {
 
     /**
      * Initializes an instance of the {@link EventTypes} class.
-     * @param _client The event types client.
-     * @param _executionContext The execution context.
-     * @param _logger The logger.
+     * @param _client - The event types client.
+     * @param _executionContext - The execution context.
+     * @param _logger - The logger.
      */
     constructor(readonly _client: AggregateRootsClient, readonly _executionContext: ExecutionContext, readonly _logger: Logger) {
     }
 
     /**
      * Registers event types.
-     * @param eventTypes The event types to register.
-     * @param cancellation The cancellation.
+     * @param eventTypes - The event types to register.
+     * @param cancellation - The cancellation.
      */
     register(eventTypes: IAggregateRootTypes, cancellation: Cancellation): Promise<any> {
         return Promise.all(eventTypes.getAll().map(eventType => this.sendRequest(eventType, cancellation)));

@@ -16,21 +16,21 @@ export class AggregateRootVersion extends ConceptAs<number, '@dolittle/sdk.aggre
 
     /**
      * Initializes an instance of {@link AggregateRootVersion}.
-     * @param {number} value The version number.
+     * @param {number} value - The version number.
      */
     constructor(value: number) {
         super(value, '@dolittle/sdk.aggregates.AggregateRoot');
     }
 
     /**
-     * Get the next version number
+     * Get the next version number.
      * @returns {AggregateRootVersion}
      */
     next(): AggregateRootVersion {
         return new AggregateRootVersion(this.value + 1);
     }
 
-    /**
+    /**.
      * Creates an {@link AggregateRootVersion} from a number or existing {@link AggregateRootVersion}
      *
      * @static

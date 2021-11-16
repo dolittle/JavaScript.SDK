@@ -21,7 +21,9 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Creates an instance of {@link CommittedAggregateEvents}.
-     * @param {...CommittedEvent[]} events Events to initialize with.
+     * @param eventSourceId
+     * @param aggregateRootId
+     * @param {...CommittedEvent[]} events - Events to initialize with.
      */
     constructor(readonly eventSourceId: EventSourceId, readonly aggregateRootId: AggregateRootId, ...events: CommittedAggregateEvent[]) {
         events.forEach((event, eventIndex) => {
@@ -45,7 +47,7 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Gets whether or not there are events.
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     get hasEvents(): boolean {
         return this._events.length > 0;
@@ -53,7 +55,7 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Gets the length of the committed events array.
-     * @returns {Number}
+     * @returns {number}
      */
     get length(): number {
         return this._events.length;

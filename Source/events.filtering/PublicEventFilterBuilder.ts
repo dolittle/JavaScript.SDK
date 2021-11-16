@@ -22,13 +22,13 @@ export class PublicEventFilterBuilder {
 
     /**
      * Initializes a new instance of {@link PublicEventFilterBuilder}.
-     * @param {FilterId} _filterId Identifier of the filter.
+     * @param {FilterId} _filterId - Identifier of the filter.
      */
     constructor(private _filterId: FilterId) {}
 
     /**
      * Defines a callback for the filter.
-     * @param {FilterEventCallback} callback The callback that will be called for each event.
+     * @param {FilterEventCallback} callback - The callback that will be called for each event.
      */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
@@ -36,11 +36,11 @@ export class PublicEventFilterBuilder {
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
-     * @param {FilterId} filterId Unique identifier for the filter.
-     * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext Execution context.
-     * @param {IEventTypes} eventTypes Event types for identifying event types.
-     * @param {Logger} logger Logger for logging.
+     * @param {FilterId} filterId - Unique identifier for the filter.
+     * @param {FiltersClient} client - The client for working with the filters in the runtime.
+     * @param {ExecutionContext} executionContext - Execution context.
+     * @param {IEventTypes} eventTypes - Event types for identifying event types.
+     * @param {Logger} logger - Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(

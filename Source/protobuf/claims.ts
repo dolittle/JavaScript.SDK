@@ -5,7 +5,8 @@ import { Claim as SdkClaim, Claims } from '@dolittle/sdk.execution';
 import { Claim as PbClaim } from '@dolittle/contracts/Security/Claim_pb';
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
+ * @param input
  * @returns {PbClaim}
  */
 function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
@@ -27,7 +28,8 @@ function toProtobuf(input: SdkClaim | Claims): PbClaim | PbClaim[] {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param input
  * @returns {SdkClaim}
  */
 function toSDK(input: PbClaim): SdkClaim {
@@ -51,7 +53,7 @@ declare module '@dolittle/sdk.execution' {
 }
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {PbClaim}
  */
 SdkClaim.prototype.toProtobuf = function () {
@@ -59,7 +61,7 @@ SdkClaim.prototype.toProtobuf = function () {
 };
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {PbClaim[]}
  */
 Claims.prototype.toProtobuf = function () {
@@ -73,7 +75,7 @@ declare module '@dolittle/contracts/Security/Claim_pb' {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
  * @returns {SdkClaim}
  */
 PbClaim.prototype.toSDK = function () {

@@ -19,12 +19,12 @@ export class OnDecoratedMethods {
     static readonly methodsPerAggregate: Map<Function, OnDecoratedMethod[]> = new Map();
 
     /**
-     * Registers handles decorated methods
-     * @param {Constructor<any>} target Target that owns the handle method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event the handle method is for or the event.
-     * @param {number | undefined} generation Generation of event type or undefined.
-     * @param {EventHandlerSignature<any>} method The handle method.
-     * @param {string} name The name of the method.
+     * Registers handles decorated methods.
+     * @param {Constructor<any>} target - Target that owns the handle method.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the handle method is for or the event.
+     * @param {number | undefined} generation - Generation of event type or undefined.
+     * @param {EventHandlerSignature<any>} method - The handle method.
+     * @param {string} name - The name of the method.
      */
     static register(
         target: Constructor<any>,

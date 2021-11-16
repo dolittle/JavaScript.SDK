@@ -8,8 +8,8 @@ import { ConceptAs } from '@dolittle/concepts';
  */
 export class PropertyNameKeySelector extends ConceptAs<string, '@dolittle/sdk.projections.PropertyNameKeySelector'> {
     /**
-     * Initializes a new instance of {@link PropertyNameKeySelector}
-     * @param expression The expression that specifices the key selection.
+     * Initializes a new instance of {@link PropertyNameKeySelector}.
+     * @param expression - The expression that specifices the key selection.
      */
     constructor(expression: string) {
         super(expression, '@dolittle/sdk.projections.PropertyNameKeySelector');

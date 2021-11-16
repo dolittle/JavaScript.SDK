@@ -12,9 +12,9 @@ export class ProjectionContext {
 
     /**
      * Initializes a new instance of {@link ProjectionContext}.
-     * @param {boolean} wasCreatedFromInitialState Whether the projection state was created from the initial state or retrieved from a persisted state.
-     * @param {Key} key The projection key.
-     * @param {EventContext} eventContext The context of the event.
+     * @param {boolean} wasCreatedFromInitialState - Whether the projection state was created from the initial state or retrieved from a persisted state.
+     * @param {Key} key - The projection key.
+     * @param {EventContext} eventContext - The context of the event.
      */
     constructor(
         readonly wasCreatedFromInitialState: boolean,

@@ -4,7 +4,7 @@
 import { Exception } from '@dolittle/rudiments';
 
 /**
- * The exception that gets thrown when a event types is not set and is expected
+ * The exception that gets thrown when a event types is not set and is expected.
  */
 
 export class EventTypesNotSet extends Exception {

@@ -4,7 +4,7 @@
 import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-/**
+/**.
  * Exception that gets thrown when the {@link IContainer} could not create an instance of the projection
  *
  * @export
@@ -14,8 +14,8 @@ import { Constructor } from '@dolittle/types';
 export class CouldNotCreateInstanceOfProjection extends Exception {
     /**
      * Initializes an instance of {@link CouldNotCreateInstanceOfProjection}.
-     * @param {Constructor<any>} type The projection type to be instantiated.
-     * @param {Exception} inner The inner exception.
+     * @param {Constructor<any>} type - The projection type to be instantiated.
+     * @param {Exception} inner - The inner exception.
      */
     constructor(type: Constructor<any>, inner:  Exception) {
         super(`Could not create an instance of the projection ${type.name}. ${inner}`);

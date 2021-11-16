@@ -14,10 +14,10 @@ import { EventTypeId, EventTypeIdLike } from './EventTypeId';
  */
 export class EventType extends Artifact<EventTypeId> {
     /**
-     * Initializes a new instance of {@link EventType}
-     * @param {EventTypeId} id The unique identifier of the event type.
-     * @param {Generation} [generation] Optional generation - will default to {@link generation.first}.
-     * @param {EventTypeAlias} [alias] Optional alias
+     * Initializes a new instance of {@link EventType}.
+     * @param {EventTypeId} id - The unique identifier of the event type.
+     * @param {Generation} [generation] - Optional generation - will default to {@link generation.first}.
+     * @param {EventTypeAlias} [alias] - Optional alias.
      */
     constructor(id: EventTypeId, generation: Generation = Generation.first, readonly alias?: EventTypeAlias) {
         super(id, generation);
@@ -37,9 +37,9 @@ export class EventType extends Artifact<EventTypeId> {
 
     /**
      * Creates an instance of {@link EventType}.
-     * @param id The Event Type Id.
-     * @param generation The generation of the Event Type.
-     * @returns The created {@link EventType}
+     * @param id - The Event Type Id.
+     * @param generation - The generation of the Event Type.
+     * @returns The created {@link EventType}.
      */
     static from(id: EventTypeIdLike, generation?: GenerationLike): EventType {
         if (generation === undefined) {

@@ -19,11 +19,12 @@ export class Projection<T> extends IProjection<T> {
     readonly events: Iterable<EventSelector>;
 
     /**
-     * Initializes a new instance of {@link Projection}
-     * @param {ProjectionId} projectionId The unique identifier for the projection.
-     * @param {Constructor<T>|T} readModelTypeOrInstance The read model type or instance produced by the projection.
-     * @param {ScopId} scopeId The identifier of the scope the projection is in.
-     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events The events with respective callbacks and keyselectors used by the projection.
+     * Initializes a new instance of {@link Projection}.
+     * @param {ProjectionId} projectionId - The unique identifier for the projection.
+     * @param {Constructor<T>|T} readModelTypeOrInstance - The read model type or instance produced by the projection.
+     * @param {ScopId} scopeId - The identifier of the scope the projection is in.
+     * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} events - The events with respective callbacks and keyselectors used by the projection.
+     * @param _eventMap
      */
     constructor(
         readonly projectionId: ProjectionId,

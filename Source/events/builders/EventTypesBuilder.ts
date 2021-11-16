@@ -6,6 +6,9 @@ import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeAlias, EventTypeAliasLike, EventTypeId, EventTypeIdLike, EventTypesFromDecorators, IEventTypes, internal } from '../index';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
+/**
+ *
+ */
 export type EventTypesBuilderCallback = (builder: EventTypesBuilder) => void;
 
 /**
@@ -16,21 +19,21 @@ export class EventTypesBuilder {
 
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type Type to associate.
-     * @param {EventType} eventType EventType to associate with.
+     * @param {Constructor} type - Type to associate.
+     * @param {EventType} eventType - EventType to associate with.
      */
     associate<T = any>(type: Constructor<T>, eventType: EventType): EventTypesBuilder;
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type Type to associate.
-     * @param {EventTypeId | Guid | string} identifier Identifier to associate with.
+     * @param {Constructor} type - Type to associate.
+     * @param {EventTypeId | Guid | string} identifier - Identifier to associate with.
      */
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, alias?: EventTypeAliasLike): EventTypesBuilder;
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type Type to associate.
-     * @param {EventTypeId | Guid | string} identifier Identifier to associate with.
-     * @param {Generation | number} generation The generation to associate with.
+     * @param {Constructor} type - Type to associate.
+     * @param {EventTypeId | Guid | string} identifier - Identifier to associate with.
+     * @param {Generation | number} generation - The generation to associate with.
      */
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, generation: GenerationLike, alias?: EventTypeAliasLike): EventTypesBuilder;
     associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, maybeGenerationOrMaybeAlias?: GenerationLike | EventTypeAliasLike | undefined, maybeAlias?: EventTypeAliasLike): EventTypesBuilder {
@@ -47,7 +50,7 @@ export class EventTypesBuilder {
 
     /**
      * Register the type as an {@link EventType}.
-     * @param type The type to register as an {@link EventType}
+     * @param type - The type to register as an {@link EventType}.
      */
     register<T = any>(type: Constructor<T>): EventTypesBuilder {
         this.associate(type, EventTypesFromDecorators.eventTypes.getFor(type));
@@ -56,6 +59,7 @@ export class EventTypesBuilder {
 
     /**
      * Build an artifacts instance.
+     * @param eventTypes
      * @returns {IArtifacts} Artifacts to work with.
      */
     addAssociationsInto(eventTypes: IEventTypes): void {
@@ -66,8 +70,8 @@ export class EventTypesBuilder {
 
     /**
      * Builds the event types by registering them with the Runtime.
-     * @param eventTypes The event types client.
-     * @param cancellation The cancellation.
+     * @param eventTypes - The event types client.
+     * @param cancellation - The cancellation.
      */
     buildAndRegister(eventTypes: internal.EventTypes, cancellation: Cancellation) {
         eventTypes.register(this._associations.map(_ => _[1]), cancellation);

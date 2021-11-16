@@ -4,6 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type EventTypeIdLike = Guid | string | EventTypeId;
 
 /**
@@ -11,7 +14,7 @@ export type EventTypeIdLike = Guid | string | EventTypeId;
  *
  * @export
  * @class EventTypeId
- * @extends {ConceptAs<Guid, '@dolittle/sdk.artifacts.EventTypeId'>}
+ * @augments {ConceptAs<Guid, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
 export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.events.EventTypeId'> {
     constructor(id: Guid) {

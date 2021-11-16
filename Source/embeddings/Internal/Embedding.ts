@@ -29,11 +29,13 @@ export class Embedding<T> implements IEmbedding<T> {
     readonly events: Iterable<EventType>;
 
     /**
-     * Initializes a new instance of {@link Embedding}
-     * @param {EmbeddingId} embeddingId The unique identifier for the embedding.
-     * @param {Constructor<T> | T} readModelTypeOrInstance The read model type or instance produced by the embedding.
-     * @param {EventTypeMap<EmbeddingProjectCallback<any>>} events The events with their respective callbacks in the embedding.
-     * @param {EmbeddingUpdateCallback} _updateMethod The compare method for the embedding.
+     * Initializes a new instance of {@link Embedding}.
+     * @param {EmbeddingId} embeddingId - The unique identifier for the embedding.
+     * @param {Constructor<T> | T} readModelTypeOrInstance - The read model type or instance produced by the embedding.
+     * @param {EventTypeMap<EmbeddingProjectCallback<any>>} events - The events with their respective callbacks in the embedding.
+     * @param _eventMap
+     * @param {EmbeddingUpdateCallback} _updateMethod - The compare method for the embedding.
+     * @param _deleteMethod
      */
     constructor(
         readonly embeddingId: EmbeddingId,

@@ -5,7 +5,8 @@ import { Guid } from '@dolittle/rudiments';
 import { Uuid } from '@dolittle/contracts/Protobuf/Uuid_pb';
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
+ * @param guid
  * @returns {Uuid}
  */
 function toProtobuf(guid: Guid): Uuid {
@@ -15,7 +16,8 @@ function toProtobuf(guid: Guid): Uuid {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param uuid
  * @returns {Guid}
  */
 function toSDK(uuid?: Uuid): Guid {
@@ -36,7 +38,7 @@ declare module '@dolittle/rudiments' {
     }
 }
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {Uuid}
  */
 Guid.prototype.toProtobuf = function () {
@@ -49,7 +51,7 @@ declare module '@dolittle/contracts/Protobuf/Uuid_pb' {
     }
 }
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
  * @returns {Guid}
  */
 Uuid.prototype.toSDK = function () {

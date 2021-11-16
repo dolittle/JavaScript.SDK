@@ -13,6 +13,9 @@ import { EventHandlerProcessor } from '../Internal';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
+/**
+ *
+ */
 export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
 
 /**
@@ -26,7 +29,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Initializes a new instance of {@link EventHandlerBuilder}.
-     * @param {EventHandlerId} _eventHandlerId The unique identifier of the event handler to build for.
+     * @param {EventHandlerId} _eventHandlerId - The unique identifier of the event handler to build for.
      */
     constructor(private _eventHandlerId: EventHandlerId) {
         super();
@@ -54,7 +57,7 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
 
     /**
      * Defines the event handler to operate on a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId Scope the event handler operates on.
+     * @param {ScopeId | Guid | string} scopeId - Scope the event handler operates on.
      * @returns {EventHandlerBuilder}
      */
     inScope(scopeId: ScopeId | Guid | string): EventHandlerBuilder {

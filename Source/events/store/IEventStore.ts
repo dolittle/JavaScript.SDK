@@ -12,16 +12,16 @@ import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
 
 /**
- * Defines the API surface for the event store
+ * Defines the API surface for the event store.
  */
 export abstract class IEventStore {
 
     /**
      * Commit a single event.
-     * @param {*} event The content of the event.
-     * @param {EventSourceId | Guid | string} eventSourceId The source of the event - a unique identifier that is associated with the event.
-     * @param {EventType | EventTypeId | Guid | string} eventType An event type or an identifier representing the event type.
-     * @param {Cancellation} cancellation The cancellation signal.
+     * @param {*} event - The content of the event.
+     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {EventType | EventTypeId | Guid | string} eventType - An event type or an identifier representing the event type.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
@@ -30,20 +30,20 @@ export abstract class IEventStore {
 
     /**
      * Commit a collection of events.
-     * @param {UncommittedEvent|UncommittedEvent[]} eventOrEvents The event or events.
-     * @param {Cancellation} cancellation The cancellation signal.
+     * @param {UncommittedEvent|UncommittedEvent[]} eventOrEvents - The event or events.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResult>}
-     * @summary If no event type identifier or event type is supplied, it will look for associated event types based
-     * @summary on the actual type of the event.
+     * @summary If no event type identifier or event type is supplied, it will look for associated event types based.
+     * @summary On the actual type of the event.
      */
     abstract commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single public event.
-     * @param {*} event The content of the event.
-     * @param {EventSourceId | Guid | string} eventSourceId The source of the event - a unique identifier that is associated with the event.
-     * @param {EventType | EventTypeId | Guid | string} eventType An event type or an identifier representing the event type.
-     * @param {Cancellation} cancellation The cancellation signal.
+     * @param {*} event - The content of the event.
+     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {EventType | EventTypeId | Guid | string} eventType - An event type or an identifier representing the event type.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
@@ -52,13 +52,13 @@ export abstract class IEventStore {
 
     /**
      * Commit a single event for an aggregate.
-     * @param {*} event The content of the event.
-     * @param {EventSourceId | Guid | string } eventSourceId The source of the event - a unique identifier that is associated with the event.
-     * @param {AggregateRootId} aggregateRootId The type of the aggregate root that applied the event to the Event Source
-     * @param {AggregateRootVersion} expectedAggregateRootVersion The {AggregateRootVersion} of the Aggregate Root that was used to apply the rules that resulted in the Events.
+     * @param {*} event - The content of the event.
+     * @param {EventSourceId | Guid | string } eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {AggregateRootId} aggregateRootId - The type of the aggregate root that applied the event to the Event Source.
+     * @param {AggregateRootVersion} expectedAggregateRootVersion - The {AggregateRootVersion} of the Aggregate Root that was used to apply the rules that resulted in the Events.
      * The events can only be committed to the Event Store if the version of Aggregate Root has not changed.
-     * @param {EventType|Guid|string} [eventType] An artifact or an identifier representing the artifact.
-     * @param {Cancellation} cancellation The cancellation signal.
+     * @param {EventType|Guid|string} [eventType] - An artifact or an identifier representing the artifact.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResponse>}
      * @summary If no event type identifier or event type is supplied, it will look for associated artifacts based
      * on the actual type of the event.
@@ -67,27 +67,27 @@ export abstract class IEventStore {
 
     /**
      * Commit a collection of events.
-     * @param {UncommittedEvent} events Collection of aggregate events.
-     * @param {Cancellation} cancellation The cancellation signal.
-     * @returns Promise<CommitEventsResponse>
-     * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based
-     * @summary on the actual type of the event.
+     * @param {UncommittedEvent} events - Collection of aggregate events.
+     * @param {Cancellation} cancellation - The cancellation signal.
+     * @returns Promise<CommitEventsResponse>.
+     * @summary If no artifact identifier or artifact is supplied, it will look for associated artifacts based.
+     * @summary On the actual type of the event.
      */
     abstract commitForAggregate(events: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
 
     /**
      * Commit for aggregate root.
-     * @param {AggregateRoot} aggregateRootId Aggregate root to commit for.
-     * @param {Cancellation} cancellation The cancellation signal
+     * @param {AggregateRoot} aggregateRootId - Aggregate root to commit for.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {CommitForAggregateBuilder}
      */
     abstract forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder;
 
     /**
      * Fetches the {@link CommittedAggregateEvents} for an aggregate root.
-     * @param {AggregateRootId} aggregateRootId The aggregate root to fetch for.
-     * @param {EventSourceId} eventSourceId The event source id to fetch for.
-     * @param {Cancellation} cancellation The cancellation signal.
+     * @param {AggregateRootId} aggregateRootId - The aggregate root to fetch for.
+     * @param {EventSourceId} eventSourceId - The event source id to fetch for.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommittedAggregateEvents>}
      */
     abstract fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation?: Cancellation): Promise<CommittedAggregateEvents>;

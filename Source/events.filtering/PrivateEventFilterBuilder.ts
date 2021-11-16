@@ -24,13 +24,13 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Initializes a new instance of {@link PrivateEventFilterBuilder}.
-     * @param {FilterId} _filterId Identifier of the filter.
+     * @param {FilterId} _filterId - Identifier of the filter.
      */
     constructor(private _filterId: FilterId) {}
 
     /**
      * Defines which {@link ScopeId} the filter operates on.
-     * @param {ScopeId | Guid | string} scopeId Scope the filter operates on.
+     * @param {ScopeId | Guid | string} scopeId - Scope the filter operates on.
      * @returns {PrivateEventFilterBuilder}
      */
     inScope(scopeId: ScopeId | Guid | string): PrivateEventFilterBuilder {
@@ -58,11 +58,11 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
-     * @param {FilterId} filterId Unique identifier for the filter.
-     * @param {FiltersClient} client The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext Execution context manager for working with execution context.
-     * @param {IEventTypes} eventTypes Event types for identifying event types.
-     * @param {Logger} logger Logger for logging.
+     * @param {FilterId} filterId - Unique identifier for the filter.
+     * @param {FiltersClient} client - The client for working with the filters in the runtime.
+     * @param {ExecutionContext} executionContext - Execution context manager for working with execution context.
+     * @param {IEventTypes} eventTypes - Event types for identifying event types.
+     * @param {Logger} logger - Logger for logging.
      * @returns {IFilterProcessor}
      */
     build(

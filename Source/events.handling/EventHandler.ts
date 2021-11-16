@@ -15,11 +15,12 @@ export class EventHandler extends IEventHandler {
 
     readonly hasAlias: boolean;
     /**
-     * Initializes a new instance of {@link EventHandler}
-     * @param {EventHandlerId} eventHandlerId The unique identifier of the event handler.
-     * @param {ScopeId} scopeId The identifier of the scope the event handler is in.
-     * @param {boolean} partitioned Whether or not the event handler is partitioned.
-     * @param {EventTypeMap<EventHandlerSignature<any>>} handleMethodsByEventType Handle methods per event type.
+     * Initializes a new instance of {@link EventHandler}.
+     * @param {EventHandlerId} eventHandlerId - The unique identifier of the event handler.
+     * @param {ScopeId} scopeId - The identifier of the scope the event handler is in.
+     * @param {boolean} partitioned - Whether or not the event handler is partitioned.
+     * @param {EventTypeMap<EventHandlerSignature<any>>} handleMethodsByEventType - Handle methods per event type.
+     * @param alias
      */
     constructor(
         readonly eventHandlerId: EventHandlerId,

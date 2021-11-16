@@ -11,8 +11,8 @@ export class AggregateRootVersionIsOutOfOrder extends Error {
 
     /**
      * Initializes a new instance of {@link AggregateRootVersionIsOutOfOrder}.
-     * @param {AggregateRootVersion} version The attempted version number.
-     * @param {AggregateRootVersion} expectedVersion The expected version number.
+     * @param {AggregateRootVersion} version - The attempted version number.
+     * @param {AggregateRootVersion} expectedVersion - The expected version number.
      */
     constructor(version: AggregateRootVersion, expectedVersion: AggregateRootVersion) {
         super(`Aggregate Root Version is out of order. Version '${version}' does not match '${expectedVersion}'.`);

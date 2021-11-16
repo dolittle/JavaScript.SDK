@@ -16,10 +16,14 @@ export class EventStoreBuilder extends IEventStoreBuilder{
 
     /**
      * Initializes a new instance of {@link EventStoreBuilder}.
-     * @param {EventStoreClient} eventStoreClient The event store client.
-     * @param {IEventTypes} eventTypes The event types.
-     * @param {ExecutionContext} executionContext The execution context.
-     * @param {Logger} logger The logger.
+     * @param {EventStoreClient} eventStoreClient - The event store client.
+     * @param {IEventTypes} eventTypes - The event types.
+     * @param {ExecutionContext} executionContext - The execution context.
+     * @param {Logger} logger - The logger.
+     * @param _eventStoreClient
+     * @param _eventTypes
+     * @param _executionContext
+     * @param _logger
      */
     constructor(
         private readonly _eventStoreClient: EventStoreClient,

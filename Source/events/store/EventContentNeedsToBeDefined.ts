@@ -4,7 +4,7 @@
 export class EventContentNeedsToBeDefined extends Error {
 
     /**
-     * Initializes a new instance of {@link EventContentNeedsToBeDefined}
+     * Initializes a new instance of {@link EventContentNeedsToBeDefined}.
      */
     constructor() {
         super('Event content can not be null or undefined');

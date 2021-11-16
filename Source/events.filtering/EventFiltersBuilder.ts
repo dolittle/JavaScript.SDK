@@ -17,8 +17,17 @@ import { IFilters } from './IFilters';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 
+/**
+ *
+ */
 export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
+/**
+ *
+ */
 export type PrivateEventFilterBuilderCallback = (builder: PrivateEventFilterBuilder) => void;
+/**
+ *
+ */
 export type PublicEventFilterBuilderCallback = (builder: PublicEventFilterBuilder) => void;
 
 /**
@@ -30,9 +39,9 @@ export class EventFiltersBuilder {
 
     /**
      * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId The identifier of the filter.
-     * @param {PrivateEventFilterBuilderCallback} callback Callback for building the event filter.
-     * @returns {EventFiltersBuilder} Continuation of the builder
+     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
+     * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
+     * @returns {EventFiltersBuilder} Continuation of the builder.
      */
     createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): EventFiltersBuilder {
         const builder = new PrivateEventFilterBuilder(FilterId.from(filterId));
@@ -43,9 +52,9 @@ export class EventFiltersBuilder {
 
     /**
      * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId The identifier of the filter.
-     * @param {PublicEventFilterBuilderCallback} callback Callback for building the event filter.
-     * @returns {EventFiltersBuilder} Continuation of the builder
+     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
+     * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
+     * @returns {EventFiltersBuilder} Continuation of the builder.
      */
     createPublicFilter(filterId: FilterId | Guid | string, callback: PublicEventFilterBuilderCallback): EventFiltersBuilder {
         const builder = new PublicEventFilterBuilder(FilterId.from(filterId));
@@ -56,10 +65,11 @@ export class EventFiltersBuilder {
 
     /**
      * Builds and registers all the event filters.
-     * @param {FiltersClient} client The gRPC client for filters.
-     * @param {ExecutionContext} executionContext Execution context.
-     * @param {IEventTypes} eventTypes For event types resolution.
-     * @param {Logger} logger For logging.
+     * @param {FiltersClient} client - The gRPC client for filters.
+     * @param {ExecutionContext} executionContext - Execution context.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @param cancellation
      */
     buildAndRegister(
         client: FiltersClient,

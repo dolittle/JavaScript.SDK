@@ -8,12 +8,12 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class CannotRegisterEmbeddingThatIsNotAClass
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class CannotRegisterEmbeddingThatIsNotAClass extends Exception {
     /**
      * Creates an instance of CannotRegisterEmbeddingThatIsNotAClass.
-     * @param {any} instance The instance of the embedding that is not class.
+     * @param {any} instance - The instance of the embedding that is not class.
      */
     constructor(instance: any) {
         super(`Embedding instance ${instance} is not a class`);

@@ -11,9 +11,9 @@ export class DeletionDecoratedMethod {
 
     /**
      * Initializes a new instance of {@link DeletionDecoratedMethod}.
-     * @param {Constructor<any>} owner Owner of the method.
-     * @param {EmbeddingClassDeletionMethod} method The actual method that gets the embedding closer to being deleted.
-     * @param {string} name The name of the method.
+     * @param {Constructor<any>} owner - Owner of the method.
+     * @param {EmbeddingClassDeletionMethod} method - The actual method that gets the embedding closer to being deleted.
+     * @param {string} name - The name of the method.
      */
     constructor(
         readonly owner: Constructor<any>,

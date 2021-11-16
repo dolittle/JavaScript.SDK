@@ -4,4 +4,7 @@
 import { GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventTypeAliasLike } from './EventTypeAlias';
 
+/**
+ *
+ */
 export type EventTypeOptions = { generation?: GenerationLike, alias?: EventTypeAliasLike };

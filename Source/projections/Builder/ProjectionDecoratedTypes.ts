@@ -11,7 +11,7 @@ export class ProjectionDecoratedTypes {
 
     /**
      * Registers a decorated projection class with the Runtime.
-     * @param {ProjectionDecoratedType} projectionDecoratedType The decorated type to register.
+     * @param {ProjectionDecoratedType} projectionDecoratedType - The decorated type to register.
      */
     static register(projectionDecoratedType: ProjectionDecoratedType) {
         this.types.push(projectionDecoratedType);

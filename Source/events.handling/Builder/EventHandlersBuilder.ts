@@ -18,18 +18,21 @@ import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandl
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
+/**
+ *
+ */
 export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
 
 /**
- * Represents the builder for configuring event handlers
+ * Represents the builder for configuring event handlers.
  */
 export class EventHandlersBuilder {
     private _eventHandlerBuilders: ICanBuildAndRegisterAnEventHandler[] = [];
 
     /**
      * Start building an event handler.
-     * @param {EventHandlerId | Guid | string} eventHandlerId The unique identifier of the event handler.
-     * @param {EventHandlerBuilderCallback} callback Callback for building out the event handler.
+     * @param {EventHandlerId | Guid | string} eventHandlerId - The unique identifier of the event handler.
+     * @param {EventHandlerBuilderCallback} callback - Callback for building out the event handler.
      */
     createEventHandler(eventHandlerId: EventHandlerId | Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
         const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
@@ -40,12 +43,12 @@ export class EventHandlersBuilder {
 
     /**
      * Register a type as an event handler.
-     * @param type The type to register as an event handler.
+     * @param type - The type to register as an event handler.
      */
     register<T = any>(type: Constructor<T>): EventHandlersBuilder;
     /**
      * Register an instance as an event handler.
-     * @param instance The instance to register as an event handler.
+     * @param instance - The instance to register as an event handler.
      */
     register<T = any>(instance: T): EventHandlersBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
@@ -55,6 +58,12 @@ export class EventHandlersBuilder {
 
     /**
      * Builds an instance for holding event handlers.
+     * @param client
+     * @param container
+     * @param executionContext
+     * @param eventTypes
+     * @param logger
+     * @param cancellation
      * @returns {IEventHandlers} New instance.
      */
     buildAndRegister(

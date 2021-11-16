@@ -11,8 +11,9 @@ export class EventLogSequenceNumberIsOutOfOrder extends Error {
 
     /**
      * Initializes a new instance of {@link AggregateRootVersionIsOutOfOrder}.
-     * @param {EventLogSequenceNumber} version The attempted sequence number.
-     * @param {EventLogSequenceNumber} expectedSequenceNumber The expected sequence number.
+     * @param {EventLogSequenceNumber} version - The attempted sequence number.
+     * @param sequenceNumber
+     * @param {EventLogSequenceNumber} expectedSequenceNumber - The expected sequence number.
      */
     constructor(sequenceNumber: EventLogSequenceNumber, expectedSequenceNumber: EventLogSequenceNumber) {
         super(`Event Log Sequence is out of order because Event Log Sequence Number  '${sequenceNumber}' is not greater than '${expectedSequenceNumber}'.`);

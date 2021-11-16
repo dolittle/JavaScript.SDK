@@ -12,14 +12,14 @@ import { IProjections } from '..';
 export interface ICanBuildAndRegisterAProjection {
 
     /**
-     * Builds and registers a projection
-     * @param {ProjectionsClient} client The projections client.
-     * @param {IProjections} projections  The projections.
-     * @param {IContainer} container The IoC container.
-     * @param {ExcecutionContext} executionContext The execution context.
-     * @param {IEventTypes} eventTypes The event types.
-     * @param {Logger} logger The logger.
-     * @param {Cancellation} cancellation The cancellation token.
+     * Builds and registers a projection.
+     * @param {ProjectionsClient} client - The projections client.
+     * @param {IProjections} projections - The projections.
+     * @param {IContainer} container - The IoC container.
+     * @param {ExcecutionContext} executionContext - The execution context.
+     * @param {IEventTypes} eventTypes - The event types.
+     * @param {Logger} logger - The logger.
+     * @param {Cancellation} cancellation - The cancellation token.
      */
     buildAndRegister (
         client: ProjectionsClient,

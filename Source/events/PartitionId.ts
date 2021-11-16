@@ -13,7 +13,7 @@ export class PartitionId extends ConceptAs<string, '@dolittle/sdk.events.Partiti
     }
 
     /**
-     * Gets the unspecified partition id
+     * Gets the unspecified partition id.
      */
     static unspecified: PartitionId = PartitionId.from(Guid.empty.toString());
 

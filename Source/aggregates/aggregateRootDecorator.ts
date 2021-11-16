@@ -9,8 +9,9 @@ import { AggregateRootTypeOptions } from './AggregateRootTypeOptions';
 import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecorators';
 
 /**
- * Decorator to mark a class as an aggregate root
- * @param {AggregateRootIdLike} aggregateRootId The identifier of the aggregate root.
+ * Decorator to mark a class as an aggregate root.
+ * @param {AggregateRootIdLike} aggregateRootId - The identifier of the aggregate root.
+ * @param options
  */
 export function aggregateRoot(aggregateRootId: AggregateRootIdLike, options: AggregateRootTypeOptions = {}) {
     return function (target: any) {

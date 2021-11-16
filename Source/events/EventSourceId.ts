@@ -9,7 +9,7 @@ import { Guid } from '@dolittle/rudiments';
  *
  * @export
  * @class EventSourceId
- * @extends {ConceptAs<string, '@dolittle/sdk.events.EventSourceId'>}
+ * @augments {ConceptAs<string, '@dolittle/sdk.events.EventSourceId'>}
  */
 export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.EventSourceId'> {
     constructor(id: string) {
@@ -17,7 +17,7 @@ export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.Event
     }
 
     /**
-     * Create a new {@link EventSourceId} with a new unique identifier
+     * Create a new {@link EventSourceId} with a new unique identifier.
      * @returns {EventSourceId}
      */
     static new(): EventSourceId {

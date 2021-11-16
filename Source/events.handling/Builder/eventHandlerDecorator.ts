@@ -13,8 +13,8 @@ import { Constructor } from '@dolittle/types';
 
 /**
  * Decorator to mark a class as an EventHandler.
- * @param {EventHandlerId | Guid | string} eventHandlerId The id to associate with this EventHandler
- * @param {EventHandlerOptions} [options={}] Options to give to the EventHandler
+ * @param {EventHandlerId | Guid | string} eventHandlerId - The id to associate with this EventHandler.
+ * @param {EventHandlerOptions} [options={}] - Options to give to the EventHandler.
  */
 export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}) {
     return function (target: any) {

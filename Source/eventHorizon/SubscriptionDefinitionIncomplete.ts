@@ -8,13 +8,13 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class SubscriptionDefinitionIncomplete
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class SubscriptionDefinitionIncomplete extends Exception {
     /**
      * Creates an instance of SubscriptionDefinitionIncomplete.
-     * @param {string} missingInformation The information missing to complete the subscription definition.
-     * @param {string} correctingAction Required action to complete the subscription definition.
+     * @param {string} missingInformation - The information missing to complete the subscription definition.
+     * @param {string} correctingAction - Required action to complete the subscription definition.
      */
     constructor(missingInformation: string, correctingAction: string) {
         super(`Event Horizon Subscription definition is missing ${missingInformation}. ${correctingAction} before calling build()`);

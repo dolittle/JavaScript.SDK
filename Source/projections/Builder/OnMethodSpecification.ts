@@ -5,4 +5,7 @@ import { ProjectionCallback } from '..';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { TypeOrEventType } from './TypeOrEventType';
 
+/**
+ *
+ */
 export type OnMethodSpecification<T> = [TypeOrEventType, KeySelectorBuilderCallback, ProjectionCallback<T>];

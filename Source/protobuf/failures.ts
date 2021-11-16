@@ -9,8 +9,9 @@ import { MissingFailureIdentifier } from './MissingFailureIdentifier';
 import guids from './guids';
 
 /**
- * Convert to protobuf representation
- * @returns {PbFailure} Protobuf failure
+ * Convert to protobuf representation.
+ * @param input
+ * @returns {PbFailure} Protobuf failure.
  */
 function toProtobuf(input: SdkFailure): PbFailure {
     const artifact = new PbFailure();
@@ -20,7 +21,8 @@ function toProtobuf(input: SdkFailure): PbFailure {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param input
  * @returns {SdkFailure}
  */
 function toSDK(input?: PbFailure): SdkFailure | undefined {
@@ -46,7 +48,7 @@ declare module './Failure' {
 }
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {PbFailure}
  */
 SdkFailure.prototype.toProtobuf = function () {
@@ -60,7 +62,7 @@ declare module '@dolittle/contracts/Protobuf/Failure_pb' {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
  * @returns {SdkFailure}
  */
 PbFailure.prototype.toSDK = function () {

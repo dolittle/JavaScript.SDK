@@ -8,12 +8,12 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class CannotRegisterEventHandlerThatIsNotAClass
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class CannotRegisterEventHandlerThatIsNotAClass extends Exception {
     /**
      * Creates an instance of CannotRegisterEventHandlerThatIsNotAClass.
-     * @param {any} instance The instance of the event handler that is not class.
+     * @param {any} instance - The instance of the event handler that is not class.
      */
     constructor(instance: any) {
         super(`Event handler instance ${instance} is not a class`);

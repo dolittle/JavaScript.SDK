@@ -4,6 +4,9 @@
 import { ConceptAs } from '@dolittle/concepts';
 import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 
+/**
+ *
+ */
 export type GenerationLike = Generation | number;
 
 /**
@@ -11,7 +14,7 @@ export type GenerationLike = Generation | number;
  *
  * @export
  * @class Generation
- * @extends {ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>}
+ * @augments {ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>}
  */
 export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Generation'>{
 
@@ -20,7 +23,7 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
         super(generation, '@dolittle/sdk.artifacts.Generation');
     }
 
-    /**
+    /**.
      * Represents the first {Generation}
      *
      * @static

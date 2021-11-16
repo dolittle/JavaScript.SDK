@@ -6,7 +6,7 @@ import { Exception } from '@dolittle/rudiments';
 export class CouldNotResolveUpdateToEvents extends Exception {
 
     /**
-     * Initializes a new instance of {@link CouldNotResolveUpdateToEvents}
+     * Initializes a new instance of {@link CouldNotResolveUpdateToEvents}.
      */
     constructor() {
         super('resolveUpdateToEvents has failed to process');

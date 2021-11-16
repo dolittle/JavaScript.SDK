@@ -3,4 +3,7 @@
 
 import { EventContext } from '@dolittle/sdk.events';
 
+/**
+ *
+ */
 export type FilterEventCallback = (event: any, context: EventContext) => boolean | Promise<boolean>;

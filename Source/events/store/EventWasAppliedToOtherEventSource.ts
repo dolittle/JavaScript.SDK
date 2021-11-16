@@ -10,9 +10,9 @@ import { EventSourceId } from '../index';
 export class EventWasAppliedToOtherEventSource extends Error {
 
     /**
-     * Initializes a new instance of {@link EventWasAppliedToOtherEventSource}
-     * @param {EventSourceId} eventSource The applied event source.
-     * @param {EventSourceId} expectedEventSource The expected event source.
+     * Initializes a new instance of {@link EventWasAppliedToOtherEventSource}.
+     * @param {EventSourceId} eventSource - The applied event source.
+     * @param {EventSourceId} expectedEventSource - The expected event source.
      */
     constructor(eventSource: EventSourceId, expectedEventSource: EventSourceId) {
         super(`Event Source '${eventSource}' does not match with expected '${expectedEventSource}'.`);

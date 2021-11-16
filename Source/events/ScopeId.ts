@@ -12,7 +12,7 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
         super(id, '@dolittle/sdk.events.ScopeId');
     }
 
-    /**
+    /**.
      * Represents the default scope
      *
      * @static

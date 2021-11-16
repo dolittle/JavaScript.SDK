@@ -25,7 +25,7 @@ export class KeySelectorBuilder<T = any> {
 
     /**
      * Select projection key from a property on the event.
-     * @param {keyof T} property The property to use as key.
+     * @param {keyof T} property - The property to use as key.
      * @returns {EventPropertyKeySelector}
      */
     keyFromProperty(property: keyof T): EventPropertyKeySelector {

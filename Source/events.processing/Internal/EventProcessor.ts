@@ -43,13 +43,13 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     /**
      * Get the retry processing state from the request.
-     * @param {TRequest} request The request to get the retry processing state from
+     * @param {TRequest} request - The request to get the retry processing state from.
      */
     protected abstract getRetryProcessingStateFromRequest(request: TRequest): RetryProcessingState | undefined;
 
     /**
-     * Create a response from a processor failure
-     * @param {ProcessorFailure} failure The processor failure.
+     * Create a response from a processor failure.
+     * @param {ProcessorFailure} failure - The processor failure.
      */
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 

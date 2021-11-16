@@ -14,7 +14,7 @@ export class Filters extends IFilters {
 
     /**
      * Initializes a new instance of {@link Filters}.
-     * @param {Logger} _logger Logger for logging.
+     * @param {Logger} _logger - Logger for logging.
      */
     constructor(private readonly _logger: Logger) {
         super();

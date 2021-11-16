@@ -3,4 +3,7 @@
 
 import { AggregateRootTypeAliasLike } from './AggregateRootTypeAlias';
 
+/**
+ *
+ */
 export type AggregateRootTypeOptions = { alias?: AggregateRootTypeAliasLike };

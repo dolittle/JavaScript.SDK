@@ -13,8 +13,8 @@ export class SubscriptionResponse {
 
     /**
      * Initializes a new instance of {@link SubscriptionResponse}.
-     * @param {ConsentId} consentId The identifier of the consent.
-     * @param {Failure} [failure] Optional failure details if failed.
+     * @param {ConsentId} consentId - The identifier of the consent.
+     * @param {Failure} [failure] - Optional failure details if failed.
      */
     constructor(readonly consentId: ConsentId, readonly failure?: Failure) {
     }

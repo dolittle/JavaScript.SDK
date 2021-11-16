@@ -14,6 +14,10 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Creates an instance of {@link UncommittedAggregateEvents}.
+     * @param eventSourceId
+     * @param aggregateRootId
+     * @param expectedAggregateRootVersion
+     * @param {...any} events
      */
     constructor(
         readonly eventSourceId: EventSourceId,
@@ -27,7 +31,7 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Gets whether or not there are events.
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     get hasEvents(): boolean {
         return this._events.length > 0;
@@ -35,7 +39,7 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Gets the length of the committed events array.
-     * @returns {Number}
+     * @returns {number}
      */
     get length(): number {
         return this._events.length;
@@ -53,11 +57,11 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Creates uncommitted aggregate events from the provided events and metadata.
-     * @param eventSourceId The event source id that the uncommitted events will be applied to.
-     * @param aggregateRootId The aggregate root id that the uncommitted events will be applied to.
-     * @param expectedAggregateRootVersion The previous aggregate root version that was used to produce the uncommitted events.
-     * @param events The uncommitted events to apply.
-     * @returns {UncommittedAggregateEvents} Uncommitted aggregate events
+     * @param eventSourceId - The event source id that the uncommitted events will be applied to.
+     * @param aggregateRootId - The aggregate root id that the uncommitted events will be applied to.
+     * @param expectedAggregateRootVersion - The previous aggregate root version that was used to produce the uncommitted events.
+     * @param events - The uncommitted events to apply.
+     * @returns {UncommittedAggregateEvents} Uncommitted aggregate events.
      */
     static from(eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {
         return new UncommittedAggregateEvents(EventSourceId.from(eventSourceId), aggregateRootId, expectedAggregateRootVersion, ...events);

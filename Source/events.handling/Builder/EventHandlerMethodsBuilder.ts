@@ -24,27 +24,27 @@ export class EventHandlerMethodsBuilder {
     /**
      * Add a handler method for handling the event.
      * @template T Type of event.
-     * @param {Constructor<T>} type The type of event.
-     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     * @param {Constructor<T>} type - The type of event.
+     * @param {EventHandlerSignature<T>} method - Method to call for each event.
      */
     handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): void;
     /**
      * Add a handler method for handling the event.
-     * @param {EventType} eventType The identifier of the event.
-     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     * @param {EventType} eventType - The identifier of the event.
+     * @param {EventHandlerSignature<T>} method - Method to call for each event.
      */
     handle(eventType: EventType, method: EventHandlerSignature): void;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType The identifier of the event.
-     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {EventHandlerSignature<T>} method - Method to call for each event.
      */
     handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType The identifier of the event.
-     * @param {Generation | number} generation The generation of the event type.
-     * @param {EventHandlerSignature<T>} method Method to call for each event.
+     * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
+     * @param {Generation | number} generation - The generation of the event type.
+     * @param {EventHandlerSignature<T>} method - Method to call for each event.
      */
     handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): void;
     handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {

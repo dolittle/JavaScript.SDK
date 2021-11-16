@@ -10,7 +10,7 @@ import { IEmbedding } from './IEmbedding';
 export abstract class IEmbeddings {
     /**
      * Build an {@link IEmbeddingStore} for the given tenant.
-     * @param { TenantIdLike } tenantId The tenant id.
+     * @param { TenantIdLike } tenantId - The tenant id.
      * @returns {IEmbeddingStore} The embedding store.
      */
     abstract forTenant(tenantId: TenantIdLike): IEmbedding;

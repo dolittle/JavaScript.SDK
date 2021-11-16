@@ -12,15 +12,15 @@ import { Key } from '../..';
 export abstract class IConvertProjectionsToSDK {
     /**
      * Convert from the runtime respresentation to the SDK's representation of the current state of a projection.
-     * @param {Constructor<TProjection> | undefined} type The optional read model type to convert to.
-     * @param {ProjectionCurrentState} source The current state to convert.
+     * @param {Constructor<TProjection> | undefined} type - The optional read model type to convert to.
+     * @param {ProjectionCurrentState} source - The current state to convert.
      */
     abstract convert<TProjection = any>(type: Constructor<TProjection> | undefined, source: ProjectionCurrentState): CurrentState<TProjection>;
 
     /**
      * Convert from an list of runtime respresentations of the current state of a projection to the SDK's representation.
-     * @param {Constructor<TProjection> | undefined} type The optional read model type to convert to.
-     * @param {ProjectionCurrentState[]} sources A list of states to convert.
+     * @param {Constructor<TProjection> | undefined} type - The optional read model type to convert to.
+     * @param {ProjectionCurrentState[]} sources - A list of states to convert.
      */
     abstract convertAll<TProjection = any>(type: Constructor<TProjection> | undefined, sources: ProjectionCurrentState[]): Map<Key, CurrentState<TProjection>>;
 }

@@ -8,7 +8,7 @@ import { ConceptAs } from '@dolittle/concepts';
  *
  * @export
  * @class FailureReason
- * @extends {ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'>}
+ * @augments {ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'>}
  */
 export class FailureReason extends ConceptAs<string, '@dolittle/sdk.protobuf.FailureReason'> {
     constructor(reason: string) {

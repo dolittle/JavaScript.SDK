@@ -3,6 +3,9 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type AggregateRootTypeAliasLike = string | AggregateRootTypeAlias;
 
 /**
@@ -10,7 +13,7 @@ export type AggregateRootTypeAliasLike = string | AggregateRootTypeAlias;
  *
  * @export
  * @class EventTypeAlias
- * @extends {ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'>}
+ * @augments {ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'>}
  */
 export class AggregateRootTypeAlias extends ConceptAs<string, '@dolittle/sdk.aggregates.AggregateRootTypeAlias'> {
     constructor(alias: string) {

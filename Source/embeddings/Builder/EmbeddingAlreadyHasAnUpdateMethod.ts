@@ -10,8 +10,8 @@ import { EmbeddingId } from '../EmbeddingId';
  */
 export class EmbeddingAlreadyHasAnUpdateMethod extends Exception {
     /**
-     * Creates an instance of EmbeddingAlreadyHasAnUpdateMethod
-     * @param {EmbeddingId} embedding The embedding that already has a compare method.
+     * Creates an instance of EmbeddingAlreadyHasAnUpdateMethod.
+     * @param {EmbeddingId} embedding - The embedding that already has a compare method.
      */
     constructor(embedding: EmbeddingId) {
         super(`Embedding ${embedding} already has a compare method defined.`);

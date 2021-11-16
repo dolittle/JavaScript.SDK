@@ -8,12 +8,12 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class SubscriptionBuilderMethodAlreadyCalled
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class SubscriptionBuilderMethodAlreadyCalled extends Exception {
     /**
      * Creates an instance of SubscriptionBuilderMethodAlreadyCalled.
-     * @param {string} method The method that was called more than once.
+     * @param {string} method - The method that was called more than once.
      */
     constructor(method: string) {
         super(`The method ${method} can only be called once while building an Event Horizon Subscription.`);

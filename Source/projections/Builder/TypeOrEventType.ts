@@ -4,4 +4,7 @@
 import { Constructor } from '@dolittle/types';
 import { EventType } from '@dolittle/sdk.events';
 
+/**
+ *
+ */
 export type TypeOrEventType = Constructor<any> | EventType;

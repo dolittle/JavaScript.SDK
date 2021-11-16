@@ -8,12 +8,12 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class CannotRegisterProjectionThatIsNotAClass
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class CannotRegisterProjectionThatIsNotAClass extends Exception {
     /**
      * Creates an instance of CannotRegisterProjectionThatIsNotAClass.
-     * @param {any} instance The instance of the projection that is not class.
+     * @param {any} instance - The instance of the projection that is not class.
      */
     constructor(instance: any) {
         super(`Projection instance ${instance} is not a class`);

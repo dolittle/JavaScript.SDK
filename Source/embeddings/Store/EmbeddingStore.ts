@@ -18,15 +18,16 @@ import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
 
 /**
- * Represents an implementation of {link IEmbeddingStore}
+ * Represents an implementation of {link IEmbeddingStore}.
  */
 export class EmbeddingStore extends IEmbeddingStore {
     /**
      * Initializes an instance of {@link EmbeddingStore}.
-     * @param {EmbeddingStoreClient} _embeddingsStoreClient The embedding store client.
-     * @param {ExecutionContext} _executionContext The execution context.
-     * @param {IProjectionAssociations} _projectionAssociations The projection associations.
-     * @param {Logger} _logger The logger.
+     * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param _converter
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _embeddingsStoreClient: EmbeddingStoreClient,

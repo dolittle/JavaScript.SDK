@@ -11,7 +11,7 @@ import { IEventHandlers } from '..';
 
 export abstract class ICanBuildAndRegisterAnEventHandler {
 
-    /**
+    /**.
      * Builds and registers an event handler
      *
      * @param {EventHandlersClient} client The event handlers client.

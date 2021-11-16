@@ -9,7 +9,7 @@ import { Guid } from '@dolittle/rudiments';
  *
  * @export
  * @class FailureId
- * @extends {ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'>}
+ * @augments {ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'>}
  */
 export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId'> {
     constructor(id: Guid) {

@@ -33,12 +33,12 @@ import { EventHandlerId, IEventHandler } from '..';
 export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
-     * Initializes a new instance of {@link EventHandlerProcessor}
-     * @param {IEventHandler} _handler The actual handler.
-     * @param {EventHandlersClient} _client Client to use for connecting to the runtime.
-     * @param {EventHandlersClient} _executionContext Execution context.
-     * @param {IEventTypes} _eventTypes Registered event types.
-     * @param {ILogger} logger Logger for logging.
+     * Initializes a new instance of {@link EventHandlerProcessor}.
+     * @param {IEventHandler} _handler - The actual handler.
+     * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
+     * @param {EventHandlersClient} _executionContext - Execution context.
+     * @param {IEventTypes} _eventTypes - Registered event types.
+     * @param {ILogger} logger - Logger for logging.
      */
     constructor(
         private _handler: IEventHandler,

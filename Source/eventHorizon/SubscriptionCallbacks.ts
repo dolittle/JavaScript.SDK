@@ -9,17 +9,17 @@ import { Subscription } from './Subscription';
 import { SubscriptionResponse } from './SubscriptionResponse';
 
 /**
- * Callback that gets called when a subscription has been completed
+ * Callback that gets called when a subscription has been completed.
  */
 export type SubscriptionCompleted = (consumerTenant: TenantId, subscription: Subscription, subscriptionResponse: SubscriptionResponse) => void;
 
 /**
- * Callback that gets called when a subscription has been failed
+ * Callback that gets called when a subscription has been failed.
  */
 export type SubscriptionFailed = (consumerTenant: TenantId, subscription: Subscription, subscriptionResponse: SubscriptionResponse) => void;
 
 /**
- * Callback that gets called when a subscription has been succeeded
+ * Callback that gets called when a subscription has been succeeded.
  */
 export type SubscriptionSucceeded = (consumerTenant: TenantId, subscription: Subscription, subscriptionResponse: SubscriptionResponse) => void;
 
@@ -43,8 +43,8 @@ export class SubscriptionCallbacks {
     private _ownsResponses: Boolean = true;
 
     /**
-     * Initializes a new instance of {@link SubscriptionCallbacks}
-     * @param {Observable<SubscriptionCallbackArguments>} [source] Optional source of responses.
+     * Initializes a new instance of {@link SubscriptionCallbacks}.
+     * @param {Observable<SubscriptionCallbackArguments>} [source] - Optional source of responses.
      */
     constructor(source?: Observable<SubscriptionCallbackArguments>) {
         if (source) {
@@ -58,7 +58,7 @@ export class SubscriptionCallbacks {
 
     /**
      * Registers a completed callback. This will be called for all responses.
-     * @param {SubscriptionCompleted} callback The callback to register.
+     * @param {SubscriptionCompleted} callback - The callback to register.
      * @throws {CallbackShouldBeFunction} If the callback is not a function.
      */
     onCompleted(callback: SubscriptionCompleted): void {
@@ -68,7 +68,7 @@ export class SubscriptionCallbacks {
 
     /**
      * Registers a succeeded callback. This will be called for all successful responses.
-     * @param {SubscriptionSucceeded} callback The callback to register.
+     * @param {SubscriptionSucceeded} callback - The callback to register.
      * @throws {CallbackShouldBeFunction} If the callback is not a function.
      */
     onSucceeded(callback: SubscriptionSucceeded): void {
@@ -78,7 +78,7 @@ export class SubscriptionCallbacks {
 
     /**
      * Registers a succeeded callback. This will be called for all failed responses.
-     * @param {SubscriptionFailed} callback The callback to register.
+     * @param {SubscriptionFailed} callback - The callback to register.
      * @throws {CallbackShouldBeFunction} If the callback is not a function.
      */
     onFailed(callback: SubscriptionFailed): void {
@@ -88,9 +88,9 @@ export class SubscriptionCallbacks {
 
     /**
      * Pushes the next response.
-     * @param {TenantId} consumerTenant The consumer tenant the response is for.
-     * @param {Subscription} subscription The actual subscription that was subscribing.
-     * @param {SubscriptionResponse} response The response from the subscription attempt.
+     * @param {TenantId} consumerTenant - The consumer tenant the response is for.
+     * @param {Subscription} subscription - The actual subscription that was subscribing.
+     * @param {SubscriptionResponse} response - The response from the subscription attempt.
      */
     next(consumerTenant: TenantId, subscription: Subscription, response: SubscriptionResponse): void {
         if (this._ownsResponses) {

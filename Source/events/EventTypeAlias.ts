@@ -3,6 +3,9 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ *
+ */
 export type EventTypeAliasLike = string | EventTypeAlias;
 
 /**
@@ -10,7 +13,7 @@ export type EventTypeAliasLike = string | EventTypeAlias;
  *
  * @export
  * @class EventTypeAlias
- * @extends {ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeId'>}
+ * @augments {ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
 export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.events.EventTypeAlias'> {
     constructor(alias: string) {

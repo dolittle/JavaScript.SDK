@@ -10,7 +10,7 @@ import { Artifact, ArtifactIdLike } from './Artifact';
  *
  * @export
  * @class CannotHaveMultipleArtifactsAssociatedWithType
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class CannotHaveMultipleArtifactsAssociatedWithType<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends Exception {
     constructor(type: Constructor<any>, artifact: TArtifact, associatedArtifact: TArtifact) {

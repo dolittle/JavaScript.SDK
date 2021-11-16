@@ -10,7 +10,7 @@ import { Artifact, ArtifactIdLike } from './Artifact';
 export class ArtifactNotAssociatedToAType<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends Exception {
     /**
      * Initializes a new instance of {@link ArtifactNotAssociatedToAType}.
-     * @param {TArtifact} artifact Artifact that has a missing association.
+     * @param {TArtifact} artifact - Artifact that has a missing association.
      */
     constructor(artifact: TArtifact) {
         super(`'${artifact}' does not have a type associated.`);

@@ -7,7 +7,7 @@ import { EmbeddingContext, EmbeddingId } from '@dolittle/sdk.embeddings';
 export class EmbeddingUpdateMethodFailed<T> extends Exception {
 
     /**
-     * Initializes a new instance of {@link EmbeddingUpdateMethodFailed}
+     * Initializes a new instance of {@link EmbeddingUpdateMethodFailed}.
      * @param {EmbeddingId} embeddingId
      * @param {T} receivedState
      * @param {T} currentState

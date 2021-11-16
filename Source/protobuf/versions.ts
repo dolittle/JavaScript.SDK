@@ -5,7 +5,8 @@ import { Version as SdkVersion } from '@dolittle/sdk.execution';
 import { Version as PbVersion } from '@dolittle/contracts/Versioning/Version_pb';
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
+ * @param input
  * @returns {PbVersion}
  */
 function toProtobuf(input: SdkVersion): PbVersion {
@@ -20,7 +21,8 @@ function toProtobuf(input: SdkVersion): PbVersion {
 }
 
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
+ * @param input
  * @returns {SdkVersion}
  */
 function toSDK(input?: PbVersion): SdkVersion {
@@ -50,7 +52,7 @@ declare module '@dolittle/sdk.execution' {
 }
 
 /**
- * Convert to protobuf representation
+ * Convert to protobuf representation.
  * @returns {PbVersion}
  */
 SdkVersion.prototype.toProtobuf = function () {
@@ -63,7 +65,7 @@ declare module '@dolittle/contracts/Versioning/Version_pb' {
     }
 }
 /**
- * Convert to SDK representation
+ * Convert to SDK representation.
  * @returns {SdkVersion}
  */
 PbVersion.prototype.toSDK = function () {

@@ -5,7 +5,7 @@ import { Exception } from '@dolittle/rudiments';
 
 export class CouldNotResolveDeletionToEvents extends Exception {
     /**
-     * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}
+     * Initializes a new instance of {@link CouldNotResolveDeletionToEvents}.
      */
     constructor() {
         super('resolveDeletionToEvents has failed to process');

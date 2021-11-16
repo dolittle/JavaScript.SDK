@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { ProjectionId } from '..';
 
 /**
- * Represents a projection created from the decorator
+ * Represents a projection created from the decorator.
  */
 export class ProjectionDecoratedType {
     constructor(

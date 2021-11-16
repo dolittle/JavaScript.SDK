@@ -9,7 +9,7 @@ import { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequence
  *
  * @export
  * @class EventLogSequenceNumber
- * @extends {ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>}
+ * @augments {ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>}
  */
 export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.events.EventLogSequenceNumber'>{
 
@@ -18,7 +18,7 @@ export class EventLogSequenceNumber extends ConceptAs<number, '@dolittle/sdk.eve
         super(value, '@dolittle/sdk.events.EventLogSequenceNumber');
     }
 
-    /**
+    /**.
      * Represents the first {EventLogSequenceNumber}
      *
      * @static

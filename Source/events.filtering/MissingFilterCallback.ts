@@ -12,8 +12,8 @@ export class MissingFilterCallback extends Exception {
 
     /**
      * Initializes a new instance of {@link MissingFilterCallback}.
-     * @param {FilterId} filterId Identifier of the filter.
-     * @param {ScopeId} scopeId Scope the filter is in.
+     * @param {FilterId} filterId - Identifier of the filter.
+     * @param {ScopeId} scopeId - Scope the filter is in.
      */
     constructor(filterId: FilterId, scopeId: ScopeId) {
         super(`Filter callback is not configured for filter '${filterId}' in scope ${scopeId}`);

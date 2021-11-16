@@ -5,4 +5,7 @@ import { EventContext } from '@dolittle/sdk.events';
 
 import { PartitionedFilterResult } from './PartitionedFilterResult';
 
+/**
+ *
+ */
 export type PartitionedFilterEventCallback = (event: any, context: EventContext) => PartitionedFilterResult | Promise<PartitionedFilterResult>;

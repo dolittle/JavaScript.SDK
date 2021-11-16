@@ -4,7 +4,7 @@
 import { EventType, EventTypeId } from '../index';
 
 /**
- * Represents and uncommitted aggregate event
+ * Represents and uncommitted aggregate event.
  */
 
 export abstract class UncommittedAggregateEvent {

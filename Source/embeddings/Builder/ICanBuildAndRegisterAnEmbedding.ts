@@ -16,14 +16,14 @@ import { IEmbeddings } from '../Internal';
 export interface ICanBuildAndRegisterAnEmbedding {
 
     /**
-     * Builds and registers a embedding
-     * @param {EmbeddingsClient} client The embeddings client.
-     * @param {IEmbeddings} embeddings  The embeddings.
-     * @param {IContainer} container The IoC container.
-     * @param {ExcecutionContext} executionContext The execution context.
-     * @param {IEventTypes} eventTypes The event types.
-     * @param {Logger} logger The logger.
-     * @param {Cancellation} cancellation The cancellation token.
+     * Builds and registers a embedding.
+     * @param {EmbeddingsClient} client - The embeddings client.
+     * @param {IEmbeddings} embeddings - The embeddings.
+     * @param {IContainer} container - The IoC container.
+     * @param {ExcecutionContext} executionContext - The execution context.
+     * @param {IEventTypes} eventTypes - The event types.
+     * @param {Logger} logger - The logger.
+     * @param {Cancellation} cancellation - The cancellation token.
      */
     buildAndRegister(
         client: EmbeddingsClient,

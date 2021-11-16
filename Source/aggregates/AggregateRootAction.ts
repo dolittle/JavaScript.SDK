@@ -3,4 +3,7 @@
 
 import { AggregateRoot } from './AggregateRoot';
 
+/**
+ *
+ */
 export type AggregateRootAction<TAggregate extends AggregateRoot> = (aggregateRoot: TAggregate) => void | Promise<void>;

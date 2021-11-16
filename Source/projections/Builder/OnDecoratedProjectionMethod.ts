@@ -14,12 +14,12 @@ export class OnDecoratedProjectionMethod {
 
     /**
      * Initializes a new instance of {@link OnDecoratedMethod}.
-     * @param {Constructor<any>} owner Owner of the method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId Type or event type id of event it handles.
-     * @param {number | undefined} generation Generation of the event or undefined.
-     * @param {KeySelector} keySelector The key selector to use for this event type.
-     * @param {ProjectionClassOnMethod} method The actual method that handles the event.
-     * @param {string} name The name of the method.
+     * @param {Constructor<any>} owner - Owner of the method.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event it handles.
+     * @param {number | undefined} generation - Generation of the event or undefined.
+     * @param {KeySelector} keySelector - The key selector to use for this event type.
+     * @param {ProjectionClassOnMethod} method - The actual method that handles the event.
+     * @param {string} name - The name of the method.
      */
     constructor(
         readonly owner: Constructor<any>,

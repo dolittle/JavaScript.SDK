@@ -17,7 +17,11 @@ export class SubscriptionBuilderForConsumerScope {
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForConsumerScope}.
-     * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
+     * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
+     * @param _producerTenantId
+     * @param _producerStreamId
+     * @param _producerPartitionId
+     * @param _consumerScopeId
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
@@ -28,8 +32,8 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
-     * @param {SubscriptionCompleted} completed The callback method.
+     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionCompleted} completed - The callback method.
      * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
@@ -39,8 +43,8 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
-     * @param {SubscriptionSucceeded} succeeded The callback method.
+     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionSucceeded} succeeded - The callback method.
      * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
@@ -50,8 +54,8 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
-     * @param {SubscriptionFailed} failed The callback method.
+     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionFailed} failed - The callback method.
      * @returns {SubscriptionBuilderForConsumerScope}
      * @summary The callback will be called on each subscription.
      */
@@ -62,7 +66,7 @@ export class SubscriptionBuilderForConsumerScope {
 
     /**
      * Builds the subscription.
-     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
+     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource - The observable source of responses.
      * @returns {Subscription}
      */
     build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {

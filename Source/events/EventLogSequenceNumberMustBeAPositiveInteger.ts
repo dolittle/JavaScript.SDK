@@ -8,7 +8,7 @@ import { Exception } from '@dolittle/rudiments';
  *
  * @export
  * @class EventLogSequenceNumberMustBeAPositiveInteger
- * @extends {Exception}
+ * @augments {Exception}
  */
 export class EventLogSequenceNumberMustBeAPositiveInteger extends Exception {
     constructor() {

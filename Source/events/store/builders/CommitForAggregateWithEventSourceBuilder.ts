@@ -8,7 +8,7 @@ import { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCall
 import { CommitForAggregateWithEventSourceAndExpectedVersionBuilder } from './CommitForAggregateWithEventSourceAndExpectedVersionBuilder';
 
 /**
- * Represents the builder for an aggregate event commit
+ * Represents the builder for an aggregate event commit.
  */
 export class CommitForAggregateWithEventSourceBuilder {
     private _builder?: CommitForAggregateWithEventSourceAndExpectedVersionBuilder;
@@ -23,8 +23,8 @@ export class CommitForAggregateWithEventSourceBuilder {
 
     /**
      * Configure the expected {@link AggregateRootVersion} for the {@link UncommittedAggregateEvents}.
-     * @param {AggregateRootVersion} expectedVersion Expected {@link AggregateRootVersion}.
-     * @returns  {CommitForAggregateWithEventSourceAndExpectedVersionBuilder}
+     * @param {AggregateRootVersion} expectedVersion - Expected {@link AggregateRootVersion}.
+     * @returns {CommitForAggregateWithEventSourceAndExpectedVersionBuilder}
      */
     expectVersion(expectedVersion: AggregateRootVersion): CommitForAggregateWithEventSourceAndExpectedVersionBuilder {
         if (this._builder) {

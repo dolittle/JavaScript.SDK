@@ -11,7 +11,7 @@ import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecora
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 
 /**
- * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}
+ * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}.
  * @template TAggregateRoot
  */
 export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> extends IAggregateRootOperations<TAggregateRoot> {

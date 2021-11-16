@@ -11,7 +11,7 @@ import { OnDecoratedMethod } from './OnDecoratedMethod';
 import { EventTypesNotSet } from './EventTypesNotSet';
 
 /**
- * Represents the aggregate root
+ * Represents the aggregate root.
  */
 export class AggregateRoot {
     private _aggregateRootId?: AggregateRootId;
@@ -25,7 +25,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Gets aggregate root id
+     * Gets aggregate root id.
      */
     get aggregateRootId(): AggregateRootId {
         if (!this._aggregateRootId) {
@@ -35,7 +35,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Sets the aggregate root id - internal use
+     * Sets the aggregate root id - internal use.
      * @internal
      */
     set aggregateRootId(value: AggregateRootId) {
@@ -43,7 +43,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Sets the event types - internal use
+     * Sets the event types - internal use.
      * @internal
      */
     set eventTypes(value: IEventTypes) {
@@ -51,7 +51,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Gets the version of the aggregate root
+     * Gets the version of the aggregate root.
      * @returns {AggregateRootVersion}
      */
     get version(): AggregateRootVersion {
@@ -59,7 +59,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Gets all applied events
+     * Gets all applied events.
      * @returns {AppliedEvent[]}
      */
     get appliedEvents(): AppliedEvent[] {
@@ -67,18 +67,18 @@ export class AggregateRoot {
     }
 
     /**
-     * Apply an event to the aggregate root that will be committed to the event store
-     * @param {*} event Event type apply.
-     * @param {EventType} [eventType] Optional type of event to apply.
+     * Apply an event to the aggregate root that will be committed to the event store.
+     * @param {any} event - Event type apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     apply(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, false);
     }
 
     /**
-     * Apply a public event to the aggregate root that will be committed to the event store
-     * @param {*} event Event type apply.
-     * @param {EventType} [eventType] Optional type of event to apply.
+     * Apply a public event to the aggregate root that will be committed to the event store.
+     * @param {any} event - Event type apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     applyPublic(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, true);
@@ -104,7 +104,7 @@ export class AggregateRoot {
     }
 
     /**
-     * Move to next version
+     * Move to next version.
      */
     nextVersion() {
         this._version = this._version.next();

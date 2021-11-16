@@ -35,13 +35,13 @@ import {
 export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
-     * Initializes a new instance of {@link ProjectionProcessor}
+     * Initializes a new instance of {@link ProjectionProcessor}.
      * @template T
-     * @param {IProjection<T>} _projection The projection
-     * @param {ProjectionsClient} _client The client used to connect to the Runtime
-     * @param {ExecutionContext} _executionContext The execution context
-     * @param {IEventType} _eventTypes The registered event types for this projection
-     * @param {ILogger} logger Logger for logging
+     * @param {IProjection<T>} _projection - The projection.
+     * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IEventType} _eventTypes - The registered event types for this projection.
+     * @param {ILogger} logger - Logger for logging.
      */
     constructor(
         private _projection: IProjection<T>,

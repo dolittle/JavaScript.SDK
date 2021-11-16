@@ -22,8 +22,10 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Initializes a new instance of {@link SubscriptionBuilderForProducerStream}.
-     * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
-     * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
+     * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
+     * @param {Observable<SubscriptionCallbackArguments>} responsesSource - The source of responses.
+     * @param _producerTenantId
+     * @param _producerStreamId
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
@@ -33,7 +35,7 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {PartitionId | Guid | string} partitionId Stream partition to subscribe to events from.
+     * @param {PartitionId | Guid | string} partitionId - Stream partition to subscribe to events from.
      */
     fromProducerPartition(partitionId: PartitionId | Guid | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
@@ -48,7 +50,7 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Builds the subscription.
-     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
+     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource - The observable source of responses.
      * @returns {Subscription}
      */
     build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
