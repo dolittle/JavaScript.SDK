@@ -3,18 +3,17 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { TenantId } from '@dolittle/sdk.execution';
-import { IResource } from './IResource';
 import { ResourceName } from './ResourceName';
 
 /**
  * Exception that gets thrown when getting a resource for a tenant failed.
  */
-
 export class FailedToGetResource extends Exception {
-
     /**
      * Initializes a new instance of the {@link FailedToGetResource} class.
-     * @param failureReason The reason for the failure.
+     * @param {ResourceName} resourceName - The resource name that was attempted to get.
+     * @param {TenantId} tenant - The tenant that the resource was attemted to get for.
+     * @param {string} reason - The reason for the failure.
      */
     constructor(resourceName: ResourceName, tenant: TenantId, reason: string) {
         super(`Failed to get resource ${resourceName.value} for tenant ${tenant.value} because ${reason}`);

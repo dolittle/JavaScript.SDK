@@ -11,7 +11,7 @@ export abstract class ITenants {
 
     /**
      * Gets all tenants.
-     * @param cancellation The optional{@link Cancellation}.
+     * @param cancellation - The optional {@link Cancellation}.
      */
     abstract getAll(cancellation?: Cancellation): Promise<Tenant[]>;
 }

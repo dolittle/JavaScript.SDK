@@ -7,12 +7,15 @@ import { retryWhen, takeUntil, endWith } from 'rxjs/operators';
 import { Cancellation } from './Cancellation';
 import { RetryOperator } from './RetryOperator';
 
+/**
+ *
+ */
 export type RetryPolicy = (errors: Observable<Error>) => Observable<Error>;
 
 /**
  * Creates a retry policy from a pipe of operators.
- * @param {RetryOperator[]} operators Operators for the pipe.
- * @returns {RetryPolicy}
+ * @param {RetryOperator[]} operators - Operators for the pipe.
+ * @returns {RetryPolicy} The {@link RetryPolicy} that consist of the combined policies.
  */
 export function retryPipe(...operators: RetryOperator[]): RetryPolicy {
     return (errors: Observable<Error>) => {
@@ -27,10 +30,10 @@ export function retryPipe(...operators: RetryOperator[]): RetryPolicy {
 /**
  * Run a {@link Observable<T>} with a {@link RetryPolicy}.
  * @template T Type for the observable.
- * @param {Observable<T>} source Observable to retry for.
- * @param {RetryPolicy} policy The policy to apply.
- * @param {Cancellation} cancellation A cancellation.
- * @returns {Observable<T>}
+ * @param {Observable<T>} source - Observable to retry for.
+ * @param {RetryPolicy} policy - The policy to apply.
+ * @param {Cancellation} cancellation - A cancellation.
+ * @returns {Observable<T>} The {@link Observable<T>} that is automatically retried.
  */
 export function retryWithPolicy<T>(source: Observable<T>, policy: RetryPolicy, cancellation: Cancellation): Observable<T> {
     return source.pipe(retryWhen((errors: Observable<Error>) => {

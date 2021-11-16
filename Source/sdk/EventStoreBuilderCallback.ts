@@ -3,4 +3,7 @@
 
 import { IEventStore, IEventStoreBuilder } from '@dolittle/sdk.events';
 
+/**
+ * Defines the callback for building an {@link IEventStore}.
+ */
 export type EventStoreBuilderCallback = (builder: IEventStoreBuilder) => IEventStore;

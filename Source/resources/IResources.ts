@@ -10,7 +10,7 @@ import { IResourcesForTenant } from './IResourcesForTenant';
 export abstract class IResources {
     /**
      * Gets the the {@link IResourcesForTenant} resources for a specific tenant.
-     * @param {TenantId} tenant The Tenant to get the {@link IResourcesForTenant} for
+     * @param {TenantId} tenant - The Tenant to get the {@link IResourcesForTenant} for.
      */
     abstract forTenant(tenant: TenantId): IResourcesForTenant;
 }

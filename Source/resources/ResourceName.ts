@@ -3,25 +3,23 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ * Defines types that can be converted into a {@link ResourceName}.
+ */
 export type ResourceNameLike = string | ResourceName;
 
 /**
  * Represents the name of a resource.
- *
- * @export
- * @class ResourceName
- * @extends {ConceptAs<string, '@dolittle/sdk.resources.ResourceName'>}
  */
 export class ResourceName extends ConceptAs<string, '@dolittle/sdk.resources.ResourceName'> {
     constructor(name: string) {
         super(name, '@dolittle/sdk.resources.ResourceName');
     }
+
     /**
      * Creates an {@link ResourceName} from a string.
-     *
-     * @static
-     * @param {ResourceNameLike} name
-     * @returns {ResourceName}
+     * @param {ResourceNameLike} name - The name of the resource.
+     * @returns {ResourceName} The resource name concept.
      */
     static from(name: ResourceNameLike): ResourceName {
         if (name instanceof ResourceName) return name;

@@ -10,14 +10,13 @@ import { Logger } from 'winston';
 import { Tenant, ITenants, FailedToGetAllTenants } from '../index';
 
 /**
- * Represents a client for Tenants and an implementation of @link } that knows how to register Event Types with the Runtime.
+ * Represents a client for Tenants and an implementation of @link ITenants} that knows how to register Event Types with the Runtime.
  */
 export class Tenants extends ITenants {
     /**
      * Initializes an instance of the {@link Tenants} class.
-     * @param _client The event types client.
-     * @param _executionContext The execution context.
-     * @param _logger The logger.
+     * @param {TenantsClient} _client - The event types client.
+     * @param {Logger} _logger - The logger.
      */
     constructor(private readonly _client: TenantsClient, private readonly _logger: Logger) {
         super();

@@ -21,7 +21,8 @@ export class Resources extends IResources {
     }
     /**
      * Gets the the {@link IResourcesForTenant} resources for a specific tenant.
-     * @param {TenantId} tenant The Tenant to get the {@link IResourcesForTenant} for
+     * @param {TenantId} tenant - The Tenant to get the {@link IResourcesForTenant} for.
+     * @returns {IResourcesForTenant} The resources for the specified tenant.
      */
     forTenant(tenant: TenantId): IResourcesForTenant {
         const executionContext = this._executionContext

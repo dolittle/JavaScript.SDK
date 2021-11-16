@@ -23,6 +23,41 @@ module.exports = {
             ],
             2
         ],
+        'jsdoc/require-param-name': 'error',
+        'jsdoc/require-param-type': 'error',
+        'jsdoc/check-alignment': 'error',
+        'jsdoc/check-indentation': 'error',
+        'jsdoc/valid-types': 'error',
+        'jsdoc/require-hyphen-before-param-description': 'error',
+        'jsdoc/check-line-alignment': 'error',
+        'jsdoc/require-returns': 'error',
+        'jsdoc/require-returns-check': 'error',
+        'jsdoc/require-returns-description': 'error',
+        'jsdoc/require-returns-type': 'error',
+        'jsdoc/check-tag-names': 'error',
+        'jsdoc/check-param-names': 'error',
+        'jsdoc/check-types': 'error',
+        'jsdoc/empty-tags': 'error',
+        'jsdoc/no-bad-blocks': 'error',
+        'jsdoc/no-undefined-types': 'error',
+        'jsdoc/multiline-blocks': 'error',
+        'jsdoc/no-multi-asterisks': 'error',
+        'jsdoc/require-asterisk-prefix': 'error',
+        'jsdoc/require-description': 'error',
+        'jsdoc/require-description-complete-sentence': 'error',
+        'jsdoc/require-param': 'error',
+        'jsdoc/require-param-description': 'error',
+        'jsdoc/tag-lines': ['error', 'always', { 'count': 0 }],
+
+        'jsdoc/require-jsdoc': ['error', {
+            'require': {
+                'FunctionDeclaration': false
+            },
+            'contexts': [
+                'ExportNamedDeclaration>TSTypeAliasDeclaration',
+                'ExportNamedDeclaration>FunctionDeclaration'
+            ]
+        }]
     },
     overrides: [
         {

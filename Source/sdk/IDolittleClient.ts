@@ -14,7 +14,7 @@ import { Logger } from 'winston';
 import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
 
 /**
- * Defines the Dolittle client.
+ * Defines the Dolittle Client.
  */
 export abstract class IDolittleClient {
     /**
@@ -59,21 +59,22 @@ export abstract class IDolittleClient {
     abstract get logger(): Logger;
 
     /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for a new aggregate of the specified type
-     * @template TAggregateRoot
-     * @param {Constructor<any> type Type of aggregate - corresponding to the generic type
-     * @param {EventStoreBuilderCallback} buildEventStore Callback for building the context for the event store
-     * @returns {IAggregateRootOperations<TAggregate>}
+     * Gets the {@link IAggregateRootOperations<TAggregate>} for a new aggregate of the specified type.
+     * @param {Constructor<any>} type - Type of aggregate - corresponding to the generic type.
+     * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
+     * @returns {IAggregateRootOperations<TAggregateRoot>}
+     * @typedef TAggregateRoot - The type of the aggregate root.
      */
     abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
 
     /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for an existing aggregate of the specified type
+     * Gets the {@link IAggregateRootOperations<TAggregate>} for an existing aggregate of the specified type.
      * @template TAggregateRoot
-     * @param {Constructor<any> type Type of aggregate - corresponding to the generic type.
-     * @param {EventSourceId} eventSourceId The event source id of the aggregate
-     * @param {EventStoreBuilderCallback} buildEventStore Callback for building the context for the event store.
-     * @returns {IAggregateRootOperations<TAggregate>}
+     * @param {Constructor<any>} type - Type of aggregate - corresponding to the generic type.
+     * @param {EventSourceId} eventSourceId - The event source id of the aggregate.
+     * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
+     * @returns {IAggregateRootOperations<TAggregateRoot>}
+     * @typedef TAggregateRoot - The type of the aggregate root.
      */
     abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
 }

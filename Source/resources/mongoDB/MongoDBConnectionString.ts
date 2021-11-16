@@ -3,14 +3,13 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ * Defines types that can be converted into a {@link MongoDBConnectionString}.
+ */
 export type MongoDBConnectionStringLike = string | MongoDBConnectionString;
 
 /**
  * Represents the MongoDB connection string.
- *
- * @export
- * @class MongoDBConnectionString
- * @extends {ConceptAs<string, '@dolittle/sdk.resources.MongoDBConnectionString'>}
  */
 export class MongoDBConnectionString extends ConceptAs<string, '@dolittle/sdk.resources.mongoDB.MongoDBConnectionString'> {
     constructor(connectionString: string) {
@@ -18,13 +17,11 @@ export class MongoDBConnectionString extends ConceptAs<string, '@dolittle/sdk.re
     }
     /**
      * Creates an {@link MongoDBConnectionString} from a string.
-     *
-     * @static
-     * @param {MongoDBConnectionStringLike} name
-     * @returns {MongoDBConnectionString}
+     * @param {MongoDBConnectionStringLike} connectionString - The connection string.
+     * @returns {MongoDBConnectionString} The connection string concept.
      */
-    static from(name: MongoDBConnectionStringLike): MongoDBConnectionString {
-        if (name instanceof MongoDBConnectionString) return name;
-        return new MongoDBConnectionString(name);
+    static from(connectionString: MongoDBConnectionStringLike): MongoDBConnectionString {
+        if (connectionString instanceof MongoDBConnectionString) return connectionString;
+        return new MongoDBConnectionString(connectionString);
     }
-};
+}

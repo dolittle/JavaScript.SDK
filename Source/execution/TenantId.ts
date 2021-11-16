@@ -30,10 +30,9 @@ export class TenantId extends ConceptAs<Guid, '@dolittle/sdk.execution.TenantId'
     static development: TenantId = TenantId.from('445f8ea8-1a6f-40d7-b2fc-796dba92dc44');
 
     /**
-     * Creates a {TenantId} from a guid.
+     * Creates a {@link TenantId} from a guid.
      *
-     * @static
-     * @param {TenantIdLike} id
+     * @param id - Hello
      * @returns {TenantId}
      */
     static from(id: TenantIdLike): TenantId {

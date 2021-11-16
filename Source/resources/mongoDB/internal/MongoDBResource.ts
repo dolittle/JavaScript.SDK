@@ -18,9 +18,10 @@ export class MongoDBResource extends IMongoDBResource {
     private readonly _method: UnaryMethod<GetRequest, GetMongoDbResponse>;
     /**
      * Initializes an instance of the {@link Tenants} class.
-     * @param tenant The tenant id.
-     * @param _client The resources client.
-     * @param logger The logger.
+     * @param {TenantId} tenant - The tenant id.
+     * @param {ResourcesClient} client - The resources client.
+     * @param {ExecutionContext} executionContext - The execution context of the client.
+     * @param {Logger} logger - The logger.
      */
     constructor(
         tenant: TenantId,
@@ -29,7 +30,6 @@ export class MongoDBResource extends IMongoDBResource {
         logger: Logger) {
         super(ResourceName.from('MongoDB'), tenant, client, executionContext, logger);
         this._method = client.getMongoDb;
-
     }
 
     /** @inheritdoc */

@@ -19,20 +19,21 @@ import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
 import { IDolittleClient } from './IDolittleClient';
 
 /**
- * Represents the client for working with the Dolittle Runtime
+ * Represents the client for working with the Dolittle Runtime.
  */
 export class DolittleClient extends IDolittleClient {
     /**
      * Creates an instance of client.
-     * @param {Logger} logger Winston Logger for logging.
-     * @param {IArtifacts} artifacts All the configured artifacts.
-     * @param {EventStoreBuilder} eventStore The event store builder to work with.
-     * @param {IEventHandlers} eventHandlers All the event handlers.
-     * @param {IFilters} filters All the filters.
-     * @param {IEventHorizons} eventHorizons All event horizons.
-     * @param {ProjectionStoreBuilder} projections All projections.
-     * @param {Embeddings} embeddings All embeddings.
-     * @param {ITenants} tenants All tenants.
+     * @param {Logger} logger - Winston Logger for logging.
+     * @param {IEventTypes} eventTypes - All the registered event types.
+     * @param {EventStoreBuilder} eventStore - The event store builder to work with.
+     * @param {IEventHandlers} eventHandlers - All the event handlers.
+     * @param {IFilters} filters - All the filters.
+     * @param {IEventHorizons} eventHorizons - All event horizons.
+     * @param {ProjectionStoreBuilder} projections - All projections.
+     * @param {Embeddings} embeddings - All embeddings.
+     * @param {ITenants} tenants - All tenants.
+     * @param {IResources} resources - All resources.
      */
     constructor(
         readonly logger: Logger,
@@ -49,31 +50,18 @@ export class DolittleClient extends IDolittleClient {
     }
 
     /**
-     * Create a client builder for a Microservice
-     * @param {MicroserviceId | Guid | string} microserviceId The unique identifier for the microservice.
+     * Create a client builder for a Microservice.
+     * @param {MicroserviceId | Guid | string} microserviceId - The unique identifier for the microservice.
      * @returns {DolittleClientBuilder} The builder to build a {Client} from.
      */
     static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
         return new DolittleClientBuilder(MicroserviceId.from(microserviceId));
     }
 
-    /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for a new aggregate of the specified type
-     * @template TAggregateRoot
-     * @param {Constructor<any> type Type of aggregate - corresponding to the generic type
-     * @param {EventStoreBuilderCallback} buildEventStore Callback for building the context for the event store
-     * @returns {IAggregateRootOperations<TAggregate>}
-     */
+    /** @inheritdoc */
     aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
 
-    /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for an existing aggregate of the specified type
-     * @template TAggregateRoot
-     * @param {Constructor<any> type Type of aggregate - corresponding to the generic type.
-     * @param {EventSourceId} eventSourceId The event source id of the aggregate
-     * @param {EventStoreBuilderCallback} buildEventStore Callback for building the context for the event store.
-     * @returns {IAggregateRootOperations<TAggregate>}
-     */
+    /** @inheritdoc */
     aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
     aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceIdOrBuilder: EventStoreBuilderCallback | EventSourceId | Guid | string, buildEventStore?: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot> {
         if (buildEventStore) {

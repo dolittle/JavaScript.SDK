@@ -4,12 +4,12 @@
 import { TenantId } from '@dolittle/sdk.execution';
 
 /**
- * Represents a tenant.
+ * Represents a Tenant.
  */
 export class Tenant {
     /**
      * Initializes a new instance of {@link Tenant}.
-     *
+     * @param {TenantId} id - The identifier of the tenant.
      */
     constructor(readonly id: TenantId) {
     }

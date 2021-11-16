@@ -14,18 +14,27 @@ import { FailedToGetResource } from './FailedToGetResource';
 import { IResource } from './IResource';
 import { ResourceName } from './ResourceName';
 
-export type ResponseLike = { hasFailure: () => boolean; getFailure: () => Failure | undefined; };
+/**
+ * Defines the type of response expected from the Runtime when getting a resource.
+ */
+export interface ResponseLike {
+    hasFailure: () => boolean;
+    getFailure: () => Failure | undefined;
+};
 
 /**
  * Represents the base implementation of a {@link IResource}.
+ * @typedef TRequest - The type of the request.
+ * @typedef TResponse - The type of the response.
  */
 export abstract class Resource<TRequest, TResponse extends ResponseLike> extends IResource {
     /**
      * Initializes an instance of the {@link Resource} class.
-     * @param tenant The tenant id.
-     * @param _client The resources client.
-     * @param _executionContext The execution context.
-     * @param _logger The logger.
+     * @param {ResourceName} name - The name of the resource.
+     * @param {TenantId} tenant - The tenant id.
+     * @param {ResourcesClient} _client - The resources client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {Logger} _logger - The logger.
      */
     constructor(
         protected readonly name: ResourceName,
@@ -38,9 +47,11 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
 
     /**
      * Gets the resource.
-     * @param method The method to call.
-     * @param getResult The callback for retrieving the result from the response.
-     * @param cancellation The optional cancellation token.
+     * @typedef TResult - The type of the resource.
+     * @param {UnaryMethod<TRequest, TResponse>} method - The method to call.
+     * @param {(TResponse) => TResult} getResult - The callback for retrieving the result from the response.
+     * @param {Cancellation} cancellation - The optional cancellation token.
+     * @returns {Promise<TResult>} The resource.
      */
     protected async get<TResult>(
         method: UnaryMethod<TRequest, TResponse>,
@@ -64,7 +75,7 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
 
     /**
      * Creates the {CallRequestContext} from the {@link ExecutionContext}.
-     * @returns {CallRequestContext}.
+     * @returns {CallRequestContext} The created call request context.
      */
     protected createCallContext(): CallRequestContext {
         return callContexts.toProtobuf(this._executionContext);
@@ -72,6 +83,7 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
 
     /**
      * Creates the request.
+     * @returns {TRequest} The created request.
      */
     protected abstract createRequest(): TRequest;
 

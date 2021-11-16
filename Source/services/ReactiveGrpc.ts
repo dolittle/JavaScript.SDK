@@ -10,11 +10,13 @@ import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } fro
 
 /**
  * Performs a unary call.
- * @param {grpc.Client} client The Runtime client.
- * @param {UnaryMethod} method The method to call.
- * @param argument The argument to send to the server.
- * @param {Cancellation} cancellation Used to cancel the call.
- * @returns {Observable} The response from the server.
+ * @param {grpc.Client} client - The Runtime client.
+ * @param {UnaryMethod<TArgument, TResponse>} method - The method to call.
+ * @param {TArgument} argument - The argument to send to the server.
+ * @param {Cancellation} cancellation - Used to cancel the call.
+ * @returns {Observable<TResponse>} The response from the server.
+ * @typedef TArgument - The type of the argument.
+ * @typedef TResponse - The type of the response.
  */
 export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method: UnaryMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -33,11 +35,13 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
 
 /**
  * Performs a client streaming call.
- * @param {grpc.Client} client The Runtime client.
- * @param {ClientStreamMethod} method The method to call.
- * @param {Observable} requests The requests to send to the server.
- * @param {Cancellation} cancellation Used to cancel the call.
- * @returns {Observable} The response from the server.
+ * @param {grpc.Client} client - The Runtime client.
+ * @param {ClientStreamMethod<TRequest, TResponse>} method - The method to call.
+ * @param {Observable<TRequest>} requests - The requests to send to the server.
+ * @param {Cancellation} cancellation - Used to cancel the call.
+ * @returns {Observable<TResponse>} The response from the server.
+ * @typedef TRequest - The type of the argument.
+ * @typedef TResponse - The type of the response.
  */
 export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, method: ClientStreamMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -57,11 +61,13 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
 
 /**
  * Performs a server streaming call.
- * @param {grpc.Client} client The Runtime client.
- * @param {ServerStreamMethod} method The method to call.
- * @param argument The argument to send to the server.
- * @param {Cancellation} cancellation Used to cancel the call.
- * @returns {Observable} The responses from the server.
+ * @param {grpc.Client} client - The Runtime client.
+ * @param {ServerStreamMethod<TArgument, TResponse>} method - The method to call.
+ * @param {TArgument} argument - The argument to send to the server.
+ * @param {Cancellation} cancellation - Used to cancel the call.
+ * @returns {Observable<TResponse>} The responses from the server.
+ * @typedef TArgument - The type of the argument.
+ * @typedef TResponse - The type of the response.
  */
 export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, method: ServerStreamMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -73,11 +79,13 @@ export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, 
 
 /**
  * Performs a duplex streaming call between the client and the Runtime.
- * @param {grpc.Client} client The Runtime client.
- * @param {DuplexMethod} method The method to call.
- * @param {Observable} requests The requests to send to the Runtime.
- * @param {Cancellation} cancellation Used to cancel the call.
- * @returns {Observable} The responses from the Runtime and errors from the requests.
+ * @param {grpc.Client} client - The Runtime client.
+ * @param {DuplexMethod<TRequest, TResponse>} method - The method to call.
+ * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
+ * @param {Cancellation} cancellation - Used to cancel the call.
+ * @returns {Observable<TResponse>} The responses from the Runtime and errors from the requests.
+ * @typedef TRequest - The type of the argument.
+ * @typedef TResponse - The type of the response.
  */
 export function reactiveDuplex<TRequest, TResponse>(client: grpc.Client, method: DuplexMethod<TRequest, TResponse>, requests: Observable<TRequest>, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
@@ -103,9 +111,12 @@ function handleCancellation(call: grpc.Call, cancellation: Cancellation) {
 /**
  * Handles writing requests to the Runtime. If the request error, it cancels the stream and errors the
  * subject containing the responses from the Runtime.
- * @param {grpc.ClientWritableStream} stream The stream between client and Runtime.
- * @param {Observable} requests The requests to write to the Runtime.
- * @param {Subject} subject The Subject which contains the responses from the Runtime.
+ * @param {grpc.ClientWritableStream<TRequest>} stream - The stream between client and Runtime.
+ * @param {Observable<TRequest>} requests - The requests to write to the Runtime.
+ * @param {Subject<TResponse>} subject - The Subject which contains the responses from the Runtime.
+ * @param {string} address - The address of the Runtime that was connected to.
+ * @typedef TRequest - The type of the argument.
+ * @typedef TResponse - The type of the response.
  */
 function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableStream<TRequest>, requests: Observable<TRequest>, subject: Subject<TResponse>, address: string) {
     requests.pipe(concatMap((message: TRequest) => {
@@ -130,8 +141,8 @@ function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableSt
 
 /**
  * Handles the responses coming from the Runtime.
- * @param {grpc.ClientWritableStream} stream The stream between client and Runtime.
- * @param {Subject} subject The Subject to notify about the responses from the Runtime.
+ * @param {grpc.ClientWritableStream} stream - The stream between client and Runtime.
+ * @param {Subject} subject - The Subject to notify about the responses from the Runtime.
  */
 function handleServerResponses<TResponse>(stream: grpc.ClientReadableStream<TResponse>, subject: Subject<TResponse>) {
     stream.on('data', (message: TResponse) => {
