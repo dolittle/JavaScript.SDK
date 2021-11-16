@@ -16,7 +16,7 @@ export class FailureReason extends ConceptAs<string, '@dolittle/sdk.protobuf.Fai
     }
 
     /**
-     * Creates a {FailureReason} from a string.
+     * Creates a {@link FailureReason} from a string.
      * @param {string} reason - The failure reason.
      * @returns {FailureReason} The failure reason concept.
      */

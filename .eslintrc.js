@@ -74,6 +74,14 @@ module.exports = {
             'descriptionStyle': 'body',
             'contexts': ['any']
         }],
+        // This is nice - but makes the linter horribly slow
+        // 'jsdoc/match-description': ['error', {
+        //     matchDescription: '^(?:[^\\{]+|\\{@link [^\\}]+\\})+$',
+        //     tags: {
+        //         param: true
+        //     },
+        //     message: 'Descriptions must use {@link ...} for references to other types.'
+        // }],
     },
     overrides: [
         {

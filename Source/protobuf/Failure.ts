@@ -18,8 +18,8 @@ export class Failure {
     }
 
     /**
-     * Creates a {Failure} from a guid and a string.
-     * @param {(Guid | string)} id - Unique identifier of the failure.
+     * Creates a {@link Failure} from a guid and a string.
+     * @param {Guid | string} id - Unique identifier of the failure.
      * @param {string} reason - Reason for failing.
      * @returns {Failure} The created failure.
      */

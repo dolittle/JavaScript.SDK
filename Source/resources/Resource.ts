@@ -74,7 +74,7 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
     }
 
     /**
-     * Creates the {CallRequestContext} from the {@link ExecutionContext}.
+     * Creates the {@link CallRequestContext} from the {@link ExecutionContext}.
      * @returns {CallRequestContext} The created call request context.
      */
     protected createCallContext(): CallRequestContext {

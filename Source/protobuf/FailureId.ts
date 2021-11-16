@@ -17,8 +17,8 @@ export class FailureId extends ConceptAs<Guid, '@dolittle/sdk.protobuf.FailureId
     }
 
     /**
-     * Creates a {FailureId} from a guid.
-     * @param {(string | Guid)} id - The failure id.
+     * Creates a {@link FailureId} from a {@link Guid} or a {@link string}.
+     * @param {string | Guid} id - The failure id.
      * @returns {FailureId} The failure id concept.
      */
     static from(id: string | Guid): FailureId {

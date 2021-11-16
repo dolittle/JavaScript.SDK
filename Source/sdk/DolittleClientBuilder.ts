@@ -30,7 +30,7 @@ import { DolittleClient } from './DolittleClient';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 
 /**
- * Represents a builder for building {DolittleClient}.
+ * Represents a builder for building {@link DolittleClient}.
  */
 export class DolittleClientBuilder {
     private _host = 'localhost';

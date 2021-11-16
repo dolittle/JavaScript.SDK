@@ -11,7 +11,7 @@ import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 export class TenantWithSubscriptions {
 
     /**
-     * Initializes a new instance of {EventHorizon}.
+     * Initializes a new instance of the {@link TenantWithSubscriptions} class.
      * @param {TenantId} tenant - The tenant in our microservice.
      * @param {Subscription[]} subscriptions - The subscriptions to.
      * @param {SubscriptionCallbacks} callbacks - Callbacks for handling responses of subscribing.
