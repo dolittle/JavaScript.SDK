@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { GetMongoDbResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
+import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { UnaryMethod } from '@dolittle/sdk.services';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -18,7 +18,7 @@ import { ResourceName } from '../../index';
 export class MongoDBResource extends IMongoDBResource {
 
     private readonly _openClients: Map<string, [client: MongoClient, database: Db]> = new Map();
-    private readonly _method: UnaryMethod<GetRequest, GetMongoDbResponse>;
+    private readonly _method: UnaryMethod<GetRequest, GetMongoDBResponse>;
     /**
      * Initializes an instance of the {@link Tenants} class.
      * @param {TenantId} tenant - The tenant id.
@@ -32,7 +32,7 @@ export class MongoDBResource extends IMongoDBResource {
         executionContext: ExecutionContext,
         logger: Logger) {
         super(ResourceName.from('MongoDB'), tenant, client, executionContext, logger);
-        this._method = client.getMongoDb;
+        this._method = client.getMongoDB;
     }
 
     /** @inheritdoc */
