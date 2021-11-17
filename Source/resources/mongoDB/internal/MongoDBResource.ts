@@ -6,8 +6,10 @@ import { GetMongoDbResponse, GetRequest } from '@dolittle/runtime.contracts/Reso
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { UnaryMethod } from '@dolittle/sdk.services';
 import { Cancellation } from '@dolittle/sdk.resilience';
+import { Db, MongoClient, DbOptions } from 'mongodb';
 import { Logger } from 'winston';
-import { IMongoDBResource, MongoDBConnectionString } from '../index';
+
+import { IMongoDBResource, DatabaseSettingsCallback } from '../index';
 import { ResourceName } from '../../index';
 
 /**
@@ -15,6 +17,7 @@ import { ResourceName } from '../../index';
  */
 export class MongoDBResource extends IMongoDBResource {
 
+    private readonly _openClients: Map<string, [client: MongoClient, database: Db]> = new Map();
     private readonly _method: UnaryMethod<GetRequest, GetMongoDbResponse>;
     /**
      * Initializes an instance of the {@link Tenants} class.
@@ -33,13 +36,20 @@ export class MongoDBResource extends IMongoDBResource {
     }
 
     /** @inheritdoc */
-    getConnectionString(cancellation?: Cancellation): Promise<MongoDBConnectionString> {
-        return this.get(this._method, response => MongoDBConnectionString.from(response.getConnectionstring()), cancellation);
-    }
-
-    /** @inheritdoc */
-    protected getResultFromResponse(response: GetMongoDbResponse): MongoDBConnectionString {
-        return MongoDBConnectionString.from(response.getConnectionstring());
+    async getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db> {
+        if (this._openClients.has(this.tenant.toString())) {
+            return this._openClients.get(this.tenant.toString())![1];
+        }
+        const connectionString = await this.get(this._method, response => response.getConnectionstring(), cancellation);
+        let dbOptions;
+        if (databaseSettingsCallback) {
+            dbOptions = {};
+            databaseSettingsCallback(dbOptions);
+        }
+        const client = await MongoClient.connect(connectionString);
+        const db = client.db(undefined, dbOptions);
+        this._openClients.set(this.tenant.toString(), [client, db]);
+        return db;
     }
 
     /** @inheritdoc */
