@@ -3,14 +3,14 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
-import { Embeddings } from '@dolittle/sdk.embeddings';
+import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, EventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
+import { EventSourceId, EventStoreBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
 import { IFilters } from '@dolittle/sdk.events.filtering';
 import { IEventHandlers } from '@dolittle/sdk.events.handling';
 import { MicroserviceId } from '@dolittle/sdk.execution';
-import { ProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { IResources } from '@dolittle/sdk.resources';
+import { IProjectionStoreBuilder, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { IResources, IResourcesBuilder } from '@dolittle/sdk.resources';
 import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
@@ -26,26 +26,26 @@ export class DolittleClient extends IDolittleClient {
      * Creates an instance of client.
      * @param {Logger} logger - Winston Logger for logging.
      * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {EventStoreBuilder} eventStore - The event store builder to work with.
+     * @param {IEventStoreBuilder} eventStore - The event store builder to work with.
      * @param {IEventHandlers} eventHandlers - All the event handlers.
      * @param {IFilters} filters - All the filters.
      * @param {IEventHorizons} eventHorizons - All event horizons.
-     * @param {ProjectionStoreBuilder} projections - All projections.
-     * @param {Embeddings} embeddings - All embeddings.
+     * @param {IProjectionStoreBuilder} projections - All projections.
+     * @param {IEmbeddings} embeddings - All embeddings.
      * @param {ITenants} tenants - All tenants.
      * @param {IResources} resources - All resources.
      */
     constructor(
         readonly logger: Logger,
         readonly eventTypes: IEventTypes,
-        readonly eventStore: EventStoreBuilder,
+        readonly eventStore: IEventStoreBuilder,
         readonly eventHandlers: IEventHandlers,
         readonly filters: IFilters,
         readonly eventHorizons: IEventHorizons,
-        readonly projections: ProjectionStoreBuilder,
-        readonly embeddings: Embeddings,
+        readonly projections: IProjectionStoreBuilder,
+        readonly embeddings: IEmbeddings,
         readonly tenants: ITenants,
-        readonly resources: IResources) {
+        readonly resources: IResourcesBuilder) {
             super();
     }
 
