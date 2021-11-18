@@ -11,7 +11,7 @@ import { OnDecoratedMethod } from './OnDecoratedMethod';
 import { EventTypesNotSet } from './EventTypesNotSet';
 
 /**
- * Represents the aggregate root
+ * Represents the aggregate root.
  */
 export class AggregateRoot {
     private _aggregateRootId?: AggregateRootId;
@@ -20,12 +20,16 @@ export class AggregateRoot {
     private _version: AggregateRootVersion = AggregateRootVersion.initial;
     private _eventTypes!: IEventTypes;
 
+    /**
+     * Initialises a new instance of the {@link AggregateRoot} class.
+     * @param {EventSourceId} eventSourceId - The event source id of the aggregate root.
+     */
     constructor(readonly eventSourceId: EventSourceId) {
         this._aggregateRootType = Object.getPrototypeOf(this).constructor;
     }
 
     /**
-     * Gets aggregate root id
+     * Gets aggregate root id.
      */
     get aggregateRootId(): AggregateRootId {
         if (!this._aggregateRootId) {
@@ -35,55 +39,55 @@ export class AggregateRoot {
     }
 
     /**
-     * Sets the aggregate root id - internal use
-     * @internal
+     * Sets the aggregate root id - internal use.
      */
     set aggregateRootId(value: AggregateRootId) {
         this._aggregateRootId = value;
     }
 
     /**
-     * Sets the event types - internal use
-     * @internal
+     * Sets the event types - internal use.
      */
     set eventTypes(value: IEventTypes) {
         this._eventTypes = value;
     }
 
     /**
-     * Gets the version of the aggregate root
-     * @returns {AggregateRootVersion}
+     * Gets the version of the aggregate root.
      */
     get version(): AggregateRootVersion {
         return this._version;
     }
 
     /**
-     * Gets all applied events
-     * @returns {AppliedEvent[]}
+     * Gets all applied events.
      */
     get appliedEvents(): AppliedEvent[] {
         return this._appliedEvents;
     }
 
     /**
-     * Apply an event to the aggregate root that will be committed to the event store
-     * @param {*} event Event type apply.
-     * @param {EventType} [eventType] Optional type of event to apply.
+     * Apply an event to the aggregate root that will be committed to the event store.
+     * @param {any} event - Event type apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     apply(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, false);
     }
 
     /**
-     * Apply a public event to the aggregate root that will be committed to the event store
-     * @param {*} event Event type apply.
-     * @param {EventType} [eventType] Optional type of event to apply.
+     * Apply a public event to the aggregate root that will be committed to the event store.
+     * @param {any} event - Event type apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     applyPublic(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, true);
     }
 
+    /**
+     * Re-applies the committed aggregate events to rehydrate the state of the aggregate root by calling on()-methods and incrementing the in-memory version.
+     * @param {CommittedAggregateEvents} committedEvents - The events to re-apply.
+     */
     reApply(committedEvents: CommittedAggregateEvents) {
         this.throwIfEventWasAppliedToOtherEventSource(committedEvents);
         this.throwIfEventWasAppliedByOtherAggreateRoot(committedEvents);
@@ -104,12 +108,11 @@ export class AggregateRoot {
     }
 
     /**
-     * Move to next version
+     * Move to next version.
      */
     nextVersion() {
         this._version = this._version.next();
     }
-
 
     private applyImplementation(event: any, eventType: EventType | undefined, isPublic: boolean) {
         this.throwIfEventContentIsNullOrUndefined(event);
@@ -152,7 +155,6 @@ export class AggregateRoot {
             return appliedEventType.id.equals(decoratorEventTypeId);
         });
     }
-
 
     private throwIfAggregateRootVersionIsOutOfOrder(event: CommittedAggregateEvent) {
         if (event.aggregateRootVersion.value !== this.version.value) {

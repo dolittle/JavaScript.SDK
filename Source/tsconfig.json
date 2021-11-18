@@ -15,7 +15,9 @@
         { "path": "./projections" },
         { "path": "./protobuf" },
         { "path": "./resilience" },
+        { "path": "./resources" },
         { "path": "./sdk" },
-        { "path": "./services" }
+        { "path": "./services" },
+        { "path": "./tenancy" },
     ]
 }

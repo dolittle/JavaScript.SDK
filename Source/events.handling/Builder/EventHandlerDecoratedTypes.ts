@@ -11,7 +11,7 @@ export class EventHandlerDecoratedTypes {
 
     /**
      * Registers an decorated event handler class with the Runtime.
-     * @param {EventHandlerDecoratedType} eventHandlerDecoratedType The decorated type to register.
+     * @param {EventHandlerDecoratedType} eventHandlerDecoratedType - The decorated type to register.
      */
     static register(eventHandlerDecoratedType: EventHandlerDecoratedType) {
         this.types.push(eventHandlerDecoratedType);

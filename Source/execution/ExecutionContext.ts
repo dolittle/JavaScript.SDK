@@ -16,12 +16,12 @@ export class ExecutionContext {
 
     /**
      * Creates an instance of execution context.
-     * @param {MicroserviceId} microserviceId The microservice identifier.
-     * @param {TenantId} tenantId The current tenant identifier.
-     * @param {Version} version The current version of the software.
-     * @param {string} environment The current environment running in.
-     * @param {CorrelationId} correlationId The current correlation id for execution context being performed.
-     * @param {Claims} claims The current claims for the context.
+     * @param {MicroserviceId}_microserviceId - The microservice identifier.
+     * @param {TenantId} _tenantId - The current tenant identifier.
+     * @param {Version} version - The current version of the software.
+     * @param {string} environment - The current environment running in.
+     * @param {CorrelationId} _correlationId - The current correlation id for execution context being performed.
+     * @param {Claims} claims - The current claims for the context.
      */
     constructor(
         private _microserviceId: MicroserviceId,
@@ -33,25 +33,22 @@ export class ExecutionContext {
     }
 
     /**
-     * Gets the microservice identifier
-     * @returns {MicroserviceId}
+     * Gets the microservice identifier.
      */
     get microserviceId(): MicroserviceId { return this._microserviceId; }
 
     /**
-     * Gets the tenant identifier
-     * @returns {Guid}
+     * Gets the tenant identifier.
      */
     get tenantId(): TenantId { return this._tenantId; }
 
     /**
-     * Gets the correlation identifier
-     * @returns {CorrelationId}
+     * Gets the correlation identifier.
      */
     get correlationId(): CorrelationId { return this._correlationId; }
 
     /**
-     * Gets parent execution context
+     * Gets parent execution context.
      */
     get parent(): ExecutionContext | undefined {
         return this._parent;
@@ -59,7 +56,7 @@ export class ExecutionContext {
 
     /**
      * Sets parent execution context - should not be used directly, this is for internal use.
-     * @param {ExecutionContext} parent The parent execution context.
+     * @param {ExecutionContext} parent - The parent execution context.
      */
     setParent(parent: ExecutionContext) {
         this._parent = parent;

@@ -8,11 +8,15 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a scope.
  */
 export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
+    /**
+     * Initialises a new instance of the {@link ScopeId} class.
+     * @param {Guid} id - The scope id.
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.ScopeId');
     }
 
-    /**
+    /**.
      * Represents the default scope
      *
      * @static
@@ -21,11 +25,9 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
     static default: ScopeId = ScopeId.from(Guid.empty);
 
     /**
-     * Creates a {ScopeId} from a guid.
-     *
-     * @static
-     * @param {ScopeId | Guid | string} [id]
-     * @returns {ScopeId}
+     * Creates a {@link ScopeId} from a {@link Guid} or a {@link string}.
+     * @param {ScopeId | Guid | string} id - The scope id.
+     * @returns {ScopeId} The created scope id concept.
      */
     static from(id: ScopeId | Guid | string): ScopeId {
         if (id instanceof ScopeId) return id;

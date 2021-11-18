@@ -8,6 +8,10 @@ import { ConceptAs } from '@dolittle/concepts';
  * Represents the unique identifier of a stream.
  */
 export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
+    /**
+     * Initialises a new instance of the {@link StreamId} class.
+     * @param {Guid} id - The stream id.
+     */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.StreamId');
     }
@@ -21,11 +25,9 @@ export class StreamId extends ConceptAs<Guid, '@dolittle/sdk.events.StreamId'> {
     static eventLog: StreamId = StreamId.from(Guid.empty);
 
     /**
-     * Creates a {StreamId} from a guid.
-     *
-     * @static
-     * @param {(Guid | string)} id
-     * @returns {StreamId}
+     * Creates a {@link StreamId} from a {@link Guid} or a {@link string}.
+     * @param {Guid | string} id - The stream id.
+     * @returns {StreamId} The created stream id concept.
      */
     static from(id: string | Guid | StreamId): StreamId {
         if (id instanceof StreamId) return id;

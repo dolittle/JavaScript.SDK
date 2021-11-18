@@ -15,13 +15,38 @@ import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
 
-
 /**
- * Represents an implementation of {IReverseCallClient}.
+ * Represents an implementation of {@link IReverseCallClient}.
+ * @template TClientMessage The type of the messages from the client to the server.
+ * @template TServerMessage The type of the messages from the server to the client.
+ * @template TConnectArguments The type of the connect arguments message.
+ * @template TConnectResponse The type of the connect response message.
+ * @template TRequest The type of the request messages.
+ * @template TResponse The type of the response messages.
  */
 export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments, TConnectResponse, TRequest, TResponse> extends IReverseCallClient<TConnectResponse> {
     private _observable: Observable<TConnectResponse>;
 
+    /**
+     * Creates a new instance of the {@link ReverseCallClient} class.
+     * @param {(Observable, Cancellation) => Observable<TServerMessage>} _establishConnection - The callback to use to establish a new connection.
+     * @param {() => TClientMessage} _messageConstructor - The constructor to use to create a new {@link TClientMessage}.
+     * @param {(TClientMessage, TConnectArguments) => void} _setConnectArguments - The callback to use to set the connect arguments to a client message.
+     * @param {(TServerMessage) => TRequest | undefined} _getConnectResponse - The callback to use to get the connect response from a server message.
+     * @param {(TServerMessage) => TRequest | undefined} _getMessageRequest - The callback to use to get a request from a server message.
+     * @param {(TClientMessage, TResponse) => void} _setMessageResponse - The callback to use to set a response to a client message.
+     * @param {(TConnectArguments, ReverseCallArgumentsContext) => void} _setArgumentsContext - The callback to use to set the call context in a connect arguments message.
+     * @param {(TRequest) => ReverseCallRequestContext | undefined} _getRequestContext - The callback to use to get the call context from a request message.
+     * @param {(TResponse, ReverseCallResponseContext) => void} _setResponseContext - The callback to use to set the call context in a response message.
+     * @param {(TServerMessage) => Ping | undefined} _getMessagePing - The callback to use to get a ping from a server message.
+     * @param {(TClientMessage, Pong) => void} _setMessagePong - The callback to use to set a pong in a client message.
+     * @param {ExecutionContext} _executionContext - The execution context of the client.
+     * @param {TConnectArguments} _connectArguments - The connect arguments to use to initiate the reverse call client.
+     * @param {number} _pingInterval - The interval to request the server to send pings (in seconds).
+     * @param {ReverseCallCallback<TRequest, TResponse>} _callback - The callback to use to handle requests from the server to the client.
+     * @param {Cancellation} _cancellation - The cancellation token to use to cancel the reverse call client.
+     * @param {Logger} _logger - The logger to use for logging.
+     */
     constructor(
         private _establishConnection: (requests: Observable<TClientMessage>, cancellation: Cancellation) => Observable<TServerMessage>,
         private _messageConstructor: new () => TClientMessage,
@@ -44,6 +69,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         this._observable = this.create();
     }
 
+    /** @inheritdoc */
     subscribe(observer?: NextObserver<TConnectResponse> | ErrorObserver<TConnectResponse> | CompletionObserver<TConnectResponse> | undefined): Unsubscribable;
     subscribe(next: null | undefined, error: null | undefined, complete: () => void): Unsubscribable;
     subscribe(next: null | undefined, error: (error: any) => void, complete?: (() => void) | undefined): Unsubscribable;

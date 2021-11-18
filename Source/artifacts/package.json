@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.artifacts",
-    "version": "19.0.1",
+    "version": "20.0.0-legolas.13",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -34,7 +34,7 @@
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/types": "5.0.1",
-        "@dolittle/runtime.contracts": "6.2.0"
+        "@dolittle/runtime.contracts": "6.3.0"
     },
     "devDependencies": {
         "@types/is-natural-number": "^4.0.0"

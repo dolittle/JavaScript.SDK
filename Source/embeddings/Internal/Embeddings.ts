@@ -8,13 +8,13 @@ import { IEmbeddings } from './IEmbeddings';
 import { EmbeddingProcessor } from './EmbeddingProcessor';
 
 /**
- * Represents an implementation of {IEmbeddings}
+ * Represents an implementation of {IEmbeddings}.
  */
 export class Embeddings implements IEmbeddings {
 
     /**
      * Initializes an instance of {@link Embeddings}.
-     * @param {Logger} _logger For logging.
+     * @param {Logger} _logger - For logging.
      */
     constructor(private readonly _logger: Logger) {
     }

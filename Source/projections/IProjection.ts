@@ -8,9 +8,9 @@ import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
 
-
 /**
  * Defines a projection.
+ * @template T The type of the projection read model.
  */
 export abstract class IProjection<T> {
     /**
@@ -40,10 +40,10 @@ export abstract class IProjection<T> {
 
     /**
      * Handle an event and update a readmodel.
-     * @param {T} readModel ReadModel to update.
-     * @param {*} event Event to handle.
-     * @param {EventType} eventType The event type.
-     * @param {ProjectionContext} context The context for the projection processing.
+     * @param {T} readModel - ReadModel to update.
+     * @param {*} event - Event to handle.
+     * @param {EventType} eventType - The event type.
+     * @param {ProjectionContext} context - The context for the projection processing.
      */
     abstract on(readModel: T, event: any, eventType: EventType, context: ProjectionContext): Promise<T | DeleteReadModelInstance> | T | DeleteReadModelInstance;
 }

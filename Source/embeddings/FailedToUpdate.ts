@@ -12,9 +12,9 @@ import { EmbeddingId } from './EmbeddingId';
 export class FailedToUpdate extends Exception {
     /**
      * Initialises an instance of {@link FailedToUpdate}.
-     * @param {EmbeddingId} embedding The embedding identifier.
-     * @param {Key | undefined} key The optional key.
-     * @param {Failure} failure The failure.
+     * @param {EmbeddingId} embedding - The embedding identifier.
+     * @param {Key | undefined} key - The optional key.
+     * @param {Failure} failure - The failure.
      */
     constructor(embedding: EmbeddingId, key: Key | undefined, failure: Failure) {
         super(`Failed to update embedding ${embedding} ${key ? `with key ${key} `: ''} due to failure ${failure.id} with reason: ${failure.reason}`);

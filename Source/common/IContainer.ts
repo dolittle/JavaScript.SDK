@@ -11,8 +11,8 @@ export abstract class IContainer {
 
     /**
      * Get the instance of a service.
-     * @param {Constructor} service Type of service by its constructor to get
-     * @param {ExecutionContext} executionContext The current execution context to use for resolving tenant-dependant services.
+     * @param {Constructor} service - Type of service by its constructor to get.
+     * @param {ExecutionContext} executionContext - The current execution context to use for resolving tenant-dependant services.
      * @returns The instance.
      */
     abstract get(service: Constructor, executionContext: ExecutionContext): any;

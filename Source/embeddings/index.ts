@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
     resolveUpdateToEvents,
@@ -35,6 +36,7 @@ export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingId } from './EmbeddingId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
+export { IEmbeddings } from './IEmbeddings';
 export { Embeddings } from './Embeddings';
 export { FailedToDelete } from './FailedToDelete';
 export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';

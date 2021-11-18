@@ -12,8 +12,8 @@ export interface IEmbeddings {
     /**
      * Register an embedding.
      * @template TReadModel Type of the readmodel.
-     * @param {EmbeddingProcessor} embeddingProcessor Embedding processor to register.
-     * @param {Cancellation} cancellation Used to close the connection to the Runtime.
+     * @param {EmbeddingProcessor} embeddingProcessor - Embedding processor to register.
+     * @param {Cancellation} cancellation - Used to close the connection to the Runtime.
      */
     register<TReadModel>(embeddingProcessor: EmbeddingProcessor<TReadModel>, cancellation?: Cancellation): void;
 }

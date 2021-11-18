@@ -8,13 +8,13 @@ import { ProjectionProcessor } from './Internal';
 import { IProjections } from './IProjections';
 
 /**
- * Represents an implementation of {IProjections}
+ * Represents an implementation of {IProjections}.
  */
 export class Projections extends IProjections {
 
     /**
      * Initializes an instance of {@link Projections}.
-     * @param {Logger} _logger For logging.
+     * @param {Logger} _logger - For logging.
      */
     constructor(private readonly _logger: Logger) {
         super();

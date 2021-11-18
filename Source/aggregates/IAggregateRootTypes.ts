@@ -6,7 +6,7 @@ import { AggregateRootId } from '@dolittle/sdk.events';
 import { AggregateRootType } from './AggregateRootType';
 
 /**
- * Defines the system for working with {@link AggregateRootType}
+ * Defines the system for working with {@link AggregateRootType}.
  */
 export abstract class IAggregateRootTypes extends Artifacts<AggregateRootType, AggregateRootId> {
 }

@@ -6,22 +6,19 @@ import { EventType } from '@dolittle/sdk.events';
 /**
  * Represents an uncommitted event that is applied on an aggregate.
  */
-
 export class AppliedEvent {
 
     /**
      * Initializes a new instance of {@link AppliedEvent}.
-     * @param {*} event The event content.
-     * @param {EventType | undefined} eventType The {@link EventType}.
-     * @param {boolean} isPublic Whether the event is public or not.
+     * @param {*} event - The event content.
+     * @param {EventType | undefined} eventType - The {@link EventType}.
+     * @param {boolean} isPublic - Whether the event is public or not.
      */
     constructor(readonly event: any, readonly eventType: EventType | undefined, readonly isPublic: boolean) {
     }
 
     /**
-     * Gets whether AppliedEvent has event type explicitly defined or not
-     *
-     * @returns {Boolean}
+     * Gets whether AppliedEvent has event type explicitly defined or not.
      */
     get hasEventType(): boolean {
         return this.eventType !== undefined;

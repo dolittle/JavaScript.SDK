@@ -4,6 +4,9 @@
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { PartialObserver, Subscribable, Unsubscribable } from 'rxjs';
 
+/**
+ * Defines a reverse call client callback to handle a request comfing from the server to the client.
+ */
 export type ReverseCallCallback<TRequest, TResponse> = (request: TRequest, executionContext: ExecutionContext) => TResponse | Promise<TResponse>;
 
 /**

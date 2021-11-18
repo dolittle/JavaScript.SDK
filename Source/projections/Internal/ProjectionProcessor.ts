@@ -29,20 +29,19 @@ import {
     PartitionIdKeySelector, ProjectionContext, ProjectionId, UnknownKeySelectorType
 } from '..';
 
-
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.
  */
 export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
-     * Initializes a new instance of {@link ProjectionProcessor}
-     * @template T
-     * @param {IProjection<T>} _projection The projection
-     * @param {ProjectionsClient} _client The client used to connect to the Runtime
-     * @param {ExecutionContext} _executionContext The execution context
-     * @param {IEventType} _eventTypes The registered event types for this projection
-     * @param {ILogger} logger Logger for logging
+     * Initializes a new instance of {@link ProjectionProcessor}.
+     * @param {IProjection<T>} _projection - The projection.
+     * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IEventTypes} _eventTypes - The registered event types for this projection.
+     * @param {Logger} logger - Logger for logging.
+     * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
@@ -54,11 +53,11 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         super('Projection', _projection.projectionId, logger);
     }
 
+    /** @inheritdoc */
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
         registerArguments.setScopeid(guids.toProtobuf(this._projection.scopeId.value));
-
 
         let readModelInstance;
         if (typeof this._projection.readModelTypeOrInstance === 'function') {
@@ -94,6 +93,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         }
     }
 
+    /** @inheritdoc */
     protected createClient(
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
@@ -120,20 +120,24 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         );
     }
 
+    /** @inheritdoc */
     protected getFailureFromRegisterResponse(response: ProjectionRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
+    /** @inheritdoc */
     protected getRetryProcessingStateFromRequest(request: ProjectionRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): ProjectionResponse {
         const response = new ProjectionResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /** @inheritdoc */
     protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');

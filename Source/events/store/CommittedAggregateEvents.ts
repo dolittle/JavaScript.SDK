@@ -21,7 +21,9 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Creates an instance of {@link CommittedAggregateEvents}.
-     * @param {...CommittedEvent[]} events Events to initialize with.
+     * @param {EventSourceId} eventSourceId - The event source id.
+     * @param {AggregateRootId} aggregateRootId - The aggregate root type id.
+     * @param {...CommittedEvent[]} events - Events to initialize with.
      */
     constructor(readonly eventSourceId: EventSourceId, readonly aggregateRootId: AggregateRootId, ...events: CommittedAggregateEvent[]) {
         events.forEach((event, eventIndex) => {
@@ -45,7 +47,6 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Gets whether or not there are events.
-     * @returns {Boolean}
      */
     get hasEvents(): boolean {
         return this._events.length > 0;
@@ -53,7 +54,6 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Gets the length of the committed events array.
-     * @returns {Number}
      */
     get length(): number {
         return this._events.length;
@@ -74,13 +74,10 @@ export class CommittedAggregateEvents implements Iterable<CommittedAggregateEven
 
     /**
      * Gets the {@link AggregateRootVersion} of the aggregate root after all the events was applied.
-     *
-     * @returns {AggregateRootVersion}
      */
     get aggregateRootVersion(): AggregateRootVersion {
         return this._events.length === 0 ? AggregateRootVersion.initial : this._events[this._events.length - 1].aggregateRootVersion;
     }
-
 
     private throwIfEventLogVersionIsOutOfOrder(event: CommittedAggregateEvent, previousEvent: CommittedAggregateEvent) {
         if (event.eventLogSequenceNumber.value <= previousEvent.eventLogSequenceNumber.value) {

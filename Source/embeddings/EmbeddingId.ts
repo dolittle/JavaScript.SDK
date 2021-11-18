@@ -9,19 +9,17 @@ import { Guid } from '@dolittle/rudiments';
  */
 export class EmbeddingId extends ConceptAs<Guid, '@dolittle/sdk.embeddings.EmbeddingId'> {
     /**
-     * Initializes a new instance of {@link EmbeddingId}.
-     * @param {Guid} id The embedding id.
+     * Initializes a new instance of the {@link EmbeddingId} class.
+     * @param {Guid} id - The embedding id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.embeddings.EmbeddingId');
     }
 
     /**
-     * Creates a {EmbeddingId} from a guid.
-     *
-     * @static
-     * @param {string | Guid | EmbeddingId} id
-     * @returns {EmbeddingId}
+     * Creates a {@link EmbeddingId} from a {@link Guid} or a {@link string}.
+     * @param {string | Guid | EmbeddingId} id - The embedding id.
+     * @returns {EmbeddingId} The created embedding id concept.
      */
     static from(id: string | Guid | EmbeddingId): EmbeddingId {
         if (id instanceof EmbeddingId) return id;

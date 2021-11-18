@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
 import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 import { Observable } from 'rxjs';
@@ -17,8 +16,12 @@ export class SubscriptionBuilderForConsumerScope {
     private readonly _callbacks: ((subscriptionCallback: SubscriptionCallbacks) => void)[] = [];
 
     /**
-     * Initializes a new instance of {@link SubscriptionBuilderForConsumerScope}.
-     * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
+     * Initializes a new instance of the {@link SubscriptionBuilderForConsumerScope} class.
+     * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
+     * @param {TenantId} _producerTenantId - The producer tenant id the subscriptions are for.
+     * @param {StreamId} _producerStreamId - The producer stream id the subscriptions are for.
+     * @param {PartitionId} _producerPartitionId - The producer partition id the subscriptions are for.
+     * @param {ScopeId} _consumerScopeId - The consumer scope id the subscription is for.
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
@@ -29,9 +32,9 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon
-     * @param {SubscriptionCompleted} completed The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope}
+     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionCompleted} completed - The callback method.
+     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onCompleted(completed: SubscriptionCompleted): SubscriptionBuilderForConsumerScope {
@@ -40,9 +43,9 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon
-     * @param {SubscriptionSucceeded} succeeded The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope}
+     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionSucceeded} succeeded - The callback method.
+     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onSuccess(succeeded: SubscriptionSucceeded): SubscriptionBuilderForConsumerScope {
@@ -51,9 +54,9 @@ export class SubscriptionBuilderForConsumerScope {
     }
 
     /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon
-     * @param {SubscriptionFailed} failed The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope}
+     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
+     * @param {SubscriptionFailed} failed - The callback method.
+     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
      * @summary The callback will be called on each subscription.
      */
     onFailure(failed: SubscriptionFailed): SubscriptionBuilderForConsumerScope {
@@ -63,8 +66,8 @@ export class SubscriptionBuilderForConsumerScope {
 
     /**
      * Builds the subscription.
-     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}
+     * @param {Observable<SubscriptionCallbackArguments>} callbackArgumentsSource - The observable source of responses.
+     * @returns {Subscription} The built subscription.
      */
     build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         const subscriptionCallbacks = new SubscriptionCallbacks(

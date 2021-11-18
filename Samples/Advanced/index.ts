@@ -1,14 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { EventContext, PartitionId } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 
 import { MyEvent } from './MyEvent';
 import { MyEventHandler } from './MyEventHandler';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
     .withVersion(1, 0, 2)
     .withEnvironment('test')
@@ -35,7 +35,6 @@ const client = Client
             )
     )
     .build();
-
 
 const event = new MyEvent();
 event.anInteger = 42;

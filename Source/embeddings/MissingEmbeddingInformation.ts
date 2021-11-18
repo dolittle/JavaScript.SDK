@@ -10,7 +10,7 @@ export class MissingEmbeddingInformation extends Exception {
 
     /**
      * Initializes a new instance of {@link MissingEmbeddingInformation}.
-     * @param {string} details Details that are missing.
+     * @param {string} details - Details that are missing.
      */
     constructor(details: string) {
         super(`Missing information on embedding: ${details}`);

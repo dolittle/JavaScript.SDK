@@ -9,17 +9,16 @@ import { Exception } from '@dolittle/rudiments';
 export class CallbackShouldBeFunction extends Exception {
 
     /**
-     * Initializes a new instance of {@link CallbackShouldBeFunction}
-     * @param {*} callback The alleged callback which is not a function.
+     * Initializes a new instance of {@link CallbackShouldBeFunction}.
+     * @param {*} callback - The alleged callback which is not a function.
      */
     constructor(callback: any) {
         super(`Argument '${typeof callback}' is not a function`);
     }
 
-
     /**
      * Asserts an alleged callback for being a function. Throws {@link CallbackShouldBeFunction} if it is not a function.
-     * @param {*} callback Callback to check.
+     * @param {*} callback - Callback to check.
      */
     static assert(callback: any) {
         if (typeof callback !== 'function') {

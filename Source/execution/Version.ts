@@ -13,11 +13,11 @@ export class Version {
 
     /**
      * Initializes a new instance of {@link Version}.
-     * @param {number} major Major version of the software.
-     * @param {number} minor Minor version of the software.
-     * @param {number} patch Path level of the software.
-     * @param {number} build Builder number of the software.
-     * @param {string} [preReleaseString] If prerelease - the prerelease string.
+     * @param {number} major - Major version of the software.
+     * @param {number} minor - Minor version of the software.
+     * @param {number} patch - Path level of the software.
+     * @param {number} build - Builder number of the software.
+     * @param {string} [preReleaseString] - If prerelease - the prerelease string.
      */
     constructor(major: number, minor: number, patch: number, build: number, preReleaseString = '') {
         this.major = major;
@@ -33,10 +33,14 @@ export class Version {
     static readonly notSet = new Version(0, 0, 0, 0);
 
     /**
-     * First version
+     * First version.
      */
     static readonly first = new Version(1, 0, 0, 0);
 
+    /**
+     * Converts the {@link Version} to a string.
+     * @returns {string} The version as a string.
+     */
     toString() {
         let version = `${this.major}.${this.minor}.${this.patch}`;
         if (this.preReleaseString) {

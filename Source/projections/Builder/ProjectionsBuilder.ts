@@ -19,15 +19,22 @@ import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { IProjectionAssociations } from '../Store/IProjectionAssociations';
 
+/**
+ * Represents a builder for building instances of {@link IProjection}.
+ */
 export class ProjectionsBuilder {
     private _projectionBuilders: ICanBuildAndRegisterAProjection[] = [];
 
+    /**
+     * Initialises a new instance of the {@link ProjectionsBuilder} class.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations to use for associating read model types with projections.
+     */
     constructor(private _projectionAssociations: IProjectionAssociations) {}
 
     /**
      * Start building a projection.
-     * @param {ProjectionId | Guid | string} projectionId  The unique identifier of the projection
-     * @returns {ProjectionBuilder}
+     * @param {ProjectionId | Guid | string} projectionId - The unique identifier of the projection.
+     * @returns {ProjectionBuilder} The projections builder for continuation.
      */
     createProjection(projectionId: ProjectionId | Guid | string): ProjectionBuilder {
         const builder = new ProjectionBuilder(ProjectionId.from(projectionId), this._projectionAssociations);
@@ -36,14 +43,10 @@ export class ProjectionsBuilder {
     }
 
     /**
-     * Register a type as a projection
-     * @param type The type to register as a projection.
+     * Register a type as a projection.
+     * @param type - The type to register as a projection.
      */
     register<T = any>(type: Constructor<T>): ProjectionsBuilder;
-    /**
-     * Register an instance as an event handler.
-     * @param instance The instance to register as an event handler.
-     */
     register<T = any>(instance: T): ProjectionsBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
         this._projectionBuilders.push(new ProjectionClassBuilder<T>(typeOrInstance));
@@ -51,6 +54,16 @@ export class ProjectionsBuilder {
         return this;
     }
 
+    /**
+     * Builds and registers all projections created with the builder.
+     * @param {ProjectionsClient} client - The projections client to use to register the built projections.
+     * @param {IContainer} container - The container to use to create new instances of projection types.
+     * @param {ExecutionContext} executionContext - The execution context of the client.
+     * @param {IEventTypes} eventTypes - All the registered event types.
+     * @param {Logger} logger - The logger to use for logging.
+     * @param {Cancellation} cancellation - The cancellation token.
+     * @returns {Projections} The built projections.
+     */
     buildAndRegister(
         client: ProjectionsClient,
         container: IContainer,

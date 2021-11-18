@@ -4,17 +4,16 @@
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { ProjectionProcessor } from './Internal';
 
-
 /**
- * Defines the system for projections
+ * Defines the system for projections.
  */
 export abstract class IProjections {
 
     /**
-     * Register a a projection
+     * Register a a projection.
      * @template T Type of the readmodel.
-     * @param {ProjectionProcessor} projectionProcessor Projection processor to register.
-     * @param {Cancellation} cancellation Used to close the connection to the Runtime.
+     * @param {ProjectionProcessor} projectionProcessor - Projection processor to register.
+     * @param {Cancellation} cancellation - Used to close the connection to the Runtime.
      */
     abstract register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation?: Cancellation): void;
 }

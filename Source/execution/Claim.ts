@@ -11,9 +11,9 @@ export class Claim {
 
     /**
      * Creates an instance of claim.
-     * @param {string} key Key of the claim.
-     * @param {string} value Value on the claim.
-     * @param {string} valueType Type of value.
+     * @param {string} key - Key of the claim.
+     * @param {string} value - Value on the claim.
+     * @param {string} valueType - Type of value.
      */
     constructor(key: string, value: string, valueType: string) {
         this.key = key;

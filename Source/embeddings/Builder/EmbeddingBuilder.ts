@@ -15,9 +15,8 @@ import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 
-
 /**
- * Represents a builder for building embeddings inline.
+ * Represents a builder for building {@link IEmbedding}.
  */
 export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
     private _readModelTypeOrInstance?: Constructor<any> | any;
@@ -25,8 +24,8 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
 
     /**
      * Initializes a new instance of {@link EmbeddingBuilder}.
-     * @param {EmbeddingId} _embeddingId  The unique identifier of the embedding to build for
-     * @param {IProjectionAssociations} _projectionAssociations The projection associations
+     * @param {EmbeddingId} _embeddingId - The unique identifier of the embedding to build for.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      */
     constructor(private readonly _embeddingId: EmbeddingId, private readonly _projectionAssociations: IProjectionAssociations) { }
 
@@ -34,8 +33,9 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
      * Defines the type of the read model the embedding builds. The initial state of a newly
      * created read model is given by the provided instance or an instance constructed by
      * the default constructor of the provided type.
-     * @param {Constructor<T> | T} typeOrInstance The type or an instance of the read model.
-     * @returns {EmbeddingBuilderForReadModel<T>}
+     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the read model.
+     * @returns {EmbeddingBuilderForReadModel<T>} The embedding builder for the specified read model type.
+     * @template T The type of the embedding read model.
      */
     forReadModel<T>(typeOrInstance: Constructor<T> | T): EmbeddingBuilderForReadModel<T> {
         if (this._readModelTypeOrInstance) {

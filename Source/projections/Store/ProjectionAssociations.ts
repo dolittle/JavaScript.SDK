@@ -10,6 +10,9 @@ import { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection
 import { ProjectionAssociation } from './ProjectionAssociation';
 import { TypeIsNotAProjection } from './TypeIsNotAProjection';
 
+/**
+ * Represents an implementation of {@link IProjectionAssociations}.
+ */
 export class ProjectionAssociations extends IProjectionAssociations {
     readonly _associationsToType: Map<ProjectionAssociation, Constructor<any>> = new Map();
     readonly _typeToAssociations: Map<Constructor<any>, ProjectionAssociation> = new Map();

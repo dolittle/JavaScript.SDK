@@ -13,12 +13,12 @@ import { TypeNotAssociatedToArtifact } from './TypeNotAssociatedToArtifact';
 import { UnableToResolveArtifact } from './UnableToResolveArtifact';
 
 /**
- * Represents an implementation of {@link IArtifacts}
+ * Represents an implementation of {@link IArtifacts}.
  */
 export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> extends IArtifacts<TArtifact, TId> {
     /**
-     * Initializes a new instance of {@link EventTypes}
-     * @param {ArtifactTypeMap<Constructor<any>>} [associations] Known associations
+     * Initializes a new instance of {@link EventTypes}.
+     * @param {ArtifactTypeMap<Constructor<any>>} _associations - Known associations.
      */
     constructor(private _associations: ArtifactTypeMap<TArtifact, TId, Constructor<any>>) {
         super();
@@ -42,7 +42,6 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         }
         return type;
     }
-
 
     /** @inheritdoc */
     hasFor(type: Constructor<any>): boolean {
@@ -98,7 +97,6 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Art
         return left.generation.equals(right.generation)
             && left.id.toString() === right.id.toString();
     }
-
 
     private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, artifact: TArtifact) {
         if (this.hasFor(type)) {

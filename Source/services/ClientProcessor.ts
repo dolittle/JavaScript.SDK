@@ -13,18 +13,22 @@ import { Logger } from 'winston';
 import { IReverseCallClient } from './IReverseCallClient';
 import { RegistrationFailed } from './RegistrationFailed';
 
-
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
+ * @template TIdentifier - The type of the identifier.
+ * @template TRegisterArguments - The type of the registration arguments.
+ * @template TRegisterResponse - The type of the registration response.
+ * @template TRequest - The type of the requests.
+ * @template TResponse - The type of the responses.
  */
 export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> {
     private _pingTimeout = 1;
 
     /**
      * Initializes a new {@link ClientProcessor}.
-     * @param {string} _kind What kind of a processor it is.
-     * @param {TIdentifier} _identifier The unique identifier for the processor.
-     * @param {Logger} _logger The logger.
+     * @param {string} _kind - What kind of a processor it is.
+     * @param {TIdentifier} _identifier - The unique identifier for the processor.
+     * @param {Logger} _logger - The logger.
      */
     constructor(
         protected readonly _kind: string,
@@ -33,7 +37,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
 
     /**
      * Registers a processor with the Runtime, and if successful starts handling requests.
-     * @param {Cancellation} cancellation Used to cancel the registration and processing.
+     * @param {Cancellation} cancellation - Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
     register(cancellation: Cancellation): Observable<void> {
@@ -65,9 +69,9 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
     }
 
     /**
-     * Registers a processor with a policy
-     * @param {RetryPolicy} policy The policy to register with.
-     * @param {Cancellation} cancellation The cancellation.
+     * Registers a processor with a policy.
+     * @param {RetryPolicy} policy - The policy to register with.
+     * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
     registerWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void> {
@@ -77,8 +81,8 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
     /**
      * Registers a processor forever with a policy. Even if the registration completes, the repeat() call
      * will try to re-register.
-     * @param {RetryPolicy} policy The policy to register with.
-     * @param {Cancellation} cancellation The cancellation.
+     * @param {RetryPolicy} policy - The policy to register with.
+     * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
     registerForeverWithPolicy(policy: RetryPolicy, cancellation: Cancellation): Observable<void> {
@@ -92,7 +96,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
 
     /**
      * Get a failure from the registration response.
-     * @param {TRegisterResponse} response The registration response
+     * @param {TRegisterResponse} response - The registration response.
      * @returns {Failure} The failure to return to Runtime.
      */
     protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): Failure | undefined;
@@ -112,15 +116,15 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
 
     /**
      * Handles the request from the Runtime.
-     * @param {TRequest} request The request from the Runtime.
-     * @param {ExecutionContext} executionContext The execution context.
+     * @param {TRequest} request - The request from the Runtime.
+     * @param {ExecutionContext} executionContext - The execution context.
      */
     protected abstract handle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 
     /**
      * Wrapper around the handle() method to catch errors and set them to the response.
-     * @param {TRequest} request The request from the Runtime.
-     * @param {ExecutionContext} executionContext The execution context.
+     * @param {TRequest} request - The request from the Runtime.
+     * @param {ExecutionContext} executionContext - The execution context.
      */
     protected abstract catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
 }

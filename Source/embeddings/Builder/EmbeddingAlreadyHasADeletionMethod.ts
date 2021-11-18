@@ -9,8 +9,8 @@ import { EmbeddingId } from '../EmbeddingId';
  */
 export class EmbeddingAlreadyHasADeletionMethod extends Exception {
     /**
-     * Creates an instance of EmbeddingAlreadyHasADeletionMethod
-     * @param {EmbeddingId} embedding The embedding that already has a deletion method.
+     * Creates an instance of EmbeddingAlreadyHasADeletionMethod.
+     * @param {EmbeddingId} embedding - The embedding that already has a deletion method.
      */
     constructor(embedding: EmbeddingId) {
         super(`Embedding ${embedding} already has a deletion method defined.`);

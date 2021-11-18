@@ -12,12 +12,12 @@ export class Subscription {
 
     /**
      * Initializes a new instance of {@link Subscription}.
-     * @param {ScopeId} scope Scope for the subscription.
-     * @param {MicroserviceId} microservice The microservice to subscribe to.
-     * @param {TenantId} tenant The tenant the subscription is for.
-     * @param {StreamId} stream The public stream identifier to subscribe to.
-     * @param {PartitionId} partition The partition within the public stream.
-     * @param {SubscriptionCallbacks} callbacks Callbacks for handling responses of subscribing.
+     * @param {ScopeId} scope - Scope for the subscription.
+     * @param {MicroserviceId} microservice - The microservice to subscribe to.
+     * @param {TenantId} tenant - The tenant the subscription is for.
+     * @param {StreamId} stream - The public stream identifier to subscribe to.
+     * @param {PartitionId} partition - The partition within the public stream.
+     * @param {SubscriptionCallbacks} callbacks - Callbacks for handling responses of subscribing.
      */
     constructor(
         readonly scope: ScopeId,

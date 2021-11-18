@@ -30,18 +30,17 @@ import { IEventStore } from './IEventStore';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
 
-
 /**
- * Represents an implementation of {@link IEventStore}
+ * Represents an implementation of {@link IEventStore}.
  */
 export class EventStore extends IEventStore {
 
     /**
      * Initializes a new instance of {@link EventStore}.
-     * @param {EventStoreClient} _eventStoreClient The client to use for connecting to the event store.
-     * @param {IEventTypes} _eventTypes Event types system for working with event types.
-     * @param {ExecutionContext} _executionContext The execution context.
-     * @param {Logger} _logger Logger for logging.
+     * @param {EventStoreClient} _eventStoreClient - The client to use for connecting to the event store.
+     * @param {IEventTypes} _eventTypes - Event types system for working with event types.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _eventStoreClient: EventStoreClient,

@@ -4,15 +4,14 @@
 import { AggregateRootId } from '../index';
 
 /**
- * The exception that gets thrown when a an event is applied to an event source other than the one expected.
+ * Exception that gets thrown when a an event is applied to an event source other than the one expected.
  */
-
 export class EventWasAppliedByOtherAggregateRoot extends Error {
 
     /**
      * Initializes a new instance of {@link EventWasAppliedToOtherEventSource}.
-     * @param {AggregateRootId} aggregateRoot The applied event source.
-     * @param {AggregateRootId} expectedAggregateRoot The expected event source.
+     * @param {AggregateRootId} aggregateRoot - The applied event source.
+     * @param {AggregateRootId} expectedAggregateRoot - The expected event source.
      */
     constructor(aggregateRoot: AggregateRootId, expectedAggregateRoot: AggregateRootId) {
         super(`Aggregate Root '${aggregateRoot}' does not match with expected '${expectedAggregateRoot}'.`);

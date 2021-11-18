@@ -18,9 +18,17 @@ import { IEventProcessor } from './IEventProcessor';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
+ * @template TIdentifier The type of the event processor identifier.
+ * @template TRequest The type of the event processor requests.
  */
 export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
 
+    /**
+     * Initialises a new instance of the {@link EventProcessor} class.
+     * @param {string} _kind - The kind of the event processor.
+     * @param {TIdentifier} _identifier - The identifier of the event processor.
+     * @param {Logger} _logger - The logger to use for logging.
+     */
     constructor(
         protected _kind: string,
         protected _identifier: TIdentifier,
@@ -43,13 +51,13 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     /**
      * Get the retry processing state from the request.
-     * @param {TRequest} request The request to get the retry processing state from
+     * @param {TRequest} request - The request to get the retry processing state from.
      */
     protected abstract getRetryProcessingStateFromRequest(request: TRequest): RetryProcessingState | undefined;
 
     /**
-     * Create a response from a processor failure
-     * @param {ProcessorFailure} failure The processor failure.
+     * Create a response from a processor failure.
+     * @param {ProcessorFailure} failure - The processor failure.
      */
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 

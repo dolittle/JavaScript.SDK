@@ -9,12 +9,12 @@ import { AggregateRootTypeMap } from './AggregateRootTypeMap';
 import { IAggregateRootTypes } from './IAggregateRootTypes';
 
 /**
- * Represents an implementation of {@link IAggregateRootTypes}
+ * Represents an implementation of {@link IAggregateRootTypes}.
  */
 export class AggregateRootTypes extends IAggregateRootTypes {
     /**
-     * Initializes a new instance of {@link AggregateRootType}
-     * @param {AggregateRootTypeMap<Constructor<any>>} [associations] Known associations
+     * Initializes a new instance of {@link AggregateRootType}.
+     * @param {AggregateRootTypeMap<Constructor<any>>} [associations] - Known associations.
      */
     constructor(associations: AggregateRootTypeMap<Constructor<any>> = new AggregateRootTypeMap()) {
         super(associations);

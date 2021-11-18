@@ -17,10 +17,10 @@ export class UpdateDecoratedMethods {
     static readonly methodPerEmbedding: Map<Constructor<any>, UpdateDecoratedMethod> = new Map();
 
     /**
-     * Registers the @resolveUpdateToEvents decorated method
-     * @param {Constructor<any>} target Target that owns the on method.
-     * @param {EmbeddingClassUpdateMethod} method The update method.
-     * @param {string} name The name of the method.
+     * Registers the @resolveUpdateToEvents decorated method.
+     * @param {Constructor<any>} target - Target that owns the on method.
+     * @param {EmbeddingClassUpdateMethod} method - The update method.
+     * @param {string} name - The name of the method.
      */
     static register(
         target: Constructor<any>,

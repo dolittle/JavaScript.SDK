@@ -5,9 +5,13 @@ import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 /**
- * Exception that gets thrown when trying to get a projection that isn't associated to a type.
+ * Exception that gets thrown when trying to get a projection that is not associated to a type.
  */
 export class NoProjectionAssociatedWithType extends Exception {
+    /**
+     * Initialises a new instance of the {@link NoProjectionAssociatedWithType} class.
+     * @param {Constructor<any>} type - The type that is not associated with a projection.
+     */
     constructor(type: Constructor<any>) {
         super(`No projection associated with type ${type.name}`);
     }

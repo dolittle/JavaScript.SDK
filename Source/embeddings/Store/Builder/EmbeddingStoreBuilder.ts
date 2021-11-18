@@ -16,10 +16,10 @@ export class EmbeddingStoreBuilder {
 
     /**
      * Initializes an instance of {@link EmbeddingStoreBuilder}.
-     * @param {EmbeddingStoreClient} _embeddingsStoreClient The embedding store client.
-     * @param {ExecutionContext} _executionContext The execution context.
-     * @param {IProjectionAssociations} _embeddingAssociations The embedding associations.
-     * @param {Logger} _logger The logger.
+     * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IProjectionAssociations} _embeddingAssociations - The embedding associations.
+     * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _embeddingsStoreClient: EmbeddingStoreClient,
@@ -30,7 +30,7 @@ export class EmbeddingStoreBuilder {
 
     /**
      * Build an {@link IEmbeddingStore} for the given tenant.
-     * @param {TenantId | Guid | string} tenantId The tenant id.
+     * @param {TenantId | Guid | string} tenantId - The tenant id.
      * @returns {IEmbeddingStore} The embedding store.
      */
     forTenant(tenantId: TenantId | Guid | string): IEmbeddingStore {

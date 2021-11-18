@@ -4,9 +4,12 @@
 import { Exception } from '@dolittle/rudiments';
 
 /**
- * The exception that gets thrown when an aggregate root identifier is not set and is expected
+ * The exception that gets thrown when an aggregate root identifier is not set and is expected.
  */
 export class AggregateRootIdentifierNotSet extends Exception {
+    /**
+     * Initialises a new instance of the {@link AggregateRootIdentifierNotSet} class.
+     */
     constructor() {
         super('Aggregate root identifier is not set on the Aggregate Root. Aggregate Roots must be constructed through the Client.');
     }

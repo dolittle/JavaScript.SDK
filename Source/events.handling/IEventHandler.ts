@@ -5,18 +5,17 @@ import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
 import { EventHandlerAlias } from './EventHandlerAlias';
 import { EventHandlerId } from './EventHandlerId';
 
-
 /**
- * Defines an event handler
+ * Defines an event handler.
  */
 export abstract class IEventHandler {
     /**
-     * Gets the unique identifier for event handler - {@link EventHandlerId}
+     * Gets the unique identifier for event handler - {@link EventHandlerId}.
      */
     abstract readonly eventHandlerId: EventHandlerId;
 
     /**
-     * Gets the scope the event handler is in
+     * Gets the scope the event handler is in.
      */
     abstract readonly scopeId: ScopeId;
 
@@ -42,9 +41,9 @@ export abstract class IEventHandler {
 
     /**
      * Handle an event.
-     * @param {*} event Event to handle.
-     * @param {EventType} eventType The event type.
-     * @param {EventContext} context The context in which the event is in.
+     * @param {*} event - Event to handle.
+     * @param {EventType} eventType - The event type.
+     * @param {EventContext} context - The context in which the event is in.
      */
     abstract handle(event: any, eventType: EventType, context: EventContext): Promise<void>;
 }

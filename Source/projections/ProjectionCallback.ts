@@ -5,6 +5,6 @@ import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { ProjectionContext } from './ProjectionContext';
 
 /**
- * Represents the callback for a projection on() method
+ * Represents the callback for a projection on() method.
  */
 export type ProjectionCallback<T, TEvent = any> = (readModel: T, event: TEvent, context: ProjectionContext) => T | DeleteReadModelInstance | Promise<T | DeleteReadModelInstance>;

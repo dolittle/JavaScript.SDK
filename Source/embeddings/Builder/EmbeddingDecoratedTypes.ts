@@ -11,7 +11,7 @@ export class EmbeddingDecoratedTypes {
 
     /**
      * Registers a decorated embedding class with the Runtime.
-     * @param {EmbeddingDecoratedType} embeddingDecoratedType The decorated type to register.
+     * @param {EmbeddingDecoratedType} embeddingDecoratedType - The decorated type to register.
      */
     static register(embeddingDecoratedType: EmbeddingDecoratedType) {
         this.types.push(embeddingDecoratedType);

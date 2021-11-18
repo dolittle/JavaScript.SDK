@@ -1,0 +1,39 @@
+{
+    "name": "@dolittle/sdk.tenancy",
+    "version": "20.0.0-legolas.13",
+    "description": "",
+    "author": "",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dolittle/Javascript.SDK.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dolittle/Javascript.SDK/issues"
+    },
+    "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
+    "files": [
+        "Distribution",
+        "**/*.ts"
+    ],
+    "main": "Distribution/index.js",
+    "types": "Distribution/index.d.ts",
+    "scripts": {
+        "prebuild": "yarn clean",
+        "postbuild": "yarn lint",
+        "build": "tsc -b",
+        "clean": "tsc -b --clean",
+        "test": "mocha",
+        "lint": "eslint --quiet --ext .ts ./",
+        "lint:fix": "eslint --quiet --ext .ts ./ --fix"
+    },
+    "dependencies": {
+        "@dolittle/rudiments": "5.0.1",
+        "@dolittle/sdk.execution": "20.0.0-legolas.13",
+        "@dolittle/sdk.resilience": "20.0.0-legolas.13",
+        "@dolittle/runtime.contracts": "6.3.0"
+    }
+}

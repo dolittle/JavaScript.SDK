@@ -13,11 +13,11 @@ export class OnDecoratedEmbeddingMethod {
 
     /**
      * Initializes a new instance of {@link OnDecoratedEmbeddingMethod}.
-     * @param {Constructor<any>} owner Owner of the method.
-     * @param {Constructor<any> | EventTypeIdLike} eventTypeOrId Type or event type id of event it handles.
-     * @param {GenerationLike | undefined} generation Generation of the event or undefined.
-     * @param {EmbeddingClassOnMethod} method The actual method that handles the event.
-     * @param {string} name The name of the method.
+     * @param {Constructor<any>} owner - Owner of the method.
+     * @param {Constructor<any> | EventTypeIdLike} eventTypeOrId - Type or event type id of event it handles.
+     * @param {GenerationLike | undefined} generation - Generation of the event or undefined.
+     * @param {EmbeddingClassOnMethod} method - The actual method that handles the event.
+     * @param {string} name - The name of the method.
      */
     constructor(
         readonly owner: Constructor<any>,

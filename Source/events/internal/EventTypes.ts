@@ -8,7 +8,7 @@ import { artifacts, callContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
-import { EventType, IEventTypes } from '../index';
+import { EventType } from '../index';
 
 /**
  * Represents a system that knows how to register Event Types with the Runtime.
@@ -17,20 +17,21 @@ export class EventTypes {
 
     /**
      * Initializes an instance of the {@link EventTypes} class.
-     * @param _client The event types client.
-     * @param _executionContext The execution context.
-     * @param _logger The logger.
+     * @param {EventTypesClient} _client - The event types client.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {Logger} _logger - The logger.
      */
     constructor(readonly _client: EventTypesClient, readonly _executionContext: ExecutionContext, readonly _logger: Logger) {
     }
 
     /**
      * Registers event types.
-     * @param eventTypes The event types to register.
-     * @param cancellation The cancellation.
+     * @param {EventType[]} eventTypes - The event types to register.
+     * @param {Cancellation} cancellation - The cancellation.
+     * @returns {Promise<void>} A {@link Promise} that represents the asynchronous operation.
      */
-    register(eventTypes: EventType[], cancellation: Cancellation): Promise<any> {
-        return Promise.all(eventTypes.map(eventType => this.sendRequest(eventType, cancellation)));
+    register(eventTypes: EventType[], cancellation: Cancellation): Promise<void> {
+        return Promise.all(eventTypes.map(eventType => this.sendRequest(eventType, cancellation))) as unknown as Promise<void>;
     }
 
     private createRequest(eventType: EventType): EventTypeRegistrationRequest {
@@ -43,7 +44,7 @@ export class EventTypes {
         return result;
     }
 
-    private async sendRequest(eventType: EventType, cancellation: Cancellation): Promise<any> {
+    private async sendRequest(eventType: EventType, cancellation: Cancellation): Promise<void> {
         const request = this.createRequest(eventType);
         this._logger.debug(`Registering Event Type ${eventType.id.value.toString()} with Alias ${eventType.alias?.value}`);
         try {

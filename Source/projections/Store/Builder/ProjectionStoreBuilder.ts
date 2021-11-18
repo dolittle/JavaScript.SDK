@@ -3,31 +3,36 @@
 
 import { Logger } from 'winston';
 
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 import { Guid } from '@dolittle/rudiments';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 
 import { IProjectionAssociations, IProjectionStore, ProjectionStore } from '..';
+import { IProjectionStoreBuilder } from './IProjectionStoreBuilder';
 
 /**
- * Represents a builder for builing a projection store.
+ * Represents an implementation of {@link IProjectionsStoreBuilder}.
  */
-export class ProjectionStoreBuilder {
+export class ProjectionStoreBuilder extends IProjectionStoreBuilder {
 
+    /**
+     * Initializes a new instance of {@link ProjectionStoreBuilder}.
+     * @param {ProjectionsClient} _projectionsClient - The client for the projections.
+     * @param {ExecutionContext} _executionContext - The execution context.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {Logger} _logger - The logger.
+     */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _projectionAssociations: IProjectionAssociations,
         private readonly _logger: Logger) {
+            super();
     }
 
-    /**
-     * Build an {@link IProjectionStore} for the given tenant.
-     * @param {TenantId | Guid | string} tenantId The tenant id.
-     * @returns {IProjectionStore} The projection store.
-     */
-    forTenant(tenantId: TenantId | Guid | string): IProjectionStore {
+    /** @inheritdoc */
+    forTenant(tenantId: TenantIdLike): IProjectionStore {
         const executionContext = this._executionContext
             .forTenant(tenantId)
             .forCorrelation(Guid.create());

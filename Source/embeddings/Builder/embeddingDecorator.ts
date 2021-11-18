@@ -12,7 +12,8 @@ import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 
 /**
  * Decorator to mark a class as an Embedding.
- * @param {EmbeddingId | Guid | string} id The id to associate with this Embedding
+ * @param {EmbeddingId | Guid | string} id - The id to associate with this Embedding.
+ * @returns {(any) => void} The decorator to apply.
  */
 export function embedding(id: EmbeddingId | Guid | string) {
     return function (target: any) {

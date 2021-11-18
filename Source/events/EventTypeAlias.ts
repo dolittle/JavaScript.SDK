@@ -3,25 +3,26 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 
+/**
+ * Defines the types that can be converted to a {@link EventTypeAlias}.
+ */
 export type EventTypeAliasLike = string | EventTypeAlias;
 
 /**
  * Represents the alias of an event type.
- *
- * @export
- * @class EventTypeAlias
- * @extends {ConceptAs<string, '@dolittle/sdk.artifacts.EventTypeId'>}
  */
 export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.events.EventTypeAlias'> {
+    /**
+     * Initialises a new instance of the {@link EventTypeAlias} class.
+     * @param {string} alias - The event type alias.
+     */
     constructor(alias: string) {
         super(alias, '@dolittle/sdk.events.EventTypeAlias');
     }
     /**
-     * Creates an {@link EventTypeAlias} from a guid.
-     *
-     * @static
-     * @param {(Guid | string)} id
-     * @returns {EventSourceId}
+     * Creates an {@link EventTypeAlias} from a {@link string}.
+     * @param {EventTypeAliasLike} id - The event type alias.
+     * @returns {EventTypeAlias} The created event type alias concept.
      */
     static from(id: EventTypeAliasLike): EventTypeAlias {
         if (id instanceof EventTypeAlias) return id;

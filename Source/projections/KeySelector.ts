@@ -6,6 +6,6 @@ import { EventSourceIdKeySelector } from './EventSourceIdKeySelector';
 import { PartitionIdKeySelector } from './PartitionIdKeySelector';
 
 /**
- * Represents a key selector
+ * Represents a key selector.
  */
  export type KeySelector = EventPropertyKeySelector | EventSourceIdKeySelector | PartitionIdKeySelector;

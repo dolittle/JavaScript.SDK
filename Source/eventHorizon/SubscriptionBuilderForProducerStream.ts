@@ -21,9 +21,10 @@ export class SubscriptionBuilderForProducerStream {
     private _builder?: SubscriptionBuilderForProducerPartition;
 
     /**
-     * Initializes a new instance of {@link SubscriptionBuilderForProducerStream}.
-     * @param {MicroserviceId} _producerMicroserviceId The microservice the subscriptions are for.
-     * @param {Observable<SubscriptionCallbackArguments>} responsesSource The source of responses.
+     * Initializes a new instance of the {@link SubscriptionBuilderForProducerStream} class.
+     * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
+     * @param {TenantId} _producerTenantId - The producer tenant id the subscriptions are for.
+     * @param {StreamId} _producerStreamId - The producer stream id the subscriptions are for.
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
@@ -33,7 +34,8 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Sets the producer stream to subscribe to events from.
-     * @param {PartitionId | Guid | string} partitionId Stream partition to subscribe to events from.
+     * @param {PartitionId | Guid | string} partitionId - Stream partition to subscribe to events from.
+     * @returns {SubscriptionBuilderForProducerPartition} The builder for creating event horizon subscriptions.
      */
     fromProducerPartition(partitionId: PartitionId | Guid | string): SubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
@@ -48,8 +50,8 @@ export class SubscriptionBuilderForProducerStream {
 
     /**
      * Builds the subscription.
-     * @param {Observable<SubscriptionCallbackArguments} callbackArgumentsSource The observable source of responses.
-     * @returns {Subscription}
+     * @param {Observable<SubscriptionCallbackArguments>} callbackArgumentsSource - The observable source of responses.
+     * @returns {Subscription} The built subscription.
      */
     build(callbackArgumentsSource: Observable<SubscriptionCallbackArguments>): Subscription {
         this.throwIfProducerPartitionIsNotDefined();

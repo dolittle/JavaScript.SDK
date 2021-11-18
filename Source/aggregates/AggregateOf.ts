@@ -15,6 +15,13 @@ import { IAggregateRootOperations } from './IAggregateRootOperations';
  */
 export class AggregateOf<TAggregateRoot extends AggregateRoot> extends IAggregateOf<TAggregateRoot> {
 
+    /**
+     * Initialises a new instance of the {@link AggregateOf} class.
+     * @param {Constructor<TAggregateRoot>} _type - The type of the aggregate root implementation.
+     * @param {IEventStore} _eventStore - The event store to fetch committed events from and commit aggregate events with.
+     * @param {IEventTypes} _eventTypes - All registered event types.
+     * @param {Logger} _logger - The logger to use for logging.
+     */
     constructor(
         private readonly _type: Constructor<TAggregateRoot>,
         private readonly _eventStore: IEventStore,

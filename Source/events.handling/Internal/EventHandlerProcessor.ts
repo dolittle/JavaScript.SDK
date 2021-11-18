@@ -33,12 +33,12 @@ import { EventHandlerId, IEventHandler } from '..';
 export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
-     * Initializes a new instance of {@link EventHandlerProcessor}
-     * @param {IEventHandler} _handler The actual handler.
-     * @param {EventHandlersClient} _client Client to use for connecting to the runtime.
-     * @param {EventHandlersClient} _executionContext Execution context.
-     * @param {IEventTypes} _eventTypes Registered event types.
-     * @param {ILogger} logger Logger for logging.
+     * Initializes a new instance of {@link EventHandlerProcessor}.
+     * @param {IEventHandler} _handler - The actual handler.
+     * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
+     * @param {EventHandlersClient} _executionContext - Execution context.
+     * @param {IEventTypes} _eventTypes - Registered event types.
+     * @param {Logger} logger - Logger for logging.
      */
     constructor(
         private _handler: IEventHandler,
@@ -50,6 +50,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         super('EventHandler', _handler.eventHandlerId, logger);
     }
 
+    /** @inheritdoc */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
         registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
@@ -66,6 +67,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         return registerArguments;
     }
 
+    /** @inheritdoc */
     protected createClient(
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
@@ -92,20 +94,24 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         );
     }
 
+    /** @inheritdoc */
     protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
+    /** @inheritdoc */
     protected getRetryProcessingStateFromRequest(request: HandleEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
+    /** @inheritdoc */
     protected createResponseFromFailure(failure: ProcessorFailure): EventHandlerResponse {
         const response = new EventHandlerResponse();
         response.setFailure(failure);
         return response;
     }
 
+    /** @inheritdoc */
     protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');

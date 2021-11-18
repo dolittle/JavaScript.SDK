@@ -1,5 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { Artifact, ArtifactIdLike } from './Artifact';
 import { Generation } from './Generation';
 
@@ -13,7 +14,7 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
     private _generationsById: Map<string, Map<number, [TType, TArtifact]>>;
 
     /**
-     * Initializes a new instance of {@link EventTypeMap}
+     * Initializes a new instance of {@link EventTypeMap}.
      */
     constructor() {
         this._generationsById = new Map<string, Map<number, [TType, TArtifact]>>();
@@ -117,8 +118,8 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
 
     /**
      * Creates the specific artifact from the id and generation.
-     * @param id The artifact id as a string.
-     * @param generation The {@link Generation}.
+     * @param id - The artifact id as a string.
+     * @param generation - The {@link Generation}.
      */
     protected abstract createArtifact(id: string, generation: Generation): TArtifact;
 }
