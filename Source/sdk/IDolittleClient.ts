@@ -9,7 +9,7 @@ import { IEmbeddings } from '@dolittle/sdk.embeddings';
 import { IProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { ITenants } from '@dolittle/sdk.tenancy';
 import { Constructor } from '@dolittle/types';
-import { IResources } from '@dolittle/sdk.resources';
+import { IResourcesBuilder } from '@dolittle/sdk.resources';
 import { Logger } from 'winston';
 import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
 
@@ -49,9 +49,9 @@ export abstract class IDolittleClient {
     abstract get tenants(): ITenants;
 
     /**
-     * Gets the {@link IResources}.
+     * Gets the {@link IResourcesBuilder}.
      */
-    abstract get resources(): IResources;
+    abstract get resources(): IResourcesBuilder;
 
     /**
      * Gets the {@link Logger}.
