@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.common",
-    "version": "20.0.0-legolas.12",
+    "version": "20.0.0-legolas.13",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -32,7 +32,7 @@
     },
     "dependencies": {
         "@dolittle/types": "5.0.1",
-        "@dolittle/sdk.execution": "20.0.0-legolas.12"
+        "@dolittle/sdk.execution": "20.0.0-legolas.13"
     },
     "devDependencies": {}
 }
