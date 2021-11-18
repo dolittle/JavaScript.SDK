@@ -8,7 +8,7 @@ import { Cancellation } from './Cancellation';
  * Represents the source of a {@link Cancellation}.
  */
 export class CancellationSource {
-    private _subject: Subject<void>;
+    private readonly _subject: Subject<void>;
 
     /**
      * Initializes a new instance of {@link CancellationSource}.
@@ -19,6 +19,7 @@ export class CancellationSource {
         for (const source of sources) {
             source.subscribe(this._subject);
         }
+        this.cancellation = new Cancellation(this._subject);
     }
 
     /**
@@ -31,9 +32,7 @@ export class CancellationSource {
     /**
      * Gets the cancellation subject.
      */
-    get cancellation(): Cancellation {
-        return this._subject;
-    }
+    readonly cancellation: Cancellation;
 
     /**
      * Get whether or not the {@link CancellationSource} is cancelled.
