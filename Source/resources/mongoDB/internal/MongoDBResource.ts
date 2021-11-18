@@ -36,14 +36,19 @@ export class MongoDBResource extends IMongoDBResource {
     }
 
     /** @inheritdoc */
-    async getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db> {
+    getDatabase(cancellation?: Cancellation): Promise<Db>;
+    getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db>;
+    async getDatabase(maybeCancellationOrDatabaseSettingsCallback: Cancellation | DatabaseSettingsCallback | undefined, maybeCancellation?: Cancellation): Promise<Db> {
+        const settingsCallback = this.getDatabaseSettingsCallback(maybeCancellationOrDatabaseSettingsCallback);
+        const cancellation = this.getCancellation(maybeCancellationOrDatabaseSettingsCallback, maybeCancellation);
+
         if (!this._openClients.has(this.tenant.toString())) {
             const connectionString = await this.get(this._method, response => response.getConnectionstring(), cancellation);
             this._openClients.set(this.tenant.toString(), await MongoClient.connect(connectionString));
         }
         return this.getDatabaseFromClient(
             this._openClients.get(this.tenant.toString())!,
-            this.getDatabaseSettings(databaseSettingsCallback));
+            this.getDatabaseSettings(settingsCallback));
     }
 
     /** @inheritdoc */
@@ -53,13 +58,32 @@ export class MongoDBResource extends IMongoDBResource {
         return request;
     }
 
-    private getDatabaseSettings(databaseSettingsCallback?: DatabaseSettingsCallback): DbOptions | undefined {
-        let dbOptions;
-        if (databaseSettingsCallback) {
-            dbOptions = {};
-            databaseSettingsCallback(dbOptions);
+    private getDatabaseSettingsCallback(maybeCancellationOrDatabaseSettingsCallback: Cancellation | DatabaseSettingsCallback | undefined): DatabaseSettingsCallback | undefined {
+        if (
+            maybeCancellationOrDatabaseSettingsCallback instanceof Cancellation ||
+            maybeCancellationOrDatabaseSettingsCallback === undefined) {
+            return undefined;
         }
-        return dbOptions;
+
+        return maybeCancellationOrDatabaseSettingsCallback;
+    }
+
+    private getCancellation(maybeCancellationOrDatabaseSettingsCallback: Cancellation | DatabaseSettingsCallback | undefined, maybeCancellation?: Cancellation): Cancellation | undefined {
+        if (maybeCancellationOrDatabaseSettingsCallback instanceof Cancellation) {
+            return maybeCancellationOrDatabaseSettingsCallback;
+        }
+
+        return maybeCancellation;
+    }
+
+    private getDatabaseSettings(databaseSettingsCallback?: DatabaseSettingsCallback): DbOptions | undefined {
+        if (!databaseSettingsCallback) {
+            return undefined;
+        }
+
+        const options = {};
+        databaseSettingsCallback(options);
+        return options;
     }
 
     private getDatabaseFromClient(client: MongoClient, dbOptions?: DbOptions): Db {
