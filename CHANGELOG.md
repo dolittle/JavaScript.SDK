@@ -1,3 +1,25 @@
+# [20.0.0] - 2021-11-18 [PR: #73](https://github.com/dolittle/JavaScript.SDK/pull/73)
+## Summary
+
+Adds the ability to get the configured tenants, and a MongoDB database per tenant from the Runtime through the client. Also renames the Client to DolittleClient, and introduces interfaces many places to simplify creation of mocks for testing purposes.
+
+### Added
+
+- ITenants tenants property on the client for getting all tenants from the Runtime
+- IResourcesBuilder resources property on the client for getting resources for a specific tenant. Currently supports MongoDB. 
+- IDolittleClient interface that DolittleClient implements, and interfaces for other classes in the client structure
+
+### Changed
+
+- Client renamed to DolittleClient
+- ClientBuilder renamed to DolittleClientBuilder
+
+### Fixed
+
+- A bug in the implementation of `Cancellation` and `CancellationSource` where `instanceof Cancellation` does not work.
+- A small typo in the exception thrown when the client cannot connect to the configured Runtime.
+
+
 # [19.0.1] - 2021-11-9 [PR: #71](https://github.com/dolittle/JavaScript.SDK/pull/71)
 ## Summary
 
