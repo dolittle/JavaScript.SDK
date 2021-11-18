@@ -17,7 +17,7 @@ import { ResourceName } from '../../index';
  */
 export class MongoDBResource extends IMongoDBResource {
 
-    private readonly _openClients: Map<string, [client: MongoClient, database: Db]> = new Map();
+    private readonly _openClients: Map<string, MongoClient> = new Map();
     private readonly _method: UnaryMethod<GetRequest, GetMongoDBResponse>;
     /**
      * Initializes an instance of the {@link Tenants} class.
@@ -37,19 +37,13 @@ export class MongoDBResource extends IMongoDBResource {
 
     /** @inheritdoc */
     async getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db> {
-        if (this._openClients.has(this.tenant.toString())) {
-            return this._openClients.get(this.tenant.toString())![1];
+        if (!this._openClients.has(this.tenant.toString())) {
+            const connectionString = await this.get(this._method, response => response.getConnectionstring(), cancellation);
+            this._openClients.set(this.tenant.toString(), await MongoClient.connect(connectionString));
         }
-        const connectionString = await this.get(this._method, response => response.getConnectionstring(), cancellation);
-        let dbOptions;
-        if (databaseSettingsCallback) {
-            dbOptions = {};
-            databaseSettingsCallback(dbOptions);
-        }
-        const client = await MongoClient.connect(connectionString);
-        const db = client.db(undefined, dbOptions);
-        this._openClients.set(this.tenant.toString(), [client, db]);
-        return db;
+        return this.getDatabaseFromClient(
+            this._openClients.get(this.tenant.toString())!,
+            this.getDatabaseSettings(databaseSettingsCallback));
     }
 
     /** @inheritdoc */
@@ -57,5 +51,18 @@ export class MongoDBResource extends IMongoDBResource {
         const request = new GetRequest();
         request.setCallcontext(this.createCallContext());
         return request;
+    }
+
+    private getDatabaseSettings(databaseSettingsCallback?: DatabaseSettingsCallback): DbOptions | undefined {
+        let dbOptions;
+        if (databaseSettingsCallback) {
+            dbOptions = {};
+            databaseSettingsCallback(dbOptions);
+        }
+        return dbOptions;
+    }
+
+    private getDatabaseFromClient(client: MongoClient, dbOptions?: DbOptions): Db {
+        return client.db(undefined, dbOptions);
     }
 }
