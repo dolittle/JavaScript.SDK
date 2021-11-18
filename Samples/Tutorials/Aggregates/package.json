@@ -1,7 +1,7 @@
 {
     "name": "samples.aggregates",
     "private": true,
-    "version": "20.0.0-legolas.9",
+    "version": "20.0.0-legolas.10",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "20.0.0-legolas.9",
-        "@dolittle/sdk.aggregates": "20.0.0-legolas.9",
-        "@dolittle/sdk.artifacts": "20.0.0-legolas.9",
-        "@dolittle/sdk.events": "20.0.0-legolas.9",
-        "@dolittle/sdk.events.handling": "20.0.0-legolas.9"
+        "@dolittle/sdk": "20.0.0-legolas.10",
+        "@dolittle/sdk.aggregates": "20.0.0-legolas.10",
+        "@dolittle/sdk.artifacts": "20.0.0-legolas.10",
+        "@dolittle/sdk.events": "20.0.0-legolas.10",
+        "@dolittle/sdk.events.handling": "20.0.0-legolas.10"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
