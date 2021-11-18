@@ -12,7 +12,12 @@ export class Cancellation extends Observable<void> {
      * @param {Observable<void>} source - The source observable that indicates when a cancellation has occured.
      */
     constructor(source: Observable<void>) {
-        super(source.subscribe);
+        super((subscriber) => {
+            const subscription = source.subscribe(subscriber);
+            return () => {
+                subscription.unsubscribe();
+            };
+        });
     }
 
     /**
