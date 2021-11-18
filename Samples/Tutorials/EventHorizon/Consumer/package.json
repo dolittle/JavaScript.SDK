@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-consumer",
     "private": true,
-    "version": "20.0.0-legolas.11",
+    "version": "20.0.0-legolas.12",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "20.0.0-legolas.11",
-        "@dolittle/sdk.artifacts": "20.0.0-legolas.11",
-        "@dolittle/sdk.eventhorizon": "20.0.0-legolas.11",
-        "@dolittle/sdk.events": "20.0.0-legolas.11",
-        "@dolittle/sdk.events.handling": "20.0.0-legolas.11"
+        "@dolittle/sdk": "20.0.0-legolas.12",
+        "@dolittle/sdk.artifacts": "20.0.0-legolas.12",
+        "@dolittle/sdk.eventhorizon": "20.0.0-legolas.12",
+        "@dolittle/sdk.events": "20.0.0-legolas.12",
+        "@dolittle/sdk.events.handling": "20.0.0-legolas.12"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
