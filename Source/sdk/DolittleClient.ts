@@ -1,46 +1,45 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { HandshakeClient } from '@dolittle/runtime.contracts/Handshake/Handshake_grpc_pb';
+import grpc from '@grpc/grpc-js';
+import { Logger } from 'winston';
+
+import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { HandshakeClient } from '@dolittle/runtime.contracts/Handshake/Handshake_grpc_pb';
+import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
 import { AggregateRootsBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
+import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
+import { IContainer } from '@dolittle/sdk.common';
 import { EmbeddingsBuilder, Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
-import { EventHorizons, IEventHorizons, SubscriptionsBuilder } from '@dolittle/sdk.eventhorizon';
+import { IEventHorizons, SubscriptionsBuilder } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, EventTypes, EventTypesBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
+import { EventTypes as InternalEventTypes } from '@dolittle/sdk.events/internal';
 import { EventFiltersBuilder } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
+import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, ProjectionAssociations, ProjectionsBuilder, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
 import { Tenant } from '@dolittle/sdk.tenancy';
-import grpc from '@grpc/grpc-js';
+import { Tenants } from '@dolittle/sdk.tenancy/internal';
 
 import { ConfigurationBuilder, ConnectCallback, SetupBuilder, SetupCallback } from './Builders/';
+import { ConnectConfiguration } from './Internal';
 import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittleClientMultipleTimes';
+import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { ConnectConfiguration } from './Internal';
-import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
-import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
-import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
-import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
-import tenants from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
-import { callContexts } from '@dolittle/sdk.protobuf';
-import { reactiveUnary } from '@dolittle/sdk.services';
-import { add, Logger } from 'winston';
-import { Tenants } from '@dolittle/sdk.tenancy/internal';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { EventTypes as InternalEventTypes } from '@dolittle/sdk.events/internal';
-import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
-import { IContainer } from '@dolittle/sdk.common';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -89,27 +88,28 @@ export class DolittleClient extends IDolittleClient {
 
     /** @inheritdoc */
     get eventTypes(): IEventTypes {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._eventTypes, 'eventTypes');
     }
 
     /** @inheritdoc */
     get eventStore(): IEventStoreBuilder {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._eventStore, 'eventStore');
     }
 
     /** @inheritdoc */
     get aggregates(): IAggregatesBuilder {
-        throw new Error('Method not implemented.');
+        // return this.assertConnectedAndDefined(this._aggregates);
+        throw new Error('Method not implemented');
     }
 
     /** @inheritdoc */
     get projections(): IProjectionStoreBuilder {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._projections, 'projections');
     }
 
     /** @inheritdoc */
     get embeddings(): IEmbeddings {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._embeddings, 'embeddings');
     }
 
     /** @inheritdoc */
@@ -119,12 +119,12 @@ export class DolittleClient extends IDolittleClient {
 
     /** @inheritdoc */
     get resources(): IResourcesBuilder {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._resources, 'resources');
     }
 
     /** @inheritdoc */
     get eventHorizons(): IEventHorizons {
-        throw new Error('Method not implemented.');
+        return this.throwIfNotConnectedOrUndefined(this._eventHorizons, 'eventHorizons');
     }
 
     /** @inheritdoc */
@@ -355,5 +355,12 @@ export class DolittleClient extends IDolittleClient {
             resources: new ResourcesClient(address, credentials),
             eventHorizons: new SubscriptionsClient(address, credentials),
         };
+    }
+
+    private throwIfNotConnectedOrUndefined<TProperty>(value: TProperty | undefined, propertyName: string): TProperty {
+        if (!this._connected || value === undefined) {
+            throw new CannotUseUnconnectedDolittleClient(propertyName);
+        }
+        return value;
     }
 }
