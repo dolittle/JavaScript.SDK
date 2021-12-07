@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { AggregateRootsBuilder, AggregateRootsBuilderCallback } from './builders';
+export { AggregateRootsBuilder, AggregateRootsBuilderCallback, IAggregatesBuilder } from './builders';
 export { EventTypesNotSet } from './EventTypesNotSet';
 export { AggregateOf } from './AggregateOf';
 export { AggregateRoot } from './AggregateRoot';
@@ -24,5 +24,6 @@ export { AggregateRootTypeMap } from './AggregateRootTypeMap';
 export { AggregateRootTypeOptions } from './AggregateRootTypeOptions';
 export { AggregateRootTypes } from './AggregateRootTypes';
 export { IAggregateRootTypes } from './IAggregateRootTypes';
+export { IAggregates } from './IAggregates';
 
 export * as internal from './internal';
