@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.projections",
-    "version": "21.0.0-gimli.2",
+    "version": "21.0.0-gimli.3",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",

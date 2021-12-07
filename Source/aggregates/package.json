@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.aggregates",
-    "version": "21.0.0-gimli.2",
+    "version": "21.0.0-gimli.3",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -46,8 +46,8 @@
     "dependencies": {
         "@dolittle/concepts": "5.0.1",
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.events": "21.0.0-gimli.2",
-        "@dolittle/sdk.artifacts": "21.0.0-gimli.2"
+        "@dolittle/sdk.events": "21.0.0-gimli.3",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.3"
     },
     "devDependencies": {}
 }
