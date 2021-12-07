@@ -23,7 +23,14 @@ const fs = require('fs');
 
     for (const destination of destinations) {
         const destinationPath = path.resolve(destination, 'README.md');
-        fs.writeFile(destinationPath, readmeFile);
+        await new Promise((reject, resolve) =>
+            fs.writeFile(destinationPath, readmeFile, (error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            }));
     }
 })().catch(error => {
     console.error(error);
