@@ -1,21 +1,15 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
-import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
-import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, EventStoreBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
-import { IFilters } from '@dolittle/sdk.events.filtering';
-import { IEventHandlers } from '@dolittle/sdk.events.handling';
-import { MicroserviceId } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { IResources, IResourcesBuilder } from '@dolittle/sdk.resources';
-import { ITenants } from '@dolittle/sdk.tenancy';
-import { Constructor } from '@dolittle/types';
-import { Logger } from 'winston';
-import { DolittleClientBuilder } from './DolittleClientBuilder';
-import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
+import { AggregateRootsBuilder } from '@dolittle/sdk.aggregates';
+import { EmbeddingsBuilder } from '@dolittle/sdk.embeddings';
+import { SubscriptionsBuilder } from '@dolittle/sdk.eventhorizon';
+import { EventTypesBuilder } from '@dolittle/sdk.events';
+import { EventFiltersBuilder } from '@dolittle/sdk.events.filtering';
+import { EventHandlersBuilder } from '@dolittle/sdk.events.handling';
+import { ProjectionAssociations, ProjectionsBuilder } from '@dolittle/sdk.projections';
+
+import { SetupBuilder, SetupCallback } from './Builders/';
 import { IDolittleClient } from './IDolittleClient';
 
 /**
@@ -23,51 +17,41 @@ import { IDolittleClient } from './IDolittleClient';
  */
 export class DolittleClient extends IDolittleClient {
     /**
-     * Creates an instance of client.
-     * @param {Logger} logger - Winston Logger for logging.
-     * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {IEventStoreBuilder} eventStore - The event store builder to work with.
-     * @param {IEventHandlers} eventHandlers - All the event handlers.
-     * @param {IFilters} filters - All the filters.
-     * @param {IEventHorizons} eventHorizons - All event horizons.
-     * @param {IProjectionStoreBuilder} projections - All projections.
-     * @param {IEmbeddings} embeddings - All embeddings.
-     * @param {ITenants} tenants - All tenants.
-     * @param {IResources} resources - All resources.
+     * Initialises a new instance of the {@link DolittleClient} class.
+     * @param {EventTypesBuilder} _eventTypesBuilder - The {@link EventTypesBuilder}.
+     * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
+     * @param {EventFiltersBuilder} _eventFiltersBuilder - The {@link EventFiltersBuilder}.
+     * @param {EventHandlersBuilder} _eventHandlersBuilder - The {@link EventHandlersBuilder}.
+     * @param {ProjectionAssociations} _projectionsAssociations - The {@link ProjectionAssociations}.
+     * @param {ProjectionsBuilder} _projectionsBuilder - The {@link ProjectionsBuilder}.
+     * @param {EmbeddingsBuilder} _embeddingsBuilder - The {@link EmbeddingsBuilder}.
+     * @param {SubscriptionsBuilder} _subscriptionsBuilder - The {@link SubscriptionsBuilder}.
      */
     constructor(
-        readonly logger: Logger,
-        readonly eventTypes: IEventTypes,
-        readonly eventStore: IEventStoreBuilder,
-        readonly eventHandlers: IEventHandlers,
-        readonly filters: IFilters,
-        readonly eventHorizons: IEventHorizons,
-        readonly projections: IProjectionStoreBuilder,
-        readonly embeddings: IEmbeddings,
-        readonly tenants: ITenants,
-        readonly resources: IResourcesBuilder) {
-            super();
+        private readonly _eventTypesBuilder: EventTypesBuilder,
+        private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
+        private readonly _eventFiltersBuilder: EventFiltersBuilder,
+        private readonly _eventHandlersBuilder: EventHandlersBuilder,
+        private readonly _projectionsAssociations: ProjectionAssociations,
+        private readonly _projectionsBuilder: ProjectionsBuilder,
+        private readonly _embeddingsBuilder: EmbeddingsBuilder,
+        private readonly _subscriptionsBuilder: SubscriptionsBuilder
+    ) {
+        super();
     }
 
     /**
-     * Create a client builder for a Microservice.
-     * @param {MicroserviceId | Guid | string} microserviceId - The unique identifier for the microservice.
-     * @returns {DolittleClientBuilder} The builder to build a {Client} from.
+     * Setup a new {@link IDolittleClient}.
+     * @param {SetupCallback} [callback] - The optional callback to use to setup the new client.
+     * @returns {IDolittleClient} An new unconnected client.
      */
-    static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
-        return new DolittleClientBuilder(MicroserviceId.from(microserviceId));
-    }
+    static setup(callback?: SetupCallback): IDolittleClient {
+        const builder = new SetupBuilder();
 
-    /** @inheritdoc */
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
-
-    /** @inheritdoc */
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceIdOrBuilder: EventStoreBuilderCallback | EventSourceId | Guid | string, buildEventStore?: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot> {
-        if (buildEventStore) {
-            return new AggregateOf(type, buildEventStore(this.eventStore), this.eventTypes, this.logger).get(EventSourceId.from(eventSourceIdOrBuilder as any));
-        } else {
-            return new AggregateOf(type, (eventSourceIdOrBuilder as EventStoreBuilderCallback)(this.eventStore), this.eventTypes, this.logger).create();
+        if (typeof callback === 'function') {
+            callback(builder);
         }
+
+        return builder.build();
     }
 }
