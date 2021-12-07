@@ -1,22 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
+import { IAggregatesBuilder } from '@dolittle/sdk.aggregates';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, IEventTypes, IEventStoreBuilder } from '@dolittle/sdk.events';
+import { IEventTypes, IEventStoreBuilder } from '@dolittle/sdk.events';
 import { IEmbeddings } from '@dolittle/sdk.embeddings';
 import { IProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { ITenants } from '@dolittle/sdk.tenancy';
-import { Constructor } from '@dolittle/types';
+import { Tenant } from '@dolittle/sdk.tenancy';
 import { IResourcesBuilder } from '@dolittle/sdk.resources';
-import { Logger } from 'winston';
-import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
 
 /**
  * Defines the Dolittle Client.
  */
 export abstract class IDolittleClient {
+    /**
+     * Gets a value indicating whether the {@link IDolittleClient} is connected to the Runtime or not.
+     */
+    abstract get connected(): boolean;
+
     /**
      * Gets the {@link IEventTypes}.
      */
@@ -26,6 +27,11 @@ export abstract class IDolittleClient {
      * Gets the {@link IEventStoreBuilder}.
      */
     abstract get eventStore(): IEventStoreBuilder;
+
+    /**
+     * Gets the {@link IAggregatesBuilder}.
+     */
+    abstract get aggregates(): IAggregatesBuilder;
 
     /**
      * Gets the {@link IProjectionStoreBuilder}.
@@ -38,15 +44,10 @@ export abstract class IDolittleClient {
     abstract get embeddings(): IEmbeddings;
 
     /**
-     * Gets the {@link IEventHorizons}.
-     */
-    abstract get eventHorizons(): IEventHorizons;
-
-    /**
-     * Gets the {@link ITenants}.
+     * Gets the list of {@link Tenant} that is configured.
      */
 
-    abstract get tenants(): ITenants;
+    abstract get tenants(): Tenant[];
 
     /**
      * Gets the {@link IResourcesBuilder}.
@@ -54,27 +55,7 @@ export abstract class IDolittleClient {
     abstract get resources(): IResourcesBuilder;
 
     /**
-     * Gets the {@link Logger}.
+     * Gets the {@link IEventHorizons}.
      */
-    abstract get logger(): Logger;
-
-    /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for a new aggregate of the specified type.
-     * @param {Constructor<any>} type - Type of aggregate - corresponding to the generic type.
-     * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
-     * @returns {IAggregateRootOperations<TAggregateRoot>}
-     * @template TAggregateRoot - The type of the aggregate root.
-     */
-    abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
-
-    /**
-     * Gets the {@link IAggregateRootOperations<TAggregate>} for an existing aggregate of the specified type.
-     * @template TAggregateRoot
-     * @param {Constructor<any>} type - Type of aggregate - corresponding to the generic type.
-     * @param {EventSourceId} eventSourceId - The event source id of the aggregate.
-     * @param {EventStoreBuilderCallback} buildEventStore - Callback for building the context for the event store.
-     * @returns {IAggregateRootOperations<TAggregateRoot>}
-     * @template TAggregateRoot - The type of the aggregate root.
-     */
-    abstract aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>;
+    abstract get eventHorizons(): IEventHorizons;
 }
