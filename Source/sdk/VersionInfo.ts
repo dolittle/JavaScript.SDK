@@ -11,6 +11,6 @@ export class VersionInfo {
      * Gets the current {@link Version} of the Dolittle JS SDK.
      */
     static get currentVersion(): Version {
-        return new Version(21, 0, 0, 0, 'gimli.3');
+        return new Version(377, 389, 368, 0, 'PRERELEASE');
     }
 }
