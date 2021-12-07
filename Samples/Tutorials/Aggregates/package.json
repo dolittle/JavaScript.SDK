@@ -1,7 +1,7 @@
 {
     "name": "samples.aggregates",
     "private": true,
-    "version": "20.0.0",
+    "version": "21.0.0-gimli.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "20.0.0",
-        "@dolittle/sdk.aggregates": "20.0.0",
-        "@dolittle/sdk.artifacts": "20.0.0",
-        "@dolittle/sdk.events": "20.0.0",
-        "@dolittle/sdk.events.handling": "20.0.0"
+        "@dolittle/sdk": "21.0.0-gimli.0",
+        "@dolittle/sdk.aggregates": "21.0.0-gimli.0",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.0",
+        "@dolittle/sdk.events": "21.0.0-gimli.0",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
