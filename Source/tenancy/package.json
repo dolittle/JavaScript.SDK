@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.tenancy",
-    "version": "21.0.0-gimli.0",
+    "version": "21.0.0-gimli.1",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -33,8 +33,8 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "5.0.1",
-        "@dolittle/sdk.execution": "21.0.0-gimli.0",
-        "@dolittle/sdk.resilience": "21.0.0-gimli.0",
+        "@dolittle/sdk.execution": "21.0.0-gimli.1",
+        "@dolittle/sdk.resilience": "21.0.0-gimli.1",
         "@dolittle/runtime.contracts": "6.3.0"
     }
 }
