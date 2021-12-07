@@ -23,10 +23,11 @@
     "main": "Distribution/index.js",
     "types": "Distribution/index.d.ts",
     "scripts": {
-        "prebuild": "yarn clean",
+        "prebuild": "yarn clean && yarn copy-readme",
         "postbuild": "yarn lint",
         "build": "tsc -b",
         "clean": "tsc -b --clean",
+        "copy-readme": "node ../../Assets/copy-readme.js .",
         "test": "mocha",
         "lint": "eslint --quiet --ext .ts ./",
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
