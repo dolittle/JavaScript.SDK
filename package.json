@@ -12,11 +12,12 @@
     "Samples/Container"
   ],
   "scripts": {
-    "prebuild": "yarn clean",
+    "prebuild": "yarn clean && yarn copy-readme",
     "postbuild": "yarn lint",
     "build": "tsc -b Source/tsconfig.json && tsc -b Samples/tsconfig.json",
     "clean": "tsc -b Source/tsconfig.json --clean && tsc -b Samples/tsconfig.json --clean",
     "test": "TS_NODE_PROJECT=tsconfig.settings.json mocha",
+    "copy-readme": "node Assets/copy-readme.js Source/*/",
     "test:clean": "rimraf **/Distribution/**/for_*",
     "lint": "eslint --quiet --ext .ts ./",
     "lint:fix": "eslint --quiet --ext .ts ./ --fix",
