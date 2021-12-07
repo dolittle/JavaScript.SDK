@@ -49,6 +49,6 @@
         "@dolittle/sdk.protobuf": "21.0.0-gimli.4",
         "@dolittle/sdk.resilience": "21.0.0-gimli.4",
         "@dolittle/sdk.services": "21.0.0-gimli.4",
-        "@dolittle/runtime.contracts": "6.3.0"
+        "@dolittle/runtime.contracts": "6.4.0-gimli.2"
     }
 }
