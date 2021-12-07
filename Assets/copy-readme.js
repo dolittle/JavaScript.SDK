@@ -24,7 +24,7 @@ const fs = require('fs');
 
     for (const destination of destinations) {
         const destinationPath = path.resolve(destination, 'README.md');
-        await new Promise((reject, resolve) =>
+        await new Promise((resolve, reject) =>
             fs.writeFile(destinationPath, readmeFile, (error) => {
                 if (error) {
                     console.error('Failed to copy to', destinationPath, error);
