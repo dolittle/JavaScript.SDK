@@ -8,16 +8,18 @@ import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .build();
+(async () => {
+    const client = await DolittleClient
+        .setup(builder => builder
+            .withEventTypes(eventTypes =>
+                eventTypes.register(DishPrepared))
+            .withEventHandlers(builder =>
+                builder.register(DishHandler)))
+        .connect();
 
-const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
+    const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(preparedTaco, 'Dolittle Tacos');
+    await client.eventStore
+        .forTenant(TenantId.development)
+        .commit(preparedTaco, 'Dolittle Tacos');
+})();
