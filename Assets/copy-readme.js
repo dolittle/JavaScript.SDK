@@ -9,6 +9,7 @@ const fs = require('fs');
     const readmeFile = await new Promise((resolve, reject) =>
         fs.readFile(readmePath, (error, data) => {
             if (error) {
+                console.error('Failed to open README from', readmePath);
                 reject(error);
             } else {
                 resolve(data);
@@ -26,6 +27,7 @@ const fs = require('fs');
         await new Promise((reject, resolve) =>
             fs.writeFile(destinationPath, readmeFile, (error) => {
                 if (error) {
+                    console.error('Failed to copy to', destinationPath, error);
                     reject(error);
                 } else {
                     resolve();
