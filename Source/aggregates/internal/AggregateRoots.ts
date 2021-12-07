@@ -21,8 +21,11 @@ export class AggregateRoots {
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {Logger} _logger - The logger.
      */
-    constructor(readonly _client: AggregateRootsClient, readonly _executionContext: ExecutionContext, readonly _logger: Logger) {
-    }
+    constructor(
+        private readonly _client: AggregateRootsClient,
+        private readonly _executionContext: ExecutionContext,
+        private readonly _logger: Logger
+    ) {}
 
     /**
      * Registers aggregate roots.
