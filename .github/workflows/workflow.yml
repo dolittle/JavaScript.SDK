@@ -22,15 +22,12 @@ jobs:
       with:
         node-version: 12.x
         registry-url: 'https://registry.npmjs.org'
-    - run: yarn
-    - run: yarn ci
 
     - name: Establish context
       id: context
       uses: dolittle/establish-context-action@v2
       with:
         prerelease-branches: ${{ env.PRERELEASE_BRANCHES }}
-
     - name: Increment version
       id: increment-version
       if: ${{ steps.context.outputs.should-publish == 'true' }}
@@ -38,6 +35,15 @@ jobs:
       with:
         version: ${{ steps.context.outputs.current-version }}
         release-type: ${{ steps.context.outputs.release-type }}
+
+    - name: Update VersionInfo
+      uses: dolittle/update-version-info-action@v1
+      with:
+        version: ${{ steps.increment-version.outputs.next-version || '0.0.0-prerelease' }}
+        files-to-update: Source/sdk/VersionInfo.ts
+
+    - run: yarn
+    - run: yarn ci
 
     - name: Prepend to Changelog
       if: ${{ steps.context.outputs.should-publish == 'true' && steps.context.outputs.release-type != 'prerelease' }}
