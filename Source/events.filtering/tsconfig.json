@@ -11,6 +11,8 @@
         { "path": "../events" },
         { "path": "../events.processing" },
         { "path": "../execution" },
-        { "path": "../resilience" }
+        { "path": "../protobuf" },
+        { "path": "../resilience" },
+        { "path": "../services" },
     ]
 }

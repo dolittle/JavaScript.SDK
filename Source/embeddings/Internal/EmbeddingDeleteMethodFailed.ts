@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { EmbeddingContext, EmbeddingId } from '@dolittle/sdk.embeddings';
+
+import { EmbeddingContext, EmbeddingId } from '../';
 
 /**
  * Exception that gets thrown when calling delete on an embedding fails.
