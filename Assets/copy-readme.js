@@ -4,7 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 
-(async () => {
+await (async () => {
     const readmePath = path.resolve(__dirname, '..', 'README.md');
     const readmeFile = await new Promise((resolve, reject) =>
         fs.readFile(readmePath, (error, data) => {
