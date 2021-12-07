@@ -4,7 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 
-await (async () => {
+(async () => {
     const readmePath = path.resolve(__dirname, '..', 'README.md');
     const readmeFile = await new Promise((resolve, reject) =>
         fs.readFile(readmePath, (error, data) => {
@@ -25,4 +25,7 @@ await (async () => {
         const destinationPath = path.resolve(destination, 'README.md');
         fs.writeFile(destinationPath, readmeFile);
     }
-})();
+})().catch(error => {
+    console.error(error);
+    process.exit(1);
+});
