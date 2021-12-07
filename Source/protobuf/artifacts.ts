@@ -6,7 +6,8 @@ import { Artifact as SdkArtifact, ArtifactIdLike, Generation } from '@dolittle/s
 import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
-import guids from './guids';
+
+import './guids';
 
 /**
  * Convert to protobuf representation.
@@ -17,7 +18,7 @@ import guids from './guids';
  */
 function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: TArtifact): PbArtifact {
     const artifact = new PbArtifact();
-    artifact.setId(guids.toProtobuf(input.id.value));
+    artifact.setId(input.id.value.toProtobuf());
     artifact.setGeneration(input.generation.value);
     return artifact;
 

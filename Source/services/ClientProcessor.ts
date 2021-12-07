@@ -5,13 +5,14 @@ import { ConceptAs } from '@dolittle/concepts';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 import { Observable } from 'rxjs';
 import { repeat } from 'rxjs/operators';
 import { Logger } from 'winston';
 import { IReverseCallClient } from './IReverseCallClient';
 import { RegistrationFailed } from './RegistrationFailed';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
@@ -52,7 +53,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
                 next: (message: TRegisterResponse) => {
                     const failure = this.getFailureFromRegisterResponse(message);
                     if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, failures.toSDK(failure)!));
+                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, failure.toSDK()));
                     } else {
                         this._logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
                     }

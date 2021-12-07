@@ -6,7 +6,6 @@ import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Sto
 import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
@@ -16,6 +15,8 @@ import { EmbeddingId, FailedToGetEmbeddingKeys } from '..';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {link IEmbeddingStore}.
@@ -59,9 +60,9 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting one state from embedding ${embedding} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(embedding.value.toProtobuf());
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,8 +90,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all states from embedding ${embedding}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(this._executionContext.toCallContext());
+        request.setEmbeddingid(embedding.value.toProtobuf());
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -117,8 +118,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all keys for embedding ${embedding}`);
 
         const request = new GetKeysRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(this._executionContext.toCallContext());
+        request.setEmbeddingid(embedding.value.toProtobuf());
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getKeys, request, cancellation)
             .pipe(map(response => {
@@ -166,9 +167,9 @@ export class EmbeddingStore extends IEmbeddingStore {
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse | GetKeysResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
             if (response instanceof GetKeysResponse) {
-                throw new FailedToGetEmbeddingKeys(embedding, failures.toSDK(response.getFailure())!);
+                throw new FailedToGetEmbeddingKeys(embedding, response.getFailure()!.toSDK());
             }
-            throw new FailedToGetEmbedding(embedding, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetEmbedding(embedding, key, response.getFailure()!.toSDK());
         }
     }
 

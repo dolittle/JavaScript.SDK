@@ -23,9 +23,9 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { guids, artifacts } from '@dolittle/sdk.protobuf';
-
 import { EventHandlerId, IEventHandler } from '..';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
@@ -53,15 +53,15 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     /** @inheritdoc */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
-        registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._handler.scopeId.value));
+        registerArguments.setEventhandlerid(this._identifier.value.toProtobuf());
+        registerArguments.setScopeid(this._handler.scopeId.value.toProtobuf());
         registerArguments.setPartitioned(this._handler.partitioned);
         if (this._handler.hasAlias) {
             registerArguments.setAlias(this._handler.alias!.value);
         }
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {
-            handledArtifacts.push(artifacts.toProtobuf(eventType));
+            handledArtifacts.push(eventType.toProtobuf());
         }
         registerArguments.setEventtypesList(handledArtifacts);
         return registerArguments;
@@ -142,7 +142,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = artifacts.toSDK(pbEventType, EventType.from);
+        const eventType = pbEventType.toSDK(EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

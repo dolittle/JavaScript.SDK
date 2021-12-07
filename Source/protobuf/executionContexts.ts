@@ -3,11 +3,10 @@
 
 import { ExecutionContext as SdkExecutionContext, Claims, TenantId, MicroserviceId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 import { ExecutionContext as PbExecutionContext } from '@dolittle/contracts/Execution/ExecutionContext_pb';
-import { Claim as PbClaim } from '@dolittle/contracts/Security/Claim_pb';
 
-import claims from './claims';
-import guids from './guids';
-import versions from './versions';
+import './claims';
+import './guids';
+import './versions';
 
 /**
  * Convert to protobuf representation.
@@ -16,12 +15,12 @@ import versions from './versions';
  */
 function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     const result = new PbExecutionContext();
-    result.setMicroserviceid(guids.toProtobuf(input.microserviceId.value));
-    result.setTenantid(guids.toProtobuf(input.tenantId.value));
-    result.setVersion(versions.toProtobuf(input.version));
-    result.setCorrelationid(guids.toProtobuf(input.correlationId.value));
+    result.setMicroserviceid(input.microserviceId.value.toProtobuf());
+    result.setTenantid(input.tenantId.value.toProtobuf());
+    result.setVersion(input.version.toProtobuf());
+    result.setCorrelationid(input.correlationId.value.toProtobuf());
     result.setEnvironment(input.environment.value);
-    result.setClaimsList(claims.toProtobuf(input.claims) as PbClaim[]);
+    result.setClaimsList(input.claims.toProtobuf());
     return result;
 }
 
@@ -31,12 +30,12 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
  * @returns {PbExecutionContext} SDK representation.
  */
 function toSDK(input: PbExecutionContext): SdkExecutionContext {
-    const microserviceId = MicroserviceId.from(guids.toSDK(input.getMicroserviceid()));
-    const tenantId = TenantId.from(guids.toSDK(input.getTenantid()));
-    const version = versions.toSDK(input.getVersion());
+    const microserviceId = MicroserviceId.from(input.getMicroserviceid()!.toSDK());
+    const tenantId = TenantId.from(input.getTenantid()!.toSDK());
+    const version = input.getVersion()!.toSDK();
     const environment = Environment.from(input.getEnvironment());
-    const correlationId = CorrelationId.from(guids.toSDK(input.getCorrelationid()));
-    const convertedClaims = new Claims(input.getClaimsList().map(claim => claims.toSDK(claim)));
+    const correlationId = CorrelationId.from(input.getCorrelationid()!.toSDK());
+    const convertedClaims = new Claims(input.getClaimsList().map(claim => claim.toSDK()));
 
     return new SdkExecutionContext(
         microserviceId,

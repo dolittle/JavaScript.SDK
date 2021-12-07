@@ -13,7 +13,6 @@ import {
 } from '@dolittle/runtime.contracts/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { CommitForAggregateBuilder } from './builders';
@@ -29,6 +28,8 @@ import { EventConverters } from './EventConverters';
 import { IEventStore } from './IEventStore';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IEventStore}.
@@ -97,9 +98,9 @@ export class EventStore extends IEventStore {
     /** @inheritdoc */
     fetchForAggregate(aggregateRootId: AggregateRootId, eventSourceId: EventSourceId, cancellation: Cancellation = Cancellation.default): Promise<CommittedAggregateEvents> {
         const request = new FetchForAggregateRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         const aggregate = new Aggregate();
-        aggregate.setAggregaterootid(guids.toProtobuf(aggregateRootId.value));
+        aggregate.setAggregaterootid(aggregateRootId.value.toProtobuf());
         aggregate.setEventsourceid(eventSourceId.value);
         request.setAggregate(aggregate);
 
@@ -121,14 +122,14 @@ export class EventStore extends IEventStore {
                 !!event.public));
 
         const request = new CommitEventsRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setEventsList(uncommittedEvents);
         this._logger.debug('Committing events');
 
         return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commit, request, cancellation)
             .pipe(map(response => {
                 const committedEvents = new CommittedEvents(...response.getEventsList().map(event => EventConverters.toSDK(event)));
-                return new CommitEventsResult(committedEvents, failures.toSDK(response.getFailure()));
+                return new CommitEventsResult(committedEvents, response.getFailure()?.toSDK());
             })).toPromise();
     }
 
@@ -148,10 +149,10 @@ export class EventStore extends IEventStore {
         const request = new CommitAggregateEventsRequest();
         const pbEvents = new PbUncommittedAggregateEvents();
         pbEvents.setEventsList(uncommittedAggregateEvents);
-        pbEvents.setAggregaterootid(guids.toProtobuf(aggregateRootId.value));
+        pbEvents.setAggregaterootid(aggregateRootId.value.toProtobuf());
         pbEvents.setEventsourceid(events.eventSourceId.value);
         pbEvents.setExpectedaggregaterootversion(events.expectedAggregateRootVersion.value);
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setEvents(pbEvents);
 
         return reactiveUnary(this._eventStoreClient, this._eventStoreClient.commitForAggregate, request, cancellation)
@@ -160,7 +161,7 @@ export class EventStore extends IEventStore {
                 const failure = response.getFailure();
 
                 const committedEvents = this.toCommittedAggregateEvents(aggregateRootId, eventSourceId, events, failure);
-                return new CommitAggregateEventsResult(committedEvents, failures.toSDK(failure));
+                return new CommitAggregateEventsResult(committedEvents, failure?.toSDK());
             })).toPromise();
     }
 

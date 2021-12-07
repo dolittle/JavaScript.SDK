@@ -5,7 +5,6 @@ import { Logger } from 'winston';
 
 import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -16,6 +15,8 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 
 import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '..';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters events to a partitioned stream.
@@ -47,8 +48,8 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
     /** @inheritdoc */
     protected get registerArguments(): PartitionedFilterRegistrationRequest {
         const registerArguments = new PartitionedFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._scopeId.value));
+        registerArguments.setFilterid(this._identifier.value.toProtobuf());
+        registerArguments.setScopeid(this._scopeId.value.toProtobuf());
         return registerArguments;
     }
 

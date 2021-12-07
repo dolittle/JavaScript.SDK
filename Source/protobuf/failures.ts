@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { Guid } from '@dolittle/rudiments';
 
 import { Failure as SdkFailure } from './Failure';
 import { MissingFailureIdentifier } from './MissingFailureIdentifier';
-import guids from './guids';
+
+import './guids';
 
 /**
  * Convert to protobuf representation.
@@ -15,7 +15,7 @@ import guids from './guids';
  */
 function toProtobuf(input: SdkFailure): PbFailure {
     const artifact = new PbFailure();
-    artifact.setId(guids.toProtobuf(input.id.value));
+    artifact.setId(input.id.value.toProtobuf());
     artifact.setReason(input.reason.value);
     return artifact;
 }
@@ -29,11 +29,11 @@ function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
         return undefined;
     }
-    const uuid = input.getId()?.getValue_asU8();
-    if (!uuid) {
+    const guid = input.getId()?.toSDK();
+    if (!guid) {
         throw new MissingFailureIdentifier();
     }
-    return SdkFailure.from(new Guid(uuid), input.getReason());
+    return SdkFailure.from(guid, input.getReason());
 }
 
 export default {
@@ -57,7 +57,7 @@ SdkFailure.prototype.toProtobuf = function () {
 
 declare module '@dolittle/contracts/Protobuf/Failure_pb' {
     interface Failure {
-        toSDK(): SdkFailure | undefined
+        toSDK(): SdkFailure
     }
 }
 
@@ -66,5 +66,5 @@ declare module '@dolittle/contracts/Protobuf/Failure_pb' {
  * @returns {SdkFailure} The converted failure.
  */
 PbFailure.prototype.toSDK = function () {
-    return toSDK(this);
+    return toSDK(this)!;
 };

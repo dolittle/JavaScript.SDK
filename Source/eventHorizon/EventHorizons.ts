@@ -5,7 +5,6 @@ import { Guid } from '@dolittle/rudiments';
 import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
 import { Subscription as PbSubscription } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation, retryPipe, retryWithPolicy } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Observable } from 'rxjs';
@@ -18,6 +17,8 @@ import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 import { SubscriptionResponse } from './SubscriptionResponse';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
@@ -90,7 +91,7 @@ export class EventHorizons extends IEventHorizons {
                 .subscribe({
                     next: pbResponse => {
                         try {
-                            const response = SubscriptionResponse.from(guids.toSDK(pbResponse?.getConsentid()), failures.toSDK(pbResponse?.getFailure()));
+                            const response = SubscriptionResponse.from(pbResponse!.getConsentid()!.toSDK(), pbResponse?.getFailure()?.toSDK());
                             if (response.failed) {
                                 this._logger.error(`Failed to subscribe to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}. Failure id:${response.failure?.id}) and reason: '${response.failure?.reason}'. Will retry in ${this._retryTimeout}s.`);
                                 subscriber.error(new EventHorizonSubscriptionFailed(
@@ -122,16 +123,16 @@ export class EventHorizons extends IEventHorizons {
 
     private createSubscriptionRequest(tenant: TenantId, subscription: Subscription) {
         const executionContext = this._executionContext.forTenant(tenant.value);
-        const callContext = callContexts.toProtobuf(executionContext);
-        callContext.setHeadid(guids.toProtobuf(Guid.create()));
+        const callContext = executionContext.toCallContext();
+        callContext.setHeadid(Guid.create().toProtobuf());
 
         const pbSubscription = new PbSubscription();
         pbSubscription.setCallcontext(callContext);
         pbSubscription.setPartitionid(subscription.partition.value);
-        pbSubscription.setScopeid(guids.toProtobuf(subscription.scope.value));
-        pbSubscription.setStreamid(guids.toProtobuf(subscription.stream.value));
-        pbSubscription.setTenantid(guids.toProtobuf(subscription.tenant.value));
-        pbSubscription.setMicroserviceid(guids.toProtobuf(subscription.microservice.value));
+        pbSubscription.setScopeid(subscription.scope.value.toProtobuf());
+        pbSubscription.setStreamid(subscription.stream.value.toProtobuf());
+        pbSubscription.setTenantid(subscription.tenant.value.toProtobuf());
+        pbSubscription.setMicroserviceid(subscription.microservice.value.toProtobuf());
         return pbSubscription;
     }
 }

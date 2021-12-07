@@ -4,11 +4,12 @@
 import { AggregateRootAliasRegistrationRequest } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_pb';
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { artifacts, callContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
 import { AggregateRootType, IAggregateRootTypes } from '../index';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents a system that knows how to register Aggregate Roots with the Runtime.
@@ -39,8 +40,8 @@ export class AggregateRoots {
 
     private createRequest(aggregateRootType: AggregateRootType): AggregateRootAliasRegistrationRequest {
         const result = new AggregateRootAliasRegistrationRequest();
-        result.setAggregateroot(artifacts.toProtobuf(aggregateRootType));
-        result.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        result.setAggregateroot(aggregateRootType.toProtobuf());
+        result.setCallcontext(this._executionContext.toCallContext());
         if (aggregateRootType.hasAlias()) {
             result.setAlias(aggregateRootType.alias!.value);
         }

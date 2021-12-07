@@ -5,7 +5,6 @@ import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb'
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { callContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary, UnaryMethod } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
@@ -13,6 +12,8 @@ import { Logger } from 'winston';
 import { FailedToGetResource } from './FailedToGetResource';
 import { IResource } from './IResource';
 import { ResourceName } from './ResourceName';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Defines the type of response expected from the Runtime when getting a resource.
@@ -78,7 +79,7 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
      * @returns {CallRequestContext} The created call request context.
      */
     protected createCallContext(): CallRequestContext {
-        return callContexts.toProtobuf(this._executionContext);
+        return this._executionContext.toCallContext();
     }
 
     /**

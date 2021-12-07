@@ -12,12 +12,12 @@ import {
     UncommittedAggregateEvents as PbUncommittedAggregateEvents
 } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 
-import { artifacts, executionContexts } from '@dolittle/sdk.protobuf';
-
 import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '../index';
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
 import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
 import { MissingExecutionContext } from './MissingExecutionContext';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents converter helpers for converting to relevant event types for transmitting over Grpc.
@@ -34,7 +34,7 @@ export class EventConverters {
      */
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
-        uncommittedEvent.setEventtype(artifacts.toProtobuf(eventType));
+        uncommittedEvent.setEventtype(eventType.toProtobuf());
         uncommittedEvent.setEventsourceid(eventSourceId.value);
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
@@ -50,7 +50,7 @@ export class EventConverters {
      */
     static getUncommittedEmbeddingEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
         const uncommittedEvent = new PbUncommittedEvent();
-        uncommittedEvent.setEventtype(artifacts.toProtobuf(eventType));
+        uncommittedEvent.setEventtype(eventType.toProtobuf());
         uncommittedEvent.setPublic(isPublic);
         uncommittedEvent.setContent(JSON.stringify(event));
         return uncommittedEvent;
@@ -65,7 +65,7 @@ export class EventConverters {
      */
     static getUncommittedAggregateEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedAggregateEvents.UncommittedAggregateEvent {
         const uncommittedAggregateEvent = new PbUncommittedAggregateEvents.UncommittedAggregateEvent();
-        uncommittedAggregateEvent.setEventtype(artifacts.toProtobuf(eventType));
+        uncommittedAggregateEvent.setEventtype(eventType.toProtobuf());
         uncommittedAggregateEvent.setPublic(isPublic);
         uncommittedAggregateEvent.setContent(JSON.stringify(event));
         return uncommittedAggregateEvent;
@@ -91,8 +91,8 @@ export class EventConverters {
             eventSourceId,
             aggregateRootId,
             aggregateRootVersion,
-            executionContexts.toSDK(executionContext),
-            artifacts.toSDK(input.getEventtype(), EventType.from),
+            executionContext.toSDK(),
+            input.getEventtype()!.toSDK(EventType.from),
             JSON.parse(input.getContent()),
             input.getPublic()
         );
@@ -115,8 +115,8 @@ export class EventConverters {
             EventLogSequenceNumber.from(input.getEventlogsequencenumber()),
             DateTime.fromJSDate((input.getOccurred()?.toDate() || new Date())),
             EventSourceId.from(input.getEventsourceid()),
-            executionContexts.toSDK(executionContext),
-            artifacts.toSDK(input.getEventtype(), EventType.from),
+            executionContext.toSDK(),
+            input.getEventtype()!.toSDK(EventType.from),
             JSON.parse(input.getContent()),
             input.getPublic(),
             input.getExternal(),
@@ -141,8 +141,8 @@ export class EventConverters {
         committedEvent.setEventlogsequencenumber(input.eventLogSequenceNumber.value);
         committedEvent.setOccurred(occurred);
         committedEvent.setEventsourceid(input.eventSourceId.value);
-        committedEvent.setExecutioncontext(executionContexts.toProtobuf(input.executionContext));
-        committedEvent.setEventtype(artifacts.toProtobuf(input.type));
+        committedEvent.setExecutioncontext(input.executionContext.toProtobuf());
+        committedEvent.setEventtype(input.type.toProtobuf());
         committedEvent.setContent(JSON.stringify(input.content));
         committedEvent.setPublic(input.isPublic);
         committedEvent.setExternal(input.isExternal);

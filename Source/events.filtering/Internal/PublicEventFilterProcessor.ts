@@ -5,7 +5,6 @@ import { Logger } from 'winston';
 
 import { EventContext, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -17,6 +16,8 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 
 import { FilterId, PartitionedFilterEventCallback } from '..';
 import { FilterEventProcessor } from './FilterEventProcessor';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters public events to a public stream.
@@ -46,7 +47,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
     /** @inheritdoc */
     protected get registerArguments(): PublicFilterRegistrationRequest {
         const registerArguments = new PublicFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
+        registerArguments.setFilterid(this._identifier.value.toProtobuf());
         return registerArguments;
     }
 

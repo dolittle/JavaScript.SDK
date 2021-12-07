@@ -1,23 +1,27 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
+
+import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingId } from '@dolittle/sdk.embeddings';
 import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
-import { IEmbedding } from './IEmbedding';
-import { FailedToUpdate } from './FailedToUpdate';
-import { FailedToDelete } from './FailedToDelete';
 import { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+
+import { EmbeddingId } from './EmbeddingId';
+import { IEmbedding } from './IEmbedding';
+import { FailedToDelete } from './FailedToDelete';
+import { FailedToUpdate } from './FailedToUpdate';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IEmbedding}.
@@ -78,9 +82,9 @@ export class Embedding extends IEmbedding {
         this._logger.debug(`Updating one state from embedding ${embedding} with key ${key}`);
 
         const request = new UpdateRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(embedding.value.toProtobuf());
         request.setState(JSON.stringify(state));
         return reactiveUnary(this._embeddingsClient, this._embeddingsClient.update, request, cancellation)
             .pipe(map(response => {
@@ -110,9 +114,9 @@ export class Embedding extends IEmbedding {
         this._logger.debug(`Removing one state from embedding ${embedding} with key ${key}`);
 
         const request = new DeleteRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(embedding.value.toProtobuf());
 
         return reactiveUnary(this._embeddingsClient, this._embeddingsClient.delete, request, cancellation)
             .pipe(map(response => {
@@ -172,9 +176,9 @@ export class Embedding extends IEmbedding {
     private throwIfResponseHasFailure(response: UpdateResponse | DeleteResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
             if (response instanceof UpdateResponse) {
-                throw new FailedToUpdate(embedding, key, failures.toSDK(response.getFailure())!);
+                throw new FailedToUpdate(embedding, key, response.getFailure()!.toSDK());
             }
-            throw new FailedToDelete(embedding, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToDelete(embedding, key, response.getFailure()!.toSDK());
         }
     }
 

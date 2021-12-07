@@ -2,10 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingId } from '@dolittle/sdk.embeddings';
 import { CurrentState, Key } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Constructor } from '@dolittle/types';
+
+import { EmbeddingId } from './EmbeddingId';
 import { EmbeddingStore } from './Store';
 
 /**

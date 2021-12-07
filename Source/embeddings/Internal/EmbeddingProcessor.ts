@@ -22,7 +22,6 @@ import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittl
 import { MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
-import { artifacts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import {
     ClientProcessor,
@@ -39,6 +38,8 @@ import {
     MissingEmbeddingInformation
 } from '..';
 import { IEmbedding } from './IEmbedding';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
@@ -67,7 +68,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     /** @inheritdoc */
     protected get registerArguments(): EmbeddingRegistrationRequest {
         const registerArguments = new EmbeddingRegistrationRequest();
-        registerArguments.setEmbeddingid(guids.toProtobuf(this._embedding.embeddingId.value));
+        registerArguments.setEmbeddingid(this._embedding.embeddingId.value.toProtobuf());
 
         let readModelInstance;
         if (typeof this._embedding.readModelTypeOrInstance === 'function') {
@@ -80,7 +81,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         const events: Artifact[] = [];
         for (const eventType of this._embedding.events) {
-            events.push(artifacts.toProtobuf(eventType));
+            events.push(eventType.toProtobuf());
         }
         registerArguments.setEventsList(events);
         return registerArguments;
@@ -201,7 +202,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = artifacts.toSDK(pbEventType, EventType.from);
+        const eventType = pbEventType.toSDK(EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

@@ -6,7 +6,6 @@ import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store
 import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
@@ -20,6 +19,8 @@ import { FailedToGetProjection } from './FailedToGetProjection';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { IProjectionStore } from './IProjectionStore';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IProjectionStore}.
@@ -60,10 +61,10 @@ export class ProjectionStore extends IProjectionStore {
         this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(this._executionContext.toCallContext());
         request.setKey(key.value);
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setProjectionid(projection.value.toProtobuf());
+        request.setScopeid(scope.value.toProtobuf());
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,9 +90,9 @@ export class ProjectionStore extends IProjectionStore {
         this._logger.debug(`Getting all states from projection ${projection} in scope ${scope}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setCallcontext(this._executionContext.toCallContext());
+        request.setProjectionid(projection.value.toProtobuf());
+        request.setScopeid(scope.value.toProtobuf());
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -152,7 +153,7 @@ export class ProjectionStore extends IProjectionStore {
 
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse, projection: ProjectionId, scope: ScopeId, key?: Key) {
         if (response.hasFailure()) {
-            throw new FailedToGetProjection(projection, scope, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetProjection(projection, scope, key, response.getFailure()!.toSDK());
         }
     }
 

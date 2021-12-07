@@ -5,7 +5,6 @@ import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
 import { ReverseCallArgumentsContext, ReverseCallRequestContext, ReverseCallResponseContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
 import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { executionContexts, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 import { CompletionObserver, concat, ErrorObserver, merge, NextObserver, Observable, partition, Subject, Subscriber, TimeoutError, Unsubscribable } from 'rxjs';
@@ -14,6 +13,8 @@ import { Logger } from 'winston';
 import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IReverseCallClient}.
@@ -86,7 +87,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
      */
     private create(): Observable<TConnectResponse> {
         const callContext = new ReverseCallArgumentsContext();
-        callContext.setHeadid(guids.toProtobuf(Guid.create()));
+        callContext.setHeadid(Guid.create().toProtobuf());
 
         const pingInterval = new Duration();
         const pingSeconds = Math.trunc(this._pingInterval);
@@ -95,7 +96,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         pingInterval.setNanos(pingNanos);
         callContext.setPinginterval(pingInterval);
 
-        const executionContext = executionContexts.toProtobuf(this._executionContext);
+        const executionContext = this._executionContext.toProtobuf();
         callContext.setExecutioncontext(executionContext);
 
         this._setArgumentsContext(this._connectArguments, callContext);
@@ -179,7 +180,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 try {
                     const request = this._getMessageRequest(message)!;
                     const context = this._getRequestContext(request)!;
-                    const requestContext = executionContexts.toSDK(context.getExecutioncontext()!);
+                    const requestContext = context.getExecutioncontext()!.toSDK();
                     const executionContext = this._executionContext
                         .forTenant(requestContext.tenantId.value)
                         .forClaims(requestContext.claims);

@@ -4,11 +4,12 @@
 import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
 import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events/EventTypes_pb';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { artifacts, callContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Logger } from 'winston';
 import { EventType } from '../index';
+
+import '@dolittle/sdk.protobuf';
 
 /**
  * Represents a system that knows how to register Event Types with the Runtime.
@@ -36,8 +37,8 @@ export class EventTypes {
 
     private createRequest(eventType: EventType): EventTypeRegistrationRequest {
         const result = new EventTypeRegistrationRequest();
-        result.setEventtype(artifacts.toProtobuf(eventType));
-        result.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        result.setEventtype(eventType.toProtobuf());
+        result.setCallcontext(this._executionContext.toCallContext());
         if (eventType.hasAlias()) {
             result.setAlias(eventType.alias!.value);
         }
