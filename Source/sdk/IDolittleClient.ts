@@ -8,6 +8,9 @@ import { IEmbeddings } from '@dolittle/sdk.embeddings';
 import { IProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Tenant } from '@dolittle/sdk.tenancy';
 import { IResourcesBuilder } from '@dolittle/sdk.resources';
+import { DolittleClientConfiguration } from './DolittleClientConfiguration';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { ConnectCallback } from './Builders';
 
 /**
  * Defines the Dolittle Client.
@@ -58,4 +61,24 @@ export abstract class IDolittleClient {
      * Gets the {@link IEventHorizons}.
      */
     abstract get eventHorizons(): IEventHorizons;
+
+    /**
+     * Connects the {@link IDolittleClient}.
+     * @param {DolittleClientConfiguration} configuration - The configuration to use.
+     * @param {Cancellation} [cancellation] - An optional cancellation to use to stop the connect call.
+     */
+    abstract connect(configuration: DolittleClientConfiguration, cancellation?: Cancellation): Promise<IDolittleClient>;
+
+    /**
+     * Connects the {@link IDolittleClient}.
+     * @param {ConnectCallback} callback - A callback to use for configuring the client.
+     * @param {Cancellation} [cancellation] - An optional cancellation to use to stop the connect call.
+     */
+    abstract connect(callback: ConnectCallback, cancellation?: Cancellation): Promise<IDolittleClient>;
+
+    /**
+     * Connects the {@link IDolittleClient}.
+     * @param {Cancellation} [cancellation] - An optional cancellation to use to stop the connect call.
+     */
+    abstract connect(cancellation?: Cancellation): Promise<IDolittleClient>;
 }

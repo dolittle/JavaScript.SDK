@@ -4,3 +4,7 @@
 export { ISetupBuilder } from './ISetupBuilder';
 export { SetupBuilder } from './SetupBuilder';
 export { SetupCallback } from './SetupCallback';
+export { IConfigurationBuilder } from './IConfigurationBuilder';
+export { ConfigurationBuilder } from './ConfigurationBuilder';
+export { ConnectCallback } from './ConnectCallback';
+export { InvalidRuntimeAddressConfiguration } from './InvalidRuntimeAddressConfiguration';
