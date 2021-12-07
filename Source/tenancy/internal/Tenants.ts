@@ -7,7 +7,7 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 import { GetAllRequest, Tenant as PbTenant } from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
 
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { callContexts } from '@dolittle/sdk.protobuf';
+import { callContexts, guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
@@ -45,7 +45,8 @@ export class Tenants extends ITenants {
             }
 
             const failure = response.getFailure()!;
-            this._logger.warn(`An error occurred while getting all tenants because ${failure.getReason()}. Failure Id '${failure.getId()?.toSDK().toString()}'`);
+            const failureId = guids.toSDK(failure.getId()!);
+            this._logger.warn(`An error occurred while getting all tenants because ${failure.getReason()}. Failure Id '${failureId}'`);
             throw new FailedToGetAllTenants(failure.getReason());
         } catch (error) {
             this._logger.warn(`An error occurred while getting all tenants because ${error}.`);
@@ -54,6 +55,6 @@ export class Tenants extends ITenants {
     }
 
     private static createTenant(tenant: PbTenant): Tenant {
-        return new Tenant(TenantId.from(tenant.getId()!.toSDK()));
+        return new Tenant(TenantId.from(guids.toSDK(tenant.getId()!)));
     }
 }
