@@ -1,29 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { Generation } from '@dolittle/sdk.artifacts';
-import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { DeleteReadModelInstance, IProjections, KeySelector, Projection, ProjectionCallback } from '../index';
-import { ProjectionProcessor } from '../Internal';
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
+
+import { IProjection } from '../Distribution';
+import { DeleteReadModelInstance, KeySelector, Projection, ProjectionCallback } from '../';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
-import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
 import { ProjectionDecoratedTypes } from './ProjectionDecoratedTypes';
 import { projection as projectionDecorator } from './projectionDecorator';
 
 /**
- * Represents an implementation of {@link ICanBuildAndRegisterAProjection} that build a projection from a class.
+ * Represents a builder for building a projection from a class.
  * @template T The type of the projection class.
  */
-export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjection {
+export class ProjectionClassBuilder<T> {
     private readonly _projectionType: Constructor<T>;
 
     /**
@@ -42,15 +39,13 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
         }
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: ProjectionsClient,
-        projections: IProjections,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
+    /**
+     * Builds the projection.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IProjection | undefined} The built projection if successful.
+     */
+    build(eventTypes: IEventTypes, logger: Logger): IProjection<T> | undefined {
 
         logger.debug(`Building projection of type ${this._projectionType.name}`);
         const decoratedType = ProjectionDecoratedTypes.types.find(_ => _.type === this._projectionType);
@@ -65,16 +60,8 @@ export class ProjectionClassBuilder<T> implements ICanBuildAndRegisterAProjectio
             logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods. Maybe you have multiple @on methods handling the same event type?`);
             return;
         }
-        const projection = new Projection<T>(decoratedType.projectionId, decoratedType.type, decoratedType.scopeId, events);
-        projections.register<T>(
-            new ProjectionProcessor<T>(
-                projection,
-                client,
-                executionContext,
-                eventTypes,
-                logger
-            ), cancellation);
-        }
+        return new Projection<T>(decoratedType.projectionId, decoratedType.type, decoratedType.scopeId, events);
+    }
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
         let allMethodsValid = true;

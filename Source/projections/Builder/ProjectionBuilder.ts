@@ -1,23 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-import { IContainer } from '@dolittle/sdk.common';
-import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import { IProjectionAssociations, IProjections, ProjectionId } from '..';
-import { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
+
+import { IProjection, IProjectionAssociations, ProjectionId } from '../';
+import { IProjectionBuilder } from './IProjectionBuilder';
+import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 import { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 
 /**
- * Represents a builder for building {@link IProjection}.
+ * Represents an implementation of {@link IProjectionBuilder}.
  */
-export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
+export class ProjectionBuilder extends IProjectionBuilder {
     private _scopeId: ScopeId = ScopeId.default;
     private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: ProjectionBuilderForReadModel<any>;
@@ -27,27 +26,24 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
      * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
      * @param {IProjectionAssociations} _projectionAssociations - The projection associations to use for associating read model types with projections.
      */
-    constructor(private readonly _projectionId: ProjectionId, private readonly _projectionAssociations: IProjectionAssociations) { }
+    constructor(
+        private readonly _projectionId: ProjectionId,
+        private readonly _projectionAssociations: IProjectionAssociations
+    ) {
+        super();
+    }
 
-    /**
-     * Defines the projection to operate on a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId - Scope the projection operates on.
-     * @returns {ProjectionBuilder} The builder for continuation.
-     */
-    inScope(scopeId: ScopeId | Guid | string): ProjectionBuilder {
+    /** @inheritdoc */
+    inScope(scopeId: string | ScopeId | Guid): IProjectionBuilder {
         this._scopeId = ScopeId.from(scopeId);
+        if (this._builder !== undefined) {
+            this._builder.inScope(scopeId);
+        }
         return this;
     }
 
-    /**
-     * Defines the type of the read model the projection builds. The initial state of a newly
-     * created read model is given by the provided instance or an instance constructed by
-     * the default constructor of the provided type.
-     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the read model.
-     * @returns {ProjectionBuilderForReadModel<T>} The projection builder for the specified read model type.
-     * @template T The type of the projection read model.
-     */
-    forReadModel<T>(typeOrInstance: Constructor<T> | T): ProjectionBuilderForReadModel<T> {
+    /** @inheritdoc */
+    forReadModel<T>(typeOrInstance: T | Constructor<T>): IProjectionBuilderForReadModel<T> {
         if (this._readModelTypeOrInstance) {
             throw new ReadModelAlreadyDefinedForProjection(this._projectionId, typeOrInstance, this._readModelTypeOrInstance);
         }
@@ -59,26 +55,17 @@ export class ProjectionBuilder implements ICanBuildAndRegisterAProjection {
         return this._builder;
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: ProjectionsClient,
-        projections: IProjections,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
+    /**
+     * Builds the projection.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IProjection | undefined} The built projection if successful.
+     */
+    build(eventTypes: IEventTypes, logger: Logger): IProjection<any> | undefined {
         if (!this._builder) {
             logger.warn(`Failed to register projection ${this._projectionId}. No read model defined for projection.`);
             return;
         }
-        this._builder.buildAndRegister(
-            client,
-            projections,
-            container,
-            executionContext,
-            eventTypes,
-            logger,
-            cancellation);
+        return this._builder.build(eventTypes, logger);
     }
 }

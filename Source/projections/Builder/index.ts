@@ -3,7 +3,9 @@
 
 export { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
-export { ICanBuildAndRegisterAProjection } from './ICanBuildAndRegisterAProjection';
+export { IProjectionBuilder } from './IProjectionBuilder';
+export { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
+export { IProjectionsBuilder } from './IProjectionsBuilder';
 export { KeySelectorBuilder } from './KeySelectorBuilder';
 export { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 export { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';

@@ -4,25 +4,27 @@
 export {
     CannotRegisterProjectionThatIsNotAClass,
     CouldNotCreateInstanceOfProjection,
-    ICanBuildAndRegisterAProjection,
+    IProjectionBuilder,
+    IProjectionBuilderForReadModel,
+    IProjectionsBuilder,
     KeySelectorBuilder,
     KeySelectorBuilderCallback,
-    on,
     OnDecoratedProjectionMethod,
     OnDecoratedProjectionMethods,
-    projection,
+    on,
+    OnMethodSpecification,
     ProjectionBuilder,
     ProjectionBuilderForReadModel,
     ProjectionClassBuilder,
     ProjectionClassOnMethod,
     ProjectionDecoratedType,
     ProjectionDecoratedTypes,
+    projection,
     ProjectionOptions,
     ProjectionsBuilder,
     ProjectionsBuilderCallback,
     ReadModelAlreadyDefinedForProjection,
     TypeOrEventType,
-    OnMethodSpecification
 } from './Builder';
 export { DeleteReadModelInstance } from './DeleteReadModelInstance';
 export { EventPropertyKeySelector } from './EventPropertyKeySelector';
@@ -46,7 +48,6 @@ export {
     CurrentStateType,
     FailedToGetProjection,
     FailedToGetProjectionState,
-    IConvertProjectionsToSDK,
     IProjectionAssociations,
     IProjectionStore,
     NoProjectionAssociatedWithType,
@@ -54,10 +55,11 @@ export {
     ProjectionAssociation,
     ProjectionAssociations,
     ProjectionStore,
-    ProjectionStoreBuilder,
-    ProjectionsToSDKConverter,
     TypeIsNotAProjection,
+    ProjectionStoreBuilder,
+    IProjectionStoreBuilder,
+    IConvertProjectionsToSDK,
+    ProjectionsToSDKConverter,
     UnknownCurrentStateType,
-    IProjectionStoreBuilder
 } from './Store';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';
