@@ -1,21 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Observable } from 'rxjs';
 import { Guid } from '@dolittle/rudiments';
 
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
+import { ISubscriptionBuilderForProducerMicroservice } from './ISubscriptionBuilderForProducerMicroservice';
+import { ISubscriptionBuilderForProducerTenant } from './ISubscriptionBuilderForProducerTenant';
 import { Subscription } from './Subscription';
 import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
-import { Observable } from 'rxjs';
 
 /**
- * Represents the builder for building subscriptions on a tenant.
+ * Represents an implementation of {@link ISubscriptionBuilderForProducerMicroservice}.
  */
-export class SubscriptionBuilderForProducerMicroservice {
+export class SubscriptionBuilderForProducerMicroservice extends ISubscriptionBuilderForProducerMicroservice {
     private _producerTenantId?: TenantId;
     private _builder?: SubscriptionBuilderForProducerTenant;
 
@@ -24,15 +26,13 @@ export class SubscriptionBuilderForProducerMicroservice {
      * @param {MicroserviceId} _producerMicroserviceId - The microservice the subscriptions are for.
      */
     constructor(
-        private readonly _producerMicroserviceId: MicroserviceId) {
+        private readonly _producerMicroserviceId: MicroserviceId
+    ) {
+        super();
     }
 
-    /**
-     * Specifies from which tenant we should get events from in the other microservice.
-     * @param {TenantId | Guid | string} tenantId - Tenant for the subscription.
-     * @returns {SubscriptionBuilderForProducerTenant} The builder for creating event horizon subscriptions.
-     */
-    fromProducerTenant(tenantId: TenantId | Guid | string): SubscriptionBuilderForProducerTenant {
+    /** @inheritdoc */
+    fromProducerTenant(tenantId: TenantId | Guid | string): ISubscriptionBuilderForProducerTenant {
         this.throwIfProducerTenantIsAlreadyDefined();
         this._producerTenantId = TenantId.from(tenantId);
         this._builder = new SubscriptionBuilderForProducerTenant(this._producerMicroserviceId, this._producerTenantId);

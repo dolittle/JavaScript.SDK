@@ -3,16 +3,20 @@
 
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Guid } from '@dolittle/rudiments';
+
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+
+import { ISubscriptionsBuilderForConsumerTenant } from './ISubscriptionsBuilderForConsumerTenant';
+import { ISubscriptionBuilderForProducerMicroservice } from './ISubscriptionBuilderForProducerMicroservice';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
 import { SubscriptionBuilderForProducerMicroservice } from './SubscriptionBuilderForProducerMicroservice';
 import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
-import { Guid } from '@dolittle/rudiments';
 
 /**
- * Represents the builder of {@link TenantSubscriptions}.
+ * Represents an implementation of {@link ISubscriptionsBuilderForConsumerTenant}.
  */
-export class SubscriptionsBuilderForConsumerTenant {
+export class SubscriptionsBuilderForConsumerTenant extends ISubscriptionsBuilderForConsumerTenant {
     private readonly _callbacks: SubscriptionCallbacks;
     readonly _subscriptionBuilders: SubscriptionBuilderForProducerMicroservice[] = [];
 
@@ -22,51 +26,33 @@ export class SubscriptionsBuilderForConsumerTenant {
      * @param {Observable<SubscriptionCallbackArguments>} responsesSource - The source of responses.
      */
     constructor(private _consumerTenantId: TenantId, responsesSource: Observable<SubscriptionCallbackArguments>) {
+        super();
         this._callbacks = new SubscriptionCallbacks(
             responsesSource.pipe(filter(_ =>
                 _.consumerTenant.toString() === _consumerTenantId.toString())));
     }
 
-    /**
-     * Sets the producer microservice to subscribe to events from.
-     * @param {Guid | string | MicroserviceId} microserviceId - Microservice to build for.
-     * @returns {SubscriptionBuilderForProducerMicroservice} The builder for creating event horizon subscriptions.
-     */
-    fromProducerMicroservice(microserviceId: MicroserviceId | Guid | string): SubscriptionBuilderForProducerMicroservice {
+    /** @inheritdoc */
+    fromProducerMicroservice(microserviceId: MicroserviceId | Guid | string): ISubscriptionBuilderForProducerMicroservice {
         const builder = new SubscriptionBuilderForProducerMicroservice(MicroserviceId.from(microserviceId));
         this._subscriptionBuilders.push(builder);
         return builder;
     }
 
-    /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionCompleted} completed - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
-     * @summary The callback will be called on each subscription for the tenant.
-     */
-    onCompleted(completed: SubscriptionCompleted): SubscriptionsBuilderForConsumerTenant {
+    /** @inheritdoc */
+    onCompleted(completed: SubscriptionCompleted): ISubscriptionsBuilderForConsumerTenant {
         this._callbacks.onCompleted(completed);
         return this;
     }
 
-    /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionSucceeded} succeeded - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
-     * @summary The callback will be called on each subscription for the tenant.
-     */
-    onSuccess(succeeded: SubscriptionSucceeded): SubscriptionsBuilderForConsumerTenant {
+    /** @inheritdoc */
+    onSuccess(succeeded: SubscriptionSucceeded): ISubscriptionsBuilderForConsumerTenant {
         this._callbacks.onSucceeded(succeeded);
         return this;
     }
 
-    /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionFailed} failed - The callback method.
-     * @returns {SubscriptionsBuilderForConsumerTenant} The builder for continuation.
-     * @summary The callback will be called on each subscription for the tenant.
-     */
-    onFailure(failed: SubscriptionFailed): SubscriptionsBuilderForConsumerTenant {
+    /** @inheritdoc */
+    onFailure(failed: SubscriptionFailed): ISubscriptionsBuilderForConsumerTenant {
         this._callbacks.onFailed(failed);
         return this;
     }
@@ -77,9 +63,6 @@ export class SubscriptionsBuilderForConsumerTenant {
      */
     build(): TenantWithSubscriptions {
         const subscriptions = this._subscriptionBuilders.map(_ => _.build(this._callbacks.responses));
-        return new TenantWithSubscriptions(
-            this._consumerTenantId,
-            subscriptions,
-            this._callbacks);
+        return new TenantWithSubscriptions(this._consumerTenantId, subscriptions, this._callbacks);
     }
 }

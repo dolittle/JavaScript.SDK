@@ -8,16 +8,15 @@ import { Constructor } from '@dolittle/types';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
 import { IEventTypes } from '@dolittle/sdk.events';
-import { IEventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { IProjection, ProjectionId } from '..';
+import { ProjectionProcessor } from '../Internal';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { IProjectionAssociations } from '../Store/IProjectionAssociations';
 import { IProjectionsBuilder } from './IProjectionsBuilder';
 import { IProjectionBuilder } from './IProjectionBuilder';
-import { ProjectionProcessor } from '../Distribution/Internal';
 
 /**
  * Represents an implementation of {@link IProjectionsBuilder}.
