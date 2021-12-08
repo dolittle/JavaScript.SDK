@@ -1,15 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 
-import { IProjection } from '../Distribution';
-import { DeleteReadModelInstance, KeySelector, Projection, ProjectionCallback } from '../';
+import { DeleteReadModelInstance, IProjection, KeySelector, Projection, ProjectionCallback } from '..';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
@@ -42,22 +41,22 @@ export class ProjectionClassBuilder<T> {
     /**
      * Builds the projection.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IProjection | undefined} The built projection if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IProjection<T> | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
 
-        logger.debug(`Building projection of type ${this._projectionType.name}`);
+        results.addInformation(`Building projection of type ${this._projectionType.name}`);
         const decoratedType = ProjectionDecoratedTypes.types.find(_ => _.type === this._projectionType);
         if (decoratedType === undefined) {
-            logger.warn(`The projection class ${this._projectionType.name} must be decorated with an @${projectionDecorator.name} decorator`);
+            results.addFailure(`The projection class ${this._projectionType.name} must be decorated with an @${projectionDecorator.name} decorator`);
             return;
         }
-        logger.debug(`Building projection ${decoratedType.projectionId} processing events in scope ${decoratedType.scopeId} from type ${this._projectionType.name}`);
 
+        results.addInformation(`Building projection ${decoratedType.projectionId} processing events in scope ${decoratedType.scopeId} from type ${this._projectionType.name}`);
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
         if (!this.tryAddAllOnMethods(events, this._projectionType, eventTypes)) {
-            logger.warn(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods. Maybe you have multiple @on methods handling the same event type?`);
+            results.addFailure(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
             return;
         }
         return new Projection<T>(decoratedType.projectionId, decoratedType.type, decoratedType.scopeId, events);

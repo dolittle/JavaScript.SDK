@@ -1,10 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { IProjection, IProjectionAssociations, ProjectionId } from '../';
@@ -58,14 +58,14 @@ export class ProjectionBuilder extends IProjectionBuilder {
     /**
      * Builds the projection.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IProjection | undefined} The built projection if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IProjection<any> | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<any> | undefined {
         if (!this._builder) {
-            logger.warn(`Failed to register projection ${this._projectionId}. No read model defined for projection.`);
+            results.addFailure(`Failed to register projection ${this._projectionId}. No read model defined for projection.`);
             return;
         }
-        return this._builder.build(eventTypes, logger);
+        return this._builder.build(eventTypes, results);
     }
 }

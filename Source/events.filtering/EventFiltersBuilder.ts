@@ -1,10 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IEventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -46,23 +45,23 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
      * @param {FiltersClient} client - The gRPC client for filters.
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventProcessor[]} The built filters.
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger
+        results: IClientBuildResults
     ): IEventProcessor[] {
         const processors: IEventProcessor[] = [];
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes, logger);
+            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes, results);
             processors.push(filterProcessor);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes, logger);
+            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes, results);
             processors.push(filterProcessor);
         }
 

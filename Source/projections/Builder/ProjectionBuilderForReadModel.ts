@@ -1,10 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
@@ -68,19 +68,19 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
     /**
      * Builds the projection.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IProjection | undefined} The built projection if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IProjection<T> | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
 
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
         if (this.onMethods.length < 1) {
-            logger.warn(`Failed to register projection ${this._projectionId}. No on methods are configured`);
+            results.addFailure(`Failed to register projection ${this._projectionId}. No on methods are configured`);
             return;
         }
         const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
         if (!allMethodsBuilt) {
-            logger.warn(`Failed to register projection ${this._projectionId}. Could not build projection. Maybe it tries to handle the same type of event twice?`);
+            results.addFailure(`Failed to register projection ${this._projectionId}. Could not build projection`, 'Maybe it tries to handle the same type of event twice?');
             return;
         }
         return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);

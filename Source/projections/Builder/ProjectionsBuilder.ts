@@ -1,12 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
@@ -54,25 +54,25 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
      * @param {ProjectionsClient} client - The projections client to use to register the built projections.
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {Logger} logger - The logger to use for logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {ProjectionProcessor[]} The built projection processors.
      */
     build(
         client: ProjectionsClient,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger
+        results: IClientBuildResults
     ): ProjectionProcessor<any>[] {
         const projections: IProjection<any>[] = [];
 
         for (const projectionBuilder of this._callbackBuilders) {
-            const projection = projectionBuilder.build(eventTypes, logger);
+            const projection = projectionBuilder.build(eventTypes, results);
             if (projection !== undefined) {
                 projections.push(projection);
             }
         }
         for (const projectionBuilder of this._classBuilders) {
-            const projection = projectionBuilder.build(eventTypes, logger);
+            const projection = projectionBuilder.build(eventTypes, results);
             if (projection !== undefined) {
                 projections.push(projection);
             }

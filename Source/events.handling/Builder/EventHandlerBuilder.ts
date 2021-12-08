@@ -1,9 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandler } from '../';
@@ -57,18 +57,18 @@ export class EventHandlerBuilder extends IEventHandlerBuilder {
     /**
      * Builds the event handler.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventHandler | undefined} The built event handler if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IEventHandler | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IEventHandler | undefined {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (this._methodsBuilder === undefined) {
-            logger.warn(`Failed to build event handler ${this._eventHandlerId}. No event handler methods are configured for event handler`);
+            results.addFailure(`Failed to build event handler ${this._eventHandlerId}. No event handler methods are configured for event handler`);
             return;
         }
-        const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, logger);
+        const allMethodsBuilt = this._methodsBuilder.tryAddEventHandlerMethods(eventTypes, eventTypeToMethods, results);
         if (!allMethodsBuilt) {
-            logger.warn(`Could not build event handler ${this._eventHandlerId}`);
+            results.addFailure(`Could not build event handler ${this._eventHandlerId}`);
             return;
         }
         return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods, this._alias);

@@ -1,11 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
@@ -55,16 +54,16 @@ export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
      * Tries to add event handler methods to the builder.
      * @param {IEventTypes} eventTypes - All registered event types.
      * @param {EventTypeMap<EventHandlerSignature<any>>} eventTypeToMethods - The event handler methods to add by event type.
-     * @param {Logger} logger - The logger to use for logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {boolean} A value indicating whether all provided methods were added or not.
      */
-    tryAddEventHandlerMethods(eventTypes: IEventTypes, eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>, logger: Logger): boolean {
+    tryAddEventHandlerMethods(eventTypes: IEventTypes, eventTypeToMethods: EventTypeMap<EventHandlerSignature<any>>, results: IClientBuildResults): boolean {
         let allMethodsValid = true;
         for (const [typeOrEventTypeOrId, method] of this._typeToMethodPairs){
             const eventType = this.getEventType(typeOrEventTypeOrId, eventTypes);
             if (eventTypeToMethods.has(eventType)) {
                 allMethodsValid = false;
-                logger.warn(`Event handler ${this._eventHandlerId} already handles event with event type ${eventType}`);
+                results.addFailure(`Event handler ${this._eventHandlerId} already handles event with event type ${eventType}`);
             }
             eventTypeToMethods.set(eventType, method);
         }

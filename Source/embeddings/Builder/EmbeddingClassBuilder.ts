@@ -1,11 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 
@@ -47,35 +47,35 @@ export class EmbeddingClassBuilder<T> {
     /**
      * Builds the embedding.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEmbedding | undefined} The built embedding if successful.
      */
-     build(eventTypes: IEventTypes, logger: Logger): IEmbedding<T> | undefined {
-        logger.debug(`Building embedding of type ${this._embeddingType.name}`);
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IEmbedding<any> | undefined {
+        results.addInformation(`Building embedding of type ${this._embeddingType.name}`);
         const decoratedType = EmbeddingDecoratedTypes.types.find(_ => _.type === this._embeddingType);
         if (decoratedType === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must be decorated with an @${embeddingDecorator.name} decorator`);
+            results.addFailure(`The embedding class ${this._embeddingType.name} must be decorated with an @${embeddingDecorator.name} decorator`);
             return;
         }
-        logger.debug(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
+        results.addInformation(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
 
         const getUpdateMethod = UpdateDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getUpdateMethod === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
+            results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
         }
         const updateMethod = this.createUpdateMethod(getUpdateMethod);
 
         const getDeletionMethod = DeletionDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
         if (getDeletionMethod === undefined) {
-            logger.warn(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
+            results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
         }
         const deleteMethod = this.createDeleteMethod(getDeletionMethod);
 
         const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
-            logger.warn(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
+            results.addFailure(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
             return;
         }
 

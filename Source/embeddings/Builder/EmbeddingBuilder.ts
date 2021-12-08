@@ -1,9 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
 
@@ -48,14 +48,14 @@ export class EmbeddingBuilder extends IEmbeddingBuilder {
     /**
      * Builds the embedding.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEmbedding | undefined} The built embedding if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IEmbedding<any> | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IEmbedding<any> | undefined {
         if (!this._builder) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No read model defined for embedding.`);
+            results.addFailure(`Failed to register embedding ${this._embeddingId}. No read model defined for embedding.`);
             return;
         }
-        return this._builder.build(eventTypes, logger);
+        return this._builder.build(eventTypes, results);
     }
 }

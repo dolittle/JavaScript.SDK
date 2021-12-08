@@ -1,14 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
-import { IEventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
@@ -49,7 +47,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
      * @param {IContainer} container - The container to use to create new instances of event handler types.
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {Logger} logger - The logger to use for logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EventHandlerProcessor[]} The built event handlers.
      */
     build(
@@ -57,19 +55,19 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         container: IContainer,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger
+        results: IClientBuildResults
     ): EventHandlerProcessor[] {
         const eventHandlers: IEventHandler[] = [];
 
         for (const eventHandlerBuilder of this._callbackBuilders) {
-            const eventHandler = eventHandlerBuilder.build(eventTypes, logger);
+            const eventHandler = eventHandlerBuilder.build(eventTypes, results);
             if (eventHandler !== undefined) {
                 eventHandlers.push(eventHandler);
             }
         }
 
         for (const eventHandlerBuilder of this._classBuilders) {
-            const eventHandler = eventHandlerBuilder.build(container ,eventTypes, logger);
+            const eventHandler = eventHandlerBuilder.build(container ,eventTypes, results);
             if (eventHandler !== undefined) {
                 eventHandlers.push(eventHandler);
             }

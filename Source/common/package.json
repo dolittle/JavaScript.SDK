@@ -45,7 +45,8 @@
     },
     "dependencies": {
         "@dolittle/types": "5.0.1",
-        "@dolittle/sdk.execution": "21.0.0-gimli.4"
+        "@dolittle/sdk.execution": "21.0.0-gimli.4",
+        "winston": "3.3.2"
     },
     "devDependencies": {}
 }

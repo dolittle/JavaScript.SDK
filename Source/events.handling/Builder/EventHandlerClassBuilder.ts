@@ -1,12 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
@@ -49,38 +49,38 @@ export class EventHandlerClassBuilder<T> {
      * Builds the event handler.
      * @param {IContainer} container - For constructing new instances of classes.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventHandler | undefined} The built event handler if successful.
      */
-    build(container: IContainer, eventTypes: IEventTypes, logger: Logger): IEventHandler | undefined {
-        logger.debug(`Building event handler of type ${this._eventHandlerType.name}`);
+    build(container: IContainer, eventTypes: IEventTypes, results: IClientBuildResults): IEventHandler | undefined {
+        results.addInformation(`Building event handler of type ${this._eventHandlerType.name}`);
         const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
         if (decoratedType === undefined) {
-            logger.warn(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
+            results.addFailure(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
             return;
         }
-        logger.debug(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
+        results.addInformation(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
         const methods = HandlesDecoratedMethods.methodsPerEventHandler.get(this._eventHandlerType);
         if (methods === undefined) {
-            logger.warn(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
+            results.addFailure(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
             return;
         }
         const eventTypesToMethods = new EventTypeMap<EventHandlerSignature<any>>();
-        if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, container, logger)) {
-            logger.warn(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
+        if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, container, results)) {
+            results.addFailure(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
         return new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
     }
 
-    private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {
+    private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, results: IClientBuildResults): boolean {
         let allMethodsValid = true;
         for (const method of methods) {
             const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
 
             if (!hasEventType) {
                 allMethodsValid = false;
-                logger.warn(`Could not create event handler method ${method.name} in event handler ${this._eventHandlerType.name} because it is not associated to an event type`);
+                results.addFailure(`Could not create event handler method ${method.name} in event handler ${this._eventHandlerType.name} because it is not associated to an event type`);
                 continue;
             }
 
@@ -88,7 +88,7 @@ export class EventHandlerClassBuilder<T> {
 
             if (eventTypesToMethods.has(eventType!)) {
                 allMethodsValid = false;
-                logger.warn(`Event handler ${this._eventHandlerType.name} has multiple event handler methods handling event type ${eventType}`);
+                results.addFailure(`Event handler ${this._eventHandlerType.name} has multiple event handler methods handling event type ${eventType}`);
                 continue;
             }
             eventTypesToMethods.set(eventType!, eventHandlerMethod);

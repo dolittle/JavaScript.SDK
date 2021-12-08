@@ -1,11 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { TypeOrEventType } from '@dolittle/sdk.projections';
 
@@ -75,12 +75,12 @@ export class EmbeddingBuilderForReadModel<T> extends IEmbeddingBuilderForReadMod
     /**
      * Builds the embedding.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEmbedding | undefined} The built embedding if successful.
      */
-    build(eventTypes: IEventTypes, logger: Logger): IEmbedding<T> | undefined {
-        const events = this.buildOnMethods(eventTypes, logger);
-        const canRegister = this.canRegisterEmbedding(logger);
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IEmbedding<T> | undefined {
+        const events = this.buildOnMethods(eventTypes, results);
+        const canRegister = this.canRegisterEmbedding(results);
         if (!canRegister || !events) {
             return;
         }
@@ -104,11 +104,11 @@ export class EmbeddingBuilderForReadModel<T> extends IEmbeddingBuilderForReadMod
         return new EventType(EventTypeId.from(eventTypeId), Generation.from(eventTypeGeneration));
     }
 
-    private buildOnMethods(eventTypes: IEventTypes, logger: Logger) {
+    private buildOnMethods(eventTypes: IEventTypes, results: IClientBuildResults) {
         const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
         const allMethodsBuilt = this.tryAddOnMethods(eventTypes, events);
         if (!allMethodsBuilt) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. Couldn't build the @on methods. Maybe an event type is handled twice?`);
+            results.addFailure(`Failed to register embedding ${this._embeddingId}. Couldn't build the @on methods`, 'Maybe an event type is handled twice?');
             return false;
         }
         return events;
@@ -130,17 +130,17 @@ export class EmbeddingBuilderForReadModel<T> extends IEmbeddingBuilderForReadMod
         return allMethodsValid;
     }
 
-    private canRegisterEmbedding(logger: Logger): boolean {
+    private canRegisterEmbedding(results: IClientBuildResults): boolean {
         if (this._onMethods.length < 1) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
+            results.addFailure(`Failed to register embedding ${this._embeddingId}. No @on methods are configured`);
             return false;
         }
         if (this._updateMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No resolveUpdateToEvents() method defined.`);
+            results.addFailure(`Failed to register embedding ${this._embeddingId}. No resolveUpdateToEvents() method defined.`);
             return false;
         }
         if (this._deleteMethod === undefined) {
-            logger.warn(`Failed to register embedding ${this._embeddingId}. No resolveDeletionToEvents() method defined.`);
+            results.addFailure(`Failed to register embedding ${this._embeddingId}. No resolveDeletionToEvents() method defined.`);
             return false;
         }
         return true;

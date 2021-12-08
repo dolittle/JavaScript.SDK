@@ -8,6 +8,7 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
+        { "path": "../common" },
         { "path": "../events" },
         { "path": "../events.processing" },
         { "path": "../execution" },
