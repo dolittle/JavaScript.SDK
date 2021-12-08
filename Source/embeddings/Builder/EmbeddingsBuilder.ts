@@ -1,85 +1,89 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { IContainer } from '@dolittle/sdk.common';
+
 import { IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionAssociations } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
-import { Logger } from 'winston';
+
 import { EmbeddingId } from '..';
-import { Embeddings, IEmbeddings } from '../Internal';
+import { IEmbedding, EmbeddingProcessor } from '../Internal';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { IEmbeddingBuilder } from './IEmbeddingBuilder';
+import { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
 
 /**
- * Represents a builder for building multiple embeddings.
+ * Represents an implementation of {@link IEmbeddingsBuilder}.
  */
-export class EmbeddingsBuilder {
-    private _embeddingBuilders: ICanBuildAndRegisterAnEmbedding[] = [];
+export class EmbeddingsBuilder extends IEmbeddingsBuilder {
+    private _callbackBuilders: EmbeddingBuilder[] = [];
+    private _classBuilders: EmbeddingClassBuilder<any>[] = [];
 
     /**
      * Initialises a new instance of {@link EmbeddingsBuilder}.
      * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      */
-    constructor(private readonly _projectionAssociations: IProjectionAssociations) {}
+    constructor(private readonly _projectionAssociations: IProjectionAssociations) {
+        super();
+    }
 
-    /**
-     * Start building an embedding.
-     * @param {EmbeddingId | Guid | string} embeddingId - The unique identifier of the embedding.
-     * @returns {EmbeddingBuilder} The builder for continuation.
-     */
-    createEmbedding(embeddingId: EmbeddingId | Guid | string): EmbeddingBuilder {
+    /** @inheritdoc */
+    createEmbedding(embeddingId: string | EmbeddingId | Guid): IEmbeddingBuilder {
         const builder = new EmbeddingBuilder(EmbeddingId.from(embeddingId), this._projectionAssociations);
-        this._embeddingBuilders.push(builder);
+        this._callbackBuilders.push(builder);
         return builder;
     }
 
-    /**
-     * Register a type as an embedding.
-     * @param type - The type to register as a embedding.
-     * @returns {EmbeddingBuilder} The builder for continuation.
-     */
-    register<T = any>(type: Constructor<T>): EmbeddingsBuilder;
-    /**
-     * Register an instance as an embedding.
-     * @param instance - The instance to register as an event handler.
-     * @returns {EmbeddingBuilder} The builder for continuation.
-     */
-    register<T = any>(instance: T): EmbeddingsBuilder;
+    /** @inheritdoc */
+    register<T = any>(type: Constructor<T>): IEmbeddingsBuilder;
+    register<T = any>(instance: T): IEmbeddingsBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
-        this._embeddingBuilders.push(new EmbeddingClassBuilder<T>(typeOrInstance));
+        this._classBuilders.push(new EmbeddingClassBuilder<T>(typeOrInstance));
         this._projectionAssociations.associate<T>(typeOrInstance);
         return this;
     }
 
     /**
-     * Builds and registers the embeddings created with the builder.
+     * Builds all the embeddings created with the builder.
      * @param {EmbeddingsClient} client - The client to use to register embeddings.
-     * @param {IContainer} container - The container to use to create new instances of embedding classes.
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
      * @param {Logger} logger - The logger to use for logging.
-     * @param {Cancellation} cancellation - The cancellation token.
-     * @returns {IEmbeddings} The built embeddings.
+     * @returns {EmbeddingProcessor[]} The built embedding processors.
      */
-    buildAndRegister(
+    build(
         client: EmbeddingsClient,
-        container: IContainer,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): IEmbeddings {
-        const embeddings = new Embeddings(logger);
+        logger: Logger
+    ): EmbeddingProcessor<any>[] {
+        const embeddings: IEmbedding<any>[] = [];
 
-        for (const embeddingBuilder of this._embeddingBuilders) {
-            embeddingBuilder.buildAndRegister(client, embeddings, container, executionContext, eventTypes, logger, cancellation);
+        for (const embeddingBuilder of this._callbackBuilders) {
+            const embedding = embeddingBuilder.build(eventTypes, logger);
+            if (embedding !== undefined) {
+                embeddings.push(embedding);
+            }
+        }
+        for (const embeddingBuilder of this._classBuilders) {
+            const embedding = embeddingBuilder.build(eventTypes, logger);
+            if (embedding !== undefined) {
+                embeddings.push(embedding);
+            }
         }
 
-        return embeddings;
+        return embeddings.map(embedding =>
+            new EmbeddingProcessor(
+                embedding,
+                client,
+                executionContext,
+                eventTypes,
+                logger));
     }
 }

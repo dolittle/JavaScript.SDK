@@ -56,14 +56,14 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All the registered event types.
      * @param {Logger} logger - The logger to use for logging.
-     * @returns {IEventProcessor[]} The built projection processors.
+     * @returns {ProjectionProcessor[]} The built projection processors.
      */
     build(
         client: ProjectionsClient,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
         logger: Logger
-    ): IEventProcessor[] {
+    ): ProjectionProcessor<any>[] {
         const projections: IProjection<any>[] = [];
 
         for (const projectionBuilder of this._callbackBuilders) {

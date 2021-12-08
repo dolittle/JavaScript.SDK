@@ -50,7 +50,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All the registered event types.
      * @param {Logger} logger - The logger to use for logging.
-     * @returns {IEventProcessor[]} The built event handlers.
+     * @returns {EventHandlerProcessor[]} The built event handlers.
      */
     build(
         client: EventHandlersClient,
@@ -58,7 +58,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
         logger: Logger
-    ): IEventProcessor[] {
+    ): EventHandlerProcessor[] {
         const eventHandlers: IEventHandler[] = [];
 
         for (const eventHandlerBuilder of this._callbackBuilders) {

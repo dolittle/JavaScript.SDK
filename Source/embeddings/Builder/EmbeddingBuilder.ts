@@ -1,24 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { IContainer } from '@dolittle/sdk.common';
-import { IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
+
+import { IEventTypes } from '@dolittle/sdk.events';
+import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
+
 import { EmbeddingId } from '..';
-import { IEmbeddings } from '../Internal';
+import { IEmbedding } from '../Internal';
 import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
+import { IEmbeddingBuilder } from './IEmbeddingBuilder';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 
 /**
- * Represents a builder for building {@link IEmbedding}.
+ * Represents an implementation of {@link IEmbeddingBuilder}.
  */
-export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
+export class EmbeddingBuilder extends IEmbeddingBuilder {
     private _readModelTypeOrInstance?: Constructor<any> | any;
     private _builder?: EmbeddingBuilderForReadModel<any>;
 
@@ -27,16 +25,14 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
      * @param {EmbeddingId} _embeddingId - The unique identifier of the embedding to build for.
      * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
      */
-    constructor(private readonly _embeddingId: EmbeddingId, private readonly _projectionAssociations: IProjectionAssociations) { }
+    constructor(
+        private readonly _embeddingId: EmbeddingId,
+        private readonly _projectionAssociations: IProjectionAssociations
+    ) {
+        super();
+    }
 
-    /**
-     * Defines the type of the read model the embedding builds. The initial state of a newly
-     * created read model is given by the provided instance or an instance constructed by
-     * the default constructor of the provided type.
-     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the read model.
-     * @returns {EmbeddingBuilderForReadModel<T>} The embedding builder for the specified read model type.
-     * @template T The type of the embedding read model.
-     */
+    /** @inheritdoc */
     forReadModel<T>(typeOrInstance: Constructor<T> | T): EmbeddingBuilderForReadModel<T> {
         if (this._readModelTypeOrInstance) {
             throw new ReadModelAlreadyDefinedForEmbedding(this._embeddingId, typeOrInstance, this._readModelTypeOrInstance);
@@ -49,26 +45,17 @@ export class EmbeddingBuilder implements ICanBuildAndRegisterAnEmbedding {
         return this._builder;
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: EmbeddingsClient,
-        embeddings: IEmbeddings,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
+    /**
+     * Builds the embedding.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IEmbedding | undefined} The built embedding if successful.
+     */
+    build(eventTypes: IEventTypes, logger: Logger): IEmbedding<any> | undefined {
         if (!this._builder) {
             logger.warn(`Failed to register embedding ${this._embeddingId}. No read model defined for embedding.`);
             return;
         }
-        this._builder.buildAndRegister(
-            client,
-            embeddings,
-            container,
-            executionContext,
-            eventTypes,
-            logger,
-            cancellation);
+        return this._builder.build(eventTypes, logger);
     }
 }

@@ -1,40 +1,32 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { IContainer } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
-import {
-    EmbeddingUpdateCallback,
-    EmbeddingDeleteCallback,
-    EmbeddingProjectCallback,
-    OnDecoratedEmbeddingMethods
-} from '..';
-import { Embedding, EmbeddingProcessor, IEmbeddings } from '../Internal';
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { Generation } from '@dolittle/sdk.artifacts';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
+import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
+
+import { EmbeddingUpdateCallback, EmbeddingDeleteCallback, EmbeddingProjectCallback, OnDecoratedEmbeddingMethods } from '..';
+import { Embedding, IEmbedding } from '../Internal';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
 import { resolveUpdateToEvents as updateDecorator } from './updateDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
-import { ICanBuildAndRegisterAnEmbedding } from './ICanBuildAndRegisterAnEmbedding';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
-import { Generation } from '@dolittle/sdk.artifacts';
 
 /**
- * Represents an implementation of {@link ICanBuildAndRegisterAnEmbedding} that builds embeddings from classes.
+ * Represents a builder for building an embedding from a class.
  * @template T The embedding class type.
  */
-export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding {
+export class EmbeddingClassBuilder<T> {
     private readonly _embeddingType: Constructor<T>;
 
     /**
@@ -52,15 +44,13 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
         }
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: EmbeddingsClient,
-        embeddings: IEmbeddings,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
+    /**
+     * Builds the embedding.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IEmbedding | undefined} The built embedding if successful.
+     */
+     build(eventTypes: IEventTypes, logger: Logger): IEmbedding<T> | undefined {
         logger.debug(`Building embedding of type ${this._embeddingType.name}`);
         const decoratedType = EmbeddingDecoratedTypes.types.find(_ => _.type === this._embeddingType);
         if (decoratedType === undefined) {
@@ -89,21 +79,12 @@ export class EmbeddingClassBuilder<T> implements ICanBuildAndRegisterAnEmbedding
             return;
         }
 
-        const embedding = new Embedding<T>(
+        return new Embedding<T>(
             decoratedType.embeddingId,
             decoratedType.type,
             events,
             updateMethod,
             deleteMethod);
-
-        embeddings.register<T>(
-            new EmbeddingProcessor<T>(
-                embedding,
-                client,
-                executionContext,
-                eventTypes,
-                logger
-            ), cancellation);
     }
 
     private createUpdateMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {

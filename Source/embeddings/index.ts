@@ -3,31 +3,34 @@
 
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
-    resolveUpdateToEvents,
-    UpdateDecoratedMethod,
-    UpdateDecoratedMethods, embedding,
-    EmbeddingAlreadyHasAnUpdateDecorator,
-    EmbeddingAlreadyHasAnUpdateMethod,
+    resolveDeletionToEvents,
+    DeletionDecoratedMethod,
+    DeletionDecoratedMethods,
     EmbeddingAlreadyHasADeletionDecorator,
     EmbeddingAlreadyHasADeletionMethod,
+    EmbeddingAlreadyHasAnUpdateDecorator,
+    EmbeddingAlreadyHasAnUpdateMethod,
     EmbeddingBuilder,
     EmbeddingBuilderForReadModel,
     EmbeddingClassBuilder,
-    EmbeddingClassUpdateMethod,
     EmbeddingClassDeletionMethod,
     EmbeddingClassOnMethod,
+    EmbeddingClassUpdateMethod,
     EmbeddingDecoratedType,
     EmbeddingDecoratedTypes,
+    embedding,
     EmbeddingsBuilder,
     EmbeddingsBuilderCallback,
-    ICanBuildAndRegisterAnEmbedding,
-    on,
+    IEmbeddingBuilder,
+    IEmbeddingBuilderForReadModel,
+    IEmbeddingsBuilder,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
+    on,
     ReadModelAlreadyDefinedForEmbedding,
-    resolveDeletionToEvents,
-    DeletionDecoratedMethod,
-    DeletionDecoratedMethods
+    UpdateDecoratedMethod,
+    UpdateDecoratedMethods,
+    resolveUpdateToEvents,
 } from './Builder';
 export { Embedding } from './Embedding';
 export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
@@ -46,10 +49,10 @@ export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
 export {CouldNotResolveDeletionToEvents} from './CouldNotResolveDeletionToEvents';
 export {CouldNotResolveUpdateToEvents} from './CouldNotResolveUpdateToEvents';
 export {
-    EmbeddingStore,
     EmbeddingStoreBuilder,
+    EmbeddingStore,
     FailedToGetEmbedding,
     FailedToGetEmbeddingKeys,
     FailedToGetEmbeddingState,
-    IEmbeddingStore
+    IEmbeddingStore,
 } from './Store';
