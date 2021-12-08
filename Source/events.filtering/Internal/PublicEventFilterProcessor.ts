@@ -29,13 +29,11 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
      * Initialises a new instance of the {@link PublicEventFilterProcessor} class.
      * @param {FilterId} filterId - The filter id.
      * @param {PartitionedFilterEventCallback} _callback - The filter callback.
-     * @param {FiltersClient} _client - The filters client to use to register the filter.
      * @param {IEventTypes} eventTypes - All registered event types.
      */
     constructor(
         filterId: FilterId,
         private _callback: PartitionedFilterEventCallback,
-        private _client: FiltersClient,
         eventTypes: IEventTypes
     ) {
         super('Public Filter', filterId, eventTypes);
@@ -50,14 +48,16 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
 
     /** @inheritdoc */
     protected createClient(
+        client: FiltersClient,
         registerArguments: PublicFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
         executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
-        cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+        cancellation: Cancellation
+    ): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<PublicFilterClientToRuntimeMessage, FilterRuntimeToClientMessage, PublicFilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, PartitionedFilterResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connectPublic, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connectPublic, requests, cancellation),
             PublicFilterClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),

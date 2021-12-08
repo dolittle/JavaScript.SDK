@@ -10,6 +10,7 @@ import { MissingEventInformation, internal } from '@dolittle/sdk.events.processi
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
@@ -20,7 +21,7 @@ import '@dolittle/sdk.protobuf';
 /**
  * Represents an implementation of {@link internal.EventProcessor} that filters events to a stream.
  */
-export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
+export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, FiltersClient, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
     /**
      * Initialises a new instance of the {@link FilterEventProcessor} class.

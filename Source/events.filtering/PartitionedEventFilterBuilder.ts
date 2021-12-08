@@ -3,8 +3,6 @@
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
 import { FilterId } from './FilterId';
 import * as internal from './Internal';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
@@ -29,18 +27,16 @@ export class PartitionedEventFilterBuilder {
      * Builds partitioned event filter builder.
      * @param {FilterId} filterId - Unique identifier for the filter.
      * @param {ScopeId} scopeId - The identifier of the scope the filter runs on.
-     * @param {FiltersClient} client - The client for working with the filters in the runtime.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
      * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         filterId: FilterId,
         scopeId: ScopeId,
-        client: FiltersClient,
         eventTypes: IEventTypes
     ): IFilterProcessor {
         this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, eventTypes);
+        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, eventTypes);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {

@@ -4,8 +4,6 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IProjectionAssociations } from '@dolittle/sdk.projections';
@@ -50,13 +48,11 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
 
     /**
      * Builds all the embeddings created with the builder.
-     * @param {EmbeddingsClient} client - The client to use to register embeddings.
      * @param {IEventTypes} eventTypes - All registered event types.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EmbeddingProcessor[]} The built embedding processors.
      */
     build(
-        client: EmbeddingsClient,
         eventTypes: IEventTypes,
         results: IClientBuildResults
     ): EmbeddingProcessor<any>[] {
@@ -76,6 +72,6 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
         }
 
         return embeddings.map(embedding =>
-            new EmbeddingProcessor(embedding, client, eventTypes));
+            new EmbeddingProcessor(embedding, eventTypes));
     }
 }

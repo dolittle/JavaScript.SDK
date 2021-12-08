@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import grpc from '@grpc/grpc-js';
 import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
@@ -22,7 +23,7 @@ import { IServiceProvider } from '../../common/DependencyInversion';
  * @template TIdentifier The type of the event processor identifier.
  * @template TRequest The type of the event processor requests.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TClient, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor<TClient> {
     /**
      * Initialises a new instance of the {@link EventProcessor} class.
      * @param {string} _kind - The kind of the event processor.
@@ -40,6 +41,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
 
     /** @inheritdoc */
     protected abstract createClient(
+        client: TClient,
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         executionContext: ExecutionContext,

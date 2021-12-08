@@ -8,6 +8,8 @@ import { ITenantServiceProviders } from '@dolittle/sdk.common/DependencyInversio
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+
 import { IFilterProcessor } from './IFilterProcessor';
 import { IFilters } from './IFilters';
 
@@ -18,11 +20,13 @@ export class Filters extends IFilters {
 
     /**
      * Initializes a new instance of {@link Filters}.
+     * @param {FiltersClient} _client - The filters client to use.
      * @param {ExecutionContext} _executionContext - The base execution context of the client.
      * @param {ITenantServiceProviders} _services - For resolving services while handling requests.
      * @param {Logger} _logger - For logging.
      */
     constructor(
+        private readonly _client: FiltersClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _services: ITenantServiceProviders,
         private readonly _logger: Logger
@@ -34,6 +38,7 @@ export class Filters extends IFilters {
     register(filterProcessor: IFilterProcessor, cancellation = Cancellation.default): void {
         filterProcessor.registerForeverWithPolicy(
             retryPipe(delay(1000)),
+            this._client,
             this._executionContext,
             this._services,
             this._logger,

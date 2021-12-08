@@ -8,6 +8,8 @@ import { ITenantServiceProviders } from '@dolittle/sdk.common/DependencyInversio
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+
 import { IEmbeddings } from './IEmbeddings';
 import { EmbeddingProcessor } from './EmbeddingProcessor';
 
@@ -18,11 +20,13 @@ export class Embeddings extends IEmbeddings {
 
     /**
      * Initializes an instance of {@link Embeddings}.
+     * @param {EmbeddingsClient} _client - The embeddings client to use.
      * @param {ExecutionContext} _executionContext - The base execution context of the client.
      * @param {ITenantServiceProviders} _services - For resolving services while handling requests.
      * @param {Logger} _logger - For logging.
      */
     constructor(
+        private readonly _client: EmbeddingsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _services: ITenantServiceProviders,
         private readonly _logger: Logger
@@ -34,6 +38,7 @@ export class Embeddings extends IEmbeddings {
     register<T>(embeddingProcessor: EmbeddingProcessor<T>, cancellation: Cancellation = Cancellation.default): void {
         embeddingProcessor.registerForeverWithPolicy(
             retryPipe(delay(1000)),
+            this._client,
             this._executionContext,
             this._services,
             this._logger,

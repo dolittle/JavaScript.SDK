@@ -36,19 +36,17 @@ import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link EventProcessor} for {@link Projection}.
+ * @template T The type of the projection read model.
  */
-export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
+export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionsClient, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
      * Initializes a new instance of {@link ProjectionProcessor}.
      * @param {IProjection<T>} _projection - The projection.
-     * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
      * @param {IEventTypes} _eventTypes - The registered event types for this projection.
-     * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
-        private _client: ProjectionsClient,
         private _eventTypes: IEventTypes
     ) {
         super('Projection', _projection.projectionId);
@@ -96,6 +94,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
     /** @inheritdoc */
     protected createClient(
+        client: ProjectionsClient,
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
         executionContext: ExecutionContext,
@@ -103,7 +102,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<ProjectionRegistrationResponse> {
         return new ReverseCallClient<ProjectionClientToRuntimeMessage, ProjectionRuntimeToClientMessage, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             ProjectionClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),

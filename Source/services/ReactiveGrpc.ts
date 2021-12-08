@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Cancellation } from '@dolittle/sdk.resilience';
-import * as grpc from '@grpc/grpc-js';
+import grpc from '@grpc/grpc-js';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
 

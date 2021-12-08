@@ -38,18 +38,16 @@ import '@dolittle/sdk.protobuf';
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
  */
-export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
+export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingsClient, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
 
     /**
      * Initializes a new instance of {@link EmbeddingProcessor}.
      * @template TReadModel
      * @param {IEmbedding<TReadModel>} _embedding - The embedding.
-     * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
      * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,
-        private _client: EmbeddingsClient,
         private _eventTypes: IEventTypes
     ) {
         super('Embedding', _embedding.embeddingId);
@@ -79,6 +77,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
     /** @inheritdoc */
     protected createClient(
+        client: EmbeddingsClient,
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
         executionContext: ExecutionContext,
@@ -86,7 +85,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EmbeddingRegistrationResponse> {
         return new ReverseCallClient<EmbeddingClientToRuntimeMessage, EmbeddingRuntimeToClientMessage, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse>(
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             EmbeddingClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),

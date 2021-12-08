@@ -31,17 +31,15 @@ import '@dolittle/sdk.protobuf';
 /**
  * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
  */
-export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
+export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlersClient, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
      * Initializes a new instance of {@link EventHandlerProcessor}.
      * @param {IEventHandler} _handler - The actual handler.
-     * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
      * @param {IEventTypes} _eventTypes - Registered event types.
      */
     constructor(
         private _handler: IEventHandler,
-        private _client: EventHandlersClient,
         private _eventTypes: IEventTypes
     ) {
         super('EventHandler', _handler.eventHandlerId);
@@ -66,6 +64,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
     /** @inheritdoc */
     protected createClient(
+        client: EventHandlersClient,
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
         executionContext: ExecutionContext,
@@ -73,7 +72,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             EventHandlerClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),

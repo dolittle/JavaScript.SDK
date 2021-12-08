@@ -28,14 +28,12 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
      * @param {FilterId} filterId - The filter id.
      * @param {ScopeId} _scopeId - The filter scope id.
      * @param {FilterEventCallback} _callback - The filter callback.
-     * @param {FiltersClient} _client - The filters client to use to register the filter.
      * @param {IEventTypes} eventTypes - All registered event types.
      */
     constructor(
         filterId: FilterId,
         private _scopeId: ScopeId,
         private _callback: FilterEventCallback,
-        private _client: FiltersClient,
         eventTypes: IEventTypes,
     ) {
         super('Filter', filterId, eventTypes);
@@ -51,14 +49,16 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
 
     /** @inheritdoc */
     protected createClient(
+        client: FiltersClient,
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
         executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
-        cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+        cancellation: Cancellation
+    ): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<FilterClientToRuntimeMessage, FilterRuntimeToClientMessage, FilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, FilterResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             FilterClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),

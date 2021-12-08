@@ -1,6 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import grpc from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import { repeat } from 'rxjs/operators';
 import { Logger } from 'winston';
@@ -21,12 +22,13 @@ import '@dolittle/sdk.protobuf';
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
  * @template TIdentifier - The type of the identifier.
+ * @template TClient - The type of the gRPC client to use to connect.
  * @template TRegisterArguments - The type of the registration arguments.
  * @template TRegisterResponse - The type of the registration response.
  * @template TRequest - The type of the requests.
  * @template TResponse - The type of the responses.
  */
-export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> {
+export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> {
     private _pingTimeout = 1;
 
     /**
@@ -41,14 +43,16 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
 
     /**
      * Registers a processor with the Runtime, and if successful starts handling requests.
+     * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
      * @param {Cancellation} cancellation - Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
-    register(executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
-        const client = this.createClient(
+    register(client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
+        const reverseCallClient = this.createClient(
+            client,
             this.registerArguments,
             (request: TRequest, requestExecutionContext: ExecutionContext) => {
                 const tenantServiceProvider = services.forTenant(requestExecutionContext.tenantId);
@@ -58,9 +62,10 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
             this._pingTimeout,
             logger,
             cancellation);
+
         return new Observable<void>(subscriber => {
             logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
-            client.subscribe({
+            reverseCallClient.subscribe({
                 next: (message: TRegisterResponse) => {
                     const failure = this.getFailureFromRegisterResponse(message);
                     if (failure) {
@@ -83,28 +88,30 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
     /**
      * Registers a processor with a policy.
      * @param {RetryPolicy} policy - The policy to register with.
+     * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerWithPolicy(policy: RetryPolicy, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
-        return retryWithPolicy(this.register(executionContext, services, logger, cancellation), policy, cancellation);
+    registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
+        return retryWithPolicy(this.register(client, executionContext, services, logger, cancellation), policy, cancellation);
     }
 
     /**
      * Registers a processor forever with a policy. Even if the registration completes, the repeat() call
      * will try to re-register.
      * @param {RetryPolicy} policy - The policy to register with.
+     * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerForeverWithPolicy(policy: RetryPolicy, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
-        return this.registerWithPolicy(policy, executionContext, services, logger, cancellation).pipe(repeat());
+    registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
+        return this.registerWithPolicy(policy, client, executionContext, services, logger, cancellation).pipe(repeat());
     }
 
     /**
@@ -121,6 +128,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
 
     /**
      * Creates a reverse call client.
+     * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {TRegisterArguments} registerArguments - The registration arguments of the reverse call client.
      * @param {(request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>} callback - The callback to pass to the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
@@ -129,6 +137,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {Cancellation} cancellation - The cancellation used to stop the client.
      */
     protected abstract createClient(
+        client: TClient,
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         executionContext: ExecutionContext,

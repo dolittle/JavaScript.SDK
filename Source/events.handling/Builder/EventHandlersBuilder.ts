@@ -8,8 +8,6 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-
 import { EventHandlerId, IEventHandler } from '../';
 import { EventHandlerProcessor } from '../Internal';
 import { EventHandlerBuilder } from './EventHandlerBuilder';
@@ -42,14 +40,12 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
 
     /**
      * Builds all the event handlers.
-     * @param {EventHandlersClient} client - The event handlers client to use to register the event handlers.
      * @param {IContainer} container - The container to use to create new instances of event handler types.
      * @param {IEventTypes} eventTypes - All the registered event types.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EventHandlerProcessor[]} The built event handlers.
      */
     build(
-        client: EventHandlersClient,
         container: IContainer,
         eventTypes: IEventTypes,
         results: IClientBuildResults
@@ -71,6 +67,6 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         }
 
         return eventHandlers.map(handler =>
-            new EventHandlerProcessor(handler, client, eventTypes));
+            new EventHandlerProcessor(handler, eventTypes));
     }
 }

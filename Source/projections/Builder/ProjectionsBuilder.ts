@@ -4,8 +4,6 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
-
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 
@@ -50,13 +48,11 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
 
     /**
      * Builds all projections created with the builder.
-     * @param {ProjectionsClient} client - The projections client to use to register the built projections.
      * @param {IEventTypes} eventTypes - All the registered event types.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {ProjectionProcessor[]} The built projection processors.
      */
     build(
-        client: ProjectionsClient,
         eventTypes: IEventTypes,
         results: IClientBuildResults
     ): ProjectionProcessor<any>[] {
@@ -76,6 +72,6 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
         }
 
         return projections.map(projection =>
-            new ProjectionProcessor(projection, client, eventTypes));
+            new ProjectionProcessor(projection, eventTypes));
     }
 }
