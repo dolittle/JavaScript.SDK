@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { AggregateRootsBuilder, AggregateRootsBuilderCallback } from '@dolittle/sdk.aggregates';
+import { IContainer } from '@dolittle/sdk.common';
+import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
+import { EventTypes, EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
@@ -99,15 +101,28 @@ export class SetupBuilder extends ISetupBuilder {
             this.discoverAndRegisterAll();
         }
 
+        const buildResults = new ClientBuildResults();
+
+        const eventTypes = new EventTypes();
+        this._eventTypesBuilder.addAssociationsInto(eventTypes);
+
+        const filters = this._eventFiltersBuilder.build(eventTypes);
+        const eventHandlers = this._eventHandlersBuilder.build({} as IContainer, eventTypes, buildResults);
+        const projections = this._projectionsBuilder.build(eventTypes, buildResults);
+        const embeddings = this._embeddingsBuilder.build(eventTypes, buildResults);
+        const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
+
         return new DolittleClient(
-            this._eventTypesBuilder,
+            buildResults,
+            eventTypes,
             this._aggregateRootsBuilder,
-            this._eventFiltersBuilder,
-            this._eventHandlersBuilder,
+            filters,
+            eventHandlers,
             this._projectionsAssociations,
-            this._projectionsBuilder,
-            this._embeddingsBuilder,
-            this._subscriptionsBuilder);
+            projections,
+            embeddings,
+            subscriptions,
+            subscriptionCallbacks);
     }
 
     private discoverAndRegisterAll(): void {

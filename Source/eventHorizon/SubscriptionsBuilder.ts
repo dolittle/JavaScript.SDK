@@ -45,9 +45,9 @@ export class SubscriptionsBuilder extends ISubscriptionsBuilder {
 
     /**
      * Build all configured {@link TenantWithSubscriptions}.
-     * @returns {TenantWithSubscriptions[]} The built event horizons.
+     * @returns {[TenantWithSubscriptions[], SubscriptionCallbacks]} The built event horizons.
      */
-    build(): TenantWithSubscriptions[] {
-        return this._tenantSubscriptionsBuilders.map(_ => _.build());
+    build(): [TenantWithSubscriptions[], SubscriptionCallbacks] {
+        return [this._tenantSubscriptionsBuilders.map(_ => _.build()), this._callbacks];
     }
 }
