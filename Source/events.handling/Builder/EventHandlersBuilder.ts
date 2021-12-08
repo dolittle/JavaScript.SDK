@@ -8,78 +8,79 @@ import { Constructor } from '@dolittle/types';
 
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
+import { IEventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandlerId, EventHandlers, IEventHandlers } from '..';
-import { EventHandlerBuilder, EventHandlerBuilderCallback } from './EventHandlerBuilder';
+import { EventHandlerId, IEventHandler } from '../';
+import { EventHandlerProcessor } from '../Internal';
+import { EventHandlerBuilder } from './EventHandlerBuilder';
+import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
-import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
+import { IEventHandlersBuilder } from './IEventHandlersBuilder';
 
 /**
- * Defines the callback for configuring event handlers.
+ * Represents an implementation of {@link IEventHandlersBuilder}.
  */
-export type EventHandlersBuilderCallback = (builder: EventHandlersBuilder) => void;
+export class EventHandlersBuilder extends IEventHandlersBuilder {
+    private _callbackBuilders: EventHandlerBuilder[] = [];
+    private _classBuilders: EventHandlerClassBuilder<any>[] = [];
 
-/**
- * Represents the builder for configuring event handlers.
- */
-export class EventHandlersBuilder {
-    private _eventHandlerBuilders: ICanBuildAndRegisterAnEventHandler[] = [];
-
-    /**
-     * Start building an event handler.
-     * @param {EventHandlerId | Guid | string} eventHandlerId - The unique identifier of the event handler.
-     * @param {EventHandlerBuilderCallback} callback - Callback for building out the event handler.
-     * @returns {EventHandlersBuilder} The builder for continuation.
-     */
-    createEventHandler(eventHandlerId: EventHandlerId | Guid | string, callback: EventHandlerBuilderCallback): EventHandlersBuilder {
+    /** @inheritdoc */
+    createEventHandler(eventHandlerId: string | EventHandlerId | Guid, callback: EventHandlerBuilderCallback): IEventHandlersBuilder {
         const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
         callback(builder);
-        this._eventHandlerBuilders.push(builder);
+        this._callbackBuilders.push(builder);
         return this;
     }
 
-    /**
-     * Register a type as an event handler.
-     * @param type - The type to register as an event handler.
-     */
-    register<T = any>(type: Constructor<T>): EventHandlersBuilder;
-    /**
-     * Register an instance as an event handler.
-     * @param instance - The instance to register as an event handler.
-     */
-    register<T = any>(instance: T): EventHandlersBuilder;
+    /** @inheritdoc */
+    register<T = any>(type: Constructor<T>): IEventHandlersBuilder;
+    register<T = any>(instance: T): IEventHandlersBuilder;
     register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
-        this._eventHandlerBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
+        this._classBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
         return this;
     }
 
     /**
-     * Builds and registers the event handlers created with the builder.
+     * Builds all the event handlers.
      * @param {EventHandlersClient} client - The event handlers client to use to register the event handlers.
      * @param {IContainer} container - The container to use to create new instances of event handler types.
      * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All the registered event types.
      * @param {Logger} logger - The logger to use for logging.
-     * @param {Cancellation} cancellation - The cancellation token.
-     * @returns {IEventHandlers} The built event handlers.
+     * @returns {IEventProcessor[]} The built event handlers.
      */
-    buildAndRegister(
+    build(
         client: EventHandlersClient,
         container: IContainer,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): IEventHandlers {
-        const eventHandlers = new EventHandlers(logger);
+        logger: Logger
+    ): IEventProcessor[] {
+        const eventHandlers: IEventHandler[] = [];
 
-        for (const eventHandlerBuilder of this._eventHandlerBuilders) {
-            eventHandlerBuilder.buildAndRegister(client, eventHandlers, container, executionContext, eventTypes, logger, cancellation);
+        for (const eventHandlerBuilder of this._callbackBuilders) {
+            const eventHandler = eventHandlerBuilder.build(eventTypes, logger);
+            if (eventHandler !== undefined) {
+                eventHandlers.push(eventHandler);
+            }
         }
 
-        return eventHandlers;
+        for (const eventHandlerBuilder of this._classBuilders) {
+            const eventHandler = eventHandlerBuilder.build(container ,eventTypes, logger);
+            if (eventHandler !== undefined) {
+                eventHandlers.push(eventHandler);
+            }
+        }
+
+        return eventHandlers.map(handler =>
+            new EventHandlerProcessor(
+                handler,
+                client,
+                executionContext,
+                eventTypes,
+                logger));
     }
 }

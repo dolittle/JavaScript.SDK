@@ -23,7 +23,7 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { EventHandlerId, IEventHandler } from '..';
+import { EventHandlerId, IEventHandler } from '../';
 
 import '@dolittle/sdk.protobuf';
 

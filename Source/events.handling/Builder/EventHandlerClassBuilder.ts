@@ -1,17 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { Constructor } from '@dolittle/types';
+
 import { Generation } from '@dolittle/sdk.artifacts';
 import { IContainer } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
-import { Logger } from 'winston';
-import { EventHandler, EventHandlerAlias, EventHandlerSignature, IEventHandlers } from '..';
-import { EventHandlerProcessor } from '../Internal';
+
+import { EventHandler, EventHandlerSignature, IEventHandler } from '../';
 import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
@@ -19,13 +18,12 @@ import { eventHandler as eventHandlerDecorator } from './eventHandlerDecorator';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { handles as handlesDecorator } from './handlesDecorator';
-import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
 
 /**
- * Represents an implementation of {@link ICanBuildAndRegisterAnEventHandler} that builds event handlers from classes.
+ * Represents a builder for building event handlers from classes.
  * @template T The event handler class type.
  */
-export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHandler {
+export class EventHandlerClassBuilder<T> {
     private readonly _eventHandlerType: Constructor<T>;
     private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
 
@@ -34,7 +32,6 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
      * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the event handler.
      */
     constructor(typeOrInstance: Constructor<T> | T) {
-        super();
         if (typeOrInstance instanceof Function) {
             this._eventHandlerType = typeOrInstance;
             this._getInstance = (container, executionContext) => container.get(typeOrInstance, executionContext);
@@ -48,16 +45,14 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
         }
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: EventHandlersClient,
-        eventHandlers: IEventHandlers,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
-
+    /**
+     * Builds the event handler.
+     * @param {IContainer} container - For constructing new instances of classes.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IEventHandler | undefined} The built event handler if successful.
+     */
+    build(container: IContainer, eventTypes: IEventTypes, logger: Logger): IEventHandler | undefined {
         logger.debug(`Building event handler of type ${this._eventHandlerType.name}`);
         const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
         if (decoratedType === undefined) {
@@ -75,14 +70,7 @@ export class EventHandlerClassBuilder<T> extends ICanBuildAndRegisterAnEventHand
             logger.warn(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
-        const eventHandler = new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
-        eventHandlers.register(
-            new EventHandlerProcessor(
-                eventHandler,
-                client,
-                executionContext,
-                eventTypes,
-                logger), cancellation);
+        return new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
     }
 
     private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, logger: Logger): boolean {

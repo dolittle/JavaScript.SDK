@@ -19,7 +19,7 @@ import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCa
 import { IEventFiltersBuilder } from './IEventFiltersBuilder';
 
 /**
- * Represents the builder for building event filters.
+ * Represents an implementation of {@link IEventFiltersBuilder}.
  */
 export class EventFiltersBuilder extends IEventFiltersBuilder {
     private _privateFilterBuilders: PrivateEventFilterBuilder[]  = [];

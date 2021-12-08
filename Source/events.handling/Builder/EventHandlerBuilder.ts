@@ -1,27 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-import { IContainer } from '@dolittle/sdk.common';
-import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Logger } from 'winston';
-import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandlers } from '..';
-import { EventHandlerProcessor } from '../Internal';
+import { Guid } from '@dolittle/rudiments';
+
+import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
+
+import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandler } from '../';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
-import { ICanBuildAndRegisterAnEventHandler } from './ICanBuildAndRegisterAnEventHandler';
+import { IEventHandlerBuilder } from './IEventHandlerBuilder';
+import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 
 /**
- * Defines the callback for building instances of {@link IEventHandler}.
+ * Represents an implementation of {@link IEventHandlerBuilder}.
  */
-export type EventHandlerBuilderCallback = (builder: EventHandlerBuilder) => void;
-
-/**
- * Represents a builder for building instances of {@link IEventHandler}.
- */
-export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
+export class EventHandlerBuilder extends IEventHandlerBuilder {
     private _methodsBuilder?: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
     private _alias?: EventHandlerAlias;
@@ -35,55 +28,39 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
         super();
     }
 
-    /**
-     * Defines the event handler to be partitioned - this is default for a event handler.
-     * @returns {EventHandlerBuilder} The builder for continuation.
-     */
-    partitioned(): EventHandlerMethodsBuilder {
+    /** @inheritdoc */
+    partitioned(): IEventHandlerMethodsBuilder {
         this._partitioned = true;
         this._methodsBuilder = new EventHandlerMethodsBuilder(this._eventHandlerId);
         return this._methodsBuilder;
     }
 
-    /**
-     * Defines the event handler to be unpartitioned. By default it will be partitioned.
-     * @returns {EventHandlerBuilder} The builder for continuation.
-     */
-    unpartitioned(): EventHandlerMethodsBuilder {
+    /** @inheritdoc */
+    unpartitioned(): IEventHandlerMethodsBuilder {
         this._partitioned = false;
         this._methodsBuilder = new EventHandlerMethodsBuilder(this._eventHandlerId);
         return this._methodsBuilder;
     }
 
-    /**
-     * Defines the event handler to operate on a specific {@link ScopeId}.
-     * @param {ScopeId | Guid | string} scopeId - Scope the event handler operates on.
-     * @returns {EventHandlerBuilder} The builder for continuation.
-     */
-    inScope(scopeId: ScopeId | Guid | string): EventHandlerBuilder {
+    /** @inheritdoc */
+    inScope(scopeId: string | ScopeId | Guid): IEventHandlerBuilder {
         this._scopeId = ScopeId.from(scopeId);
         return this;
     }
 
-    /**
-     * Defines and alias for the event handler.
-     * @param {EventHandlerAliasLike} alias - The event handler alias.
-     * @returns {EventHandlerBuilder} The builder for continuation.
-     */
-    withAlias(alias: EventHandlerAliasLike): EventHandlerBuilder {
+    /** @inheritdoc */
+    withAlias(alias: EventHandlerAliasLike): IEventHandlerBuilder {
         this._alias = EventHandlerAlias.from(alias);
         return this;
     }
 
-    /** @inheritdoc */
-    buildAndRegister(
-        client: EventHandlersClient,
-        eventHandlers: IEventHandlers,
-        container: IContainer,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): void {
+    /**
+     * Builds the event handler.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {Logger} logger - For logging.
+     * @returns {IEventHandler | undefined} The built event handler if successful.
+     */
+    build(eventTypes: IEventTypes, logger: Logger): IEventHandler | undefined {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (this._methodsBuilder === undefined) {
             logger.warn(`Failed to build event handler ${this._eventHandlerId}. No event handler methods are configured for event handler`);
@@ -94,14 +71,6 @@ export class EventHandlerBuilder extends ICanBuildAndRegisterAnEventHandler {
             logger.warn(`Could not build event handler ${this._eventHandlerId}`);
             return;
         }
-        const eventHandler = new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods, this._alias);
-        eventHandlers.register(
-            new EventHandlerProcessor(
-                eventHandler,
-                client,
-                executionContext,
-                eventTypes,
-                logger
-            ), cancellation);
+        return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods, this._alias);
     }
 }

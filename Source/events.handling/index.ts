@@ -28,5 +28,7 @@ export {
     HandlesDecoratedMethod,
     HandlesDecoratedMethods,
     handles,
-    ICanBuildAndRegisterAnEventHandler,
+    IEventHandlerBuilder,
+    IEventHandlerMethodsBuilder,
+    IEventHandlersBuilder,
 } from './Builder';

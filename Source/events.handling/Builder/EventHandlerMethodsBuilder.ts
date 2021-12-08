@@ -6,19 +6,19 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
-import { EventHandlerId, EventHandlerSignature } from '..';
-import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { EventHandlerId, EventHandlerSignature } from '../';
+import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 
 type TypeOrEventType = Constructor<any> | EventType;
 type TypeToMethodPair = [TypeOrEventType, EventHandlerSignature<any>];
 
 /**
- * Represents a builder for building event handler methods.
+ * Represents an implementation of {@link IEventHandlerMethodsBuilder}.
  */
-export class EventHandlerMethodsBuilder {
-
+export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
     private readonly _typeToMethodPairs: TypeToMethodPair[];
 
     /**
@@ -26,35 +26,15 @@ export class EventHandlerMethodsBuilder {
      * @param {EventHandlerId} _eventHandlerId - The event handler id to build methods for.
      */
     constructor(private readonly _eventHandlerId: EventHandlerId) {
+        super();
         this._typeToMethodPairs = [];
     }
 
-    /**
-     * Add a handler method for handling the event.
-     * @param {Constructor<T>} type - The type of event.
-     * @param {EventHandlerSignature<T>} method - Method to call for each event.
-     * @template T Type of event.
-     */
+    /** @inheritdoc */
     handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): void;
-    /**
-     * Add a handler method for handling the event.
-     * @param {EventType} eventType - The identifier of the event.
-     * @param {EventHandlerSignature} method - Method to call for each event.
-     */
-    handle(eventType: EventType, method: EventHandlerSignature): void;
-    /**
-     * Add a handler method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
-     * @param {EventHandlerSignature} method - Method to call for each event.
-     */
-    handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
-    /**
-     * Add a handler method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
-     * @param {Generation | number} generation - The generation of the event type.
-     * @param {EventHandlerSignature} method - Method to call for each event.
-     */
-    handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): void;
+    handle(eventType: EventType, method: EventHandlerSignature<any>): void;
+    handle(eventTypeId: string | EventTypeId | Guid, method: EventHandlerSignature<any>): void;
+    handle(eventTypeId: string | EventTypeId | Guid, generation: GenerationLike, method: EventHandlerSignature<any>): void;
     handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {
         const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
