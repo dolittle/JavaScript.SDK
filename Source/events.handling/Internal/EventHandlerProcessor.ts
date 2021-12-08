@@ -4,6 +4,7 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -36,13 +37,11 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
      * Initializes a new instance of {@link EventHandlerProcessor}.
      * @param {IEventHandler} _handler - The actual handler.
      * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
-     * @param {EventHandlersClient} _executionContext - Execution context.
      * @param {IEventTypes} _eventTypes - Registered event types.
      */
     constructor(
         private _handler: IEventHandler,
         private _client: EventHandlersClient,
-        private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes
     ) {
         super('EventHandler', _handler.eventHandlerId);
@@ -69,6 +68,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     protected createClient(
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
@@ -84,7 +84,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -111,7 +111,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     }
 
     /** @inheritdoc */
-    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext, logger: Logger): Promise<EventHandlerResponse> {
+    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }

@@ -17,6 +17,7 @@ import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '..';
 
 import '@dolittle/sdk.protobuf';
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters events to a partitioned stream.
@@ -29,7 +30,6 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
      * @param {ScopeId} _scopeId - The filter scope id.
      * @param {PartitionedFilterEventCallback} _callback - The filter callback.
      * @param {FiltersClient} _client - The filters client to use to register the filter.
-     * @param {ExecutionContext} _executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
      */
     constructor(
@@ -37,7 +37,6 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         private _scopeId: ScopeId,
         private _callback: PartitionedFilterEventCallback,
         private _client: FiltersClient,
-        private _executionContext: ExecutionContext,
         eventTypes: IEventTypes
     ) {
         super('Partitioned Filter', filterId, eventTypes);
@@ -55,6 +54,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
     protected createClient(
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
@@ -70,7 +70,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -87,7 +87,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
     }
 
     /** @inheritdoc */
-    protected async filter(event: any, context: EventContext, logger: Logger): Promise<PartitionedFilterResponse> {
+    protected async filter(event: any, context: EventContext, services: IServiceProvider, logger: Logger): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 
         const response = new PartitionedFilterResponse();

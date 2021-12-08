@@ -1,6 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { DateTime } from 'luxon';
+import { Logger } from 'winston';
+
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
+import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
+import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
+
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
@@ -10,14 +20,8 @@ import {
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
+
 import { Constructor } from '@dolittle/types';
-import { DateTime } from 'luxon';
-import { Logger } from 'winston';
 import {
     DeleteReadModelInstance,
     EventPropertyKeySelector,
@@ -39,14 +43,12 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
      * Initializes a new instance of {@link ProjectionProcessor}.
      * @param {IProjection<T>} _projection - The projection.
      * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
-     * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this projection.
      * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
         private _client: ProjectionsClient,
-        private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes
     ) {
         super('Projection', _projection.projectionId);
@@ -96,6 +98,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
     protected createClient(
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<ProjectionRegistrationResponse> {
@@ -111,7 +114,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -138,7 +141,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
     }
 
     /** @inheritdoc */
-    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext, logger: Logger): Promise<ProjectionResponse> {
+    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');
         }

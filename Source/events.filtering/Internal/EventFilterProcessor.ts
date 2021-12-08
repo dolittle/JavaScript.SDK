@@ -3,6 +3,7 @@
 
 import { Logger } from 'winston';
 
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -28,7 +29,6 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
      * @param {ScopeId} _scopeId - The filter scope id.
      * @param {FilterEventCallback} _callback - The filter callback.
      * @param {FiltersClient} _client - The filters client to use to register the filter.
-     * @param {ExecutionContext} _executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
      */
     constructor(
@@ -36,7 +36,6 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         private _scopeId: ScopeId,
         private _callback: FilterEventCallback,
         private _client: FiltersClient,
-        private _executionContext: ExecutionContext,
         eventTypes: IEventTypes,
     ) {
         super('Filter', filterId, eventTypes);
@@ -54,6 +53,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
     protected createClient(
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
@@ -69,7 +69,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -86,7 +86,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
     }
 
     /** @inheritdoc */
-    protected async filter(event: any, context: EventContext, logger: Logger): Promise<FilterResponse> {
+    protected async filter(event: any, context: EventContext, services: IServiceProvider, logger: Logger): Promise<FilterResponse> {
         const shouldInclude = await this._callback(event, context);
 
         const response = new FilterResponse();

@@ -4,7 +4,6 @@
 import { Guid } from '@dolittle/rudiments';
 
 import { IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
@@ -42,23 +41,21 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     /**
      * Builds all the event filters.
      * @param {FiltersClient} client - The gRPC client for filters.
-     * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - For event types resolution.
      * @returns {IFilterProcessor[]} The built filters.
      */
     build(
         client: FiltersClient,
-        executionContext: ExecutionContext,
         eventTypes: IEventTypes
     ): IFilterProcessor[] {
         const processors: IFilterProcessor[] = [];
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes);
+            const filterProcessor = privateFilterBuilder.build(client, eventTypes);
             processors.push(filterProcessor);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes);
+            const filterProcessor = publicFilterBuilder.build(client, eventTypes);
             processors.push(filterProcessor);
         }
 

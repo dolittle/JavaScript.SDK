@@ -8,7 +8,6 @@ import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddi
 
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionAssociations } from '@dolittle/sdk.projections';
 
 import { EmbeddingId } from '..';
@@ -52,14 +51,12 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
     /**
      * Builds all the embeddings created with the builder.
      * @param {EmbeddingsClient} client - The client to use to register embeddings.
-     * @param {ExecutionContext} executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EmbeddingProcessor[]} The built embedding processors.
      */
     build(
         client: EmbeddingsClient,
-        executionContext: ExecutionContext,
         eventTypes: IEventTypes,
         results: IClientBuildResults
     ): EmbeddingProcessor<any>[] {
@@ -79,6 +76,6 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
         }
 
         return embeddings.map(embedding =>
-            new EmbeddingProcessor(embedding, client, executionContext, eventTypes));
+            new EmbeddingProcessor(embedding, client, eventTypes));
     }
 }

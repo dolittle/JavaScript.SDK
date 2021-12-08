@@ -4,6 +4,7 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -46,7 +47,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
     }
 
     /** @inheritdoc */
-    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse> {
+    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');
         }
@@ -82,8 +83,8 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
             event = Object.assign(new eventType(), event);
         }
 
-        return this.filter(event, eventContext, logger);
+        return this.filter(event, eventContext, services, logger);
     }
 
-    protected abstract filter(event: any, context: EventContext, logger: Logger): Promise<TResponse>;
+    protected abstract filter(event: any, context: EventContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
 }

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 
@@ -57,18 +56,16 @@ export class PrivateEventFilterBuilder {
     /**
      * Build an instance of a {@link IFilterProcessor}.
      * @param {FiltersClient} client - The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext - Execution context manager for working with execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
      * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         client: FiltersClient,
-        executionContext: ExecutionContext,
         eventTypes: IEventTypes,
     ): IFilterProcessor {
         if (!this._innerBuilder) {
             throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or unpartitioned().');
         }
-        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, eventTypes);
+        return this._innerBuilder.build(this._filterId, this._scopeId, client, eventTypes);
     }
 }

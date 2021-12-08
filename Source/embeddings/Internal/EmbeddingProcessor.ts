@@ -1,6 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
+
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
+import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
+import { ClientProcessor, IReverseCallClient, reactiveDuplex, ReverseCallClient} from '@dolittle/sdk.services';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
@@ -18,25 +29,8 @@ import {
 } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
 import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import {
-    ClientProcessor,
-    IReverseCallClient,
-    reactiveDuplex,
-    ReverseCallClient
-} from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
-import { Logger } from 'winston';
-import {
-    EmbeddingContext,
-    EmbeddingId,
-    EmbeddingProjectContext,
-    MissingEmbeddingInformation
-} from '..';
+
+import { EmbeddingContext, EmbeddingId, EmbeddingProjectContext, MissingEmbeddingInformation } from '..';
 import { IEmbedding } from './IEmbedding';
 
 import '@dolittle/sdk.protobuf';
@@ -51,13 +45,11 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
      * @template TReadModel
      * @param {IEmbedding<TReadModel>} _embedding - The embedding.
      * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
-     * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,
         private _client: EmbeddingsClient,
-        private _executionContext: ExecutionContext,
         private _eventTypes: IEventTypes
     ) {
         super('Embedding', _embedding.embeddingId);
@@ -89,6 +81,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     protected createClient(
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EmbeddingRegistrationResponse> {
@@ -104,7 +97,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
             pingTimeout,
             callback,
@@ -119,7 +112,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext, logger: Logger): Promise<EmbeddingResponse> {
+    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
         const projectionCurrentState = this.getProjectionCurrentState(request);
         const projectionType = projectionCurrentState.getType();
         const projectionKey = projectionCurrentState.getKey();
@@ -147,9 +140,9 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext, logger: Logger): Promise<EmbeddingResponse> {
+    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
         try {
-            return await this.handle(request, executionContext, logger);
+            return await this.handle(request, executionContext, services, logger);
         } catch (error) {
             return this.createResponseFromError(error, logger);
         }

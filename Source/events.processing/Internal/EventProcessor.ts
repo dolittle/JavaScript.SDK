@@ -15,6 +15,7 @@ import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { IEventProcessor } from './IEventProcessor';
+import { IServiceProvider } from '../../common/DependencyInversion';
 
 /**
  * Partial implementation of {@link IEventProcessor}.
@@ -41,6 +42,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
     protected abstract createClient(
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
+        executionContext: ExecutionContext,
         pingTimeout: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
@@ -61,14 +63,14 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 
     /** @inheritdoc */
-    protected abstract handle(request: TRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse>;
+    protected abstract handle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
 
     /** @inheritdoc */
-    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse> {
+    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse> {
         let retryProcessingState: RetryProcessingState | undefined;
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
-            return await this.handle(request, executionContext, logger);
+            return await this.handle(request, executionContext, services, logger);
         } catch (error: any) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
