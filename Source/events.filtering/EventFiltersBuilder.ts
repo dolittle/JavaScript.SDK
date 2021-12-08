@@ -3,9 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
-import { IEventProcessor } from '@dolittle/sdk.events.processing/Internal';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
@@ -16,6 +14,7 @@ import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
 import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
 import { IEventFiltersBuilder } from './IEventFiltersBuilder';
+import { IFilterProcessor } from './IFilterProcessor';
 
 /**
  * Represents an implementation of {@link IEventFiltersBuilder}.
@@ -45,23 +44,21 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
      * @param {FiltersClient} client - The gRPC client for filters.
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {IClientBuildResults} results - For keeping track of build results.
-     * @returns {IEventProcessor[]} The built filters.
+     * @returns {IFilterProcessor[]} The built filters.
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        results: IClientBuildResults
-    ): IEventProcessor[] {
-        const processors: IEventProcessor[] = [];
+        eventTypes: IEventTypes
+    ): IFilterProcessor[] {
+        const processors: IFilterProcessor[] = [];
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes, results);
+            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes);
             processors.push(filterProcessor);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes, results);
+            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes);
             processors.push(filterProcessor);
         }
 

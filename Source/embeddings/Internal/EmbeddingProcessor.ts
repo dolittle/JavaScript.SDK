@@ -53,16 +53,14 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
      * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
-     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,
         private _client: EmbeddingsClient,
         private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        protected _logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('Embedding', _embedding.embeddingId, _logger);
+        super('Embedding', _embedding.embeddingId);
     }
 
     /** @inheritdoc */
@@ -92,6 +90,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EmbeddingRegistrationResponse> {
         return new ReverseCallClient<EmbeddingClientToRuntimeMessage, EmbeddingRuntimeToClientMessage, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse>(
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
@@ -110,7 +109,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
             pingTimeout,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -120,7 +119,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
+    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext, logger: Logger): Promise<EmbeddingResponse> {
         const projectionCurrentState = this.getProjectionCurrentState(request);
         const projectionType = projectionCurrentState.getType();
         const projectionKey = projectionCurrentState.getKey();
@@ -148,11 +147,11 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
+    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext, logger: Logger): Promise<EmbeddingResponse> {
         try {
-            return await this.handle(request, executionContext);
+            return await this.handle(request, executionContext, logger);
         } catch (error) {
-            return this.createResponseFromError(error);
+            return this.createResponseFromError(error, logger);
         }
     }
 
@@ -219,8 +218,8 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         }
     }
 
-    private createResponseFromError(error: any): EmbeddingResponse {
-        this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
+    private createResponseFromError(error: any, logger: Logger): EmbeddingResponse {
+        logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
         const response = new EmbeddingResponse();
         const failure = new Failure();
         failure.setReason(`${error}`);

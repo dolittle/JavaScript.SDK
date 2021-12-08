@@ -22,7 +22,7 @@ export class Projections extends IProjections {
 
     /** @inheritdoc */
     register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation: Cancellation = Cancellation.default): void {
-        projectionProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+        projectionProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), this._logger, cancellation).subscribe({
             error: (error: Error) => {
                 this._logger.error(`Failed to register projection: ${error}`);
             },

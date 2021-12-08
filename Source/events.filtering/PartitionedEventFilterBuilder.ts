@@ -35,7 +35,6 @@ export class PartitionedEventFilterBuilder {
      * @param {FiltersClient} client - The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {Logger} logger - Logger for logging.
      * @returns {IFilterProcessor} The built filter processor.
      */
     build(
@@ -43,10 +42,10 @@ export class PartitionedEventFilterBuilder {
         scopeId: ScopeId,
         client: FiltersClient,
         executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger): IFilterProcessor {
+        eventTypes: IEventTypes
+    ): IFilterProcessor {
         this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, eventTypes, logger);
+        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, eventTypes);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {

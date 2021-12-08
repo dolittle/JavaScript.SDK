@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
@@ -38,18 +37,15 @@ export class PublicEventFilterBuilder {
      * @param {FiltersClient} client - The client for working with the filters in the runtime.
      * @param {ExecutionContext} executionContext - Execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IFilterProcessor} The built filter processor.
      */
     build(
         client: FiltersClient,
         executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        results: IClientBuildResults
     ): IFilterProcessor {
-
         this.throwIfCallbackIsMissing(this._filterId);
-        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, eventTypes, results);
+        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, eventTypes);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId) {

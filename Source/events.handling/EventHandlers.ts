@@ -22,7 +22,7 @@ export class EventHandlers extends IEventHandlers {
 
     /** @inheritdoc */
     register(eventHandlerProcessor: EventHandlerProcessor, cancellation = Cancellation.default): void {
-        eventHandlerProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+        eventHandlerProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), this._logger, cancellation).subscribe({
             error: (error: Error) => {
                 this._logger.error(`Failed to register event handler: ${error}`);
             },

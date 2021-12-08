@@ -79,11 +79,6 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
         }
 
         return embeddings.map(embedding =>
-            new EmbeddingProcessor(
-                embedding,
-                client,
-                executionContext,
-                eventTypes,
-                logger));
+            new EmbeddingProcessor(embedding, client, executionContext, eventTypes));
     }
 }

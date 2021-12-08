@@ -74,11 +74,6 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         }
 
         return eventHandlers.map(handler =>
-            new EventHandlerProcessor(
-                handler,
-                client,
-                executionContext,
-                eventTypes,
-                logger));
+            new EventHandlerProcessor(handler, client, executionContext, eventTypes));
     }
 }

@@ -26,15 +26,13 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
      * @param {string} kind - The kind of the filter.
      * @param {FilterId} filterId - The unique identifier of the filter.
      * @param {IEventTypes} _eventTypes - All registered event types.
-     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         kind: string,
         filterId: FilterId,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super(kind, filterId, logger);
+        super(kind, filterId);
     }
 
     /** @inheritdoc */
@@ -48,7 +46,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
     }
 
     /** @inheritdoc */
-    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext): Promise<TResponse> {
+    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');
         }
@@ -84,8 +82,8 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
             event = Object.assign(new eventType(), event);
         }
 
-        return this.filter(event, eventContext);
+        return this.filter(event, eventContext, logger);
     }
 
-    protected abstract filter(event: any, context: EventContext): Promise<TResponse>;
+    protected abstract filter(event: any, context: EventContext, logger: Logger): Promise<TResponse>;
 }

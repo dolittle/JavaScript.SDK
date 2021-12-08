@@ -31,7 +31,6 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
      * @param {FiltersClient} _client - The filters client to use to register the filter.
      * @param {ExecutionContext} _executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
-     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         filterId: FilterId,
@@ -39,10 +38,9 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         private _callback: PartitionedFilterEventCallback,
         private _client: FiltersClient,
         private _executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger
+        eventTypes: IEventTypes
     ) {
-        super('Partitioned Filter', filterId, eventTypes, logger);
+        super('Partitioned Filter', filterId, eventTypes);
     }
 
     /** @inheritdoc */
@@ -58,6 +56,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<PartitionedFilterClientToRuntimeMessage, FilterRuntimeToClientMessage, PartitionedFilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, PartitionedFilterResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connectPartitioned, requests, cancellation),
@@ -76,7 +75,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
             pingTimeout,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -88,7 +87,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
     }
 
     /** @inheritdoc */
-    protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
+    protected async filter(event: any, context: EventContext, logger: Logger): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 
         const response = new PartitionedFilterResponse();

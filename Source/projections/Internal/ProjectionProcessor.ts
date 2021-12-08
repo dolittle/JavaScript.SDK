@@ -41,17 +41,15 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
      * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this projection.
-     * @param {Logger} logger - Logger for logging.
      * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
         private _client: ProjectionsClient,
         private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('Projection', _projection.projectionId, logger);
+        super('Projection', _projection.projectionId);
     }
 
     /** @inheritdoc */
@@ -99,6 +97,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<ProjectionRegistrationResponse> {
         return new ReverseCallClient<ProjectionClientToRuntimeMessage, ProjectionRuntimeToClientMessage, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
@@ -117,7 +116,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
             pingTimeout,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -139,7 +138,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
     }
 
     /** @inheritdoc */
-    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
+    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext, logger: Logger): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');
         }

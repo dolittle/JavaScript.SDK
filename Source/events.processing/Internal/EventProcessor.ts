@@ -22,19 +22,17 @@ import { IEventProcessor } from './IEventProcessor';
  * @template TRequest The type of the event processor requests.
  */
 export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
-
     /**
      * Initialises a new instance of the {@link EventProcessor} class.
      * @param {string} _kind - The kind of the event processor.
      * @param {TIdentifier} _identifier - The identifier of the event processor.
-     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         protected _kind: string,
         protected _identifier: TIdentifier,
-        protected _logger: Logger) {
-            super(_kind, _identifier, _logger);
-        }
+    ) {
+        super(_kind, _identifier);
+    }
 
     /** @inheritdoc */
     protected abstract get registerArguments(): TRegisterArguments;
@@ -44,6 +42,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     /** @inheritdoc */
@@ -62,14 +61,14 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 
     /** @inheritdoc */
-    protected abstract handle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
+    protected abstract handle(request: TRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse>;
 
     /** @inheritdoc */
-    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse> {
+    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext, logger: Logger): Promise<TResponse> {
         let retryProcessingState: RetryProcessingState | undefined;
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
-            return await this.handle(request, executionContext);
+            return await this.handle(request, executionContext, logger);
         } catch (error: any) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
@@ -80,7 +79,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
             retryTimeout.setSeconds(retrySeconds);
             failure.setRetrytimeout(retryTimeout);
 
-            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
+            logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
 
             return this.createResponseFromFailure(failure);
         }

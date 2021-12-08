@@ -24,5 +24,6 @@ export { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomp
 export { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 export { SubscriptionResponse } from './SubscriptionResponse';
 export { SubscriptionsBuilder } from './SubscriptionsBuilder';
+export { SubscriptionsBuilderCallback } from './SubscriptionsBuilderCallback';
 export { SubscriptionsBuilderForConsumerTenant } from './SubscriptionsBuilderForConsumerTenant';
 export { TenantWithSubscriptions } from './TenantWithSubscriptions';

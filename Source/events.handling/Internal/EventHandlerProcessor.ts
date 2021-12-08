@@ -38,16 +38,14 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
      * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
      * @param {EventHandlersClient} _executionContext - Execution context.
      * @param {IEventTypes} _eventTypes - Registered event types.
-     * @param {Logger} logger - Logger for logging.
      */
     constructor(
         private _handler: IEventHandler,
         private _client: EventHandlersClient,
         private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('EventHandler', _handler.eventHandlerId, logger);
+        super('EventHandler', _handler.eventHandlerId);
     }
 
     /** @inheritdoc */
@@ -72,6 +70,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
@@ -90,7 +89,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
             pingTimeout,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -112,7 +111,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     }
 
     /** @inheritdoc */
-    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
+    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext, logger: Logger): Promise<EventHandlerResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }

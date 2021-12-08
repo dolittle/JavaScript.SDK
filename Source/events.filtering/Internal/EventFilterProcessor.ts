@@ -30,7 +30,6 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
      * @param {FiltersClient} _client - The filters client to use to register the filter.
      * @param {ExecutionContext} _executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
-     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         filterId: FilterId,
@@ -39,9 +38,8 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         private _client: FiltersClient,
         private _executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger
     ) {
-        super('Filter', filterId, eventTypes, logger);
+        super('Filter', filterId, eventTypes);
     }
 
     /** @inheritdoc */
@@ -57,6 +55,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
         pingTimeout: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<FilterClientToRuntimeMessage, FilterRuntimeToClientMessage, FilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, FilterResponse> (
             (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
@@ -75,7 +74,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
             pingTimeout,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -87,7 +86,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
     }
 
     /** @inheritdoc */
-    protected async filter(event: any, context: EventContext): Promise<FilterResponse> {
+    protected async filter(event: any, context: EventContext, logger: Logger): Promise<FilterResponse> {
         const shouldInclude = await this._callback(event, context);
 
         const response = new FilterResponse();

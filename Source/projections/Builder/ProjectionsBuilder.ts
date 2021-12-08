@@ -79,11 +79,6 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
         }
 
         return projections.map(projection =>
-            new ProjectionProcessor(
-                projection,
-                client,
-                executionContext,
-                eventTypes,
-                logger));
+            new ProjectionProcessor(projection, client, executionContext, eventTypes));
     }
 }

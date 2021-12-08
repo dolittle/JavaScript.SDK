@@ -22,7 +22,7 @@ export class Filters extends IFilters {
 
     /** @inheritdoc */
     register(filterProcessor: IFilterProcessor, cancellation = Cancellation.default): void {
-        filterProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), cancellation).subscribe({
+        filterProcessor.registerForeverWithPolicy(retryPipe(delay(1000)), this._logger, cancellation).subscribe({
             error: (error: Error) => {
                 this._logger.error(`Failed to register filter: ${error}`);
             },
