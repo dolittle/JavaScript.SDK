@@ -41,7 +41,7 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventHandlerProcessor } from '@dolittle/sdk.events.handling/Internal';
 import { ProjectionProcessor } from '@dolittle/sdk.projections/Internal';
 import { EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
@@ -64,7 +64,7 @@ export class DolittleClient extends IDolittleClient {
 
     /**
      * Initialises a new instance of the {@link DolittleClient} class.
-     * @param {IClientBuildResults} _setupResults - The results from building the client artifacts.
+     * @param {ClientBuildResults} _setupResults - The results from building the client artifacts.
      * @param {IEventTypes} eventTypes - The built event types.
      * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
      * @param {IFilterProcessor[]} _eventFilters - The built event filters.
@@ -76,7 +76,7 @@ export class DolittleClient extends IDolittleClient {
      * @param {SubscriptionCallbacks} _subscriptionCallbacks - The built event horizon subscription callbacks.
      */
     constructor(
-        private readonly _setupResults: IClientBuildResults,
+        private readonly _setupResults: ClientBuildResults,
         readonly eventTypes: IEventTypes,
         private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
         private readonly _eventFilters: IFilterProcessor[],
@@ -183,6 +183,9 @@ export class DolittleClient extends IDolittleClient {
             this._cancellationSource = new CancellationSource();
 
             const logger = configuration.logger;
+
+            this._setupResults.writeTo(logger);
+
             const clients = this.createGrpcClients(configuration.runtimeHost, configuration.runtimePort);
 
             const executionContext = await this.performHandshake(clients.handshake, configuration.version, cancellation);
@@ -203,7 +206,8 @@ export class DolittleClient extends IDolittleClient {
                 clients.eventTypes,
                 clients.aggregateRoots,
                 executionContext,
-                logger);
+                logger,
+                this._cancellationSource.cancellation);
 
             this.startReverseCallClients(
                 clients.filters,
@@ -272,16 +276,14 @@ export class DolittleClient extends IDolittleClient {
         eventTypesClient: EventTypesClient,
         aggregateRootsClient: AggregateRootsClient,
         executionContext: ExecutionContext,
-        logger: Logger
+        logger: Logger,
+        cancellation: Cancellation,
     ) {
-        // TODO: Reimplement
-        // const eventTypes = new InternalEventTypes(
-        //     eventTypesClient,
-        //     executionContext,
-        //     logger);
-        // this._eventTypesBuilder.buildAndRegister(
-        //     eventTypes,
-        //     this._cancellationSource.cancellation);
+        const eventTypes = new InternalEventTypes(
+            eventTypesClient,
+            executionContext,
+            logger);
+        eventTypes.registerAllFrom(this.eventTypes, cancellation);
 
         const aggregateRoots = new InternalAggregateRoots(
             aggregateRootsClient,
@@ -289,7 +291,7 @@ export class DolittleClient extends IDolittleClient {
             logger);
         this._aggregateRootsBuilder.buildAndRegister(
             aggregateRoots,
-            this._cancellationSource.cancellation);
+            cancellation);
     }
 
     private startReverseCallClients(

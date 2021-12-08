@@ -103,8 +103,7 @@ export class SetupBuilder extends ISetupBuilder {
 
         const buildResults = new ClientBuildResults();
 
-        const eventTypes = new EventTypes();
-        this._eventTypesBuilder.addAssociationsInto(eventTypes);
+        const eventTypes = this._eventTypesBuilder.build();
 
         const filters = this._eventFiltersBuilder.build(eventTypes);
         const eventHandlers = this._eventHandlersBuilder.build({} as IContainer, eventTypes, buildResults);

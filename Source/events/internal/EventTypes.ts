@@ -1,13 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
-import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events/EventTypes_pb';
+import { Logger } from 'winston';
+
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { Logger } from 'winston';
-import { EventType } from '../index';
+
+import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
+import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events/EventTypes_pb';
+
+import { IEventTypes, EventType } from '../';
 
 import '@dolittle/sdk.protobuf';
 
@@ -26,13 +29,14 @@ export class EventTypes {
     }
 
     /**
-     * Registers event types.
-     * @param {EventType[]} eventTypes - The event types to register.
+     * Registers all event types from the given {@link IEventTypes}.
+     * @param {IEventTypes} eventTypes - The event types to register.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Promise<void>} A {@link Promise} that represents the asynchronous operation.
      */
-    register(eventTypes: EventType[], cancellation: Cancellation): Promise<void> {
-        return Promise.all(eventTypes.map(eventType => this.sendRequest(eventType, cancellation))) as unknown as Promise<void>;
+    registerAllFrom(eventTypes: IEventTypes, cancellation: Cancellation): Promise<void> {
+        const responses = eventTypes.getAll().map(_ => this.sendRequest(_, cancellation));
+        return Promise.all(responses) as unknown as Promise<void>;
     }
 
     private createRequest(eventType: EventType): EventTypeRegistrationRequest {

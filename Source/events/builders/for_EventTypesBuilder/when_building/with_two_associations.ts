@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypeId, EventTypes } from '../../../index';
+import { EventTypeId } from '../../../index';
 import { EventTypesBuilder } from '../../EventTypesBuilder';
 import { Generation } from '@dolittle/sdk.artifacts';
 
@@ -20,8 +20,7 @@ describeThis(__filename, () => {
     const builder = new EventTypesBuilder();
     builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);
     builder.associate(SecondType, secondTypeIdentifier, secondTypeGeneration);
-    const eventTypes = new EventTypes();
-    builder.addAssociationsInto(eventTypes);
+    const eventTypes = builder.build();
 
     const firstTypeAssociation = eventTypes.getFor(FirstType);
     const secondTypeAssociation = eventTypes.getFor(SecondType);
