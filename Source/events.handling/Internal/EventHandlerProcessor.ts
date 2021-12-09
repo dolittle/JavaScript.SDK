@@ -146,7 +146,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
             event = Object.assign(new typeOfEvent(), event);
         }
 
-        await this._handler.handle(event, eventType, eventContext);
+        await this._handler.handle(event, eventType, eventContext, services, logger);
 
         return new EventHandlerResponse();
     }

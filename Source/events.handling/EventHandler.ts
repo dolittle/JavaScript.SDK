@@ -1,7 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 import { EventContext, EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
+
 import { EventHandlerAlias } from './EventHandlerAlias';
 import { EventHandlerId } from './EventHandlerId';
 import { EventHandlerSignature } from './EventHandlerSignature';
@@ -12,8 +16,8 @@ import { MissingEventHandlerForType } from './MissingEventHandlerForType';
  * Represents an implementation of {@link IEventHandler}.
  */
 export class EventHandler extends IEventHandler {
-
     readonly hasAlias: boolean;
+
     /**
      * Initializes a new instance of {@link EventHandler}.
      * @param {EventHandlerId} eventHandlerId - The unique identifier of the event handler.
@@ -27,7 +31,8 @@ export class EventHandler extends IEventHandler {
         readonly scopeId: ScopeId,
         readonly partitioned: boolean,
         readonly handleMethodsByEventType: EventTypeMap<EventHandlerSignature<any>>,
-        readonly alias: EventHandlerAlias | undefined = undefined) {
+        readonly alias: EventHandlerAlias | undefined = undefined
+    ) {
         super();
         this.hasAlias = alias !== undefined;
     }
@@ -38,10 +43,10 @@ export class EventHandler extends IEventHandler {
     }
 
     /** @inheritdoc */
-    async handle(event: any, eventType: EventType, context: EventContext): Promise<void> {
+    async handle(event: any, eventType: EventType, context: EventContext, services: IServiceProvider, logger: Logger): Promise<void> {
         if (this.handleMethodsByEventType.has(eventType)) {
             const method = this.handleMethodsByEventType.get(eventType)!;
-            await method(event, context);
+            await method(event, context, services, logger);
         } else {
             throw new MissingEventHandlerForType(eventType);
         }

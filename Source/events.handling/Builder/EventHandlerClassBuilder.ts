@@ -5,7 +5,6 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { IContainer } from '@dolittle/sdk.common';
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -18,6 +17,7 @@ import { eventHandler as eventHandlerDecorator } from './eventHandlerDecorator';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { handles as handlesDecorator } from './handlesDecorator';
+import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 
 /**
  * Represents a builder for building event handlers from classes.
@@ -25,7 +25,7 @@ import { handles as handlesDecorator } from './handlesDecorator';
  */
 export class EventHandlerClassBuilder<T> {
     private readonly _eventHandlerType: Constructor<T>;
-    private readonly _getInstance: (container: IContainer, executionContext: ExecutionContext) => T;
+    private readonly _getInstance: (services: IServiceProvider) => Promise<T>;
 
     /**
      * Initialises a new instance of the {@link FailureReason} class.
@@ -34,25 +34,24 @@ export class EventHandlerClassBuilder<T> {
     constructor(typeOrInstance: Constructor<T> | T) {
         if (typeOrInstance instanceof Function) {
             this._eventHandlerType = typeOrInstance;
-            this._getInstance = (container, executionContext) => container.get(typeOrInstance, executionContext);
+            this._getInstance = (services) => services.get(typeOrInstance);
 
         } else {
             this._eventHandlerType = Object.getPrototypeOf(typeOrInstance).constructor;
             if (this._eventHandlerType === undefined) {
                 throw new CannotRegisterEventHandlerThatIsNotAClass(typeOrInstance);
             }
-            this._getInstance = () => typeOrInstance;
+            this._getInstance = () => Promise.resolve(typeOrInstance);
         }
     }
 
     /**
      * Builds the event handler.
-     * @param {IContainer} container - For constructing new instances of classes.
      * @param {IEventTypes} eventTypes - For event types resolution.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventHandler | undefined} The built event handler if successful.
      */
-    build(container: IContainer, eventTypes: IEventTypes, results: IClientBuildResults): IEventHandler | undefined {
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IEventHandler | undefined {
         results.addInformation(`Building event handler of type ${this._eventHandlerType.name}`);
         const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
         if (decoratedType === undefined) {
@@ -66,14 +65,14 @@ export class EventHandlerClassBuilder<T> {
             return;
         }
         const eventTypesToMethods = new EventTypeMap<EventHandlerSignature<any>>();
-        if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, container, results)) {
+        if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, results)) {
             results.addFailure(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
             return;
         }
         return new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
     }
 
-    private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, container: IContainer, results: IClientBuildResults): boolean {
+    private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, results: IClientBuildResults): boolean {
         let allMethodsValid = true;
         for (const method of methods) {
             const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
@@ -84,7 +83,7 @@ export class EventHandlerClassBuilder<T> {
                 continue;
             }
 
-            const eventHandlerMethod = this.createEventHandlerMethod(method, container);
+            const eventHandlerMethod = this.createEventHandlerMethod(method);
 
             if (eventTypesToMethods.has(eventType!)) {
                 allMethodsValid = false;
@@ -96,15 +95,14 @@ export class EventHandlerClassBuilder<T> {
         return allMethodsValid;
     }
 
-    private createEventHandlerMethod(method: HandlesDecoratedMethod, container: IContainer): EventHandlerSignature<any> {
-        return (event, eventContext) => {
-            let instance: T;
+    private createEventHandlerMethod(method: HandlesDecoratedMethod): EventHandlerSignature<any> {
+        return async (event, eventContext, services, logger) => {
             try {
-                instance = this._getInstance(container, eventContext.executionContext);
+                const instance = await this._getInstance(services);
+                return method.method.call(instance, event, eventContext, services, logger);
             } catch (error) {
                 throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, error);
             }
-            return method.method.call(instance, event, eventContext);
         };
     }
 

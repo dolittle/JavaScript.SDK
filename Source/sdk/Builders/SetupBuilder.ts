@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { AggregateRootsBuilder, AggregateRootsBuilderCallback } from '@dolittle/sdk.aggregates';
-import { IContainer } from '@dolittle/sdk.common';
 import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
@@ -106,7 +105,7 @@ export class SetupBuilder extends ISetupBuilder {
         const eventTypes = this._eventTypesBuilder.build();
 
         const filters = this._eventFiltersBuilder.build(eventTypes);
-        const eventHandlers = this._eventHandlersBuilder.build({} as IContainer, eventTypes, buildResults);
+        const eventHandlers = this._eventHandlersBuilder.build(eventTypes, buildResults);
         const projections = this._projectionsBuilder.build(eventTypes, buildResults);
         const embeddings = this._embeddingsBuilder.build(eventTypes, buildResults);
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
