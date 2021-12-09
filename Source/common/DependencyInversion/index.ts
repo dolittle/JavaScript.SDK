@@ -4,3 +4,5 @@
 export { IServiceProvider } from './IServiceProvider';
 export { ITenantServiceProviders } from './ITenantServiceProviders';
 export { ServiceIdentifier } from './ServiceIdentifier';
+export { ServiceProvider } from './ServiceProvider';
+export { TenantServiceProviders } from './TenantServiceProviders';

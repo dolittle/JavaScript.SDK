@@ -20,16 +20,17 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 
 import { AggregateRootsBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
 import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
-import { IContainer } from '@dolittle/sdk.common';
-import { EmbeddingsBuilder, Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
-import { Embeddings as InternalEmbeddings } from '@dolittle/sdk.embeddings/Internal';
-import { EventHorizons, IEventHorizons, SubscriptionCallbacks, SubscriptionsBuilder, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
-import { EventStoreBuilder, EventTypes, EventTypesBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
+import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
+import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
+import { Embeddings as InternalEmbeddings, EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
+import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
+import { EventStoreBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
 import { EventTypes as InternalEventTypes } from '@dolittle/sdk.events/internal';
-import { EventFiltersBuilder, Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
-import { EventHandlers, EventHandlersBuilder } from '@dolittle/sdk.events.handling';
+import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
+import { EventHandlers } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionsBuilder, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
 import { Tenant } from '@dolittle/sdk.tenancy';
@@ -41,11 +42,8 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventHandlerProcessor } from '@dolittle/sdk.events.handling/Internal';
 import { ProjectionProcessor } from '@dolittle/sdk.projections/Internal';
-import { EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
-import { ITenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -202,6 +200,8 @@ export class DolittleClient extends IDolittleClient {
                 executionContext,
                 logger);
 
+            const services = this.buildTenantServiceProviders();
+
             this.registerTypes(
                 clients.eventTypes,
                 clients.aggregateRoots,
@@ -216,8 +216,10 @@ export class DolittleClient extends IDolittleClient {
                 clients.embeddings,
                 clients.eventHorizons,
                 executionContext,
+                services,
                 logger,
                 this._cancellationSource.cancellation);
+
         } catch (exception) {
             this._connected = false;
             throw exception;
@@ -270,6 +272,11 @@ export class DolittleClient extends IDolittleClient {
             resourcesClient,
             executionContext,
             logger);
+    }
+
+    private buildTenantServiceProviders(): ITenantServiceProviders {
+        //TODO: Implement for real
+        return new TenantServiceProviders();
     }
 
     private registerTypes(
