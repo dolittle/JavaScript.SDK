@@ -43,6 +43,21 @@
                 "<node_internals>/**",
                 "node_modules/**"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug 'events' Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "cwd": "${workspaceFolder}/Source/events",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/Source/events/**/for_*/**/*.ts",
+            ],
         }
     ]
 }
