@@ -45,7 +45,6 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/rudiments": "5.0.1",
         "@dolittle/runtime.contracts": "6.4.0-gimli.2",
         "@dolittle/sdk.aggregates": "21.0.0-gimli.4",
         "@dolittle/sdk.artifacts": "21.0.0-gimli.4",
@@ -53,8 +52,8 @@
         "@dolittle/sdk.embeddings": "21.0.0-gimli.4",
         "@dolittle/sdk.eventhorizon": "21.0.0-gimli.4",
         "@dolittle/sdk.events": "21.0.0-gimli.4",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.4",
         "@dolittle/sdk.events.filtering": "21.0.0-gimli.4",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.4",
         "@dolittle/sdk.events.processing": "21.0.0-gimli.4",
         "@dolittle/sdk.execution": "21.0.0-gimli.4",
         "@dolittle/sdk.projections": "21.0.0-gimli.4",
