@@ -1,15 +1,15 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventTypeId } from '../../../index';
-import { EventTypesBuilder } from '../../EventTypesBuilder';
+import { describeThis } from '@dolittle/typescript.testing';
+
 import { Generation } from '@dolittle/sdk.artifacts';
+import { EventTypeId } from '../../..';
+import { EventTypesBuilder } from '../../EventTypesBuilder';
 
 class FirstType {}
 
 class SecondType {}
-
-import { describeThis } from '@dolittle/typescript.testing';
 
 describeThis(__filename, () => {
     const firstTypeIdentifier = EventTypeId.from('21ef6f8d-4871-48b0-9567-4d576b6a12da');
