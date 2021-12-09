@@ -21,7 +21,7 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
 import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
 import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
-import { ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
+import { IServiceProvider, ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
 import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
 import { Embeddings as InternalEmbeddings, EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
@@ -195,6 +195,7 @@ export class DolittleClient extends IDolittleClient {
 
             const tenants = new Tenants(clients.tenants, executionContext, logger);
             this._tenants = await tenants.getAll();
+            const tenantIds = this._tenants.map(_ => _.id);
 
             this.buildClientServices(
                 clients.eventStore,
@@ -205,7 +206,7 @@ export class DolittleClient extends IDolittleClient {
                 executionContext,
                 logger);
 
-            const services = this.buildTenantServiceProviders();
+            const services = this.buildTenantServiceProviders(tenantIds);
 
             this.registerTypes(
                 clients.eventTypes,
@@ -282,9 +283,10 @@ export class DolittleClient extends IDolittleClient {
             logger);
     }
 
-    private buildTenantServiceProviders(): ITenantServiceProviders {
+    private buildTenantServiceProviders(tenants: TenantId[]): ITenantServiceProviders {
         //TODO: Implement for real
-        return new TenantServiceProviders();
+        const base = {} as IServiceProvider;
+        return new TenantServiceProviders(base, tenants);
     }
 
     private registerTypes(

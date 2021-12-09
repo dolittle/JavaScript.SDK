@@ -8,8 +8,15 @@ import { ServiceIdentifier } from './ServiceIdentifier';
  */
 export abstract class IServiceProvider {
     /**
+     * Checks if the provided identifier is bound to a service.
+     * @param {ServiceIdentifier<any>} service - The identifier of the service to check.
+     * @returns {boolean} True if the identifier is bound, false if not.
+     */
+    abstract has(service: ServiceIdentifier<any>): boolean;
+
+    /**
      * Gets the service bound to the provided identifier.
-     * @param {ServiceIdentifier} service - The identifier of the service to get.
+     * @param {ServiceIdentifier<T>} service - The identifier of the service to get.
      * @returns {T} The service.
      * @throws An error if no service is bound to the provided identifier.
      * @template T The Service identifier type.
@@ -18,7 +25,7 @@ export abstract class IServiceProvider {
 
     /**
      * Gets the service bound to the provided identifier.
-     * @param {ServiceIdentifier} service - The identifier of the service to get.
+     * @param {ServiceIdentifier<T>} service - The identifier of the service to get.
      * @returns {Promise<T>} A promise that when resolved returns the service.
      * @throws An error if no service is bound to the provided identifier.
      * @template T The service identifier type.
@@ -27,7 +34,7 @@ export abstract class IServiceProvider {
 
     /**
      * Gets all services bound to the provided identifier.
-     * @param {ServiceIdentifier} service - The identifier of the service to get.
+     * @param {ServiceIdentifier<T>} service - The identifier of the service to get.
      * @returns {T[]} The services.
      * @template T The service identifier type.
      */
@@ -35,7 +42,7 @@ export abstract class IServiceProvider {
 
     /**
      * Gets all services bound to the provided identifier.
-     * @param {ServiceIdentifier} service - The identifier of the service to get.
+     * @param {ServiceIdentifier<T>} service - The identifier of the service to get.
      * @returns {Promise<T[]>} A promise that when resolved returns the services.
      * @template T The service identifier type.
      */
