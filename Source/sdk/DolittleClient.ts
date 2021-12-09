@@ -156,6 +156,12 @@ export class DolittleClient extends IDolittleClient {
         return this;
     }
 
+    /** @inheritdoc */
+    async disconnect(cancellation?: Cancellation): Promise<void> {
+        this._cancellationSource?.cancel();
+        // TODO: Wait for processors to complete.
+    }
+
     /**
      * Setup a new {@link IDolittleClient}.
      * @param {SetupCallback} [callback] - The optional callback to use to setup the new client.
