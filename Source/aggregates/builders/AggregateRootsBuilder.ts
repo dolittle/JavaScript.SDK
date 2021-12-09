@@ -8,11 +8,6 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { AggregateRootTypesFromDecorators, AggregateRootTypes, internal } from '..';
 
 /**
- * Defines the callback for registering aggregate roots.
- */
-export type AggregateRootsBuilderCallback = (builder: AggregateRootsBuilder) => void;
-
-/**
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
  */
 export class AggregateRootsBuilder {

@@ -1,9 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Version } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';
-import { IDolittleClient } from '../';
+import { Version } from '@dolittle/sdk.execution';
 
 /**
  * Represents the configuration used to connect a {@link IDolittleClient}.

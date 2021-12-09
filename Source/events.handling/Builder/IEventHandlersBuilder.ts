@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventHandlerId } from '../';
+import { EventHandlerId } from '..';
 
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 

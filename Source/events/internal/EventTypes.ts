@@ -10,7 +10,7 @@ import { reactiveUnary } from '@dolittle/sdk.services';
 import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
 import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events/EventTypes_pb';
 
-import { IEventTypes, EventType } from '../';
+import { IEventTypes, EventType } from '..';
 
 import '@dolittle/sdk.protobuf';
 

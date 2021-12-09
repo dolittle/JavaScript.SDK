@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { IProjection, IProjectionAssociations, ProjectionId } from '../';
+import { IProjection, IProjectionAssociations, ProjectionId } from '..';
 import { IProjectionBuilder } from './IProjectionBuilder';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';

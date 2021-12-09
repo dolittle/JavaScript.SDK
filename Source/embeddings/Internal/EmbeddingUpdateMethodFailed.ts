@@ -3,7 +3,7 @@
 
 import { Exception } from '@dolittle/rudiments';
 
-import { EmbeddingContext, EmbeddingId } from '../';
+import { EmbeddingContext, EmbeddingId } from '..';
 
 /**
  * Exception that gets thrown when calling update on an embedding fails.

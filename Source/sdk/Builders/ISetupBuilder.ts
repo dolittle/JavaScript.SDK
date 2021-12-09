@@ -9,8 +9,6 @@ import { EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
 
-import { IDolittleClient } from '../';
-
 /**
  * Defines a builder for setting up a {@link IDolittleClient}.
  */

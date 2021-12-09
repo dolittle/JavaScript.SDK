@@ -8,7 +8,7 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { IProjection, KeySelector, Projection, ProjectionCallback, ProjectionId } from '../';
+import { IProjection, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';

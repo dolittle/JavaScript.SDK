@@ -10,7 +10,7 @@ import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { Tenant, ITenants, FailedToGetAllTenants } from '../';
+import { Tenant, ITenants, FailedToGetAllTenants } from '..';
 
 import '@dolittle/sdk.protobuf';
 

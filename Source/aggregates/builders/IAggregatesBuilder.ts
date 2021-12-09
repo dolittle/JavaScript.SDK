@@ -3,7 +3,7 @@
 
 import { TenantId } from '@dolittle/sdk.execution';
 
-import { IAggregates } from '../';
+import { IAggregates } from './IAggregates';
 
 /**
  * Defines a builder for tenants.

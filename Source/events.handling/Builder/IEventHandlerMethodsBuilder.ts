@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId } from '@dolittle/sdk.events';
 
-import { EventHandlerSignature } from '../';
+import { EventHandlerSignature } from '..';
 
 /**
  * Defines a builder for building event handler methods from callbacks.

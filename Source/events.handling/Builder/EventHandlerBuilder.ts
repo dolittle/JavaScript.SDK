@@ -6,7 +6,7 @@ import { Guid } from '@dolittle/rudiments';
 import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandler } from '../';
+import { EventHandler, EventHandlerAlias, EventHandlerAliasLike, EventHandlerId, EventHandlerSignature, IEventHandler } from '..';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 import { IEventHandlerBuilder } from './IEventHandlerBuilder';
 import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';

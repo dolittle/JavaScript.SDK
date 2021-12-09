@@ -8,7 +8,7 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IContainer } from '@dolittle/sdk.common';
 
-import { EventHandlerId, IEventHandler } from '../';
+import { EventHandlerId, IEventHandler } from '..';
 import { EventHandlerProcessor } from '../Internal';
 import { EventHandlerBuilder } from './EventHandlerBuilder';
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';

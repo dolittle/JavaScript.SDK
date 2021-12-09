@@ -8,7 +8,7 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
-import { EventHandlerId, EventHandlerSignature } from '../';
+import { EventHandlerId, EventHandlerSignature } from '..';
 import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 
 type TypeOrEventType = Constructor<any> | EventType;

@@ -18,7 +18,7 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
+import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
 import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
 import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
@@ -53,7 +53,7 @@ export class DolittleClient extends IDolittleClient {
     private _connected: boolean = false;
 
     private _eventStore?: EventStoreBuilder;
-    // TODO: Aggregates
+    private _aggregates?: AggregatesBuilder;
     private _projectionStore?: ProjectionStoreBuilder;
     private _embeddingStore?: Embeddings;
     private _tenants: Tenant[] = [];
@@ -100,8 +100,7 @@ export class DolittleClient extends IDolittleClient {
 
     /** @inheritdoc */
     get aggregates(): IAggregatesBuilder {
-        // return this.assertConnectedAndDefined(this._aggregates);
-        throw new Error('Method not implemented');
+        return this.throwIfNotConnectedOrUndefined(this._aggregates, 'aggregates');
     }
 
     /** @inheritdoc */
@@ -259,7 +258,10 @@ export class DolittleClient extends IDolittleClient {
             executionContext,
             logger);
 
-        // TODO: Aggregates
+        this._aggregates = new AggregatesBuilder(
+            this._eventStore,
+            this.eventTypes,
+            logger);
 
         this._projectionStore = new ProjectionStoreBuilder(
             projectionStoreClient,

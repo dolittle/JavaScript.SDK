@@ -10,7 +10,7 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { EventHandler, EventHandlerSignature, IEventHandler } from '../';
+import { EventHandler, EventHandlerSignature, IEventHandler } from '..';
 import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
