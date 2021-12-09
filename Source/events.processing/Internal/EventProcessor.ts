@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import grpc from '@grpc/grpc-js';
+import * as grpc from '@grpc/grpc-js';
 import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';

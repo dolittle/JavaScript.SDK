@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import grpc from '@grpc/grpc-js';
+import * as grpc from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import { repeat } from 'rxjs/operators';
 import { Logger } from 'winston';
