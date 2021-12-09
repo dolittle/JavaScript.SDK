@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId } from '../index';
+
+import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId } from '..';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
 import { CommitForAggregateBuilder } from './builders';

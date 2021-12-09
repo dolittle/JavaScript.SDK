@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TenantIdLike } from '@dolittle/sdk.execution';
-import { IEventStore } from '../index';
+
+import { IEventStore } from '..';
 
 /**
  * Defines a builder for {@link IEventStore}.

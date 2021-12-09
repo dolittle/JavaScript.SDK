@@ -1,11 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Db, DbOptions } from 'mongodb';
 
-import { Resource } from '../index';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
+import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
+
+import { Resource } from '..';
 
 /**
  * Represents the callback for configuring {@link DbOptions}.

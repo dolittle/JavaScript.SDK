@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
-import { IEventStore } from '../index';
-import { AggregateRootId, EventSourceId, IEventTypes } from '../../index';
+
+import { AggregateRootId, EventSourceId, IEventTypes } from '../..';
+import { IEventStore } from '..';
 import { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCalled';
 import { CommitForAggregateWithEventSourceBuilder } from './CommitForAggregateWithEventSourceBuilder';
 

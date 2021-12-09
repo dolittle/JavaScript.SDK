@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { AggregateRootTypesFromDecorators, internal } from '../index';
-import { AggregateRootTypes } from '../AggregateRootTypes';
+
 import { Cancellation } from '@dolittle/sdk.resilience';
+
+import { AggregateRootTypesFromDecorators, AggregateRootTypes, internal } from '..';
 
 /**
  * Defines the callback for registering aggregate roots.

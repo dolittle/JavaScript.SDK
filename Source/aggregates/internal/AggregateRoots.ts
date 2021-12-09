@@ -1,13 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootAliasRegistrationRequest } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_pb';
-import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+import { Logger } from 'winston';
+
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { Logger } from 'winston';
-import { AggregateRootType, IAggregateRootTypes } from '../index';
+
+import { AggregateRootAliasRegistrationRequest } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_pb';
+import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+
+import { AggregateRootType, IAggregateRootTypes } from '..';
 
 import '@dolittle/sdk.protobuf';
 

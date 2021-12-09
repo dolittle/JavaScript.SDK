@@ -1,10 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId } from '../index';
+import { Guid } from '@dolittle/rudiments';
+
+import { AggregateRootId, AggregateRootVersion, EventSourceId } from '..';
 import { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
-import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents a sequence of {@link UncommittedAggregateEvent}s that have not been committed to the Event Store.

@@ -3,16 +3,11 @@
 
 import { DateTime } from 'luxon';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
-import {
-    CommittedEvent as PbCommittedEvent,
-    CommittedAggregateEvents as PbCommittedAggregateEvents
-} from '@dolittle/runtime.contracts/Events/Committed_pb';
-import {
-    UncommittedEvent as PbUncommittedEvent,
-    UncommittedAggregateEvents as PbUncommittedAggregateEvents
-} from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 
-import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '../index';
+import { CommittedEvent as PbCommittedEvent, CommittedAggregateEvents as PbCommittedAggregateEvents} from '@dolittle/runtime.contracts/Events/Committed_pb';
+import { UncommittedEvent as PbUncommittedEvent, UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+
+import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '..';
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
 import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
 import { MissingExecutionContext } from './MissingExecutionContext';

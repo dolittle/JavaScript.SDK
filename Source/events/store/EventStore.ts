@@ -1,24 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
-import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
-import {
-    CommitAggregateEventsRequest,
-    CommitEventsRequest,
-    FetchForAggregateRequest
-} from '@dolittle/runtime.contracts/Events/EventStore_pb';
-import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
+
+import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
+import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { CommitAggregateEventsRequest, CommitEventsRequest, FetchForAggregateRequest } from '@dolittle/runtime.contracts/Events/EventStore_pb';
+import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+
+import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId, IEventTypes } from '..';
 import { CommitForAggregateBuilder } from './builders';
-import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId, IEventTypes } from '../index';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';

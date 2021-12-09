@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventLogSequenceNumber } from '../index';
+import { EventLogSequenceNumber } from '..';
 
 /**
  * Exception that gets thrown when a sequence of events are not valid for the Aggregate Root it is being used with.

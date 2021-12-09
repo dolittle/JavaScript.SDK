@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
-import { AggregateRootId, AggregateRootVersion, EventSourceId, IEventTypes } from '../../index';
-import { CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, UncommittedAggregateEvents } from '../index';
+
+import { AggregateRootId, AggregateRootVersion, EventSourceId, IEventTypes } from '../..';
+import { CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, UncommittedAggregateEvents } from '..';
 
 /**
  * Represents the builder for an aggregate event commit.

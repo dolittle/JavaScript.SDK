@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId } from '../index';
+import { AggregateRootId, AggregateRootVersion, EventSourceId } from '..';
 import { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
 import { CommittedEvent } from './CommittedEvent';

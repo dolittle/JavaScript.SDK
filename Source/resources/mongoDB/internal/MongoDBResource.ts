@@ -1,16 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { UnaryMethod } from '@dolittle/sdk.services';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Db, MongoClient, DbOptions } from 'mongodb';
 import { Logger } from 'winston';
 
-import { IMongoDBResource, DatabaseSettingsCallback } from '../index';
-import { ResourceName } from '../../index';
+import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { UnaryMethod } from '@dolittle/sdk.services';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
+import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
+
+import { ResourceName } from '../..';
+import { IMongoDBResource, DatabaseSettingsCallback } from '..';
 
 /**
  * Represents a client for Resources and an implementation of {@link IMongoDBResource}.

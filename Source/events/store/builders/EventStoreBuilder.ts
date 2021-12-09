@@ -1,13 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExecutionContext, TenantId, TenantIdLike } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { IEventTypes } from '../../index';
-import { IEventStore, EventStore } from '../index';
+
+import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
+
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
-import { IEventStoreBuilder } from '.';
+
+import { IEventTypes } from '../..';
+import { IEventStore, EventStore } from '..';
+import { IEventStoreBuilder } from './IEventStoreBuilder';
 
 /**
  * Represents an implementation of {@link IEventStoreBuilder}.

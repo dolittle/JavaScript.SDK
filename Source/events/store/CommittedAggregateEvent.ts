@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
+
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '../index';
+
+import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '..';
 import { CommittedEvent } from './CommittedEvent';
 
 /**

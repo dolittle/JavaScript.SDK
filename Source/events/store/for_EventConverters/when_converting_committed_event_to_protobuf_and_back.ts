@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
-import { Generation } from '@dolittle/sdk.artifacts';
+
 import { Claim, Claims, ExecutionContext, Version, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
-import { EventLogSequenceNumber, EventSourceId, EventType, EventTypeId } from '../../index';
-import { CommittedEvent } from '../CommittedEvent';
-import { EventConverters } from '../EventConverters';
+
+import { EventLogSequenceNumber, EventSourceId, EventType } from '../..';
+import { CommittedEvent, EventConverters } from '..';
 
 import { describeThis } from '@dolittle/typescript.testing';
 
