@@ -3,7 +3,8 @@
 
 import { Container } from 'inversify';
 
-import { IServiceProvider, ServiceIdentifier } from '../..';
+import { IServiceProvider } from '../../IServiceProvider';
+import { ServiceIdentifier } from '../../ServiceIdentifier';
 
 /**
  * Represents an implementation of {@link IServiceProvider} that uses InversifyJS as it's underlying implementation.

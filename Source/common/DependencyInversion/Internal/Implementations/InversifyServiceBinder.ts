@@ -5,7 +5,12 @@ import { Container, interfaces } from 'inversify';
 
 import { Constructor } from '@dolittle/types';
 
-import { AsyncServiceFactory, IBindServiceScope, IBindServiceTo, IServiceBinder, ServiceFactory, ServiceIdentifier } from '../..';
+import { AsyncServiceFactory } from '../../AsyncServiceFactory';
+import { IBindServiceScope } from '../../IBindServiceScope';
+import { IBindServiceTo } from '../../IBindServiceTo';
+import { IServiceBinder } from '../../IServiceBinder';
+import { ServiceFactory } from '../../ServiceFactory';
+import { ServiceIdentifier } from '../../ServiceIdentifier';
 import { InversifyServiceProvider } from './InversifyServiceProvider';
 
 /**
