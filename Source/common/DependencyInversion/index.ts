@@ -5,6 +5,7 @@ export { AsyncServiceFactory } from './AsyncServiceFactory';
 export { DefaultServiceProvider } from './DefaultServiceProvider';
 export { IBindServiceScope } from './IBindServiceScope';
 export { IBindServiceTo } from './IBindServiceTo';
+export { inject } from './injectDecorator';
 export { IServiceBinder } from './IServiceBinder';
 export { IServiceProvider } from './IServiceProvider';
 export { IServiceProviderBuilder } from './IServiceProviderBuilder';

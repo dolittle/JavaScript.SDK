@@ -11,6 +11,8 @@ import { IServiceProvider } from './IServiceProvider';
 import { ITenantServiceProviders } from './ITenantServiceProviders';
 import { TenantServiceProviderNotConfigured } from './TenantServiceProviderNotConfigured';
 import { IServiceProviderBuilder } from '.';
+import { MetadataReader } from './Internal/MetadataReader';
+import { applyToContainerAndCreatedChildren } from './Internal/Extensions/applyToContainerAndCreatedChildren';
 
 /**
  * Represents an implementation of {@link ITenantServiceProviders}.
@@ -38,6 +40,11 @@ export class TenantServiceProviders extends ITenantServiceProviders {
             this._rootContainer = new Container();
             applyDynamicResolver(this._rootContainer, new DelegatingResolver(baseServiceProvider));
         }
+
+        const metadataReader = new MetadataReader();
+        applyToContainerAndCreatedChildren(this._rootContainer, (container) => {
+            container.applyCustomMetadataReader(metadataReader);
+        });
 
         const binder = new InversifyServiceBinder(this._rootContainer);
         bindings.bindAllServices(binder);

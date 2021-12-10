@@ -15,7 +15,8 @@
         "@dolittle/sdk": "21.0.0-gimli.4",
         "@dolittle/sdk.artifacts": "21.0.0-gimli.4",
         "@dolittle/sdk.events": "21.0.0-gimli.4",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.4"
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.4",
+        "winston": "3.3.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",

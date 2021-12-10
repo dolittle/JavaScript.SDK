@@ -13,4 +13,5 @@ export {
     IServiceProvider,
     IServiceProviderBuilder,
     ITenantServiceProviders,
+    inject,
 } from './DependencyInversion';

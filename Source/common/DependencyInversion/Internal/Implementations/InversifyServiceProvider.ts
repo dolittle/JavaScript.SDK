@@ -6,6 +6,39 @@ import { Container } from 'inversify';
 import { IServiceProvider } from '../../IServiceProvider';
 import { ServiceIdentifier } from '../../ServiceIdentifier';
 
+type MethodNameAndImplementation = [string, any];
+
+const nullReflectMetadataMethods: MethodNameAndImplementation[] = [
+    ['defineMetadata', () => {}],
+    ['hasMetadata', () => false],
+    ['hasOwnMetadata', () => false],
+    ['getMetadata', () => undefined],
+    ['getOwnMetadata', () => undefined],
+    ['getMetadataKeys', () => []],
+    ['getOwnMetadataKeys', () => []],
+    ['deleteMetadata', () => false],
+];
+
+const withNullReflectMetadataMethods = <T>(callback: () => T): T => {
+    const reflect = Reflect as any;
+    const overridden: MethodNameAndImplementation[] = [];
+
+    for (const [methodName, nullImplementation] of nullReflectMetadataMethods) {
+        if (typeof reflect[methodName] !== 'function') {
+            overridden.push([methodName, reflect[methodName]]);
+            reflect[methodName] = nullImplementation;
+        }
+    }
+
+    const result = callback();
+
+    for (const [methodName, originalImplementation] of overridden) {
+        reflect[methodName] = originalImplementation;
+    }
+
+    return result;
+};
+
 /**
  * Represents an implementation of {@link IServiceProvider} that uses InversifyJS as it's underlying implementation.
  */
@@ -20,26 +53,36 @@ export class InversifyServiceProvider extends IServiceProvider {
 
     /** @inheritdoc */
     has(service: ServiceIdentifier<any>): boolean {
-        return this.container.isBound(service);
+        return withNullReflectMetadataMethods(() => {
+            return this.container.isBound(service);
+        });
     }
 
     /** @inheritdoc */
     get<T>(service: ServiceIdentifier<T>): T {
-        return this.container.get<T>(service);
+        return withNullReflectMetadataMethods(() => {
+            return this.container.get<T>(service);
+        });
     }
 
     /** @inheritdoc */
     getAsync<T>(service: ServiceIdentifier<T>): Promise<T> {
-        return this.container.getAsync<T>(service);
+        return withNullReflectMetadataMethods(() => {
+            return this.container.getAsync<T>(service);
+        });
     }
 
     /** @inheritdoc */
     getAll<T>(service: ServiceIdentifier<T>): T[] {
-        return this.container.getAll<T>(service);
+        return withNullReflectMetadataMethods(() => {
+            return this.container.getAll<T>(service);
+        });
     }
 
     /** @inheritdoc */
     getAllAsync<T>(service: ServiceIdentifier<T>): Promise<T[]> {
-        return this.container.getAllAsync<T>(service);
+        return withNullReflectMetadataMethods(() => {
+            return this.container.getAllAsync<T>(service);
+        });
     }
 }

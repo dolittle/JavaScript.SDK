@@ -52,6 +52,7 @@
             "cwd": "${workspaceFolder}/Samples/Tutorials/GettingStarted",
             "preLaunchTask": "tsc: build - Samples/Tutorials/GettingStarted/tsconfig.json",
             "outputCapture": "std",
+            "internalConsoleOptions": "openOnSessionStart",
             "outFiles": [
                 "${workspaceFolder}/Samples/Tutorials/GettingStarted/Distribution/**/*.js",
                 "${workspaceFolder}/Source/*/Distribution/**/*.js",

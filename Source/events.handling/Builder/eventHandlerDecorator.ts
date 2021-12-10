@@ -5,10 +5,10 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerAlias, EventHandlerId } from '..';
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-import { EventHandlerOptions } from './EventHandlerOptions';
+import { EventHandlerAlias, EventHandlerId } from '..';
+import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
+import { EventHandlerOptions } from './EventHandlerOptions';
 import { Constructor } from '@dolittle/types';
 
 /**
@@ -17,7 +17,7 @@ import { Constructor } from '@dolittle/types';
  * @param {EventHandlerOptions} [options={}] - Options to give to the EventHandler.
  * @returns {(any) => void} The decorator to apply.
  */
-export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}) {
+export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}) {
     return function (target: any) {
         const targetConstructor = target as Constructor<any>;
         EventHandlerDecoratedTypes.register(new EventHandlerDecoratedType(

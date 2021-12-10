@@ -4,18 +4,8 @@
 import { Container, interfaces } from 'inversify';
 import { getBindingDictionary } from 'inversify/lib/planning/planner';
 
+import { applyToContainerAndCreatedChildren } from './applyToContainerAndCreatedChildren';
 import { IDynamicResolver } from './IDynamicResolver';
-
-const applyMiddlewareToContainerAndChildren = (container: Container, middleware: interfaces.Middleware) => {
-    container.applyMiddleware(middleware);
-
-    const originalCreateChild = container.createChild;
-    container.createChild = function (containerOptions?: interfaces.ContainerOptions): Container {
-        const childContainer = originalCreateChild.call(this, containerOptions);
-        applyMiddlewareToContainerAndChildren(childContainer, middleware);
-        return childContainer;
-    };
-};
 
 /**
  * Applies a dynamic resolver to be invoked to add bindings to the container when a service is resolved but not bound already.
@@ -50,5 +40,7 @@ export const applyDynamicResolver = (container: Container, resolver: IDynamicRes
         return next(args);
     };
 
-    applyMiddlewareToContainerAndChildren(container, planningTrackerMiddleware);
+    applyToContainerAndCreatedChildren(container, (container) => {
+        container.applyMiddleware(planningTrackerMiddleware);
+    });
 };

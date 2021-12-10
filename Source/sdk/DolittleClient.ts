@@ -20,19 +20,16 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 
 import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
-import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
-import { Embeddings as InternalEmbeddings, EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
+import { Embeddings, IEmbeddings, internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
-import { EventStoreBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
-import { EventTypes as InternalEventTypes } from '@dolittle/sdk.events/internal';
+import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
-import { EventHandlers } from '@dolittle/sdk.events.handling';
+import { EventHandlers, internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
+import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, internal as ProjectionsInternal } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
-import { Tenant } from '@dolittle/sdk.tenancy';
-import { Tenants } from '@dolittle/sdk.tenancy/internal';
+import { Tenant, internal as TenancyInternal } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder, ConnectCallback, SetupBuilder, SetupCallback } from './Builders/';
 import { ConnectConfiguration } from './Internal';
@@ -40,8 +37,6 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { EventHandlerProcessor } from '@dolittle/sdk.events.handling/Internal';
-import { ProjectionProcessor } from '@dolittle/sdk.projections/Internal';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -65,10 +60,10 @@ export class DolittleClient extends IDolittleClient {
      * @param {IEventTypes} eventTypes - The built event types.
      * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
      * @param {IFilterProcessor[]} _eventFilters - The built event filters.
-     * @param {EventHandlerProcessor[]} _eventHandlers - The built event handlers.
+     * @param {EventsHandlingInternal.EventHandlerProcessor[]} _eventHandlers - The built event handlers.
      * @param {ProjectionAssociations} _projectionsAssociations - The {@link ProjectionAssociations}.
-     * @param {ProjectionProcessor<any>[]} _projections - The built projections.
-     * @param {EmbeddingProcessor<any>[]} _embeddings - The built embeddings.
+     * @param {ProjectionsInternal.ProjectionProcessor<any>[]} _projections - The built projections.
+     * @param {EmbeddingsInternal.EmbeddingProcessor<any>[]} _embeddings - The built embeddings.
      * @param {TenantWithSubscriptions[]} _subscriptions - The built event horizon subscriptions.
      * @param {SubscriptionCallbacks} _subscriptionCallbacks - The built event horizon subscription callbacks.
      */
@@ -78,10 +73,10 @@ export class DolittleClient extends IDolittleClient {
         readonly eventTypes: IEventTypes,
         private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
         private readonly _eventFilters: IFilterProcessor[],
-        private readonly _eventHandlers: EventHandlerProcessor[],
+        private readonly _eventHandlers: EventsHandlingInternal.EventHandlerProcessor[],
         private readonly _projectionsAssociations: ProjectionAssociations,
-        private readonly _projections: ProjectionProcessor<any>[],
-        private readonly _embeddings: EmbeddingProcessor<any>[],
+        private readonly _projections: ProjectionsInternal.ProjectionProcessor<any>[],
+        private readonly _embeddings: EmbeddingsInternal.EmbeddingProcessor<any>[],
         private readonly _subscriptions: TenantWithSubscriptions[],
         private readonly _subscriptionCallbacks: SubscriptionCallbacks,
         ) {
@@ -186,6 +181,7 @@ export class DolittleClient extends IDolittleClient {
             this._cancellationSource = new CancellationSource();
 
             const logger = configuration.logger;
+            this._serviceProviderBuilder.addServices(bindings => bindings.bind('logger').toInstance(logger));
 
             this._setupResults.writeTo(logger);
 
@@ -193,7 +189,7 @@ export class DolittleClient extends IDolittleClient {
 
             const executionContext = await this.performHandshake(clients.handshake, configuration.version, cancellation);
 
-            const tenants = new Tenants(clients.tenants, executionContext, logger);
+            const tenants = new TenancyInternal.Tenants(clients.tenants, executionContext, logger);
             this._tenants = await tenants.getAll();
             const tenantIds = this._tenants.map(_ => _.id);
 
@@ -258,6 +254,8 @@ export class DolittleClient extends IDolittleClient {
             this.eventTypes,
             executionContext,
             logger);
+        // TODO: Clean up these bindings.
+        this._serviceProviderBuilder.addTenantServices((binder, tenant) => binder.bind(IEventStore).toFactory(() => this._eventStore!.forTenant(tenant)));
 
         this._aggregates = new AggregatesBuilder(
             this._eventStore,
@@ -296,7 +294,7 @@ export class DolittleClient extends IDolittleClient {
         logger: Logger,
         cancellation: Cancellation,
     ) {
-        const eventTypes = new InternalEventTypes(
+        const eventTypes = new EventTypesInternal.EventTypes(
             eventTypesClient,
             executionContext,
             logger);
@@ -337,7 +335,7 @@ export class DolittleClient extends IDolittleClient {
             projections.register(projection, cancellation);
         }
 
-        const embeddings = new InternalEmbeddings(embeddingsClient, executionContext, services, logger);
+        const embeddings = new EmbeddingsInternal.Embeddings(embeddingsClient, executionContext, services, logger);
         for (const embedding of this._embeddings) {
             embeddings.register(embedding, cancellation);
         }
