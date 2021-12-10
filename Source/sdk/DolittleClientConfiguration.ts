@@ -23,7 +23,7 @@ export type DolittleClientConfiguration = {
     /**
      * The address of the Runtime to connect to.
      */
-    runtime?: string | {
+    runtimeOn?: string | {
         /**
          * The host of the Runtime to connect to.
          */

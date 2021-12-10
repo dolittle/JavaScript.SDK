@@ -98,7 +98,7 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
         }
 
         this.applyFromVersion(from.version);
-        this.applyFromRuntime(from.runtime);
+        this.applyFromRuntimeOn(from.runtimeOn);
 
         if (typeof from.pingInterval === 'number') {
             this._pingInterval = from.pingInterval;
@@ -120,7 +120,7 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
         }
     }
 
-    private applyFromRuntime(from?: string | { host?: string, port?: number}) {
+    private applyFromRuntimeOn(from?: string | { host?: string, port?: number}) {
         if (from === undefined || from === null) {
             return;
         }
