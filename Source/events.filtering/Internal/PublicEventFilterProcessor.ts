@@ -3,7 +3,7 @@
 
 import { Logger } from 'winston';
 
-import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
+import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';

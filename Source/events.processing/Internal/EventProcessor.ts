@@ -6,6 +6,7 @@ import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
+import { IServiceProvider } from '@dolittle/sdk.common';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { IReverseCallClient, ClientProcessor  } from '@dolittle/sdk.services';
@@ -16,7 +17,6 @@ import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { IEventProcessor } from './IEventProcessor';
-import { IServiceProvider } from '../../common/DependencyInversion';
 
 /**
  * Partial implementation of {@link IEventProcessor}.

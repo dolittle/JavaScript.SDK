@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { AsyncServiceFactory } from './AsyncServiceFactory';
+export { DefaultServiceProvider } from './DefaultServiceProvider';
 export { IBindServiceScope } from './IBindServiceScope';
 export { IBindServiceTo } from './IBindServiceTo';
 export { IServiceBinder } from './IServiceBinder';

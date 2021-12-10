@@ -9,7 +9,7 @@ import { Logger } from 'winston';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 
-import { IServiceProvider, ITenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
+import { IServiceProvider, ITenantServiceProviders } from '@dolittle/sdk.common';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 

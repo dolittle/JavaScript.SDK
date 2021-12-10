@@ -3,6 +3,7 @@
 
 import { Logger } from 'winston';
 
+import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
@@ -17,7 +18,6 @@ import { FilterEventProcessor } from './FilterEventProcessor';
 import { FilterId, PartitionedFilterEventCallback } from '..';
 
 import '@dolittle/sdk.protobuf';
-import { IServiceProvider } from '@dolittle/sdk.common/DependencyInversion';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters events to a partitioned stream.

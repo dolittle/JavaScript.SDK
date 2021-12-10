@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults, IServiceProviderBuilder } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandlerId, IEventHandler } from '..';
@@ -40,11 +40,13 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
     /**
      * Builds all the event handlers.
      * @param {IEventTypes} eventTypes - All the registered event types.
+     * @param {IServiceProviderBuilder} bindings - For registering the bindings for the event handler classes.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EventHandlerProcessor[]} The built event handlers.
      */
     build(
         eventTypes: IEventTypes,
+        bindings: IServiceProviderBuilder,
         results: IClientBuildResults
     ): EventHandlerProcessor[] {
         const eventHandlers: IEventHandler[] = [];
@@ -57,7 +59,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         }
 
         for (const eventHandlerBuilder of this._classBuilders) {
-            const eventHandler = eventHandlerBuilder.build(eventTypes, results);
+            const eventHandler = eventHandlerBuilder.build(eventTypes, bindings, results);
             if (eventHandler !== undefined) {
                 eventHandlers.push(eventHandler);
             }

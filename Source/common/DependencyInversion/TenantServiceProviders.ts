@@ -6,10 +6,11 @@ import { Container } from 'inversify';
 import { TenantId, TenantIdLike } from '@dolittle/sdk.execution';
 
 import { applyDynamicResolver, DelegatingResolver } from './Internal/Extensions';
-import { InversifyServiceProvider } from './Internal/Implementations';
+import { InversifyServiceBinder, InversifyServiceProvider } from './Internal/Implementations';
 import { IServiceProvider } from './IServiceProvider';
 import { ITenantServiceProviders } from './ITenantServiceProviders';
 import { TenantServiceProviderNotConfigured } from './TenantServiceProviderNotConfigured';
+import { IServiceProviderBuilder } from '.';
 
 /**
  * Represents an implementation of {@link ITenantServiceProviders}.
@@ -21,10 +22,12 @@ export class TenantServiceProviders extends ITenantServiceProviders {
     /**
      * Initialises a new instance of the {@link TenantServiceProviders} class.
      * @param {IServiceProvider} baseServiceProvider - The base service provider to use.
+     * @param {IServiceProviderBuilder} bindings - The bindings to bind in the service provider.
      * @param {TenantId[]} tenants - The tenants to create service providers for.
      */
     constructor(
         baseServiceProvider: IServiceProvider,
+        bindings: IServiceProviderBuilder,
         tenants: TenantId[],
     ) {
         super();
@@ -32,16 +35,19 @@ export class TenantServiceProviders extends ITenantServiceProviders {
         if (baseServiceProvider instanceof InversifyServiceProvider) {
             this._rootContainer = baseServiceProvider.container;
         } else {
-            console.log('Creating new container');
             this._rootContainer = new Container();
             applyDynamicResolver(this._rootContainer, new DelegatingResolver(baseServiceProvider));
         }
+
+        const binder = new InversifyServiceBinder(this._rootContainer);
+        bindings.bindAllServices(binder);
 
         this._tenantContainers = new Map<string, IServiceProvider>();
         for (const tenant of tenants) {
             const tenantContainer = this._rootContainer.createChild();
 
-            // TODO: Call configure service things for tenants.
+            const tenantBinder = new InversifyServiceBinder(tenantContainer);
+            bindings.bindAllTenantServices(tenantBinder, tenant);
 
             this._tenantContainers.set(tenant.toString(), new InversifyServiceProvider(tenantContainer));
         }

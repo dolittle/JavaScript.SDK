@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import * as grpc from '@grpc/grpc-js';
-import { Logger } from 'winston';
+import { Container, Logger } from 'winston';
 
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
@@ -18,10 +18,8 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder } from '@dolittle/sdk.aggregates';
-import { AggregateRoots as InternalAggregateRoots } from '@dolittle/sdk.aggregates/internal';
-import { ClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
-import { IServiceProvider, ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.common/DependencyInversion';
+import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
 import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
 import { Embeddings as InternalEmbeddings, EmbeddingProcessor } from '@dolittle/sdk.embeddings/Internal';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
@@ -62,7 +60,8 @@ export class DolittleClient extends IDolittleClient {
 
     /**
      * Initialises a new instance of the {@link DolittleClient} class.
-     * @param {ClientBuildResults} _setupResults - The results from building the client artifacts.
+     * @param {IServiceProviderBuilder} _serviceProviderBuilder - The service provider builder with bound services from the setup.
+     * @param {ClientSetup.ClientBuildResults} _setupResults - The results from building the client artifacts.
      * @param {IEventTypes} eventTypes - The built event types.
      * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
      * @param {IFilterProcessor[]} _eventFilters - The built event filters.
@@ -74,7 +73,8 @@ export class DolittleClient extends IDolittleClient {
      * @param {SubscriptionCallbacks} _subscriptionCallbacks - The built event horizon subscription callbacks.
      */
     constructor(
-        private readonly _setupResults: ClientBuildResults,
+        private readonly _serviceProviderBuilder: IServiceProviderBuilder,
+        private readonly _setupResults: ClientSetup.ClientBuildResults,
         readonly eventTypes: IEventTypes,
         private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
         private readonly _eventFilters: IFilterProcessor[],
@@ -206,14 +206,14 @@ export class DolittleClient extends IDolittleClient {
                 executionContext,
                 logger);
 
-            const services = this.buildTenantServiceProviders(tenantIds);
-
             this.registerTypes(
                 clients.eventTypes,
                 clients.aggregateRoots,
                 executionContext,
                 logger,
                 this._cancellationSource.cancellation);
+
+            const services = this.buildServiceProviders(tenantIds);
 
             this.startReverseCallClients(
                 clients.filters,
@@ -283,10 +283,10 @@ export class DolittleClient extends IDolittleClient {
             logger);
     }
 
-    private buildTenantServiceProviders(tenants: TenantId[]): ITenantServiceProviders {
-        //TODO: Implement for real
-        const base = {} as IServiceProvider;
-        return new TenantServiceProviders(base, tenants);
+    private buildServiceProviders(tenants: TenantId[]): ITenantServiceProviders {
+        // TODO: Allow providing one from the configuration
+        const baseProvider = new DependencyInversion.DefaultServiceProvider();
+        return new DependencyInversion.TenantServiceProviders(baseProvider, this._serviceProviderBuilder, tenants);
     }
 
     private registerTypes(
@@ -302,7 +302,7 @@ export class DolittleClient extends IDolittleClient {
             logger);
         eventTypes.registerAllFrom(this.eventTypes, cancellation);
 
-        const aggregateRoots = new InternalAggregateRoots(
+        const aggregateRoots = new AggregatesInternal.AggregateRoots(
             aggregateRootsClient,
             executionContext,
             logger);
