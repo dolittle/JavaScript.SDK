@@ -10,7 +10,7 @@ import { IServiceProvider, ServiceIdentifier } from '../..';
  */
 export class InversifyServiceProvider extends IServiceProvider {
     /**
-     * Initialises a new instance of the {@link ServiceProvider} class.
+     * Initialises a new instance of the {@link InversifyServiceProvider} class.
      * @param {Container} container - The InversifyJS child container that contains tenant bindings.
      */
     constructor(readonly container: Container) {
