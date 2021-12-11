@@ -3,10 +3,10 @@
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
+import { PublicEventFilterProcessor } from './Internal/PublicEventFilterProcessor';
 import { FilterId } from './FilterId';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
-import * as internal from './Internal';
 import { MissingFilterCallback } from './MissingFilterCallback';
 
 /**
@@ -38,7 +38,7 @@ export class PublicEventFilterBuilder {
         eventTypes: IEventTypes,
     ): IFilterProcessor {
         this.throwIfCallbackIsMissing(this._filterId);
-        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, eventTypes);
+        return new PublicEventFilterProcessor(this._filterId, this._callback!, eventTypes);
     }
 
     private throwIfCallbackIsMissing(filterId: FilterId) {
