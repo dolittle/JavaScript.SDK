@@ -1,25 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export {
-    CommitForAggregateBuilder,
-    CommitForAggregateWithEventSourceAndExpectedVersionBuilder,
-    CommitForAggregateWithEventSourceBuilder,
-    EventBuilderMethodAlreadyCalled,
-    IEventStoreBuilder,
-    EventStoreBuilder
-} from './builders';
+export * as Builders from './Builders/_exports';
 
 export { AggregateRootVersionIsOutOfOrder } from './AggregateRootVersionIsOutOfOrder';
-export { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
-export { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
 export { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 export { CommitEventsResult } from './CommitEventsResult';
 export { CommittedAggregateEvent } from './CommittedAggregateEvent';
 export { CommittedAggregateEvents } from './CommittedAggregateEvents';
 export { CommittedEvent } from './CommittedEvent';
 export { CommittedEvents } from './CommittedEvents';
+export { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 export { EventConverters } from './EventConverters';
+export { EventLogSequenceNumberIsOutOfOrder } from './EventLogSequenceNumberIsOutOfOrder';
 export { EventStore } from './EventStore';
 export { EventWasAppliedByOtherAggregateRoot } from './EventWasAppliedByOtherAggregateRoot';
 export { EventWasAppliedToOtherEventSource } from './EventWasAppliedToOtherEventSource';

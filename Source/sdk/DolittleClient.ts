@@ -22,7 +22,7 @@ import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal 
 import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
 import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
-import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, internal as EventTypesInternal } from '@dolittle/sdk.events';
+import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';

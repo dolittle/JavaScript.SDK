@@ -23,7 +23,7 @@ import { EventSourceId } from '../EventSourceId';
 import { EventType } from '../EventType';
 import { EventTypeId } from '../EventTypeId';
 import { IEventTypes } from '../IEventTypes';
-import { CommitForAggregateBuilder } from './builders/CommitForAggregateBuilder';
+import { CommitForAggregateBuilder } from './Builders/CommitForAggregateBuilder';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';

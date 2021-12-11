@@ -10,7 +10,7 @@ import { AggregateRootVersion } from '../AggregateRootVersion';
 import { EventSourceId } from '../EventSourceId';
 import { EventType } from '../EventType';
 import { EventTypeId } from '../EventTypeId';
-import { CommitForAggregateBuilder } from './builders/CommitForAggregateBuilder';
+import { CommitForAggregateBuilder } from './Builders/CommitForAggregateBuilder';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
