@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
 

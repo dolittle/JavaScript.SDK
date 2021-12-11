@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
+
 import { Version } from '@dolittle/sdk.execution';
 
-import { ConnectConfiguration } from '../Internal';
+import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
 
 /**
  * Represents a builder for building a {@link ConnectConfiguration}.

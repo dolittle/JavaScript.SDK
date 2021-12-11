@@ -4,7 +4,8 @@
 import { describeThis } from '@dolittle/typescript.testing';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { EventTypeId } from '../../..';
+
+import { EventTypeId } from '../../../EventTypeId';
 import { EventTypesBuilder } from '../../EventTypesBuilder';
 
 class FirstType {}

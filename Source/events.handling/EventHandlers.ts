@@ -10,7 +10,7 @@ import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 
-import { EventHandlerProcessor } from './Internal';
+import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
 import { IEventHandlers } from './IEventHandlers';
 
 /**

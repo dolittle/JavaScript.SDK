@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { TypeOrEventType } from '@dolittle/sdk.projections';
 

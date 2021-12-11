@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Version } from '@dolittle/sdk.execution';
 import { Logger, DefaulLevels, createLogger, format, transports } from 'winston';
+
+import { Version } from '@dolittle/sdk.execution';
+
+import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
 import { DolittleClientConfiguration } from '../DolittleClientConfiguration';
-import { ConnectConfiguration } from '../Internal';
 import { IConfigurationBuilder } from './IConfigurationBuilder';
 import { InvalidRuntimeAddressConfiguration } from './InvalidRuntimeAddressConfiguration';
 

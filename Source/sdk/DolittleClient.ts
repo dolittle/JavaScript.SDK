@@ -31,8 +31,11 @@ import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
 import { Tenant, internal as TenancyInternal } from '@dolittle/sdk.tenancy';
 
-import { ConfigurationBuilder, ConnectCallback, SetupBuilder, SetupCallback } from './Builders/';
-import { ConnectConfiguration } from './Internal';
+import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
+import { ConnectCallback } from './Builders/ConnectCallback';
+import { SetupBuilder } from './Builders/SetupBuilder';
+import { SetupCallback } from './Builders/SetupCallback';
+import { ConnectConfiguration } from './Internal/ConnectConfiguration';
 import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittleClientMultipleTimes';
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';

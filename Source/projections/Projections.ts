@@ -10,7 +10,7 @@ import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
-import { ProjectionProcessor } from './Internal';
+import { ProjectionProcessor } from './Internal/ProjectionProcessor';
 import { IProjections } from './IProjections';
 
 /**

@@ -5,12 +5,14 @@ import { Container } from 'inversify';
 
 import { TenantId, TenantIdLike } from '@dolittle/sdk.execution';
 
-import { applyDynamicResolver, DelegatingResolver } from './Internal/Extensions';
-import { InversifyServiceBinder, InversifyServiceProvider } from './Internal/Implementations';
+import { applyDynamicResolver } from './Internal/Extensions/applyDynamicResolver';
+import { DelegatingResolver } from './Internal/Extensions/DelegatingResolver';
+import { InversifyServiceBinder } from './Internal/Implementations/InversifyServiceBinder';
+import { InversifyServiceProvider } from './Internal/Implementations/InversifyServiceProvider';
 import { IServiceProvider } from './IServiceProvider';
 import { ITenantServiceProviders } from './ITenantServiceProviders';
 import { TenantServiceProviderNotConfigured } from './TenantServiceProviderNotConfigured';
-import { IServiceProviderBuilder } from '.';
+import { IServiceProviderBuilder } from './IServiceProviderBuilder';
 import { MetadataReader } from './Internal/MetadataReader';
 import { applyToContainerAndCreatedChildren } from './Internal/Extensions/applyToContainerAndCreatedChildren';
 

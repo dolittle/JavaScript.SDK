@@ -10,7 +10,8 @@ import { Tenant } from '@dolittle/sdk.tenancy';
 import { IResourcesBuilder } from '@dolittle/sdk.resources';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { ConnectCallback } from './Builders';
+
+import { ConnectCallback } from './Builders/ConnectCallback';
 
 /**
  * Defines the Dolittle Client.

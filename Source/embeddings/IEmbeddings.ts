@@ -3,7 +3,6 @@
 
 import { TenantIdLike } from '@dolittle/sdk.execution';
 
-import { IEmbeddingStore } from './Store';
 import { IEmbedding } from './IEmbedding';
 
 /**
@@ -11,9 +10,9 @@ import { IEmbedding } from './IEmbedding';
  */
 export abstract class IEmbeddings {
     /**
-     * Build an {@link IEmbeddingStore} for the given tenant.
-     * @param { TenantIdLike } tenantId - The tenant id.
-     * @returns {IEmbeddingStore} The embedding store.
+     * Build an {@link IEmbedding} for the given tenant.
+     * @param {TenantIdLike} tenantId - The tenant id.
+     * @returns {IEmbedding} The embedding.
      */
     abstract forTenant(tenantId: TenantIdLike): IEmbedding;
 }

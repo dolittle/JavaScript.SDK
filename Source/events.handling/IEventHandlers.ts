@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { EventHandlerProcessor } from './Internal';
+
+import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
 
 /**
  * Defines the system for event handlers.

@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { IProjection } from '../IProjection';

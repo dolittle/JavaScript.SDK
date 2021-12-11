@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandler } from '../EventHandler';
