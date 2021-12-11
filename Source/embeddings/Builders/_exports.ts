@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
-export { resolveDeletionToEvents } from './deleteDecorator';
 export { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 export { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 export { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
@@ -17,7 +16,6 @@ export { EmbeddingClassOnMethod } from './EmbeddingClassOnMethod';
 export { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 export { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 export { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
-export { embedding } from './embeddingDecorator';
 export { EmbeddingsBuilder } from './EmbeddingsBuilder';
 export { EmbeddingsBuilderCallback } from './EmbeddingsBuilderCallback';
 export { IEmbeddingBuilder } from './IEmbeddingBuilder';
@@ -25,8 +23,10 @@ export { IEmbeddingBuilderForReadModel } from './IEmbeddingBuilderForReadModel';
 export { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
 export { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 export { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
-export { on } from './onDecorator';
 export { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 export { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 export { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
-export { resolveUpdateToEvents } from './updateDecorator';
+export { resolveDeletionToEvents } from './resolveDeletionToEventsDecorator';
+export { embedding } from './embeddingDecorator';
+export { on } from './onDecorator';
+export { resolveUpdateToEvents } from './resolveUpdateToEventsDecorator';

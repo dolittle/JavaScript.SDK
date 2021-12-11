@@ -5,5 +5,6 @@ export { Embedding } from './Embedding';
 export { EmbeddingDeleteMethodFailed } from './EmbeddingDeleteMethodFailed';
 export { EmbeddingProcessor } from './EmbeddingProcessor';
 export { Embeddings } from './Embeddings';
+export { EmbeddingUpdateMethodFailed } from './EmbeddingUpdateMethodFailed';
 export { IEmbedding } from './IEmbedding';
 export { IEmbeddings } from './IEmbeddings';

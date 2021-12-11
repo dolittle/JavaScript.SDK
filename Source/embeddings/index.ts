@@ -1,9 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export * from './_exports';
+
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
-    resolveDeletionToEvents,
     DeletionDecoratedMethod,
     DeletionDecoratedMethods,
     EmbeddingAlreadyHasADeletionDecorator,
@@ -18,7 +19,6 @@ export {
     EmbeddingClassUpdateMethod,
     EmbeddingDecoratedType,
     EmbeddingDecoratedTypes,
-    embedding,
     EmbeddingsBuilder,
     EmbeddingsBuilderCallback,
     IEmbeddingBuilder,
@@ -26,33 +26,23 @@ export {
     IEmbeddingsBuilder,
     OnDecoratedEmbeddingMethod,
     OnDecoratedEmbeddingMethods,
-    on,
     ReadModelAlreadyDefinedForEmbedding,
     UpdateDecoratedMethod,
     UpdateDecoratedMethods,
+    resolveDeletionToEvents,
+    embedding,
+    on,
     resolveUpdateToEvents,
-} from './Builder';
-export { Embedding } from './Embedding';
-export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
-export { EmbeddingContext } from './EmbeddingContext';
-export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
-export { EmbeddingId } from './EmbeddingId';
-export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
-export { EmbeddingProjectContext } from './EmbeddingProjectContext';
-export { IEmbeddings } from './IEmbeddings';
-export { Embeddings } from './Embeddings';
-export { FailedToDelete } from './FailedToDelete';
-export { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
-export { IEmbedding } from './IEmbedding';
-export * as internal from './Internal';
-export { MissingEmbeddingInformation } from './MissingEmbeddingInformation';
-export {CouldNotResolveDeletionToEvents} from './CouldNotResolveDeletionToEvents';
-export {CouldNotResolveUpdateToEvents} from './CouldNotResolveUpdateToEvents';
+} from './Builders/_exports';
+
 export {
-    EmbeddingStoreBuilder,
     EmbeddingStore,
     FailedToGetEmbedding,
     FailedToGetEmbeddingKeys,
     FailedToGetEmbeddingState,
     IEmbeddingStore,
-} from './Store';
+} from './Store/_exports';
+
+export {
+    EmbeddingStoreBuilder,
+} from './Store/Builders/_exports';

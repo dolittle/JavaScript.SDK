@@ -20,7 +20,7 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 
 import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
-import { Embeddings, IEmbeddings, internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
+import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';

@@ -18,13 +18,13 @@ import { IEmbedding } from '../Internal/IEmbedding';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
-import { resolveUpdateToEvents as updateDecorator } from './updateDecorator';
+import { resolveUpdateToEvents as updateDecorator } from './resolveUpdateToEventsDecorator';
 import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 import { embedding as embeddingDecorator } from './embeddingDecorator';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
-import { resolveDeletionToEvents as deleteDecorator } from './deleteDecorator';
+import { resolveDeletionToEvents as deleteDecorator } from './resolveDeletionToEventsDecorator';
 
 /**
  * Represents a builder for building an embedding from a class.
