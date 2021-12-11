@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { describeThis } from '@dolittle/typescript.testing';
+
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventSourceId, EventType, EventTypeId, EventTypes } from '@dolittle/sdk.events';
+
 import { AggregateRoot } from '../AggregateRoot';
-import { describeThis } from '@dolittle/typescript.testing';
 
 describeThis(__filename, () => {
     const event = { something: 42 };

@@ -18,7 +18,7 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
 import { Embeddings, IEmbeddings, internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';

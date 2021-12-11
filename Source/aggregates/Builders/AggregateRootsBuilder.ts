@@ -5,9 +5,9 @@ import { Constructor } from '@dolittle/types';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
+import { AggregateRoots } from '../Internal/AggregateRoots';
 import { AggregateRootTypes } from '../AggregateRootTypes';
 import { AggregateRootTypesFromDecorators } from '../AggregateRootTypesFromDecorators';
-import { AggregateRoots } from '../internal/AggregateRoots';
 
 /**
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
