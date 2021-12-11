@@ -91,18 +91,4 @@ export class ExecutionContext {
             this.correlationId,
             claims);
     };
-    // /**
-    //  * Gets parent execution context.
-    //  */
-    // get parent(): ExecutionContext | undefined {
-    //     return this._parent;
-    // }
-
-    // /**
-    //  * Sets parent execution context - should not be used directly, this is for internal use.
-    //  * @param {ExecutionContext} parent - The parent execution context.
-    //  */
-    // setParent(parent: ExecutionContext) {
-    //     this._parent = parent;
-    // }
 }
