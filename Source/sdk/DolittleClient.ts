@@ -24,7 +24,7 @@ import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolitt
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
-import { EventHandlers, internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
+import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, internal as ProjectionsInternal } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
