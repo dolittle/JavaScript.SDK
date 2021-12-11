@@ -29,7 +29,7 @@ import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, T
 import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
-import { Tenant, internal as TenancyInternal } from '@dolittle/sdk.tenancy';
+import { Tenant, Internal as TenancyInternal } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
 import { ConnectCallback } from './Builders/ConnectCallback';
