@@ -13,16 +13,16 @@ import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCall
 export abstract class IEventFiltersBuilder {
     /**
      * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
+     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
+     * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
      * @returns {IEventFiltersBuilder} Continuation of the builder.
      */
     abstract createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder;
 
     /**
      * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
+     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
+     * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
      * @returns {IEventFiltersBuilder} Continuation of the builder.
      */
     abstract createPublicFilter(filterId: FilterId | Guid | string, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder;

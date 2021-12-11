@@ -11,8 +11,8 @@ export class CommitEventsResult {
 
     /**
      * Initializes a new instance of {@link CommitEventsResult}.
-     * @param {CommittedEvents} events - Events committed.
-     * @param {Failure} failure - Failure from the response.
+     * @param {CommittedEvents} events - Events committed.
+     * @param {Failure} failure - Failure from the response.
      */
     constructor(readonly events: CommittedEvents, readonly failure?: Failure) {
     }

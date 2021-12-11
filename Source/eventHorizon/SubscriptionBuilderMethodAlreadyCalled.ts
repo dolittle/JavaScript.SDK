@@ -12,6 +12,6 @@ export class SubscriptionBuilderMethodAlreadyCalled extends Exception {
      * @param {string} method - The method that was called more than once.
      */
     constructor(method: string) {
-        super(`The method ${method} can only be called once while building an Event Horizon Subscription.`);
+        super(`The method ${method} can only be called once while building an Event Horizon Subscription.`);
     }
 }

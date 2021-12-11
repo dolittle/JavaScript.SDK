@@ -8,7 +8,7 @@ export { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCall
 export { EventFiltersBuilder } from './EventFiltersBuilder';
 export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 export { FilterEventCallback } from './FilterEventCallback';
-export { FilterId } from './FilterId';
+export { FilterId } from './FilterId';
 export { Filters } from './Filters';
 export { IFilterProcessor } from './IFilterProcessor';
 export { IFilters } from './IFilters';

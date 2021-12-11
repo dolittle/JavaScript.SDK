@@ -10,7 +10,7 @@ import { ConceptAs } from '@dolittle/concepts';
 export class CorrelationId extends ConceptAs<Guid, '@dolittle/sdk.execution.CorrelationId'> {
     /**
      * Initialises a new instance of the {@link CorrelationId} class.
-     * @param {Guid} id - The correlation id.
+     * @param {Guid} id - The correlation id.
      */
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.execution.CorrelationId');

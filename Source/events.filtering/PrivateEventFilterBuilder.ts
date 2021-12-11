@@ -3,11 +3,11 @@
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
-import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
-import { FilterId } from './FilterId';
-import { IFilterProcessor } from './IFilterProcessor';
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
+import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+import { FilterId } from './FilterId';
+import { IFilterProcessor } from './IFilterProcessor';
+import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 import { Guid } from '@dolittle/rudiments';
 
 /**

@@ -68,7 +68,7 @@ export class Embedding extends IEmbedding {
         cancellation?: Cancellation): Promise<CurrentState<any>>;
     async update<TEmbedding = any>(
         typeOrKey: Constructor<TEmbedding> | Key | string,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string,
+        keyOrEmbedding: Key | EmbeddingId | Guid | string,
         stateOrEmbedding: TEmbedding | any | EmbeddingId | Guid | string,
         maybeCancellationOrState: Cancellation | undefined | TEmbedding,
         maybeCancellation?: Cancellation): Promise<CurrentState<TEmbedding>> {
@@ -133,7 +133,7 @@ export class Embedding extends IEmbedding {
 
     private getEmbeddingForUpdate<TEmbedding>(
         maybeType: Constructor<any> | undefined,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string,
+        keyOrEmbedding: Key | EmbeddingId | Guid | string,
         stateOrEmbedding: TEmbedding | any | EmbeddingId | Guid | string) {
         if (maybeType === undefined) {
             return EmbeddingId.from(keyOrEmbedding.toString());
@@ -147,7 +147,7 @@ export class Embedding extends IEmbedding {
 
     private getEmbeddingForDelete<TEmbedding>(
         maybeType: Constructor<any> | Key | string,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string) {
+        keyOrEmbedding: Key | EmbeddingId | Guid | string) {
         if (typeof maybeType === 'function') {
             return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(maybeType).identifier.value);
         }
@@ -188,6 +188,6 @@ export class Embedding extends IEmbedding {
         }
     }
     private isEmbeddingId(value: any): value is EmbeddingId | Guid | string {
-        return value instanceof EmbeddingId || value instanceof Guid || typeof value === 'string';
+        return value instanceof EmbeddingId || value instanceof Guid || typeof value === 'string';
     }
 }

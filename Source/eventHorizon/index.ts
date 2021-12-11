@@ -3,9 +3,9 @@
 
 export { CallbackShouldBeFunction } from './CallbackShouldBeFunction';
 export { ConsentId } from './ConsentId';
-export { EventHorizons } from './EventHorizons';
+export { EventHorizons } from './EventHorizons';
 export { EventHorizonSubscriptionFailed } from './EventHorizonSubscriptionFailed';
-export { IEventHorizons } from './IEventHorizons';
+export { IEventHorizons } from './IEventHorizons';
 export { ISubscriptionBuilderForConsumerScope } from './ISubscriptionBuilderForConsumerScope';
 export { ISubscriptionBuilderForProducerMicroservice } from './ISubscriptionBuilderForProducerMicroservice';
 export { ISubscriptionBuilderForProducerPartition } from './ISubscriptionBuilderForProducerPartition';

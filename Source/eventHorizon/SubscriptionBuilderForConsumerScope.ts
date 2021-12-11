@@ -8,7 +8,7 @@ import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { ISubscriptionBuilderForConsumerScope } from './ISubscriptionBuilderForConsumerScope';
-import { Subscription } from './Subscription';
+import { Subscription } from './Subscription';
 import { SubscriptionCallbackArguments, SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 
 /**

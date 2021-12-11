@@ -7,7 +7,7 @@ import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteg
 /**
  * Defines the types that can be converted into a {@link Generation}.
  */
-export type GenerationLike = Generation | number;
+export type GenerationLike = Generation | number;
 
 /**
  * Represents the generation of an Artifact.
@@ -16,7 +16,7 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
 
     /**
      * Initialises a new instance of the {@link Generation} class.
-     * @param {number} generation - The generation.
+     * @param {number} generation - The generation.
      */
     constructor(generation: number) {
         if (!Number.isSafeInteger(generation) || generation < 0) throw new GenerationMustBePositiveInteger();

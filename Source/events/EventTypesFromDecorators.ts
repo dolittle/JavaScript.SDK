@@ -16,7 +16,7 @@ export class EventTypesFromDecorators {
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
-     * @param {Constructor} type - Type to associate.
+     * @param {Constructor} type - Type to associate.
      * @param {EventTypeId} identifier - Identifier to associate with.
      * @param {Generation} generation - The generation to associate with.
      * @param {EventTypeAlias} alias - The alias to associate with the event type.

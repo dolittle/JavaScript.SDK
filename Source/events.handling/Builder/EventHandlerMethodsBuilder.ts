@@ -35,14 +35,14 @@ export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
     handle(eventType: EventType, method: EventHandlerSignature<any>): void;
     handle(eventTypeId: string | EventTypeId | Guid, method: EventHandlerSignature<any>): void;
     handle(eventTypeId: string | EventTypeId | Guid, generation: GenerationLike, method: EventHandlerSignature<any>): void;
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {
+    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {
         const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
-        if (typeOrEventTypeOrId instanceof EventType) {
+        if (typeOrEventTypeOrId instanceof EventType) {
             this._typeToMethodPairs.push([typeOrEventTypeOrId, method]);
         } else if (typeOrEventTypeOrId instanceof EventTypeId || typeOrEventTypeOrId instanceof Guid || typeof typeOrEventTypeOrId === 'string') {
             let generation = Generation.first;
-            if (methodOrGeneration instanceof Generation || typeof methodOrGeneration === 'number') {
+            if (methodOrGeneration instanceof Generation || typeof methodOrGeneration === 'number') {
                 generation = Generation.from(methodOrGeneration);
             }
             this._typeToMethodPairs.push([new EventType(EventTypeId.from(typeOrEventTypeOrId), generation), method]);

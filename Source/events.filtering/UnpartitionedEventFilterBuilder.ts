@@ -3,11 +3,11 @@
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { FilterId } from './FilterId';
-import { FilterEventCallback } from './FilterEventCallback';
-import { IFilterProcessor } from './IFilterProcessor';
+import { FilterId } from './FilterId';
+import { FilterEventCallback } from './FilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
 import { MissingFilterCallback } from './MissingFilterCallback';
-import * as internal from './Internal';
+import * as internal from './Internal';
 
 /**
  * Represents the builder for building public event filters.

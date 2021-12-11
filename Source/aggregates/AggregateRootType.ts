@@ -12,8 +12,8 @@ export class AggregateRootType extends Artifact<AggregateRootId> {
     /**
      * Initializes a new instance of {@link EventType}.
      * @param {AggregateRootType} id - The unique identifier of the aggregate root type.
-     * @param {Generation} [generation = Generation.first] - Optional generation - will default to {@link generation.first}.
-     * @param {AggregateRootTypeAlias} [alias = undefined] - Optional alias.
+     * @param {Generation} [generation = Generation.first] - Optional generation - will default to {@link generation.first}.
+     * @param {AggregateRootTypeAlias} [alias = undefined] - Optional alias.
      */
     constructor(id: AggregateRootId, generation: Generation = Generation.first, readonly alias?: AggregateRootTypeAlias) {
         super(id, generation);

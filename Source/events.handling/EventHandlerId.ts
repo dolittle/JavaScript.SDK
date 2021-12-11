@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ConceptAs } from '@dolittle/concepts';
-import { Guid } from '@dolittle/rudiments';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents the unique identifier for a EventHandler.
@@ -18,10 +18,10 @@ export class EventHandlerId extends ConceptAs<Guid, '@dolittle/sdk.events.handli
 
     /**
      * Creates an {@link EventHandlerId} from a {@link Guid} or a {@link string}.
-     * @param {string | Guid | EventHandlerId} id - The event handler id.
+     * @param {string | Guid | EventHandlerId} id - The event handler id.
      * @returns {EventHandlerId} The created event handler id concept.
      */
-    static from(id: string | Guid | EventHandlerId): EventHandlerId {
+    static from(id: string | Guid | EventHandlerId): EventHandlerId {
         if (id instanceof EventHandlerId) return id;
         return new EventHandlerId(Guid.as(id));
     }

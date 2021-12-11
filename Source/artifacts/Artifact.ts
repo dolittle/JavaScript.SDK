@@ -18,7 +18,7 @@ export abstract class Artifact<TId extends ArtifactIdLike> {
     /**
      * Initializes a new instance of {@link EventType}.
      * @param {TId} id - The unique identifier of the artifact.
-     * @param {Generation} [generation] - Optional generation - will default to {@link generation.first}.
+     * @param {Generation} [generation] - Optional generation - will default to {@link generation.first}.
      */
     constructor(readonly id: TId, readonly generation: Generation = Generation.first) {
     }

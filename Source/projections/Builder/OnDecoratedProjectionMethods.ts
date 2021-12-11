@@ -22,7 +22,7 @@ export class OnDecoratedProjectionMethods {
     /**
      * Registers on decorated projection methods.
      * @param {Constructor<any>} target - Target that owns the on method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the on method is for or the event.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the on method is for or the event.
      * @param {number | undefined} generation - Generation of event type or undefined.
      * @param {KeySelector} keySelector - The key selector to use for this event type.
      * @param {ProjectionClassOnMethod} method - The method that handles the event.

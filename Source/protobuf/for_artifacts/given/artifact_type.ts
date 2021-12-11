@@ -19,7 +19,7 @@ export class artifact_type extends Artifact<artifact_type_id> {
     toString() {
         return `artifact_type_id(${this.id}, ${this.generation})`;
     }
-    static from(id: Guid | string | artifact_type_id, generation: Generation | number) {
+    static from(id: Guid | string | artifact_type_id, generation: Generation | number) {
         return new artifact_type(artifact_type_id.from(id), Generation.from(generation));
     }
 }

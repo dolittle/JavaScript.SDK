@@ -9,7 +9,7 @@ import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { ISubscriptionBuilderForProducerPartition } from './ISubscriptionBuilderForProducerPartition';
 import { ISubscriptionBuilderForConsumerScope } from './ISubscriptionBuilderForConsumerScope';
-import { Subscription } from './Subscription';
+import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForConsumerScope } from './SubscriptionBuilderForConsumerScope';

@@ -42,7 +42,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      */
     abstract update<TEmbedding>(
         type: Constructor<TEmbedding>,
-        key: Key | string,
+        key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         state: TEmbedding,
         cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;

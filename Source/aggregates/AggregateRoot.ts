@@ -69,7 +69,7 @@ export class AggregateRoot {
     /**
      * Apply an event to the aggregate root that will be committed to the event store.
      * @param {any} event - Event type apply.
-     * @param {EventType} [eventType] - Optional type of event to apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     apply(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, false);
@@ -78,7 +78,7 @@ export class AggregateRoot {
     /**
      * Apply a public event to the aggregate root that will be committed to the event store.
      * @param {any} event - Event type apply.
-     * @param {EventType} [eventType] - Optional type of event to apply.
+     * @param {EventType} [eventType] - Optional type of event to apply.
      */
     applyPublic(event: any, eventType?: EventType): void {
         this.applyImplementation(event, eventType, true);

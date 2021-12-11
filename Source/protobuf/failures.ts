@@ -4,7 +4,7 @@
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 
 import { Failure as SdkFailure } from './Failure';
-import { MissingFailureIdentifier } from './MissingFailureIdentifier';
+import { MissingFailureIdentifier } from './MissingFailureIdentifier';
 
 import './guids';
 
@@ -25,7 +25,7 @@ function toProtobuf(input: SdkFailure): PbFailure {
  * @param {PbFailure} input - The failure to convert.
  * @returns {SdkFailure} The converted failure.
  */
-function toSDK(input?: PbFailure): SdkFailure | undefined {
+function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
         return undefined;
     }

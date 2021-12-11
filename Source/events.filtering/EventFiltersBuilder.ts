@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { IEventTypes } from '@dolittle/sdk.events';
 
-import { FilterId } from './FilterId';
+import { FilterId } from './FilterId';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';

@@ -16,7 +16,7 @@ export class AggregateRootTypesFromDecorators {
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
-     * @param {Constructor} type - Type to associate.
+     * @param {Constructor} type - Type to associate.
      * @param {AggregateRootId} identifier - Identifier to associate with.
      * @param {Generation} generation - Optional generation - defaults to 0.
      * @param {AggregateRootTypeAlias} alias - The alias of the aggregate root type.

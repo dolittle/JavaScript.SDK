@@ -3,11 +3,11 @@
 
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { FilterId } from './FilterId';
-import * as internal from './Internal';
-import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
-import { IFilterProcessor } from './IFilterProcessor';
-import { MissingFilterCallback } from './MissingFilterCallback';
+import { FilterId } from './FilterId';
+import * as internal from './Internal';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import { MissingFilterCallback } from './MissingFilterCallback';
 
 /**
  * Represents builder for building a partitioned event filter.

@@ -4,4 +4,4 @@
 /**
  * Represents the signature for an on method.
  */
-export type OnMethodSignature<T = any> = (event: T) => void | Promise<void>;
+export type OnMethodSignature<T = any> = (event: T) => void | Promise<void>;

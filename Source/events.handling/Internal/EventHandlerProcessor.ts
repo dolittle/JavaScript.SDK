@@ -94,7 +94,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     }
 
     /** @inheritdoc */
-    protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
+    protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
@@ -112,7 +112,7 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
     /** @inheritdoc */
     protected async handle(request: HandleEventRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EventHandlerResponse> {
-        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
+        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }
 

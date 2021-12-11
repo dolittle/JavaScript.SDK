@@ -21,7 +21,7 @@ export class OnDecoratedMethods {
     /**
      * Registers on decorated methods.
      * @param {Constructor<any>} target - Target that owns the on method.
-     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the handle on is for or the event.
+     * @param {Constructor<any> | EventTypeId | Guid | string} eventTypeOrId - Type or event type id of event the handle on is for or the event.
      * @param {number | undefined} generation - Generation of event type or undefined.
      * @param {OnMethodSignature<any>} method - The on method.
      * @param {string} name - The name of the method.

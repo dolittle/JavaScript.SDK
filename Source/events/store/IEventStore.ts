@@ -25,7 +25,7 @@ export abstract class IEventStore {
     /**
      * Commit a single event.
      * @param {*} event - The content of the event.
-     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
      * @param {EventType | EventTypeId | Guid | string} eventType - An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResult>}
@@ -47,19 +47,19 @@ export abstract class IEventStore {
     /**
      * Commit a single public event.
      * @param {*} event - The content of the event.
-     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {EventSourceId | Guid | string} eventSourceId - The source of the event - a unique identifier that is associated with the event.
      * @param {EventType | EventTypeId | Guid | string} eventType - An event type or an identifier representing the event type.
      * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {Promise<CommitEventsResult>}
      * @summary If no event type identifier or event type is supplied, it will look for associated event types based
      * on the actual type of the event.
      */
-    abstract commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    abstract commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
 
     /**
      * Commit a single event for an aggregate.
      * @param {*} event - The content of the event.
-     * @param {EventSourceId | Guid | string } eventSourceId - The source of the event - a unique identifier that is associated with the event.
+     * @param {EventSourceId | Guid | string } eventSourceId - The source of the event - a unique identifier that is associated with the event.
      * @param {AggregateRootId} aggregateRootId - The type of the aggregate root that applied the event to the Event Source.
      * @param {AggregateRootVersion} expectedAggregateRootVersion - The {AggregateRootVersion} of the Aggregate Root that was used to apply the rules that resulted in the Events.
      * The events can only be committed to the Event Store if the version of Aggregate Root has not changed.
@@ -69,7 +69,7 @@ export abstract class IEventStore {
      * @summary If no event type identifier or event type is supplied, it will look for associated artifacts based
      * on the actual type of the event.
      */
-    abstract commitForAggregate(event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    abstract commitForAggregate(event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
 
     /**
      * Commit a collection of events.
@@ -83,8 +83,8 @@ export abstract class IEventStore {
 
     /**
      * Commit for aggregate root.
-     * @param {AggregateRootId} aggregateRootId - Aggregate root to commit for.
-     * @param {Cancellation} cancellation - The cancellation signal.
+     * @param {AggregateRootId} aggregateRootId - Aggregate root to commit for.
+     * @param {Cancellation} cancellation - The cancellation signal.
      * @returns {CommitForAggregateBuilder}
      */
     abstract forAggregate(aggregateRootId: AggregateRootId): CommitForAggregateBuilder;

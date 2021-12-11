@@ -11,8 +11,8 @@ export class CommitAggregateEventsResult {
 
     /**
      * Initializes a new instance of {@link CommitEventsResult}.
-     * @param {CommittedAggregateEvents} events - Events committed.
-     * @param {Failure} failure - Failure from the response.
+     * @param {CommittedAggregateEvents} events - Events committed.
+     * @param {Failure} failure - Failure from the response.
      */
     constructor(readonly events: CommittedAggregateEvents, readonly failure?: Failure) {
     }

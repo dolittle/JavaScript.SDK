@@ -39,7 +39,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
  * Performs a client streaming call.
  * @param {grpc.Client} client - The Runtime client.
  * @param {ClientStreamMethod<TRequest, TResponse>} method - The method to call.
- * @param {Observable<TRequest>} requests - The requests to send to the server.
+ * @param {Observable<TRequest>} requests - The requests to send to the server.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The response from the server.
  * @template TRequest - The type of the argument.
@@ -83,7 +83,7 @@ export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, 
  * Performs a duplex streaming call between the client and the Runtime.
  * @param {grpc.Client} client - The Runtime client.
  * @param {DuplexMethod<TRequest, TResponse>} method - The method to call.
- * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
+ * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The responses from the Runtime and errors from the requests.
  * @template TRequest - The type of the argument.

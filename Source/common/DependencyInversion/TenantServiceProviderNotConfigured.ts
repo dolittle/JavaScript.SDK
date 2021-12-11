@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IServiceProvider } from './IServiceProvider';
+import { IServiceProvider } from './IServiceProvider';
 
 /**
  * The exception that gets thrown when attempting to get an {@link IServiceProvider} for a tenant that is not configured.

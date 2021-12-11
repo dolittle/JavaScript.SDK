@@ -43,7 +43,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
     }
 
     /** @inheritdoc */
-    protected getRetryProcessingStateFromRequest(request: FilterEventRequest): RetryProcessingState | undefined {
+    protected getRetryProcessingStateFromRequest(request: FilterEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 

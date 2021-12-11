@@ -32,7 +32,7 @@ function toProtobuf<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLi
  * @template TArtifact The type of the artifact.
  * @template TId The type of the artifact id.
  */
-function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: PbArtifact | undefined, artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact {
+function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactIdLike>(input: PbArtifact | undefined, artifactFactory: (id: Guid, generation: Generation) => TArtifact): TArtifact {
     if (!input) {
         throw new MissingArtifactIdentifier();
     }

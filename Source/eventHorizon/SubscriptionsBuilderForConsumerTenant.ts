@@ -9,9 +9,9 @@ import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { ISubscriptionsBuilderForConsumerTenant } from './ISubscriptionsBuilderForConsumerTenant';
 import { ISubscriptionBuilderForProducerMicroservice } from './ISubscriptionBuilderForProducerMicroservice';
-import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-import { SubscriptionBuilderForProducerMicroservice } from './SubscriptionBuilderForProducerMicroservice';
-import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
+import { TenantWithSubscriptions } from './TenantWithSubscriptions';
+import { SubscriptionBuilderForProducerMicroservice } from './SubscriptionBuilderForProducerMicroservice';
+import { SubscriptionCallbacks, SubscriptionCallbackArguments, SubscriptionCompleted, SubscriptionSucceeded, SubscriptionFailed } from './SubscriptionCallbacks';
 
 /**
  * Represents an implementation of {@link ISubscriptionsBuilderForConsumerTenant}.

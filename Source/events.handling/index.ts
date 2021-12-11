@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { EventHandler } from './EventHandler';
-export { EventHandlerAlias, EventHandlerAliasLike } from './EventHandlerAlias';
-export { EventHandlerId } from './EventHandlerId';
+export { EventHandlerAlias, EventHandlerAliasLike } from './EventHandlerAlias';
+export { EventHandlerId } from './EventHandlerId';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlerSignature } from './EventHandlerSignature';
 export { IEventHandler } from './IEventHandler';

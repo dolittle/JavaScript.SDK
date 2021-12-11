@@ -3,8 +3,8 @@
 
 import { Version } from './Version';
 import { MicroserviceId } from './MicroserviceId';
-import { TenantId } from './TenantId';
-import { Claims } from './Claims';
+import { TenantId } from './TenantId';
+import { Claims } from './Claims';
 import { CorrelationId } from './CorrelationId';
 import { Environment } from './Environment';
 
@@ -35,12 +35,12 @@ export class ExecutionContext {
     /**
      * Gets the microservice identifier.
      */
-    get microserviceId(): MicroserviceId { return this._microserviceId; }
+    get microserviceId(): MicroserviceId { return this._microserviceId; }
 
     /**
      * Gets the tenant identifier.
      */
-    get tenantId(): TenantId { return this._tenantId; }
+    get tenantId(): TenantId { return this._tenantId; }
 
     /**
      * Gets the correlation identifier.
@@ -50,7 +50,7 @@ export class ExecutionContext {
     /**
      * Gets parent execution context.
      */
-    get parent(): ExecutionContext | undefined {
+    get parent(): ExecutionContext | undefined {
         return this._parent;
     }
 

@@ -124,7 +124,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {TRegisterResponse} response - The registration response.
      * @returns {Failure} The failure to return to Runtime.
      */
-    protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): Failure | undefined;
+    protected abstract getFailureFromRegisterResponse(response: TRegisterResponse): Failure | undefined;
 
     /**
      * Creates a reverse call client.

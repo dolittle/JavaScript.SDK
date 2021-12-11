@@ -8,8 +8,8 @@ import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
 import { ISubscriptionBuilderForProducerMicroservice } from './ISubscriptionBuilderForProducerMicroservice';
 import { ISubscriptionBuilderForProducerTenant } from './ISubscriptionBuilderForProducerTenant';
-import { Subscription } from './Subscription';
-import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
+import { Subscription } from './Subscription';
+import { SubscriptionBuilderForProducerTenant  } from './SubscriptionBuilderForProducerTenant';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';

@@ -47,7 +47,7 @@ export abstract class IConfigurationBuilder {
 
     /**
      * Sets the ping interval to use for keeping processors connected to the Runtime alive.
-     * @param {number} interval - The ping interval.
+     * @param {number} interval - The ping interval.
      * @returns {IConfigurationBuilder} The client builder for continuation.
      */
     abstract withPingInterval(interval: number): IConfigurationBuilder;
