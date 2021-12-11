@@ -26,7 +26,7 @@ import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Intern
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, internal as ProjectionsInternal } from '@dolittle/sdk.projections';
+import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
 import { Tenant, internal as TenancyInternal } from '@dolittle/sdk.tenancy';

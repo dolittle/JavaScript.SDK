@@ -5,7 +5,7 @@ import { Constructor } from '@dolittle/types';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { ProjectionDecoratedTypes } from '../Builder/ProjectionDecoratedTypes';
+import { ProjectionDecoratedTypes } from '../Builders/ProjectionDecoratedTypes';
 import { ProjectionId } from '../ProjectionId';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
