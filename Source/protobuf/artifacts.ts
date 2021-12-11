@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+
 import { Artifact as SdkArtifact, ArtifactIdLike, Generation } from '@dolittle/sdk.artifacts';
+
 import { Artifact as PbArtifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 
 import { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
@@ -49,7 +51,11 @@ export default {
 };
 
 declare module '@dolittle/sdk.artifacts' {
-    interface Artifact<TId> {
+    abstract class Artifact<TId> {
+        /**
+         * Convert to protobuf representation.
+         * @returns {PbArtifact} The converted artifact.
+         */
         toProtobuf(): PbArtifact;
     }
 }
@@ -58,7 +64,7 @@ declare module '@dolittle/sdk.artifacts' {
  * Convert to protobuf representation.
  * @returns {PbArtifact} The converted artifact.
  */
- SdkArtifact.prototype.toProtobuf = function () {
+SdkArtifact.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 

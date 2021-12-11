@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
+
 import { artifacts, artifact_type, artifact_type_id, artifact_type_map } from './artifacts';
 
 class my_type {}
