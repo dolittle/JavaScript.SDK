@@ -12,7 +12,8 @@ import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources
 import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
 
 import { ResourceName } from '../../ResourceName';
-import { DatabaseSettingsCallback, IMongoDBResource } from '../IMongoDBResource';
+import { IMongoDBResource } from '../IMongoDBResource';
+import { DatabaseSettingsCallback } from '../DatabaseSettingsCallback';
 
 /**
  * Represents a client for Resources and an implementation of {@link IMongoDBResource}.
