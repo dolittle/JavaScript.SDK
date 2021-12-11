@@ -2,8 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ExecutionContext as SdkExecutionContext, Claims, TenantId, MicroserviceId, CorrelationId, Environment } from '@dolittle/sdk.execution';
-import { ExecutionContext as PbExecutionContext } from '@dolittle/contracts/Execution/ExecutionContext_pb';
 
+import { ExecutionContext as PbExecutionContext } from '@dolittle/contracts/Execution/ExecutionContext_pb';
+import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
+
+import './extensions';
 import './claims';
 import './guids';
 import './versions';
@@ -13,7 +16,7 @@ import './versions';
  * @param {SdkExecutionContext} input - Input execution context.
  * @returns {PbExecutionContext} Protobuf representation.
  */
-function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
+export function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
     const result = new PbExecutionContext();
     result.setMicroserviceid(input.microserviceId.value.toProtobuf());
     result.setTenantid(input.tenantId.value.toProtobuf());
@@ -25,11 +28,22 @@ function toProtobuf(input: SdkExecutionContext): PbExecutionContext {
 }
 
 /**
+ * Convert {@link ExecutionContext} to a {@link CallRequestContext}.
+ * @param {SdkExecutionContext} executionContext - Execution context to convert from.
+ * @returns {CallRequestContext} The converted call request context.
+ */
+export function toCallContext(executionContext: SdkExecutionContext): CallRequestContext {
+    const callContext = new CallRequestContext();
+    callContext.setExecutioncontext(executionContext.toProtobuf());
+    return callContext;
+}
+
+/**
  * Convert to SDK representation.
  * @param {SdkExecutionContext} input - Input execution context.
  * @returns {PbExecutionContext} SDK representation.
  */
-function toSDK(input: PbExecutionContext): SdkExecutionContext {
+export function toSDK(input: PbExecutionContext): SdkExecutionContext {
     const microserviceId = MicroserviceId.from(input.getMicroserviceid()!.toSDK());
     const tenantId = TenantId.from(input.getTenantid()!.toSDK());
     const version = input.getVersion()!.toSDK();
@@ -46,35 +60,14 @@ function toSDK(input: PbExecutionContext): SdkExecutionContext {
         convertedClaims);
 }
 
-export default {
-    toProtobuf,
-    toSDK
-};
-
-declare module '@dolittle/sdk.execution' {
-    interface ExecutionContext {
-        toProtobuf(): PbExecutionContext;
-    }
-}
-
-/**
- * Convert to protobuf representation.
- * @returns {PbExecutionContext} Protobuf representation.
- */
 SdkExecutionContext.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
-declare module '@dolittle/contracts/Execution/ExecutionContext_pb' {
-    interface ExecutionContext {
-        toSDK(): SdkExecutionContext;
-    }
-}
+SdkExecutionContext.prototype.toCallContext = function () {
+    return toCallContext(this);
+};
 
-/**
- * Convert to SDK representation.
- * @returns {PbExecutionContext} SDK representation.
- */
 PbExecutionContext.prototype.toSDK = function () {
     return toSDK(this);
 };

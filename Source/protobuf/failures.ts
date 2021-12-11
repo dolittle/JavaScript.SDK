@@ -6,6 +6,7 @@ import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { Failure as SdkFailure } from './Failure';
 import { MissingFailureIdentifier } from './MissingFailureIdentifier';
 
+import './extensions';
 import './guids';
 
 /**
@@ -13,7 +14,7 @@ import './guids';
  * @param {SdkFailure} input - The failure to convert.
  * @returns {PbFailure} The converted failure.
  */
-function toProtobuf(input: SdkFailure): PbFailure {
+export function toProtobuf(input: SdkFailure): PbFailure {
     const artifact = new PbFailure();
     artifact.setId(input.id.value.toProtobuf());
     artifact.setReason(input.reason.value);
@@ -25,7 +26,7 @@ function toProtobuf(input: SdkFailure): PbFailure {
  * @param {PbFailure} input - The failure to convert.
  * @returns {SdkFailure} The converted failure.
  */
-function toSDK(input?: PbFailure): SdkFailure | undefined {
+export function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
         return undefined;
     }
@@ -36,35 +37,10 @@ function toSDK(input?: PbFailure): SdkFailure | undefined {
     return SdkFailure.from(guid, input.getReason());
 }
 
-export default {
-    toProtobuf,
-    toSDK
-};
-
-declare module './Failure' {
-    interface Failure {
-        toProtobuf(): PbFailure;
-    }
-}
-
-/**
- * Convert to protobuf representation.
- * @returns {PbFailure} The converted failure.
- */
 SdkFailure.prototype.toProtobuf = function () {
     return toProtobuf(this);
 };
 
-declare module '@dolittle/contracts/Protobuf/Failure_pb' {
-    interface Failure {
-        toSDK(): SdkFailure
-    }
-}
-
-/**
- * Convert to SDK representation.
- * @returns {SdkFailure} The converted failure.
- */
 PbFailure.prototype.toSDK = function () {
     return toSDK(this)!;
 };
