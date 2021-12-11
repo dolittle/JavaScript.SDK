@@ -3,7 +3,8 @@
 
 import { describeThis } from '@dolittle/typescript.testing';
 
-import { Cancellation, CancellationSource } from '../..';
+import { Cancellation } from '../../Cancellation';
+import { CancellationSource } from '../../CancellationSource';
 
 describeThis(__filename, () => {
     const result = new CancellationSource(Cancellation.default).cancellation instanceof Cancellation;

@@ -4,7 +4,7 @@
 import { Subject } from 'rxjs';
 import { describeThis } from '@dolittle/typescript.testing';
 
-import { Cancellation } from '../..';
+import { Cancellation } from '../../Cancellation';
 
 describeThis(__filename, () => {
     const source = new Subject<void>();

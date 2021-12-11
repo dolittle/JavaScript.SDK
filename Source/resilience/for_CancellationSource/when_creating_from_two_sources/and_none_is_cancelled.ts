@@ -4,7 +4,7 @@
 import { Subject } from 'rxjs';
 import { describeThis } from '@dolittle/typescript.testing';
 
-import { CancellationSource } from '../..';
+import { CancellationSource } from '../../CancellationSource';
 
 describeThis(__filename, () => {
     const first = new Subject<void>();

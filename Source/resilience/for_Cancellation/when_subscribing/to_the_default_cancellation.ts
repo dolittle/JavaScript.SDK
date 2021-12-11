@@ -3,7 +3,7 @@
 
 import { describeThis } from '@dolittle/typescript.testing';
 
-import { Cancellation } from '../..';
+import { Cancellation } from '../../Cancellation';
 
 describeThis(__filename, () => {
     Cancellation.default.subscribe(() => {});

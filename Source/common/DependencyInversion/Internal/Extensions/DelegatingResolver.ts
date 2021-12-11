@@ -3,7 +3,7 @@
 
 import { interfaces } from 'inversify';
 
-import { IServiceProvider } from '../..';
+import { IServiceProvider } from '../../IServiceProvider';
 import { Bindings } from './Bindings';
 import { IDynamicResolver } from './IDynamicResolver';
 
