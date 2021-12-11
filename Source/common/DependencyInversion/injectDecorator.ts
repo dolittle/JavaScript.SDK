@@ -34,12 +34,15 @@ function setServiceInjectionDescriptors(target: Constructor<any>, descriptors: I
     }
 }
 
+type Service = ServiceIdentifier<any>;
+type Inject = (target: any, propertyKey?: string | symbol, parameterIndex?: number) => void;
+
 /**
  * Injects services.
  * @param {...ServiceIdentifier<any>[]} services - The services to inject.
  * @returns {any} Whatever.
  */
-export function inject(...services: (ServiceIdentifier<any> | [ServiceIdentifier<any>])[]) {
+export function inject(...services: (Service | [Service])[]): Inject {
     return function (target: any, propertyKey?: string | symbol, parameterIndex?: number) {
         const descriptors = getServiceInjectionDescriptors(target);
 
