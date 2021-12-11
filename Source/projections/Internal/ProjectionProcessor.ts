@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
@@ -36,10 +36,10 @@ import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 import '@dolittle/sdk.protobuf';
 
 /**
- * Represents an implementation of {@link EventProcessor} for {@link Projection}.
+ * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
  * @template T The type of the projection read model.
  */
-export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionsClient, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
+export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId, ProjectionsClient, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
      * Initializes a new instance of {@link ProjectionProcessor}.

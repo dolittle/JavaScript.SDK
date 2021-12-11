@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
-import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
@@ -19,9 +19,9 @@ import { FilterId } from '../FilterId';
 import '@dolittle/sdk.protobuf';
 
 /**
- * Represents an implementation of {@link internal.EventProcessor} that filters events to a stream.
+ * Represents an implementation of {@link Internal.EventProcessor} that filters events to a stream.
  */
-export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, FiltersClient, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
+export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends Internal.EventProcessor<FilterId, FiltersClient, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
     /**
      * Initialises a new instance of the {@link FilterEventProcessor} class.

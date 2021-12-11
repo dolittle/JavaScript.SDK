@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
-import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
@@ -30,9 +30,9 @@ import { IEventHandler } from '../IEventHandler';
 import '@dolittle/sdk.protobuf';
 
 /**
- * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
+ * Represents an implementation of {@link Internal.EventProcessor} for {@link EventHandler}.
  */
-export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlersClient, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
+export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerId, EventHandlersClient, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
      * Initializes a new instance of {@link EventHandlerProcessor}.
