@@ -3,7 +3,7 @@
 
 import { Container } from 'inversify';
 
-import { InversifyServiceProvider } from './Internal/Implementations';
+import { InversifyServiceProvider } from './Internal/Implementations/InversifyServiceProvider';
 import { IServiceProvider } from './IServiceProvider';
 
 /**
