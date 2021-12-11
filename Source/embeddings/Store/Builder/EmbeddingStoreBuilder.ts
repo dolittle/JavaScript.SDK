@@ -1,13 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { IProjectionAssociations, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
-import { Logger } from 'winston';
-import { EmbeddingStore, IEmbeddingStore } from '..';
+
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
+import { EmbeddingStore } from '../EmbeddingStore';
+import { IEmbeddingStore } from '../IEmbeddingStore';
 
 /**
  * Represents a builder for building an embedding store.

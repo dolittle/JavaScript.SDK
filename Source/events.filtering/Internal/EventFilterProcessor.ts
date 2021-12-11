@@ -13,7 +13,8 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Fil
 import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId, FilterEventCallback } from '..';
+import { FilterEventCallback } from '../FilterEventCallback';
+import { FilterId } from '../FilterId';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
 import '@dolittle/sdk.protobuf';

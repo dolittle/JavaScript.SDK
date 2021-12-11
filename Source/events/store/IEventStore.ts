@@ -5,10 +5,14 @@ import { Guid } from '@dolittle/rudiments';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId } from '..';
+import { AggregateRootId } from '../AggregateRootId';
+import { AggregateRootVersion } from '../AggregateRootVersion';
+import { EventSourceId } from '../EventSourceId';
+import { EventType } from '../EventType';
+import { EventTypeId } from '../EventTypeId';
+import { CommitForAggregateBuilder } from './builders/CommitForAggregateBuilder';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
-import { CommitForAggregateBuilder } from './builders';
 import { CommittedAggregateEvents } from './CommittedAggregateEvents';
 import { UncommittedAggregateEvents } from './UncommittedAggregateEvents';
 import { UncommittedEvent } from './UncommittedEvent';

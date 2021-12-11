@@ -4,11 +4,12 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
-import { EventHandlerId, EventHandlerSignature } from '..';
+import { EventHandlerId } from '../EventHandlerId';
+import { EventHandlerSignature } from '../EventHandlerSignature';
 import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 
 type TypeOrEventType = Constructor<any> | EventType;

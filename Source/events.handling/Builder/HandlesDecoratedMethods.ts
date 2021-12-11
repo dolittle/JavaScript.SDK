@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 
 import { EventTypeId } from '@dolittle/sdk.events';
 
-import { EventHandlerSignature } from '..';
+import { EventHandlerSignature } from '../EventHandlerSignature';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 
 /**

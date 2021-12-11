@@ -3,9 +3,14 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
 
-import { IEventTypes, EventTypes, EventType, EventTypeIdLike, EventTypeAliasLike, EventTypeId, EventTypesFromDecorators, EventTypeAlias } from '..';
+import { EventType } from '../EventType';
+import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
+import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
+import { EventTypes } from '../EventTypes';
+import { EventTypesFromDecorators } from '../EventTypesFromDecorators';
+import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
 
 /**

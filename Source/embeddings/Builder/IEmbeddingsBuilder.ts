@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EmbeddingId } from '..';
+import { EmbeddingId } from '../EmbeddingId';
 import { IEmbeddingBuilder } from './IEmbeddingBuilder';
 
 /**

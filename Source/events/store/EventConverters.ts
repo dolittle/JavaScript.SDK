@@ -7,9 +7,13 @@ import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { CommittedEvent as PbCommittedEvent, CommittedAggregateEvents as PbCommittedAggregateEvents} from '@dolittle/runtime.contracts/Events/Committed_pb';
 import { UncommittedEvent as PbUncommittedEvent, UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 
-import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '..';
+import { AggregateRootId } from '../AggregateRootId';
+import { AggregateRootVersion } from '../AggregateRootVersion';
+import { EventLogSequenceNumber } from '../EventLogSequenceNumber';
+import { EventSourceId } from '../EventSourceId';
+import { EventType } from '../EventType';
 import { CommittedEvent as SdkCommittedEvent } from './CommittedEvent';
-import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
+import { CommittedAggregateEvent as SdkCommittedAggregateEvent } from './CommittedAggregateEvent';
 import { MissingExecutionContext } from './MissingExecutionContext';
 
 import '@dolittle/sdk.protobuf';
@@ -24,7 +28,7 @@ export class EventConverters {
      * @param {any} event - Event content to constructor with.
      * @param {EventSourceId} eventSourceId - The unique identifier of the event source that the event is originating from.
      * @param {EventType} eventType - The event type.
-     * @param {boolean} isPublic - Whether or not it is a public event.
+     * @param {boolean} isPublic - Whether or not it is a public event.
      * @returns {PbUncommittedEvent} Constructed uncommitted event.
      */
     static getUncommittedEventFrom(event: any, eventSourceId: EventSourceId, eventType: EventType, isPublic: boolean): PbUncommittedEvent {
@@ -40,7 +44,7 @@ export class EventConverters {
      * Creates an uncommitted embedding event (aka an event without an eventsourceid) from given parameters.
      * @param {any} event - Event content to constructor with.
      * @param {EventType} eventType - The event type.
-     * @param {boolean} isPublic - Whether or not it is a public event.
+     * @param {boolean} isPublic - Whether or not it is a public event.
      * @returns {PbUncommittedEvent} Constructed uncommitted event.
      */
     static getUncommittedEmbeddingEventFrom(event: any, eventType: EventType, isPublic: boolean): PbUncommittedEvent {

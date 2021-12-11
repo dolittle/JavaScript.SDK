@@ -5,7 +5,9 @@ import { Constructor } from '@dolittle/types';
 
 import { EventSourceId } from '@dolittle/sdk.events';
 
-import { AggregateRoot, IAggregateOf, IAggregateRootOperations } from '..';
+import { AggregateRoot } from '../AggregateRoot';
+import { IAggregateOf } from '../IAggregateOf';
+import { IAggregateRootOperations } from '../IAggregateRootOperations';
 
 /**
  * Defines a system that can get aggregate roots scoped to a tenant.

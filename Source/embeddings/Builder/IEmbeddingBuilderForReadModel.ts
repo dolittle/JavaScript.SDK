@@ -7,7 +7,9 @@ import { Constructor } from '@dolittle/types';
 import { GenerationLike } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeIdLike } from '@dolittle/sdk.events';
 
-import { EmbeddingDeleteCallback, EmbeddingProjectCallback, EmbeddingUpdateCallback } from '..';
+import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
+import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
+import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
 
 /**
  * Defines a builder for building an embedding for a readmodel from method callbacks.

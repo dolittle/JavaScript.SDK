@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionId } from '..';
+import { ProjectionId } from '../ProjectionId';
 import { IProjectionBuilder } from './IProjectionBuilder';
 
 /**

@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
+
 import { Failure } from '@dolittle/sdk.protobuf';
-import { EmbeddingId } from '..';
+
+import { EmbeddingId } from '../EmbeddingId';
 
 /**
  * An exception that gets thrown when an embedding fails to be getted.

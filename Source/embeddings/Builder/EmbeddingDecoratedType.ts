@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { EmbeddingId } from '..';
+import { EmbeddingId } from '../EmbeddingId';
 
 /**
  * Represents an embedding created from the decorator.

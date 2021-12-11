@@ -3,6 +3,7 @@
 
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
+
 import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
@@ -16,8 +17,13 @@ import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_
 import { CommitAggregateEventsRequest, CommitEventsRequest, FetchForAggregateRequest } from '@dolittle/runtime.contracts/Events/EventStore_pb';
 import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId, EventType, EventTypeId, IEventTypes } from '..';
-import { CommitForAggregateBuilder } from './builders';
+import { AggregateRootId } from '../AggregateRootId';
+import { AggregateRootVersion } from '../AggregateRootVersion';
+import { EventSourceId } from '../EventSourceId';
+import { EventType } from '../EventType';
+import { EventTypeId } from '../EventTypeId';
+import { IEventTypes } from '../IEventTypes';
+import { CommitForAggregateBuilder } from './builders/CommitForAggregateBuilder';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
 import { CommitEventsResult } from './CommitEventsResult';
 import { CommittedAggregateEvent } from './CommittedAggregateEvent';
@@ -40,7 +46,7 @@ export class EventStore extends IEventStore {
      * @param {EventStoreClient} _eventStoreClient - The client to use for connecting to the event store.
      * @param {IEventTypes} _eventTypes - Event types system for working with event types.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param {Logger} _logger - Logger for logging.
+     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _eventStoreClient: EventStoreClient,

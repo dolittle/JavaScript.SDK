@@ -8,7 +8,9 @@ import { Generation } from '@dolittle/sdk.artifacts';
 import { IServiceProviderBuilder, IClientBuildResults, DependencyInversion } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
-import { EventHandler, EventHandlerSignature, IEventHandler } from '..';
+import { EventHandler } from '../EventHandler';
+import { EventHandlerSignature } from '../EventHandlerSignature';
+import { IEventHandler } from '../IEventHandler';
 import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';

@@ -4,12 +4,13 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IProjectionAssociations } from '@dolittle/sdk.projections';
 
-import { EmbeddingId } from '..';
-import { IEmbedding, EmbeddingProcessor } from '../Internal';
+import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingProcessor } from '../Internal/EmbeddingProcessor';
+import { IEmbedding } from '../Internal/IEmbedding';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 import { IEmbeddingBuilder } from './IEmbeddingBuilder';

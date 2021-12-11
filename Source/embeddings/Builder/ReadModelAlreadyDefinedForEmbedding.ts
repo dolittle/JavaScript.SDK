@@ -3,7 +3,8 @@
 
 import { Exception } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { EmbeddingId } from '..';
+
+import { EmbeddingId } from '../EmbeddingId';
 
 /**
  * Exception that is thrown when you try to register a readmodel for a embedding when its already defined.

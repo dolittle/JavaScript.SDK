@@ -1,10 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+
+import { EventType } from '@dolittle/sdk.events';
 import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
-import { EmbeddingContext, EmbeddingId, EmbeddingProjectContext } from '..';
+
+import { EmbeddingContext } from '../EmbeddingContext';
+import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
 
 /**
  * Defines an embedding.

@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
+
 import { Key } from '@dolittle/sdk.projections';
-import { EmbeddingId } from '..';
+
+import { EmbeddingId } from '../EmbeddingId';
 
 /**
  * Exception that gets thrown when embedding state fails to be getted.

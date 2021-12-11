@@ -4,11 +4,15 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { IProjection, KeySelector, Projection, ProjectionCallback, ProjectionId } from '..';
+import { IProjection } from '../IProjection';
+import { KeySelector } from '../KeySelector';
+import { Projection } from '../Projection';
+import { ProjectionCallback } from '../ProjectionCallback';
+import { ProjectionId } from '../ProjectionId';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';

@@ -7,7 +7,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
 
-import { Resource } from '..';
+import { Resource } from '../Resource';
 
 /**
  * Represents the callback for configuring {@link DbOptions}.

@@ -3,7 +3,9 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId } from '..';
+import { AggregateRootId } from '../AggregateRootId';
+import { AggregateRootVersion } from '../AggregateRootVersion';
+import { EventSourceId } from '../EventSourceId';
 import { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 

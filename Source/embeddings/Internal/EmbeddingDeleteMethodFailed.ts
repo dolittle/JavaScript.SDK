@@ -3,7 +3,8 @@
 
 import { Exception } from '@dolittle/rudiments';
 
-import { EmbeddingContext, EmbeddingId } from '..';
+import { EmbeddingContext } from '../EmbeddingContext';
+import { EmbeddingId } from '../EmbeddingId';
 
 /**
  * Exception that gets thrown when calling delete on an embedding fails.

@@ -2,14 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerAlias, EventHandlerId } from '..';
+import { EventHandlerAlias } from '../EventHandlerAlias';
+import { EventHandlerId } from '../EventHandlerId';
 import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerOptions } from './EventHandlerOptions';
-import { Constructor } from '@dolittle/types';
 
 /**
  * Decorator to mark a class as an EventHandler.

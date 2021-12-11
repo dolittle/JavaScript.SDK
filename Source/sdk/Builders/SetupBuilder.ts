@@ -10,7 +10,8 @@ import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.
 import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
 import { ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
 
-import { DolittleClient, IDolittleClient } from '..';
+import { DolittleClient } from '../DolittleClient';
+import { IDolittleClient } from '../IDolittleClient';
 import { ISetupBuilder } from './ISetupBuilder';
 
 /**

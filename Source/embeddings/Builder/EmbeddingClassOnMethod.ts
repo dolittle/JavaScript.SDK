@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
-import { EmbeddingProjectContext } from '..';
+
+import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
 
 /**
  * Defines the signature of a embedding class's on() method.

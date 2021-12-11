@@ -1,17 +1,21 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
-import { Key, ProjectionId } from '..';
+
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
+import { Key } from '../Key';
+import { ProjectionId } from '../ProjectionId';
 import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
 import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
 import { CurrentState } from './CurrentState';

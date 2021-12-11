@@ -3,7 +3,7 @@
 
 import { TenantIdLike } from '@dolittle/sdk.execution';
 
-import { IEventStore } from '..';
+import { IEventStore } from '../IEventStore';
 
 /**
  * Defines a builder for {@link IEventStore}.

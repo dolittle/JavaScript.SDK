@@ -15,7 +15,8 @@ import { PartitionedFilterResponse } from '@dolittle/runtime.contracts/Events.Pr
 import { PublicFilterClientToRuntimeMessage, PublicFilterRegistrationRequest } from '@dolittle/runtime.contracts/Events.Processing/PublicFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId, PartitionedFilterEventCallback } from '..';
+import { FilterId } from '../FilterId';
+import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
 import { FilterEventProcessor } from './FilterEventProcessor';
 
 import '@dolittle/sdk.protobuf';

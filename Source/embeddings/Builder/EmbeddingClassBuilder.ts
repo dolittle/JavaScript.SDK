@@ -5,12 +5,16 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 
-import { EmbeddingUpdateCallback, EmbeddingDeleteCallback, EmbeddingProjectCallback, OnDecoratedEmbeddingMethods } from '..';
-import { Embedding, IEmbedding } from '../Internal';
+import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
+import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
+import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
+import { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
+import { Embedding } from '../Internal/Embedding';
+import { IEmbedding } from '../Internal/IEmbedding';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';

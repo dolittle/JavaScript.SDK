@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventTypeId } from '@dolittle/sdk.events';
 
-import { DeleteReadModelInstance } from '..';
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';

@@ -3,8 +3,10 @@
 
 import { Logger } from 'winston';
 
-import { AggregateRootId, EventSourceId, IEventTypes } from '../..';
-import { IEventStore } from '..';
+import { AggregateRootId } from '../../AggregateRootId';
+import { EventSourceId } from '../../EventSourceId';
+import { IEventTypes } from '../../IEventTypes';
+import { IEventStore } from '../IEventStore';
 import { EventBuilderMethodAlreadyCalled } from './EventBuilderMethodAlreadyCalled';
 import { CommitForAggregateWithEventSourceBuilder } from './CommitForAggregateWithEventSourceBuilder';
 

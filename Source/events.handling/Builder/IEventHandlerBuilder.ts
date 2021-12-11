@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerAliasLike } from '..';
+import { EventHandlerAliasLike } from '../EventHandlerAlias';
 import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 
 /**

@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
+import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
-import { Guid } from '@dolittle/rudiments';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 
-import { IProjectionAssociations, IProjectionStore, ProjectionStore } from '..';
+import { IProjectionAssociations } from '../IProjectionAssociations';
+import { IProjectionStore } from '../IProjectionStore';
+import { ProjectionStore } from '../ProjectionStore';
 import { IProjectionStoreBuilder } from './IProjectionStoreBuilder';
 
 /**

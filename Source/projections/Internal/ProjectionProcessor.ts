@@ -3,6 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
@@ -21,16 +22,16 @@ import {
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
 
-import { Constructor } from '@dolittle/types';
-import {
-    DeleteReadModelInstance,
-    EventPropertyKeySelector,
-    EventSourceIdKeySelector,
-    IProjection,
-    Key,
-    KeySelector,
-    PartitionIdKeySelector, ProjectionContext, ProjectionId, UnknownKeySelectorType
-} from '..';
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { EventPropertyKeySelector } from '../EventPropertyKeySelector';
+import { EventSourceIdKeySelector } from '../EventSourceIdKeySelector';
+import { IProjection } from '../IProjection';
+import { Key } from '../Key';
+import { KeySelector } from '../KeySelector';
+import { PartitionIdKeySelector } from '../PartitionIdKeySelector';
+import { ProjectionContext } from '../ProjectionContext';
+import { ProjectionId } from '../ProjectionId';
+import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 
 import '@dolittle/sdk.protobuf';
 

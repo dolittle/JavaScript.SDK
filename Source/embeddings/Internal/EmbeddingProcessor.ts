@@ -30,7 +30,10 @@ import {
 import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
 
-import { EmbeddingContext, EmbeddingId, EmbeddingProjectContext, MissingEmbeddingInformation } from '..';
+import { EmbeddingContext } from '../EmbeddingContext';
+import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
+import { MissingEmbeddingInformation } from '../MissingEmbeddingInformation';
 import { IEmbedding } from './IEmbedding';
 
 import '@dolittle/sdk.protobuf';

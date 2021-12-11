@@ -14,7 +14,7 @@ import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Fil
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId } from '..';
+import { FilterId } from '../FilterId';
 
 import '@dolittle/sdk.protobuf';
 

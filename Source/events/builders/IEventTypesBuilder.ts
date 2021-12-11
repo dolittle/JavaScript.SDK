@@ -5,7 +5,9 @@ import { Constructor } from '@dolittle/types';
 
 import { GenerationLike } from '@dolittle/sdk.artifacts';
 
-import { EventType, EventTypeAliasLike, EventTypeIdLike } from '..';
+import { EventType } from '../EventType';
+import { EventTypeAliasLike } from '../EventTypeAlias';
+import { EventTypeIdLike } from '../EventTypeId';
 
 /**
  * Represents a builder for associating types with an {@link EventType}.
@@ -13,7 +15,7 @@ import { EventType, EventTypeAliasLike, EventTypeIdLike } from '..';
 export abstract class IEventTypesBuilder {
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type - Type to associate.
+     * @param {Constructor} type - Type to associate.
      * @param {EventType} eventType - EventType to associate with.
      * @returns {IEventTypesBuilder} The builder for continuation.
      */
@@ -21,7 +23,7 @@ export abstract class IEventTypesBuilder {
 
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type - Type to associate.
+     * @param {Constructor} type - Type to associate.
      * @param {EventTypeIdLike} identifier - Identifier to associate with.
      * @param {EventTypeAliasLike} [alias] - Optional alias to associate with the event type.
      * @returns {IEventTypesBuilder} The builder for continuation.
@@ -30,7 +32,7 @@ export abstract class IEventTypesBuilder {
 
     /**
      * Associate a type with an unique event type identifier and optional generation.
-     * @param {Constructor} type - Type to associate.
+     * @param {Constructor} type - Type to associate.
      * @param {EventTypeIdLike} identifier - Identifier to associate with.
      * @param {GenerationLike} generation - The generation to associate with.
      * @param {EventTypeAliasLike} [alias] - Optional alias to associate with the event type.

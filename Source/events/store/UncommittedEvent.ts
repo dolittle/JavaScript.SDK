@@ -1,7 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventSourceId, EventType, EventTypeId } from '..';
+import { EventSourceId } from '../EventSourceId';
+import { EventType } from '../EventType';
+import { EventTypeId } from '../EventTypeId';
 
 /**
  * Represents and uncommitted event.

@@ -5,7 +5,9 @@ import { Constructor } from '@dolittle/types';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { AggregateRootTypesFromDecorators, AggregateRootTypes, internal } from '..';
+import { AggregateRootTypes } from '../AggregateRootTypes';
+import { AggregateRootTypesFromDecorators } from '../AggregateRootTypesFromDecorators';
+import { AggregateRoots } from '../internal/AggregateRoots';
 
 /**
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
@@ -26,10 +28,10 @@ export class AggregateRootsBuilder {
 
     /**
      * Builds the aggregate roots by registering them with the Runtime.
-     * @param {internal.AggregateRoots} aggregateRoots - The aggregate roots client.
+     * @param {AggregateRoots} aggregateRoots - The aggregate roots client.
      * @param {Cancellation} cancellation - The cancellation.
      */
-    buildAndRegister(aggregateRoots: internal.AggregateRoots, cancellation: Cancellation) {
+    buildAndRegister(aggregateRoots: AggregateRoots, cancellation: Cancellation) {
         aggregateRoots.register(this._aggregateRootTypes, cancellation);
     }
 }

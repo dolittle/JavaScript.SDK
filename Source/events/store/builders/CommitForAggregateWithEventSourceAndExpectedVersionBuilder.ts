@@ -3,8 +3,14 @@
 
 import { Logger } from 'winston';
 
-import { AggregateRootId, AggregateRootVersion, EventSourceId, IEventTypes } from '../..';
-import { CommittedAggregateEvents, IEventStore, UncommittedAggregateEvent, UncommittedAggregateEvents } from '..';
+import { AggregateRootId } from '../../AggregateRootId';
+import { AggregateRootVersion } from '../../AggregateRootVersion';
+import { EventSourceId } from '../../EventSourceId';
+import { IEventTypes } from '../../IEventTypes';
+import { CommittedAggregateEvents } from '../CommittedAggregateEvents';
+import { IEventStore } from '../IEventStore';
+import { UncommittedAggregateEvent } from '../UncommittedAggregateEvent';
+import { UncommittedAggregateEvents } from '../UncommittedAggregateEvents';
 
 /**
  * Represents the builder for an aggregate event commit.

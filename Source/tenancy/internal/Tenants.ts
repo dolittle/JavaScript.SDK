@@ -10,7 +10,9 @@ import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { Tenant, ITenants, FailedToGetAllTenants } from '..';
+import { FailedToGetAllTenants } from '../FailedToGetAllTenants';
+import { ITenants } from '../ITenants';
+import { Tenant } from '../Tenant';
 
 import '@dolittle/sdk.protobuf';
 
@@ -55,7 +57,7 @@ export class Tenants extends ITenants {
         }
     }
 
-    private static createTenant(tenant: PbTenant): Tenant {
-        return new Tenant(TenantId.from(tenant.getId()!.toSDK()));
+    private static createTenant(tenant: PbTenant): Tenant {
+        return new Tenant(TenantId.from(tenant.getId()!.toSDK()));
     }
 }

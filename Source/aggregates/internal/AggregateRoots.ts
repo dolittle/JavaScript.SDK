@@ -10,7 +10,8 @@ import { reactiveUnary } from '@dolittle/sdk.services';
 import { AggregateRootAliasRegistrationRequest } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_pb';
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 
-import { AggregateRootType, IAggregateRootTypes } from '..';
+import { AggregateRootType } from '../AggregateRootType';
+import { IAggregateRootTypes } from '../IAggregateRootTypes';
 
 import '@dolittle/sdk.protobuf';
 

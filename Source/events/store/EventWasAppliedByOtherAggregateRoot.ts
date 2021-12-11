@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootId } from '..';
+import { AggregateRootId } from '../AggregateRootId';
 
 /**
  * Exception that gets thrown when a an event is applied to an event source other than the one expected.

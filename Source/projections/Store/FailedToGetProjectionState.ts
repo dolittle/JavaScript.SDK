@@ -2,8 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
+
 import { ScopeId } from '@dolittle/sdk.events';
-import { Key, ProjectionId } from '..';
+
+import { Key } from '../Key';
+import { ProjectionId } from '../ProjectionId';
 
 /**
  * The exception that gets thrown when no state is returned for a projection.

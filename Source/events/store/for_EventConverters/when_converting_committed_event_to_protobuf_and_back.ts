@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DateTime } from 'luxon';
+import { describeThis } from '@dolittle/typescript.testing';
 
 import { Claim, Claims, ExecutionContext, Version, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 
-import { EventLogSequenceNumber, EventSourceId, EventType } from '../..';
-import { CommittedEvent, EventConverters } from '..';
-
-import { describeThis } from '@dolittle/typescript.testing';
+import { EventLogSequenceNumber } from '../../EventLogSequenceNumber';
+import { EventSourceId } from '../../EventSourceId';
+import { EventType } from '../../EventType';
+import { CommittedEvent } from '../CommittedEvent';
+import { EventConverters } from '../EventConverters';
 
 describeThis(__filename, () => {
     const claimsArray: Claim[] = [

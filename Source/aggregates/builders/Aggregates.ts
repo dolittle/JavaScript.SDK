@@ -6,7 +6,11 @@ import { Constructor } from '@dolittle/types';
 
 import { EventSourceId, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 
-import { AggregateOf, AggregateRoot, AggregateRootOperations, IAggregateOf, IAggregateRootOperations } from '..';
+import { AggregateOf } from '../AggregateOf';
+import { AggregateRoot } from '../AggregateRoot';
+import { AggregateRootOperations } from '../AggregateRootOperations';
+import { IAggregateOf } from '../IAggregateOf';
+import { IAggregateRootOperations } from '../IAggregateRootOperations';
 import { IAggregates } from './IAggregates';
 
 /**

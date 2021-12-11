@@ -4,11 +4,12 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
-import { IProjection, ProjectionId } from '..';
-import { ProjectionProcessor } from '../Internal';
+import { IProjection } from '../IProjection';
+import { ProjectionId } from '../ProjectionId';
+import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { IProjectionAssociations } from '../Store/IProjectionAssociations';

@@ -1,18 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
+
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
+import { Constructor } from '@dolittle/types';
+
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
-import { EmbeddingId, FailedToGetEmbeddingKeys } from '..';
+
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
+
+import { EmbeddingId } from '../EmbeddingId';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
+import { FailedToGetEmbeddingKeys } from './FailedToGetEmbeddingKeys';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
 

@@ -7,7 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, ScopeId } from '@dolittle/sdk.events';
 
-import { ProjectionCallback } from '..';
+import { ProjectionCallback } from '../ProjectionCallback';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 
 /**

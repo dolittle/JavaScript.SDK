@@ -4,8 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { EventHandlerId } from '..';
-
+import { EventHandlerId } from '../EventHandlerId';
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 
 /**
@@ -15,7 +14,7 @@ export abstract class IEventHandlersBuilder {
     /**
      * Start building an event handler.
      * @param {EventHandlerId | Guid | string} eventHandlerId - The unique identifier of the event handler.
-     * @param {EventHandlerBuilderCallback} callback - Callback for building out the event handler.
+     * @param {EventHandlerBuilderCallback} callback - Callback for building out the event handler.
      * @returns {IEventHandlersBuilder} The builder for continuation.
      */
     abstract createEventHandler(eventHandlerId: EventHandlerId | Guid | string, callback: EventHandlerBuilderCallback): IEventHandlersBuilder;

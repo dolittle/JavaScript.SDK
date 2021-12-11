@@ -5,7 +5,11 @@ import { DateTime } from 'luxon';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { AggregateRootId, AggregateRootVersion, EventLogSequenceNumber, EventSourceId, EventType } from '..';
+import { AggregateRootId } from '../AggregateRootId';
+import { AggregateRootVersion } from '../AggregateRootVersion';
+import { EventLogSequenceNumber } from '../EventLogSequenceNumber';
+import { EventType } from '../EventType';
+import { EventSourceId } from '../EventSourceId';
 import { CommittedEvent } from './CommittedEvent';
 
 /**
@@ -16,7 +20,7 @@ export class CommittedAggregateEvent extends CommittedEvent {
      * Initializes a new instance of {@link CommittedEvent}.
      * @param {EventLogSequenceNumber} eventLogSequenceNumber - The sequence number in the event log.
      * @param {DateTime} occurred - Timestamp for when it occurred.
-     * @param {EventSourceId} eventSourceId - Identifier of the event source.
+     * @param {EventSourceId} eventSourceId - Identifier of the event source.
      * @param {AggregateRootId} aggregateRootId - Identifier of the aggregate root.
      * @param {AggregateRootVersion} aggregateRootVersion - The version of the aggregate root that applied the event.
      * @param {ExecutionContext} executionContext - The execution context in which the event happened.

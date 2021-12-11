@@ -5,10 +5,14 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 
-import { DeleteReadModelInstance, IProjection, KeySelector, Projection, ProjectionCallback } from '..';
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { IProjection } from '../IProjection';
+import { KeySelector } from '../KeySelector';
+import { Projection } from '../Projection';
+import { ProjectionCallback } from '../ProjectionCallback';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';

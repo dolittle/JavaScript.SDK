@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { EventHandlerAliasLike } from '..';
+import { EventHandlerAliasLike } from '../EventHandlerAlias';
 
 /**
  * Defines the options that can be defined in a {@link eventHandler} decorator.

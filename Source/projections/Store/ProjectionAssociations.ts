@@ -1,9 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { ProjectionDecoratedTypes, ProjectionId } from '..';
+
+import { ScopeId } from '@dolittle/sdk.events';
+
+import { ProjectionDecoratedTypes } from '../Builder/ProjectionDecoratedTypes';
+import { ProjectionId } from '../ProjectionId';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
 import { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection';

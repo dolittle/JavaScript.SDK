@@ -11,8 +11,8 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
 
-import { ResourceName } from '../..';
-import { IMongoDBResource, DatabaseSettingsCallback } from '..';
+import { ResourceName } from '../../ResourceName';
+import { DatabaseSettingsCallback, IMongoDBResource } from '../IMongoDBResource';
 
 /**
  * Represents a client for Resources and an implementation of {@link IMongoDBResource}.

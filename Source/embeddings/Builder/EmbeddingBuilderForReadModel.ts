@@ -9,12 +9,15 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 import { TypeOrEventType } from '@dolittle/sdk.projections';
 
-import { EmbeddingUpdateCallback, EmbeddingDeleteCallback, EmbeddingId, EmbeddingProjectCallback } from '..';
-import { Embedding, IEmbedding } from '../Internal';
+import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
+import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
+import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
+import { EmbeddingId } from '../EmbeddingId';
+import { Embedding } from '../Internal/Embedding';
+import { IEmbedding } from '../Internal/IEmbedding';
 import { EmbeddingAlreadyHasAnUpdateMethod } from './EmbeddingAlreadyHasAnUpdateMethod';
 import { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 import { IEmbeddingBuilderForReadModel } from './IEmbeddingBuilderForReadModel';
-
 /**
  * Represents an implementation of {@link IEmbeddingBuilderForReadModel}.
  * @template T The type of the embedding read model.

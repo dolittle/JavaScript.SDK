@@ -7,9 +7,10 @@ import { Constructor } from '@dolittle/types';
 import { IClientBuildResults, IServiceProviderBuilder } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
-import { EventHandlerId, IEventHandler } from '..';
-import { EventHandlerProcessor } from '../Internal';
-import { EventHandlerBuilder } from './EventHandlerBuilder';
+import { EventHandlerId } from '../EventHandlerId';
+import { IEventHandler } from '../IEventHandler';
+import { EventHandlerProcessor } from '../Internal/EventHandlerProcessor';
+import { EventHandlerBuilder } from './EventHandlerBuilder';
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { IEventHandlersBuilder } from './IEventHandlersBuilder';

@@ -7,8 +7,8 @@ import { IClientBuildResults } from '@dolittle/sdk.common/ClientSetup';
 import { IEventTypes } from '@dolittle/sdk.events';
 import { IProjectionAssociations, ProjectionId } from '@dolittle/sdk.projections';
 
-import { EmbeddingId } from '..';
-import { IEmbedding } from '../Internal';
+import { EmbeddingId } from '../EmbeddingId';
+import { IEmbedding } from '../Internal/IEmbedding';
 import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 import { IEmbeddingBuilder } from './IEmbeddingBuilder';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';

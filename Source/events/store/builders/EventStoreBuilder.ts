@@ -8,8 +8,9 @@ import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 
 import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
 
-import { IEventTypes } from '../..';
-import { IEventStore, EventStore } from '..';
+import { IEventTypes } from '../../IEventTypes';
+import { EventStore } from '../EventStore';
+import { IEventStore } from '../IEventStore';
 import { IEventStoreBuilder } from './IEventStoreBuilder';
 
 /**
