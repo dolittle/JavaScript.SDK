@@ -42,9 +42,9 @@ export function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
         return undefined;
     }
-    const guid = Guids.toSDK(input.getId());
-    if (!guid) {
+    const uuid = input.getId();
+    if (!uuid) {
         throw new MissingFailureIdentifier();
     }
-    return SdkFailure.from(guid, input.getReason());
+    return SdkFailure.from(Guids.toSDK(uuid), input.getReason());
 }

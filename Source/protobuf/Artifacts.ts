@@ -37,9 +37,9 @@ export function toSDK<TArtifact extends SdkArtifact<TId>, TId extends ArtifactId
     if (!input) {
         throw new MissingArtifactIdentifier();
     }
-    const guid = Guids.toSDK(input.getId());
-    if (!guid) {
+    const uuid = input.getId();
+    if (!uuid) {
         throw new MissingArtifactIdentifier();
     }
-    return artifactFactory(guid, Generation.from(input.getGeneration()));
+    return artifactFactory(Guids.toSDK(uuid), Generation.from(input.getGeneration()));
 }
