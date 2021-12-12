@@ -9,7 +9,7 @@ import { ServiceIdentifier } from './ServiceIdentifier';
 import { SingleInjectionServiceMustBeSpecifiedForConstructorArgument } from './SingleInjectionServiceMustBeSpecifiedForConstructorArgument';
 import { WrongNumberOfInjectionServicesSpecifiedForClass } from './WrongNumberOfInjectionServicesSpecifiedForClass';
 
-type Inject = (target: any, propertyKey?: string | symbol, parameterIndex?: number) => void;
+type Inject = (target: any, propertyKey?: string | symbol, parameterIndex?: PropertyDescriptor | number) => void;
 
 type Service = ServiceIdentifier<any>;
 
@@ -19,7 +19,7 @@ type InjectionDescriptor = {
     readonly index: number;
 };
 
-const [decorator, getMeteadata] = createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', DecoratorTarget.ConstructorParameter);
+const [decorator, getMeteadata] = createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', DecoratorTarget.Class | DecoratorTarget.ConstructorParameter);
 
 /**
  * Gets the specified service injection descriptors for a class.
