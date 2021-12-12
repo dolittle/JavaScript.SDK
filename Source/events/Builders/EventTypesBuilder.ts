@@ -9,9 +9,9 @@ import { EventType } from '../EventType';
 import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
 import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
 import { EventTypes } from '../EventTypes';
-import { EventTypesFromDecorators } from '../EventTypesFromDecorators';
 import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
+import { getDecoratedEventType } from '../eventTypeDecorator';
 
 /**
  * Represents a builder for adding associations into {@link IEventTypes} instance.
@@ -37,7 +37,7 @@ export class EventTypesBuilder extends IEventTypesBuilder {
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IEventTypesBuilder {
-        this.associate(type, EventTypesFromDecorators.eventTypes.getFor(type));
+        this.associate(type, getDecoratedEventType(type));
         return this;
     }
 

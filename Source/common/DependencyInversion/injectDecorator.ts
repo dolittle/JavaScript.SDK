@@ -9,7 +9,7 @@ import { ServiceIdentifier } from './ServiceIdentifier';
 import { SingleInjectionServiceMustBeSpecifiedForConstructorArgument } from './SingleInjectionServiceMustBeSpecifiedForConstructorArgument';
 import { WrongNumberOfInjectionServicesSpecifiedForClass } from './WrongNumberOfInjectionServicesSpecifiedForClass';
 
-type Inject = (target: any, propertyKey?: string | symbol, parameterIndex?: PropertyDescriptor | number) => void;
+type Decorator = (target: any, propertyKey?: string | symbol, parameterIndex?: PropertyDescriptor | number) => void;
 
 type Service = ServiceIdentifier<any>;
 
@@ -19,7 +19,7 @@ type InjectionDescriptor = {
     readonly index: number;
 };
 
-const [decorator, getMeteadata] = createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', DecoratorTarget.Class | DecoratorTarget.ConstructorParameter);
+const [decorator, getMetadata] = createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', DecoratorTarget.Class | DecoratorTarget.ConstructorParameter);
 
 /**
  * Gets the specified service injection descriptors for a class.
@@ -27,16 +27,16 @@ const [decorator, getMeteadata] = createMetadataDecorator<InjectionDescriptor[]>
  * @returns {InjectionDescriptor[]} The service injection descriptors.
  */
 export function getServiceInjectionDescriptors(target: NewableFunction): InjectionDescriptor[] {
-    return getMeteadata(target as Constructor<any>) || [];
+    return getMetadata(target as Constructor<any>) || [];
 }
 
 /**
  * Specifies service(s) to inject when constructing an instance of a class using the dependency injection container.
  * This decorator can be used on the class to specify all services, or on each constructor parameter individually.
  * @param {...ServiceIdentifier<any>[]} services - The services to inject.
- * @returns {Inject} The decorator.
+ * @returns {Decorator} The decorator.
  */
-export function inject(...services: (Service | [Service])[]): Inject {
+export function inject(...services: (Service | [Service])[]): Decorator {
     return decorator((target, type, propertyKey, index, value) => {
         const descriptors = value || [];
 
