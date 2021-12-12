@@ -1,11 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { describeThis } from '@dolittle/typescript.testing';
+
 import { ExecutionContext, Version, Claim, Claims, MicroserviceId, TenantId, CorrelationId, Environment } from '@dolittle/sdk.execution';
 
-import '../executionContexts';
-
-import { describeThis } from '@dolittle/typescript.testing';
+import { toProtobuf, toSDK } from  '../ExecutionContexts';
 
 describeThis(__filename, () => {
     const claimsArray: Claim[] = [
@@ -23,7 +23,7 @@ describeThis(__filename, () => {
         claims
     );
 
-    const result = original.toProtobuf().toSDK();
+    const result = toSDK(toProtobuf(original));
     const resultClaims = result.claims.toArray();
 
     it('should hold the same microservice identifier', () => result.microserviceId.toString().should.equal(original.microserviceId.toString()));

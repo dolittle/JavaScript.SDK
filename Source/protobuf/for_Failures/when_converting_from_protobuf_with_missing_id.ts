@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import '../failures';
-import { MissingFailureIdentifier } from '../MissingFailureIdentifier';
-
 import { describeThis } from '@dolittle/typescript.testing';
+
+import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
+
+import { toSDK } from '../Failures';
+import { MissingFailureIdentifier } from '../MissingFailureIdentifier';
 
 describeThis(__filename, () => {
     const reason = 'MyReason';
@@ -15,7 +16,7 @@ describeThis(__filename, () => {
     let result: any;
 
     try {
-        pbFailure.toSDK();
+        toSDK(pbFailure);
     } catch (ex) {
         result = ex;
     }

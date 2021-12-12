@@ -4,10 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { Uuid } from '@dolittle/contracts/Protobuf/Uuid_pb';
 
-import './extensions';
-
 /**
- * Convert to protobuf representation.
+ * Convert a guid to protobuf representation.
  * @param {Guid} guid - The GUID to convert.
  * @returns {Uuid} The converted UUID.
  */
@@ -18,7 +16,7 @@ export function toProtobuf(guid: Guid): Uuid {
 }
 
 /**
- * Convert to SDK representation.
+ * Convert an uuid to SDK representation.
  * @param {Uuid} uuid - The UUID to convert.
  * @returns {Guid} The converted GUID.
  */
@@ -28,11 +26,3 @@ export function toSDK(uuid?: Uuid): Guid {
     }
     return new Guid(uuid.getValue_asU8());
 }
-
-Guid.prototype.toProtobuf = function () {
-    return toProtobuf(this);
-};
-
-Uuid.prototype.toSDK = function () {
-    return toSDK(this);
-};

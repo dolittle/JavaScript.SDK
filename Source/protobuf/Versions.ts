@@ -4,8 +4,6 @@
 import { Version as SdkVersion } from '@dolittle/sdk.execution';
 import { Version as PbVersion } from '@dolittle/contracts/Versioning/Version_pb';
 
-import './extensions';
-
 /**
  * Convert to protobuf representation.
  * @param {SdkVersion} input - The version to convert.
@@ -41,9 +39,3 @@ export function toSDK(input?: PbVersion): SdkVersion {
 
     return version;
 }
-SdkVersion.prototype.toProtobuf = function () {
-    return toProtobuf(this);
-};
-PbVersion.prototype.toSDK = function () {
-    return toSDK(this);
-};

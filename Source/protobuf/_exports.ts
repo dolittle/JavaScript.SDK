@@ -7,9 +7,9 @@ export { FailureReason } from './FailureReason';
 export { MissingArtifactIdentifier } from './MissingArtifactIdentifier';
 export { MissingFailureIdentifier } from './MissingFailureIdentifier';
 
-export * as claims from './claims';
-export * as artifacts from './artifacts';
-export * as executionContexts from './executionContexts';
-export * as failures from './failures';
-export * as guids from './guids';
-export * as versions from './versions';
+export * as Claims from './Claims';
+export * as Artifacts from './Artifacts';
+export * as ExecutionContexts from './ExecutionContexts';
+export * as Failures from './Failures';
+export * as Guids from './Guids';
+export * as Versions from './Versions';

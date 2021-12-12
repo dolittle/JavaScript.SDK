@@ -3,6 +3,7 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
+
 import { Artifact, Generation } from '@dolittle/sdk.artifacts';
 
 export class artifact_type_id extends ConceptAs<Guid, 'artifact_type_id'> {
