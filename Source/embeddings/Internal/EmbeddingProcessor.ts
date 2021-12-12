@@ -6,9 +6,10 @@ import { Constructor } from '@dolittle/types';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { DeleteReadModelInstance, Key } from '@dolittle/sdk.projections';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
 import { ClientProcessor, IReverseCallClient, reactiveDuplex, ReverseCallClient} from '@dolittle/sdk.services';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
@@ -36,8 +37,6 @@ import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
 import { MissingEmbeddingInformation } from '../MissingEmbeddingInformation';
 import { IEmbedding } from './IEmbedding';
 
-import '@dolittle/sdk.protobuf';
-
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
  */
@@ -59,7 +58,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     /** @inheritdoc */
     protected get registerArguments(): EmbeddingRegistrationRequest {
         const registerArguments = new EmbeddingRegistrationRequest();
-        registerArguments.setEmbeddingid(this._embedding.embeddingId.value.toProtobuf());
+        registerArguments.setEmbeddingid(Guids.toProtobuf(this._embedding.embeddingId.value));
 
         let readModelInstance;
         if (typeof this._embedding.readModelTypeOrInstance === 'function') {
@@ -72,7 +71,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         const events: Artifact[] = [];
         for (const eventType of this._embedding.events) {
-            events.push(eventType.toProtobuf());
+            events.push(Artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventsList(events);
         return registerArguments;
@@ -196,7 +195,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = pbEventType.toSDK(EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

@@ -1,19 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
+import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { ExecutionContexts } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary, UnaryMethod } from '@dolittle/sdk.services';
+
 import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { reactiveUnary, UnaryMethod } from '@dolittle/sdk.services';
-import { Logger } from 'winston';
 
 import { FailedToGetResource } from './FailedToGetResource';
 import { IResource } from './IResource';
 import { ResourceName } from './ResourceName';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Defines the type of response expected from the Runtime when getting a resource.
@@ -79,7 +80,7 @@ export abstract class Resource<TRequest, TResponse extends ResponseLike> extends
      * @returns {CallRequestContext} The created call request context.
      */
     protected createCallContext(): CallRequestContext {
-        return this._executionContext.toCallContext();
+        return ExecutionContexts.toCallContext(this._executionContext);
     }
 
     /**

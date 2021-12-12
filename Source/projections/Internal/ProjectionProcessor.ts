@@ -7,8 +7,9 @@ import { Constructor } from '@dolittle/types';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
 
@@ -33,8 +34,6 @@ import { ProjectionContext } from '../ProjectionContext';
 import { ProjectionId } from '../ProjectionId';
 import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 
-import '@dolittle/sdk.protobuf';
-
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
  * @template T The type of the projection read model.
@@ -56,8 +55,8 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
     /** @inheritdoc */
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
-        registerArguments.setProjectionid(this._projection.projectionId.value.toProtobuf());
-        registerArguments.setScopeid(this._projection.scopeId.value.toProtobuf());
+        registerArguments.setProjectionid(Guids.toProtobuf(this._projection.projectionId.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
 
         let readModelInstance;
         if (typeof this._projection.readModelTypeOrInstance === 'function') {
@@ -71,7 +70,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
             const selector = new ProjectionEventSelector();
-            selector.setEventtype(eventSelector.eventType.toProtobuf());
+            selector.setEventtype(Artifacts.toProtobuf(eventSelector.eventType));
             this.setKeySelector(selector, eventSelector.keySelector);
             events.push(selector);
         }
@@ -184,7 +183,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = pbEventType.toSDK(EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

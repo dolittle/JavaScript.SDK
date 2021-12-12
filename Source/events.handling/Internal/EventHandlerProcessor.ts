@@ -6,8 +6,9 @@ import { DateTime } from 'luxon';
 
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
-import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -26,8 +27,6 @@ import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contra
 
 import { EventHandlerId } from '../EventHandlerId';
 import { IEventHandler } from '../IEventHandler';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link EventHandler}.
@@ -49,15 +48,15 @@ export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerI
     /** @inheritdoc */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
-        registerArguments.setEventhandlerid(this._identifier.value.toProtobuf());
-        registerArguments.setScopeid(this._handler.scopeId.value.toProtobuf());
+        registerArguments.setEventhandlerid(Guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._handler.scopeId.value));
         registerArguments.setPartitioned(this._handler.partitioned);
         if (this._handler.hasAlias) {
             registerArguments.setAlias(this._handler.alias!.value);
         }
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {
-            handledArtifacts.push(eventType.toProtobuf());
+            handledArtifacts.push(Artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventtypesList(handledArtifacts);
         return registerArguments;
@@ -141,7 +140,7 @@ export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerI
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = pbEventType.toSDK(EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

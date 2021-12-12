@@ -25,6 +25,19 @@ export function toProtobuf(input: SdkFailure): PbFailure {
  * @param {PbFailure} input - The failure to convert.
  * @returns {SdkFailure} The converted failure.
  */
+export function toSDK(input: PbFailure): SdkFailure;
+/**
+ * An overload to simplify usage of this function.
+ * @param {undefined} input - Undefined.
+ * @returns {undefined} Undefined.
+ */
+export function toSDK(input: undefined): undefined;
+/**
+ * Convert a optional failure to SDK representation.
+ * @param {PbFailure?} [input] - The optional failure to convert.
+ * @returns {SdkFailure|undefined} The converted failure.
+ */
+export function toSDK(input?: PbFailure): SdkFailure | undefined;
 export function toSDK(input?: PbFailure): SdkFailure | undefined {
     if (!input) {
         return undefined;

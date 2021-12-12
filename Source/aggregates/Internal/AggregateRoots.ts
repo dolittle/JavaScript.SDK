@@ -4,6 +4,7 @@
 import { Logger } from 'winston';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
@@ -12,8 +13,6 @@ import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/Agg
 
 import { AggregateRootType } from '../AggregateRootType';
 import { IAggregateRootTypes } from '../IAggregateRootTypes';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents a system that knows how to register Aggregate Roots with the Runtime.
@@ -44,8 +43,8 @@ export class AggregateRoots {
 
     private createRequest(aggregateRootType: AggregateRootType): AggregateRootAliasRegistrationRequest {
         const result = new AggregateRootAliasRegistrationRequest();
-        result.setAggregateroot(aggregateRootType.toProtobuf());
-        result.setCallcontext(this._executionContext.toCallContext());
+        result.setAggregateroot(Artifacts.toProtobuf(aggregateRootType));
+        result.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         if (aggregateRootType.hasAlias()) {
             result.setAlias(aggregateRootType.alias!.value);
         }

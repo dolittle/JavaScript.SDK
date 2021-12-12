@@ -4,6 +4,7 @@
 import { Logger } from 'winston';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
@@ -12,8 +13,6 @@ import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events
 
 import { EventType } from '../EventType';
 import { IEventTypes } from '../IEventTypes';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents a system that knows how to register Event Types with the Runtime.
@@ -42,8 +41,8 @@ export class EventTypes {
 
     private createRequest(eventType: EventType): EventTypeRegistrationRequest {
         const result = new EventTypeRegistrationRequest();
-        result.setEventtype(eventType.toProtobuf());
-        result.setCallcontext(this._executionContext.toCallContext());
+        result.setEventtype(Artifacts.toProtobuf(eventType));
+        result.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         if (eventType.hasAlias()) {
             result.setAlias(eventType.alias!.value);
         }

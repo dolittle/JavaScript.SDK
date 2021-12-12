@@ -6,6 +6,7 @@ import { Logger } from 'winston';
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -16,8 +17,6 @@ import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/
 import { FilterEventCallback } from '../FilterEventCallback';
 import { FilterId } from '../FilterId';
 import { FilterEventProcessor } from './FilterEventProcessor';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters events to an unpartitioned stream.
@@ -43,8 +42,8 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
     /** @inheritdoc */
     protected get registerArguments(): FilterRegistrationRequest {
         const registerArguments = new FilterRegistrationRequest();
-        registerArguments.setFilterid(this._identifier.value.toProtobuf());
-        registerArguments.setScopeid(this._scopeId.value.toProtobuf());
+        registerArguments.setFilterid(Guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._scopeId.value));
         return registerArguments;
     }
 

@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 import { IServiceProvider } from '@dolittle/sdk.common';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts } from '@dolittle/sdk.protobuf';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
@@ -15,8 +16,6 @@ import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtim
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
 import { FilterId } from '../FilterId';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} that filters events to a stream.
@@ -78,7 +77,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventTypeArtifact = pbEventType.toSDK(EventType.from);
+        const eventTypeArtifact = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventTypeArtifact)) {
             const eventType = this._eventTypes.getTypeFor(eventTypeArtifact);
             event = Object.assign(new eventType(), event);

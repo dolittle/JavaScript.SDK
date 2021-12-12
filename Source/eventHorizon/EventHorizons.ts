@@ -1,15 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
-import { Subscription as PbSubscription } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
-import { Cancellation, retryPipe, retryWithPolicy } from '@dolittle/sdk.resilience';
-import { reactiveUnary } from '@dolittle/sdk.services';
+import { Logger } from 'winston';
 import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Logger } from 'winston';
+import { Guid } from '@dolittle/rudiments';
+
+import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation, retryPipe, retryWithPolicy } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
+
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
+import { Subscription as PbSubscription } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
+
 import { EventHorizonSubscriptionFailed } from './EventHorizonSubscriptionFailed';
 import { IEventHorizons } from './IEventHorizons';
 import { Subscription } from './Subscription';
@@ -17,8 +21,6 @@ import { SubscriptionCallbacks } from './SubscriptionCallbacks';
 import { SubscriptionDoesNotExist } from './SubscriptionDoesNotExist';
 import { SubscriptionResponse } from './SubscriptionResponse';
 import { TenantWithSubscriptions } from './TenantWithSubscriptions';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IEventHorizons}.
@@ -91,7 +93,7 @@ export class EventHorizons extends IEventHorizons {
                 .subscribe({
                     next: pbResponse => {
                         try {
-                            const response = SubscriptionResponse.from(pbResponse!.getConsentid()!.toSDK(), pbResponse?.getFailure()?.toSDK());
+                            const response = SubscriptionResponse.from(Guids.toSDK(pbResponse.getConsentid()), Failures.toSDK(pbResponse.getFailure()));
                             if (response.failed) {
                                 this._logger.error(`Failed to subscribe to events from producer microservice ${subscription.microservice} in producer tenant ${subscription.tenant} in producer stream ${subscription.stream} in partition ${subscription.partition} for consumer tenant ${tenant} into scope ${subscription.scope}. Failure id:${response.failure?.id}) and reason: '${response.failure?.reason}'. Will retry in ${this._retryTimeout}s.`);
                                 subscriber.error(new EventHorizonSubscriptionFailed(
@@ -123,16 +125,16 @@ export class EventHorizons extends IEventHorizons {
 
     private createSubscriptionRequest(tenant: TenantId, subscription: Subscription) {
         const executionContext = this._executionContext.forTenant(tenant.value);
-        const callContext = executionContext.toCallContext();
-        callContext.setHeadid(Guid.create().toProtobuf());
+        const callContext = ExecutionContexts.toCallContext(executionContext);
+        callContext.setHeadid(Guids.toProtobuf(Guid.create()));
 
         const pbSubscription = new PbSubscription();
         pbSubscription.setCallcontext(callContext);
         pbSubscription.setPartitionid(subscription.partition.value);
-        pbSubscription.setScopeid(subscription.scope.value.toProtobuf());
-        pbSubscription.setStreamid(subscription.stream.value.toProtobuf());
-        pbSubscription.setTenantid(subscription.tenant.value.toProtobuf());
-        pbSubscription.setMicroserviceid(subscription.microservice.value.toProtobuf());
+        pbSubscription.setScopeid(Guids.toProtobuf(subscription.scope.value));
+        pbSubscription.setStreamid(Guids.toProtobuf(subscription.stream.value));
+        pbSubscription.setTenantid(Guids.toProtobuf(subscription.tenant.value));
+        pbSubscription.setMicroserviceid(Guids.toProtobuf(subscription.microservice.value));
         return pbSubscription;
     }
 }

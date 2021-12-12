@@ -1,20 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
-import { ReverseCallArgumentsContext, ReverseCallRequestContext, ReverseCallResponseContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
-import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
+import { Logger } from 'winston';
 import { CompletionObserver, concat, ErrorObserver, merge, NextObserver, Observable, partition, Subject, Subscriber, TimeoutError, Unsubscribable } from 'rxjs';
 import { filter, map, timeout } from 'rxjs/operators';
-import { Logger } from 'winston';
+import { Guid } from '@dolittle/rudiments';
+
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { ExecutionContexts, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
+import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
+import { ReverseCallArgumentsContext, ReverseCallRequestContext, ReverseCallResponseContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
+import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
+
 import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
-
-import '@dolittle/sdk.protobuf';
 
 /**
  * Represents an implementation of {@link IReverseCallClient}.
@@ -87,7 +89,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
      */
     private create(): Observable<TConnectResponse> {
         const callContext = new ReverseCallArgumentsContext();
-        callContext.setHeadid(Guid.create().toProtobuf());
+        callContext.setHeadid(Guids.toProtobuf(Guid.create()));
 
         const pingInterval = new Duration();
         const pingSeconds = Math.trunc(this._pingInterval);
@@ -95,9 +97,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         pingInterval.setSeconds(pingSeconds);
         pingInterval.setNanos(pingNanos);
         callContext.setPinginterval(pingInterval);
-
-        const executionContext = this._executionContext.toProtobuf();
-        callContext.setExecutioncontext(executionContext);
+        callContext.setExecutioncontext(ExecutionContexts.toProtobuf(this._executionContext));
 
         this._setArgumentsContext(this._connectArguments, callContext);
 
@@ -180,7 +180,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 try {
                     const request = this._getMessageRequest(message)!;
                     const context = this._getRequestContext(request)!;
-                    const requestContext = context.getExecutioncontext()!.toSDK();
+                    const requestContext = ExecutionContexts.toSDK(context.getExecutioncontext()!);
                     const executionContext = this._executionContext
                         .forTenant(requestContext.tenantId.value)
                         .forClaims(requestContext.claims);
