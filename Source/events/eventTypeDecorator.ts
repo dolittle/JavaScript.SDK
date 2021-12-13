@@ -1,14 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Constructor } from '@dolittle/types';
+
 import { Generation } from '@dolittle/sdk.artifacts';
 import { Decorators } from '@dolittle/sdk.common';
-import { Constructor } from '@dolittle/types';
-import { ClassNotDecoratedWithEventType } from './ClassNotDecoratedWithEventType';
 
 import { EventType } from './EventType';
 import { EventTypeAlias } from './EventTypeAlias';
-import { EventTypeDecoratorAppliedMultipleTimes } from './EventTypeDecoratorAppliedMultipleTimes';
 import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 import { EventTypeOptions } from './EventTypeOptions';
 
@@ -23,11 +22,7 @@ const [decorator, getMetadata] = Decorators.createMetadataDecorator<EventType>('
  * @returns {Decorator} The decorator.
  */
 export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}): Decorator {
-    return decorator((target, type, propertyKey, index, value) => {
-        if (value !== undefined) {
-            throw new EventTypeDecoratorAppliedMultipleTimes(type.name);
-        }
-
+    return decorator((target, type) => {
         return new EventType(
             EventTypeId.from(identifier),
             options.generation ? Generation.from(options.generation) : Generation.first,
@@ -41,11 +36,5 @@ export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions
  * @returns {EventType} The decorated event type.
  */
 export function getDecoratedEventType(type: Constructor<any>): EventType {
-    const decoratedEventType = getMetadata(type);
-
-    if (decoratedEventType === undefined) {
-        throw new ClassNotDecoratedWithEventType(type.name);
-    }
-
-    return decoratedEventType;
+    return getMetadata(type, true, 'Classes used as events must be decorated');
 }

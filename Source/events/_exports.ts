@@ -7,7 +7,6 @@ export * as Store from './Store/_exports';
 
 export { AggregateRootId, AggregateRootIdLike } from './AggregateRootId';
 export { AggregateRootVersion } from './AggregateRootVersion';
-export { ClassNotDecoratedWithEventType } from './ClassNotDecoratedWithEventType';
 export { EventContext } from './EventContext';
 export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
@@ -15,7 +14,6 @@ export { EventSourceId } from './EventSourceId';
 export { EventType } from './EventType';
 export { EventTypeAlias, EventTypeAliasLike } from './EventTypeAlias';
 export { eventType, getDecoratedEventType } from './eventTypeDecorator';
-export { EventTypeDecoratorAppliedMultipleTimes } from './EventTypeDecoratorAppliedMultipleTimes';
 export { EventTypeId, EventTypeIdLike } from './EventTypeId';
 export { EventTypeMap } from './EventTypeMap';
 export { EventTypeOptions } from './EventTypeOptions';

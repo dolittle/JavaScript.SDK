@@ -3,10 +3,13 @@
 
 export { CannotDetermineDecoratorTarget } from './CannotDetermineDecoratorTarget';
 export { createMetadataDecorator } from './createMetadataDecorator';
+export { DecoratorAppliedMultipleTimes } from './DecoratorAppliedMultipleTimes';
 export { DecoratorTarget } from './DecoratorTarget';
 export { ensureDecoratorMetadataMap } from './ensureDecoratorMetadataMap';
+export { getAppliedDecorators } from './getAppliedDecorators';
 export { getDecoratedTarget } from './getDecoratedTarget';
 export { getDecoratorMetadata } from './getDecoratorMetadata';
 export { hasDecoratorMetadata } from './hasDecoratorMetadata';
 export { InvalidDecoratorTarget } from './InvalidDecoratorTarget';
+export { RequiredDecoratorNotApplied } from './RequiredDecoratorNotApplied';
 export { setDecoratorMetadata } from './setDecoratorMetadata';
