@@ -11,17 +11,15 @@ import { EventTypeAlias } from './EventTypeAlias';
 import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 import { EventTypeOptions } from './EventTypeOptions';
 
-type Decorator = (target: any, propertyKey?: string | symbol, parameterIndex?: PropertyDescriptor | number) => void;
-
 const [decorator, getMetadata] = Decorators.createMetadataDecorator<EventType>('event-type', 'eventType', Decorators.DecoratorTarget.Class);
 
 /**
  * Decorator for associating a class with an event type.
  * @param {EventTypeIdLike} identifier - The event type to associate with this class.
  * @param {EventTypeOptions} [options={}] - Options to give to the event type.
- * @returns {Decorator} The decorator.
+ * @returns {Decorators.Decorator} The decorator.
  */
-export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}): Decorator {
+export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}): Decorators.Decorator {
     return decorator((target, type) => {
         return new EventType(
             EventTypeId.from(identifier),

@@ -3,6 +3,7 @@
 
 export { CannotDetermineDecoratorTarget } from './CannotDetermineDecoratorTarget';
 export { createMetadataDecorator } from './createMetadataDecorator';
+export { Decorator } from './Decorator';
 export { DecoratorAppliedMultipleTimes } from './DecoratorAppliedMultipleTimes';
 export { DecoratorTarget } from './DecoratorTarget';
 export { ensureDecoratorMetadataMap } from './ensureDecoratorMetadataMap';

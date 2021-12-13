@@ -4,12 +4,11 @@
 import { Constructor } from '@dolittle/types';
 
 import { createMetadataDecorator } from '../Decorators/createMetadataDecorator';
+import { Decorator } from '../Decorators/Decorator';
 import { DecoratorTarget } from '../Decorators/DecoratorTarget';
 import { ServiceIdentifier } from './ServiceIdentifier';
 import { SingleInjectionServiceMustBeSpecifiedForConstructorArgument } from './SingleInjectionServiceMustBeSpecifiedForConstructorArgument';
 import { WrongNumberOfInjectionServicesSpecifiedForClass } from './WrongNumberOfInjectionServicesSpecifiedForClass';
-
-type Decorator = (target: any, propertyKey?: string | symbol, parameterIndex?: PropertyDescriptor | number) => void;
 
 type Service = ServiceIdentifier<any>;
 
