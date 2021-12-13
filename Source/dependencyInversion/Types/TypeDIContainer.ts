@@ -1,16 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ContainerInstance } from 'typedi';
+import { ContainerInstance, Container } from 'typedi';
 
-type TypeDIContainerBase = {
+type TypeDIContainerInstanceType = {
     [K in keyof ContainerInstance]: ContainerInstance[K];
 };
+
+type TypeDIContainerGlobalType = {
+    [K in keyof typeof Container]: typeof Container[K];
+};
+
+interface TypeDIInstanceContainer extends TypeDIContainerInstanceType {};
+interface TypeDIGlobalContainer extends TypeDIContainerGlobalType {};
 
 /**
  * Defines the interface of an TypeDI container.
  */
-export interface TypeDIContainer extends TypeDIContainerBase {}
+export type TypeDIContainer = TypeDIInstanceContainer | TypeDIGlobalContainer;
 
 /**
  * Checks whether or not the provided container is an TypeDI container.
