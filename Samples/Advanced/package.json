@@ -1,7 +1,7 @@
 {
     "name": "advanced",
     "private": true,
-    "version": "21.0.0-gimli.5",
+    "version": "21.0.0-gimli.6",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "21.0.0-gimli.5",
-        "@dolittle/sdk.artifacts": "21.0.0-gimli.5",
-        "@dolittle/sdk.events": "21.0.0-gimli.5",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.5"
+        "@dolittle/sdk": "21.0.0-gimli.6",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.6",
+        "@dolittle/sdk.events": "21.0.0-gimli.6",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.6"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
