@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-consumer",
     "private": true,
-    "version": "21.0.0-gimli.6",
+    "version": "21.0.0-gimli.7",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "21.0.0-gimli.6",
-        "@dolittle/sdk.artifacts": "21.0.0-gimli.6",
-        "@dolittle/sdk.eventhorizon": "21.0.0-gimli.6",
-        "@dolittle/sdk.events": "21.0.0-gimli.6",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.6"
+        "@dolittle/sdk": "21.0.0-gimli.7",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.7",
+        "@dolittle/sdk.eventhorizon": "21.0.0-gimli.7",
+        "@dolittle/sdk.events": "21.0.0-gimli.7",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.7"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
