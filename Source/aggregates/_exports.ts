@@ -13,7 +13,6 @@ export { AggregateRootTypeAlias } from './AggregateRootTypeAlias';
 export { AggregateRootTypeMap } from './AggregateRootTypeMap';
 export { AggregateRootTypeOptions } from './AggregateRootTypeOptions';
 export { AggregateRootTypes } from './AggregateRootTypes';
-export { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecorators';
 export { AppliedEvent } from './AppliedEvent';
 export { EventTypesNotSet } from './EventTypesNotSet';
 export { IAggregateOf } from './IAggregateOf';
@@ -23,5 +22,5 @@ export { MissingAggregateRootDecoratorFor } from './MissingAggregateRootDecorato
 export { OnDecoratedMethod } from './OnDecoratedMethod';
 export { OnDecoratedMethods } from './OnDecoratedMethods';
 export { OnMethodSignature } from './OnMethodSignature';
-export { aggregateRoot } from './aggregateRootDecorator';
+export { aggregateRoot, getDecoratedAggregateRootType } from './aggregateRootDecorator';
 export { on } from './onDecorator';

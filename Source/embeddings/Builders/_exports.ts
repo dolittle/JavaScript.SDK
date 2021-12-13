@@ -15,7 +15,6 @@ export { EmbeddingClassDeletionMethod } from './EmbeddingClassDeletionMethod';
 export { EmbeddingClassOnMethod } from './EmbeddingClassOnMethod';
 export { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 export { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
-export { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
 export { EmbeddingsBuilder } from './EmbeddingsBuilder';
 export { EmbeddingsBuilderCallback } from './EmbeddingsBuilderCallback';
 export { IEmbeddingBuilder } from './IEmbeddingBuilder';
@@ -27,6 +26,6 @@ export { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedFo
 export { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 export { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
 export { resolveDeletionToEvents } from './resolveDeletionToEventsDecorator';
-export { embedding } from './embeddingDecorator';
+export { embedding, getEmbeddingDecoratedType } from './embeddingDecorator';
 export { on } from './onDecorator';
 export { resolveUpdateToEvents } from './resolveUpdateToEventsDecorator';

@@ -4,28 +4,38 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
+import { Decorators } from '@dolittle/sdk.common';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandlerAlias } from '../EventHandlerAlias';
 import { EventHandlerId } from '../EventHandlerId';
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
 import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerOptions } from './EventHandlerOptions';
+
+const [decorator, getMetadata] = Decorators.createMetadataDecorator<EventHandlerDecoratedType>('event-handler', 'eventHandler', Decorators.DecoratorTarget.Class);
 
 /**
  * Decorator to mark a class as an EventHandler.
  * @param {EventHandlerId | Guid | string} eventHandlerId - The id to associate with this EventHandler.
  * @param {EventHandlerOptions} [options={}] - Options to give to the EventHandler.
- * @returns {(any) => void} The decorator to apply.
+ * @returns {Decorators.Decorator} The decorator to apply.
  */
-export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}) {
-    return function (target: any) {
-        const targetConstructor = target as Constructor<any>;
-        EventHandlerDecoratedTypes.register(new EventHandlerDecoratedType(
+export function eventHandler(eventHandlerId: EventHandlerId | Guid | string, options: EventHandlerOptions = {}): Decorators.Decorator {
+    return decorator((target, type) => {
+        return new EventHandlerDecoratedType(
             EventHandlerId.from(eventHandlerId),
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
             options.partitioned === undefined || options.partitioned,
-            EventHandlerAlias.from(options.alias ?? targetConstructor.name),
-            targetConstructor));
-    };
+            EventHandlerAlias.from(options.alias ?? type.name),
+            type);
+    });
+}
+
+/**
+ * Gets the {@link EventHandlerDecoratedType} of the specified class.
+ * @param {Constructor<any>} type - The class to get the decorated event handler type for.
+ * @returns {EventHandlerDecoratedType | undefined} The decorated event handler type if decorated.
+ */
+export function getEventHandlerDecoratedType(type: Constructor<any>): EventHandlerDecoratedType | undefined {
+    return getMetadata(type);
 }

@@ -13,8 +13,7 @@ import { EventHandlerSignature } from '../EventHandlerSignature';
 import { IEventHandler } from '../IEventHandler';
 import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
-import { EventHandlerDecoratedTypes } from './EventHandlerDecoratedTypes';
-import { eventHandler as eventHandlerDecorator } from './eventHandlerDecorator';
+import { eventHandler as eventHandlerDecorator, getEventHandlerDecoratedType } from './eventHandlerDecorator';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
 import { handles as handlesDecorator } from './handlesDecorator';
@@ -54,7 +53,7 @@ export class EventHandlerClassBuilder<T> {
      */
     build(eventTypes: IEventTypes, bindings: IServiceProviderBuilder, results: IClientBuildResults): IEventHandler | undefined {
         results.addInformation(`Building event handler of type ${this._eventHandlerType.name}`);
-        const decoratedType = EventHandlerDecoratedTypes.types.find(_ => _.type === this._eventHandlerType);
+        const decoratedType = getEventHandlerDecoratedType(this._eventHandlerType);
         if (decoratedType === undefined) {
             results.addFailure(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
             return;

@@ -19,8 +19,7 @@ import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddin
 import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
 import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
 import { resolveUpdateToEvents as updateDecorator } from './resolveUpdateToEventsDecorator';
-import { EmbeddingDecoratedTypes } from './EmbeddingDecoratedTypes';
-import { embedding as embeddingDecorator } from './embeddingDecorator';
+import { embedding as embeddingDecorator, getEmbeddingDecoratedType } from './embeddingDecorator';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
@@ -56,7 +55,7 @@ export class EmbeddingClassBuilder<T> {
      */
     build(eventTypes: IEventTypes, results: IClientBuildResults): IEmbedding<any> | undefined {
         results.addInformation(`Building embedding of type ${this._embeddingType.name}`);
-        const decoratedType = EmbeddingDecoratedTypes.types.find(_ => _.type === this._embeddingType);
+        const decoratedType = getEmbeddingDecoratedType(this._embeddingType);
         if (decoratedType === undefined) {
             results.addFailure(`The embedding class ${this._embeddingType.name} must be decorated with an @${embeddingDecorator.name} decorator`);
             return;

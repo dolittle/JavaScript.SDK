@@ -18,7 +18,6 @@ export {
     EmbeddingClassOnMethod,
     EmbeddingClassUpdateMethod,
     EmbeddingDecoratedType,
-    EmbeddingDecoratedTypes,
     EmbeddingsBuilder,
     EmbeddingsBuilderCallback,
     IEmbeddingBuilder,
@@ -31,6 +30,7 @@ export {
     UpdateDecoratedMethods,
     resolveDeletionToEvents,
     embedding,
+    getEmbeddingDecoratedType,
     on,
     resolveUpdateToEvents,
 } from './Builders/_exports';

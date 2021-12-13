@@ -5,8 +5,8 @@ import { Constructor } from '@dolittle/types';
 
 import { ScopeId } from '@dolittle/sdk.events';
 
-import { ProjectionDecoratedTypes } from '../Builders/ProjectionDecoratedTypes';
 import { ProjectionId } from '../ProjectionId';
+import { getProjectionDecoratedType } from '../Builders/projectionDecorator';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
 import { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection';
@@ -32,8 +32,8 @@ export class ProjectionAssociations extends IProjectionAssociations {
             this._associationsToType.set(association, type);
             this._typeToAssociations.set(type, association);
         } else if (typeof typeOrInstance === 'function') {
-            const decoratedType = ProjectionDecoratedTypes.types.find(_ => _.type === typeOrInstance);
-            if (!decoratedType) {
+            const decoratedType = getProjectionDecoratedType(typeOrInstance as Constructor<T>);
+            if (decoratedType === undefined) {
                 throw new TypeIsNotAProjection(typeOrInstance);
             }
             this.associate(decoratedType.type, decoratedType.projectionId, decoratedType.scopeId);
