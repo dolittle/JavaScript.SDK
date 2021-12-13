@@ -21,7 +21,6 @@ export class DelegatingResolver extends IDynamicResolver {
 
     /** @inheritdoc */
     bindUnknownService(serviceIdentifier: interfaces.ServiceIdentifier<unknown>, bindings: Bindings): void {
-        console.log('Delegating called with', serviceIdentifier);
         if (this._services.has(serviceIdentifier)) {
             // TODO: Deal with ResolveAll here (probably easy with the context)
             bindings.bind(serviceIdentifier).toDynamicValue(() => this._services.get(serviceIdentifier));
