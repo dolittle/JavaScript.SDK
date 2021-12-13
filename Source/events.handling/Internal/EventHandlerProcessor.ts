@@ -68,7 +68,7 @@ export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerI
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
@@ -85,7 +85,7 @@ export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerI
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

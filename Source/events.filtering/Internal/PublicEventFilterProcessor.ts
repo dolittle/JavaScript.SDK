@@ -52,7 +52,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
         registerArguments: PublicFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation
     ): IReverseCallClient<FilterRegistrationResponse> {
@@ -70,7 +70,7 @@ export class PublicEventFilterProcessor extends FilterEventProcessor<PublicFilte
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

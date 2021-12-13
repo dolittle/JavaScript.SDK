@@ -24,12 +24,14 @@ export class Embeddings extends IEmbeddings {
      * @param {ExecutionContext} _executionContext - The base execution context of the client.
      * @param {ITenantServiceProviders} _services - For resolving services while handling requests.
      * @param {Logger} _logger - For logging.
+     * @param {number} _pingInterval - The ping interval to configure the reverse call client with.
      */
     constructor(
         private readonly _client: EmbeddingsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _services: ITenantServiceProviders,
-        private readonly _logger: Logger
+        private readonly _logger: Logger,
+        private readonly _pingInterval: number,
     ) {
         super();
     }
@@ -42,6 +44,7 @@ export class Embeddings extends IEmbeddings {
             this._executionContext,
             this._services,
             this._logger,
+            this._pingInterval,
             cancellation)
         .subscribe({
             error: (error: Error) => {

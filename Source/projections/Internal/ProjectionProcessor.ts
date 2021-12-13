@@ -98,7 +98,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<ProjectionRegistrationResponse> {
         return new ReverseCallClient<ProjectionClientToRuntimeMessage, ProjectionRuntimeToClientMessage, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> (
@@ -115,7 +115,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

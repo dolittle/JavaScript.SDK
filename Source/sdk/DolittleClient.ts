@@ -229,6 +229,7 @@ export class DolittleClient extends IDolittleClient {
                 executionContext,
                 services,
                 logger,
+                configuration.pingInterval,
                 this._cancellationSource.cancellation);
 
         } catch (exception) {
@@ -327,24 +328,25 @@ export class DolittleClient extends IDolittleClient {
         executionContext: ExecutionContext,
         services: ITenantServiceProviders,
         logger: Logger,
+        pingInterval: number,
         cancellation: Cancellation,
     ) {
-        const filters = new Filters(filtersClient, executionContext, services, logger);
+        const filters = new Filters(filtersClient, executionContext, services, logger, pingInterval);
         for (const filter of this._eventFilters) {
             filters.register(filter, cancellation);
         }
 
-        const eventHandlers = new EventHandlers(eventHandlersClient, executionContext, services, logger);
+        const eventHandlers = new EventHandlers(eventHandlersClient, executionContext, services, logger, pingInterval);
         for (const eventHandler of this._eventHandlers) {
             eventHandlers.register(eventHandler, cancellation);
         }
 
-        const projections = new Projections(projectionsClient, executionContext, services, logger);
+        const projections = new Projections(projectionsClient, executionContext, services, logger, pingInterval);
         for (const projection of this._projections) {
             projections.register(projection, cancellation);
         }
 
-        const embeddings = new EmbeddingsInternal.Embeddings(embeddingsClient, executionContext, services, logger);
+        const embeddings = new EmbeddingsInternal.Embeddings(embeddingsClient, executionContext, services, logger, pingInterval);
         for (const embedding of this._embeddings) {
             embeddings.register(embedding, cancellation);
         }

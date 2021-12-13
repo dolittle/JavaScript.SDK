@@ -54,7 +54,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation
     ): IReverseCallClient<FilterRegistrationResponse> {
@@ -72,7 +72,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

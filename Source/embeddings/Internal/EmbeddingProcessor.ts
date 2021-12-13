@@ -83,7 +83,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EmbeddingRegistrationResponse> {
         return new ReverseCallClient<EmbeddingClientToRuntimeMessage, EmbeddingRuntimeToClientMessage, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse>(
@@ -100,7 +100,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

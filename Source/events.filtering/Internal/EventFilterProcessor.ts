@@ -53,7 +53,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
         registerArguments: FilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<FilterResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation
     ): IReverseCallClient<FilterRegistrationResponse> {
@@ -71,7 +71,7 @@ export class EventFilterProcessor extends FilterEventProcessor<FilterRegistratio
             (message, pong) => message.setPong(pong),
             executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
             logger

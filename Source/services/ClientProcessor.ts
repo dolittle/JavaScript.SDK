@@ -28,8 +28,6 @@ import { RegistrationFailed } from './RegistrationFailed';
  * @template TResponse - The type of the responses.
  */
 export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> {
-    private _pingTimeout = 1;
-
     /**
      * Initializes a new {@link ClientProcessor}.
      * @param {string} _kind - What kind of a processor it is.
@@ -46,10 +44,11 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
-    register(client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
+    register(client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
         const reverseCallClient = this.createClient(
             client,
             this.registerArguments,
@@ -58,7 +57,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
                 return this.catchingHandle(request, requestExecutionContext, tenantServiceProvider, logger);
             },
             executionContext,
-            this._pingTimeout,
+            pingInterval,
             logger,
             cancellation);
 
@@ -91,11 +90,12 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
-        return retryWithPolicy(this.register(client, executionContext, services, logger, cancellation), policy, cancellation);
+    registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
+        return retryWithPolicy(this.register(client, executionContext, services, logger, pingInterval, cancellation), policy, cancellation);
     }
 
     /**
@@ -106,11 +106,12 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void> {
-        return this.registerWithPolicy(policy, client, executionContext, services, logger, cancellation).pipe(repeat());
+    registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
+        return this.registerWithPolicy(policy, client, executionContext, services, logger, pingInterval, cancellation).pipe(repeat());
     }
 
     /**
@@ -131,7 +132,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @param {TRegisterArguments} registerArguments - The registration arguments of the reverse call client.
      * @param {(request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>} callback - The callback to pass to the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
-     * @param {number} pingTimeout - The ping timeout to configure the client with.
+     * @param {number} pingInterval - The ping interval to configure the client with.
      * @param {Logger} logger - Used for logging.
      * @param {Cancellation} cancellation - The cancellation used to stop the client.
      */
@@ -140,7 +141,7 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 

@@ -23,7 +23,7 @@ import { IEventProcessor } from './IEventProcessor';
  * @template TIdentifier The type of the event processor identifier.
  * @template TRequest The type of the event processor requests.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TClient, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor<TClient> {
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TClient, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor<TClient> {
     /**
      * Initialises a new instance of the {@link EventProcessor} class.
      * @param {string} _kind - The kind of the event processor.
@@ -45,7 +45,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
         executionContext: ExecutionContext,
-        pingTimeout: number,
+        pingInterval: number,
         logger: Logger,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 

@@ -19,10 +19,11 @@ export abstract class IEventProcessor<TClient> {
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - Used to cancel the registration and processing.
      * @returns {Observable} Representing the connection to the Runtime.
      */
-    abstract register(client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void>;
+    abstract register(client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void>;
 
     /**
      * Registers a processor with a policy.
@@ -31,10 +32,11 @@ export abstract class IEventProcessor<TClient> {
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    abstract registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void>;
+    abstract registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void>;
 
     /**
      * Registers a processor forever with a policy. Even if the registration completes, the repeat() call
@@ -44,8 +46,9 @@ export abstract class IEventProcessor<TClient> {
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
      * @param {ITenantServiceProviders} services - Used to resolve services while handling requests.
      * @param {Logger} logger - Used for logging.
+     * @param {number} pingInterval - The ping interval to configure the processor with.
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
-    abstract registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, cancellation: Cancellation): Observable<void>;
+    abstract registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void>;
 }
