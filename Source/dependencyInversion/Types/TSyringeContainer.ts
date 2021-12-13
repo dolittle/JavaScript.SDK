@@ -14,9 +14,9 @@ export type TSyringeContainer = DependencyContainer;
  * @returns {boolean} True if the container is an {@link TSyringeContainer}, false if not.
  */
 export const isTSyringeContainer = (container: any): container is TSyringeContainer => {
-    if (typeof container.isRegistered !== 'function' || container.isRegistered.length !== 2) return false;
-    if (typeof container.resolve !== 'function' || container.resolve.length !== 2) return false;
-    if (typeof container.resolveAll !== 'function' || container.resolveAll.length !== 2) return false;
+    if (typeof container.isRegistered !== 'function' || container.isRegistered.length !== 1) return false;
+    if (typeof container.resolve !== 'function' || container.resolve.length !== 1) return false;
+    if (typeof container.resolveAll !== 'function' || container.resolveAll.length !== 1) return false;
 
     return true;
 };

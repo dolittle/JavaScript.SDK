@@ -10,6 +10,8 @@ import { isTSyringeContainer } from './Types/TSyringeContainer';
 import { IServiceProvider } from './IServiceProvider';
 import { KnownServiceProviders } from './KnownServiceProviders';
 import { UnknownServiceProviderType } from './UnknownServiceProviderType';
+import { isTypeDIContainer } from './Types/TypeDIContainer';
+import { TypeDIServiceProvider } from './Internal/Implementations/TypeDIServiceProvider';
 
 /**
  * Creates a root {@link IServiceProvider} from the specified service provider.
@@ -24,6 +26,10 @@ export function createRootServiceProvider(serviceProvider: KnownServiceProviders
 
     if (isTSyringeContainer(serviceProvider)) {
         return new TSyringeServiceProvider(serviceProvider);
+    }
+
+    if (isTypeDIContainer(serviceProvider)) {
+        return new TypeDIServiceProvider(serviceProvider);
     }
 
     const type = Object.getPrototypeOf(serviceProvider).constructor as Constructor<any>;

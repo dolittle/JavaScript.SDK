@@ -3,3 +3,4 @@
 
 export { InversifyContainer, isInversifyContainer } from './InversifyContainer';
 export { TSyringeContainer, isTSyringeContainer } from './TSyringeContainer';
+export { TypeDIContainer, isTypeDIContainer } from './TypeDIContainer';

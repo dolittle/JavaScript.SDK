@@ -4,3 +4,4 @@
 export { InversifyServiceBinder } from './InversifyServiceBinder';
 export { InversifyServiceProvider } from './InversifyServiceProvider';
 export { TSyringeServiceProvider } from './TSyringeServiceProvider';
+export { TypeDIServiceProvider } from './TypeDIServiceProvider';

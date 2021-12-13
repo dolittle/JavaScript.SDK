@@ -3,10 +3,12 @@
 
 import { InversifyContainer } from './Types/InversifyContainer';
 import { TSyringeContainer } from './Types/TSyringeContainer';
+import { TypeDIContainer } from './Types/TypeDIContainer';
 
 /**
  * Defines the service provider types the Dolittle SDK is compatible with.
  */
 export type KnownServiceProviders =
     InversifyContainer |
-    TSyringeContainer;
+    TSyringeContainer |
+    TypeDIContainer;

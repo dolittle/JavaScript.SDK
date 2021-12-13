@@ -51,6 +51,7 @@
         "winston": "3.3.2"
     },
     "devDependencies": {
-        "tsyringe": "4.6.0"
+        "tsyringe": "4.6.0",
+        "typedi": "0.10.0"
     }
 }
