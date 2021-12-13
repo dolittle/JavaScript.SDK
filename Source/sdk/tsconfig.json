@@ -10,6 +10,7 @@
     "references": [
         { "path": "../aggregates" },
         { "path": "../common" },
+        { "path": "../dependencyInversion" },
         { "path": "../embeddings" },
         { "path": "../eventHorizon" },
         { "path": "../events" },

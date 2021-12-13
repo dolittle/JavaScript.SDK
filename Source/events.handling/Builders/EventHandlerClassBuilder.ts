@@ -5,7 +5,8 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { IServiceProviderBuilder, IClientBuildResults, DependencyInversion } from '@dolittle/sdk.common';
+import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IServiceProviderBuilder, TenantServiceBindingCallback } from '@dolittle/sdk.dependencyinversion';
 import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandler } from '../EventHandler';
@@ -23,7 +24,7 @@ import { handles as handlesDecorator, getHandlesDecoratedMethods } from './handl
  */
 export class EventHandlerClassBuilder<T> {
     private readonly _eventHandlerType: Constructor<T>;
-    private readonly _bindingCallback: DependencyInversion.TenantServiceBindingCallback;
+    private readonly _bindingCallback: TenantServiceBindingCallback;
 
     /**
      * Initialises a new instance of the {@link FailureReason} class.

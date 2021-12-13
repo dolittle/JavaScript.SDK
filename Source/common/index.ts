@@ -4,4 +4,3 @@
 export * from './_exports';
 
 export { IClientBuildResults } from './ClientSetup/_exports';
-export { IServiceProvider, IServiceProviderBuilder, ITenantServiceProviders, inject } from './DependencyInversion/_exports';

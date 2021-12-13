@@ -9,6 +9,7 @@
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../common" },
+        { "path": "../dependencyInversion" },
         { "path": "../events" },
         { "path": "../events.processing" },
         { "path": "../execution" },

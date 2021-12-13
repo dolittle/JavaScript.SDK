@@ -49,6 +49,7 @@
         "@dolittle/sdk.aggregates": "21.0.0-gimli.4",
         "@dolittle/sdk.artifacts": "21.0.0-gimli.4",
         "@dolittle/sdk.common": "21.0.0-gimli.4",
+        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.4",
         "@dolittle/sdk.embeddings": "21.0.0-gimli.4",
         "@dolittle/sdk.eventhorizon": "21.0.0-gimli.4",
         "@dolittle/sdk.events": "21.0.0-gimli.4",

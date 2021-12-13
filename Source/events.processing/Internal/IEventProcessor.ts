@@ -4,7 +4,7 @@
 import { Observable } from 'rxjs';
 import { Logger } from 'winston';
 
-import { ITenantServiceProviders } from '@dolittle/sdk.common';
+import { ITenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { Cancellation, RetryPolicy } from '@dolittle/sdk.resilience';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 

@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 
-import { IServiceProvider } from '@dolittle/sdk.common';
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { MissingEventInformation } from '@dolittle/sdk.events.processing';

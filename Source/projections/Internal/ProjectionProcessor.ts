@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 
-import { IServiceProvider } from '@dolittle/sdk.common';
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';

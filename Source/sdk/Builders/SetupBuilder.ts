@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { AggregateRootsBuilder, AggregateRootsBuilderCallback } from '@dolittle/sdk.aggregates';
-import { ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
+import { ClientSetup } from '@dolittle/sdk.common';
+import { ServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
 import { EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
@@ -102,7 +103,7 @@ export class SetupBuilder extends ISetupBuilder {
             this.discoverAndRegisterAll();
         }
 
-        const bindings = new DependencyInversion.ServiceProviderBuilder();
+        const bindings = new ServiceProviderBuilder();
         const buildResults = new ClientSetup.ClientBuildResults();
 
         const eventTypes = this._eventTypesBuilder.build();

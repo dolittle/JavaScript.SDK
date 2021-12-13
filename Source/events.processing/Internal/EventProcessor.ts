@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
-import { IServiceProvider } from '@dolittle/sdk.common';
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { IReverseCallClient, ClientProcessor  } from '@dolittle/sdk.services';

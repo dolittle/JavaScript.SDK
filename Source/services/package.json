@@ -49,6 +49,7 @@
         "@dolittle/contracts": "6.4.0-gimli.2",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/sdk.common": "21.0.0-gimli.4",
+        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.4",
         "@dolittle/sdk.execution": "21.0.0-gimli.4",
         "@dolittle/sdk.protobuf": "21.0.0-gimli.4",
         "@dolittle/sdk.resilience": "21.0.0-gimli.4",

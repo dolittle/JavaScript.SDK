@@ -1,5 +1,5 @@
 {
-    "name": "@dolittle/sdk.common",
+    "name": "@dolittle/sdk.dependencyinversion",
     "version": "21.0.0-gimli.4",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
@@ -44,8 +44,10 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
+        "@dolittle/sdk.common": "21.0.0-gimli.4",
         "@dolittle/sdk.execution": "21.0.0-gimli.4",
         "@dolittle/types": "5.0.1",
+        "inversify": "6.0.1",
         "winston": "3.3.2"
     },
     "devDependencies": {}

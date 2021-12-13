@@ -19,7 +19,8 @@ import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
 import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
-import { IServiceProviderBuilder, ITenantServiceProviders, ClientSetup, DependencyInversion } from '@dolittle/sdk.common';
+import { ClientSetup } from '@dolittle/sdk.common';
+import { DefaultServiceProvider, IServiceProviderBuilder, ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
@@ -286,8 +287,8 @@ export class DolittleClient extends IDolittleClient {
 
     private buildServiceProviders(tenants: TenantId[]): ITenantServiceProviders {
         // TODO: Allow providing one from the configuration
-        const baseProvider = new DependencyInversion.DefaultServiceProvider();
-        return new DependencyInversion.TenantServiceProviders(baseProvider, this._serviceProviderBuilder, tenants);
+        const baseProvider = new DefaultServiceProvider();
+        return new TenantServiceProviders(baseProvider, this._serviceProviderBuilder, tenants);
     }
 
     private registerTypes(

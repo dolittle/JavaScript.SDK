@@ -3,9 +3,8 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { createMetadataDecorator } from '../Decorators/createMetadataDecorator';
-import { Decorator } from '../Decorators/Decorator';
-import { DecoratorTarget } from '../Decorators/DecoratorTarget';
+import { Decorators } from '@dolittle/sdk.common';
+
 import { ServiceIdentifier } from './ServiceIdentifier';
 import { SingleInjectionServiceMustBeSpecifiedForConstructorArgument } from './SingleInjectionServiceMustBeSpecifiedForConstructorArgument';
 import { WrongNumberOfInjectionServicesSpecifiedForClass } from './WrongNumberOfInjectionServicesSpecifiedForClass';
@@ -18,7 +17,7 @@ type InjectionDescriptor = {
     readonly index: number;
 };
 
-const [decorator, getMetadata] = createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', DecoratorTarget.Class | DecoratorTarget.ConstructorParameter);
+const [decorator, getMetadata] = Decorators.createMetadataDecorator<InjectionDescriptor[]>('inject', 'inject', Decorators.DecoratorTarget.Class | Decorators.DecoratorTarget.ConstructorParameter);
 
 /**
  * Gets the specified service injection descriptors for a class.
@@ -33,14 +32,14 @@ export function getServiceInjectionDescriptors(target: NewableFunction): Injecti
  * Specifies service(s) to inject when constructing an instance of a class using the dependency injection container.
  * This decorator can be used on the class to specify all services, or on each constructor parameter individually.
  * @param {...ServiceIdentifier<any>[]} services - The services to inject.
- * @returns {Decorator} The decorator.
+ * @returns {Decorators.Decorator} The decorator.
  */
-export function inject(...services: (Service | [Service])[]): Decorator {
+export function inject(...services: (Service | [Service])[]): Decorators.Decorator {
     return decorator((target, type, propertyKey, index, value) => {
         const descriptors = value || [];
 
         switch (target) {
-            case DecoratorTarget.Class:
+            case Decorators.DecoratorTarget.Class:
                 if (services.length !== type.length) {
                     throw new WrongNumberOfInjectionServicesSpecifiedForClass(type.name, type.length, services.length);
                 }
@@ -65,7 +64,7 @@ export function inject(...services: (Service | [Service])[]): Decorator {
                     }
                 }
                 break;
-            case DecoratorTarget.ConstructorParameter:
+            case Decorators.DecoratorTarget.ConstructorParameter:
                 if (services.length !== 1) {
                     throw new SingleInjectionServiceMustBeSpecifiedForConstructorArgument(type.name, index as number);
                 }

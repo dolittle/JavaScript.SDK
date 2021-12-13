@@ -10,6 +10,7 @@
     "references": [
         { "path": "../artifacts" },
         { "path": "../common" },
+        { "path": "../dependencyInversion" },
         { "path": "../events" },
         { "path": "../events.processing" },
         { "path": "../execution"},

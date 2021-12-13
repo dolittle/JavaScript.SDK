@@ -9,9 +9,6 @@
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../common" },
-        { "path": "../dependencyInversion" },
         { "path": "../execution" },
-        { "path": "../protobuf" },
-        { "path": "../resilience" },
     ]
 }

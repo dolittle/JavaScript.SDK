@@ -4,7 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults, IServiceProviderBuilder } from '@dolittle/sdk.common';
+import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandlerId } from '../EventHandlerId';

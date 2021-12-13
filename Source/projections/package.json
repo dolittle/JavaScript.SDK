@@ -50,6 +50,7 @@
         "@dolittle/runtime.contracts": "6.4.0-gimli.2",
         "@dolittle/sdk.artifacts": "21.0.0-gimli.4",
         "@dolittle/sdk.common": "21.0.0-gimli.4",
+        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.4",
         "@dolittle/sdk.events": "21.0.0-gimli.4",
         "@dolittle/sdk.events.processing": "21.0.0-gimli.4",
         "@dolittle/sdk.execution": "21.0.0-gimli.4",

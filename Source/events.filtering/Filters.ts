@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 import { delay } from 'rxjs/operators';
 
-import { ITenantServiceProviders } from '@dolittle/sdk.common';
+import { ITenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
 

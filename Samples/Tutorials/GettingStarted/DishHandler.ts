@@ -4,7 +4,7 @@
 // Sample code for the tutorial at https://dolittle.io/tutorials/getting-started/typescript/
 
 import { Logger } from 'winston';
-import { inject } from '@dolittle/sdk.common';
+import { inject } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventStore } from '@dolittle/sdk.events';
 import { eventHandler, handles } from '@dolittle/sdk.events.handling';
 import { DishPrepared } from './DishPrepared';
