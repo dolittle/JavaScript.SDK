@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Container, interfaces } from 'inversify';
+import { interfaces } from 'inversify';
 
 import { Constructor } from '@dolittle/types';
 
@@ -63,7 +63,7 @@ class InversifyBindServiceTo<T> extends IBindServiceTo<T> {
     /** @inheritdoc */
     toFactory(factory: ServiceFactory<T>): IBindServiceScope {
         const bindInWhenOn = this._bindTo.toDynamicValue((context: interfaces.Context) => {
-            const container = new InversifyServiceProvider(context.container as Container);
+            const container = new InversifyServiceProvider(context.container);
             return factory(container);
         });
         bindInWhenOn.inTransientScope();
@@ -73,7 +73,7 @@ class InversifyBindServiceTo<T> extends IBindServiceTo<T> {
     /** @inheritdoc */
     toAsyncFactory(factory: AsyncServiceFactory<T>): IBindServiceScope {
         const bindInWhenOn = this._bindTo.toDynamicValue((context: interfaces.Context) => {
-            const container = new InversifyServiceProvider(context.container as Container);
+            const container = new InversifyServiceProvider(context.container);
             return factory(container);
         });
         bindInWhenOn.inTransientScope();
@@ -92,10 +92,10 @@ class InversifyBindServiceTo<T> extends IBindServiceTo<T> {
 export class InversifyServiceBinder extends IServiceBinder {
     /**
      * Initialises a new instance of the {@link InversifyServiceBinder} class.
-     * @param {Container} _container - The InversifyJS child container that contains tenant bindings.
+     * @param {interfaces.Container} _container - The InversifyJS child container that contains tenant bindings.
      */
     constructor(
-        private readonly _container: Container
+        private readonly _container: interfaces.Container
     ) {
         super();
     }

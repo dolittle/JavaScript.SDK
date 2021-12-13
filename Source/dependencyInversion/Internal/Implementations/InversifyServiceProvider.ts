@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Container } from 'inversify';
+import { interfaces } from 'inversify';
 
 import { IServiceProvider } from '../../IServiceProvider';
 import { ServiceIdentifier } from '../../ServiceIdentifier';
@@ -45,9 +45,9 @@ const withNullReflectMetadataMethods = <T>(callback: () => T): T => {
 export class InversifyServiceProvider extends IServiceProvider {
     /**
      * Initialises a new instance of the {@link InversifyServiceProvider} class.
-     * @param {Container} container - The InversifyJS child container that contains tenant bindings.
+     * @param {interfaces.Container} container - The InversifyJS container.
      */
-    constructor(readonly container: Container) {
+    constructor(readonly container: interfaces.Container) {
         super();
     }
 

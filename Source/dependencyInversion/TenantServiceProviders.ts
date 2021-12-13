@@ -1,26 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Container } from 'inversify';
+import { Container, interfaces } from 'inversify';
 
 import { TenantId, TenantIdLike } from '@dolittle/sdk.execution';
 
 import { applyDynamicResolver } from './Internal/Extensions/applyDynamicResolver';
+import { applyToContainerAndCreatedChildren } from './Internal/Extensions/applyToContainerAndCreatedChildren';
 import { DelegatingResolver } from './Internal/Extensions/DelegatingResolver';
 import { InversifyServiceBinder } from './Internal/Implementations/InversifyServiceBinder';
 import { InversifyServiceProvider } from './Internal/Implementations/InversifyServiceProvider';
+import { MetadataReader } from './Internal/MetadataReader';
 import { IServiceProvider } from './IServiceProvider';
+import { IServiceProviderBuilder } from './IServiceProviderBuilder';
 import { ITenantServiceProviders } from './ITenantServiceProviders';
 import { TenantServiceProviderNotConfigured } from './TenantServiceProviderNotConfigured';
-import { IServiceProviderBuilder } from './IServiceProviderBuilder';
-import { MetadataReader } from './Internal/MetadataReader';
-import { applyToContainerAndCreatedChildren } from './Internal/Extensions/applyToContainerAndCreatedChildren';
 
 /**
  * Represents an implementation of {@link ITenantServiceProviders}.
  */
 export class TenantServiceProviders extends ITenantServiceProviders {
-    private readonly _rootContainer: Container;
+    private readonly _rootContainer: interfaces.Container;
     private readonly _tenantContainers: Map<string, IServiceProvider>;
 
     /**
@@ -39,8 +39,9 @@ export class TenantServiceProviders extends ITenantServiceProviders {
         if (baseServiceProvider instanceof InversifyServiceProvider) {
             this._rootContainer = baseServiceProvider.container;
         } else {
-            this._rootContainer = new Container();
-            applyDynamicResolver(this._rootContainer, new DelegatingResolver(baseServiceProvider));
+            const container = new Container();
+            applyDynamicResolver(container, new DelegatingResolver(baseServiceProvider));
+            this._rootContainer = container;
         }
 
         const metadataReader = new MetadataReader();
