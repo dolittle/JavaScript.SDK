@@ -3,10 +3,11 @@
 
 import { Logger, DefaulLevels, createLogger, format, transports } from 'winston';
 
+import { createRootServiceProvider, DefaultServiceProvider, IServiceProvider, KnownServiceProviders, TenantServiceBindingCallback } from '@dolittle/sdk.dependencyinversion';
 import { Version } from '@dolittle/sdk.execution';
 
-import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
 import { DolittleClientConfiguration } from '../DolittleClientConfiguration';
+import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
 import { IConfigurationBuilder } from './IConfigurationBuilder';
 import { InvalidRuntimeAddressConfiguration } from './InvalidRuntimeAddressConfiguration';
 
@@ -19,6 +20,8 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
     private _runtimePort: number;
     private _pingInterval: number;
     private _logger: Logger;
+    private _serviceProvider: IServiceProvider;
+    private _tenantServiceBindingCallbacks: TenantServiceBindingCallback[];
 
     /**
      * Initialises a new instance of the {@link ConfigurationBuilder} class.
@@ -40,6 +43,8 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
                 }),
             ],
         });
+        this._serviceProvider = new DefaultServiceProvider();
+        this._tenantServiceBindingCallbacks = [];
 
         this.applyFrom(from);
     }
@@ -70,14 +75,26 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
     }
 
     /** @inheritdoc */
+    withLogging(logger: Logger<DefaulLevels>): IConfigurationBuilder {
+        this._logger = logger;
+        return this;
+    }
+
+    /** @inheritdoc */
     withPingInterval(interval: number): IConfigurationBuilder {
         this._pingInterval = interval;
         return this;
     }
 
     /** @inheritdoc */
-    withLogging(logger: Logger<DefaulLevels>): IConfigurationBuilder {
-        this._logger = logger;
+    withServiceProvider(serviceProvider: KnownServiceProviders): IConfigurationBuilder {
+        this._serviceProvider = createRootServiceProvider(serviceProvider);
+        return this;
+    }
+
+    /** @inheritdoc */
+    withTenantServices(callback: TenantServiceBindingCallback): IConfigurationBuilder {
+        this._tenantServiceBindingCallbacks.push(callback);
         return this;
     }
 
@@ -91,7 +108,9 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
             this._runtimeHost,
             this._runtimePort,
             this._pingInterval,
-            this._logger);
+            this._logger,
+            this._serviceProvider,
+            this._tenantServiceBindingCallbacks);
     }
 
     private applyFrom(from?: DolittleClientConfiguration) {
@@ -103,10 +122,16 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
         this.applyFromRuntimeOn(from.runtimeOn);
 
         if (typeof from.pingInterval === 'number') {
-            this._pingInterval = from.pingInterval;
+            this.withPingInterval(from.pingInterval);
         }
         if (from.logger !== undefined) {
-            this._logger = from.logger;
+            this.withLogging(from.logger);
+        }
+        if (from.serviceProvider !== undefined) {
+            this.withServiceProvider(from.serviceProvider);
+        }
+        if (typeof from.tenantServices === 'function') {
+            this.withTenantServices(from.tenantServices);
         }
     }
 
@@ -131,25 +156,24 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
             const parts = from.split(':');
             switch (parts.length) {
                 case 1:
-                    this._runtimeHost = parts[0];
+                    this.withRuntimeOn(parts[0], this._runtimePort);
                     break;
                 case 2:
-                    this._runtimeHost = parts[0];
                     const port = parseInt(parts[1]);
                     if (isNaN(port)) {
                         throw new InvalidRuntimeAddressConfiguration(from);
                     }
-                    this._runtimePort = port;
+                    this.withRuntimeOn(parts[0], port);
                     break;
                 default:
                     throw new InvalidRuntimeAddressConfiguration(from);
             }
         } else {
             if (typeof from.host === 'string') {
-                this._runtimeHost = from.host;
+                this.withRuntimeOn(from.host, this._runtimePort);
             }
             if (typeof from.port === 'number') {
-                this._runtimePort = from.port;
+                this.withRuntimeOn(this._runtimeHost, from.port);
             }
         }
     }

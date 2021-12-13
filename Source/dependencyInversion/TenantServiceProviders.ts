@@ -11,6 +11,7 @@ import { DelegatingResolver } from './Internal/Extensions/DelegatingResolver';
 import { InversifyServiceBinder } from './Internal/Implementations/InversifyServiceBinder';
 import { InversifyServiceProvider } from './Internal/Implementations/InversifyServiceProvider';
 import { MetadataReader } from './Internal/MetadataReader';
+import { DefaultServiceProvider } from './DefaultServiceProvider';
 import { IServiceProvider } from './IServiceProvider';
 import { IServiceProviderBuilder } from './IServiceProviderBuilder';
 import { ITenantServiceProviders } from './ITenantServiceProviders';
@@ -36,8 +37,10 @@ export class TenantServiceProviders extends ITenantServiceProviders {
     ) {
         super();
 
-        if (baseServiceProvider instanceof InversifyServiceProvider) {
+        if (baseServiceProvider instanceof DefaultServiceProvider) {
             this._rootContainer = baseServiceProvider.container;
+        } else if (baseServiceProvider instanceof InversifyServiceProvider) {
+            this._rootContainer = baseServiceProvider.container.createChild();
         } else {
             const container = new Container();
             applyDynamicResolver(container, new DelegatingResolver(baseServiceProvider));

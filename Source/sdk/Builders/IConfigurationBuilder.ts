@@ -3,6 +3,7 @@
 
 import { Logger } from 'winston';
 
+import { KnownServiceProviders, TenantServiceBindingCallback } from '@dolittle/sdk.dependencyinversion';
 import { Version } from '@dolittle/sdk.execution';
 
 import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
@@ -47,6 +48,14 @@ export abstract class IConfigurationBuilder {
     abstract withRuntimeOn(host: string, port: number): IConfigurationBuilder;
 
     /**
+     * Set the winston logger to use in the microservice.
+     * @param {Logger} logger - A winston logger.
+     * @returns {IConfigurationBuilder} The client builder for continuation.
+     * @see {@link https://github.com/winstonjs/winston} for further information.
+     */
+    abstract withLogging(logger: Logger): IConfigurationBuilder;
+
+    /**
      * Sets the ping interval to use for keeping processors connected to the Runtime alive.
      * @param {number} interval - The ping interval.
      * @returns {IConfigurationBuilder} The client builder for continuation.
@@ -54,10 +63,16 @@ export abstract class IConfigurationBuilder {
     abstract withPingInterval(interval: number): IConfigurationBuilder;
 
     /**
-     * Set the winston logger to use in the microservice.
-     * @param {Logger} logger - A winston logger.
+     * Configures the root service provider to use to resolve services for the client.
+     * @param {KnownServiceProviders} serviceProvider - The service provider to use.
      * @returns {IConfigurationBuilder} The client builder for continuation.
-     * @see {@link https://github.com/winstonjs/winston} for further information.
      */
-    abstract withLogging(logger: Logger): IConfigurationBuilder;
+    abstract withServiceProvider(serviceProvider: KnownServiceProviders): IConfigurationBuilder;
+
+    /**
+     * Adds tenant specific service bindings to the service providers used for processing in the client.
+     * @param {TenantServiceBindingCallback} callback - The callback used to bind tenant specific services.
+     * @returns {IConfigurationBuilder} The client builder for continuation.
+     */
+    abstract withTenantServices(callback: TenantServiceBindingCallback): IConfigurationBuilder;
 }

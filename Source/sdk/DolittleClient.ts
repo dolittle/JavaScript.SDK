@@ -20,7 +20,7 @@ import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_
 
 import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { ClientSetup } from '@dolittle/sdk.common';
-import { DefaultServiceProvider, IServiceProviderBuilder, ITenantServiceProviders, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
+import { DefaultServiceProvider, IServiceProvider, IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
@@ -213,7 +213,12 @@ export class DolittleClient extends IDolittleClient {
                 logger,
                 this._cancellationSource.cancellation);
 
-            const services = this.buildServiceProviders(tenantIds);
+            this.bindServices(configuration.tenantServiceBindingCallbacks);
+
+            const services = new TenantServiceProviders(
+                configuration.serviceProvider,
+                this._serviceProviderBuilder,
+                tenantIds);
 
             this.startReverseCallClients(
                 clients.filters,
@@ -285,12 +290,6 @@ export class DolittleClient extends IDolittleClient {
             logger);
     }
 
-    private buildServiceProviders(tenants: TenantId[]): ITenantServiceProviders {
-        // TODO: Allow providing one from the configuration
-        const baseProvider = new DefaultServiceProvider();
-        return new TenantServiceProviders(baseProvider, this._serviceProviderBuilder, tenants);
-    }
-
     private registerTypes(
         eventTypesClient: EventTypesClient,
         aggregateRootsClient: AggregateRootsClient,
@@ -311,6 +310,12 @@ export class DolittleClient extends IDolittleClient {
         this._aggregateRootsBuilder.buildAndRegister(
             aggregateRoots,
             cancellation);
+    }
+
+    private bindServices(configuredCallbacks: TenantServiceBindingCallback[]) {
+        for (const callback of configuredCallbacks) {
+            this._serviceProviderBuilder.addTenantServices(callback);
+        }
     }
 
     private startReverseCallClients(
