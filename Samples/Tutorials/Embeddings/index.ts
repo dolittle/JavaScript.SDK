@@ -19,7 +19,7 @@ import { EmployeeTransferred } from './EmployeeTransferred';
                 eventTypes.register(EmployeeRetired);
             })
             .withEmbeddings(builder => {
-                builder.register(Employee);
+                builder.registerEmbedding(Employee);
             }))
         .connect();
 

@@ -15,7 +15,7 @@ import { Chef } from './Chef';
             .withEventTypes(eventTypes =>
                 eventTypes.register(DishPrepared))
             .withProjections(builder => {
-                builder.register(DishCounter);
+                builder.registerProjection(DishCounter);
 
                 builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
                     .forReadModel(Chef)

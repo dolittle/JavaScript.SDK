@@ -15,7 +15,7 @@ import { Kitchen } from './Kitchen';
             .withEventTypes(eventTypes =>
                 eventTypes.register(DishPrepared))
             .withEventHandlers(builder =>
-                builder.register(DishHandler))
+                builder.registerEventHandler(DishHandler))
             .withAggregateRoots(aggregateRoots =>
                 aggregateRoots.register(Kitchen)))
         .connect();

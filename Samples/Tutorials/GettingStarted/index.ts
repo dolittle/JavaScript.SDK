@@ -14,7 +14,7 @@ import { DishHandler } from './DishHandler';
             .withEventTypes(eventTypes =>
                 eventTypes.register(DishPrepared))
             .withEventHandlers(builder =>
-                builder.register(DishHandler)))
+                builder.registerEventHandler(DishHandler)))
         .connect();
 
     const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');

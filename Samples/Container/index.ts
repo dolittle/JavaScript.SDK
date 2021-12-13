@@ -15,7 +15,7 @@ import { MyEventHandler } from './MyEventHandler';
             .withEventTypes(eventTypes =>
                 eventTypes.register(MyEvent))
             .withEventHandlers(eventHandlers =>
-                eventHandlers.register(MyEventHandler)))
+                eventHandlers.registerEventHandler(MyEventHandler)))
         .connect();
 
     const event = new MyEvent();

@@ -16,7 +16,7 @@ import { DishHandler } from './DishHandler';
             .withEventTypes(eventTypes =>
                 eventTypes.register(DishPrepared))
             .withEventHandlers(builder =>
-                builder.register(DishHandler))
+                builder.registerEventHandler(DishHandler))
             .withFilters(filterBuilder =>
                 filterBuilder
                     .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>
