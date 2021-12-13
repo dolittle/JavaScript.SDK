@@ -6,7 +6,6 @@ export * from './_exports';
 export {
     CannotRegisterEmbeddingThatIsNotAClass,
     DeletionDecoratedMethod,
-    DeletionDecoratedMethods,
     EmbeddingAlreadyHasADeletionDecorator,
     EmbeddingAlreadyHasADeletionMethod,
     EmbeddingAlreadyHasAnUpdateDecorator,
@@ -24,15 +23,16 @@ export {
     IEmbeddingBuilderForReadModel,
     IEmbeddingsBuilder,
     OnDecoratedEmbeddingMethod,
-    OnDecoratedEmbeddingMethods,
     ReadModelAlreadyDefinedForEmbedding,
     UpdateDecoratedMethod,
-    UpdateDecoratedMethods,
-    resolveDeletionToEvents,
     embedding,
     getEmbeddingDecoratedType,
     on,
+    getOnDecoratedMethods,
+    resolveDeletionToEvents,
+    getDeletionDecoratedMethod,
     resolveUpdateToEvents,
+    getUpdateDecoratedMethod,
 } from './Builders/_exports';
 
 export {

@@ -15,8 +15,7 @@ import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEvent
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 import { eventHandler as eventHandlerDecorator, getEventHandlerDecoratedType } from './eventHandlerDecorator';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
-import { HandlesDecoratedMethods } from './HandlesDecoratedMethods';
-import { handles as handlesDecorator } from './handlesDecorator';
+import { handles as handlesDecorator, getHandlesDecoratedMethods } from './handlesDecorator';
 
 /**
  * Represents a builder for building event handlers from classes.
@@ -62,8 +61,8 @@ export class EventHandlerClassBuilder<T> {
         bindings.addTenantServices(this._bindingCallback);
 
         results.addInformation(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
-        const methods = HandlesDecoratedMethods.methodsPerEventHandler.get(this._eventHandlerType);
-        if (methods === undefined) {
+        const methods = getHandlesDecoratedMethods(this._eventHandlerType);
+        if (methods.length < 1) {
             results.addFailure(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
             return;
         }

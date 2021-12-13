@@ -15,8 +15,8 @@ import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
-import { OnDecoratedProjectionMethods } from './OnDecoratedProjectionMethods';
-import { getProjectionDecoratedType, projection as projectionDecorator } from './projectionDecorator';
+import { projection as projectionDecorator, getProjectionDecoratedType } from './projectionDecorator';
+import { getOnDecoratedMethods } from './onDecorator';
 
 /**
  * Represents a builder for building a projection from a class.
@@ -67,8 +67,8 @@ export class ProjectionClassBuilder<T> {
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
         let allMethodsValid = true;
-        const methods = OnDecoratedProjectionMethods.methodsPerProjection.get(type);
-        if (methods === undefined) {
+        const methods = getOnDecoratedMethods(type);
+        if (methods.length < 1) {
             allMethodsValid = false;
             return allMethodsValid;
         }

@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { AggregateRootId, AggregateRootVersion, AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventContentNeedsToBeDefined, EventSourceId, EventType, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventTypes } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { OnDecoratedMethods } from './OnDecoratedMethods';
+
+import { AggregateRootId, AggregateRootVersion, AggregateRootVersionIsOutOfOrder, CommittedAggregateEvent, CommittedAggregateEvents, EventContentNeedsToBeDefined, EventSourceId, EventType, EventTypeId, EventWasAppliedByOtherAggregateRoot, EventWasAppliedToOtherEventSource, IEventTypes } from '@dolittle/sdk.events';
+
 import { AggregateRootIdentifierNotSet } from './AggregateRootIdentifierNotSet';
 import { AppliedEvent } from './AppliedEvent';
 import { OnDecoratedMethod } from './OnDecoratedMethod';
 import { EventTypesNotSet } from './EventTypesNotSet';
+import { getOnDecoratedMethods } from './onDecorator';
 
 /**
  * Represents the aggregate root.
@@ -92,7 +94,7 @@ export class AggregateRoot {
         this.throwIfEventWasAppliedToOtherEventSource(committedEvents);
         this.throwIfEventWasAppliedByOtherAggreateRoot(committedEvents);
 
-        const hasState = OnDecoratedMethods.methodsPerAggregate.has(this._aggregateRootType);
+        const hasState = getOnDecoratedMethods(this._aggregateRootType).length > 0;
 
         for (const event of committedEvents) {
             this.throwIfAggregateRootVersionIsOutOfOrder(event);
@@ -125,7 +127,7 @@ export class AggregateRoot {
         if (this._eventTypes === undefined) {
             throw new EventTypesNotSet();
         }
-        const hasState = OnDecoratedMethods.methodsPerAggregate.has(this._aggregateRootType);
+        const hasState = getOnDecoratedMethods(this._aggregateRootType).length > 0;
         if (!hasState) {
             return;
         }
@@ -142,7 +144,7 @@ export class AggregateRoot {
     }
 
     private getOnMethodFor(event: any, eventType: EventType | undefined): OnDecoratedMethod | undefined {
-        return OnDecoratedMethods.methodsPerAggregate.get(this._aggregateRootType)!.find(_ => {
+        return getOnDecoratedMethods(this._aggregateRootType).find(_ => {
             let decoratorEventTypeId = EventTypeId.from(Guid.empty);
             if (_.eventTypeOrId instanceof Function) {
                 decoratorEventTypeId = this._eventTypes.getFor(_.eventTypeOrId).id;

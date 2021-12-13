@@ -3,7 +3,6 @@
 
 export { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 export { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
-export { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
 export { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
 export { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
 export { EmbeddingAlreadyHasAnUpdateDecorator } from './EmbeddingAlreadyHasAnUpdateDecorator';
@@ -21,11 +20,9 @@ export { IEmbeddingBuilder } from './IEmbeddingBuilder';
 export { IEmbeddingBuilderForReadModel } from './IEmbeddingBuilderForReadModel';
 export { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
 export { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
-export { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
 export { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 export { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
-export { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
-export { resolveDeletionToEvents } from './resolveDeletionToEventsDecorator';
 export { embedding, getEmbeddingDecoratedType } from './embeddingDecorator';
-export { on } from './onDecorator';
-export { resolveUpdateToEvents } from './resolveUpdateToEventsDecorator';
+export { on, getOnDecoratedMethods } from './onDecorator';
+export { resolveDeletionToEvents, getDeletionDecoratedMethod } from './resolveDeletionToEventsDecorator';
+export { resolveUpdateToEvents, getUpdateDecoratedMethod } from './resolveUpdateToEventsDecorator';

@@ -12,18 +12,16 @@ import { DeleteReadModelInstance } from '@dolittle/sdk.projections';
 import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
 import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
 import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
-import { OnDecoratedEmbeddingMethods } from './OnDecoratedEmbeddingMethods';
 import { Embedding } from '../Internal/Embedding';
 import { IEmbedding } from '../Internal/IEmbedding';
 import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
-import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
-import { UpdateDecoratedMethods } from './UpdateDecoratedMethods';
-import { resolveUpdateToEvents as updateDecorator } from './resolveUpdateToEventsDecorator';
 import { embedding as embeddingDecorator, getEmbeddingDecoratedType } from './embeddingDecorator';
+import { getOnDecoratedMethods } from './onDecorator';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
-import { DeletionDecoratedMethods } from './DeletionDecoratedMethods';
-import { resolveDeletionToEvents as deleteDecorator } from './resolveDeletionToEventsDecorator';
+import { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
+import { resolveDeletionToEvents as deleteDecorator, getDeletionDecoratedMethod } from './resolveDeletionToEventsDecorator';
+import { resolveUpdateToEvents as updateDecorator, getUpdateDecoratedMethod } from './resolveUpdateToEventsDecorator';
 
 /**
  * Represents a builder for building an embedding from a class.
@@ -62,14 +60,14 @@ export class EmbeddingClassBuilder<T> {
         }
         results.addInformation(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
 
-        const getUpdateMethod = UpdateDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        const getUpdateMethod = getUpdateDecoratedMethod(this._embeddingType);
         if (getUpdateMethod === undefined) {
             results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
         }
         const updateMethod = this.createUpdateMethod(getUpdateMethod);
 
-        const getDeletionMethod = DeletionDecoratedMethods.methodPerEmbedding.get(this._embeddingType);
+        const getDeletionMethod = getDeletionDecoratedMethod(this._embeddingType);
         if (getDeletionMethod === undefined) {
             results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
@@ -100,12 +98,7 @@ export class EmbeddingClassBuilder<T> {
 
     private tryAddAllOnMethods(events: EventTypeMap<EmbeddingProjectCallback<T>>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
         let allMethodsValid = true;
-        const methods = OnDecoratedEmbeddingMethods.methodsPerEmbedding.get(type);
-        if (methods === undefined) {
-            allMethodsValid = false;
-            return allMethodsValid;
-        }
-
+        const methods = getOnDecoratedMethods(type);
         for (const method of methods) {
             const [hasEventType, eventType] = this.tryGetEventTypeFromMethod(method, eventTypes);
 
