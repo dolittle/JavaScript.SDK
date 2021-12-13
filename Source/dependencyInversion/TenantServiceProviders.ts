@@ -59,6 +59,9 @@ export class TenantServiceProviders extends ITenantServiceProviders {
         for (const tenant of tenants) {
             const tenantContainer = this._rootContainer.createChild();
 
+            tenantContainer.bind(TenantId).toConstantValue(tenant);
+            tenantContainer.bind('TenantId').toConstantValue(tenant);
+
             const tenantBinder = new InversifyServiceBinder(tenantContainer);
             bindings.bindAllTenantServices(tenantBinder, tenant);
 

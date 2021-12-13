@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import * as grpc from '@grpc/grpc-js';
-import { Container, Logger } from 'winston';
+import { Logger } from 'winston';
 
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
@@ -18,18 +18,18 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, AggregatesBuilder, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { AggregateRootsBuilder, AggregatesBuilder, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { ClientSetup } from '@dolittle/sdk.common';
-import { DefaultServiceProvider, IServiceProvider, IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
-import { Embeddings, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
+import { IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
+import { Embeddings, IEmbedding, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal } from '@dolittle/sdk.projections';
+import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
-import { IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
 import { Tenant, Internal as TenancyInternal } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
@@ -185,7 +185,6 @@ export class DolittleClient extends IDolittleClient {
             this._cancellationSource = new CancellationSource();
 
             const logger = configuration.logger;
-            this._serviceProviderBuilder.addServices(bindings => bindings.bind('logger').toInstance(logger));
 
             this._setupResults.writeTo(logger);
 
@@ -213,7 +212,9 @@ export class DolittleClient extends IDolittleClient {
                 logger,
                 this._cancellationSource.cancellation);
 
-            this.bindServices(configuration.tenantServiceBindingCallbacks);
+            this.bindServices(
+                configuration.tenantServiceBindingCallbacks,
+                logger);
 
             const services = new TenantServiceProviders(
                 configuration.serviceProvider,
@@ -264,8 +265,6 @@ export class DolittleClient extends IDolittleClient {
             this.eventTypes,
             executionContext,
             logger);
-        // TODO: Clean up these bindings.
-        this._serviceProviderBuilder.addTenantServices((binder, tenant) => binder.bind(IEventStore).toFactory(() => this._eventStore!.forTenant(tenant)));
 
         this._aggregates = new AggregatesBuilder(
             this._eventStore,
@@ -313,7 +312,32 @@ export class DolittleClient extends IDolittleClient {
             cancellation);
     }
 
-    private bindServices(configuredCallbacks: TenantServiceBindingCallback[]) {
+    private bindServices(
+        configuredCallbacks: TenantServiceBindingCallback[],
+        logger: Logger,
+    ) {
+        this._serviceProviderBuilder.addServices((bindings) => {
+            bindings.bind('logger').toInstance(logger);
+            bindings.bind('Logger').toInstance(logger);
+        });
+
+        this._serviceProviderBuilder.addTenantServices((bindings, tenant) => {
+            bindings.bind(IEventStore).toFactory(() => this._eventStore!.forTenant(tenant));
+            bindings.bind('IEventStore').toFactory(() => this._eventStore!.forTenant(tenant));
+
+            bindings.bind(IAggregates).toFactory(() => this._aggregates!.forTenant(tenant));
+            bindings.bind('IAggregates').toFactory(() => this._aggregates!.forTenant(tenant));
+
+            bindings.bind(IProjectionStore).toFactory(() => this._projectionStore!.forTenant(tenant));
+            bindings.bind('IProjectionStore').toFactory(() => this._projectionStore!.forTenant(tenant));
+
+            bindings.bind(IEmbedding).toFactory(() => this._embeddingStore!.forTenant(tenant));
+            bindings.bind('IEmbedding').toFactory(() => this._embeddingStore!.forTenant(tenant));
+
+            bindings.bind(IResources).toFactory(() => this._resources!.forTenant(tenant));
+            bindings.bind('IResources').toFactory(() => this._resources!.forTenant(tenant));
+        });
+
         for (const callback of configuredCallbacks) {
             this._serviceProviderBuilder.addTenantServices(callback);
         }
