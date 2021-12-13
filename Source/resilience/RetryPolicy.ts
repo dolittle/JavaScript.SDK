@@ -5,6 +5,7 @@ import { Observable, concat, throwError } from 'rxjs';
 import { retryWhen, takeUntil, endWith } from 'rxjs/operators';
 
 import { Cancellation } from './Cancellation';
+import { RetryCancelled } from './RetryCancelled';
 import { RetryOperator } from './RetryOperator';
 
 /**
@@ -39,7 +40,7 @@ export function retryWithPolicy<T>(source: Observable<T>, policy: RetryPolicy, c
     return source.pipe(retryWhen((errors: Observable<Error>) => {
         const cancelled = cancellation.pipe(endWith(true));
         const retriesUntilCancelled = policy(errors).pipe(takeUntil(cancelled));
-        const retriesThenError = concat(retriesUntilCancelled, throwError(new Error('Retry was cancelled')));
+        const retriesThenError = concat(retriesUntilCancelled, throwError(new RetryCancelled()));
         return retriesThenError;
     }));
 }

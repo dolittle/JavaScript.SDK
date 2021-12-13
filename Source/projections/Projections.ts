@@ -6,7 +6,8 @@ import { delay } from 'rxjs/operators';
 
 import { ITenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation, retryPipe } from '@dolittle/sdk.resilience';
+import { Cancellation, RetryCancelled, retryPipe } from '@dolittle/sdk.resilience';
+import { ITrackProcessors } from '@dolittle/sdk.services';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 
@@ -23,6 +24,7 @@ export class Projections extends IProjections {
      * @param {ProjectionsClient} _client - The projections client to use.
      * @param {ExecutionContext} _executionContext - The base execution context of the client.
      * @param {ITenantServiceProviders} _services - For resolving services while handling requests.
+     * @param {ITrackProcessors} _tracker - The tracker to register the started processors with.
      * @param {Logger} _logger - For logging.
      * @param {number} _pingInterval - The ping interval to configure the reverse call client with.
      */
@@ -30,6 +32,7 @@ export class Projections extends IProjections {
         private readonly _client: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
         private readonly _services: ITenantServiceProviders,
+        private readonly _tracker: ITrackProcessors,
         private readonly _logger: Logger,
         private readonly _pingInterval: number,
     ) {
@@ -38,21 +41,23 @@ export class Projections extends IProjections {
 
     /** @inheritdoc */
     register<T>(projectionProcessor: ProjectionProcessor<T>, cancellation: Cancellation = Cancellation.default): void {
-        projectionProcessor.registerForeverWithPolicy(
-            retryPipe(delay(1000)),
-            this._client,
-            this._executionContext,
-            this._services,
-            this._logger,
-            this._pingInterval,
-            cancellation)
-        .subscribe({
-            error: (error: Error) => {
-                this._logger.error(`Failed to register projection: ${error}`);
-            },
-            complete: () => {
-                this._logger.error(`Projection registration completed.`);
-            }
-        });
+        this._tracker.registerProcessor(
+            projectionProcessor.registerForeverWithPolicy(
+                retryPipe(delay(1000)),
+                this._client,
+                this._executionContext,
+                this._services,
+                this._logger,
+                this._pingInterval,
+                cancellation)
+            .subscribe({
+                error: (error: Error) => {
+                    if (error instanceof RetryCancelled) return;
+                    this._logger.error(`Failed to register projection: ${error}`);
+                },
+                complete: () => {
+                    this._logger.error(`Projection registration completed.`);
+                }
+            }));
     }
 }

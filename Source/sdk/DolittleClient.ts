@@ -41,6 +41,7 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
+import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -48,6 +49,7 @@ import { IDolittleClient } from './IDolittleClient';
 export class DolittleClient extends IDolittleClient {
     private _cancellationSource: CancellationSource = new CancellationSource();
     private _connected: boolean = false;
+    private _processorTracker: ITrackProcessors = new ProcessorTracker();
 
     private _eventStore?: EventStoreBuilder;
     private _aggregates?: AggregatesBuilder;
@@ -155,9 +157,9 @@ export class DolittleClient extends IDolittleClient {
     }
 
     /** @inheritdoc */
-    async disconnect(cancellation?: Cancellation): Promise<void> {
+    disconnect(cancellation?: Cancellation): Promise<void> {
         this._cancellationSource?.cancel();
-        // TODO: Wait for processors to complete.
+        return this._processorTracker.allProcessorsCompleted(cancellation);
     }
 
     /**
@@ -355,22 +357,50 @@ export class DolittleClient extends IDolittleClient {
         pingInterval: number,
         cancellation: Cancellation,
     ) {
-        const filters = new Filters(filtersClient, executionContext, services, logger, pingInterval);
+        const filters = new Filters(
+            filtersClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
         for (const filter of this._eventFilters) {
             filters.register(filter, cancellation);
         }
 
-        const eventHandlers = new EventHandlers(eventHandlersClient, executionContext, services, logger, pingInterval);
+        const eventHandlers = new EventHandlers(
+            eventHandlersClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
         for (const eventHandler of this._eventHandlers) {
             eventHandlers.register(eventHandler, cancellation);
         }
 
-        const projections = new Projections(projectionsClient, executionContext, services, logger, pingInterval);
+        const projections = new Projections(
+            projectionsClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
         for (const projection of this._projections) {
             projections.register(projection, cancellation);
         }
 
-        const embeddings = new EmbeddingsInternal.Embeddings(embeddingsClient, executionContext, services, logger, pingInterval);
+        const embeddings = new EmbeddingsInternal.Embeddings(
+            embeddingsClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
         for (const embedding of this._embeddings) {
             embeddings.register(embedding, cancellation);
         }

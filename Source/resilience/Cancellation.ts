@@ -20,6 +20,8 @@ export class Cancellation extends Observable<void> {
         });
     }
 
+    // TODO: Add cancelled property
+
     /**
      * Default cancellation, which is never.
      */

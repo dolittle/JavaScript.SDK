@@ -3,5 +3,6 @@
 
 export { Cancellation } from './Cancellation';
 export { CancellationSource } from './CancellationSource';
+export { RetryCancelled } from './RetryCancelled';
 export { RetryOperator } from './RetryOperator';
 export { RetryPolicy, retryPipe, retryWithPolicy } from './RetryPolicy';

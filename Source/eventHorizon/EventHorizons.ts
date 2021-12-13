@@ -68,7 +68,6 @@ export class EventHorizons extends IEventHorizons {
             for (const subscription of tenantWithSubscriptions.subscriptions) {
 
                 const pbSubscription = this.createSubscriptionRequest(consumerTenant, subscription);
-                // no point in having error handler, retryWithPolicy gulps up the pushed errors
                 this.subscribeWithRetry(consumerTenant, subscription, pbSubscription, this.cancellation)
                     .subscribe({
                         complete: () => {
