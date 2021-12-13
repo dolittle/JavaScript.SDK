@@ -12,6 +12,7 @@ import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { ConnectCallback } from './Builders/ConnectCallback';
+import { ITenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 
 /**
  * Defines the Dolittle Client.
@@ -50,13 +51,17 @@ export abstract class IDolittleClient {
     /**
      * Gets the list of {@link Tenant} that is configured.
      */
-
     abstract get tenants(): Tenant[];
 
     /**
      * Gets the {@link IResourcesBuilder}.
      */
     abstract get resources(): IResourcesBuilder;
+
+    /**
+     * Gets the {@link ITenantServiceProviders}.
+     */
+    abstract get services(): ITenantServiceProviders;
 
     /**
      * Gets the {@link IEventHorizons}.

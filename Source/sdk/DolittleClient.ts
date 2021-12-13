@@ -57,6 +57,7 @@ export class DolittleClient extends IDolittleClient {
     private _embeddingStore?: Embeddings;
     private _tenants: Tenant[] = [];
     private _resources?: ResourcesBuilder;
+    private _services?: TenantServiceProviders;
     private _eventHorizons?: IEventHorizons;
 
     /**
@@ -122,6 +123,11 @@ export class DolittleClient extends IDolittleClient {
     /** @inheritdoc */
     get resources(): IResourcesBuilder {
         return this.throwIfNotConnectedOrUndefined(this._resources, 'resources');
+    }
+
+    /** @inheritdoc */
+    get services(): ITenantServiceProviders {
+        return this.throwIfNotConnectedOrUndefined(this._services, 'services');
     }
 
     /** @inheritdoc */
@@ -218,7 +224,7 @@ export class DolittleClient extends IDolittleClient {
                 configuration.tenantServiceBindingCallbacks,
                 logger);
 
-            const services = new TenantServiceProviders(
+            this._services = new TenantServiceProviders(
                 configuration.serviceProvider,
                 this._serviceProviderBuilder,
                 tenantIds);
@@ -230,7 +236,7 @@ export class DolittleClient extends IDolittleClient {
                 clients.embeddings,
                 clients.eventHorizons,
                 executionContext,
-                services,
+                this._services,
                 logger,
                 configuration.pingInterval,
                 this._cancellationSource.cancellation);
