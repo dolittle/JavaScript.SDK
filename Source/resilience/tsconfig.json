@@ -7,6 +7,5 @@
     },
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
-    "references": [
-    ]
+    "references": []
 }

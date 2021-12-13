@@ -9,24 +9,24 @@ import { DishPrepared } from './DishPrepared';
 import { DishCounter } from './DishCounter';
 import { Chef } from './Chef';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withProjections(builder => {
-        builder.register(DishCounter);
-
-        builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
-            .forReadModel(Chef)
-            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
-                chef.name = event.Chef;
-                if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
-                return chef;
-            });
-    })
-    .build();
-
 (async () => {
+    const client = await DolittleClient
+        .setup(builder => builder
+            .withEventTypes(eventTypes =>
+                eventTypes.register(DishPrepared))
+            .withProjections(builder => {
+                builder.registerProjection(DishCounter);
+
+                builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
+                    .forReadModel(Chef)
+                    .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
+                        chef.name = event.Chef;
+                        if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
+                        return chef;
+                    });
+            }))
+        .connect();
+
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
     await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');

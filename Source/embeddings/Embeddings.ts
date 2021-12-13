@@ -1,16 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
 import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 import { IProjectionAssociations, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
-import { Logger } from 'winston';
-import { Embedding } from './Embedding';
+
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
 import { IEmbedding } from './IEmbedding';
 import { IEmbeddings } from './IEmbeddings';
-import { EmbeddingStoreBuilder } from './Store';
+import { Embedding } from './Embedding';
 
 /**
  * Represents an implementation of {@link IEmbeddings}.
@@ -38,12 +40,6 @@ export class Embeddings extends IEmbeddings {
         const executionContext = this._executionContext
             .forTenant(tenantId)
             .forCorrelation(Guid.create());
-
-        const embeddingStore = new EmbeddingStoreBuilder(
-            this._embeddingsStoreClient,
-            this._executionContext,
-            this._embeddingAssociations,
-            this._logger);
 
         return new Embedding(
             this._embeddingsStoreClient,

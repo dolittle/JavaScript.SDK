@@ -2,13 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
-import { AggregateRootVersion, CommittedAggregateEvents, EventSourceId, IEventStore, IEventTypes, UncommittedAggregateEvent } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+
+import { AggregateRootVersion, CommittedAggregateEvents, EventSourceId, IEventStore, IEventTypes, UncommittedAggregateEvent } from '@dolittle/sdk.events';
 import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { AggregateRoot } from './AggregateRoot';
 import { AggregateRootAction } from './AggregateRootAction';
-import { AggregateRootTypesFromDecorators } from './AggregateRootTypesFromDecorators';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
+import { getDecoratedAggregateRootType } from '.';
 
 /**
  * Represents an implementation of {@link IAggregateRootOperations<TAggregate>}.
@@ -35,7 +37,7 @@ export class AggregateRootOperations<TAggregateRoot extends AggregateRoot> exten
     /** @inheritdoc */
     async perform(action: AggregateRootAction<TAggregateRoot>, cancellation: Cancellation = Cancellation.default): Promise<void> {
         const aggregateRoot = new this._aggregateRootType(this._eventSourceId);
-        const aggregateRootId = AggregateRootTypesFromDecorators.aggregateRootTypes.getFor(this._aggregateRootType).id;
+        const aggregateRootId = getDecoratedAggregateRootType(this._aggregateRootType).id;
         aggregateRoot.aggregateRootId = aggregateRootId;
         aggregateRoot.eventTypes = this._eventTypes;
         this._logger.debug(

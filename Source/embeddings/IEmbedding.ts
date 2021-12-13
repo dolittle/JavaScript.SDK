@@ -2,11 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { EmbeddingId } from '@dolittle/sdk.embeddings';
+import { Constructor } from '@dolittle/types';
+
 import { CurrentState, Key } from '@dolittle/sdk.projections';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
-import { EmbeddingStore } from './Store';
+
+import { EmbeddingStore } from './Store/EmbeddingStore';
+import { EmbeddingId } from './EmbeddingId';
 
 /**
  * Defines a system for working with an embedding.
@@ -41,7 +43,7 @@ export abstract class IEmbedding extends EmbeddingStore {
      */
     abstract update<TEmbedding>(
         type: Constructor<TEmbedding>,
-        key: Key | string,
+        key: Key | string,
         embeddingId: EmbeddingId | Guid | string,
         state: TEmbedding,
         cancellation?: Cancellation): Promise<CurrentState<TEmbedding>>;

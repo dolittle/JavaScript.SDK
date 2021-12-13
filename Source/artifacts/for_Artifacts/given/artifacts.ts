@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ConceptAs } from '@dolittle/concepts';
-import { Exception, Guid } from '@dolittle/rudiments';
+import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
+
 import { Artifact } from '../../Artifact';
 import { ArtifactOrId } from '../../IArtifacts';
 import { Artifacts } from '../../Artifacts';

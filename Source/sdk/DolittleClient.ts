@@ -1,73 +1,450 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { AggregateOf, AggregateRoot, IAggregateRootOperations } from '@dolittle/sdk.aggregates';
-import { Embeddings, IEmbeddings } from '@dolittle/sdk.embeddings';
-import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
-import { EventSourceId, EventStoreBuilder, IEventStoreBuilder, IEventTypes } from '@dolittle/sdk.events';
-import { IFilters } from '@dolittle/sdk.events.filtering';
-import { IEventHandlers } from '@dolittle/sdk.events.handling';
-import { MicroserviceId } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionStoreBuilder } from '@dolittle/sdk.projections';
-import { IResources, IResourcesBuilder } from '@dolittle/sdk.resources';
-import { ITenants } from '@dolittle/sdk.tenancy';
-import { Constructor } from '@dolittle/types';
+import * as grpc from '@grpc/grpc-js';
 import { Logger } from 'winston';
-import { DolittleClientBuilder } from './DolittleClientBuilder';
-import { EventStoreBuilderCallback } from './EventStoreBuilderCallback';
+
+import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
+import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
+import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { HandshakeClient } from '@dolittle/runtime.contracts/Handshake/Handshake_grpc_pb';
+import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
+
+import { AggregateRootsBuilder, AggregatesBuilder, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { ClientSetup } from '@dolittle/sdk.common';
+import { IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
+import { Embeddings, IEmbedding, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
+import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
+import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
+import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
+import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
+import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
+import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
+import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { Tenant, Internal as TenancyInternal } from '@dolittle/sdk.tenancy';
+
+import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
+import { ConnectCallback } from './Builders/ConnectCallback';
+import { SetupBuilder } from './Builders/SetupBuilder';
+import { SetupCallback } from './Builders/SetupCallback';
+import { ConnectConfiguration } from './Internal/ConnectConfiguration';
+import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittleClientMultipleTimes';
+import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
+import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
+import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
  */
 export class DolittleClient extends IDolittleClient {
+    private _cancellationSource: CancellationSource = new CancellationSource();
+    private _connected: boolean = false;
+    private _processorTracker: ITrackProcessors = new ProcessorTracker();
+
+    private _eventStore?: EventStoreBuilder;
+    private _aggregates?: AggregatesBuilder;
+    private _projectionStore?: ProjectionStoreBuilder;
+    private _embeddingStore?: Embeddings;
+    private _tenants: Tenant[] = [];
+    private _resources?: ResourcesBuilder;
+    private _services?: TenantServiceProviders;
+    private _eventHorizons?: IEventHorizons;
+
     /**
-     * Creates an instance of client.
-     * @param {Logger} logger - Winston Logger for logging.
-     * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {IEventStoreBuilder} eventStore - The event store builder to work with.
-     * @param {IEventHandlers} eventHandlers - All the event handlers.
-     * @param {IFilters} filters - All the filters.
-     * @param {IEventHorizons} eventHorizons - All event horizons.
-     * @param {IProjectionStoreBuilder} projections - All projections.
-     * @param {IEmbeddings} embeddings - All embeddings.
-     * @param {ITenants} tenants - All tenants.
-     * @param {IResources} resources - All resources.
+     * Initialises a new instance of the {@link DolittleClient} class.
+     * @param {IServiceProviderBuilder} _serviceProviderBuilder - The service provider builder with bound services from the setup.
+     * @param {ClientSetup.ClientBuildResults} _setupResults - The results from building the client artifacts.
+     * @param {IEventTypes} eventTypes - The built event types.
+     * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
+     * @param {IFilterProcessor[]} _eventFilters - The built event filters.
+     * @param {EventsHandlingInternal.EventHandlerProcessor[]} _eventHandlers - The built event handlers.
+     * @param {ProjectionAssociations} _projectionsAssociations - The {@link ProjectionAssociations}.
+     * @param {ProjectionsInternal.ProjectionProcessor<any>[]} _projections - The built projections.
+     * @param {EmbeddingsInternal.EmbeddingProcessor<any>[]} _embeddings - The built embeddings.
+     * @param {TenantWithSubscriptions[]} _subscriptions - The built event horizon subscriptions.
+     * @param {SubscriptionCallbacks} _subscriptionCallbacks - The built event horizon subscription callbacks.
      */
     constructor(
-        readonly logger: Logger,
+        private readonly _serviceProviderBuilder: IServiceProviderBuilder,
+        private readonly _setupResults: ClientSetup.ClientBuildResults,
         readonly eventTypes: IEventTypes,
-        readonly eventStore: IEventStoreBuilder,
-        readonly eventHandlers: IEventHandlers,
-        readonly filters: IFilters,
-        readonly eventHorizons: IEventHorizons,
-        readonly projections: IProjectionStoreBuilder,
-        readonly embeddings: IEmbeddings,
-        readonly tenants: ITenants,
-        readonly resources: IResourcesBuilder) {
+        private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
+        private readonly _eventFilters: IFilterProcessor[],
+        private readonly _eventHandlers: EventsHandlingInternal.EventHandlerProcessor[],
+        private readonly _projectionsAssociations: ProjectionAssociations,
+        private readonly _projections: ProjectionsInternal.ProjectionProcessor<any>[],
+        private readonly _embeddings: EmbeddingsInternal.EmbeddingProcessor<any>[],
+        private readonly _subscriptions: TenantWithSubscriptions[],
+        private readonly _subscriptionCallbacks: SubscriptionCallbacks,
+        ) {
             super();
+        }
+
+    /** @inheritdoc */
+    get connected(): boolean {
+        return this._connected;
+    }
+
+    /** @inheritdoc */
+    get eventStore(): IEventStoreBuilder {
+        return this.throwIfNotConnectedOrUndefined(this._eventStore, 'eventStore');
+    }
+
+    /** @inheritdoc */
+    get aggregates(): IAggregatesBuilder {
+        return this.throwIfNotConnectedOrUndefined(this._aggregates, 'aggregates');
+    }
+
+    /** @inheritdoc */
+    get projections(): IProjectionStoreBuilder {
+        return this.throwIfNotConnectedOrUndefined(this._projectionStore, 'projections');
+    }
+
+    /** @inheritdoc */
+    get embeddings(): IEmbeddings {
+        return this.throwIfNotConnectedOrUndefined(this._embeddingStore, 'embeddings');
+    }
+
+    /** @inheritdoc */
+    get tenants(): Tenant[] {
+        return this._tenants.slice();
+    }
+
+    /** @inheritdoc */
+    get resources(): IResourcesBuilder {
+        return this.throwIfNotConnectedOrUndefined(this._resources, 'resources');
+    }
+
+    /** @inheritdoc */
+    get services(): ITenantServiceProviders {
+        return this.throwIfNotConnectedOrUndefined(this._services, 'services');
+    }
+
+    /** @inheritdoc */
+    get eventHorizons(): IEventHorizons {
+        return this.throwIfNotConnectedOrUndefined(this._eventHorizons, 'eventHorizons');
+    }
+
+    /** @inheritdoc */
+    connect(configuration: DolittleClientConfiguration, cancellation?: Cancellation): Promise<IDolittleClient>;
+    connect(callback: ConnectCallback, cancellation?: Cancellation): Promise<IDolittleClient>;
+    connect(cancellation?: Cancellation): Promise<IDolittleClient>;
+    async connect(configurationOrCallbackOrCancellation?: DolittleClientConfiguration | ConnectCallback | Cancellation, maybeCancellation?: Cancellation): Promise<IDolittleClient> {
+        const actualConfiguration =
+            configurationOrCallbackOrCancellation === undefined ? {} :
+            configurationOrCallbackOrCancellation instanceof Cancellation ? {} :
+            typeof configurationOrCallbackOrCancellation === 'function' ? {} :
+            configurationOrCallbackOrCancellation;
+
+        const actualCancellation =
+            configurationOrCallbackOrCancellation instanceof Cancellation ? configurationOrCallbackOrCancellation :
+            maybeCancellation instanceof Cancellation ? maybeCancellation :
+            Cancellation.default;
+
+        const configurationBuilder = new ConfigurationBuilder(actualConfiguration);
+        if (typeof configurationOrCallbackOrCancellation === 'function') {
+            configurationOrCallbackOrCancellation(configurationBuilder);
+        }
+        const builtConfiguration = configurationBuilder.build();
+
+        await this.connectToRuntime(builtConfiguration, actualCancellation);
+
+        return this;
+    }
+
+    /** @inheritdoc */
+    disconnect(cancellation?: Cancellation): Promise<void> {
+        this._cancellationSource?.cancel();
+        return this._processorTracker.allProcessorsCompleted(cancellation);
     }
 
     /**
-     * Create a client builder for a Microservice.
-     * @param {MicroserviceId | Guid | string} microserviceId - The unique identifier for the microservice.
-     * @returns {DolittleClientBuilder} The builder to build a {Client} from.
+     * Setup a new {@link IDolittleClient}.
+     * @param {SetupCallback} [callback] - The optional callback to use to setup the new client.
+     * @returns {IDolittleClient} An new unconnected client.
      */
-    static forMicroservice(microserviceId: MicroserviceId | Guid | string) {
-        return new DolittleClientBuilder(MicroserviceId.from(microserviceId));
+    static setup(callback?: SetupCallback): IDolittleClient {
+        const builder = new SetupBuilder();
+
+        if (typeof callback === 'function') {
+            callback(builder);
+        }
+
+        return builder.build();
     }
 
-    /** @inheritdoc */
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<any>, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
-
-    /** @inheritdoc */
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceId: EventSourceId | Guid | string, buildEventStore: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot>
-    aggregateOf<TAggregateRoot extends AggregateRoot>(type: Constructor<TAggregateRoot>, eventSourceIdOrBuilder: EventStoreBuilderCallback | EventSourceId | Guid | string, buildEventStore?: EventStoreBuilderCallback): IAggregateRootOperations<TAggregateRoot> {
-        if (buildEventStore) {
-            return new AggregateOf(type, buildEventStore(this.eventStore), this.eventTypes, this.logger).get(EventSourceId.from(eventSourceIdOrBuilder as any));
-        } else {
-            return new AggregateOf(type, (eventSourceIdOrBuilder as EventStoreBuilderCallback)(this.eventStore), this.eventTypes, this.logger).create();
+    private async connectToRuntime(configuration: ConnectConfiguration, cancellation: Cancellation): Promise<void> {
+        if (this._connected) {
+            throw new CannotConnectDolittleClientMultipleTimes();
         }
+        this._connected = true;
+
+        try {
+            this._cancellationSource = new CancellationSource();
+
+            const logger = configuration.logger;
+
+            this._setupResults.writeTo(logger);
+
+            const clients = this.createGrpcClients(configuration.runtimeHost, configuration.runtimePort);
+
+            const executionContext = await this.performHandshake(clients.handshake, configuration.version, cancellation);
+
+            const tenants = new TenancyInternal.Tenants(clients.tenants, executionContext, logger);
+            this._tenants = await tenants.getAll();
+            const tenantIds = this._tenants.map(_ => _.id);
+
+            this.buildClientServices(
+                clients.eventStore,
+                clients.projectionStore,
+                clients.embeddingStore,
+                clients.embeddings,
+                clients.resources,
+                executionContext,
+                logger);
+
+            this.registerTypes(
+                clients.eventTypes,
+                clients.aggregateRoots,
+                executionContext,
+                logger,
+                this._cancellationSource.cancellation);
+
+            this.bindServices(
+                configuration.tenantServiceBindingCallbacks,
+                logger);
+
+            this._services = new TenantServiceProviders(
+                configuration.serviceProvider,
+                this._serviceProviderBuilder,
+                tenantIds);
+
+            this.startReverseCallClients(
+                clients.filters,
+                clients.eventHandlers,
+                clients.projections,
+                clients.embeddings,
+                clients.eventHorizons,
+                executionContext,
+                this._services,
+                logger,
+                configuration.pingInterval,
+                this._cancellationSource.cancellation);
+
+        } catch (exception) {
+            this._connected = false;
+            throw exception;
+        }
+    }
+
+    private async performHandshake(client: HandshakeClient, version: Version, cancellation: Cancellation): Promise<ExecutionContext> {
+        // TODO: Connect to the runtime and fetch the information
+
+        return new ExecutionContext(
+            MicroserviceId.notApplicable,
+            TenantId.system,
+            version,
+            Environment.undetermined,
+            CorrelationId.system,
+            Claims.empty);
+    }
+
+    private buildClientServices(
+        eventStoreClient: EventStoreClient,
+        projectionStoreClient: ProjectionStoreClient,
+        embeddingStoreClient: EmbeddingStoreClient,
+        embeddingsClient: EmbeddingsClient,
+        resourcesClient: ResourcesClient,
+        executionContext: ExecutionContext,
+        logger: Logger
+    ) {
+        this._eventStore = new EventStoreBuilder(
+            eventStoreClient,
+            this.eventTypes,
+            executionContext,
+            logger);
+
+        this._aggregates = new AggregatesBuilder(
+            this._eventStore,
+            this.eventTypes,
+            logger);
+
+        this._projectionStore = new ProjectionStoreBuilder(
+            projectionStoreClient,
+            executionContext,
+            this._projectionsAssociations,
+            logger);
+
+        this._embeddingStore = new Embeddings(
+            embeddingStoreClient,
+            embeddingsClient,
+            executionContext,
+            this._projectionsAssociations,
+            logger);
+
+        this._resources = new ResourcesBuilder(
+            resourcesClient,
+            executionContext,
+            logger);
+    }
+
+    private registerTypes(
+        eventTypesClient: EventTypesClient,
+        aggregateRootsClient: AggregateRootsClient,
+        executionContext: ExecutionContext,
+        logger: Logger,
+        cancellation: Cancellation,
+    ) {
+        const eventTypes = new EventTypesInternal.EventTypes(
+            eventTypesClient,
+            executionContext,
+            logger);
+        eventTypes.registerAllFrom(this.eventTypes, cancellation);
+
+        const aggregateRoots = new AggregatesInternal.AggregateRoots(
+            aggregateRootsClient,
+            executionContext,
+            logger);
+        this._aggregateRootsBuilder.buildAndRegister(
+            aggregateRoots,
+            cancellation);
+    }
+
+    private bindServices(
+        configuredCallbacks: TenantServiceBindingCallback[],
+        logger: Logger,
+    ) {
+        this._serviceProviderBuilder.addServices((bindings) => {
+            bindings.bind('logger').toInstance(logger);
+            bindings.bind('Logger').toInstance(logger);
+        });
+
+        this._serviceProviderBuilder.addTenantServices((bindings, tenant) => {
+            bindings.bind(IEventStore).toFactory(() => this._eventStore!.forTenant(tenant));
+            bindings.bind('IEventStore').toFactory(() => this._eventStore!.forTenant(tenant));
+
+            bindings.bind(IAggregates).toFactory(() => this._aggregates!.forTenant(tenant));
+            bindings.bind('IAggregates').toFactory(() => this._aggregates!.forTenant(tenant));
+
+            bindings.bind(IProjectionStore).toFactory(() => this._projectionStore!.forTenant(tenant));
+            bindings.bind('IProjectionStore').toFactory(() => this._projectionStore!.forTenant(tenant));
+
+            bindings.bind(IEmbedding).toFactory(() => this._embeddingStore!.forTenant(tenant));
+            bindings.bind('IEmbedding').toFactory(() => this._embeddingStore!.forTenant(tenant));
+
+            bindings.bind(IResources).toFactory(() => this._resources!.forTenant(tenant));
+            bindings.bind('IResources').toFactory(() => this._resources!.forTenant(tenant));
+        });
+
+        for (const callback of configuredCallbacks) {
+            this._serviceProviderBuilder.addTenantServices(callback);
+        }
+    }
+
+    private startReverseCallClients(
+        filtersClient: FiltersClient,
+        eventHandlersClient: EventHandlersClient,
+        projectionsClient: ProjectionsClient,
+        embeddingsClient: EmbeddingsClient,
+        subscriptionsClient: SubscriptionsClient,
+        executionContext: ExecutionContext,
+        services: ITenantServiceProviders,
+        logger: Logger,
+        pingInterval: number,
+        cancellation: Cancellation,
+    ) {
+        const filters = new Filters(
+            filtersClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
+        for (const filter of this._eventFilters) {
+            filters.register(filter, cancellation);
+        }
+
+        const eventHandlers = new EventHandlers(
+            eventHandlersClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
+        for (const eventHandler of this._eventHandlers) {
+            eventHandlers.register(eventHandler, cancellation);
+        }
+
+        const projections = new Projections(
+            projectionsClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
+        for (const projection of this._projections) {
+            projections.register(projection, cancellation);
+        }
+
+        const embeddings = new EmbeddingsInternal.Embeddings(
+            embeddingsClient,
+            executionContext,
+            services,
+            this._processorTracker,
+            logger,
+            pingInterval);
+
+        for (const embedding of this._embeddings) {
+            embeddings.register(embedding, cancellation);
+        }
+
+        this._eventHorizons = new EventHorizons(
+            subscriptionsClient,
+            executionContext,
+            this._subscriptions,
+            this._subscriptionCallbacks,
+            logger,
+            cancellation);
+    }
+
+    private createGrpcClients(runtimeHost: string, runtimePort: number) {
+        const address = `${runtimeHost}:${runtimePort}`;
+        const credentials = grpc.credentials.createInsecure();
+
+        return {
+            handshake: new HandshakeClient(address, credentials),
+            tenants: new TenantsClient(address, credentials),
+            eventTypes: new EventTypesClient(address, credentials),
+            eventStore: new EventStoreClient(address, credentials),
+            aggregateRoots: new AggregateRootsClient(address, credentials),
+            filters: new FiltersClient(address, credentials),
+            eventHandlers: new EventHandlersClient(address, credentials),
+            projections: new ProjectionsClient(address, credentials),
+            projectionStore: new ProjectionStoreClient(address, credentials),
+            embeddings: new EmbeddingsClient(address, credentials),
+            embeddingStore: new EmbeddingStoreClient(address, credentials),
+            resources: new ResourcesClient(address, credentials),
+            eventHorizons: new SubscriptionsClient(address, credentials),
+        };
+    }
+
+    private throwIfNotConnectedOrUndefined<TProperty>(value: TProperty | undefined, propertyName: string): TProperty {
+        if (!this._connected || value === undefined) {
+            throw new CannotUseUnconnectedDolittleClient(propertyName);
+        }
+        return value;
     }
 }

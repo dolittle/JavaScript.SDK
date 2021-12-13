@@ -1,12 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Logger } from 'winston';
+import { Guid } from '@dolittle/rudiments';
 
-import { internal as mongoDBInternal } from './mongoDB';
+import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
+
+import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+
+import { MongoDBResource } from './MongoDB/Internal/MongoDBResource';
 import { IResources } from './IResources';
 import { IResourcesBuilder } from './IResourcesBuilder';
 import { Resources } from './Resources';
@@ -30,6 +32,6 @@ export class ResourcesBuilder extends IResourcesBuilder {
         const executionContext = this._executionContext
             .forTenant(tenant)
             .forCorrelation(Guid.create());
-        return new Resources(new mongoDBInternal.MongoDBResource(tenant, this._client, executionContext, this._logger));
+        return new Resources(new MongoDBResource(tenant, this._client, executionContext, this._logger));
     }
 }

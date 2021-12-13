@@ -1,6 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { DateTime } from 'luxon';
+import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
+
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
+import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
+
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
@@ -10,54 +22,41 @@ import {
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { artifacts, guids } from '@dolittle/sdk.protobuf';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
-import { DateTime } from 'luxon';
-import { Logger } from 'winston';
-import {
-    DeleteReadModelInstance,
-    EventPropertyKeySelector,
-    EventSourceIdKeySelector,
-    IProjection,
-    Key,
-    KeySelector,
-    PartitionIdKeySelector, ProjectionContext, ProjectionId, UnknownKeySelectorType
-} from '..';
+
+import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
+import { EventPropertyKeySelector } from '../EventPropertyKeySelector';
+import { EventSourceIdKeySelector } from '../EventSourceIdKeySelector';
+import { IProjection } from '../IProjection';
+import { Key } from '../Key';
+import { KeySelector } from '../KeySelector';
+import { PartitionIdKeySelector } from '../PartitionIdKeySelector';
+import { ProjectionContext } from '../ProjectionContext';
+import { ProjectionId } from '../ProjectionId';
+import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 
 /**
- * Represents an implementation of {@link EventProcessor} for {@link Projection}.
+ * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
+ * @template T The type of the projection read model.
  */
-export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
+export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId, ProjectionsClient, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
 
     /**
      * Initializes a new instance of {@link ProjectionProcessor}.
      * @param {IProjection<T>} _projection - The projection.
-     * @param {ProjectionsClient} _client - The client used to connect to the Runtime.
-     * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this projection.
-     * @param {Logger} logger - Logger for logging.
-     * @template T The type of the projection read model.
      */
     constructor(
         private _projection: IProjection<T>,
-        private _client: ProjectionsClient,
-        private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('Projection', _projection.projectionId, logger);
+        super('Projection', _projection.projectionId);
     }
 
     /** @inheritdoc */
     protected get registerArguments(): ProjectionRegistrationRequest {
         const registerArguments = new ProjectionRegistrationRequest();
-        registerArguments.setProjectionid(guids.toProtobuf(this._projection.projectionId.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._projection.scopeId.value));
+        registerArguments.setProjectionid(Guids.toProtobuf(this._projection.projectionId.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
 
         let readModelInstance;
         if (typeof this._projection.readModelTypeOrInstance === 'function') {
@@ -71,7 +70,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
             const selector = new ProjectionEventSelector();
-            selector.setEventtype(artifacts.toProtobuf(eventSelector.eventType));
+            selector.setEventtype(Artifacts.toProtobuf(eventSelector.eventType));
             this.setKeySelector(selector, eventSelector.keySelector);
             events.push(selector);
         }
@@ -95,12 +94,15 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
     /** @inheritdoc */
     protected createClient(
+        client: ProjectionsClient,
         registerArguments: ProjectionRegistrationRequest,
         callback: (request: ProjectionRequest, executionContext: ExecutionContext) => Promise<ProjectionResponse>,
-        pingTimeout: number,
+        executionContext: ExecutionContext,
+        pingInterval: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<ProjectionRegistrationResponse> {
         return new ReverseCallClient<ProjectionClientToRuntimeMessage, ProjectionRuntimeToClientMessage, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             ProjectionClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),
@@ -111,12 +113,12 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -138,7 +140,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
     }
 
     /** @inheritdoc */
-    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext): Promise<ProjectionResponse> {
+    protected async handle(request: ProjectionRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<ProjectionResponse> {
         if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('No event in ProjectionRequest');
         }
@@ -181,7 +183,7 @@ export class ProjectionProcessor<T> extends internal.EventProcessor<ProjectionId
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = artifacts.toSDK(pbEventType, EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);

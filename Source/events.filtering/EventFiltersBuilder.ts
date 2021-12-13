@@ -1,64 +1,35 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { Guid } from '@dolittle/rudiments';
 
 import { IEventTypes } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
-import { FilterId } from './FilterId';
-import { Filters } from './Filters';
-import { IFilters } from './IFilters';
+import { FilterId } from './FilterId';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
+import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
+import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
+import { IEventFiltersBuilder } from './IEventFiltersBuilder';
+import { IFilterProcessor } from './IFilterProcessor';
 
 /**
- * Defines the callback to use for creating unpartitioned filters.
+ * Represents an implementation of {@link IEventFiltersBuilder}.
  */
-export type EventFiltersBuilderCallback = (builder: EventFiltersBuilder) => void;
-
-/**
- * Defines the callback to use for creating partitioned filters.
- */
-export type PrivateEventFilterBuilderCallback = (builder: PrivateEventFilterBuilder) => void;
-
-/**
- * Defines the callback to use for creating public filters.
- */
-export type PublicEventFilterBuilderCallback = (builder: PublicEventFilterBuilder) => void;
-
-/**
- * Represents the builder for building event filters.
- */
-export class EventFiltersBuilder {
+export class EventFiltersBuilder extends IEventFiltersBuilder {
     private _privateFilterBuilders: PrivateEventFilterBuilder[]  = [];
     private _publicFilterBuilders: PublicEventFilterBuilder[]  = [];
 
-    /**
-     * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
-     * @returns {EventFiltersBuilder} Continuation of the builder.
-     */
-    createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): EventFiltersBuilder {
+    /** @inheritdoc */
+    createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
         const builder = new PrivateEventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._privateFilterBuilders.push(builder);
         return this;
     }
 
-    /**
-     * Start building for a specific filter.
-     * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
-     * @returns {EventFiltersBuilder} Continuation of the builder.
-     */
-    createPublicFilter(filterId: FilterId | Guid | string, callback: PublicEventFilterBuilderCallback): EventFiltersBuilder {
+    /** @inheritdoc */
+    createPublicFilter(filterId: string | FilterId | Guid, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder {
         const builder = new PublicEventFilterBuilder(FilterId.from(filterId));
         callback(builder);
         this._publicFilterBuilders.push(builder);
@@ -66,31 +37,24 @@ export class EventFiltersBuilder {
     }
 
     /**
-     * Builds and registers all the event filters.
-     * @param {FiltersClient} client - The gRPC client for filters.
-     * @param {ExecutionContext} executionContext - Execution context.
+     * Builds all the event filters.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {Logger} logger - For logging.
-     * @param {Cancellation} cancellation - THe cancellation token.
-     * @returns {IFilters} The built filters.
+     * @returns {IFilterProcessor[]} The built filters.
      */
-    buildAndRegister(
-        client: FiltersClient,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger,
-        cancellation: Cancellation): IFilters {
-        const filters = new Filters(logger);
+    build(
+        eventTypes: IEventTypes
+    ): IFilterProcessor[] {
+        const processors: IFilterProcessor[] = [];
 
         for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(client, executionContext, eventTypes, logger);
-            filters.register(filterProcessor, cancellation);
+            const filterProcessor = privateFilterBuilder.build(eventTypes);
+            processors.push(filterProcessor);
         }
         for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(client, executionContext, eventTypes, logger);
-            filters.register(filterProcessor, cancellation);
+            const filterProcessor = publicFilterBuilder.build(eventTypes);
+            processors.push(filterProcessor);
         }
 
-        return filters;
+        return processors;
     }
 }

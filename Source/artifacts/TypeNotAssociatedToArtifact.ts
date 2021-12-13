@@ -10,7 +10,7 @@ export class TypeNotAssociatedToArtifact extends Exception {
     /**
      * Initializes a new instance of {@link TypeNotAssociatedToEventType}.
      * @param {string} artifactTypeName - The name of the artifact type.
-     * @param {Function} type - Type that has a missing association.
+     * @param {Function} type - Type that has a missing association.
      */
     constructor(artifactTypeName: string, type: Function) {
         super(`'${type.name}' does not have an ${artifactTypeName} association.`);

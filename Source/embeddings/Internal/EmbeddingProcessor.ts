@@ -1,6 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
+
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
+import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { DeleteReadModelInstance, Key } from '@dolittle/sdk.projections';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
+import { ClientProcessor, IReverseCallClient, reactiveDuplex, ReverseCallClient} from '@dolittle/sdk.services';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
@@ -18,56 +30,35 @@ import {
 } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
 import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
 import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { EventConverters, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
-import { MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { DeleteReadModelInstance, Key} from '@dolittle/sdk.projections';
-import { artifacts, failures, guids } from '@dolittle/sdk.protobuf';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import {
-    ClientProcessor,
-    IReverseCallClient,
-    reactiveDuplex,
-    ReverseCallClient
-} from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
-import { Logger } from 'winston';
-import {
-    EmbeddingContext,
-    EmbeddingId,
-    EmbeddingProjectContext,
-    MissingEmbeddingInformation
-} from '..';
+
+import { EmbeddingContext } from '../EmbeddingContext';
+import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
+import { MissingEmbeddingInformation } from '../MissingEmbeddingInformation';
 import { IEmbedding } from './IEmbedding';
 
 /**
  * Represents an implementation of {@link ClientProcessor} for {@link Embedding}.
  */
-export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
+export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId, EmbeddingsClient, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse> {
 
     /**
      * Initializes a new instance of {@link EmbeddingProcessor}.
      * @template TReadModel
      * @param {IEmbedding<TReadModel>} _embedding - The embedding.
-     * @param {EmbeddingsClient} _client - The client used to connect to the Runtime.
-     * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IEventTypes} _eventTypes - The registered event types for this embedding.
-     * @param {Logger} _logger - Logger for logging.
      */
     constructor(
         private _embedding: IEmbedding<TReadModel>,
-        private _client: EmbeddingsClient,
-        private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        protected _logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('Embedding', _embedding.embeddingId, _logger);
+        super('Embedding', _embedding.embeddingId);
     }
 
     /** @inheritdoc */
     protected get registerArguments(): EmbeddingRegistrationRequest {
         const registerArguments = new EmbeddingRegistrationRequest();
-        registerArguments.setEmbeddingid(guids.toProtobuf(this._embedding.embeddingId.value));
+        registerArguments.setEmbeddingid(Guids.toProtobuf(this._embedding.embeddingId.value));
 
         let readModelInstance;
         if (typeof this._embedding.readModelTypeOrInstance === 'function') {
@@ -80,7 +71,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         const events: Artifact[] = [];
         for (const eventType of this._embedding.events) {
-            events.push(artifacts.toProtobuf(eventType));
+            events.push(Artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventsList(events);
         return registerArguments;
@@ -88,12 +79,15 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
     /** @inheritdoc */
     protected createClient(
+        client: EmbeddingsClient,
         registerArguments: EmbeddingRegistrationRequest,
         callback: (request: EmbeddingRequest, executionContext: ExecutionContext) => Promise<EmbeddingResponse>,
-        pingTimeout: number,
+        executionContext: ExecutionContext,
+        pingInterval: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EmbeddingRegistrationResponse> {
         return new ReverseCallClient<EmbeddingClientToRuntimeMessage, EmbeddingRuntimeToClientMessage, EmbeddingRegistrationRequest, EmbeddingRegistrationResponse, EmbeddingRequest, EmbeddingResponse>(
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             EmbeddingClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),
@@ -104,12 +98,12 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -119,7 +113,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
+    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
         const projectionCurrentState = this.getProjectionCurrentState(request);
         const projectionType = projectionCurrentState.getType();
         const projectionKey = projectionCurrentState.getKey();
@@ -147,11 +141,11 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
     }
 
     /** @inheritdoc */
-    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext): Promise<EmbeddingResponse> {
+    protected async catchingHandle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
         try {
-            return await this.handle(request, executionContext);
+            return await this.handle(request, executionContext, services, logger);
         } catch (error) {
-            return this.createResponseFromError(error);
+            return this.createResponseFromError(error, logger);
         }
     }
 
@@ -201,7 +195,7 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = artifacts.toSDK(pbEventType, EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);
@@ -218,8 +212,8 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         }
     }
 
-    private createResponseFromError(error: any): EmbeddingResponse {
-        this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
+    private createResponseFromError(error: any, logger: Logger): EmbeddingResponse {
+        logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}.`);
         const response = new EmbeddingResponse();
         const failure = new Failure();
         failure.setReason(`${error}`);

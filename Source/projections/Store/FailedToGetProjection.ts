@@ -2,9 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
+
 import { ScopeId } from '@dolittle/sdk.events';
 import { Failure } from '@dolittle/sdk.protobuf';
-import { ProjectionId, Key  } from '..';
+
+import { Key } from '../Key';
+import { ProjectionId } from '../ProjectionId';
 
 /**
  * Exception that gets thrown when getting a projection fails.

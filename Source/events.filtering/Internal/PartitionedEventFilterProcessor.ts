@@ -3,9 +3,10 @@
 
 import { Logger } from 'winston';
 
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids } from '@dolittle/sdk.protobuf';
+import { Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -14,8 +15,9 @@ import { FilterEventRequest, FilterRegistrationResponse, FilterRuntimeToClientMe
 import { PartitionedFilterClientToRuntimeMessage, PartitionedFilterRegistrationRequest, PartitionedFilterResponse } from '@dolittle/runtime.contracts/Events.Processing/PartitionedFilters_pb';
 import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
+import { FilterId } from '../FilterId';
+import { PartitionedFilterEventCallback } from '../PartitionedFilterEventCallback';
 import { FilterEventProcessor } from './FilterEventProcessor';
-import { FilterId, PartitionedFilterEventCallback } from '..';
 
 /**
  * Represents an implementation of {@link FilterEventProcessor} that filters events to a partitioned stream.
@@ -27,39 +29,37 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
      * @param {FilterId} filterId - The filter id.
      * @param {ScopeId} _scopeId - The filter scope id.
      * @param {PartitionedFilterEventCallback} _callback - The filter callback.
-     * @param {FiltersClient} _client - The filters client to use to register the filter.
-     * @param {ExecutionContext} _executionContext - The execution context of the client.
      * @param {IEventTypes} eventTypes - All registered event types.
-     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         filterId: FilterId,
         private _scopeId: ScopeId,
         private _callback: PartitionedFilterEventCallback,
-        private _client: FiltersClient,
-        private _executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger
+        eventTypes: IEventTypes
     ) {
-        super('Partitioned Filter', filterId, eventTypes, logger);
+        super('Partitioned Filter', filterId, eventTypes);
     }
 
     /** @inheritdoc */
     protected get registerArguments(): PartitionedFilterRegistrationRequest {
         const registerArguments = new PartitionedFilterRegistrationRequest();
-        registerArguments.setFilterid(guids.toProtobuf(this._identifier.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._scopeId.value));
+        registerArguments.setFilterid(Guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._scopeId.value));
         return registerArguments;
     }
 
     /** @inheritdoc */
     protected createClient(
+        client: FiltersClient,
         registerArguments: PartitionedFilterRegistrationRequest,
         callback: (request: FilterEventRequest, executionContext: ExecutionContext) => Promise<PartitionedFilterResponse>,
-        pingTimeout: number,
-        cancellation: Cancellation): IReverseCallClient<FilterRegistrationResponse> {
+        executionContext: ExecutionContext,
+        pingInterval: number,
+        logger: Logger,
+        cancellation: Cancellation
+    ): IReverseCallClient<FilterRegistrationResponse> {
         return new ReverseCallClient<PartitionedFilterClientToRuntimeMessage, FilterRuntimeToClientMessage, PartitionedFilterRegistrationRequest, FilterRegistrationResponse, FilterEventRequest, PartitionedFilterResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connectPartitioned, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connectPartitioned, requests, cancellation),
             PartitionedFilterClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),
@@ -70,12 +70,12 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
@@ -87,7 +87,7 @@ export class PartitionedEventFilterProcessor extends FilterEventProcessor<Partit
     }
 
     /** @inheritdoc */
-    protected async filter(event: any, context: EventContext): Promise<PartitionedFilterResponse> {
+    protected async filter(event: any, context: EventContext, services: IServiceProvider, logger: Logger): Promise<PartitionedFilterResponse> {
         const result = await this._callback(event, context);
 
         const response = new PartitionedFilterResponse();

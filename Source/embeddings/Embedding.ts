@@ -1,23 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EmbeddingId } from '@dolittle/sdk.embeddings';
-import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { Constructor } from '@dolittle/types';
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
+
+import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
+import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+
+import { EmbeddingId } from './EmbeddingId';
 import { IEmbedding } from './IEmbedding';
-import { FailedToUpdate } from './FailedToUpdate';
 import { FailedToDelete } from './FailedToDelete';
 import { FailedToGetUpdatedState } from './FailedToGetUpdatedState';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
-import { reactiveUnary } from '@dolittle/sdk.services';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import { FailedToUpdate } from './FailedToUpdate';
 
 /**
  * Represents an implementation of {@link IEmbedding}.
@@ -64,7 +67,7 @@ export class Embedding extends IEmbedding {
         cancellation?: Cancellation): Promise<CurrentState<any>>;
     async update<TEmbedding = any>(
         typeOrKey: Constructor<TEmbedding> | Key | string,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string,
+        keyOrEmbedding: Key | EmbeddingId | Guid | string,
         stateOrEmbedding: TEmbedding | any | EmbeddingId | Guid | string,
         maybeCancellationOrState: Cancellation | undefined | TEmbedding,
         maybeCancellation?: Cancellation): Promise<CurrentState<TEmbedding>> {
@@ -78,10 +81,11 @@ export class Embedding extends IEmbedding {
         this._logger.debug(`Updating one state from embedding ${embedding} with key ${key}`);
 
         const request = new UpdateRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
         request.setState(JSON.stringify(state));
+
         return reactiveUnary(this._embeddingsClient, this._embeddingsClient.update, request, cancellation)
             .pipe(map(response => {
                     this.throwIfResponseHasFailure(response, embedding);
@@ -110,9 +114,9 @@ export class Embedding extends IEmbedding {
         this._logger.debug(`Removing one state from embedding ${embedding} with key ${key}`);
 
         const request = new DeleteRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsClient, this._embeddingsClient.delete, request, cancellation)
             .pipe(map(response => {
@@ -129,7 +133,7 @@ export class Embedding extends IEmbedding {
 
     private getEmbeddingForUpdate<TEmbedding>(
         maybeType: Constructor<any> | undefined,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string,
+        keyOrEmbedding: Key | EmbeddingId | Guid | string,
         stateOrEmbedding: TEmbedding | any | EmbeddingId | Guid | string) {
         if (maybeType === undefined) {
             return EmbeddingId.from(keyOrEmbedding.toString());
@@ -143,7 +147,7 @@ export class Embedding extends IEmbedding {
 
     private getEmbeddingForDelete<TEmbedding>(
         maybeType: Constructor<any> | Key | string,
-        keyOrEmbedding: Key | EmbeddingId | Guid | string) {
+        keyOrEmbedding: Key | EmbeddingId | Guid | string) {
         if (typeof maybeType === 'function') {
             return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(maybeType).identifier.value);
         }
@@ -172,9 +176,9 @@ export class Embedding extends IEmbedding {
     private throwIfResponseHasFailure(response: UpdateResponse | DeleteResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
             if (response instanceof UpdateResponse) {
-                throw new FailedToUpdate(embedding, key, failures.toSDK(response.getFailure())!);
+                throw new FailedToUpdate(embedding, key, Failures.toSDK(response.getFailure()!));
             }
-            throw new FailedToDelete(embedding, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToDelete(embedding, key, Failures.toSDK(response.getFailure()!));
         }
     }
 
@@ -184,6 +188,6 @@ export class Embedding extends IEmbedding {
         }
     }
     private isEmbeddingId(value: any): value is EmbeddingId | Guid | string {
-        return value instanceof EmbeddingId || value instanceof Guid || typeof value === 'string';
+        return value instanceof EmbeddingId || value instanceof Guid || typeof value === 'string';
     }
 }

@@ -4,9 +4,11 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
-import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
 import { ExecutionContext } from '@dolittle/sdk.execution';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -23,45 +25,38 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
 import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { guids, artifacts } from '@dolittle/sdk.protobuf';
-
-import { EventHandlerId, IEventHandler } from '..';
+import { EventHandlerId } from '../EventHandlerId';
+import { IEventHandler } from '../IEventHandler';
 
 /**
- * Represents an implementation of {@link EventProcessor} for {@link EventHandler}.
+ * Represents an implementation of {@link Internal.EventProcessor} for {@link EventHandler}.
  */
-export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerId, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
+export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerId, EventHandlersClient, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> {
 
     /**
      * Initializes a new instance of {@link EventHandlerProcessor}.
      * @param {IEventHandler} _handler - The actual handler.
-     * @param {EventHandlersClient} _client - Client to use for connecting to the runtime.
-     * @param {EventHandlersClient} _executionContext - Execution context.
      * @param {IEventTypes} _eventTypes - Registered event types.
-     * @param {Logger} logger - Logger for logging.
      */
     constructor(
         private _handler: IEventHandler,
-        private _client: EventHandlersClient,
-        private _executionContext: ExecutionContext,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super('EventHandler', _handler.eventHandlerId, logger);
+        super('EventHandler', _handler.eventHandlerId);
     }
 
     /** @inheritdoc */
     protected get registerArguments(): EventHandlerRegistrationRequest {
         const registerArguments = new EventHandlerRegistrationRequest();
-        registerArguments.setEventhandlerid(guids.toProtobuf(this._identifier.value));
-        registerArguments.setScopeid(guids.toProtobuf(this._handler.scopeId.value));
+        registerArguments.setEventhandlerid(Guids.toProtobuf(this._identifier.value));
+        registerArguments.setScopeid(Guids.toProtobuf(this._handler.scopeId.value));
         registerArguments.setPartitioned(this._handler.partitioned);
         if (this._handler.hasAlias) {
             registerArguments.setAlias(this._handler.alias!.value);
         }
         const handledArtifacts: Artifact[] = [];
         for (const eventType of this._handler.handledEvents) {
-            handledArtifacts.push(artifacts.toProtobuf(eventType));
+            handledArtifacts.push(Artifacts.toProtobuf(eventType));
         }
         registerArguments.setEventtypesList(handledArtifacts);
         return registerArguments;
@@ -69,12 +64,15 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
     /** @inheritdoc */
     protected createClient(
+        client: EventHandlersClient,
         registerArguments: EventHandlerRegistrationRequest,
         callback: (request: HandleEventRequest, executionContext: ExecutionContext) => Promise<EventHandlerResponse>,
-        pingTimeout: number,
+        executionContext: ExecutionContext,
+        pingInterval: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<EventHandlerRegistrationResponse> {
         return new ReverseCallClient<EventHandlerClientToRuntimeMessage, EventHandlerRuntimeToClientMessage, EventHandlerRegistrationRequest, EventHandlerRegistrationResponse, HandleEventRequest, EventHandlerResponse> (
-            (requests, cancellation) => reactiveDuplex(this._client, this._client.connect, requests, cancellation),
+            (requests, cancellation) => reactiveDuplex(client, client.connect, requests, cancellation),
             EventHandlerClientToRuntimeMessage,
             (message, connectArguments) => message.setRegistrationrequest(connectArguments),
             (message) => message.getRegistrationresponse(),
@@ -85,17 +83,17 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
             (response, context) => response.setCallcontext(context),
             (message) => message.getPing(),
             (message, pong) => message.setPong(pong),
-            this._executionContext,
+            executionContext,
             registerArguments,
-            pingTimeout,
+            pingInterval,
             callback,
             cancellation,
-            this._logger
+            logger
         );
     }
 
     /** @inheritdoc */
-    protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
+    protected getFailureFromRegisterResponse(response: EventHandlerRegistrationResponse): Failure | undefined {
         return response.getFailure();
     }
 
@@ -112,8 +110,8 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
     }
 
     /** @inheritdoc */
-    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext): Promise<EventHandlerResponse> {
-        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
+    protected async handle(request: HandleEventRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EventHandlerResponse> {
+        if (!request.getEvent() || !request.getEvent()?.getEvent()) {
             throw new MissingEventInformation('no event in HandleEventRequest');
         }
 
@@ -142,13 +140,13 @@ export class EventHandlerProcessor extends internal.EventProcessor<EventHandlerI
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventType = artifacts.toSDK(pbEventType, EventType.from);
+        const eventType = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventType)) {
             const typeOfEvent = this._eventTypes.getTypeFor(eventType);
             event = Object.assign(new typeOfEvent(), event);
         }
 
-        await this._handler.handle(event, eventType, eventContext);
+        await this._handler.handle(event, eventType, eventContext, services, logger);
 
         return new EventHandlerResponse();
     }

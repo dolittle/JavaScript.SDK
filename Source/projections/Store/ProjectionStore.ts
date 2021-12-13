@@ -1,18 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
-import { Key, ProjectionId } from '..';
+
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
+import { Key } from '../Key';
+import { ProjectionId } from '../ProjectionId';
 import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
 import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
 import { CurrentState } from './CurrentState';
@@ -60,10 +64,10 @@ export class ProjectionStore extends IProjectionStore {
         this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setProjectionid(Guids.toProtobuf(projection.value));
+        request.setScopeid(Guids.toProtobuf(scope.value));
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,9 +93,9 @@ export class ProjectionStore extends IProjectionStore {
         this._logger.debug(`Getting all states from projection ${projection} in scope ${scope}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setProjectionid(Guids.toProtobuf(projection.value));
+        request.setScopeid(Guids.toProtobuf(scope.value));
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -152,7 +156,7 @@ export class ProjectionStore extends IProjectionStore {
 
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse, projection: ProjectionId, scope: ScopeId, key?: Key) {
         if (response.hasFailure()) {
-            throw new FailedToGetProjection(projection, scope, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetProjection(projection, scope, key, Failures.toSDK(response.getFailure()!));
         }
     }
 

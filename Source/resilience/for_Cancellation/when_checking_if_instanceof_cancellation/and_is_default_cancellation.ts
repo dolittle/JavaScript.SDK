@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { describeThis } from '@dolittle/typescript.testing';
-import { Cancellation } from '../../index';
+
+import { Cancellation } from '../../Cancellation';
 
 describeThis(__filename, () => {
     const result = Cancellation.default instanceof Cancellation;

@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import * as grpc from '@grpc/grpc-js';
 import { Logger } from 'winston';
 
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { IReverseCallClient, ClientProcessor  } from '@dolittle/sdk.services';
@@ -21,29 +23,30 @@ import { IEventProcessor } from './IEventProcessor';
  * @template TIdentifier The type of the event processor identifier.
  * @template TRequest The type of the event processor requests.
  */
-export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TRegisterArguments, TRegisterResponse, TRequest, TResponse>  implements IEventProcessor {
-
+export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TClient, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor<TClient> {
     /**
      * Initialises a new instance of the {@link EventProcessor} class.
-     * @param {string} _kind - The kind of the event processor.
+     * @param {string} _kind - The kind of the event processor.
      * @param {TIdentifier} _identifier - The identifier of the event processor.
-     * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         protected _kind: string,
         protected _identifier: TIdentifier,
-        protected _logger: Logger) {
-            super(_kind, _identifier, _logger);
-        }
+    ) {
+        super(_kind, _identifier);
+    }
 
     /** @inheritdoc */
     protected abstract get registerArguments(): TRegisterArguments;
 
     /** @inheritdoc */
     protected abstract createClient(
+        client: TClient,
         registerArguments: TRegisterArguments,
         callback: (request: TRequest, executionContext: ExecutionContext) => Promise<TResponse>,
-        pingTimeout: number,
+        executionContext: ExecutionContext,
+        pingInterval: number,
+        logger: Logger,
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     /** @inheritdoc */
@@ -62,14 +65,14 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 
     /** @inheritdoc */
-    protected abstract handle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse>;
+    protected abstract handle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
 
     /** @inheritdoc */
-    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext): Promise<TResponse> {
+    protected async catchingHandle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse> {
         let retryProcessingState: RetryProcessingState | undefined;
         try {
             retryProcessingState = this.getRetryProcessingStateFromRequest(request);
-            return await this.handle(request, executionContext);
+            return await this.handle(request, executionContext, services, logger);
         } catch (error: any) {
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
@@ -80,7 +83,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
             retryTimeout.setSeconds(retrySeconds);
             failure.setRetrytimeout(retryTimeout);
 
-            this._logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
+            logger.warn(`Processing in ${this._kind} ${this._identifier} failed. ${error.message || error}. Will retry in ${retrySeconds}`);
 
             return this.createResponseFromFailure(failure);
         }

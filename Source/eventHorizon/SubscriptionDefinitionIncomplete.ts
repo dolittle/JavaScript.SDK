@@ -13,6 +13,6 @@ export class SubscriptionDefinitionIncomplete extends Exception {
      * @param {string} correctingAction - Required action to complete the subscription definition.
      */
     constructor(missingInformation: string, correctingAction: string) {
-        super(`Event Horizon Subscription definition is missing ${missingInformation}. ${correctingAction} before calling build()`);
+        super(`Event Horizon Subscription definition is missing ${missingInformation}. ${correctingAction} before calling build()`);
     }
 }

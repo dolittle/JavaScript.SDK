@@ -43,6 +43,35 @@
                 "<node_internals>/**",
                 "node_modules/**"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Tutorial - Getting Started",
+            "program": "${workspaceFolder}/Samples/Tutorials/GettingStarted/Distribution/index.js",
+            "cwd": "${workspaceFolder}/Samples/Tutorials/GettingStarted",
+            "preLaunchTask": "tsc: build - Samples/Tutorials/GettingStarted/tsconfig.json",
+            "outputCapture": "std",
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceFolder}/Samples/Tutorials/GettingStarted/Distribution/**/*.js",
+                "${workspaceFolder}/Source/*/Distribution/**/*.js",
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug 'events' Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "cwd": "${workspaceFolder}/Source/events",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/Source/events/**/for_*/**/*.ts",
+            ],
         }
     ]
 }

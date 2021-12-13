@@ -10,19 +10,18 @@ import { EmployeeHired } from './EmployeeHired';
 import { EmployeeRetired } from './EmployeeRetired';
 import { EmployeeTransferred } from './EmployeeTransferred';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes => {
-        eventTypes.register(EmployeeHired);
-        eventTypes.register(EmployeeTransferred);
-        eventTypes.register(EmployeeRetired);
-    })
-    .withEmbeddings(builder => {
-        builder.register(Employee);
-    })
-    .build();
-
 (async () => {
+    const client = await DolittleClient
+        .setup(builder => builder
+            .withEventTypes(eventTypes => {
+                eventTypes.register(EmployeeHired);
+                eventTypes.register(EmployeeTransferred);
+                eventTypes.register(EmployeeRetired);
+            })
+            .withEmbeddings(builder => {
+                builder.registerEmbedding(Employee);
+            }))
+        .connect();
 
     // wait for the registration to complete
     setTimeout(async () => {

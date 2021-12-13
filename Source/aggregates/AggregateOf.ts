@@ -1,9 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventSourceId, IEventStore, IEventTypes } from '@dolittle/sdk.events';
-import { Constructor } from '@dolittle/types';
 import { Logger } from 'winston';
+import { Constructor } from '@dolittle/types';
+
+import { EventSourceId, IEventStore, IEventTypes } from '@dolittle/sdk.events';
+
 import { AggregateRoot } from './AggregateRoot';
 import { AggregateRootOperations } from './AggregateRootOperations';
 import { IAggregateOf } from './IAggregateOf';
@@ -37,12 +39,6 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> extends IAggregat
 
     /** @inheritdoc */
     get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregateRoot> {
-        return new AggregateRootOperations<TAggregateRoot>(
-            eventSourceId,
-            this._eventStore,
-            this._type,
-            this._eventTypes,
-            this._logger);
+        return new AggregateRootOperations<TAggregateRoot>(eventSourceId, this._eventStore, this._type, this._eventTypes, this._logger);
     }
-
 }

@@ -1,18 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
-import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
-import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
-import { FilterId } from './FilterId';
-import { IFilterProcessor } from './IFilterProcessor';
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
+import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+import { FilterId } from './FilterId';
+import { IFilterProcessor } from './IFilterProcessor';
+import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 import { Guid } from '@dolittle/rudiments';
 
 /**
@@ -58,21 +53,15 @@ export class PrivateEventFilterBuilder {
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
-     * @param {FiltersClient} client - The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext - Execution context manager for working with execution context.
      * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {Logger} logger - Logger for logging.
      * @returns {IFilterProcessor} The built filter processor.
      */
     build(
-        client: FiltersClient,
-        executionContext: ExecutionContext,
         eventTypes: IEventTypes,
-        logger: Logger): IFilterProcessor {
-
+    ): IFilterProcessor {
         if (!this._innerBuilder) {
             throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or unpartitioned().');
         }
-        return this._innerBuilder.build(this._filterId, this._scopeId, client, executionContext, eventTypes, logger);
+        return this._innerBuilder.build(this._filterId, this._scopeId, eventTypes);
     }
 }

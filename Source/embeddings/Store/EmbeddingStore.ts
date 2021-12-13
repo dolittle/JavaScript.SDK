@@ -1,19 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { reactiveUnary } from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
-import { EmbeddingId, FailedToGetEmbeddingKeys } from '..';
+
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
+
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
+
+import { EmbeddingId } from '../EmbeddingId';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
+import { FailedToGetEmbeddingKeys } from './FailedToGetEmbeddingKeys';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
 
@@ -59,9 +64,9 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting one state from embedding ${embedding} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,8 +94,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all states from embedding ${embedding}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -117,8 +122,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all keys for embedding ${embedding}`);
 
         const request = new GetKeysRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getKeys, request, cancellation)
             .pipe(map(response => {
@@ -166,9 +171,9 @@ export class EmbeddingStore extends IEmbeddingStore {
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse | GetKeysResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
             if (response instanceof GetKeysResponse) {
-                throw new FailedToGetEmbeddingKeys(embedding, failures.toSDK(response.getFailure())!);
+                throw new FailedToGetEmbeddingKeys(embedding, Failures.toSDK(response.getFailure()!));
             }
-            throw new FailedToGetEmbedding(embedding, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetEmbedding(embedding, key, Failures.toSDK(response.getFailure()!));
         }
     }
 

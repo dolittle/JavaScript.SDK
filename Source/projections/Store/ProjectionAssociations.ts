@@ -1,9 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { ProjectionDecoratedTypes, ProjectionId } from '..';
+
+import { ScopeId } from '@dolittle/sdk.events';
+
+import { ProjectionId } from '../ProjectionId';
+import { getProjectionDecoratedType } from '../Builders/projectionDecorator';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
 import { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection';
@@ -29,8 +32,8 @@ export class ProjectionAssociations extends IProjectionAssociations {
             this._associationsToType.set(association, type);
             this._typeToAssociations.set(type, association);
         } else if (typeof typeOrInstance === 'function') {
-            const decoratedType = ProjectionDecoratedTypes.types.find(_ => _.type === typeOrInstance);
-            if (!decoratedType) {
+            const decoratedType = getProjectionDecoratedType(typeOrInstance as Constructor<T>);
+            if (decoratedType === undefined) {
                 throw new TypeIsNotAProjection(typeOrInstance);
             }
             this.associate(decoratedType.type, decoratedType.projectionId, decoratedType.scopeId);

@@ -24,7 +24,7 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Ar
     /**
      * Check if there is a type associated with an artifact.
      * @param {TArtifact} input - Artifact.
-     * @returns {boolean} True if there is, false if not.
+     * @returns {boolean} True if there is, false if not.
      */
     abstract hasTypeFor(input: TArtifact): boolean;
 
@@ -37,7 +37,7 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Ar
 
     /**
      * Check if there is an {Artifact} definition for a given type.
-     * @param {Function} type - Type to check for.
+     * @param {Function} type - Type to check for.
      * @returns True if there is, false if not.
      */
     abstract hasFor(type: Constructor<any>): boolean;
@@ -59,7 +59,7 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Ar
 
     /**
      * Associate a type with a unique artifact identifier and optional generation.
-     * @param {Constructor<any>} type - Type to associate.
+     * @param {Constructor<any>} type - Type to associate.
      * @param {TArtifact} eventType - Artifact to associate with.
      */
     abstract associate(type: Constructor<any>, eventType: TArtifact): void;
