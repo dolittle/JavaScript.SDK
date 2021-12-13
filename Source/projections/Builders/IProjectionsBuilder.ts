@@ -22,11 +22,11 @@ export abstract class IProjectionsBuilder {
      * Register a type as a projection.
      * @param type - The type to register as a projection.
      */
-    abstract register<T = any>(type: Constructor<T>): IProjectionsBuilder;
+    abstract registerProjection<T = any>(type: Constructor<T>): IProjectionsBuilder;
 
     /**
      * Register an instance as a projection.
      * @param instance - The instane to register as a projection.
      */
-    abstract register<T = any>(instance: T): IProjectionsBuilder;
+    abstract registerProjection<T = any>(instance: T): IProjectionsBuilder;
 }

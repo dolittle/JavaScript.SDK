@@ -10,4 +10,5 @@ export {
     AggregatesBuilder,
     IAggregates,
     IAggregatesBuilder,
+    IAggregateRootsBuilder,
 } from './Builders/_exports';

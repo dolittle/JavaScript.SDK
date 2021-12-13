@@ -7,3 +7,4 @@ export { Aggregates } from './Aggregates';
 export { AggregatesBuilder } from './AggregatesBuilder';
 export { IAggregates } from './IAggregates';
 export { IAggregatesBuilder } from './IAggregatesBuilder';
+export { IAggregateRootsBuilder } from './IAggregateRootsBuilder';

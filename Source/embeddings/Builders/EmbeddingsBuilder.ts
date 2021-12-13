@@ -39,9 +39,9 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
     }
 
     /** @inheritdoc */
-    register<T = any>(type: Constructor<T>): IEmbeddingsBuilder;
-    register<T = any>(instance: T): IEmbeddingsBuilder;
-    register<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
+    registerEmbedding<T = any>(type: Constructor<T>): IEmbeddingsBuilder;
+    registerEmbedding<T = any>(instance: T): IEmbeddingsBuilder;
+    registerEmbedding<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
         this._classBuilders.push(new EmbeddingClassBuilder<T>(typeOrInstance));
         this._projectionAssociations.associate<T>(typeOrInstance);
         return this;

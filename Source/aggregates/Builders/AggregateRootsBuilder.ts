@@ -8,20 +8,16 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { AggregateRoots } from '../Internal/AggregateRoots';
 import { getDecoratedAggregateRootType } from '../aggregateRootDecorator';
 import { AggregateRootTypes } from '../AggregateRootTypes';
+import { IAggregateRootsBuilder } from './IAggregateRootsBuilder';
 
 /**
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
  */
-export class AggregateRootsBuilder {
+export class AggregateRootsBuilder extends IAggregateRootsBuilder {
     private readonly _aggregateRootTypes = new AggregateRootTypes();
 
-    /**
-     * Register the type as an {@link AggregateRootType}.
-     * @param {Constructor<T>} type - The type to register as an {@link AggregateRootType}.
-     * @returns {AggregateRootsBuilder} The builder for continuation.
-     * @template T The type of the aggregate root.
-     */
-    register<T = any>(type: Constructor<T>): AggregateRootsBuilder {
+    /** @inheritdoc */
+    register<T = any>(type: Constructor<T>): IAggregateRootsBuilder {
         this._aggregateRootTypes.associate(type, getDecoratedAggregateRootType(type));
         return this;
     }

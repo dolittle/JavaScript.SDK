@@ -31,9 +31,9 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
     }
 
     /** @inheritdoc */
-    register<T = any>(type: Constructor<T>): IEventHandlersBuilder;
-    register<T = any>(instance: T): IEventHandlersBuilder;
-    register<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
+    registerEventHandler<T = any>(type: Constructor<T>): IEventHandlersBuilder;
+    registerEventHandler<T = any>(instance: T): IEventHandlersBuilder;
+    registerEventHandler<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
         this._classBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
         return this;
     }

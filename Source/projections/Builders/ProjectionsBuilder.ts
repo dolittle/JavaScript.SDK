@@ -39,9 +39,9 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
     }
 
     /** @inheritdoc */
-    register<T = any>(type: Constructor<T>): IProjectionsBuilder;
-    register<T = any>(instance: T): IProjectionsBuilder;
-    register<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
+    registerProjection<T = any>(type: Constructor<T>): IProjectionsBuilder;
+    registerProjection<T = any>(instance: T): IProjectionsBuilder;
+    registerProjection<T = any>(typeOrInstance: Constructor<T> | T): ProjectionsBuilder {
         this._classBuilders.push(new ProjectionClassBuilder<T>(typeOrInstance));
         this._projectionAssociations.associate<T>(typeOrInstance);
         return this;

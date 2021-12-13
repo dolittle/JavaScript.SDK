@@ -23,11 +23,11 @@ export abstract class IEventHandlersBuilder {
      * Register a type as an event handler.
      * @param type - The type to register as an event handler.
      */
-    abstract register<T = any>(type: Constructor<T>): IEventHandlersBuilder;
+    abstract registerEventHandler<T = any>(type: Constructor<T>): IEventHandlersBuilder;
 
     /**
      * Register an instance as an event handler.
      * @param instance - The instance to register as an event handler.
      */
-    abstract register<T = any>(instance: T): IEventHandlersBuilder;
+    abstract registerEventHandler<T = any>(instance: T): IEventHandlersBuilder;
 }
