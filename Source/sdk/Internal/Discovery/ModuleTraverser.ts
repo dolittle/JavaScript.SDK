@@ -39,8 +39,7 @@ export class ModuleTraverser extends ICanTraverseModules {
             return;
         }
 
-        const set = new Set<string>();
-        this.traverseLoadedModuleRecursively(require.main, set, callback);
+        this.traverseLoadedModuleRecursively(require.main, new Set(), callback);
     }
 
     private traverseLoadedModuleRecursively(module: NodeJS.Module, checked: Set<string>, callback: ObjectCallback): void {
