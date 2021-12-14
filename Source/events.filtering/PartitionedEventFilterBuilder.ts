@@ -5,21 +5,19 @@ import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { PartitionedEventFilterProcessor } from './Internal/PartitionedEventFilterProcessor';
 import { FilterId } from './FilterId';
-import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
+import { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder';
 import { MissingFilterCallback } from './MissingFilterCallback';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 
 /**
- * Represents builder for building a partitioned event filter.
+ * Represents an implementation of {@link IPartitionedEventFilterBuilder}.
  */
-export class PartitionedEventFilterBuilder {
+export class PartitionedEventFilterBuilder extends IPartitionedEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
 
-    /**
-     * Configured the handle callback.
-     * @param {PartitionedFilterEventCallback} callback - The callback that will be called for each event.
-     */
-    handle(callback: PartitionedFilterEventCallback) {
+    /** @inheritdoc */
+    handle(callback: PartitionedFilterEventCallback): void {
         this._callback = callback;
     }
 

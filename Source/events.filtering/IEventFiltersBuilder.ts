@@ -12,7 +12,7 @@ import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCall
  */
 export abstract class IEventFiltersBuilder {
     /**
-     * Start building for a specific filter.
+     * Start building for a private filter.
      * @param {FilterId | Guid | string} filterId - The identifier of the filter.
      * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
      * @returns {IEventFiltersBuilder} Continuation of the builder.
@@ -20,7 +20,7 @@ export abstract class IEventFiltersBuilder {
     abstract createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder;
 
     /**
-     * Start building for a specific filter.
+     * Start building for a public filter.
      * @param {FilterId | Guid | string} filterId - The identifier of the filter.
      * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
      * @returns {IEventFiltersBuilder} Continuation of the builder.
