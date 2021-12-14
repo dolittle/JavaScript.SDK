@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { Artifacts } from '@dolittle/sdk.protobuf';
+import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
@@ -73,6 +73,7 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
             pbSequenceNumber,
             EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
+            ExecutionContexts.toSDK(pbExecutionContext),
             executionContext);
 
         let event = JSON.parse(pbEvent.getContent());

@@ -22,6 +22,7 @@ import { IEventProcessor } from './IEventProcessor';
  * Partial implementation of {@link IEventProcessor}.
  * @template TIdentifier The type of the event processor identifier.
  * @template TRequest The type of the event processor requests.
+ * @template TResponse The type of the event processor response.
  */
 export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>, TClient extends grpc.Client, TRegisterArguments, TRegisterResponse, TRequest, TResponse> extends ClientProcessor<TIdentifier, TClient, TRegisterArguments, TRegisterResponse, TRequest, TResponse> implements IEventProcessor<TClient> {
     /**
@@ -64,7 +65,14 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
      */
     protected abstract createResponseFromFailure(failure: ProcessorFailure): TResponse;
 
-    /** @inheritdoc */
+    /**
+     * Handles the request from the Runtime.
+     * @param {TRequest} request - The request from the Runtime.
+     * @param {ExecutionContext} executionContext - The execution context for the current processing request.
+     * @param {IServiceProvider} services - The service provider to use for resolving services while handling the current request.
+     * @param {Logger} logger - The logger to use for logging.
+     * @returns {Promise<TResponse>} The response to the request.
+     */
     protected abstract handle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
 
     /** @inheritdoc */

@@ -112,8 +112,15 @@ export class EmbeddingProcessor<TReadModel> extends ClientProcessor<EmbeddingId,
         return response.getFailure();
     }
 
-    /** @inheritdoc */
-    protected async handle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
+    /**
+     * Handles the request from the Runtime.
+     * @param {EmbeddingRequest} request - The request from the Runtime.
+     * @param {ExecutionContext} executionContext - The execution context for the current processing request.
+     * @param {IServiceProvider} services - The service provider to use for resolving services while handling the current request.
+     * @param {Logger} logger - The logger to use for logging.
+     * @returns {Promise<EmbeddingResponse>} The response to the request.
+     */
+    async handle(request: EmbeddingRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<EmbeddingResponse> {
         const projectionCurrentState = this.getProjectionCurrentState(request);
         const projectionType = projectionCurrentState.getType();
         const projectionKey = projectionCurrentState.getKey();

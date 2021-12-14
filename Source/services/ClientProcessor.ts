@@ -146,18 +146,9 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
         cancellation: Cancellation): IReverseCallClient<TRegisterResponse>;
 
     /**
-     * Handles the request from the Runtime.
-     * @param {TRequest} request - The request from the Runtime.
-     * @param {ExecutionContext} executionContext - The execution context.
-     * @param {IServiceProvider} services - The service provider to use for resolving services while handling the current request.
-     * @param {Logger} logger - The logger to use for logging.
-     */
-    protected abstract handle(request: TRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
-
-    /**
      * Wrapper around the handle() method to catch errors and set them to the response.
      * @param {TRequest} request - The request from the Runtime.
-     * @param {ExecutionContext} executionContext - The execution context.
+     * @param {ExecutionContext} executionContext - The execution context for the current processing request.
      * @param {IServiceProvider} services - The service provider to use for resolving services while handling the current request.
      * @param {Logger} logger - The logger to use for logging.
      */

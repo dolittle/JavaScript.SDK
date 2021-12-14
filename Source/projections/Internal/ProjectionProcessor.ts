@@ -9,7 +9,7 @@ import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
+import { Artifacts, ExecutionContexts, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
 
@@ -166,6 +166,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
             pbSequenceNumber,
             EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
+            ExecutionContexts.toSDK(pbExecutionContext),
             executionContext);
 
         if (!request.getCurrentstate() || !request.getCurrentstate()?.getState()) {
