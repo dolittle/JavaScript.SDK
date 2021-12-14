@@ -21,5 +21,5 @@ export { IAggregateRootTypes } from './IAggregateRootTypes';
 export { MissingAggregateRootDecoratorFor } from './MissingAggregateRootDecoratorFor';
 export { OnDecoratedMethod } from './OnDecoratedMethod';
 export { OnMethodSignature } from './OnMethodSignature';
-export { aggregateRoot, getDecoratedAggregateRootType } from './aggregateRootDecorator';
+export { aggregateRoot, isDecoratedAggregateRootType, getDecoratedAggregateRootType } from './aggregateRootDecorator';
 export { on } from './onDecorator';

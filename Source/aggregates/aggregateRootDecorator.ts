@@ -29,6 +29,15 @@ export function aggregateRoot(aggregateRootId: AggregateRootIdLike, options: Agg
 }
 
 /**
+ * Checks whether the specified class is decorated with an aggregate root type.
+ * @param {Constructor<any>} type - The class to check the decorated aggregate root type for.
+ * @returns {boolean} True if the decorator is applied, false if not.
+ */
+export function isDecoratedAggregateRootType(type: Constructor<any>): boolean {
+    return getMetadata(type, false, false) !== undefined;
+}
+
+/**
  * Gets the decorated aggregate root type of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated aggregate root type for.
  * @returns {AggregateRootType} The decorated aggregate root type.

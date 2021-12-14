@@ -15,7 +15,7 @@ import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
-import { projection as projectionDecorator, getProjectionDecoratedType } from './projectionDecorator';
+import { projection as projectionDecorator, getDecoratedProjectionType } from './projectionDecorator';
 import { getOnDecoratedMethods } from './onDecorator';
 
 /**
@@ -50,7 +50,7 @@ export class ProjectionClassBuilder<T> {
     build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
 
         results.addInformation(`Building projection of type ${this._projectionType.name}`);
-        const decoratedType = getProjectionDecoratedType(this._projectionType);
+        const decoratedType = getDecoratedProjectionType(this._projectionType);
         if (decoratedType === undefined) {
             results.addFailure(`The projection class ${this._projectionType.name} must be decorated with an @${projectionDecorator.name} decorator`);
             return;

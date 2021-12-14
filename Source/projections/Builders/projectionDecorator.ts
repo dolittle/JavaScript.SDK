@@ -29,10 +29,19 @@ export function projection(projectionId: ProjectionId | Guid | string, options: 
 }
 
 /**
+ * Checks whether the specified class is decorated with an projection type.
+ * @param {Constructor<any>} type - The class to check the decorated projection type for.
+ * @returns {boolean} True if the decorator is applied, false if not.
+ */
+export function isDecoratedProjectionType(type: Constructor<any>): boolean {
+    return getMetadata(type, false, false) !== undefined;
+}
+
+/**
  * Gets the {@link ProjectionDecoratedType} of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated projection type for.
  * @returns {ProjectionDecoratedType | undefined} The decorated projection type if decorated.
  */
-export function getProjectionDecoratedType(type: Constructor<any>): ProjectionDecoratedType | undefined {
+export function getDecoratedProjectionType(type: Constructor<any>): ProjectionDecoratedType | undefined {
     return getMetadata(type);
 }

@@ -7,7 +7,7 @@ export { EventHandlerBuilder } from './EventHandlerBuilder';
 export { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 export { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 export { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
-export { eventHandler, getEventHandlerDecoratedType } from './eventHandlerDecorator';
+export { eventHandler, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 export { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 export { EventHandlerOptions } from './EventHandlerOptions';
 export { EventHandlersBuilder } from './EventHandlersBuilder';
