@@ -3,25 +3,26 @@
 
 import { Logger } from 'winston';
 import { from, Notification, Observable } from 'rxjs';
+import { concatMap, delay, dematerialize, map } from 'rxjs/operators';
 import { status as GrpcStatus } from '@grpc/grpc-js';
 
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { Failures, Guids, Versions } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
+import { isGrpcError, reactiveUnary } from '@dolittle/sdk.services';
+import { Internal } from '@dolittle/sdk.tenancy';
 
 import { HandshakeClient } from '@dolittle/runtime.contracts/Handshake/Handshake_grpc_pb';
+import { HandshakeRequest, HandshakeResponse } from '@dolittle/runtime.contracts/Handshake/Handshake_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
+import { VersionInfo as ContractsVersionInfo } from '@dolittle/runtime.contracts/VersionInfo';
 
+import { RuntimeHandshakeFailed } from '../RuntimeHandshakeFailed';
+import { RuntimeHandshakeMissingInformation } from '../RuntimeHandshakeMissingInformation';
+import { RuntimeVersionNotCompatible } from '../RuntimeVersionNotCompatible';
+import { VersionInfo } from '../VersionInfo';
 import { ConnectionResult } from './ConnectionResult';
 import { ICanConnectToARuntime } from './ICanConnectToARuntime';
-import { concatMap, delay, dematerialize, map } from 'rxjs/operators';
-import { isGrpcError, reactiveUnary } from '@dolittle/sdk.services';
-import { VersionInfo as ContractsVersionInfo } from '@dolittle/runtime.contracts/VersionInfo';
-import { HandshakeRequest, HandshakeResponse } from '@dolittle/runtime.contracts/Handshake/Handshake_pb';
-import { RuntimeHandshakeFailed } from '../RuntimeHandshakeFailed';
-import { RuntimeVersionNotCompatible } from '../RuntimeVersionNotCompatible';
-import { Failures, Guids, Versions } from '@dolittle/sdk.protobuf';
-import { VersionInfo } from '../VersionInfo';
-import { Tenants } from '@dolittle/sdk.tenancy/Internal/Tenants';
 
 /**
  * Represents an implementation of {@link ICanConnectToARuntime}.
@@ -75,7 +76,7 @@ export class RuntimeConnector extends ICanConnectToARuntime {
                 return this.createExecutionContextFrom(response);
             }))
             .pipe(concatMap((executionContext) => {
-                const tenants = new Tenants(this._tenantsClient, executionContext, this._logger);
+                const tenants = new Internal.Tenants(this._tenantsClient, executionContext, this._logger);
 
                 return from(tenants.getAll(cancellation))
                 .pipe(map((tenants) => {
@@ -121,6 +122,8 @@ export class RuntimeConnector extends ICanConnectToARuntime {
     }
 
     private createExecutionContextFrom(response: HandshakeResponse): ExecutionContext {
+        this.throwIfResponseIsMissingInformation(response);
+
         const runtimeVersion = Versions.toSDK(response.getRuntimeversion());
         const contractsVersion = Versions.toSDK(response.getContractsversion());
         this._logger.debug(`Received initial booting configuration from Runtime running version ${runtimeVersion} using Contracts version ${contractsVersion}`);
@@ -135,5 +138,12 @@ export class RuntimeConnector extends ICanConnectToARuntime {
             environment,
             CorrelationId.system,
             Claims.empty);
+    }
+
+    private throwIfResponseIsMissingInformation(response: HandshakeResponse): void {
+        if (!response.hasRuntimeversion()) throw new RuntimeHandshakeMissingInformation('Runtime version');
+        if (!response.hasContractsversion()) throw new RuntimeHandshakeMissingInformation('Contracts version');
+        if (!response.hasMicroserviceid()) throw new RuntimeHandshakeMissingInformation('microservice ID');
+        if (response.getEnvironment() === '') throw new RuntimeHandshakeMissingInformation('environment');
     }
 }

@@ -7,5 +7,6 @@ export { DolittleClient } from './DolittleClient';
 export { DolittleClientConfiguration } from './DolittleClientConfiguration';
 export { IDolittleClient } from './IDolittleClient';
 export { RuntimeHandshakeFailed } from './RuntimeHandshakeFailed';
+export { RuntimeHandshakeMissingInformation } from './RuntimeHandshakeMissingInformation';
 export { RuntimeVersionNotCompatible } from './RuntimeVersionNotCompatible';
 export { VersionInfo } from './VersionInfo';
