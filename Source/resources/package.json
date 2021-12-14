@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.resources",
-    "version": "21.0.0-gimli.9",
+    "version": "21.0.0-gimli.10",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -48,10 +48,10 @@
         "@dolittle/contracts": "6.4.0-gimli.2",
         "@dolittle/rudiments": "5.0.1",
         "@dolittle/runtime.contracts": "6.4.0-gimli.2",
-        "@dolittle/sdk.execution": "21.0.0-gimli.9",
-        "@dolittle/sdk.protobuf": "21.0.0-gimli.9",
-        "@dolittle/sdk.resilience": "21.0.0-gimli.9",
-        "@dolittle/sdk.services": "21.0.0-gimli.9",
+        "@dolittle/sdk.execution": "21.0.0-gimli.10",
+        "@dolittle/sdk.protobuf": "21.0.0-gimli.10",
+        "@dolittle/sdk.resilience": "21.0.0-gimli.10",
+        "@dolittle/sdk.services": "21.0.0-gimli.10",
         "mongodb": "4.1.4"
     }
 }
