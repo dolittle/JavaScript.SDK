@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.common",
-    "version": "21.0.0-gimli.8",
+    "version": "21.0.0-gimli.9",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -44,7 +44,7 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/sdk.execution": "21.0.0-gimli.8",
+        "@dolittle/sdk.execution": "21.0.0-gimli.9",
         "@dolittle/types": "5.0.1",
         "winston": "3.3.2"
     },
