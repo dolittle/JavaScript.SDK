@@ -26,11 +26,11 @@ import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscri
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
-import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
-import { Tenant, Internal as TenancyInternal } from '@dolittle/sdk.tenancy';
+import { Tenant } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
 import { ConnectCallback } from './Builders/ConnectCallback';
