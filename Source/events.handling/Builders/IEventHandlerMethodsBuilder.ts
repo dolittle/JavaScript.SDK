@@ -17,26 +17,30 @@ export abstract class IEventHandlerMethodsBuilder {
      * Add a handler method for handling the event.
      * @param {Constructor<T>} type - The type of event.
      * @param {EventHandlerSignature<T>} method - Method to call for each event.
+     * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      * @template T Type of event.
      */
-    abstract handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): void;
+    abstract handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): IEventHandlerMethodsBuilder;
     /**
      * Add a handler method for handling the event.
      * @param {EventType} eventType - The identifier of the event.
      * @param {EventHandlerSignature} method - Method to call for each event.
+     * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      */
-    abstract handle(eventType: EventType, method: EventHandlerSignature): void;
+    abstract handle(eventType: EventType, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
     /**
      * Add a handler method for handling the event.
      * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
      * @param {EventHandlerSignature} method - Method to call for each event.
+     * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      */
-    abstract handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): void;
+    abstract handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
     /**
      * Add a handler method for handling the event.
      * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
      * @param {GenerationLike} generation - The generation of the event type.
      * @param {EventHandlerSignature} method - Method to call for each event.
+     * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      */
-     abstract handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): void;
+     abstract handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
 }

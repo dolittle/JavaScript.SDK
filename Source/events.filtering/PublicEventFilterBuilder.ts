@@ -8,23 +8,23 @@ import { FilterId } from './FilterId';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
 import { MissingFilterCallback } from './MissingFilterCallback';
+import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
 
 /**
- * Represents the builder for building public event filters.
+ * Represents an implementation of {@link IPublicEventFilterBuilder}.
  */
-export class PublicEventFilterBuilder {
+export class PublicEventFilterBuilder extends IPublicEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
 
     /**
      * Initializes a new instance of {@link PublicEventFilterBuilder}.
      * @param {FilterId} _filterId - Identifier of the filter.
      */
-    constructor(private _filterId: FilterId) {}
+    constructor(private _filterId: FilterId) {
+        super();
+    }
 
-    /**
-     * Defines a callback for the filter.
-     * @param {PartitionedFilterEventCallback} callback - The callback that will be called for each event.
-     */
+    /** @inheritdoc */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
     }

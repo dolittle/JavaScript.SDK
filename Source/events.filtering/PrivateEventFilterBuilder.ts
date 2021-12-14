@@ -1,19 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Guid } from '@dolittle/rudiments';
+
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
-import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
+import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 import { FilterId } from './FilterId';
 import { IFilterProcessor } from './IFilterProcessor';
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
-import { Guid } from '@dolittle/rudiments';
+import { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder';
+import { IPrivateEventFilterBuilder } from './IPrivateEventFilterBuilder';
+import { IUnpartitionedEventFilterBuilder } from './IUnpartitionedEventFilterBuilder';
+import { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
+import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';
 
 /**
  * Represents the builder for building private event filters.
  */
-export class PrivateEventFilterBuilder {
+export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder {
     private _scopeId: ScopeId = ScopeId.default;
     private _innerBuilder?: PartitionedEventFilterBuilder | UnpartitionedEventFilterBuilder;
 
@@ -21,32 +25,24 @@ export class PrivateEventFilterBuilder {
      * Initializes a new instance of {@link PrivateEventFilterBuilder}.
      * @param {FilterId} _filterId - Identifier of the filter.
      */
-    constructor(private _filterId: FilterId) {}
+    constructor(private _filterId: FilterId) {
+        super();
+    }
 
-    /**
-     * Defines which {@link ScopeId} the filter operates on.
-     * @param {ScopeId | Guid | string} scopeId - Scope the filter operates on.
-     * @returns {PrivateEventFilterBuilder} The builder for continuation.
-     */
-    inScope(scopeId: ScopeId | Guid | string): PrivateEventFilterBuilder {
+    /** @inheritdoc */
+    inScope(scopeId: ScopeId | Guid | string): IPrivateEventFilterBuilder {
         this._scopeId = ScopeId.from(scopeId);
         return this;
     }
 
-    /**
-     * Defines the filter to be partitioned.
-     * @returns {PrivateEventFilterBuilder} The builder for continuation.
-     */
-    partitioned(): PartitionedEventFilterBuilder {
+    /** @inheritdoc */
+    partitioned(): IPartitionedEventFilterBuilder {
         this._innerBuilder = new PartitionedEventFilterBuilder();
         return this._innerBuilder;
     }
 
-    /**
-     * Defines the filter to be unpartitioned.
-     * @returns {PrivateEventFilterBuilder} The builder for continuation.
-     */
-    unpartitioned(): UnpartitionedEventFilterBuilder {
+    /** @inheritdoc */
+    unpartitioned(): IUnpartitionedEventFilterBuilder {
         this._innerBuilder = new UnpartitionedEventFilterBuilder();
         return this._innerBuilder;
     }

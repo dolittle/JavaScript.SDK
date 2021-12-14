@@ -7,19 +7,17 @@ import { EventFilterProcessor } from './Internal/EventFilterProcessor';
 import { FilterId } from './FilterId';
 import { FilterEventCallback } from './FilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
+import { IUnpartitionedEventFilterBuilder } from './IUnpartitionedEventFilterBuilder';
 import { MissingFilterCallback } from './MissingFilterCallback';
 
 /**
- * Represents the builder for building public event filters.
+ * Represents an implementation of {@link IUnpartitionedEventFilterBuilder}.
  */
-export class UnpartitionedEventFilterBuilder {
+export class UnpartitionedEventFilterBuilder extends IUnpartitionedEventFilterBuilder {
     private _callback?: FilterEventCallback;
 
-    /**
-     * Defines a callback for the filter.
-     * @param {FilterEventCallback} callback - The callback that will be called for each event.
-     */
-    handle(callback: FilterEventCallback) {
+    /** @inheritdoc */
+    handle(callback: FilterEventCallback): void {
         this._callback = callback;
     }
 
