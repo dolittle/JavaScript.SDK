@@ -8,7 +8,7 @@ import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
-import { Artifacts, Guids } from '@dolittle/sdk.protobuf';
+import { Artifacts, ExecutionContexts, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
@@ -136,6 +136,7 @@ export class EventHandlerProcessor extends Internal.EventProcessor<EventHandlerI
             pbSequenceNumber,
             EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
+            ExecutionContexts.toSDK(pbExecutionContext),
             executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
