@@ -7,9 +7,11 @@ import { Observable, NEVER } from 'rxjs';
  * Represents a possible cancellation.
  */
 export class Cancellation extends Observable<void> {
+    private _cancelled = false;
+
     /**
      * Creates a new instance of the {@link Cancellation} class.
-     * @param {Observable<void>} source - The source observable that indicates when a cancellation has occured.
+     * @param {Observable<void>} source - The source observable indicates a cancellation has been requested by completing.
      */
     constructor(source: Observable<void>) {
         super((subscriber) => {
@@ -18,9 +20,19 @@ export class Cancellation extends Observable<void> {
                 subscription.unsubscribe();
             };
         });
+        source.subscribe({
+            complete: () => {
+                this._cancelled = true;
+            }
+        });
     }
 
-    // TODO: Add cancelled property
+    /**
+     * Gets a value indicating wheter or not this cancellation is cancelled.
+     */
+    get cancelled(): boolean {
+        return this._cancelled;
+    }
 
     /**
      * Default cancellation, which is never.

@@ -10,11 +10,12 @@ describeThis(__filename, () => {
     const source = new Subject<void>();
     const cancellation = new Cancellation(source);
 
-    let cancelled = false;
+    let completed = false;
     cancellation.subscribe({
-        complete: () => cancelled = true,
+        complete: () => completed = true,
     });
     source.complete();
 
-    it('should be cancelled', () => cancelled.should.be.true);
+    it('should be cancelled', () => cancellation.cancelled.should.be.true);
+    it('should complete', () => completed.should.be.true);
 });
