@@ -15,12 +15,14 @@ export class EventContext {
      * @param {number} sequenceNumber - Sequence number in the event log the event belongs to.
      * @param {EventSourceId} eventSourceId - Unique identifier of the event source it originates from.
      * @param {DateTime} occurred - DateTime in UTC for when the event occurred.
-     * @param {ExecutionContext} executionContext - The execution context the event happened in.
+     * @param {ExecutionContext} committedExecutionContext - The execution context in which the event was committed to the event store.
+     * @param {ExecutionContext} currentExecutionContext - The execution context in which the event is currently being processed..
      */
     constructor(
         readonly sequenceNumber: number,
         readonly eventSourceId: EventSourceId,
         readonly occurred: DateTime,
-        readonly executionContext: ExecutionContext) {
+        readonly committedExecutionContext: ExecutionContext,
+        readonly currentExecutionContext: ExecutionContext) {
     }
 }
