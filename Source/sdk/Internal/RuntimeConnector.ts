@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Logger } from 'winston';
-import { from, Notification, Observable } from 'rxjs';
-import { concatMap, delay, dematerialize, map } from 'rxjs/operators';
+import { from, Notification, Observable, timer } from 'rxjs';
+import { concatMap, delayWhen, dematerialize, map } from 'rxjs/operators';
 import { status as GrpcStatus } from '@grpc/grpc-js';
 
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
@@ -28,6 +28,9 @@ import { ICanConnectToARuntime } from './ICanConnectToARuntime';
  * Represents an implementation of {@link ICanConnectToARuntime}.
  */
 export class RuntimeConnector extends ICanConnectToARuntime {
+    private readonly _initialRetryDelay = 1;
+    private readonly _maxRetryDelay = 10;
+
     /**
      * Initialises a new instance of the {@link RuntimeConnector} class.
      * @param {HandshakeClient} _handshakeClient - The client to use to perform the handshake.
@@ -93,7 +96,6 @@ export class RuntimeConnector extends ICanConnectToARuntime {
 
     private createRetryPolicy(): RetryPolicy {
         return (errors) => errors.pipe(
-            delay(1000),
             map((error) => {
                 if (isGrpcError(error) && error.code === GrpcStatus.UNIMPLEMENTED) {
                     return Notification.createError<Error>(RuntimeVersionNotCompatible.unimplemented);
@@ -101,10 +103,16 @@ export class RuntimeConnector extends ICanConnectToARuntime {
                     return Notification.createError<Error>(error);
                 }
 
-                this._logger.warn(`Connection to Runtime failed, will retry in 1 second. Reason: ${error.message}`);
                 return Notification.createNext(error);
             }),
             dematerialize(),
+            delayWhen((error, attempt) => {
+                const delay = Math.min(this._initialRetryDelay * (attempt + 1), this._maxRetryDelay);
+
+                this._logger.warn(`Connection to Runtime failed, will retry in ${delay} seconds. Reason: ${error.message}`);
+
+                return timer(delay * 1e3);
+            }),
         );
     }
 
