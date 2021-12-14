@@ -4,21 +4,23 @@
 import { Subject } from 'rxjs';
 import { describeThis } from '@dolittle/typescript.testing';
 
+import { Cancellation } from '../../Cancellation';
 import { CancellationSource } from '../../CancellationSource';
 
 describeThis(__filename, () => {
     const first = new Subject<void>();
     const second = new Subject<void>();
 
-    const source = new CancellationSource(first, second);
+    const source = new CancellationSource(new Cancellation(first), new Cancellation(second));
     const cancellation = source.cancellation;
 
-    let cancelled = false;
+    let complete = false;
     cancellation.subscribe({
-        complete: () => cancelled = true,
+        complete: () => complete = true,
     });
 
     first.complete();
 
-    it('should be cancelled', () => cancelled.should.be.true);
+    it('should be cancelled', () => cancellation.cancelled.should.be.true);
+    it('should complete', () => complete.should.be.true);
 });

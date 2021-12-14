@@ -51,7 +51,7 @@ export abstract class IDolittleClient {
     /**
      * Gets the list of {@link Tenant} that is configured.
      */
-    abstract get tenants(): Tenant[];
+    abstract get tenants(): readonly Tenant[];
 
     /**
      * Gets the {@link IResourcesBuilder}.

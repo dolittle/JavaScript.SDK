@@ -26,11 +26,11 @@ import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscri
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
-import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
+import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
-import { Tenant, Internal as TenancyInternal } from '@dolittle/sdk.tenancy';
+import { Tenant } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
 import { ConnectCallback } from './Builders/ConnectCallback';
@@ -42,6 +42,7 @@ import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolitt
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
 import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
+import { RuntimeConnector } from './Internal/RuntimeConnector';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -55,7 +56,7 @@ export class DolittleClient extends IDolittleClient {
     private _aggregates?: AggregatesBuilder;
     private _projectionStore?: ProjectionStoreBuilder;
     private _embeddingStore?: Embeddings;
-    private _tenants: Tenant[] = [];
+    private _tenants: readonly Tenant[] = [];
     private _resources?: ResourcesBuilder;
     private _services?: TenantServiceProviders;
     private _eventHorizons?: IEventHorizons;
@@ -198,11 +199,14 @@ export class DolittleClient extends IDolittleClient {
 
             const clients = this.createGrpcClients(configuration.runtimeHost, configuration.runtimePort);
 
-            const executionContext = await this.performHandshake(clients.handshake, configuration.version, cancellation);
+            const connector = new RuntimeConnector(
+                clients.handshake,
+                clients.tenants,
+                configuration.version,
+                logger);
 
-            const tenants = new TenancyInternal.Tenants(clients.tenants, executionContext, logger);
-            this._tenants = await tenants.getAll();
-            const tenantIds = this._tenants.map(_ => _.id);
+            const connectionResult = await connector.connect(cancellation);
+            this._tenants = connectionResult.tenants;
 
             this.buildClientServices(
                 clients.eventStore,
@@ -210,13 +214,13 @@ export class DolittleClient extends IDolittleClient {
                 clients.embeddingStore,
                 clients.embeddings,
                 clients.resources,
-                executionContext,
+                connectionResult.executionContext,
                 logger);
 
             this.registerTypes(
                 clients.eventTypes,
                 clients.aggregateRoots,
-                executionContext,
+                connectionResult.executionContext,
                 logger,
                 this._cancellationSource.cancellation);
 
@@ -227,7 +231,7 @@ export class DolittleClient extends IDolittleClient {
             this._services = new TenantServiceProviders(
                 configuration.serviceProvider,
                 this._serviceProviderBuilder,
-                tenantIds);
+                connectionResult.tenantIds);
 
             this.startReverseCallClients(
                 clients.filters,
@@ -235,7 +239,7 @@ export class DolittleClient extends IDolittleClient {
                 clients.projections,
                 clients.embeddings,
                 clients.eventHorizons,
-                executionContext,
+                connectionResult.executionContext,
                 this._services,
                 logger,
                 configuration.pingInterval,
@@ -245,18 +249,6 @@ export class DolittleClient extends IDolittleClient {
             this._connected = false;
             throw exception;
         }
-    }
-
-    private async performHandshake(client: HandshakeClient, version: Version, cancellation: Cancellation): Promise<ExecutionContext> {
-        // TODO: Connect to the runtime and fetch the information
-
-        return new ExecutionContext(
-            MicroserviceId.notApplicable,
-            TenantId.system,
-            version,
-            Environment.undetermined,
-            CorrelationId.system,
-            Claims.empty);
     }
 
     private buildClientServices(

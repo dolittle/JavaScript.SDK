@@ -13,6 +13,13 @@ export class CouldNotConnectToRuntime extends Exception {
      * @param {string} address - The address of the Runtime that was connected to.
      */
     constructor(address: string) {
-        super(`Could not connect to a Runtime on '${address}'. Please make sure a Runtime is running, and that the private port (usually 50053) is accessible on the specified port.`);
+        super(`Could not connect to a Runtime on '${CouldNotConnectToRuntime.getStrippedAddress(address)}'. Please make sure a Runtime is running, and that the private port (usually 50053) is accessible on the specified port.`);
+    }
+
+    private static getStrippedAddress(address: string): string {
+        if (address.startsWith('dns:')) {
+            return address.slice(4);
+        }
+        return address;
     }
 }

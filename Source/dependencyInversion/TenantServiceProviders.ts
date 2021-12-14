@@ -33,7 +33,7 @@ export class TenantServiceProviders extends ITenantServiceProviders {
     constructor(
         baseServiceProvider: IServiceProvider,
         bindings: IServiceProviderBuilder,
-        tenants: TenantId[],
+        tenants: readonly TenantId[],
     ) {
         super();
 
