@@ -13,8 +13,8 @@ import { RequiredDecoratorNotApplied } from './RequiredDecoratorNotApplied';
 import { setDecoratorMetadata } from './setDecoratorMetadata';
 
 type GetMetadataValue<TData> =
-    ((type: Constructor<any>, required?: false) => TData | undefined) &
-    ((type: Constructor<any>, required: true, reason: string) => TData);
+    ((type: Constructor<any>, required?: false, createMetadata?: boolean) => TData | undefined) &
+    ((type: Constructor<any>, required: true, reason: string, createMetadata?: boolean) => TData);
 
 type Decorator<TCallback> = (callback: TCallback) => (target: Function | Object, propertyKey?: string | symbol, descriptorOrIndex?: PropertyDescriptor | number) => void;
 
@@ -55,7 +55,7 @@ export function createMetadataDecorator<TData>(name: string, displayName: string
                     throw new DecoratorAppliedMultipleTimes(displayName, decoratedTarget, constructor, target, propertyKey, descriptorOrIndex);
                 }
 
-                const value = getDecoratorMetadata<TData>(name, constructor);
+                const value = getDecoratorMetadata<TData>(name, constructor, true);
                 const newValue = callback(decoratedTarget, constructor, propertyKey, descriptorOrIndex, value);
                 setDecoratorMetadata<TData>(name, constructor, newValue);
 
@@ -64,11 +64,16 @@ export function createMetadataDecorator<TData>(name: string, displayName: string
                 }
             };
         },
-        function (type: Constructor<any>, required?: boolean, reason?: string) {
-            const value = getDecoratorMetadata<TData>(name, type);
+        function (type: Constructor<any>, required?: boolean, maybeRasonOrCreateMetadata?: string | boolean, maybeCreateMetadata?: boolean) {
+            const createMetadata =
+                typeof maybeCreateMetadata === 'boolean' ? maybeCreateMetadata :
+                typeof maybeRasonOrCreateMetadata === 'boolean' ? maybeRasonOrCreateMetadata :
+                true;
 
-            if (value === undefined && required) {
-                throw new RequiredDecoratorNotApplied(displayName, validTargets, type, reason!);
+            const value = getDecoratorMetadata<TData>(name, type, createMetadata);
+
+            if (value === undefined && required === true) {
+                throw new RequiredDecoratorNotApplied(displayName, validTargets, type, maybeRasonOrCreateMetadata as string);
             }
 
             return value;

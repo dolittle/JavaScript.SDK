@@ -13,7 +13,7 @@ export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequence
 export { EventSourceId } from './EventSourceId';
 export { EventType } from './EventType';
 export { EventTypeAlias, EventTypeAliasLike } from './EventTypeAlias';
-export { eventType, getDecoratedEventType } from './eventTypeDecorator';
+export { eventType, isDecoratedWithEventType, getDecoratedEventType } from './eventTypeDecorator';
 export { EventTypeId, EventTypeIdLike } from './EventTypeId';
 export { EventTypeMap } from './EventTypeMap';
 export { EventTypeOptions } from './EventTypeOptions';
