@@ -31,11 +31,11 @@ export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
     }
 
     /** @inheritdoc */
-    handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): void;
-    handle(eventType: EventType, method: EventHandlerSignature<any>): void;
-    handle(eventTypeId: string | EventTypeId | Guid, method: EventHandlerSignature<any>): void;
-    handle(eventTypeId: string | EventTypeId | Guid, generation: GenerationLike, method: EventHandlerSignature<any>): void;
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>) {
+    handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): IEventHandlerMethodsBuilder;
+    handle(eventType: EventType, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
+    handle(eventTypeId: string | EventTypeId | Guid, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
+    handle(eventTypeId: string | EventTypeId | Guid, generation: GenerationLike, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
+    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>): IEventHandlerMethodsBuilder {
         const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
         if (typeOrEventTypeOrId instanceof EventType) {
@@ -49,6 +49,8 @@ export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
         } else {
             this._typeToMethodPairs.push([typeOrEventTypeOrId, method]);
         }
+
+        return this;
     }
 
     /**
