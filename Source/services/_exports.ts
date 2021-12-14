@@ -4,6 +4,7 @@
 export { ClientProcessor } from './ClientProcessor';
 export { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 export { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
+export { GrpcError, isGrpcError } from './GrpcError';
 export { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
 export { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 export { ITrackProcessors } from './ITrackProcessors';
