@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Observable, NEVER } from 'rxjs';
+import { Observable, NEVER, timer } from 'rxjs';
+import { ignoreElements } from 'rxjs/operators';
 
 /**
  * Represents a possible cancellation.
@@ -28,14 +29,24 @@ export class Cancellation extends Observable<void> {
     }
 
     /**
-     * Gets a value indicating wheter or not this cancellation is cancelled.
+     * Gets a value indicating wheter or not the {@link Cancellation} is cancelled.
      */
     get cancelled(): boolean {
         return this._cancelled;
     }
 
     /**
-     * Default cancellation, which is never.
+     * Default {@link Cancellation}, which is never.
      */
     static default: Cancellation = new Cancellation(NEVER);
+
+    /**
+     * Creates a new {@link Cancellation} that is cancelled after the specified amount of time.
+     * @param {number} time - The time in milliseconds until the cancellation occurs.
+     * @returns {Cancellation} The scheduled cancellation.
+     */
+    static after(time: number): Cancellation {
+        const source = timer(time).pipe(ignoreElements());
+        return new Cancellation(source);
+    }
 }
