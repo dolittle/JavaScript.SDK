@@ -3,4 +3,5 @@
 
 export * from './_exports';
 
+export { ICanBuildUniqueBindings, UniqueBindingBuilder } from './Bindings/_exports';
 export { IClientBuildResults } from './ClientSetup/_exports';

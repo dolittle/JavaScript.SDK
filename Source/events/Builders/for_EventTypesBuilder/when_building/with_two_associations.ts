@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { describeThis } from '@dolittle/typescript.testing';
+import * as sinon from 'ts-sinon';
 
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Generation } from '@dolittle/sdk.artifacts';
 
 import { EventTypeId } from '../../../EventTypeId';
@@ -19,9 +21,11 @@ describeThis(__filename, () => {
     const secondTypeGeneration = Generation.from(43);
 
     const builder = new EventTypesBuilder();
+    const results = sinon.stubInterface<IClientBuildResults>();
+
     builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);
     builder.associate(SecondType, secondTypeIdentifier, secondTypeGeneration);
-    const eventTypes = builder.build();
+    const eventTypes = builder.build(results);
 
     const firstTypeAssociation = eventTypes.getFor(FirstType);
     const secondTypeAssociation = eventTypes.getFor(SecondType);

@@ -12,12 +12,17 @@ import { EventTypes } from '../EventTypes';
 import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
 import { getDecoratedEventType } from '../eventTypeDecorator';
+import { IClientBuildResults, UniqueBindingBuilder } from '@dolittle/sdk.common';
 
 /**
  * Represents a builder for adding associations into {@link IEventTypes} instance.
  */
 export class EventTypesBuilder extends IEventTypesBuilder {
-    private _associations: [Constructor<any>, EventType][] = [];
+    private readonly _bindings = new UniqueBindingBuilder<EventType, Constructor<any>>(
+        (eventType, type, count) => `The event type ${eventType} was bound to ${type.name} ${count} times.`,
+        (eventType, types) => `The event type ${eventType} was associated with multiple classes (${types.map(_ => _.name).join(', ')}). None of these will be registered.`,
+        (type, eventTypes) => `The class ${type.name} was associated with multiple event types (${eventTypes.join(', ')}). None of these will be registered`,
+    );
 
     /** @inheritdoc */
     associate<T = any>(type: Constructor<T>, eventType: EventType): IEventTypesBuilder;
@@ -31,23 +36,26 @@ export class EventTypesBuilder extends IEventTypesBuilder {
                                 EventTypeId.from(eventTypeOrIdentifier),
                                 generation,
                                 alias);
-        this._associations.push([type, eventType]);
+        this._bindings.add(eventType, type);
         return this;
     }
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IEventTypesBuilder {
+        this._bindings.add(getDecoratedEventType(type), type);
         this.associate(type, getDecoratedEventType(type));
         return this;
     }
 
     /**
      * Builds an {@link IEventTypes} from the associated and registered event types.
+     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventTypes} The built event types.
      */
-    build(): IEventTypes {
+    build(results: IClientBuildResults): IEventTypes {
+        const unique = this._bindings.buildUnique(results);
         const eventTypes = new EventTypes();
-        for (const [type, eventType] of this._associations) {
+        for (const { identifier: eventType, value: type } of unique) {
             eventTypes.associate(type, eventType);
         }
         return eventTypes;
