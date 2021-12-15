@@ -9,6 +9,7 @@ export { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } fro
 export { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 export { ITrackProcessors } from './ITrackProcessors';
 export { PingTimeout } from './PingTimeout';
+export { ProcessorShouldNeverComplete } from './ProcessorShouldNeverComplete';
 export { ProcessorTracker } from './ProcessorTracker';
 export { reactiveClientStream, reactiveDuplex, reactiveServerStream, reactiveUnary } from './ReactiveGrpc';
 export { RegistrationFailed } from './RegistrationFailed';
