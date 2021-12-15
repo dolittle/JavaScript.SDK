@@ -6,7 +6,7 @@ export { createMetadataDecorator } from './createMetadataDecorator';
 export { Decorator } from './Decorator';
 export { DecoratorAppliedMultipleTimes } from './DecoratorAppliedMultipleTimes';
 export { DecoratorTarget } from './DecoratorTarget';
-export { ensureDecoratorMetadataMap } from './ensureDecoratorMetadataMap';
+export { hasDecoratorMetadataMap, ensureDecoratorMetadataMap } from './decoratorMetadataMap';
 export { getAppliedDecorators } from './getAppliedDecorators';
 export { getDecoratedTarget } from './getDecoratedTarget';
 export { getDecoratorMetadata } from './getDecoratorMetadata';

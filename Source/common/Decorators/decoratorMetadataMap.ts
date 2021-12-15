@@ -6,6 +6,16 @@ import { Constructor } from '@dolittle/types';
 const DECORATOR_METADATA_KEY = '@dolittle/sdk.common/Decorators';
 
 /**
+ * Checks whether or not the decorator metadata map exists on the provided type.
+ * @param {Constructor<any>} type - The type to check if the map exists on.
+ * @returns {boolean} True if the type has the decorator metadata map, false if not.
+ */
+export function hasDecoratorMetadataMap(type: Constructor<any>): boolean {
+    const descriptor = Object.getOwnPropertyDescriptor(type, DECORATOR_METADATA_KEY);
+    return descriptor !== undefined && descriptor.value instanceof Map;
+}
+
+/**
  * Ensures that the decorator metadata map exists on the provided type.
  * @param {Constructor<any>} type - The type to ensure the map exists on.
  * @returns {Map<string, any>} The metadata map on the type.

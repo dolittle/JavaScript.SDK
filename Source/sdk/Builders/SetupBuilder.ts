@@ -1,16 +1,18 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootsBuilder, AggregateRootsBuilderCallback } from '@dolittle/sdk.aggregates';
+import { AggregateRootsBuilder, AggregateRootsBuilderCallback, isDecoratedAggregateRootType } from '@dolittle/sdk.aggregates';
 import { ClientSetup } from '@dolittle/sdk.common';
 import { ServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
-import { EmbeddingsBuilder, EmbeddingsBuilderCallback } from '@dolittle/sdk.embeddings';
+import { EmbeddingsBuilder, EmbeddingsBuilderCallback, isDecoratedEmbeddingType } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { EventTypesBuilder, EventTypesBuilderCallback } from '@dolittle/sdk.events';
+import { EventTypesBuilder, EventTypesBuilderCallback, isDecoratedWithEventType } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback } from '@dolittle/sdk.events.handling';
-import { ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
+import { EventHandlersBuilder, EventHandlersBuilderCallback, isDecoratedEventHandlerType } from '@dolittle/sdk.events.handling';
+import { isDecoratedProjectionType, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
 
+import { ICanTraverseModules } from '../Internal/Discovery/ICanTraverseModules';
+import { ModuleTraverser } from '../Internal/Discovery/ModuleTraverser';
 import { DolittleClient } from '../DolittleClient';
 import { IDolittleClient } from '../IDolittleClient';
 import { ISetupBuilder } from './ISetupBuilder';
@@ -19,6 +21,8 @@ import { ISetupBuilder } from './ISetupBuilder';
  * Represents an implementation of {@link ISetupBuilder}.
  */
 export class SetupBuilder extends ISetupBuilder {
+    private readonly _moduleTraverser: ICanTraverseModules;
+
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _aggregateRootsBuilder: AggregateRootsBuilder;
     private readonly _eventFiltersBuilder: EventFiltersBuilder;
@@ -35,6 +39,8 @@ export class SetupBuilder extends ISetupBuilder {
      */
     constructor() {
         super();
+
+        this._moduleTraverser = new ModuleTraverser();
 
         this._eventTypesBuilder = new EventTypesBuilder();
         this._aggregateRootsBuilder = new AggregateRootsBuilder();
@@ -129,6 +135,26 @@ export class SetupBuilder extends ISetupBuilder {
     }
 
     private discoverAndRegisterAll(): void {
-        // TODO: Implement
+        this._moduleTraverser.forEachClass((type) => {
+            if (isDecoratedWithEventType(type)) {
+                this._eventTypesBuilder.register(type);
+            }
+
+            if (isDecoratedAggregateRootType(type)) {
+                this._aggregateRootsBuilder.register(type);
+            }
+
+            if (isDecoratedEventHandlerType(type)) {
+                this._eventHandlersBuilder.registerEventHandler(type);
+            }
+
+            if (isDecoratedProjectionType(type)) {
+                this._projectionsBuilder.registerProjection(type);
+            }
+
+            if (isDecoratedEmbeddingType(type)) {
+                this._embeddingsBuilder.registerEmbedding(type);
+            }
+        });
     }
 }

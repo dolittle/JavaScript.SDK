@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { ensureDecoratorMetadataMap } from './ensureDecoratorMetadataMap';
+import { ensureDecoratorMetadataMap } from './decoratorMetadataMap';
 
 /**
  * Sets the named data in the metadata of the specified type.

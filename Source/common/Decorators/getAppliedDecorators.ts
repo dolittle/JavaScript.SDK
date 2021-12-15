@@ -25,7 +25,7 @@ export type AppliedDecorator = {
  * @returns {AppliedDecorator[]} The applied decorators.
  */
 export function getAppliedDecorators(type: Constructor<any>): AppliedDecorator[] {
-    let decorators = getDecoratorMetadata<AppliedDecorator[]>(APPLIED_DECORATORS_NAME, type);
+    let decorators = getDecoratorMetadata<AppliedDecorator[]>(APPLIED_DECORATORS_NAME, type, true);
 
     if (decorators === undefined) {
         decorators = [];

@@ -22,7 +22,7 @@ export { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
 export { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 export { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
 export { UpdateDecoratedMethod } from './UpdateDecoratedMethod';
-export { embedding, getEmbeddingDecoratedType } from './embeddingDecorator';
+export { embedding, isDecoratedEmbeddingType, getDecoratedEmbeddingType } from './embeddingDecorator';
 export { on, getOnDecoratedMethods } from './onDecorator';
 export { resolveDeletionToEvents, getDeletionDecoratedMethod } from './resolveDeletionToEventsDecorator';
 export { resolveUpdateToEvents, getUpdateDecoratedMethod } from './resolveUpdateToEventsDecorator';

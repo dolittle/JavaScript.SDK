@@ -28,10 +28,19 @@ export function embedding(id: EmbeddingId | Guid | string): Decorators.Decorator
 }
 
 /**
+ * Checks whether the specified class is decorated with an embedding type.
+ * @param {Constructor<any>} type - The class to check the decorated embedding type for.
+ * @returns {boolean} True if the decorator is applied, false if not.
+ */
+export function isDecoratedEmbeddingType(type: Constructor<any>): boolean {
+    return getMetadata(type, false, false) !== undefined;
+}
+
+/**
  * Gets the {@link EmbeddingDecoratedType} of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated embedding type for.
  * @returns {EmbeddingDecoratedType | undefined} The decorated embedding type if decorated.
  */
-export function getEmbeddingDecoratedType(type: Constructor<any>): EmbeddingDecoratedType | undefined {
+export function getDecoratedEmbeddingType(type: Constructor<any>): EmbeddingDecoratedType | undefined {
     return getMetadata(type);
 }

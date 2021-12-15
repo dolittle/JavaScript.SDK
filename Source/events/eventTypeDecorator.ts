@@ -29,6 +29,15 @@ export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions
 }
 
 /**
+ * Checks whether the specified class is decorated with an event type.
+ * @param {Constructor<any>} type - The class to check the decorated event type for.
+ * @returns {boolean} True if the decorator is applied, false if not.
+ */
+export function isDecoratedWithEventType(type: Constructor<any>): boolean {
+    return getMetadata(type, false, false) !== undefined;
+}
+
+/**
  * Gets the decorated event type of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated event type for.
  * @returns {EventType} The decorated event type.

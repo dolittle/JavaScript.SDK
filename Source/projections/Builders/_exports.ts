@@ -16,7 +16,7 @@ export { ProjectionBuilderForReadModel } from './ProjectionBuilderForReadModel';
 export { ProjectionClassBuilder } from './ProjectionClassBuilder';
 export { ProjectionClassOnMethod } from './ProjectionClassOnMethod';
 export { ProjectionDecoratedType } from './ProjectionDecoratedType';
-export { projection, getProjectionDecoratedType } from './projectionDecorator';
+export { projection, isDecoratedProjectionType, getDecoratedProjectionType } from './projectionDecorator';
 export { ProjectionOptions } from './ProjectionOptions';
 export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';

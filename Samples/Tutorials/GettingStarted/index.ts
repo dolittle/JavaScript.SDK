@@ -6,15 +6,11 @@
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
+import './DishHandler';
 
 (async () => {
     const client = await DolittleClient
-        .setup(builder => builder
-            .withEventTypes(eventTypes =>
-                eventTypes.register(DishPrepared))
-            .withEventHandlers(builder =>
-                builder.registerEventHandler(DishHandler)))
+        .setup()
         .connect();
 
     const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
