@@ -5,7 +5,6 @@ export * as Internal from './Internal/_exports';
 
 export { EventFiltersBuilder } from './EventFiltersBuilder';
 export { EventFiltersBuilderCallback } from './EventFiltersBuilderCallback';
-export { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 export { FilterEventCallback } from './FilterEventCallback';
 export { FilterId } from './FilterId';
 export { Filters } from './Filters';
@@ -16,7 +15,6 @@ export { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder
 export { IPrivateEventFilterBuilder } from './IPrivateEventFilterBuilder';
 export { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
 export { IUnpartitionedEventFilterBuilder } from './IUnpartitionedEventFilterBuilder';
-export { MissingFilterCallback } from './MissingFilterCallback';
 export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 export { PartitionedFilterResult } from './PartitionedFilterResult';

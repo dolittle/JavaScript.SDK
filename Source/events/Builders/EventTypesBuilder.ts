@@ -53,9 +53,9 @@ export class EventTypesBuilder extends IEventTypesBuilder {
      * @returns {IEventTypes} The built event types.
      */
     build(results: IClientBuildResults): IEventTypes {
-        const unique = this._bindings.buildUnique(results);
+        const uniqueBindings = this._bindings.buildUnique(results);
         const eventTypes = new EventTypes();
-        for (const { identifier: eventType, value: type } of unique) {
+        for (const { identifier: eventType, value: type } of uniqueBindings) {
             eventTypes.associate(type, eventType);
         }
         return eventTypes;

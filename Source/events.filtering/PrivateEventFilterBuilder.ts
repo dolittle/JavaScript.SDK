@@ -3,9 +3,9 @@
 
 import { Guid } from '@dolittle/rudiments';
 
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
-import { FilterDefinitionIncomplete } from './FilterDefinitionIncomplete';
 import { FilterId } from './FilterId';
 import { IFilterProcessor } from './IFilterProcessor';
 import { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder';
@@ -49,15 +49,16 @@ export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder {
 
     /**
      * Build an instance of a {@link IFilterProcessor}.
-     * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @returns {IFilterProcessor} The built filter processor.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {IClientBuildResults} results - For keeping track of build results.
+     * @returns {IFilterProcessor | undefined} The built filter processor if successful.
      */
-    build(
-        eventTypes: IEventTypes,
-    ): IFilterProcessor {
-        if (!this._innerBuilder) {
-            throw new FilterDefinitionIncomplete(this._filterId, 'call partitioned() or unpartitioned().');
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IFilterProcessor | undefined {
+        if (this._innerBuilder === undefined) {
+            results.addFailure(`Filter configuration for private filter '${this._filterId}' is incomplete`, 'Call partitioned() or unpartitioned() on the builder to complete the filter configuration');
+            return;
         }
-        return this._innerBuilder.build(this._filterId, this._scopeId, eventTypes);
+
+        return this._innerBuilder.build(this._filterId, this._scopeId, eventTypes, results);
     }
 }

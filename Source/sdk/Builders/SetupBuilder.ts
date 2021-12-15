@@ -114,7 +114,7 @@ export class SetupBuilder extends ISetupBuilder {
 
         const eventTypes = this._eventTypesBuilder.build(buildResults);
 
-        const filters = this._eventFiltersBuilder.build(eventTypes);
+        const filters = this._eventFiltersBuilder.build(eventTypes, buildResults);
         const eventHandlers = this._eventHandlersBuilder.build(eventTypes, bindings, buildResults);
         const projections = this._projectionsBuilder.build(eventTypes, buildResults);
         const embeddings = this._embeddingsBuilder.build(eventTypes, buildResults);
