@@ -3,7 +3,7 @@
 
 import * as grpc from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
-import { repeat } from 'rxjs/operators';
+import { filter, map, repeat, tap } from 'rxjs/operators';
 import { Logger } from 'winston';
 
 import { ConceptAs } from '@dolittle/concepts';
@@ -61,26 +61,21 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
             logger,
             cancellation);
 
-        return new Observable<void>(subscriber => {
-            logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
-            reverseCallClient.subscribe({
-                next: (message: TRegisterResponse) => {
-                    const failure = this.getFailureFromRegisterResponse(message);
-                    if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, Failures.toSDK(failure)));
-                    } else {
-                        logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
-                    }
-                },
-                error: (error: Error) => {
-                    subscriber.error(error);
-                },
+        return reverseCallClient.pipe(
+            map((registerResponse) => {
+                const failure = this.getFailureFromRegisterResponse(registerResponse);
+                if (failure) {
+                    throw new RegistrationFailed(this._kind, this._identifier.value, Failures.toSDK(failure));
+                } else {
+                    logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
+                }
+            }),
+            tap({
                 complete: () => {
                     logger.debug(`${this._kind} ${this._identifier} handling of requests completed.`);
-                    subscriber.complete();
-                },
-            });
-        });
+                }
+            })
+        );
     }
 
     /**
@@ -111,7 +106,11 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
     registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
-        return this.registerWithPolicy(policy, client, executionContext, services, logger, pingInterval, cancellation).pipe(repeat());
+        return this.registerWithPolicy(policy, client, executionContext, services, logger, pingInterval, cancellation).pipe(tap(
+            () => console.log('Repeat next'),
+            (e) => console.log('Repeat error', e),
+            () => console.log('Repeat complete'),
+        ), repeat());
     }
 
     /**
