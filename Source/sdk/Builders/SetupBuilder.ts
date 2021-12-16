@@ -112,6 +112,7 @@ export class SetupBuilder extends ISetupBuilder {
         const bindings = new ServiceProviderBuilder();
         const buildResults = new ClientSetup.ClientBuildResults();
 
+        const aggregateRootTypes = this._aggregateRootsBuilder.build(buildResults);
         const eventTypes = this._eventTypesBuilder.build(buildResults);
 
         const filters = this._eventFiltersBuilder.build(eventTypes, buildResults);
@@ -124,7 +125,7 @@ export class SetupBuilder extends ISetupBuilder {
             bindings,
             buildResults,
             eventTypes,
-            this._aggregateRootsBuilder,
+            aggregateRootTypes,
             filters,
             eventHandlers,
             this._projectionsAssociations,

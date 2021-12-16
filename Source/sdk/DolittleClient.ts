@@ -18,7 +18,7 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, AggregatesBuilder, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { AggregatesBuilder, IAggregateRootTypes, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { ClientSetup } from '@dolittle/sdk.common';
 import { IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
 import { Embeddings, IEmbedding, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
@@ -30,6 +30,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 import { Tenant } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
@@ -37,12 +38,11 @@ import { ConnectCallback } from './Builders/ConnectCallback';
 import { SetupBuilder } from './Builders/SetupBuilder';
 import { SetupCallback } from './Builders/SetupCallback';
 import { ConnectConfiguration } from './Internal/ConnectConfiguration';
+import { RuntimeConnector } from './Internal/RuntimeConnector';
 import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittleClientMultipleTimes';
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
-import { RuntimeConnector } from './Internal/RuntimeConnector';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -66,7 +66,7 @@ export class DolittleClient extends IDolittleClient {
      * @param {IServiceProviderBuilder} _serviceProviderBuilder - The service provider builder with bound services from the setup.
      * @param {ClientSetup.ClientBuildResults} _setupResults - The results from building the client artifacts.
      * @param {IEventTypes} eventTypes - The built event types.
-     * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
+     * @param {IAggregateRootTypes} _aggregateRootTypes - The built aggregate root types.
      * @param {IFilterProcessor[]} _eventFilters - The built event filters.
      * @param {EventsHandlingInternal.EventHandlerProcessor[]} _eventHandlers - The built event handlers.
      * @param {ProjectionAssociations} _projectionsAssociations - The {@link ProjectionAssociations}.
@@ -79,7 +79,7 @@ export class DolittleClient extends IDolittleClient {
         private readonly _serviceProviderBuilder: IServiceProviderBuilder,
         private readonly _setupResults: ClientSetup.ClientBuildResults,
         readonly eventTypes: IEventTypes,
-        private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
+        private readonly _aggregateRootTypes: IAggregateRootTypes,
         private readonly _eventFilters: IFilterProcessor[],
         private readonly _eventHandlers: EventsHandlingInternal.EventHandlerProcessor[],
         private readonly _projectionsAssociations: ProjectionAssociations,
@@ -307,9 +307,7 @@ export class DolittleClient extends IDolittleClient {
             aggregateRootsClient,
             executionContext,
             logger);
-        this._aggregateRootsBuilder.buildAndRegister(
-            aggregateRoots,
-            cancellation);
+        aggregateRoots.registerAllFrom(this._aggregateRootTypes, cancellation);
     }
 
     private bindServices(
