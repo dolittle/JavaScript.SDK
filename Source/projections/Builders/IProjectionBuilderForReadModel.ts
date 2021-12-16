@@ -5,7 +5,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId, ScopeId } from '@dolittle/sdk.events';
+import { EventType, EventTypeIdLike, ScopeId } from '@dolittle/sdk.events';
 
 import { ProjectionCallback } from '../ProjectionCallback';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
@@ -36,22 +36,22 @@ export abstract class IProjectionBuilderForReadModel<T> {
 
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
      * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T>} callback - Callback to call for each event.
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
-     abstract on(eventTypeId: EventTypeId | Guid | string, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
+     abstract on(eventTypeId: EventTypeIdLike, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
 
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
      * @param {Generation | number} generation - The generation of the event type.
      * @param {KeySelectorBuilderCallback<T>} keySelectorCallback - Callback for building key selector.
      * @param {ProjectionCallback<T>} method - Callback to call for each event.
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
-     abstract on(eventTypeId: EventTypeId | Guid | string, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
+     abstract on(eventTypeId: EventTypeIdLike, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.

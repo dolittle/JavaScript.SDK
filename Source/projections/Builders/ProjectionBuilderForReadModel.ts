@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Generation } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { IProjection } from '../IProjection';
 import { KeySelector } from '../KeySelector';
@@ -43,10 +43,10 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
     /** @inheritdoc */
     on<TEvent>(type: Constructor<TEvent>, keySelectorCallback: KeySelectorBuilderCallback<TEvent>, callback: ProjectionCallback<T, TEvent>): IProjectionBuilderForReadModel<T>;
     on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback<any>, callback: ProjectionCallback<T, any>): IProjectionBuilderForReadModel<T>;
-    on(eventTypeId: string | Guid | EventTypeId, keySelectorCallback: KeySelectorBuilderCallback<any>, callback: ProjectionCallback<T, any>): IProjectionBuilderForReadModel<T>;
-    on(eventTypeId: string | Guid | EventTypeId, generation: number | Generation, keySelectorCallback: KeySelectorBuilderCallback<any>, callback: ProjectionCallback<T, any>): IProjectionBuilderForReadModel<T>;
+    on(eventTypeId: EventTypeIdLike, keySelectorCallback: KeySelectorBuilderCallback<any>, callback: ProjectionCallback<T, any>): IProjectionBuilderForReadModel<T>;
+    on(eventTypeId: EventTypeIdLike, generation: number | Generation, keySelectorCallback: KeySelectorBuilderCallback<any>, callback: ProjectionCallback<T, any>): IProjectionBuilderForReadModel<T>;
     on<TEvent>(
-        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
+        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeIdLike,
         keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<TEvent> | Generation | number,
         keySelectorCallbackOrCallback?: KeySelectorBuilderCallback<TEvent> | ProjectionCallback<T, TEvent>,
         maybeCallback?: ProjectionCallback<T, TEvent>
@@ -105,7 +105,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         return allMethodsValid;
     }
 
-    private getTypeOrEventTypeFrom<T>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string,
+    private getTypeOrEventTypeFrom<T>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeIdLike,
         keySelectorCallbackOrGeneration: KeySelectorBuilderCallback<T> | Generation | number): Constructor<T> | EventType {
 
         if (typeof typeOrEventTypeOrId === 'function') {

@@ -1,11 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { GenerationLike } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId } from '@dolittle/sdk.events';
+import { EventType, EventTypeIdLike } from '@dolittle/sdk.events';
 
 import { EventHandlerSignature } from '../EventHandlerSignature';
 
@@ -30,17 +29,17 @@ export abstract class IEventHandlerMethodsBuilder {
     abstract handle(eventType: EventType, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
      * @param {EventHandlerSignature} method - Method to call for each event.
      * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      */
-    abstract handle(eventTypeId: EventTypeId | Guid | string, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
+    abstract handle(eventTypeId: EventTypeIdLike, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
     /**
      * Add a handler method for handling the event.
-     * @param {EventTypeId | Guid | string} eventType - The identifier of the event.
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
      * @param {GenerationLike} generation - The generation of the event type.
      * @param {EventHandlerSignature} method - Method to call for each event.
      * @returns {IEventHandlerMethodsBuilder} The builder for continuation.
      */
-     abstract handle(eventTypeId: EventTypeId | Guid | string, generation: GenerationLike, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
+     abstract handle(eventTypeId: EventTypeIdLike, generation: GenerationLike, method: EventHandlerSignature): IEventHandlerMethodsBuilder;
 }

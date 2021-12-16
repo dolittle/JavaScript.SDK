@@ -10,7 +10,7 @@ export { AggregateRootVersion } from './AggregateRootVersion';
 export { EventContext } from './EventContext';
 export { EventLogSequenceNumber } from './EventLogSequenceNumber';
 export { EventLogSequenceNumberMustBeAPositiveInteger } from './EventLogSequenceNumberMustBeAPositiveInteger';
-export { EventSourceId } from './EventSourceId';
+export { EventSourceId, EventSourceIdLike } from './EventSourceId';
 export { EventType } from './EventType';
 export { EventTypeAlias, EventTypeAliasLike } from './EventTypeAlias';
 export { eventType, isDecoratedWithEventType, getDecoratedEventType } from './eventTypeDecorator';

@@ -1,11 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { GenerationLike } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId, EventTypeIdLike } from '@dolittle/sdk.events';
+import { EventType, EventTypeIdLike } from '@dolittle/sdk.events';
 
 import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
 import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
@@ -49,11 +48,11 @@ export abstract class IEmbeddingBuilderForReadModel<T> {
 
     /**
      * Add an on method for handling the event.
-     * @param {EventTypeId|Guid|string} eventType - The identifier of the event.
+     * @param {EventTypeIdLike} eventType - The identifier of the event.
      * @param {EmbeddingProjectCallback} callback - Callback to call for each event.
      * @returns {IEmbeddingBuilderForReadModel<T>} The builder for continuation.
      */
-    abstract on(eventTypeId: EventTypeId | Guid | string, callback: EmbeddingProjectCallback<T>): IEmbeddingBuilderForReadModel<T>;
+    abstract on(eventTypeId: EventTypeIdLike, callback: EmbeddingProjectCallback<T>): IEmbeddingBuilderForReadModel<T>;
 
     /**
      * Add an on method for handling the event.

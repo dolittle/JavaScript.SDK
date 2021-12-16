@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
 import { IClientBuildResults } from '@dolittle/sdk.common';
-import { EventType, EventTypeId, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 
 import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
 import { IProjection } from '../IProjection';
@@ -108,7 +108,7 @@ export class ProjectionClassBuilder<T> {
         }
     }
 
-    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeId | Guid | string): eventTypeOrId is EventTypeId | Guid | string {
+    private eventTypeIsId(eventTypeOrId: Constructor<any> | EventTypeIdLike): eventTypeOrId is EventTypeIdLike {
         return eventTypeOrId instanceof EventTypeId || eventTypeOrId instanceof Guid || typeof eventTypeOrId === 'string';
     }
 

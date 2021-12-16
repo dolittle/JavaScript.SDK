@@ -4,7 +4,7 @@
 import { Logger } from 'winston';
 import { Constructor } from '@dolittle/types';
 
-import { EventSourceId, IEventStore, IEventTypes } from '@dolittle/sdk.events';
+import { EventSourceId, EventSourceIdLike, IEventStore, IEventTypes } from '@dolittle/sdk.events';
 
 import { AggregateRoot } from './AggregateRoot';
 import { AggregateRootOperations } from './AggregateRootOperations';
@@ -38,7 +38,7 @@ export class AggregateOf<TAggregateRoot extends AggregateRoot> extends IAggregat
     }
 
     /** @inheritdoc */
-    get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregateRoot> {
-        return new AggregateRootOperations<TAggregateRoot>(eventSourceId, this._eventStore, this._type, this._eventTypes, this._logger);
+    get(eventSourceId: EventSourceIdLike): IAggregateRootOperations<TAggregateRoot> {
+        return new AggregateRootOperations<TAggregateRoot>(EventSourceId.from(eventSourceId), this._eventStore, this._type, this._eventTypes, this._logger);
     }
 }
