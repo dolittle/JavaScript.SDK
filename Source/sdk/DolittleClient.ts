@@ -267,8 +267,9 @@ export class DolittleClient extends IDolittleClient {
             logger);
 
         this._aggregates = new AggregatesBuilder(
-            this._eventStore,
+            this._aggregateRootTypes,
             this.eventTypes,
+            this._eventStore,
             logger);
 
         this._projectionStore = new ProjectionStoreBuilder(

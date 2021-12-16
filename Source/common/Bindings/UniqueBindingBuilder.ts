@@ -72,7 +72,9 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
 
     private logDuplicateBindings(results: IClientBuildResults, bindings: readonly Counted<Binding<TIdentifier, TValue>>[]) {
         for (const { identifier, value, count } of bindings) {
-            results.addInformation(this._duplicateCallback(identifier, value, count));
+            if (count > 1) {
+                results.addInformation(this._duplicateCallback(identifier, value, count));
+            }
         }
     }
 
