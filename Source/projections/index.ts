@@ -38,7 +38,6 @@ export {
     IProjectionAssociations,
     IProjectionStore,
     NoProjectionAssociatedWithType,
-    NoTypeAssociatedWithProjection,
     ProjectionAssociation,
     ProjectionAssociations,
     ProjectionStore,

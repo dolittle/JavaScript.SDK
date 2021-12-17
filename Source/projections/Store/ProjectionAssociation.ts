@@ -6,13 +6,9 @@ import { ScopeId } from '@dolittle/sdk.events';
 import { ProjectionId } from '../ProjectionId';
 
 /**
- * Represents the identifier for an associated projection.
+ * Identifies a projection associated with a class.
  */
-export class ProjectionAssociation {
-    /**
-     * Initializes a new instance of a {@link ProjectionAssociation}.
-     * @param {ProjectionId} identifier - The id of the projection.
-     * @param {ScopeId} scopeId - The scope the projection is in.
-     */
-    constructor(readonly identifier: ProjectionId, readonly scopeId: ScopeId) { }
-}
+export type ProjectionAssociation = {
+    readonly identifier: ProjectionId;
+    readonly scope: ScopeId;
+};

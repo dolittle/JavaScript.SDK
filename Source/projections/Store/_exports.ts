@@ -11,7 +11,6 @@ export { FailedToGetProjectionState } from './FailedToGetProjectionState';
 export { IProjectionAssociations } from './IProjectionAssociations';
 export { IProjectionStore } from './IProjectionStore';
 export { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
-export { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection';
 export { ProjectionAssociation } from './ProjectionAssociation';
 export { ProjectionAssociations } from './ProjectionAssociations';
 export { ProjectionStore } from './ProjectionStore';

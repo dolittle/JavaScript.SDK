@@ -3,60 +3,32 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { ScopeId } from '@dolittle/sdk.events';
-
-import { ProjectionId } from '../ProjectionId';
-import { getDecoratedProjectionType } from '../Builders/projectionDecorator';
 import { IProjectionAssociations } from './IProjectionAssociations';
 import { NoProjectionAssociatedWithType } from './NoProjectionAssociatedWithType';
-import { NoTypeAssociatedWithProjection } from './NoTypeAssociatedWithProjection';
 import { ProjectionAssociation } from './ProjectionAssociation';
-import { TypeIsNotAProjection } from './TypeIsNotAProjection';
 
 /**
  * Represents an implementation of {@link IProjectionAssociations}.
  */
 export class ProjectionAssociations extends IProjectionAssociations {
-    readonly _associationsToType: Map<ProjectionAssociation, Constructor<any>> = new Map();
-    readonly _typeToAssociations: Map<Constructor<any>, ProjectionAssociation> = new Map();
-
-    /** @inheritdoc */
-    associate<T>(typeOrInstance: Constructor<T> | T): void;
-    /** @inheritdoc */
-    associate<T>(typeOrInstance: Constructor<T> | T, projection: ProjectionId, scope: ScopeId): void;
-    /** @inheritdoc */
-    associate<T>(typeOrInstance: Constructor<T> | T, projection?: ProjectionId, scope?: ScopeId) {
-        if (projection && typeof typeOrInstance  === 'function') {
-            const type = typeOrInstance as Constructor<T>;
-            const association = new ProjectionAssociation(projection, scope || ScopeId.default);
-            this._associationsToType.set(association, type);
-            this._typeToAssociations.set(type, association);
-        } else if (typeof typeOrInstance === 'function') {
-            const decoratedType = getDecoratedProjectionType(typeOrInstance as Constructor<T>);
-            if (decoratedType === undefined) {
-                throw new TypeIsNotAProjection(typeOrInstance);
-            }
-            this.associate(decoratedType.type, decoratedType.projectionId, decoratedType.scopeId);
-        } else {
-            this.associate(Object.getPrototypeOf(typeOrInstance).constructor as Constructor<T>);
-        }
+    /**
+     * Initialises a new instance of the {@link ProjectionAssociations} class.
+     * @param {Map<Constructor<any>, ProjectionAssociation>} _associations - The associatons.
+     */
+    constructor(private readonly _associations: Map<Constructor<any>, ProjectionAssociation>) {
+        super();
     }
 
     /** @inheritdoc */
-    getFor<T>(type: Constructor<T>) {
-        const association = this._typeToAssociations.get(type);
-        if (!association) {
+    hasFor<T>(type: Constructor<T>): boolean {
+        return this._associations.has(type);
+    }
+
+    /** @inheritdoc */
+    getFor<T>(type: Constructor<T>): ProjectionAssociation {
+        if (!this._associations.has(type)) {
             throw new NoProjectionAssociatedWithType(type);
         }
-        return association;
-    }
-
-    /** @inheritdoc */
-    getType(projection: ProjectionId, scope: ScopeId) {
-        const type = this._associationsToType.get(new ProjectionAssociation(projection, scope));
-        if (!type) {
-            throw new NoTypeAssociatedWithProjection(projection, scope);
-        }
-        return type;
+        return this._associations.get(type)!;
     }
 }
