@@ -13,7 +13,7 @@ import { EventHandlerProcessor } from '../Internal/EventHandlerProcessor';
 import { EventHandlerBuilder } from './EventHandlerBuilder';
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
-import { eventHandler as eventHandlerDecorator, getDecoratedEventHandlerType } from './eventHandlerDecorator';
+import { eventHandler as eventHandlerDecorator, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 import { IEventHandlersBuilder } from './IEventHandlersBuilder';
 
 const getBuilderName = (builder: EventHandlerBuilder | EventHandlerClassBuilder<any>): string => {
@@ -73,12 +73,12 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
             return this;
         }
 
-        const eventHandlerType = getDecoratedEventHandlerType(type);
-        if (eventHandlerType === undefined) {
+        if (!isDecoratedEventHandlerType(type)) {
             this._buildResults.addFailure(`The event handler class ${type.name} is not decorated as an event handler`,`Add the @${eventHandlerDecorator.name} decorator to the class`);
             return this;
         }
 
+        const eventHandlerType = getDecoratedEventHandlerType(type);
         const identifier = eventHandlerType.eventHandlerId;
         const builder = new EventHandlerClassBuilder(eventHandlerType, type, instance);
         this._builders.add(identifier, builder);
@@ -91,10 +91,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
      * @param {IServiceProviderBuilder} bindings - For registering the bindings for the event handler classes.
      * @returns {EventHandlerProcessor[]} The built event handlers.
      */
-    build(
-        eventTypes: IEventTypes,
-        bindings: IServiceProviderBuilder
-    ): EventHandlerProcessor[] {
+    build(eventTypes: IEventTypes, bindings: IServiceProviderBuilder): EventHandlerProcessor[] {
         const uniqueBuilders = this._builders.buildUnique(this._buildResults);
         const processors: EventHandlerProcessor[] = [];
 
