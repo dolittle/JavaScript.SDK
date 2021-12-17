@@ -35,6 +35,14 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
         (builder, filterIds) => `The event filter ${getFilterBuilderName(builder)} was bound to multiple filter ids (${filterIds.join(', ')}). None of these will be registered.`,
     );
 
+    /**
+     * Initialises a new instance of the {@link EventTypesBuilder} class.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(private readonly _buildResults: IClientBuildResults) {
+        super();
+    }
+
     /** @inheritdoc */
     createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
         const identifier = FilterId.from(filterId);
@@ -56,15 +64,14 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     /**
      * Builds all the event filters.
      * @param {IEventTypes} eventTypes - For event types resolution.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IFilterProcessor[]} The built filters.
      */
-    build(eventTypes: IEventTypes, results: IClientBuildResults): IFilterProcessor[] {
-        const uniqueBuilders = this._builders.buildUnique(results);
+    build(eventTypes: IEventTypes): IFilterProcessor[] {
+        const uniqueBuilders = this._builders.buildUnique(this._buildResults);
         const processors: IFilterProcessor[] = [];
 
         for (const { value: builder } of uniqueBuilders) {
-            const processor = builder.build(eventTypes, results);
+            const processor = builder.build(eventTypes, this._buildResults);
             if (processor !== undefined) {
                 processors.push(processor);
             }

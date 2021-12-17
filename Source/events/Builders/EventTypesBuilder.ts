@@ -24,6 +24,14 @@ export class EventTypesBuilder extends IEventTypesBuilder {
         (type, eventTypes) => `The class ${type.name} was associated with multiple event types (${eventTypes.join(', ')}). None of these will be registered`,
     );
 
+    /**
+     * Initialises a new instance of the {@link EventTypesBuilder} class.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(private readonly _buildResults: IClientBuildResults) {
+        super();
+    }
+
     /** @inheritdoc */
     associate<T = any>(type: Constructor<T>, eventType: EventType): IEventTypesBuilder;
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, alias?: EventTypeAliasLike): IEventTypesBuilder;
@@ -49,11 +57,10 @@ export class EventTypesBuilder extends IEventTypesBuilder {
 
     /**
      * Builds an {@link IEventTypes} from the associated and registered event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventTypes} The built event types.
      */
-    build(results: IClientBuildResults): IEventTypes {
-        const uniqueBindings = this._bindings.buildUnique(results);
+    build(): IEventTypes {
+        const uniqueBindings = this._bindings.buildUnique(this._buildResults);
         const eventTypes = new EventTypes();
         for (const { identifier: eventType, value: type } of uniqueBindings) {
             eventTypes.associate(type, eventType);

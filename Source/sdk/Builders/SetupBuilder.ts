@@ -44,13 +44,13 @@ export class SetupBuilder extends ISetupBuilder {
         this._buildResults = new ClientSetup.ClientBuildResults();
         this._moduleTraverser = new ModuleTraverser();
 
-        this._eventTypesBuilder = new EventTypesBuilder();
-        this._aggregateRootsBuilder = new AggregateRootsBuilder();
-        this._eventFiltersBuilder = new EventFiltersBuilder();
+        this._eventTypesBuilder = new EventTypesBuilder(this._buildResults);
+        this._aggregateRootsBuilder = new AggregateRootsBuilder(this._buildResults);
+        this._eventFiltersBuilder = new EventFiltersBuilder(this._buildResults);
         this._eventHandlersBuilder = new EventHandlersBuilder(this._buildResults);
         this._projectionsAssociations = new ProjectionAssociations();
-        this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
-        this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations);
+        this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations, this._buildResults);
+        this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations, this._buildResults);
         this._subscriptionsBuilder = new SubscriptionsBuilder();
     }
 
@@ -113,13 +113,13 @@ export class SetupBuilder extends ISetupBuilder {
 
         const bindings = new ServiceProviderBuilder();
 
-        const aggregateRootTypes = this._aggregateRootsBuilder.build(this._buildResults);
-        const eventTypes = this._eventTypesBuilder.build(this._buildResults);
+        const eventTypes = this._eventTypesBuilder.build();
+        const aggregateRootTypes = this._aggregateRootsBuilder.build();
 
-        const filters = this._eventFiltersBuilder.build(eventTypes, this._buildResults);
+        const filters = this._eventFiltersBuilder.build(eventTypes);
         const eventHandlers = this._eventHandlersBuilder.build(eventTypes, bindings);
-        const projections = this._projectionsBuilder.build(eventTypes, this._buildResults);
-        const embeddings = this._embeddingsBuilder.build(eventTypes, this._buildResults);
+        const projections = this._projectionsBuilder.build(eventTypes);
+        const embeddings = this._embeddingsBuilder.build(eventTypes);
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
 
         return new DolittleClient(

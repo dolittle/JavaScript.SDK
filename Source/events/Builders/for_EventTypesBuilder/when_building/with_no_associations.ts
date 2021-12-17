@@ -9,10 +9,10 @@ import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventTypesBuilder } from '../../EventTypesBuilder';
 
 describeThis(__filename, () => {
-    const builder = new EventTypesBuilder();
     const results = sinon.stubInterface<IClientBuildResults>();
+    const builder = new EventTypesBuilder(results);
 
-    const eventTypes = builder.build(results);
+    const eventTypes = builder.build();
 
     it('should return an instance', () => (eventTypes !== null || eventTypes !== undefined).should.be.true);
 });

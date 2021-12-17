@@ -20,12 +20,12 @@ describeThis(__filename, () => {
     const firstTypeGeneration = Generation.from(42);
     const secondTypeGeneration = Generation.from(43);
 
-    const builder = new EventTypesBuilder();
     const results = sinon.stubInterface<IClientBuildResults>();
+    const builder = new EventTypesBuilder(results);
 
     builder.associate(FirstType, firstTypeIdentifier, firstTypeGeneration);
     builder.associate(SecondType, secondTypeIdentifier, secondTypeGeneration);
-    const eventTypes = builder.build(results);
+    const eventTypes = builder.build();
 
     const firstTypeAssociation = eventTypes.getFor(FirstType);
     const secondTypeAssociation = eventTypes.getFor(SecondType);

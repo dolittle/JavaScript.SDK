@@ -21,6 +21,14 @@ export class AggregateRootsBuilder extends IAggregateRootsBuilder {
         (type, aggregateRootTypes) => `The class ${type.name} was associated with multiple aggregate root types (${aggregateRootTypes.join(', ')}). None of these will be registered`,
     );
 
+    /**
+     * Initialises a new instance of the {@link AggregateRootsBuilder} class.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(private readonly _buildResults: IClientBuildResults) {
+        super();
+    }
+
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IAggregateRootsBuilder {
         this._bindings.add(getDecoratedAggregateRootType(type), type);
@@ -29,11 +37,10 @@ export class AggregateRootsBuilder extends IAggregateRootsBuilder {
 
     /**
      * Builds an {@link IAggregateRootTypes} from the associated and registered event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IAggregateRootTypes} The built event types.
      */
-    build(results: IClientBuildResults): IAggregateRootTypes {
-        const uniqueBindings = this._bindings.buildUnique(results);
+    build(): IAggregateRootTypes {
+        const uniqueBindings = this._bindings.buildUnique(this._buildResults);
         const aggregateRootTypes = new AggregateRootTypes();
         for (const { identifier: aggregateRootType, value: type } of uniqueBindings) {
             aggregateRootTypes.associate(type, aggregateRootType);

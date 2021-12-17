@@ -26,8 +26,9 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
     /**
      * Initialises a new instance of the {@link ProjectionsBuilder} class.
      * @param {IProjectionAssociations} _projectionAssociations - The projection associations to use for associating read model types with projections.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
-    constructor(private _projectionAssociations: IProjectionAssociations) {
+    constructor(private _projectionAssociations: IProjectionAssociations, private readonly _buildResults: IClientBuildResults) {
         super();
     }
 
@@ -50,23 +51,19 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
     /**
      * Builds all projections created with the builder.
      * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {ProjectionProcessor[]} The built projection processors.
      */
-    build(
-        eventTypes: IEventTypes,
-        results: IClientBuildResults
-    ): ProjectionProcessor<any>[] {
+    build(eventTypes: IEventTypes): ProjectionProcessor<any>[] {
         const projections: IProjection<any>[] = [];
 
         for (const projectionBuilder of this._callbackBuilders) {
-            const projection = projectionBuilder.build(eventTypes, results);
+            const projection = projectionBuilder.build(eventTypes, this._buildResults);
             if (projection !== undefined) {
                 projections.push(projection);
             }
         }
         for (const projectionBuilder of this._classBuilders) {
-            const projection = projectionBuilder.build(eventTypes, results);
+            const projection = projectionBuilder.build(eventTypes, this._buildResults);
             if (projection !== undefined) {
                 projections.push(projection);
             }

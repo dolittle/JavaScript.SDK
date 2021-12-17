@@ -25,9 +25,10 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
 
     /**
      * Initialises a new instance of {@link EmbeddingsBuilder}.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {IProjectionAssociations} _projectionAssociations - The projection associations to use for associating read model types with projections.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
-    constructor(private readonly _projectionAssociations: IProjectionAssociations) {
+    constructor(private _projectionAssociations: IProjectionAssociations, private readonly _buildResults: IClientBuildResults) {
         super();
     }
 
@@ -50,23 +51,19 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
     /**
      * Builds all the embeddings created with the builder.
      * @param {IEventTypes} eventTypes - All registered event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {EmbeddingProcessor[]} The built embedding processors.
      */
-    build(
-        eventTypes: IEventTypes,
-        results: IClientBuildResults
-    ): EmbeddingProcessor<any>[] {
+    build(eventTypes: IEventTypes): EmbeddingProcessor<any>[] {
         const embeddings: IEmbedding<any>[] = [];
 
         for (const embeddingBuilder of this._callbackBuilders) {
-            const embedding = embeddingBuilder.build(eventTypes, results);
+            const embedding = embeddingBuilder.build(eventTypes, this._buildResults);
             if (embedding !== undefined) {
                 embeddings.push(embedding);
             }
         }
         for (const embeddingBuilder of this._classBuilders) {
-            const embedding = embeddingBuilder.build(eventTypes, results);
+            const embedding = embeddingBuilder.build(eventTypes, this._buildResults);
             if (embedding !== undefined) {
                 embeddings.push(embedding);
             }
