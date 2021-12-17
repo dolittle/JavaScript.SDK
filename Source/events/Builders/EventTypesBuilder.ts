@@ -18,11 +18,7 @@ import { IEventTypesBuilder } from './IEventTypesBuilder';
  * Represents a builder for adding associations into {@link IEventTypes} instance.
  */
 export class EventTypesBuilder extends IEventTypesBuilder {
-    private readonly _bindings = new UniqueBindingBuilder<EventType, Constructor<any>>(
-        (eventType, type, count) => `The event type ${eventType} was bound to ${type.name} ${count} times.`,
-        (eventType, types) => `The event type ${eventType} was associated with multiple classes (${types.map(_ => _.name).join(', ')}). None of these will be registered.`,
-        (type, eventTypes) => `The class ${type.name} was associated with multiple event types (${eventTypes.join(', ')}). None of these will be registered`,
-    );
+    private readonly _bindings = new UniqueBindingBuilder<EventType, Constructor<any>>('event type', type => type.name);
 
     /**
      * Initialises a new instance of the {@link EventTypesBuilder} class.
@@ -42,7 +38,7 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             ? eventTypeOrIdentifier
             : new EventType(EventTypeId.from(eventTypeOrIdentifier), generation, alias);
 
-        this._bindings.add(eventType, type);
+        this._bindings.add(eventType, type, type);
         return this;
     }
 
@@ -53,7 +49,7 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             return this;
         }
 
-        this._bindings.add(getDecoratedEventType(type), type);
+        this._bindings.add(getDecoratedEventType(type), type, type);
         return this;
     }
 
@@ -64,7 +60,7 @@ export class EventTypesBuilder extends IEventTypesBuilder {
     build(): IEventTypes {
         const uniqueBindings = this._bindings.buildUnique(this._buildResults);
         const eventTypes = new EventTypes();
-        for (const { identifier: eventType, value: type } of uniqueBindings) {
+        for (const { identifier: eventType, type } of uniqueBindings) {
             eventTypes.associate(type, eventType);
         }
         return eventTypes;

@@ -15,11 +15,7 @@ import { IAggregateRootsBuilder } from './IAggregateRootsBuilder';
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
  */
 export class AggregateRootsBuilder extends IAggregateRootsBuilder {
-    private readonly _bindings = new UniqueBindingBuilder<AggregateRootType, Constructor<any>>(
-        (aggregateRootType, type, count) => `The aggregate root type ${aggregateRootType} was bound to ${type.name} ${count} times.`,
-        (aggregateRootType, types) => `The aggregate root type ${aggregateRootType} was associated with multiple classes (${types.map(_ => _.name).join(', ')}). None of these will be registered.`,
-        (type, aggregateRootTypes) => `The class ${type.name} was associated with multiple aggregate root types (${aggregateRootTypes.join(', ')}). None of these will be registered`,
-    );
+    private readonly _bindings = new UniqueBindingBuilder<AggregateRootType, Constructor<any>>('aggregate root type', type => type.name);
 
     /**
      * Initialises a new instance of the {@link AggregateRootsBuilder} class.
@@ -36,8 +32,7 @@ export class AggregateRootsBuilder extends IAggregateRootsBuilder {
             return this;
         }
 
-        const aggregateRootType = getDecoratedAggregateRootType(type);
-        this._bindings.add(aggregateRootType, type);
+        this._bindings.add(getDecoratedAggregateRootType(type), type, type);
         return this;
     }
 
@@ -48,7 +43,7 @@ export class AggregateRootsBuilder extends IAggregateRootsBuilder {
     build(): IAggregateRootTypes {
         const uniqueBindings = this._bindings.buildUnique(this._buildResults);
         const aggregateRootTypes = new AggregateRootTypes();
-        for (const { identifier: aggregateRootType, value: type } of uniqueBindings) {
+        for (const { identifier: aggregateRootType, type } of uniqueBindings) {
             aggregateRootTypes.associate(type, aggregateRootType);
         }
         return aggregateRootTypes;

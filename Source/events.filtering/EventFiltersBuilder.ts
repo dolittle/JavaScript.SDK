@@ -14,26 +14,20 @@ import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCa
 import { IEventFiltersBuilder } from './IEventFiltersBuilder';
 import { IFilterProcessor } from './IFilterProcessor';
 
-const getFilterBuilderName = (builder: PrivateEventFilterBuilder | PublicEventFilterBuilder): string => {
+type Builder = PrivateEventFilterBuilder | PublicEventFilterBuilder;
+
+const getBuilderName = (builder: Builder): string => {
     if (builder instanceof PrivateEventFilterBuilder) {
         return 'private callback-filter';
     }
     return 'public callback-filter';
 };
 
-const getFilterBuilderNames = (builders: (PrivateEventFilterBuilder | PublicEventFilterBuilder)[]): string => {
-    return builders.map(getFilterBuilderName).join(', ');
-};
-
 /**
  * Represents an implementation of {@link IEventFiltersBuilder}.
  */
 export class EventFiltersBuilder extends IEventFiltersBuilder {
-    private readonly _builders = new UniqueBindingBuilder<FilterId, PrivateEventFilterBuilder | PublicEventFilterBuilder>(
-        (filterId, builder, count) => `The event filter id ${filterId} was bound to ${getFilterBuilderName(builder)} ${count} times.`,
-        (filterId, builders) => `The event filter id ${filterId} was used for multiple filters (${getFilterBuilderNames(builders)}). None of these will be registered.`,
-        (builder, filterIds) => `The event filter ${getFilterBuilderName(builder)} was bound to multiple filter ids (${filterIds.join(', ')}). None of these will be registered.`,
-    );
+    private readonly _builders = new UniqueBindingBuilder<FilterId, Builder>('event filter', getBuilderName);
 
     /**
      * Initialises a new instance of the {@link EventTypesBuilder} class.
@@ -47,7 +41,7 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
         const identifier = FilterId.from(filterId);
         const builder = new PrivateEventFilterBuilder(identifier);
-        this._builders.add(identifier, builder);
+        this._builders.add(identifier, class {}, builder);
         callback(builder);
         return this;
     }
@@ -56,7 +50,7 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     createPublicFilter(filterId: string | FilterId | Guid, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder {
         const identifier = FilterId.from(filterId);
         const builder = new PublicEventFilterBuilder(identifier);
-        this._builders.add(identifier, builder);
+        this._builders.add(identifier, class {}, builder);
         callback(builder);
         return this;
     }
