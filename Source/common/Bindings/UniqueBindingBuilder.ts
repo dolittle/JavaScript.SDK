@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IClientBuildResults } from '..';
+import { IEquatable } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { IClientBuildResults } from '../ClientSetup/IClientBuildResults';
 import { Binding } from './Binding';
 import { ICanBuildUniqueBindings } from './ICanBuildUniqueBindings';
-
-type Equatable<T> = { equals: (other: T) => boolean; };
 
 type Counted<T> = T & { count: number };
 
@@ -18,78 +19,56 @@ function findSet<U,V>(groupedSets: GroupedSets<U, V>, predicate: (key: U) => boo
     }
 }
 
-type MessageCallback<U, V> = (key: U, value: V, count: number) => string;
-type FailureCallback<U, V> = (key: U, values: V[]) => string | { message: string, fix?: string };
+type ValueStringer<T> = (value: T) => string;
 type ValueComparator<T> = (left: T, right: T) => boolean;
 
 /**
  * Represents an implementation of {@link ICanBuildUniqueBindings}.
- * @template TIdentifier The type of the identifier.
- * @template TValue The type of the value.
+ * @template TIdentifier The type of the identifiers.
+ * @template TValue The type of the values.
  */
-export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TValue> extends ICanBuildUniqueBindings<TIdentifier, TValue> {
+export class UniqueBindingBuilder<TIdentifier extends IEquatable, TValue> extends ICanBuildUniqueBindings<TIdentifier, TValue> {
     private readonly _bindings: Binding<TIdentifier, TValue>[] = [];
 
     /**
      * Initialises a new instance of the {@link UniqueBindingBuilder} class.
-     * @param {MessageCallback<TIdentifier, TValue>} _duplicateCallback - Callback to format build result message for duplicate bindings.
-     * @param {FailureCallback<TIdentifier, TValue>} _conflictingIdentifierCallback - Callback to format build result failures for conflicting identifier bindings.
-     * @param {FailureCallback<TValue, TIdentifier>} _conflictingValueCallback - Callback to format build result failures for conflicting value bindings.
+     * @param {string} _kind - A string that describes the kind to bind.
+     * @param {ValueStringer<TValue>} [_valueStringer] - An optional callback to use to convert the value to a string.
      * @param {ValueComparator<TValue>} [_valueComparator] - An optional value comparator to use.
      */
     constructor(
-        private readonly _duplicateCallback: MessageCallback<TIdentifier, TValue>,
-        private readonly _conflictingIdentifierCallback: FailureCallback<TIdentifier, TValue>,
-        private readonly _conflictingValueCallback: FailureCallback<TValue, TIdentifier>,
-        private readonly _valueComparator: ValueComparator<TValue> = Object.is
+        private readonly _kind: string,
+        private readonly _valueStringer: ValueStringer<TValue> = (value) => `${value}`,
+        private readonly _valueComparator: ValueComparator<TValue> = Object.is,
     ) {
         super();
     }
 
     /** @inheritdoc */
-    add(identifier: TIdentifier, value: TValue): void {
-        this._bindings.push({ identifier, value });
+    add(identifier: TIdentifier, type: Constructor<any>, value: TValue): void {
+        this._bindings.push({ identifier, type, value });
     }
 
     /** @inheritdoc */
-    buildUnique(results: IClientBuildResults): Binding<TIdentifier, TValue>[] {
+    buildUnique(results: IClientBuildResults): readonly Binding<TIdentifier, TValue>[] {
         const counted = this.countIdentical(this._bindings);
-        this.logDuplicateBindings(results, counted);
 
-        const [byIdentifier, byValue] = this.groupByIdentifierAndValue(counted);
+        const [byIdentifier, byType] = this.groupByIdentifierAndType(counted);
         const [uniqueIdentifiers, conflictingIdentifiers] = this.splitUniqueAndConflicting(byIdentifier);
-        const [uniqueValues, conflictingValues] = this.splitUniqueAndConflicting(byValue);
-
-        this.logConflictingBindings(results, conflictingIdentifiers, this._conflictingIdentifierCallback);
-        this.logConflictingBindings(results, conflictingValues, this._conflictingValueCallback);
+        const [uniqueTypes, conflictingTypes] = this.splitUniqueAndConflicting(byType);
 
         const uniqueBindings: Binding<TIdentifier, TValue>[] = [];
-        for (const [identifier, value] of uniqueIdentifiers) {
-            if (uniqueValues.has(value)) {
-                uniqueBindings.push({ identifier, value });
+        for (const [identifier, [type, value]] of uniqueIdentifiers) {
+            if (uniqueTypes.has(type)) {
+                uniqueBindings.push({ identifier, type, value });
             }
         }
+
+        this.logDuplicateBindings(results, counted);
+        this.logConflictingIdentifiers(results, conflictingIdentifiers);
+        this.logConflictingTypes(results, conflictingTypes);
 
         return uniqueBindings;
-    }
-
-    private logDuplicateBindings(results: IClientBuildResults, bindings: readonly Counted<Binding<TIdentifier, TValue>>[]) {
-        for (const { identifier, value, count } of bindings) {
-            if (count > 1) {
-                results.addInformation(this._duplicateCallback(identifier, value, count));
-            }
-        }
-    }
-
-    private logConflictingBindings<U, V>(results: IClientBuildResults, conflictingBindings: Map<U, V[]>, callback: FailureCallback<U, V>) {
-        for (const [key, values] of conflictingBindings) {
-            const failure = callback(key, values);
-            if (typeof failure === 'string') {
-                results.addFailure(failure);
-            } else {
-                results.addFailure(failure.message, failure.fix);
-            }
-        }
     }
 
     private countIdentical(bindings: readonly Binding<TIdentifier, TValue>[]): readonly Counted<Binding<TIdentifier, TValue>>[] {
@@ -97,7 +76,10 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
 
         counting: for (const binding of bindings) {
             for (const counted of countedBindings) {
-                if (counted.identifier.equals(binding.identifier) && this._valueComparator(counted.value, binding.value)) {
+                if (counted.identifier.equals(binding.identifier)
+                    && counted.type === binding.type
+                    && this._valueComparator(counted.value, binding.value)
+                ) {
                     counted.count += 1;
                     continue counting;
                 }
@@ -109,28 +91,28 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
         return countedBindings;
     }
 
-    private groupByIdentifierAndValue(bindings: readonly Binding<TIdentifier, TValue>[]): [Map<TIdentifier, TValue[]>, Map<TValue, TIdentifier[]>] {
-        const byIdentifier: GroupedSets<TIdentifier, TValue> = [];
-        const byValue: GroupedSets<TValue, TIdentifier> = [];
+    private groupByIdentifierAndType(bindings: readonly Binding<TIdentifier, TValue>[]): [Map<TIdentifier, [Constructor<any>, TValue][]>, Map<Constructor<any>, [TIdentifier, TValue][]>] {
+        const byIdentifier: GroupedSets<TIdentifier, [Constructor<any>, TValue]> = [];
+        const byType: GroupedSets<Constructor<any>, [TIdentifier, TValue]> = [];
 
-        for (const { identifier, value } of bindings) {
+        for (const { identifier, type, value } of bindings) {
 
-            const valuesByIdentifier = findSet(byIdentifier, _ => _.equals(identifier));
-            if (valuesByIdentifier === undefined) {
-                byIdentifier.push([identifier, [value]]);
+            const typesByIdentifier = findSet(byIdentifier, _ => _.equals(identifier));
+            if (typesByIdentifier === undefined) {
+                byIdentifier.push([identifier, [[type, value]]]);
             } else {
-                valuesByIdentifier.push(value);
+                typesByIdentifier.push([type, value]);
             }
 
-            const identifiersByValue = findSet(byValue, _ => this._valueComparator(_, value));
-            if (identifiersByValue === undefined) {
-                byValue.push([value, [identifier]]);
+            const identifiersByType = findSet(byType, _ => Object.is(_, type));
+            if (identifiersByType === undefined) {
+                byType.push([type, [[identifier, value]]]);
             } else {
-                identifiersByValue.push(identifier);
+                identifiersByType.push([identifier, value]);
             }
         }
 
-        return [new Map(byIdentifier), new Map(byValue)];
+        return [new Map(byIdentifier), new Map(byType)];
     }
 
     private splitUniqueAndConflicting<U, V>(map: Map<U, V[]>): [Map<U, V>, Map<U, V[]>] {
@@ -144,5 +126,33 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
             }
         }
         return [unique, conflicting];
+    }
+
+    private logDuplicateBindings(results: IClientBuildResults, bindings: readonly Counted<Binding<TIdentifier, TValue>>[]) {
+        for (const { identifier, type, value, count } of bindings) {
+            if (count > 1) {
+                results.addInformation(`The ${this._kind} id ${identifier} was bound to ${type.name} with ${this._valueStringer(value)} ${count} times`);
+            }
+        }
+    }
+
+    private logConflictingIdentifiers(results: IClientBuildResults, conflictingIdentifiers: Map<TIdentifier, [Constructor<any>, TValue][]>) {
+        for (const [identifier, values] of conflictingIdentifiers) {
+            results.addFailure(`The ${this._kind} id ${identifier} was bound to multiple ${this._kind}s. None of these will be bound`);
+
+            for (const [type, value] of values) {
+                results.addFailure(`\t${identifier} was bound to ${type.name} with ${this._valueStringer(value)}`);
+            }
+        }
+    }
+
+    private logConflictingTypes(results: IClientBuildResults, conflictingTypes: Map<Constructor<any>, [TIdentifier, TValue][]>) {
+        for (const [type, values] of conflictingTypes) {
+            results.addFailure(`The ${this._kind} ${type.name} was bound to multiple ${this._kind} ids. None of these will be bound`);
+
+            for (const [identifier, value] of values) {
+                results.addFailure(`\t${type.name} was bound to ${identifier} with ${this._valueStringer(value)}`);
+            }
+        }
     }
 }
