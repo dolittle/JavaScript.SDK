@@ -36,8 +36,9 @@ export class artifact_type_map<TType> extends ArtifactTypeMap<artifact_type, art
         return new artifact_type(artifact_type_id.from(id), generation);
     }
 
-    [Symbol.toStringTag] = 'artifact_type_map';
-
+    get [Symbol.toStringTag]() {
+        return 'artifact_type_map';
+    }
 }
 
 export class artifacts extends Artifacts<artifact_type, artifact_type_id> {

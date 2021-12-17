@@ -96,7 +96,7 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Con
         this._associations.set(artifact, type);
     }
 
-    protected abstract createArtifact(artifactOrId: TId | Guid | string): TArtifact;
+    protected abstract createArtifact(id: TId | Guid | string): TArtifact;
 
     protected abstract getArtifactTypeName(): string;
 
