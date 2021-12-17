@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 export { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 export { EventHandlerBuilder } from './EventHandlerBuilder';
 export { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';

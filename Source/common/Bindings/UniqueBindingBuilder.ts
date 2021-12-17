@@ -20,6 +20,7 @@ function findSet<U,V>(groupedSets: GroupedSets<U, V>, predicate: (key: U) => boo
 
 type MessageCallback<U, V> = (key: U, value: V, count: number) => string;
 type FailureCallback<U, V> = (key: U, values: V[]) => string | { message: string, fix?: string };
+type ValueComparator<T> = (left: T, right: T) => boolean;
 
 /**
  * Represents an implementation of {@link ICanBuildUniqueBindings}.
@@ -34,11 +35,13 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
      * @param {MessageCallback<TIdentifier, TValue>} _duplicateCallback - Callback to format build result message for duplicate bindings.
      * @param {FailureCallback<TIdentifier, TValue>} _conflictingIdentifierCallback - Callback to format build result failures for conflicting identifier bindings.
      * @param {FailureCallback<TValue, TIdentifier>} _conflictingValueCallback - Callback to format build result failures for conflicting value bindings.
+     * @param {ValueComparator<TValue>} [_valueComparator] - An optional value comparator to use.
      */
     constructor(
         private readonly _duplicateCallback: MessageCallback<TIdentifier, TValue>,
         private readonly _conflictingIdentifierCallback: FailureCallback<TIdentifier, TValue>,
         private readonly _conflictingValueCallback: FailureCallback<TValue, TIdentifier>,
+        private readonly _valueComparator: ValueComparator<TValue> = Object.is
     ) {
         super();
     }
@@ -94,7 +97,7 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
 
         counting: for (const binding of bindings) {
             for (const counted of countedBindings) {
-                if (counted.identifier.equals(binding.identifier) && Object.is(counted.value, binding.value)) {
+                if (counted.identifier.equals(binding.identifier) && this._valueComparator(counted.value, binding.value)) {
                     counted.count += 1;
                     continue counting;
                 }
@@ -119,7 +122,7 @@ export class UniqueBindingBuilder<TIdentifier extends Equatable<TIdentifier>, TV
                 valuesByIdentifier.push(value);
             }
 
-            const identifiersByValue = findSet(byValue, _ => Object.is(_, value));
+            const identifiersByValue = findSet(byValue, _ => this._valueComparator(_, value));
             if (identifiersByValue === undefined) {
                 byValue.push([value, [identifier]]);
             } else {

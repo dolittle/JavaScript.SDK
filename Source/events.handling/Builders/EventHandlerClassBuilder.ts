@@ -10,37 +10,31 @@ import { IServiceProviderBuilder, TenantServiceBindingCallback } from '@dolittle
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandler } from '../EventHandler';
+import { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 import { EventHandlerSignature } from '../EventHandlerSignature';
 import { IEventHandler } from '../IEventHandler';
-import { CannotRegisterEventHandlerThatIsNotAClass } from './CannotRegisterEventHandlerThatIsNotAClass';
 import { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
-import { eventHandler as eventHandlerDecorator, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 import { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 import { handles as handlesDecorator, getHandlesDecoratedMethods } from './handlesDecorator';
 
 /**
- * Represents a builder for building event handlers from classes.
+ * Represents a builder for building an event handler from a class.
  * @template T The event handler class type.
  */
 export class EventHandlerClassBuilder<T> {
-    private readonly _eventHandlerType: Constructor<T>;
     private readonly _bindingCallback: TenantServiceBindingCallback;
 
     /**
-     * Initialises a new instance of the {@link FailureReason} class.
-     * @param {Constructor<T> | T} typeOrInstance - The type or an instance of the event handler.
+     * Initialises a new instance of the {@link EventHandlerClassBuilder} class.
+     * @param {EventHandlerDecoratedType} _eventHandlerType - The decorated event handler type of the class.
+     * @param {Constructor<T>} type - The class of the event handler.
+     * @param {T} [instance] - An optional instance of the class to use when processing.
      */
-    constructor(typeOrInstance: Constructor<T> | T) {
-        if (typeOrInstance instanceof Function) {
-            this._eventHandlerType = typeOrInstance;
-            this._bindingCallback = (binder) => binder.bind(this._eventHandlerType).toType(this._eventHandlerType);
-
+    constructor(private readonly _eventHandlerType: EventHandlerDecoratedType, readonly type: Constructor<T>, instance?: T) {
+        if (instance === undefined) {
+            this._bindingCallback = (binder) => binder.bind(type).toType(type);
         } else {
-            this._eventHandlerType = Object.getPrototypeOf(typeOrInstance).constructor;
-            if (this._eventHandlerType === undefined) {
-                throw new CannotRegisterEventHandlerThatIsNotAClass(typeOrInstance);
-            }
-            this._bindingCallback = (binder) => binder.bind(this._eventHandlerType).toInstance(typeOrInstance);
+            this._bindingCallback = (binder) => binder.bind(type).toInstance(instance);
         }
     }
 
@@ -52,28 +46,23 @@ export class EventHandlerClassBuilder<T> {
      * @returns {IEventHandler | undefined} The built event handler if successful.
      */
     build(eventTypes: IEventTypes, bindings: IServiceProviderBuilder, results: IClientBuildResults): IEventHandler | undefined {
-        results.addInformation(`Building event handler of type ${this._eventHandlerType.name}`);
-        const decoratedType = getDecoratedEventHandlerType(this._eventHandlerType);
-        if (decoratedType === undefined) {
-            results.addFailure(`The event handler class ${this._eventHandlerType.name} must be decorated with an @${eventHandlerDecorator.name} decorator`);
-            return;
-        }
+        results.addInformation(`Building event handler of type ${this.type.name}`);
 
         bindings.addTenantServices(this._bindingCallback);
 
-        results.addInformation(`Building ${decoratedType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${decoratedType.eventHandlerId} processing events in scope ${decoratedType.scopeId} from type ${this._eventHandlerType.name}`);
-        const methods = getHandlesDecoratedMethods(this._eventHandlerType);
+        results.addInformation(`Building ${this._eventHandlerType.partitioned ? 'partitioned' : 'unpartitioned'} event handler ${this._eventHandlerType.eventHandlerId} processing events in scope ${this._eventHandlerType.scopeId} from type ${this.type.name}`);
+        const methods = getHandlesDecoratedMethods(this.type);
         if (methods.length < 1) {
-            results.addFailure(`There are no event handler methods to register in event handler ${this._eventHandlerType.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
+            results.addFailure(`There are no event handler methods to register in event handler ${this.type.name}. An event handler must to be decorated with @${handlesDecorator.name}`);
             return;
         }
 
         const eventTypesToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (!this.tryAddAllEventHandlerMethods(eventTypesToMethods, methods, eventTypes, results)) {
-            results.addFailure(`Could not create event handler ${this._eventHandlerType.name} because it contains invalid event handler methods`);
+            results.addFailure(`Could not create event handler ${this.type.name} because it contains invalid event handler methods`);
             return;
         }
-        return new EventHandler(decoratedType.eventHandlerId, decoratedType.scopeId, decoratedType.partitioned, eventTypesToMethods, decoratedType.alias);
+        return new EventHandler(this._eventHandlerType.eventHandlerId, this._eventHandlerType.scopeId, this._eventHandlerType.partitioned, eventTypesToMethods, this._eventHandlerType.alias);
     }
 
     private tryAddAllEventHandlerMethods(eventTypesToMethods: EventTypeMap<EventHandlerSignature<any>>, methods: HandlesDecoratedMethod[], eventTypes: IEventTypes, results: IClientBuildResults): boolean {
@@ -83,7 +72,7 @@ export class EventHandlerClassBuilder<T> {
 
             if (!hasEventType) {
                 allMethodsValid = false;
-                results.addFailure(`Could not create event handler method ${method.name} in event handler ${this._eventHandlerType.name} because it is not associated to an event type`);
+                results.addFailure(`Could not create event handler method ${method.name} in event handler ${this.type.name} because it is not associated to an event type`);
                 continue;
             }
 
@@ -91,7 +80,7 @@ export class EventHandlerClassBuilder<T> {
 
             if (eventTypesToMethods.has(eventType!)) {
                 allMethodsValid = false;
-                results.addFailure(`Event handler ${this._eventHandlerType.name} has multiple event handler methods handling event type ${eventType}`);
+                results.addFailure(`Event handler ${this.type.name} has multiple event handler methods handling event type ${eventType}`);
                 continue;
             }
             eventTypesToMethods.set(eventType!, eventHandlerMethod);
@@ -102,10 +91,10 @@ export class EventHandlerClassBuilder<T> {
     private createEventHandlerMethod(method: HandlesDecoratedMethod): EventHandlerSignature<any> {
         return async (event, eventContext, services, logger) => {
             try {
-                const instance = await services.getAsync(this._eventHandlerType);
+                const instance = await services.getAsync(this.type);
                 return method.method.call(instance, event, eventContext, services, logger);
             } catch (error) {
-                throw new CouldNotCreateInstanceOfEventHandler(this._eventHandlerType, error);
+                throw new CouldNotCreateInstanceOfEventHandler(this.type, error);
             }
         };
     }

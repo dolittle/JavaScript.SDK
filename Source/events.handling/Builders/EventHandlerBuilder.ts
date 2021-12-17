@@ -4,6 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 
 import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandler } from '../EventHandler';
@@ -61,10 +62,11 @@ export class EventHandlerBuilder extends IEventHandlerBuilder {
     /**
      * Builds the event handler.
      * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {IServiceProviderBuilder} bindings - For registering the bindings for the event handler class.
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {IEventHandler | undefined} The built event handler if successful.
      */
-    build(eventTypes: IEventTypes, results: IClientBuildResults): IEventHandler | undefined {
+    build(eventTypes: IEventTypes, bindings: IServiceProviderBuilder, results: IClientBuildResults): IEventHandler | undefined {
         const eventTypeToMethods = new EventTypeMap<EventHandlerSignature<any>>();
         if (this._methodsBuilder === undefined) {
             results.addFailure(`Failed to build event handler ${this._eventHandlerId}. No event handler methods are configured for event handler`);

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { AggregateRootsBuilder, AggregateRootsBuilderCallback, isDecoratedAggregateRootType } from '@dolittle/sdk.aggregates';
-import { ClientSetup } from '@dolittle/sdk.common';
+import { ClientSetup, IClientBuildResults } from '@dolittle/sdk.common';
 import { ServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { EmbeddingsBuilder, EmbeddingsBuilderCallback, isDecoratedEmbeddingType } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
@@ -21,6 +21,7 @@ import { ISetupBuilder } from './ISetupBuilder';
  * Represents an implementation of {@link ISetupBuilder}.
  */
 export class SetupBuilder extends ISetupBuilder {
+    private readonly _buildResults: ClientSetup.ClientBuildResults;
     private readonly _moduleTraverser: ICanTraverseModules;
 
     private readonly _eventTypesBuilder: EventTypesBuilder;
@@ -40,12 +41,13 @@ export class SetupBuilder extends ISetupBuilder {
     constructor() {
         super();
 
+        this._buildResults = new ClientSetup.ClientBuildResults();
         this._moduleTraverser = new ModuleTraverser();
 
         this._eventTypesBuilder = new EventTypesBuilder();
         this._aggregateRootsBuilder = new AggregateRootsBuilder();
         this._eventFiltersBuilder = new EventFiltersBuilder();
-        this._eventHandlersBuilder = new EventHandlersBuilder();
+        this._eventHandlersBuilder = new EventHandlersBuilder(this._buildResults);
         this._projectionsAssociations = new ProjectionAssociations();
         this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations);
         this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations);
@@ -110,20 +112,19 @@ export class SetupBuilder extends ISetupBuilder {
         }
 
         const bindings = new ServiceProviderBuilder();
-        const buildResults = new ClientSetup.ClientBuildResults();
 
-        const aggregateRootTypes = this._aggregateRootsBuilder.build(buildResults);
-        const eventTypes = this._eventTypesBuilder.build(buildResults);
+        const aggregateRootTypes = this._aggregateRootsBuilder.build(this._buildResults);
+        const eventTypes = this._eventTypesBuilder.build(this._buildResults);
 
-        const filters = this._eventFiltersBuilder.build(eventTypes, buildResults);
-        const eventHandlers = this._eventHandlersBuilder.build(eventTypes, bindings, buildResults);
-        const projections = this._projectionsBuilder.build(eventTypes, buildResults);
-        const embeddings = this._embeddingsBuilder.build(eventTypes, buildResults);
+        const filters = this._eventFiltersBuilder.build(eventTypes, this._buildResults);
+        const eventHandlers = this._eventHandlersBuilder.build(eventTypes, bindings);
+        const projections = this._projectionsBuilder.build(eventTypes, this._buildResults);
+        const embeddings = this._embeddingsBuilder.build(eventTypes, this._buildResults);
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
 
         return new DolittleClient(
             bindings,
-            buildResults,
+            this._buildResults,
             eventTypes,
             aggregateRootTypes,
             filters,
