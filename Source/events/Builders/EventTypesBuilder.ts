@@ -4,15 +4,15 @@
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { IClientBuildResults, UniqueBindingBuilder } from '@dolittle/sdk.common';
 
 import { EventType } from '../EventType';
 import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
+import { eventType as eventTypeDecorator,  isDecoratedWithEventType, getDecoratedEventType } from '../eventTypeDecorator';
 import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
 import { EventTypes } from '../EventTypes';
 import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
-import { getDecoratedEventType } from '../eventTypeDecorator';
-import { IClientBuildResults, UniqueBindingBuilder } from '@dolittle/sdk.common';
 
 /**
  * Represents a builder for adding associations into {@link IEventTypes} instance.
@@ -38,20 +38,22 @@ export class EventTypesBuilder extends IEventTypesBuilder {
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, generation: GenerationLike, alias?: EventTypeAliasLike): IEventTypesBuilder;
     associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, maybeGenerationOrMaybeAlias?: GenerationLike | EventTypeAliasLike | undefined, maybeAlias?: EventTypeAliasLike): IEventTypesBuilder {
         const [generation, alias] = this.getGenerationAndAlias(maybeGenerationOrMaybeAlias, maybeAlias);
-        const eventType = eventTypeOrIdentifier instanceof EventType ?
-                            eventTypeOrIdentifier
-                            : new EventType(
-                                EventTypeId.from(eventTypeOrIdentifier),
-                                generation,
-                                alias);
+        const eventType = eventTypeOrIdentifier instanceof EventType
+            ? eventTypeOrIdentifier
+            : new EventType(EventTypeId.from(eventTypeOrIdentifier), generation, alias);
+
         this._bindings.add(eventType, type);
         return this;
     }
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IEventTypesBuilder {
+        if (!isDecoratedWithEventType(type)) {
+            this._buildResults.addFailure(`The event type class ${type.name} is not decorated as an event type`,`Add the @${eventTypeDecorator.name} decorator to the class`);
+            return this;
+        }
+
         this._bindings.add(getDecoratedEventType(type), type);
-        this.associate(type, getDecoratedEventType(type));
         return this;
     }
 

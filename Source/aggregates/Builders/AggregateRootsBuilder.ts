@@ -5,7 +5,7 @@ import { Constructor } from '@dolittle/types';
 
 import { IClientBuildResults, UniqueBindingBuilder } from '@dolittle/sdk.common';
 
-import { getDecoratedAggregateRootType } from '../aggregateRootDecorator';
+import { aggregateRoot as aggregateRootDecorator, isDecoratedAggregateRootType, getDecoratedAggregateRootType } from '../aggregateRootDecorator';
 import { AggregateRootType } from '../AggregateRootType';
 import { AggregateRootTypes } from '../AggregateRootTypes';
 import { IAggregateRootTypes } from '../IAggregateRootTypes';
@@ -31,7 +31,13 @@ export class AggregateRootsBuilder extends IAggregateRootsBuilder {
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IAggregateRootsBuilder {
-        this._bindings.add(getDecoratedAggregateRootType(type), type);
+        if (!isDecoratedAggregateRootType(type)) {
+            this._buildResults.addFailure(`The aggregate root class ${type.name} is not decorated as an aggregate root`,`Add the @${aggregateRootDecorator.name} decorator to the class`);
+            return this;
+        }
+
+        const aggregateRootType = getDecoratedAggregateRootType(type);
+        this._bindings.add(aggregateRootType, type);
         return this;
     }
 
