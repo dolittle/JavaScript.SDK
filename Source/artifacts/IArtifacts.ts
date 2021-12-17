@@ -1,20 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
-import { Artifact, ArtifactIdLike } from './Artifact';
+
+import { Artifact } from './Artifact';
 
 /**
  * Represents a reference to an artifact through the artifact itself or just the id.
  */
-export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> = TArtifact | TId | Guid | string;
+export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>> = TArtifact | TId | Guid | string;
 
 /**
  * Defines the system for working with {@link Artifact}.
  * @template TArtifact The type of the artifact.
+ * @template TId The id type of the artifact.
  */
-export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike> {
+export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>> {
 
     /**
      * Gets all artifacts.
@@ -31,28 +34,28 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Ar
     /**
      * Get type for a given artifact.
      * @param {TArtifact} input - Artifact.
-     * @returns Type for artifact.
+     * @returns {Constructor<any>} Type for artifact.
      */
     abstract getTypeFor(input: TArtifact): Constructor<any>;
 
     /**
-     * Check if there is an {Artifact} definition for a given type.
-     * @param {Function} type - Type to check for.
-     * @returns True if there is, false if not.
+     * Check if there is an artifact definition for a given type.
+     * @param {Constructor<any>} type - Type to check for.
+     * @returns {boolean} True if there is, false if not.
      */
     abstract hasFor(type: Constructor<any>): boolean;
 
     /**
-     * Get {Artifact} definition for a given type.
-     * @param {Function} type - Type to get for.
+     * Get the artifact definition for a given type.
+     * @param {Constructor<any>} type - Type to get for.
      * @returns {TArtifact} The artifact associated.
      */
     abstract getFor(type: Constructor<any>): TArtifact;
 
     /**
      * Resolves an artifact from optional input or the given object.
-     * @param object - Object to resolve for.
-     * @param [input] - Optional input as an artifact or representations of artifacts as identifier.
+     * @param {any} object - Object to resolve for.
+     * @param {ArtifactOrId<TArtifact, TId>} [input] - Optional input as an artifact or representations of artifacts as identifier.
      * @returns {TArtifact} Resolved event type.
      */
     abstract resolveFrom(object: any, input?: ArtifactOrId<TArtifact, TId>): TArtifact;

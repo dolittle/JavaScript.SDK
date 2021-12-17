@@ -10,5 +10,6 @@ export { CannotHaveMultipleTypesAssociatedWithArtifact } from './CannotHaveMulti
 export { Generation, GenerationLike } from './Generation';
 export { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 export { IArtifacts, ArtifactOrId } from './IArtifacts';
+export { IdentifierTypeMap } from './IdentifierTypeMap';
 export { TypeNotAssociatedToArtifact } from './TypeNotAssociatedToArtifact';
 export { UnableToResolveArtifact } from './UnableToResolveArtifact';

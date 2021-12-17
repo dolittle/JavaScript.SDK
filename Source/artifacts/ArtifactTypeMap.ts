@@ -1,30 +1,34 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Artifact, ArtifactIdLike } from './Artifact';
-import { Generation } from './Generation';
+import { ConceptAs } from '@dolittle/concepts';
+import { Guid } from '@dolittle/rudiments';
+
+import { Artifact } from './Artifact';
+import { IdentifierTypeMap } from './IdentifierTypeMap';
 
 /**
- * Represents a map for mapping an artifact to a given type and provide.
+ * Represents a map for mapping an artifact to a given type.
  * @template TArtifact The artifact type to map to a type.
  * @template TId The id type of the artifact.
  * @template TType Type to map to.
  */
-export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId extends ArtifactIdLike, TType> implements Map<TArtifact, TType> {
-    private _generationsById: Map<string, Map<number, [TType, TArtifact]>>;
+export class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>, TType> implements Map<TArtifact, TType> {
+    private _generationsById: IdentifierTypeMap<TId, Map<number, [TType, TArtifact]>>;
 
     /**
-     * Initializes a new instance of {@link EventTypeMap}.
+     * Initialises a new instance of the {@link ArtifactTypeMap} class.
      */
     constructor() {
-        this._generationsById = new Map<string, Map<number, [TType, TArtifact]>>();
+        this._generationsById = new IdentifierTypeMap<TId, Map<number, [TType, TArtifact]>>();
     }
-    /** @inheritdoc */
-    abstract [Symbol.toStringTag]: string;
 
-    /**
-     * Gets the size of the map.
-     */
+    /** @inheritdoc */
+    get [Symbol.toStringTag]() {
+        return 'ArtifactTypeMap';
+    }
+
+    /** @inheritdoc */
     get size(): number {
         let size = 0;
         for (const generations of this._generationsById.values()) {
@@ -35,29 +39,26 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
 
     /** @inheritdoc */
     has(key: TArtifact): boolean {
-        const artifactId = key.id.toString();
-        return this._generationsById.get(artifactId)?.has(key.generation.value) ?? false;
+        return this._generationsById.get(key.id)?.has(key.generation.value) ?? false;
     }
 
     /** @inheritdoc */
     get(key: TArtifact): TType | undefined {
-        const artifactId = key.id.toString();
-        return this._generationsById.get(artifactId)?.get(key.generation.value)?.[0];
+        return this._generationsById.get(key.id)?.get(key.generation.value)?.[0];
     }
 
     /** @inheritdoc */
     set(key: TArtifact, value: TType): this {
-        const artifactId = key.id.toString();
-
         let generations: Map<number, [TType, TArtifact]>;
-        if (this._generationsById.has(artifactId)) {
-            generations = this._generationsById.get(artifactId)!;
+
+        if (this._generationsById.has(key.id)) {
+            generations = this._generationsById.get(key.id)!;
         } else {
             generations = new Map<number, [TType, TArtifact]>();
-            this._generationsById.set(artifactId, generations);
+            this._generationsById.set(key.id, generations);
         }
-        generations.set(key.generation.value, [value, key]);
 
+        generations.set(key.generation.value, [value, key]);
         return this;
     }
 
@@ -68,13 +69,11 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
 
     /** @inheritdoc */
     delete(key: TArtifact): boolean {
-        const artifactId = key.id.toString();
-
-        const generations = this._generationsById.get(artifactId);
+        const generations = this._generationsById.get(key.id);
         if (generations) {
             const deleted = generations.delete(key.generation.value);
             if (generations.size === 0) {
-                this._generationsById.delete(artifactId);
+                this._generationsById.delete(key.id);
             }
             return deleted;
         }
@@ -83,8 +82,8 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
 
     /** @inheritdoc */
     *[Symbol.iterator](): IterableIterator<[TArtifact, TType]> {
-        for (const [artifactId, generations] of this._generationsById) {
-            for (const [generation, [type, artifact]] of generations) {
+        for (const [_, generations] of this._generationsById) {
+            for (const [_, [type, artifact]] of generations) {
                 yield [artifact, type];
             }
         }
@@ -115,11 +114,4 @@ export abstract class ArtifactTypeMap<TArtifact extends Artifact<TId>, TId exten
             callbackfn.call(thisArg, type, artifact, this);
         }
     }
-
-    /**
-     * Creates the specific artifact from the id and generation.
-     * @param id - The artifact id as a string.
-     * @param generation - The {@link Generation}.
-     */
-    protected abstract createArtifact(id: string, generation: Generation): TArtifact;
 }
