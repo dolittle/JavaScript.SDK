@@ -5,7 +5,7 @@ export * as Builders from './Builders/_exports';
 export * as Internal from './Internal/_exports';
 export * as Store from './Store/_exports';
 
-export { AggregateRootId, AggregateRootIdLike } from './AggregateRootId';
+export { AggregateRootId, AggregateRootIdLike, isAggregateRootId } from './AggregateRootId';
 export { AggregateRootVersion } from './AggregateRootVersion';
 export { EventContext } from './EventContext';
 export { EventLogSequenceNumber } from './EventLogSequenceNumber';
