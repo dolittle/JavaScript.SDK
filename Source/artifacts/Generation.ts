@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, createIsConceptAsNumber } from '@dolittle/concepts';
 import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 
 /**
@@ -38,3 +38,10 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
         return new Generation(generation);
     }
 }
+
+/**
+ * Checks whether or not an object is an instance of {@link Generation}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link Generation}, false if not.
+ */
+export const isGeneration = createIsConceptAsNumber(Generation, '@dolittle/sdk.artifacts.Generation');

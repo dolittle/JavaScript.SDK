@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, createIsConceptAsString } from '@dolittle/concepts';
 
 /**
  * Defines the types that can be converted to a {@link EventTypeAlias}.
@@ -29,3 +29,10 @@ export class EventTypeAlias extends ConceptAs<string, '@dolittle/sdk.events.Even
         return new EventTypeAlias(id);
     }
 };
+
+/**
+ * Checks whether or not an object is an instance of {@link EventTypeAlias}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link EventTypeAlias}, false if not.
+ */
+export const isEventTypeAlias = createIsConceptAsString(EventTypeAlias, '@dolittle/sdk.events.EventTypeAlias');
