@@ -11,14 +11,20 @@ import { isAggregateRootType } from '../AggregateRootType';
  * Represents a builder that can build {@link IAggregateRootTypes} from an {@link IModel}.
  */
 export class AggregateRootsModelBuilder {
+    /**
+     * Initialises a new instance of the {@link AggregateRootsModelBuilder} class.
+     * @param {IModel} _model - The built application model.
+     */
+    constructor(
+        private readonly _model: IModel,
+    ) {}
 
     /**
      * Builds an {@link IAggregateRootTypes} from the associated and registered aggregate root types.
-     * @param {IModel} model - The built application model.
      * @returns {IAggregateRootTypes} The built event types.
      */
-    build(model: IModel): IAggregateRootTypes {
-        const bindings = model.getTypeBindings(isAggregateRootType);
+    build(): IAggregateRootTypes {
+        const bindings = this._model.getTypeBindings(isAggregateRootType);
         const aggregateRootTypes = new AggregateRootTypes();
         for (const { identifier, type } of bindings) {
             aggregateRootTypes.associate(type, identifier);

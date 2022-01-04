@@ -15,7 +15,7 @@ import { IAggregateRootsBuilder } from './IAggregateRootsBuilder';
 export class AggregateRootsBuilder extends IAggregateRootsBuilder {
     /**
      * Initialises a new instance of the {@link AggregateRootsBuilder} class.
-     * @param {IModelBuilder} _modelBuilder - For binding event types to identifiers.
+     * @param {IModelBuilder} _modelBuilder - For binding aggregate root types to identifiers.
      * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
     constructor(

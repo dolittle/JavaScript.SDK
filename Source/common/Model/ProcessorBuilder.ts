@@ -4,6 +4,6 @@
 import { IEquatable } from '@dolittle/rudiments';
 
 /**
- * Defines a processor in a Dolittle application model.
+ * Defines a processor builder in a Dolittle application model.
  */
-export interface Processor extends IEquatable {}
+export interface ProcessorBuilder extends IEquatable {}

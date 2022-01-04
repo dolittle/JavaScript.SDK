@@ -1,6 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { IEquatable } from '@dolittle/rudiments';
+
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
@@ -13,7 +15,7 @@ import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
 /**
  * Represents an implementation of {@link IPublicEventFilterBuilder}.
  */
-export class PublicEventFilterBuilder extends IPublicEventFilterBuilder {
+export class PublicEventFilterBuilder extends IPublicEventFilterBuilder implements IEquatable {
     private _callback?: PartitionedFilterEventCallback;
 
     /**
@@ -27,6 +29,11 @@ export class PublicEventFilterBuilder extends IPublicEventFilterBuilder {
     /** @inheritdoc */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
+    }
+
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        return this === other;
     }
 
     /**

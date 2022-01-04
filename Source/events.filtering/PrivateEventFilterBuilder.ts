@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid, IEquatable } from '@dolittle/rudiments';
 
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
@@ -17,7 +17,7 @@ import { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuild
 /**
  * Represents the builder for building private event filters.
  */
-export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder {
+export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder implements IEquatable {
     private _scopeId: ScopeId = ScopeId.default;
     private _innerBuilder?: PartitionedEventFilterBuilder | UnpartitionedEventFilterBuilder;
 
@@ -45,6 +45,11 @@ export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder {
     unpartitioned(): IUnpartitionedEventFilterBuilder {
         this._innerBuilder = new UnpartitionedEventFilterBuilder();
         return this._innerBuilder;
+    }
+
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        return this === other;
     }
 
     /**

@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 import { IClientBuildResults } from '../ClientSetup/IClientBuildResults';
 import { Identifier } from './Identifier';
 import { IModel } from './IModel';
-import { Processor } from './Processor';
+import { ProcessorBuilder } from './ProcessorBuilder';
 
 /**
  * Defines a builder for building a Dolittle application model.
@@ -20,11 +20,11 @@ export abstract class IModelBuilder {
     abstract bindIdentifierToType(identifier: Identifier, type: Constructor): void;
 
     /**
-     * Adds a binding between an identifier and a processor.
+     * Adds a binding between an identifier and a processor builder.
      * @param {Identifier} identifier - The identifier to bind.
-     * @param {Processor} processor - The processor to bind the identifier to.
+     * @param {ProcessorBuilder} processorBuilder - The processor builder to bind the identifier to.
      */
-    abstract bindIdentifierToProcessor(identifier: Identifier, processor: Processor): void;
+    abstract bindIdentifierToProcessorBuilder(identifier: Identifier, processorBuilder: ProcessorBuilder): void;
 
     /**
      * Builds a valid Dolittle application model from the bindings.

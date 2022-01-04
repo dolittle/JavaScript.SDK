@@ -4,4 +4,4 @@
 export { Identifier } from './Identifier';
 export { IModel } from './IModel';
 export { IModelBuilder } from './IModelBuilder';
-export { Processor } from './Processor';
+export { ProcessorBuilder } from './ProcessorBuilder';

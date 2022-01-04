@@ -12,12 +12,19 @@ import { IEventTypes } from '../IEventTypes';
  */
 export class EventTypesModelBuilder {
     /**
+     * Initialises a new instance of the {@link EventTypesModelBuilder} class.
+     * @param {IModel} _model - The built application model.
+     */
+    constructor(
+        private readonly _model: IModel,
+    ) {}
+
+    /**
      * Builds an {@link IEventTypes} from the associated and registered event types.
-     * @param {IModel} model - The built application model.
      * @returns {IEventTypes} The built event types.
      */
-    build(model: IModel): IEventTypes {
-        const bindings = model.getTypeBindings(isEventType);
+    build(): IEventTypes {
+        const bindings = this._model.getTypeBindings(isEventType);
         const eventTypes = new EventTypes();
         for (const { identifier, type } of bindings) {
             eventTypes.associate(type, identifier);
