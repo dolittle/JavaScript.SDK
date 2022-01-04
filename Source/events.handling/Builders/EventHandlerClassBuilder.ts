@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid, IEquatable } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
@@ -21,7 +21,7 @@ import { handles as handlesDecorator, getHandlesDecoratedMethods } from './handl
  * Represents a builder for building an event handler from a class.
  * @template T The event handler class type.
  */
-export class EventHandlerClassBuilder<T> {
+export class EventHandlerClassBuilder<T> implements IEquatable {
     private readonly _bindingCallback: TenantServiceBindingCallback;
 
     /**
@@ -35,6 +35,17 @@ export class EventHandlerClassBuilder<T> {
         } else {
             this._bindingCallback = (binder) => binder.bind(type.type).toInstance(instance);
         }
+    }
+
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        if (this === other) return true;
+
+        if (other instanceof EventHandlerClassBuilder) {
+            return this.type === other.type && this.instance === other.instance;
+        }
+
+        return false;
     }
 
     /**

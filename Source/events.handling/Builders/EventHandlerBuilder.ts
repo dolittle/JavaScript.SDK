@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid, IEquatable } from '@dolittle/rudiments';
 
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
@@ -19,7 +19,7 @@ import { IEventHandlerMethodsBuilder } from './IEventHandlerMethodsBuilder';
 /**
  * Represents an implementation of {@link IEventHandlerBuilder}.
  */
-export class EventHandlerBuilder extends IEventHandlerBuilder {
+export class EventHandlerBuilder extends IEventHandlerBuilder implements IEquatable {
     private _methodsBuilder?: EventHandlerMethodsBuilder;
     private _scopeId: ScopeId = ScopeId.default;
     private _alias?: EventHandlerAlias;
@@ -57,6 +57,11 @@ export class EventHandlerBuilder extends IEventHandlerBuilder {
     withAlias(alias: EventHandlerAliasLike): IEventHandlerBuilder {
         this._alias = EventHandlerAlias.from(alias);
         return this;
+    }
+
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        return this === other;
     }
 
     /**

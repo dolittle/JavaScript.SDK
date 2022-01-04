@@ -22,10 +22,9 @@ describeThis(__filename, () => {
             { identifier: firstEventType, type: FirstType },
         ]
     });
+    const builder = new EventTypesModelBuilder(model);
 
-    const builder = new EventTypesModelBuilder();
-
-    const eventTypes = builder.build(model);
+    const eventTypes = builder.build();
 
     it('should return an instance', () => (eventTypes !== null || eventTypes !== undefined).should.be.true);
     it('should have one association', () => eventTypes.getAll().should.be.of.length(1));

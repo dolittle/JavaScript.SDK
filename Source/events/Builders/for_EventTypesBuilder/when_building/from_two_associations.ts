@@ -23,10 +23,9 @@ describeThis(__filename, () => {
             { identifier: secondEventType, type: SecondType },
         ]
     });
+    const builder = new EventTypesModelBuilder(model);
 
-    const builder = new EventTypesModelBuilder();
-
-    const eventTypes = builder.build(model);
+    const eventTypes = builder.build();
 
     it('should return an instance', () => (eventTypes !== null || eventTypes !== undefined).should.be.true);
     it('should have two associations', () => eventTypes.getAll().should.be.of.length(2));

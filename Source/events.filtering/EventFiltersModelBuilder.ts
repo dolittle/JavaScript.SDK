@@ -13,7 +13,7 @@ import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
  */
 export class EventFiltersModelBuilder {
     /**
-     * Initialises a new instance of the {@link EventTypEventFiltersModelBuilderesBuilder} class.
+     * Initialises a new instance of the {@link EventFiltersModelBuilder} class.
      * @param {IModel} _model - The built application model.
      * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      * @param {IEventTypes} _eventTypes - For event types resolution.
