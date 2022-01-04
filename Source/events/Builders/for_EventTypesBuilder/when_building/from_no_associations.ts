@@ -4,15 +4,18 @@
 import { describeThis } from '@dolittle/typescript.testing';
 import * as sinon from 'ts-sinon';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IModel } from '@dolittle/sdk.common';
 
-import { EventTypesBuilder } from '../../EventTypesBuilder';
+import { EventTypesModelBuilder } from '../../EventTypesModelBuilder';
 
 describeThis(__filename, () => {
-    const results = sinon.stubInterface<IClientBuildResults>();
-    const builder = new EventTypesBuilder(results);
+    const builder = new EventTypesModelBuilder();
+    const model = sinon.stubInterface<IModel>({
+        getTypeBindings: [],
+    });
 
-    const eventTypes = builder.build();
+    const eventTypes = builder.build(model);
 
     it('should return an instance', () => (eventTypes !== null || eventTypes !== undefined).should.be.true);
+    it('should have no associations', () => eventTypes.getAll().should.be.empty);
 });

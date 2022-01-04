@@ -4,27 +4,27 @@
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
-import { IClientBuildResults, UniqueBindingBuilder } from '@dolittle/sdk.common';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EventType } from '../EventType';
 import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
 import { eventType as eventTypeDecorator,  isDecoratedWithEventType, getDecoratedEventType } from '../eventTypeDecorator';
 import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
-import { EventTypes } from '../EventTypes';
-import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
 
 /**
- * Represents a builder for adding associations into {@link IEventTypes} instance.
+ * Represents an implementation of {@link IEventTypesBuilder}.
  */
 export class EventTypesBuilder extends IEventTypesBuilder {
-    private readonly _bindings = new UniqueBindingBuilder<EventType, Constructor<any>>('event type', type => type.name);
-
     /**
      * Initialises a new instance of the {@link EventTypesBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding event types to identifiers.
      * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
-    constructor(private readonly _buildResults: IClientBuildResults) {
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
         super();
     }
 
@@ -38,7 +38,7 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             ? eventTypeOrIdentifier
             : new EventType(EventTypeId.from(eventTypeOrIdentifier), generation, alias);
 
-        this._bindings.add(eventType, type, type);
+        this._modelBuilder.bindIdentifierToType(eventType, type);
         return this;
     }
 
@@ -49,21 +49,8 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             return this;
         }
 
-        this._bindings.add(getDecoratedEventType(type), type, type);
+        this._modelBuilder.bindIdentifierToType(getDecoratedEventType(type), type);
         return this;
-    }
-
-    /**
-     * Builds an {@link IEventTypes} from the associated and registered event types.
-     * @returns {IEventTypes} The built event types.
-     */
-    build(): IEventTypes {
-        const uniqueBindings = this._bindings.buildUnique(this._buildResults);
-        const eventTypes = new EventTypes();
-        for (const { identifier: eventType, type } of uniqueBindings) {
-            eventTypes.associate(type, eventType);
-        }
-        return eventTypes;
     }
 
     private getGenerationAndAlias(maybeGenerationOrMaybeAlias: GenerationLike | EventTypeAliasLike | undefined, maybeAlias: EventTypeAliasLike | undefined): [Generation, EventTypeAlias | undefined] {
