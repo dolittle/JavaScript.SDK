@@ -18,7 +18,7 @@ export { PartitionIdKeySelector } from './PartitionIdKeySelector';
 export { Projection } from './Projection';
 export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';
-export { ProjectionId } from './ProjectionId';
+export { ProjectionId, isProjectionId } from './ProjectionId';
 export { ProjectionResult } from './ProjectionResult';
 export { Projections } from './Projections';
 export { PropertyNameKeySelector } from './PropertyNameKeySelector';

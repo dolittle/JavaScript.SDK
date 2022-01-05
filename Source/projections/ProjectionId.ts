@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, createIsConceptAsGuid } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 
 /**
@@ -26,3 +26,10 @@ export class ProjectionId extends ConceptAs<Guid, '@dolittle/sdk.projections.Pro
         return new ProjectionId(Guid.as(id));
     }
 }
+
+/**
+ * Checks whether or not an object is an instance of {@link ProjectionId}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link ProjectionId}, false if not.
+ */
+export const isProjectionId = createIsConceptAsGuid(ProjectionId, '@dolittle/sdk.projections.ProjectionId');

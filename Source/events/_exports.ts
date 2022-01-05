@@ -21,5 +21,5 @@ export { EventTypes } from './EventTypes';
 export { IEventTypes } from './IEventTypes';
 export { MissingEventsFromRuntime } from './MissingEventsFromRuntime';
 export { PartitionId } from './PartitionId';
-export { ScopeId } from './ScopeId';
+export { ScopeId, isScopeId } from './ScopeId';
 export { StreamId } from './StreamId';

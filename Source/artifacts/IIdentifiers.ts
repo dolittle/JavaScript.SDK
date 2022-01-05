@@ -10,7 +10,6 @@ import { Constructor } from '@dolittle/types';
  * @template TId The type of the identifer.
  */
 export abstract class IIdentifiers<TId extends ConceptAs<Guid, string>> {
-
     /**
      * Gets all identifers.
      * @returns {TId[]} All identifiers associated with a type.
