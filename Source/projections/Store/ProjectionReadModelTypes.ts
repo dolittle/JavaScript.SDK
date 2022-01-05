@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
 import { IdentifierTypeMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
-import { Constructor } from '@dolittle/types';
-import { ProjectionId } from '../_exports';
+
+import { ProjectionId } from '../ProjectionId';
 import { CannotHaveMultipleScopedProjectionIdsAssociatedWithType } from './CannotHaveMultipleScopedProjectionIdsAssociatedWithType';
 import { CannotHaveMultipleTypesAssociatedWithScopedProjectionId } from './CannotHaveMultipleTypesAssociatedWithScopedProjectionId';
 import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
