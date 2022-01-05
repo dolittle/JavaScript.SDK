@@ -19,5 +19,6 @@ export { projection, isDecoratedProjectionType, getDecoratedProjectionType } fro
 export { ProjectionOptions } from './ProjectionOptions';
 export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';
+export { ProjectionsModelBuilder } from './ProjectionsModelBuilder';
 export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 export { TypeOrEventType } from './TypeOrEventType';

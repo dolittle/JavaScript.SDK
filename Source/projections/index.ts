@@ -25,6 +25,7 @@ export {
     ProjectionOptions,
     ProjectionsBuilder,
     ProjectionsBuilderCallback,
+    ProjectionsModelBuilder,
     ReadModelAlreadyDefinedForProjection,
     TypeOrEventType,
 } from './Builders/_exports';

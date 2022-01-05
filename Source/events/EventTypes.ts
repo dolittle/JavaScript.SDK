@@ -12,6 +12,8 @@ import { IEventTypes } from './IEventTypes';
  * Represents an implementation of {@link IEventTypes}.
  */
 export class EventTypes extends IEventTypes {
+    protected artifactTypeName = 'EventType';
+
     /**
      * Initialises a new instance of the {@link EventTypes} class.
      */
@@ -22,10 +24,5 @@ export class EventTypes extends IEventTypes {
     /** @inheritdoc */
     protected createArtifact(id: string | EventTypeId | Guid): EventType {
         return new EventType(EventTypeId.from(id));
-    }
-
-    /** @inheritdoc */
-    protected getArtifactTypeName(): string {
-        return 'EventType';
     }
 }

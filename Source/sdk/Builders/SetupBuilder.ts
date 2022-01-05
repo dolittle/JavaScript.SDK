@@ -1,15 +1,15 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { AggregateRootsBuilder, AggregateRootsBuilderCallback, isDecoratedAggregateRootType } from '@dolittle/sdk.aggregates';
-import { ClientSetup, IClientBuildResults } from '@dolittle/sdk.common';
+import { AggregateRootsBuilder, AggregateRootsBuilderCallback, AggregateRootsModelBuilder, isDecoratedAggregateRootType } from '@dolittle/sdk.aggregates';
+import { ClientSetup, Model } from '@dolittle/sdk.common';
 import { ServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
-import { EmbeddingsBuilder, EmbeddingsBuilderCallback, isDecoratedEmbeddingType } from '@dolittle/sdk.embeddings';
+import { EmbeddingsBuilder, EmbeddingsBuilderCallback, EmbeddingsModelBuilder, isDecoratedEmbeddingType } from '@dolittle/sdk.embeddings';
 import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sdk.eventhorizon';
-import { EventTypesBuilder, EventTypesBuilderCallback, isDecoratedWithEventType } from '@dolittle/sdk.events';
-import { EventFiltersBuilder, EventFiltersBuilderCallback } from '@dolittle/sdk.events.filtering';
-import { EventHandlersBuilder, EventHandlersBuilderCallback, isDecoratedEventHandlerType } from '@dolittle/sdk.events.handling';
-import { isDecoratedProjectionType, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback } from '@dolittle/sdk.projections';
+import { EventTypesBuilder, EventTypesBuilderCallback, EventTypesModelBuilder, isDecoratedWithEventType } from '@dolittle/sdk.events';
+import { EventFiltersBuilder, EventFiltersBuilderCallback, EventFiltersModelBuilder } from '@dolittle/sdk.events.filtering';
+import { EventHandlersBuilder, EventHandlersBuilderCallback, EventHandlersModelBuilder, isDecoratedEventHandlerType } from '@dolittle/sdk.events.handling';
+import { isDecoratedProjectionType, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionsModelBuilder } from '@dolittle/sdk.projections';
 
 import { ICanTraverseModules } from '../Internal/Discovery/ICanTraverseModules';
 import { ModuleTraverser } from '../Internal/Discovery/ModuleTraverser';
@@ -21,18 +21,18 @@ import { ISetupBuilder } from './ISetupBuilder';
  * Represents an implementation of {@link ISetupBuilder}.
  */
 export class SetupBuilder extends ISetupBuilder {
+    private readonly _modelBuilder: Model.ModelBuilder;
     private readonly _buildResults: ClientSetup.ClientBuildResults;
-    private readonly _moduleTraverser: ICanTraverseModules;
 
     private readonly _eventTypesBuilder: EventTypesBuilder;
     private readonly _aggregateRootsBuilder: AggregateRootsBuilder;
     private readonly _eventFiltersBuilder: EventFiltersBuilder;
     private readonly _eventHandlersBuilder: EventHandlersBuilder;
-    private readonly _projectionsAssociations: ProjectionAssociations;
     private readonly _projectionsBuilder: ProjectionsBuilder;
     private readonly _embeddingsBuilder: EmbeddingsBuilder;
     private readonly _subscriptionsBuilder: SubscriptionsBuilder;
 
+    private readonly _moduleTraverser: ICanTraverseModules;
     private _discoveryEnabled: boolean = true;
 
     /**
@@ -41,17 +41,18 @@ export class SetupBuilder extends ISetupBuilder {
     constructor() {
         super();
 
+        this._modelBuilder = new Model.ModelBuilder();
         this._buildResults = new ClientSetup.ClientBuildResults();
-        this._moduleTraverser = new ModuleTraverser();
 
-        this._eventTypesBuilder = new EventTypesBuilder(this._buildResults);
-        this._aggregateRootsBuilder = new AggregateRootsBuilder(this._buildResults);
-        this._eventFiltersBuilder = new EventFiltersBuilder(this._buildResults);
-        this._eventHandlersBuilder = new EventHandlersBuilder(this._buildResults);
-        this._projectionsAssociations = new ProjectionAssociations();
-        this._projectionsBuilder = new ProjectionsBuilder(this._projectionsAssociations, this._buildResults);
-        this._embeddingsBuilder = new EmbeddingsBuilder(this._projectionsAssociations, this._buildResults);
+        this._eventTypesBuilder = new EventTypesBuilder(this._modelBuilder, this._buildResults);
+        this._aggregateRootsBuilder = new AggregateRootsBuilder(this._modelBuilder, this._buildResults);
+        this._eventFiltersBuilder = new EventFiltersBuilder(this._modelBuilder, this._buildResults);
+        this._eventHandlersBuilder = new EventHandlersBuilder(this._modelBuilder, this._buildResults);
+        this._projectionsBuilder = new ProjectionsBuilder(this._modelBuilder, this._buildResults);
+        this._embeddingsBuilder = new EmbeddingsBuilder(this._modelBuilder, this._buildResults);
         this._subscriptionsBuilder = new SubscriptionsBuilder();
+
+        this._moduleTraverser = new ModuleTraverser();
     }
 
     /** @inheritdoc */
@@ -113,13 +114,16 @@ export class SetupBuilder extends ISetupBuilder {
 
         const bindings = new ServiceProviderBuilder();
 
-        const eventTypes = this._eventTypesBuilder.build();
-        const aggregateRootTypes = this._aggregateRootsBuilder.build();
+        const model = this._modelBuilder.build(this._buildResults);
 
-        const filters = this._eventFiltersBuilder.build(eventTypes);
-        const eventHandlers = this._eventHandlersBuilder.build(eventTypes, bindings);
-        const projections = this._projectionsBuilder.build(eventTypes);
-        const embeddings = this._embeddingsBuilder.build(eventTypes);
+        const eventTypes = new EventTypesModelBuilder(model).build();
+        const aggregateRootTypes = new AggregateRootsModelBuilder(model).build();
+
+        const filters = new EventFiltersModelBuilder(model, this._buildResults, eventTypes).build();
+        const eventHandlers = new EventHandlersModelBuilder(model, this._buildResults, eventTypes, bindings).build();
+        const projections = new ProjectionsModelBuilder(model, this._buildResults, eventTypes).build();
+        const embeddings = new EmbeddingsModelBuilder(model, this._buildResults, eventTypes).build();
+
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
 
         return new DolittleClient(

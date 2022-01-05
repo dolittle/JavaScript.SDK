@@ -11,6 +11,7 @@ export { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
 export { EventHandlerOptions } from './EventHandlerOptions';
 export { EventHandlersBuilder } from './EventHandlersBuilder';
 export { EventHandlersBuilderCallback } from './EventHandlersBuilderCallback';
+export { EventHandlersModelBuilder } from './EventHandlersModelBuilder';
 export { HandlesDecoratedMethod } from './HandlesDecoratedMethod';
 export { handles, getHandlesDecoratedMethods } from './handlesDecorator';
 export { IEventHandlerBuilder } from './IEventHandlerBuilder';

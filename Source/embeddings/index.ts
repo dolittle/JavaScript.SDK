@@ -18,6 +18,7 @@ export {
     EmbeddingDecoratedType,
     EmbeddingsBuilder,
     EmbeddingsBuilderCallback,
+    EmbeddingsModelBuilder,
     IEmbeddingBuilder,
     IEmbeddingBuilderForReadModel,
     IEmbeddingsBuilder,

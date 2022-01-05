@@ -6,6 +6,7 @@ export * from './_exports';
 export {
     AggregateRootsBuilder,
     AggregateRootsBuilderCallback,
+    AggregateRootsModelBuilder,
     Aggregates,
     AggregatesBuilder,
     IAggregates,

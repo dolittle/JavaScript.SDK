@@ -3,4 +3,5 @@
 
 export { EventTypesBuilder } from './EventTypesBuilder';
 export { EventTypesBuilderCallback } from './EventTypesBuilderCallback';
+export { EventTypesModelBuilder } from './EventTypesModelBuilder';
 export { IEventTypesBuilder } from './IEventTypesBuilder';

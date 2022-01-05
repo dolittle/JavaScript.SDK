@@ -16,6 +16,7 @@ export {
     EventHandlerOptions,
     EventHandlersBuilder,
     EventHandlersBuilderCallback,
+    EventHandlersModelBuilder,
     HandlesDecoratedMethod,
     handles,
     getHandlesDecoratedMethods,
