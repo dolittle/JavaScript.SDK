@@ -13,6 +13,8 @@ import { IAggregateRootTypes } from './IAggregateRootTypes';
  * Represents an implementation of {@link IAggregateRootTypes}.
  */
 export class AggregateRootTypes extends IAggregateRootTypes {
+    protected artifactTypeName = 'AggregateRootType';
+
     /**
      * Initialises a new instance of the {@link AggregateRootType} class.
      */
@@ -23,10 +25,5 @@ export class AggregateRootTypes extends IAggregateRootTypes {
     /** @inheritdoc */
     protected createArtifact(id: string | AggregateRootId | Guid): AggregateRootType {
         return new AggregateRootType(AggregateRootId.from(id));
-    }
-
-    /** @inheritdoc */
-    protected getArtifactTypeName(): string {
-        return 'AggregateRootType';
     }
 }

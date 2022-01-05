@@ -13,14 +13,14 @@ import { Artifact } from './Artifact';
 export type ArtifactOrId<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>> = TArtifact | TId | Guid | string;
 
 /**
- * Defines the system for working with {@link Artifact}.
+ * Defines the system for working with artifacts.
  * @template TArtifact The type of the artifact.
  * @template TId The id type of the artifact.
  */
 export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>> {
-
     /**
      * Gets all artifacts.
+     * @returns {TArtifact[]} All artifacts associated with a type.
      */
     abstract getAll(): TArtifact[];
 
@@ -39,14 +39,14 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Co
     abstract getTypeFor(input: TArtifact): Constructor<any>;
 
     /**
-     * Check if there is an artifact definition for a given type.
+     * Check if there is an artifact associated with a given type.
      * @param {Constructor<any>} type - Type to check for.
      * @returns {boolean} True if there is, false if not.
      */
     abstract hasFor(type: Constructor<any>): boolean;
 
     /**
-     * Get the artifact definition for a given type.
+     * Get the artifact associated with a given type.
      * @param {Constructor<any>} type - Type to get for.
      * @returns {TArtifact} The artifact associated.
      */
@@ -56,14 +56,14 @@ export abstract class IArtifacts<TArtifact extends Artifact<TId>, TId extends Co
      * Resolves an artifact from optional input or the given object.
      * @param {any} object - Object to resolve for.
      * @param {ArtifactOrId<TArtifact, TId>} [input] - Optional input as an artifact or representations of artifacts as identifier.
-     * @returns {TArtifact} Resolved event type.
+     * @returns {TArtifact} Resolved artifact.
      */
     abstract resolveFrom(object: any, input?: ArtifactOrId<TArtifact, TId>): TArtifact;
 
     /**
-     * Associate a type with a unique artifact identifier and optional generation.
+     * Associate a type with an artifact.
      * @param {Constructor<any>} type - Type to associate.
-     * @param {TArtifact} eventType - Artifact to associate with.
+     * @param {TArtifact} artifact - Artifact to associate with.
      */
-    abstract associate(type: Constructor<any>, eventType: TArtifact): void;
+    abstract associate(type: Constructor<any>, artifact: TArtifact): void;
 }

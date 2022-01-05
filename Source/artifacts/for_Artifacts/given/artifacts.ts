@@ -42,9 +42,7 @@ export class artifact_type_map<TType> extends ArtifactTypeMap<artifact_type, art
 }
 
 export class artifacts extends Artifacts<artifact_type, artifact_type_id> {
-    protected getArtifactTypeName(): string {
-        return 'artifacts';
-    }
+    protected artifactTypeName = 'artifacts';
 
     constructor(map: artifact_type_map<Constructor<any>> = new artifact_type_map()) {
         super(map);

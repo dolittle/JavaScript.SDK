@@ -9,7 +9,7 @@ import { Exception } from '@dolittle/rudiments';
 export class UnableToResolveArtifact extends Exception {
 
     /**
-     * Initializes a new instance of {@link UnableToResolveEventType}.
+     * Initializes a new instance of {@link UnableToResolveArtifact}.
      * @param {string} artifactTypeName - The name of the artifact type.
      * @param {any} object - The object that was attempted to resolve the event from.
      */

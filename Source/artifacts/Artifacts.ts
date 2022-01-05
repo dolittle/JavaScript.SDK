@@ -5,7 +5,7 @@ import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { Artifact } from './Artifact';
+import { Artifact, isArtifact } from './Artifact';
 import { ArtifactNotAssociatedToAType } from './ArtifactNotAssociatedToAType';
 import { ArtifactTypeMap } from './ArtifactTypeMap';
 import { CannotHaveMultipleArtifactsAssociatedWithType } from './CannotHaveMultipleArtifactsAssociatedWithType';
@@ -59,46 +59,38 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Con
 
     /** @inheritdoc */
     getFor(type: Constructor<any>): TArtifact {
-        let artifact: TArtifact | undefined;
         for (const [associatedArtifact, associatedType] of this._associations) {
             if (associatedType === type) {
-                artifact = associatedArtifact;
+                return associatedArtifact;
             }
         }
-        if (!artifact) {
-            throw new TypeNotAssociatedToArtifact(this.getArtifactTypeName(), type);
-        }
-        return artifact;
+
+        throw new TypeNotAssociatedToArtifact(this.artifactTypeName, type);
     }
 
     /** @inheritdoc */
     resolveFrom(object: any, artifactOrArtifactId?: ArtifactOrId<TArtifact, TId>): TArtifact {
-        let artifact: TArtifact | undefined;
-        if (artifactOrArtifactId instanceof Artifact) {
-            artifact = artifactOrArtifactId;
+        if (isArtifact(artifactOrArtifactId)) {
+            return artifactOrArtifactId;
         } else if (artifactOrArtifactId !== undefined) {
-            artifact = this.createArtifact(artifactOrArtifactId);
+            return this.createArtifact(artifactOrArtifactId);
         } else if (object && this.hasFor(Object.getPrototypeOf(object).constructor)) {
-            artifact = this.getFor(Object.getPrototypeOf(object).constructor);
+            return this.getFor(Object.getPrototypeOf(object).constructor);
         }
 
-        if (!artifact) {
-            throw new UnableToResolveArtifact(this.getArtifactTypeName(), object);
-        }
-
-        return artifact;
+        throw new UnableToResolveArtifact(this.artifactTypeName, object);
     }
 
     /** @inheritdoc */
     associate(type: Constructor<any>, artifact: TArtifact): void {
-        this.throwIfMultipleTypesAssociatedWithArtifact(artifact, type);
         this.throwIfMultipleArtifactsAssociatedWithType(type, artifact);
+        this.throwIfMultipleTypesAssociatedWithArtifact(artifact, type);
         this._associations.set(artifact, type);
     }
 
-    protected abstract createArtifact(id: TId | Guid | string): TArtifact;
+    protected abstract readonly artifactTypeName: string;
 
-    protected abstract getArtifactTypeName(): string;
+    protected abstract createArtifact(id: TId | Guid | string): TArtifact;
 
     private throwIfMultipleArtifactsAssociatedWithType(type: Constructor<any>, artifact: TArtifact) {
         if (this.hasFor(type)) {
@@ -111,5 +103,4 @@ export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends Con
             throw new CannotHaveMultipleTypesAssociatedWithArtifact(artifact, type, this.getTypeFor(artifact));
         }
     }
-
 }

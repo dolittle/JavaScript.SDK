@@ -4,7 +4,7 @@
 import { Exception } from '@dolittle/rudiments';
 
 /**
- * Exception that gets thrown when getting artifact associated with a type and type is not associated to any artifact .
+ * Exception that gets thrown when getting artifact associated with a type and type is not associated to any artifact.
  */
 export class TypeNotAssociatedToArtifact extends Exception {
     /**
