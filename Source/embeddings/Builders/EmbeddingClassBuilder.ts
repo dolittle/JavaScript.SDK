@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid, IEquatable } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
@@ -14,8 +14,7 @@ import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
 import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
 import { Embedding } from '../Internal/Embedding';
 import { IEmbedding } from '../Internal/IEmbedding';
-import { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
-import { embedding as embeddingDecorator, getDecoratedEmbeddingType } from './embeddingDecorator';
+import { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 import { getOnDecoratedMethods } from './onDecorator';
 import { OnDecoratedEmbeddingMethod } from './OnDecoratedEmbeddingMethod';
 import { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
@@ -27,22 +26,23 @@ import { resolveUpdateToEvents as updateDecorator, getUpdateDecoratedMethod } fr
  * Represents a builder for building an embedding from a class.
  * @template T The embedding class type.
  */
-export class EmbeddingClassBuilder<T> {
-    private readonly _embeddingType: Constructor<T>;
-
+export class EmbeddingClassBuilder<T> implements IEquatable{
     /**
-     * Initializes a new instance of {@link  EmbeddingClassBuilder<T>}.
-     * @param {Constructor<T> | T} typeOrInstance - The embedding type or instance.
+     * Initializes a new instance of {@link  EmbeddingClassBuilder}.
+     * @param {EmbeddingDecoratedType} type - The decorated embedding type of the class.
      */
-    constructor(typeOrInstance: Constructor<T> | T) {
-        if (typeOrInstance instanceof Function) {
-            this._embeddingType = typeOrInstance;
-        } else {
-            this._embeddingType = Object.getPrototypeOf(typeOrInstance).constructor;
-            if (this._embeddingType === undefined) {
-                throw new CannotRegisterEmbeddingThatIsNotAClass(typeOrInstance);
-            }
+    constructor(readonly type: EmbeddingDecoratedType) {
+    }
+
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        if (this === other) return true;
+
+        if (other instanceof EmbeddingClassBuilder) {
+            return this.type === other.type;
         }
+
+        return false;
     }
 
     /**
@@ -52,40 +52,29 @@ export class EmbeddingClassBuilder<T> {
      * @returns {IEmbedding | undefined} The built embedding if successful.
      */
     build(eventTypes: IEventTypes, results: IClientBuildResults): IEmbedding<any> | undefined {
-        results.addInformation(`Building embedding of type ${this._embeddingType.name}`);
-        const decoratedType = getDecoratedEmbeddingType(this._embeddingType);
-        if (decoratedType === undefined) {
-            results.addFailure(`The embedding class ${this._embeddingType.name} must be decorated with an @${embeddingDecorator.name} decorator`);
-            return;
-        }
-        results.addInformation(`Building embedding ${decoratedType.embeddingId} from type ${this._embeddingType.name}`);
+        results.addInformation(`Building embedding ${this.type.embeddingId} from type ${this.type.type.name}`);
 
-        const getUpdateMethod = getUpdateDecoratedMethod(this._embeddingType);
+        const getUpdateMethod = getUpdateDecoratedMethod(this.type.type);
         if (getUpdateMethod === undefined) {
-            results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${updateDecorator.name} decorator`);
+            results.addFailure(`The embedding class ${this.type.type.name} must have a method decorated with @${updateDecorator.name} decorator`);
             return;
         }
         const updateMethod = this.createUpdateMethod(getUpdateMethod);
 
-        const getDeletionMethod = getDeletionDecoratedMethod(this._embeddingType);
+        const getDeletionMethod = getDeletionDecoratedMethod(this.type.type);
         if (getDeletionMethod === undefined) {
-            results.addFailure(`The embedding class ${this._embeddingType.name} must have a method decorated with @${deleteDecorator.name} decorator`);
+            results.addFailure(`The embedding class ${this.type.type.name} must have a method decorated with @${deleteDecorator.name} decorator`);
             return;
         }
         const deleteMethod = this.createDeleteMethod(getDeletionMethod);
 
         const events = new EventTypeMap<EmbeddingProjectCallback<T>>();
-        if (!this.tryAddAllOnMethods(events, this._embeddingType, eventTypes)) {
-            results.addFailure(`Could not create embedding ${this._embeddingType.name} because it contains invalid on methods`);
+        if (!this.tryAddAllOnMethods(events, this.type.type, eventTypes)) {
+            results.addFailure(`Could not create embedding ${this.type.type.name} because it contains invalid on methods`);
             return;
         }
 
-        return new Embedding<T>(
-            decoratedType.embeddingId,
-            decoratedType.type,
-            events,
-            updateMethod,
-            deleteMethod);
+        return new Embedding<T>(this.type.embeddingId, this.type.type, events, updateMethod, deleteMethod);
     }
 
     private createUpdateMethod(method: UpdateDecoratedMethod): EmbeddingUpdateCallback<any> {

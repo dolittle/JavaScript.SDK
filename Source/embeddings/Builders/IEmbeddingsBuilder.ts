@@ -23,12 +23,5 @@ export abstract class IEmbeddingsBuilder {
      * @param type - The type to register as a embedding.
      * @returns {IEmbeddingsBuilder} The builder for continuation.
      */
-     abstract registerEmbedding<T = any>(type: Constructor<T>): IEmbeddingsBuilder;
-
-    /**
-     * Register an instance as an embedding.
-     * @param instance - The instance to register as an event handler.
-     * @returns {IEmbeddingsBuilder} The builder for continuation.
-     */
-    abstract registerEmbedding<T = any>(instance: T): IEmbeddingsBuilder;
+     abstract registerEmbedding<T>(type: Constructor<T>): IEmbeddingsBuilder;
 }

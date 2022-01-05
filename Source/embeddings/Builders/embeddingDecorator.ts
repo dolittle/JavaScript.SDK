@@ -39,8 +39,8 @@ export function isDecoratedEmbeddingType(type: Constructor<any>): boolean {
 /**
  * Gets the {@link EmbeddingDecoratedType} of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated embedding type for.
- * @returns {EmbeddingDecoratedType | undefined} The decorated embedding type if decorated.
+ * @returns {EmbeddingDecoratedType} The decorated embedding type if decorated.
  */
-export function getDecoratedEmbeddingType(type: Constructor<any>): EmbeddingDecoratedType | undefined {
-    return getMetadata(type);
+export function getDecoratedEmbeddingType(type: Constructor<any>): EmbeddingDecoratedType {
+    return getMetadata(type, true, 'Classes used as embeddings must be decorated');
 }

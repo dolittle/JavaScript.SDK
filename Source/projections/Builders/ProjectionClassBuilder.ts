@@ -47,10 +47,8 @@ export class ProjectionClassBuilder<T> implements IEquatable {
      * @returns {IProjection | undefined} The built projection if successful.
      */
     build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
-
-        results.addInformation(`Building projection of type ${this.type.type.name}`);
-
         results.addInformation(`Building projection ${this.type.projectionId} processing events in scope ${this.type.scopeId} from type ${this.type.type.name}`);
+
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
         if (!this.tryAddAllOnMethods(events, this.type.type, eventTypes)) {
             results.addFailure(`Could not create projection ${this.type.type.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');

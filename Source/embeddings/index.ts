@@ -4,7 +4,6 @@
 export * from './_exports';
 
 export {
-    CannotRegisterEmbeddingThatIsNotAClass,
     DeletionDecoratedMethod,
     EmbeddingAlreadyHasADeletionDecorator,
     EmbeddingAlreadyHasADeletionMethod,

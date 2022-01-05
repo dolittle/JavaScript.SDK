@@ -4,7 +4,6 @@
 export * from './_exports';
 
 export {
-    CannotRegisterProjectionThatIsNotAClass,
     CouldNotCreateInstanceOfProjection,
     IProjectionBuilder,
     IProjectionBuilderForReadModel,
