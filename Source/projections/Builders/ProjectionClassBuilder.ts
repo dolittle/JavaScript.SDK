@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
+import { Guid, IEquatable } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation } from '@dolittle/sdk.artifacts';
@@ -13,32 +13,31 @@ import { IProjection } from '../IProjection';
 import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
-import { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
-import { projection as projectionDecorator, getDecoratedProjectionType } from './projectionDecorator';
 import { getOnDecoratedMethods } from './onDecorator';
+import { ProjectionDecoratedType } from './ProjectionDecoratedType';
 
 /**
  * Represents a builder for building a projection from a class.
  * @template T The type of the projection class.
  */
-export class ProjectionClassBuilder<T> {
-    private readonly _projectionType: Constructor<T>;
-
+export class ProjectionClassBuilder<T> implements IEquatable {
     /**
      * Initialises a new instance of the {@link FailureReason} class.
-     * @param {Constructor<T> | T} typeOrInstance - The type or instance of the class to build the projection from.
+     * @param {ProjectionDecoratedType} type - The decorated projection type of the class.
      */
-    constructor(typeOrInstance: Constructor<T> | T) {
-        if (typeOrInstance instanceof Function) {
-            this._projectionType = typeOrInstance;
+    constructor(readonly type: ProjectionDecoratedType) {
+    }
 
-        } else {
-            this._projectionType = Object.getPrototypeOf(typeOrInstance).constructor;
-            if (this._projectionType === undefined) {
-                throw new CannotRegisterProjectionThatIsNotAClass(typeOrInstance);
-            }
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        if (this === other) return true;
+
+        if (other instanceof ProjectionClassBuilder) {
+            return this.type === other.type;
         }
+
+        return false;
     }
 
     /**
@@ -49,20 +48,15 @@ export class ProjectionClassBuilder<T> {
      */
     build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
 
-        results.addInformation(`Building projection of type ${this._projectionType.name}`);
-        const decoratedType = getDecoratedProjectionType(this._projectionType);
-        if (decoratedType === undefined) {
-            results.addFailure(`The projection class ${this._projectionType.name} must be decorated with an @${projectionDecorator.name} decorator`);
-            return;
-        }
+        results.addInformation(`Building projection of type ${this.type.type.name}`);
 
-        results.addInformation(`Building projection ${decoratedType.projectionId} processing events in scope ${decoratedType.scopeId} from type ${this._projectionType.name}`);
+        results.addInformation(`Building projection ${this.type.projectionId} processing events in scope ${this.type.scopeId} from type ${this.type.type.name}`);
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
-        if (!this.tryAddAllOnMethods(events, this._projectionType, eventTypes)) {
-            results.addFailure(`Could not create projection ${this._projectionType.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
+        if (!this.tryAddAllOnMethods(events, this.type.type, eventTypes)) {
+            results.addFailure(`Could not create projection ${this.type.type.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
             return;
         }
-        return new Projection<T>(decoratedType.projectionId, decoratedType.type, decoratedType.scopeId, events);
+        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events);
     }
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
