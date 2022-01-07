@@ -12,26 +12,3 @@ export { EventHandlerSignature } from './EventHandlerSignature';
 export { IEventHandler } from './IEventHandler';
 export { IEventHandlers } from './IEventHandlers';
 export { MissingEventHandlerForType } from './MissingEventHandlerForType';
-
-// export * as internal from './Internal';
-
-// export {
-//     CannotRegisterEventHandlerThatIsNotAClass,
-//     CouldNotCreateInstanceOfEventHandler,
-//     EventHandlerBuilder,
-//     EventHandlerBuilderCallback,
-//     EventHandlerClassBuilder,
-//     EventHandlerDecoratedType,
-//     EventHandlerDecoratedTypes,
-//     eventHandler,
-//     EventHandlerMethodsBuilder,
-//     EventHandlerOptions,
-//     EventHandlersBuilder,
-//     EventHandlersBuilderCallback,
-//     HandlesDecoratedMethod,
-//     HandlesDecoratedMethods,
-//     handles,
-//     IEventHandlerBuilder,
-//     IEventHandlerMethodsBuilder,
-//     IEventHandlersBuilder,
-// } from './Builder';

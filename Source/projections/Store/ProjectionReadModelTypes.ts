@@ -3,101 +3,53 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { IdentifierTypeMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { ProjectionId } from '../ProjectionId';
-import { CannotHaveMultipleScopedProjectionIdsAssociatedWithType } from './CannotHaveMultipleScopedProjectionIdsAssociatedWithType';
-import { CannotHaveMultipleTypesAssociatedWithScopedProjectionId } from './CannotHaveMultipleTypesAssociatedWithScopedProjectionId';
 import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { ScopedProjectionId } from './ScopedProjectionId';
-import { ScopedProjectionIdNotAssociatedToAType } from './ScopedProjectionIdNotAssociatedToAType';
-import { TypeNotAssociatedToScopedProjectionId } from './TypeNotAssociatedToScopedProjectionId';
+import { TypeMap } from '@dolittle/sdk.artifacts';
 
 /**
  * Represents an implementation of {@link IProjectionReadModelTypes}.
  */
-export class ProjectionReadModelTypes extends IProjectionReadModelTypes {
-    private readonly _scopesById: IdentifierTypeMap<ProjectionId, IdentifierTypeMap<ScopeId, Constructor<any>>> = new IdentifierTypeMap<ProjectionId, IdentifierTypeMap<ScopeId, Constructor<any>>>();
-
-    /** @inheritdoc */
-    getAll(): ScopedProjectionId[] {
-        const scopedIdentifiers: ScopedProjectionId[] = [];
-
-        for (const [projectionId, scopes] of this._scopesById.entries()) {
-            for (const scopeId of scopes.keys()) {
-                scopedIdentifiers.push(new ScopedProjectionId(projectionId, scopeId));
-            }
-        }
-
-        return scopedIdentifiers;
+export class ProjectionReadModelTypes extends TypeMap<ScopedProjectionId, [string, string]> implements IProjectionReadModelTypes {
+    /**
+     * Initialises a new instance of the {@link ProjectionReadModelTypes} class.
+     */
+    constructor() {
+        super(ScopedProjectionId, _ => [_.projectionId.value.toString(), _.scopeId.value.toString()], 2);
     }
 
     /** @inheritdoc */
-    hasTypeFor(projectionId: ProjectionId, scopeId: ScopeId): boolean {
-        if (!this._scopesById.has(projectionId)) return false;
-        return this._scopesById.get(projectionId)!.has(scopeId);
+    hasTypeFor(projection: ScopedProjectionId | ProjectionId, scope?: ScopeId): boolean {
+        if (scope !== undefined) {
+            return super.hasTypeFor(new ScopedProjectionId(projection as ProjectionId, scope));
+        }
+        return super.hasTypeFor(projection as ScopedProjectionId);
     }
 
     /** @inheritdoc */
-    getTypeFor(projectionId: ProjectionId, scopeId: ScopeId): Constructor<any> {
-        if (this._scopesById.has(projectionId)) {
-            if (this._scopesById.get(projectionId)!.has(scopeId)) {
-                return this._scopesById.get(projectionId)!.get(scopeId)!;
-            }
+    getTypeFor(projection: ScopedProjectionId | ProjectionId, scope?: ScopeId): Constructor<any> {
+        if (scope !== undefined) {
+            return super.getTypeFor(new ScopedProjectionId(projection as ProjectionId, scope));
         }
-
-        throw new ScopedProjectionIdNotAssociatedToAType(new ScopedProjectionId(projectionId, scopeId));
+        return super.getTypeFor(projection as ScopedProjectionId);
     }
 
     /** @inheritdoc */
-    hasFor(type: Constructor<any>): boolean {
-        for (const [_, scopes] of this._scopesById.entries()) {
-            for (const [_, associatedType] of scopes.entries()) {
-                if (associatedType === type) {
-                    return true;
-                }
-            }
+    resolveFrom(object: any, projection?: ScopedProjectionId | ProjectionId, scope?: ScopeId): ScopedProjectionId {
+        if (scope !== undefined) {
+            return super.resolveFrom(object, new ScopedProjectionId(projection as ProjectionId, scope));
         }
-        return false;
+        return super.resolveFrom(object, projection as ScopedProjectionId);
     }
 
     /** @inheritdoc */
-    getFor(type: Constructor<any>): ScopedProjectionId {
-        for (const [projectionId, scopes] of this._scopesById.entries()) {
-            for (const [scopeId, associatedType] of scopes.entries()) {
-                if (associatedType === type) {
-                    return new ScopedProjectionId(projectionId, scopeId);
-                }
-            }
+    associate(type: Constructor<any>, projection: ScopedProjectionId | ProjectionId, scope?: ScopeId): void {
+        if (scope !== undefined) {
+            super.associate(type, new ScopedProjectionId(projection as ProjectionId, scope));
         }
-
-        throw new TypeNotAssociatedToScopedProjectionId(type);
-    }
-
-    /** @inheritdoc */
-    associate(type: Constructor<any>, projectionId: ProjectionId, scopeId: ScopeId): void {
-        this.throwIfMultipleIdentifiersAssociatedWithType(type, projectionId, scopeId);
-        this.throwIfMultipleTypesAssociatedWithIdentifier(projectionId, scopeId, type);
-
-        if (this._scopesById.has(projectionId)) {
-            this._scopesById.get(projectionId)!.set(scopeId, type);
-        } else {
-            const scopes = new IdentifierTypeMap<ScopeId, Constructor<any>>();
-            scopes.set(scopeId, type);
-            this._scopesById.set(projectionId, scopes);
-        }
-    }
-
-    private throwIfMultipleIdentifiersAssociatedWithType(type: Constructor<any>, projectionId: ProjectionId, scopeId: ScopeId) {
-        if (this.hasFor(type)) {
-            throw new CannotHaveMultipleScopedProjectionIdsAssociatedWithType(type, new ScopedProjectionId(projectionId, scopeId), this.getFor(type));
-        }
-    }
-
-    private throwIfMultipleTypesAssociatedWithIdentifier(projectionId: ProjectionId, scopeId: ScopeId, type: Constructor<any>) {
-        if (this.hasTypeFor(projectionId, scopeId)) {
-            throw new CannotHaveMultipleTypesAssociatedWithScopedProjectionId(new ScopedProjectionId(projectionId, scopeId), type, this.getTypeFor(projectionId, scopeId));
-        }
+        super.associate(type, projection as ScopedProjectionId);
     }
 }

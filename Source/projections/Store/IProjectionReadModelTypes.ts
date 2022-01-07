@@ -3,6 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 
+import { ITypeMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { ProjectionId } from '../ProjectionId';
@@ -11,48 +12,62 @@ import { ScopedProjectionId } from './ScopedProjectionId';
 /**
  * Defines a system for working with projection read model types associated with projections.
  */
-export abstract class IProjectionReadModelTypes {
+export abstract class IProjectionReadModelTypes extends ITypeMap<ScopedProjectionId> {
     /**
-     * Gets all identifers.
-     * @returns {ScopedProjectionId[]} All identifiers associated with a type.
-     */
-    abstract getAll(): ScopedProjectionId[];
-
-    /**
-     * Check if there is a type associated with a projection and scope identifier.
-     * @param {ProjectionId} projectionId - Projection identifier.
-     * @param {ScopeId} scopeId - Scope identifier.
+     * Check if there is a type associated with a given projection.
+     * @param {ScopedProjectionId} projection - Projection to check for.
      * @returns {boolean} True if there is, false if not.
      */
-    abstract hasTypeFor(projectionId: ProjectionId, scopeId: ScopeId): boolean;
-
+    abstract hasTypeFor(projection: ScopedProjectionId): boolean;
     /**
-     * Get type for a given projection and scope identifier.
-     * @param {ProjectionId} projectionId - Projection identifier.
-     * @param {ScopeId} scopeId - Scope identifier.
-     * @returns {Constructor<any>} Type for identifier.
-     */
-    abstract getTypeFor(projectionId: ProjectionId, scopeId: ScopeId): Constructor<any>;
-
-    /**
-     * Check if there is a projection and scope identifier associated with a given type.
-     * @param {Constructor<any>} type - Type to check for.
+     * Check if there is a type associated with a given projection.
+     * @param {ProjectionId} projection - Projection id to check for.
+     * @param {ScopeId} scope - Scope id to check for.
      * @returns {boolean} True if there is, false if not.
      */
-    abstract hasFor(type: Constructor<any>): boolean;
+    abstract hasTypeFor(projection: ProjectionId, scope: ScopeId): boolean;
 
     /**
-     * Get the projection and scope identifier associated with a given type.
-     * @param {Constructor<any>} type - Type to get for.
-     * @returns {ScopedProjectionId} The identifier associated.
+     * Get the type associated with a given projection.
+     * @param {ScopedProjectionId} projection - Projection to get type for.
+     * @returns {Constructor<any>} The type associated with the projection.
      */
-    abstract getFor(type: Constructor<any>): ScopedProjectionId;
+    abstract getTypeFor(projection: ScopedProjectionId): Constructor<any>;
+    /**
+     * Get the type associated with a given projection.
+     * @param {ProjectionId} projection - Projection id to get for.
+     * @param {ScopeId} scope - Scope id to get for.
+     * @returns {Constructor<any>} The type associated with the projection.
+     */
+    abstract getTypeFor(projection: ProjectionId, scope: ScopeId): Constructor<any>;
 
     /**
-     * Associate a type with an identifier.
-     * @param {Constructor<any>} type - Type to associate.
-     * @param {ProjectionId} projectionId - Projection identifier to associate with.
-     * @param {ScopeId} scopeId - Scope identifier to associate with.
+     * Resolves a projection from optional input or the given object.
+     * @param {any} object - Object to resolve for.
+     * @param {ScopedProjectionId} [projection] - Optional input projection.
+     * @returns {ScopedProjectionId} Resolved projection.
      */
-    abstract associate(type: Constructor<any>, projectionId: ProjectionId, scopeId: ScopeId): void;
+    abstract resolveFrom(object: any, projection?: ScopedProjectionId): ScopedProjectionId;
+    /**
+     * Resolves a projection from optional input or the given object.
+     * @param {any} object - Object to resolve for.
+     * @param {ProjectionId} [projection] - Optional input projection id.
+     * @param {ScopeId} [scope] - Optional input scope id.
+     * @returns {ScopedProjectionId} Resolved projection.
+     */
+    abstract resolveFrom(object: any, projection?: ProjectionId, scope?: ScopeId): ScopedProjectionId;
+
+    /**
+     * Associate a type with a projection.
+     * @param {Constructor} type - The type to associate.
+     * @param {ScopedProjectionId} projection - The projection to associate with.
+     */
+    abstract associate(type: Constructor<any>, projection: ScopedProjectionId): void;
+    /**
+     * Associate a type with a projection.
+     * @param {Constructor} type - The type to associate.
+     * @param {ProjectionId} projection - The projection id to associate with.
+     * @param {ScopeId} scope - The scope id to associate with.
+     */
+    abstract associate(type: Constructor<any>, projection: ProjectionId, scope: ScopeId): void;
 }

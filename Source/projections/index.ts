@@ -31,21 +31,16 @@ export {
 } from './Builders/_exports';
 
 export {
-    CannotHaveMultipleScopedProjectionIdsAssociatedWithType,
-    CannotHaveMultipleTypesAssociatedWithScopedProjectionId,
     CurrentState,
     CurrentStateType,
     FailedToGetProjection,
     FailedToGetProjectionState,
     IProjectionReadModelTypes,
     IProjectionStore,
-    NoProjectionAssociatedWithType,
     ProjectionReadModelTypes,
     ProjectionStore,
     ScopedProjectionId,
-    ScopedProjectionIdNotAssociatedToAType,
     TypeIsNotAProjection,
-    TypeNotAssociatedToScopedProjectionId,
 } from './Store/_exports';
 
 export {
