@@ -7,6 +7,7 @@ export { CannotHaveMultipleKeysAssociatedWithType } from './CannotHaveMultipleKe
 export { CannotHaveMultipleTypesAssociatedWithKey } from './CannotHaveMultipleTypesAssociatedWithKey';
 export { ComplexValueMap, DecomposedKey } from './ComplexMap';
 export { IncorrectNumberOfPrimitiveKeysProvided } from './IncorrectNumberOfPrimitiveKeysProvided';
+export { ITypeMap } from './ITypeMap';
 export { KeyNotAssociatedWithType } from './KeyNotAssociatedWithType';
 export { NestedMap, PrimitiveKey } from './NestedMap';
 export { TypeMap } from './TypeMap';

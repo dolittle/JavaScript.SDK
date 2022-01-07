@@ -16,6 +16,6 @@ export class TypeNotAssociatedWithKey extends Exception {
      * @param {Constructor} keyType - The type of the association key.
      */
     constructor(type: Constructor<any>, keyType: Constructor<any>) {
-        super(`'${type}' does not have an ${keyType.name} association.`);
+        super(`'${type.name}' does not have an ${keyType.name} association.`);
     }
 }

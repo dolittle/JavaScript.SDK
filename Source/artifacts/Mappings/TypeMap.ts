@@ -6,6 +6,7 @@ import { CannotHaveMultipleKeysAssociatedWithType } from './CannotHaveMultipleKe
 import { CannotHaveMultipleTypesAssociatedWithKey } from './CannotHaveMultipleTypesAssociatedWithKey';
 
 import { ComplexValueMap, DecomposedKey } from './ComplexMap';
+import { ITypeMap } from './ITypeMap';
 import { KeyNotAssociatedWithType } from './KeyNotAssociatedWithType';
 import { TypeNotAssociatedWithKey } from './TypeNotAssociatedWithKey';
 import { UnableToResolveKey } from './UnableToResolveKey';
@@ -15,7 +16,7 @@ import { UnableToResolveKey } from './UnableToResolveKey';
  * @template K The type of the key.
  * @template D The type of the decomposed complex key type.
  */
-export class TypeMap<K, D extends DecomposedKey> {
+export class TypeMap<K, D extends DecomposedKey> extends ITypeMap<K> {
     private readonly _keysToTypes: ComplexValueMap<K, Constructor<any>, D>;
     private readonly _typesToKeys: Map<Constructor<any>, K>;
 
@@ -30,74 +31,48 @@ export class TypeMap<K, D extends DecomposedKey> {
         decomposer: (key: K) => D,
         depth: D['length']
     ) {
+        super();
         this._keysToTypes = new ComplexValueMap(_keyType, decomposer, depth);
         this._typesToKeys = new Map();
     }
 
-    /**
-     * Check if there is a key associated with a given type.
-     * @param {Constructor} type - Type to check for.
-     * @returns {boolean} True if there is, false if not.
-     */
+    /** @inheritdoc */
     hasFor(type: Constructor<any>): boolean {
         return this._typesToKeys.has(type);
     }
 
-    /**
-     * Get the key associated with a given type.
-     * @param {Constructor} type - Type to get key for.
-     * @returns {K} The key associated with the type.
-     */
+    /** @inheritdoc */
     getFor(type: Constructor<any>): K {
-        if (this.hasFor(type)) {
+        if (!this.hasFor(type)) {
             throw new TypeNotAssociatedWithKey(type, this._keyType);
         }
         return this._typesToKeys.get(type)!;
     }
 
-    /**
-     * Gets all the keys that is associated with a type.
-     * @returns {K[]} All associated keys type.
-     */
+    /** @inheritdoc */
     getAll(): K[] {
         return Array.from(this._typesToKeys.values());
     }
 
-    /**
-     * Check if there is a type associated with a given key.
-     * @param {K} key - Key to check for.
-     * @returns {boolean} True if there is, false if not.
-     */
+    /** @inheritdoc */
     hasTypeFor(key: K): boolean {
         return this._keysToTypes.has(key);
     }
 
-    /**
-     * Get the type associated with a given key.
-     * @param {K} key - Key to get type for.
-     * @returns {Constructor<any>} The type associated with the key.
-     */
+    /** @inheritdoc */
     getTypeFor(key: K): Constructor<any> {
-        if (this.hasTypeFor(key)) {
+        if (!this.hasTypeFor(key)) {
             throw new KeyNotAssociatedWithType(key);
         }
         return this._keysToTypes.get(key)!;
     }
 
-    /**
-     * Gets all the keys that is associated with a type.
-     * @returns {Constructor[]} All associated keys type.
-     */
+    /** @inheritdoc */
     getAllTypes(): Constructor<any>[] {
         return Array.from(this._typesToKeys.keys());
     }
 
-    /**
-     * Resolves a key from optional input or the given object.
-     * @param {any} object - Object to resolve for.
-     * @param {K} [input] - Optional input key.
-     * @returns {K} Resolved key.
-     */
+    /** @inheritdoc */
     resolveFrom(object: any, input?: K): K {
         if (input !== undefined) {
             return input;
@@ -111,11 +86,7 @@ export class TypeMap<K, D extends DecomposedKey> {
         throw new UnableToResolveKey(object, this._keyType);
     }
 
-    /**
-     * Associate a type with a key.
-     * @param {Constructor} type - The type to associate.
-     * @param {K} key - The key to associate with.
-     */
+    /** @inheritdoc */
     associate(type: Constructor<any>, key: K): void {
         this.throwIfTypeAlreadyAssociatedWithKey(type, key);
         this.throwIfKeyAlreadyAssociatedWithType(key, type);
