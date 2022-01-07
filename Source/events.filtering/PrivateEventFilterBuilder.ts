@@ -3,10 +3,11 @@
 
 import { Guid, IEquatable } from '@dolittle/rudiments';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { FilterId } from './FilterId';
+import { FilterModelId } from './FilterModelId';
 import { IFilterProcessor } from './IFilterProcessor';
 import { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder';
 import { IPrivateEventFilterBuilder } from './IPrivateEventFilterBuilder';
@@ -24,14 +25,18 @@ export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder implem
     /**
      * Initializes a new instance of {@link PrivateEventFilterBuilder}.
      * @param {FilterId} _filterId - Identifier of the filter.
+     * @param {IModelBuilder} _modelBuilder - For binding the event filter to its identifier.
      */
-    constructor(private _filterId: FilterId) {
+    constructor(private readonly _filterId: FilterId, private readonly _modelBuilder: IModelBuilder) {
         super();
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this);
     }
 
     /** @inheritdoc */
     inScope(scopeId: ScopeId | Guid | string): IPrivateEventFilterBuilder {
+        this._modelBuilder.unbindIdentifierFromProcessorBuilder(this._modelId, this);
         this._scopeId = ScopeId.from(scopeId);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this);
         return this;
     }
 
@@ -65,5 +70,9 @@ export class PrivateEventFilterBuilder extends IPrivateEventFilterBuilder implem
         }
 
         return this._innerBuilder.build(this._filterId, this._scopeId, eventTypes, results);
+    }
+
+    private get _modelId(): FilterModelId {
+        return new FilterModelId(this._filterId, this._scopeId);
     }
 }

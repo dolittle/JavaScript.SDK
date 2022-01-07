@@ -31,8 +31,7 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     /** @inheritdoc */
     createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
         const identifier = FilterId.from(filterId);
-        const builder = new PrivateEventFilterBuilder(identifier);
-        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
+        const builder = new PrivateEventFilterBuilder(identifier, this._modelBuilder);
         callback(builder);
         return this;
     }
@@ -40,8 +39,7 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     /** @inheritdoc */
     createPublicFilter(filterId: string | FilterId | Guid, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder {
         const identifier = FilterId.from(filterId);
-        const builder = new PublicEventFilterBuilder(identifier);
-        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
+        const builder = new PublicEventFilterBuilder(identifier, this._modelBuilder);
         callback(builder);
         return this;
     }

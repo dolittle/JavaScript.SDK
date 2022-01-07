@@ -3,14 +3,15 @@
 
 import { IEquatable } from '@dolittle/rudiments';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
-import { IEventTypes } from '@dolittle/sdk.events';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
+import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { PublicEventFilterProcessor } from './Internal/PublicEventFilterProcessor';
 import { FilterId } from './FilterId';
 import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 import { IFilterProcessor } from './IFilterProcessor';
 import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
+import { FilterModelId } from './FilterModelId';
 
 /**
  * Represents an implementation of {@link IPublicEventFilterBuilder}.
@@ -21,9 +22,11 @@ export class PublicEventFilterBuilder extends IPublicEventFilterBuilder implemen
     /**
      * Initializes a new instance of {@link PublicEventFilterBuilder}.
      * @param {FilterId} _filterId - Identifier of the filter.
+     * @param {IModelBuilder} _modelBuilder - For binding the event filter to its identifier.
      */
-    constructor(private _filterId: FilterId) {
+    constructor(private readonly _filterId: FilterId, private readonly _modelBuilder: IModelBuilder) {
         super();
+        this._modelBuilder.bindIdentifierToProcessorBuilder(new FilterModelId(_filterId, ScopeId.default), this);
     }
 
     /** @inheritdoc */
