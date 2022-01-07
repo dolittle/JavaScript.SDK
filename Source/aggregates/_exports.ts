@@ -10,7 +10,6 @@ export { AggregateRootIdentifierNotSet } from './AggregateRootIdentifierNotSet';
 export { AggregateRootOperations } from './AggregateRootOperations';
 export { AggregateRootType, isAggregateRootType } from './AggregateRootType';
 export { AggregateRootTypeAlias, isAggregateRootTypeAlias } from './AggregateRootTypeAlias';
-export { AggregateRootTypeMap } from './AggregateRootTypeMap';
 export { AggregateRootTypeOptions } from './AggregateRootTypeOptions';
 export { AggregateRootTypes } from './AggregateRootTypes';
 export { AppliedEvent } from './AppliedEvent';

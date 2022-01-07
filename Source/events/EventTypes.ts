@@ -5,24 +5,21 @@ import { Guid } from '@dolittle/rudiments';
 
 import { EventType } from './EventType';
 import { EventTypeId } from './EventTypeId';
-import { EventTypeMap } from './EventTypeMap';
 import { IEventTypes } from './IEventTypes';
 
 /**
  * Represents an implementation of {@link IEventTypes}.
  */
 export class EventTypes extends IEventTypes {
-    protected artifactTypeName = 'EventType';
-
     /**
      * Initialises a new instance of the {@link EventTypes} class.
      */
     constructor() {
-        super(new EventTypeMap());
+        super(EventType);
     }
 
     /** @inheritdoc */
-    protected createArtifact(id: string | EventTypeId | Guid): EventType {
-        return new EventType(EventTypeId.from(id));
+    protected createArtifactFrom(id: string | EventTypeId | Guid): EventType {
+        return EventType.from(id);
     }
 }

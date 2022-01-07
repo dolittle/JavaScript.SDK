@@ -15,7 +15,6 @@ import { TypeMap } from './Mappings/TypeMap';
  * @template TId The id type of the artifact.
  */
 export abstract class Artifacts<TArtifact extends Artifact<TId>, TId extends ConceptAs<Guid, string>> extends TypeMap<TArtifact, [string, number]> implements IArtifacts<TArtifact, TId> {
-
     /**
      * Initialises a new instance of the {@link Artifacts} class.
      * @param {Constructor} artifactType - The type of the artifact.

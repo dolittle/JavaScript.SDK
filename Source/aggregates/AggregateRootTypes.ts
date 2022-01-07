@@ -6,24 +6,21 @@ import { Guid } from '@dolittle/rudiments';
 import { AggregateRootId } from '@dolittle/sdk.events';
 
 import { AggregateRootType } from './AggregateRootType';
-import { AggregateRootTypeMap } from './AggregateRootTypeMap';
 import { IAggregateRootTypes } from './IAggregateRootTypes';
 
 /**
  * Represents an implementation of {@link IAggregateRootTypes}.
  */
 export class AggregateRootTypes extends IAggregateRootTypes {
-    protected artifactTypeName = 'AggregateRootType';
-
     /**
-     * Initialises a new instance of the {@link AggregateRootType} class.
+     * Initialises a new instance of the {@link AggregateRootTypes} class.
      */
     constructor() {
-        super(new AggregateRootTypeMap());
+        super(AggregateRootType);
     }
 
     /** @inheritdoc */
-    protected createArtifact(id: string | AggregateRootId | Guid): AggregateRootType {
-        return new AggregateRootType(AggregateRootId.from(id));
+    protected createArtifactFrom(id: string | AggregateRootId | Guid): AggregateRootType {
+        return AggregateRootType.from(id);
     }
 }
