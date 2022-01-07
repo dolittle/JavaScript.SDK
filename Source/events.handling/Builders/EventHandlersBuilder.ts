@@ -12,6 +12,7 @@ import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { eventHandler as eventHandlerDecorator, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 import { IEventHandlersBuilder } from './IEventHandlersBuilder';
+import { EventHandlerModelId } from '../EventHandlerModelId';
 
 /**
  * Represents an implementation of {@link IEventHandlersBuilder}.
@@ -19,7 +20,7 @@ import { IEventHandlersBuilder } from './IEventHandlersBuilder';
 export class EventHandlersBuilder extends IEventHandlersBuilder {
     /**
      * Initialises a new instance of the {@link EventHandlersBuilder} class.
-     * @param {IModelBuilder} _modelBuilder - For binding event filters to identifiers.
+     * @param {IModelBuilder} _modelBuilder - For binding event handlers to identifiers.
      * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
     constructor(
@@ -32,8 +33,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
     /** @inheritdoc */
     createEventHandler(eventHandlerId: string | EventHandlerId | Guid, callback: EventHandlerBuilderCallback): IEventHandlersBuilder {
         const identifier = EventHandlerId.from(eventHandlerId);
-        const builder = new EventHandlerBuilder(identifier);
-        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
+        const builder = new EventHandlerBuilder(identifier, this._modelBuilder);
         callback(builder);
         return this;
     }
@@ -55,7 +55,7 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
         }
 
         const eventHandlerType = getDecoratedEventHandlerType(type);
-        const identifier = eventHandlerType.eventHandlerId;
+        const identifier = new EventHandlerModelId(eventHandlerType.eventHandlerId, eventHandlerType.scopeId);
         const builder = new EventHandlerClassBuilder(eventHandlerType, instance);
         this._modelBuilder.bindIdentifierToType(identifier, type);
         this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);

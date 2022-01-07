@@ -3,13 +3,14 @@
 
 import { Guid, IEquatable } from '@dolittle/rudiments';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
 import { EventHandler } from '../EventHandler';
 import { EventHandlerAlias, EventHandlerAliasLike } from '../EventHandlerAlias';
 import { EventHandlerId } from '../EventHandlerId';
+import { EventHandlerModelId } from '../EventHandlerModelId';
 import { EventHandlerSignature } from '../EventHandlerSignature';
 import { IEventHandler } from '../IEventHandler';
 import { EventHandlerMethodsBuilder } from './EventHandlerMethodsBuilder';
@@ -28,9 +29,11 @@ export class EventHandlerBuilder extends IEventHandlerBuilder implements IEquata
     /**
      * Initializes a new instance of {@link EventHandlerBuilder}.
      * @param {EventHandlerId} _eventHandlerId - The unique identifier of the event handler to build for.
+     * @param {IModelBuilder} _modelBuilder - For binding the event handler to its identifier.
      */
-    constructor(private _eventHandlerId: EventHandlerId) {
+    constructor(private readonly _eventHandlerId: EventHandlerId, private readonly _modelBuilder: IModelBuilder) {
         super();
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this);
     }
 
     /** @inheritdoc */
@@ -49,7 +52,9 @@ export class EventHandlerBuilder extends IEventHandlerBuilder implements IEquata
 
     /** @inheritdoc */
     inScope(scopeId: string | ScopeId | Guid): IEventHandlerBuilder {
+        this._modelBuilder.unbindIdentifierFromProcessorBuilder(this._modelId, this);
         this._scopeId = ScopeId.from(scopeId);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this);
         return this;
     }
 
@@ -83,5 +88,9 @@ export class EventHandlerBuilder extends IEventHandlerBuilder implements IEquata
             return;
         }
         return new EventHandler(this._eventHandlerId, this._scopeId, this._partitioned, eventTypeToMethods, this._alias);
+    }
+
+    private get _modelId(): EventHandlerModelId {
+        return new EventHandlerModelId(this._eventHandlerId, this._scopeId);
     }
 }

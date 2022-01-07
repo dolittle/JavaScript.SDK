@@ -6,7 +6,8 @@ export * as Internal from './Internal/_exports';
 
 export { EventHandler } from './EventHandler';
 export { EventHandlerAlias, EventHandlerAliasLike } from './EventHandlerAlias';
-export { EventHandlerId } from './EventHandlerId';
+export { EventHandlerId, isEventHandlerId } from './EventHandlerId';
+export { EventHandlerModelId, isEventHandlerModelId } from './EventHandlerModelId';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlerSignature } from './EventHandlerSignature';
 export { IEventHandler } from './IEventHandler';
