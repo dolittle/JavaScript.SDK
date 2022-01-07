@@ -7,6 +7,7 @@ export { AggregateOf } from './AggregateOf';
 export { AggregateRoot } from './AggregateRoot';
 export { AggregateRootAction } from './AggregateRootAction';
 export { AggregateRootIdentifierNotSet } from './AggregateRootIdentifierNotSet';
+export { AggregateRootModelId, isAggregateRootModelId } from './AggregateRootModelId';
 export { AggregateRootOperations } from './AggregateRootOperations';
 export { AggregateRootType, isAggregateRootType } from './AggregateRootType';
 export { AggregateRootTypeAlias, isAggregateRootTypeAlias } from './AggregateRootTypeAlias';

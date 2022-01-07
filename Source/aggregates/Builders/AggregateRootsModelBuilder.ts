@@ -5,7 +5,7 @@ import { IModel } from '@dolittle/sdk.common';
 
 import { AggregateRootTypes } from '../AggregateRootTypes';
 import { IAggregateRootTypes } from '../IAggregateRootTypes';
-import { isAggregateRootType } from '../AggregateRootType';
+import { isAggregateRootModelId } from '../AggregateRootModelId';
 
 /**
  * Represents a builder that can build {@link IAggregateRootTypes} from an {@link IModel}.
@@ -24,10 +24,10 @@ export class AggregateRootsModelBuilder {
      * @returns {IAggregateRootTypes} The built event types.
      */
     build(): IAggregateRootTypes {
-        const bindings = this._model.getTypeBindings(isAggregateRootType);
+        const bindings = this._model.getTypeBindings(isAggregateRootModelId);
         const aggregateRootTypes = new AggregateRootTypes();
         for (const { identifier, type } of bindings) {
-            aggregateRootTypes.associate(type, identifier);
+            aggregateRootTypes.associate(type, identifier.aggregateRootType);
         }
         return aggregateRootTypes;
     }
