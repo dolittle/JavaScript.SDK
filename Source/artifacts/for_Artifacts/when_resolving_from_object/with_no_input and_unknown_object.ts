@@ -1,10 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { UnableToResolveArtifact } from '../../UnableToResolveArtifact';
-import no_association from '../given/no_associations';
-
 import { describeThis } from '@dolittle/typescript.testing';
+
+import { UnableToResolveKey } from '../../Mappings/UnableToResolveKey';
+import no_association from '../given/no_associations';
 
 describeThis(__filename, () => {
     const object = {};
@@ -16,5 +16,5 @@ describeThis(__filename, () => {
         result = ex;
     }
 
-    it('should throw unable to resolve artifact', () => result.should.be.instanceof(UnableToResolveArtifact));
+    it('should throw unable to resolve artifact', () => result.should.be.instanceof(UnableToResolveKey));
 });
