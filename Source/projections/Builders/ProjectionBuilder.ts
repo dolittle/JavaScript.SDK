@@ -36,6 +36,7 @@ export class ProjectionBuilder extends IProjectionBuilder implements IEquatable 
 
     /** @inheritdoc */
     inScope(scopeId: string | ScopeId | Guid): IProjectionBuilder {
+        // TODO: We also need to set the scope in the model identifier.
         this._scopeId = ScopeId.from(scopeId);
         if (this._builder !== undefined) {
             this._builder.inScope(scopeId);

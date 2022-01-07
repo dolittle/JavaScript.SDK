@@ -9,7 +9,7 @@ import { SubscriptionsBuilder, SubscriptionsBuilderCallback } from '@dolittle/sd
 import { EventTypesBuilder, EventTypesBuilderCallback, EventTypesModelBuilder, isDecoratedWithEventType } from '@dolittle/sdk.events';
 import { EventFiltersBuilder, EventFiltersBuilderCallback, EventFiltersModelBuilder } from '@dolittle/sdk.events.filtering';
 import { EventHandlersBuilder, EventHandlersBuilderCallback, EventHandlersModelBuilder, isDecoratedEventHandlerType } from '@dolittle/sdk.events.handling';
-import { isDecoratedProjectionType, ProjectionAssociations, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionsModelBuilder } from '@dolittle/sdk.projections';
+import { isDecoratedProjectionType, ProjectionsBuilder, ProjectionsBuilderCallback, ProjectionsModelBuilder } from '@dolittle/sdk.projections';
 
 import { ICanTraverseModules } from '../Internal/Discovery/ICanTraverseModules';
 import { ModuleTraverser } from '../Internal/Discovery/ModuleTraverser';
@@ -121,8 +121,8 @@ export class SetupBuilder extends ISetupBuilder {
 
         const filters = new EventFiltersModelBuilder(model, this._buildResults, eventTypes).build();
         const eventHandlers = new EventHandlersModelBuilder(model, this._buildResults, eventTypes, bindings).build();
-        const projections = new ProjectionsModelBuilder(model, this._buildResults, eventTypes).build();
-        const embeddings = new EmbeddingsModelBuilder(model, this._buildResults, eventTypes).build();
+        const [projections, projectionReadModelTypes] = new ProjectionsModelBuilder(model, this._buildResults, eventTypes).build();
+        const [embeddings, embeddingReadModelTypes] = new EmbeddingsModelBuilder(model, this._buildResults, eventTypes).build();
 
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();
 
@@ -133,9 +133,10 @@ export class SetupBuilder extends ISetupBuilder {
             aggregateRootTypes,
             filters,
             eventHandlers,
-            this._projectionsAssociations,
             projections,
+            projectionReadModelTypes,
             embeddings,
+            embeddingReadModelTypes,
             subscriptions,
             subscriptionCallbacks);
     }

@@ -4,7 +4,10 @@
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
+import { isEmbeddingId } from '../EmbeddingId';
 import { EmbeddingProcessor } from '../Internal/EmbeddingProcessor';
+import { EmbeddingReadModelTypes } from '../Store/EmbeddingReadModelTypes';
+import { IEmbeddingReadModelTypes } from '../Store/IEmbeddingReadModelTypes';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 
@@ -26,9 +29,9 @@ export class EmbeddingsModelBuilder {
 
     /**
      * Builds all the embeddings created with the builder.
-     * @returns {EmbeddingProcessor[]} The built embedding processors.
+     * @returns {[EmbeddingProcessor[], IEmbeddingReadModelTypes]} The built embedding processors and read model types.
      */
-    build(): EmbeddingProcessor<any>[] {
+    build(): [EmbeddingProcessor<any>[], IEmbeddingReadModelTypes] {
         const builders = this._model.getProcessorBuilderBindings(EmbeddingBuilder, EmbeddingClassBuilder);
         const processors: EmbeddingProcessor<any>[] = [];
 
@@ -39,7 +42,14 @@ export class EmbeddingsModelBuilder {
             }
         }
 
-        return processors;
+        const identifiers = this._model.getTypeBindings(isEmbeddingId);
+        const readModelTypes = new EmbeddingReadModelTypes();
+
+        for (const { identifier, type } of identifiers) {
+            readModelTypes.associate(type, identifier);
+        }
+
+        return [processors, readModelTypes];
     }
 
 }

@@ -37,10 +37,12 @@ export {
 } from './Builders/_exports';
 
 export {
+    EmbeddingReadModelTypes,
     EmbeddingStore,
     FailedToGetEmbedding,
     FailedToGetEmbeddingKeys,
     FailedToGetEmbeddingState,
+    IEmbeddingReadModelTypes,
     IEmbeddingStore,
 } from './Store/_exports';
 

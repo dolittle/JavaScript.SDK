@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
-
 import { IEventTypes } from '@dolittle/sdk.events';
 
+import { isProjectionId } from '../ProjectionId';
 import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
+import { IProjectionReadModelTypes } from '../Store/IProjectionReadModelTypes';
+import { ProjectionReadModelTypes } from '../Store/ProjectionReadModelTypes';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 
@@ -27,9 +29,9 @@ export class ProjectionsModelBuilder {
 
     /**
      * Builds all projections created with the builder.
-     * @returns {ProjectionProcessor[]} The built projection processors.
+     * @returns {[ProjectionProcessor[], IProjectionReadModelTypes]} The built projection processors and read model types.
      */
-    build(): ProjectionProcessor<any>[] {
+    build(): [ProjectionProcessor<any>[], IProjectionReadModelTypes] {
         const builders = this._model.getProcessorBuilderBindings(ProjectionBuilder, ProjectionClassBuilder);
         const processors: ProjectionProcessor<any>[] = [];
 
@@ -40,6 +42,10 @@ export class ProjectionsModelBuilder {
             }
         }
 
-        return processors;
+        const identifiers = this._model.getTypeBindings(isProjectionId);
+        const readModelTypes = new ProjectionReadModelTypes();
+        // TODO: Figure out how to get the scope also into the identifier.
+
+        return [processors, readModelTypes];
     }
 }

@@ -10,7 +10,7 @@ export { CouldNotResolveUpdateToEvents } from './CouldNotResolveUpdateToEvents';
 export { Embedding } from './Embedding';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
-export { EmbeddingId } from './EmbeddingId';
+export { EmbeddingId, isEmbeddingId } from './EmbeddingId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
 export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';
