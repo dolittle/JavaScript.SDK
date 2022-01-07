@@ -5,7 +5,7 @@ import { Constructor } from '@dolittle/types';
 import { CannotHaveMultipleKeysAssociatedWithType } from './CannotHaveMultipleKeysAssociatedWithType';
 import { CannotHaveMultipleTypesAssociatedWithKey } from './CannotHaveMultipleTypesAssociatedWithKey';
 
-import { ComplexValueMap, DecomposedKey } from './ComplexMap';
+import { ComplexValueMap, DecomposedKey } from './ComplexValueMap';
 import { ITypeMap } from './ITypeMap';
 import { KeyNotAssociatedWithType } from './KeyNotAssociatedWithType';
 import { TypeNotAssociatedWithKey } from './TypeNotAssociatedWithKey';

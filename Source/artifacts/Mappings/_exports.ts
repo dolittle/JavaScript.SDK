@@ -5,7 +5,7 @@ export { CannotAccessMapsOfNestedMapWithNoMoreLevels } from './CannotAccessMapsO
 export { CannotAccessValuesOfNestedMapWithMoreLevels } from './CannotAccessValuesOfNestedMapWithMoreLevels';
 export { CannotHaveMultipleKeysAssociatedWithType } from './CannotHaveMultipleKeysAssociatedWithType';
 export { CannotHaveMultipleTypesAssociatedWithKey } from './CannotHaveMultipleTypesAssociatedWithKey';
-export { ComplexValueMap, DecomposedKey } from './ComplexMap';
+export { ComplexValueMap, DecomposedKey } from './ComplexValueMap';
 export { IncorrectNumberOfPrimitiveKeysProvided } from './IncorrectNumberOfPrimitiveKeysProvided';
 export { ITypeMap } from './ITypeMap';
 export { KeyNotAssociatedWithType } from './KeyNotAssociatedWithType';

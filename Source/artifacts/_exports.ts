@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export { Artifact, ArtifactIdLike } from './Artifact';
+export { ArtifactMap } from './ArtifactMap';
 export { Artifacts } from './Artifacts';
 export { createIsArtifact } from './createIsArtifact';
 export { Generation, GenerationLike, isGeneration } from './Generation';
