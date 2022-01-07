@@ -7,6 +7,7 @@ import { Constructor } from '@dolittle/types';
 import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingModelId } from '../EmbeddingModelId';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
 import { embedding as embeddingDecorator, getDecoratedEmbeddingType, isDecoratedEmbeddingType } from './embeddingDecorator';
@@ -31,8 +32,9 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
 
     /** @inheritdoc */
     createEmbedding(embeddingId: string | EmbeddingId | Guid): IEmbeddingBuilder {
-        const identifier = EmbeddingId.from(embeddingId);
-        const builder = new EmbeddingBuilder(identifier, this._modelBuilder);
+        const id = EmbeddingId.from(embeddingId);
+        const builder = new EmbeddingBuilder(id, this._modelBuilder);
+        const identifier = new EmbeddingModelId(id);
         this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
         return builder;
     }
@@ -45,7 +47,7 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
         }
 
         const embeddingType = getDecoratedEmbeddingType(type);
-        const identifier = embeddingType.embeddingId;
+        const identifier = new EmbeddingModelId(embeddingType.embeddingId);
         const builder = new EmbeddingClassBuilder<T>(embeddingType);
         this._modelBuilder.bindIdentifierToType(identifier, type);
         this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);

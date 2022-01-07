@@ -7,7 +7,7 @@ import { isScopeId, ScopeId } from '@dolittle/sdk.events';
 import { ProjectionId, isProjectionId } from './ProjectionId';
 
 /**
- * Represents the identifier of an projection in an application model.
+ * Represents the identifier of a projection in an application model.
  */
 export class ProjectionModelId extends ModelIdentifier<ProjectionId, '@dolittle/sdk.projections.ProjectionModelId', { scope: ScopeId }> {
     /**
@@ -26,6 +26,7 @@ export class ProjectionModelId extends ModelIdentifier<ProjectionId, '@dolittle/
         return this.__extras.scope;
     }
 }
+
 /**
  * Checks whether or not an object is an instance of {@link ProjectionModelId}.
  * @param {any} object - The object to check.

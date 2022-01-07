@@ -4,7 +4,7 @@
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
-import { isEmbeddingId } from '../EmbeddingId';
+import { isEmbeddingModelId } from '../EmbeddingModelId';
 import { EmbeddingProcessor } from '../Internal/EmbeddingProcessor';
 import { EmbeddingReadModelTypes } from '../Store/EmbeddingReadModelTypes';
 import { IEmbeddingReadModelTypes } from '../Store/IEmbeddingReadModelTypes';
@@ -42,11 +42,11 @@ export class EmbeddingsModelBuilder {
             }
         }
 
-        const identifiers = this._model.getTypeBindings(isEmbeddingId);
+        const identifiers = this._model.getTypeBindings(isEmbeddingModelId);
         const readModelTypes = new EmbeddingReadModelTypes();
 
         for (const { identifier, type } of identifiers) {
-            readModelTypes.associate(type, identifier);
+            readModelTypes.associate(type, identifier.id);
         }
 
         return [processors, readModelTypes];

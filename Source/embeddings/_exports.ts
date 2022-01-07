@@ -11,6 +11,7 @@ export { Embedding } from './Embedding';
 export { EmbeddingContext } from './EmbeddingContext';
 export { EmbeddingDeleteCallback } from './EmbeddingDeleteCallback';
 export { EmbeddingId, isEmbeddingId } from './EmbeddingId';
+export { EmbeddingModelId, isEmbeddingModelId } from './EmbeddingModelId';
 export { EmbeddingProjectCallback } from './EmbeddingProjectCallback';
 export { EmbeddingProjectContext } from './EmbeddingProjectContext';
 export { EmbeddingUpdateCallback } from './EmbeddingUpdateCallback';

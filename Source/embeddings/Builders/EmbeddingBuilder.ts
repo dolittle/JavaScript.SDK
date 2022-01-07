@@ -9,6 +9,7 @@ import { IEventTypes } from '@dolittle/sdk.events';
 
 import { IEmbedding } from '../Internal/IEmbedding';
 import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingModelId } from '../EmbeddingModelId';
 import { EmbeddingBuilderForReadModel } from './EmbeddingBuilderForReadModel';
 import { IEmbeddingBuilder } from './IEmbeddingBuilder';
 import { ReadModelAlreadyDefinedForEmbedding } from './ReadModelAlreadyDefinedForEmbedding';
@@ -40,7 +41,7 @@ export class EmbeddingBuilder extends IEmbeddingBuilder implements IEquatable {
         this._readModelTypeOrInstance = typeOrInstance;
 
         if (typeOrInstance instanceof Function) {
-            this._modelBuilder.bindIdentifierToType(this._embeddingId, typeOrInstance);
+            this._modelBuilder.bindIdentifierToType(new EmbeddingModelId(this._embeddingId), typeOrInstance);
         }
 
         this._builder = new EmbeddingBuilderForReadModel(this._embeddingId, typeOrInstance);
