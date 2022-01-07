@@ -4,12 +4,12 @@
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
 import { IEventTypes } from '@dolittle/sdk.events';
 
-import { isProjectionId } from '../ProjectionId';
 import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
 import { IProjectionReadModelTypes } from '../Store/IProjectionReadModelTypes';
 import { ProjectionReadModelTypes } from '../Store/ProjectionReadModelTypes';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
+import { isProjectionModelId } from '../ProjectionModelId';
 
 /**
  * Represents a builder that can build {@link ProjectionProcessor} from an {@link IModel}.
@@ -42,9 +42,11 @@ export class ProjectionsModelBuilder {
             }
         }
 
-        const identifiers = this._model.getTypeBindings(isProjectionId);
+        const identifiers = this._model.getTypeBindings(isProjectionModelId);
         const readModelTypes = new ProjectionReadModelTypes();
-        // TODO: Figure out how to get the scope also into the identifier.
+        for (const { identifier, type } of identifiers) {
+            readModelTypes.associate(type, identifier.id, identifier.scope);
+        }
 
         return [processors, readModelTypes];
     }

@@ -19,6 +19,7 @@ export { Projection } from './Projection';
 export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';
 export { ProjectionId, isProjectionId } from './ProjectionId';
+export { ProjectionModelId, isProjectionModelId } from './ProjectionModelId';
 export { ProjectionResult } from './ProjectionResult';
 export { Projections } from './Projections';
 export { PropertyNameKeySelector } from './PropertyNameKeySelector';

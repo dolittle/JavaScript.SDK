@@ -4,7 +4,7 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes, ScopeId } from '@dolittle/sdk.events';
 
@@ -18,6 +18,8 @@ import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
+import { ProjectionModelId } from '../ProjectionModelId';
+import { ProjectionBuilder } from '..';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
@@ -31,13 +33,21 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
      * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
      * @param {Constructor<T> | T} _readModelTypeOrInstance - The type or instance of the read model to build a projection for.
      * @param {ScopeId} _scopeId - The scope of the projection.
+     * @param {IModelBuilder} _modelBuilder - For binding the parent projection builder and read model to its identifier.
+     * @param {ProjectionBuilder} _parentBuilder - For binding the builder to the identifier.
      */
     constructor(
-        private _projectionId: ProjectionId,
-        private _readModelTypeOrInstance: Constructor<T> | T,
-        private _scopeId: ScopeId
+        private readonly _projectionId: ProjectionId,
+        private readonly _readModelTypeOrInstance: Constructor<T> | T,
+        private _scopeId: ScopeId,
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _parentBuilder: ProjectionBuilder,
     ) {
         super();
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this._parentBuilder);
+        if (_readModelTypeOrInstance instanceof Function) {
+            this._modelBuilder.bindIdentifierToType(this._modelId, _readModelTypeOrInstance);
+        }
     }
 
     /** @inheritdoc */
@@ -65,7 +75,9 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
 
     /** @inheritdoc */
     inScope(scopeId: string | Guid | ScopeId): IProjectionBuilderForReadModel<T> {
+        this._modelBuilder.unbindIdentifierFromProcessorBuilder(this._modelId, this._parentBuilder);
         this._scopeId = ScopeId.from(scopeId);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this._parentBuilder);
         return this;
     }
 
@@ -130,5 +142,9 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             eventType = eventTypes.getFor(typeOrEventTypeOrId);
         }
         return eventType;
+    }
+
+    private get _modelId(): ProjectionModelId {
+        return new ProjectionModelId(this._projectionId, this._scopeId);
     }
 }

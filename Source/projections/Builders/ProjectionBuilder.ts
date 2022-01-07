@@ -25,7 +25,7 @@ export class ProjectionBuilder extends IProjectionBuilder implements IEquatable 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
      * @param {ProjectionId} _projectionId - The unique identifier of the projection to build for.
-     * @param {IModelBuilder} _modelBuilder - For binding read models to identifiers.
+     * @param {IModelBuilder} _modelBuilder - For binding this projection builder and read model to its identifier.
      */
     constructor(
         private readonly _projectionId: ProjectionId,
@@ -36,7 +36,6 @@ export class ProjectionBuilder extends IProjectionBuilder implements IEquatable 
 
     /** @inheritdoc */
     inScope(scopeId: string | ScopeId | Guid): IProjectionBuilder {
-        // TODO: We also need to set the scope in the model identifier.
         this._scopeId = ScopeId.from(scopeId);
         if (this._builder !== undefined) {
             this._builder.inScope(scopeId);
@@ -49,13 +48,15 @@ export class ProjectionBuilder extends IProjectionBuilder implements IEquatable 
         if (this._readModelTypeOrInstance !== undefined) {
             throw new ReadModelAlreadyDefinedForProjection(this._projectionId, typeOrInstance, this._readModelTypeOrInstance);
         }
+
         this._readModelTypeOrInstance = typeOrInstance;
+        this._builder = new ProjectionBuilderForReadModel(
+            this._projectionId,
+            typeOrInstance,
+            this._scopeId,
+            this._modelBuilder,
+            this);
 
-        if (typeOrInstance instanceof Function) {
-            this._modelBuilder.bindIdentifierToType(this._projectionId, typeOrInstance);
-        }
-
-        this._builder = new ProjectionBuilderForReadModel(this._projectionId, typeOrInstance, this._scopeId);
         return this._builder;
     }
 

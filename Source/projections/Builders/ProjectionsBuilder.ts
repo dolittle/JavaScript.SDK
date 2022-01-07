@@ -12,6 +12,7 @@ import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { projection as projectionDecorator, isDecoratedProjectionType, getDecoratedProjectionType } from './projectionDecorator';
 import { IProjectionsBuilder } from './IProjectionsBuilder';
 import { IProjectionBuilder } from './IProjectionBuilder';
+import { ProjectionModelId } from '../ProjectionModelId';
 
 /**
  * Represents an implementation of {@link IProjectionsBuilder}.
@@ -32,9 +33,7 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
     /** @inheritdoc */
     createProjection(projectionId: string | ProjectionId | Guid): IProjectionBuilder {
         const identifier = ProjectionId.from(projectionId);
-        const builder = new ProjectionBuilder(identifier, this._modelBuilder);
-        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
-        return builder;
+        return new ProjectionBuilder(identifier, this._modelBuilder);
     }
 
     /** @inheritdoc */
@@ -45,7 +44,7 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
         }
 
         const projectionType = getDecoratedProjectionType(type);
-        const identifier = projectionType.projectionId;
+        const identifier = new ProjectionModelId(projectionType.projectionId, projectionType.scopeId);
         const builder = new ProjectionClassBuilder<T>(projectionType);
         this._modelBuilder.bindIdentifierToType(identifier, type);
         this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
