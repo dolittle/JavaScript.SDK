@@ -3,7 +3,7 @@
 
 import { IModel } from '@dolittle/sdk.common';
 
-import { isEventType } from '../EventType';
+import { isEventTypeModelId } from '../EventTypeModelId';
 import { EventTypes } from '../EventTypes';
 import { IEventTypes } from '../IEventTypes';
 
@@ -24,10 +24,10 @@ export class EventTypesModelBuilder {
      * @returns {IEventTypes} The built event types.
      */
     build(): IEventTypes {
-        const bindings = this._model.getTypeBindings(isEventType);
+        const bindings = this._model.getTypeBindings(isEventTypeModelId);
         const eventTypes = new EventTypes();
         for (const { identifier, type } of bindings) {
-            eventTypes.associate(type, identifier);
+            eventTypes.associate(type, identifier.eventType);
         }
         return eventTypes;
     }

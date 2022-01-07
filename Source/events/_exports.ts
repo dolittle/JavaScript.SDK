@@ -16,6 +16,7 @@ export { EventTypeAlias, EventTypeAliasLike, isEventTypeAlias } from './EventTyp
 export { eventType, isDecoratedWithEventType, getDecoratedEventType } from './eventTypeDecorator';
 export { EventTypeId, EventTypeIdLike, isEventTypeId } from './EventTypeId';
 export { EventTypeMap } from './EventTypeMap';
+export { EventTypeModelId, isEventTypeModelId } from './EventTypeModelId';
 export { EventTypeOptions } from './EventTypeOptions';
 export { EventTypes } from './EventTypes';
 export { IEventTypes } from './IEventTypes';

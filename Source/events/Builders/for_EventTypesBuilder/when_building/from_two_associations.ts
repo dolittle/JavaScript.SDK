@@ -8,6 +8,7 @@ import { IModel } from '@dolittle/sdk.common';
 
 import { EventTypesModelBuilder } from '../../EventTypesModelBuilder';
 import { EventType } from '../../../EventType';
+import { EventTypeModelId } from '../../../EventTypeModelId';
 
 class FirstType {}
 
@@ -19,8 +20,8 @@ describeThis(__filename, () => {
 
     const model = sinon.stubInterface<IModel>({
         getTypeBindings: [
-            { identifier: firstEventType, type: FirstType },
-            { identifier: secondEventType, type: SecondType },
+            { identifier: new EventTypeModelId(firstEventType), type: FirstType },
+            { identifier: new EventTypeModelId(secondEventType), type: SecondType },
         ]
     });
     const builder = new EventTypesModelBuilder(model);

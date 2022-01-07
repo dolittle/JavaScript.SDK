@@ -11,6 +11,7 @@ import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
 import { eventType as eventTypeDecorator,  isDecoratedWithEventType, getDecoratedEventType } from '../eventTypeDecorator';
 import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
+import { EventTypeModelId } from '../EventTypeModelId';
 
 /**
  * Represents an implementation of {@link IEventTypesBuilder}.
@@ -38,7 +39,8 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             ? eventTypeOrIdentifier
             : new EventType(EventTypeId.from(eventTypeOrIdentifier), generation, alias);
 
-        this._modelBuilder.bindIdentifierToType(eventType, type);
+        const identifier = new EventTypeModelId(eventType);
+        this._modelBuilder.bindIdentifierToType(identifier, type);
         return this;
     }
 
@@ -49,7 +51,8 @@ export class EventTypesBuilder extends IEventTypesBuilder {
             return this;
         }
 
-        this._modelBuilder.bindIdentifierToType(getDecoratedEventType(type), type);
+        const identifier = new EventTypeModelId(getDecoratedEventType(type));
+        this._modelBuilder.bindIdentifierToType(identifier, type);
         return this;
     }
 
