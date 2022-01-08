@@ -6,32 +6,10 @@ export * as Internal from './Internal/_exports';
 
 export { EventHandler } from './EventHandler';
 export { EventHandlerAlias, EventHandlerAliasLike } from './EventHandlerAlias';
-export { EventHandlerId } from './EventHandlerId';
+export { EventHandlerId, isEventHandlerId } from './EventHandlerId';
+export { EventHandlerModelId, isEventHandlerModelId } from './EventHandlerModelId';
 export { EventHandlers } from './EventHandlers';
 export { EventHandlerSignature } from './EventHandlerSignature';
 export { IEventHandler } from './IEventHandler';
 export { IEventHandlers } from './IEventHandlers';
 export { MissingEventHandlerForType } from './MissingEventHandlerForType';
-
-// export * as internal from './Internal';
-
-// export {
-//     CannotRegisterEventHandlerThatIsNotAClass,
-//     CouldNotCreateInstanceOfEventHandler,
-//     EventHandlerBuilder,
-//     EventHandlerBuilderCallback,
-//     EventHandlerClassBuilder,
-//     EventHandlerDecoratedType,
-//     EventHandlerDecoratedTypes,
-//     eventHandler,
-//     EventHandlerMethodsBuilder,
-//     EventHandlerOptions,
-//     EventHandlersBuilder,
-//     EventHandlersBuilderCallback,
-//     HandlesDecoratedMethod,
-//     HandlesDecoratedMethods,
-//     handles,
-//     IEventHandlerBuilder,
-//     IEventHandlerMethodsBuilder,
-//     IEventHandlersBuilder,
-// } from './Builder';

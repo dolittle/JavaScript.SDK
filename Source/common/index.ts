@@ -4,3 +4,4 @@
 export * from './_exports';
 
 export { IClientBuildResults } from './ClientSetup/_exports';
+export { IModel, IModelBuilder, Identifier as ModelIdentifier, createIsIdentifier as createIsModelIdentifier, AnyIdentifier as AnyModelIdentifier } from './Model/_exports';

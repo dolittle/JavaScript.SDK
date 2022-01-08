@@ -46,7 +46,7 @@
     "dependencies": {
         "@dolittle/sdk.common": "21.0.0-gimli.11",
         "@dolittle/sdk.execution": "21.0.0-gimli.11",
-        "@dolittle/types": "5.0.1",
+        "@dolittle/types": "6.0.0-gimli.0",
         "inversify": "6.0.1",
         "winston": "3.3.2"
     },

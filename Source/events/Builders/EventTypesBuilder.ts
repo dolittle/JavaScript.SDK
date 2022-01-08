@@ -4,20 +4,30 @@
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EventType } from '../EventType';
 import { EventTypeAlias, EventTypeAliasLike } from '../EventTypeAlias';
+import { eventType as eventTypeDecorator,  isDecoratedWithEventType, getDecoratedEventType } from '../eventTypeDecorator';
 import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
-import { EventTypes } from '../EventTypes';
-import { IEventTypes } from '../IEventTypes';
 import { IEventTypesBuilder } from './IEventTypesBuilder';
-import { getDecoratedEventType } from '../eventTypeDecorator';
+import { EventTypeModelId } from '../EventTypeModelId';
 
 /**
- * Represents a builder for adding associations into {@link IEventTypes} instance.
+ * Represents an implementation of {@link IEventTypesBuilder}.
  */
 export class EventTypesBuilder extends IEventTypesBuilder {
-    private _associations: [Constructor<any>, EventType][] = [];
+    /**
+     * Initialises a new instance of the {@link EventTypesBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding event types to identifiers.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
+        super();
+    }
 
     /** @inheritdoc */
     associate<T = any>(type: Constructor<T>, eventType: EventType): IEventTypesBuilder;
@@ -25,32 +35,25 @@ export class EventTypesBuilder extends IEventTypesBuilder {
     associate<T = any>(type: Constructor<T>, identifier: EventTypeIdLike, generation: GenerationLike, alias?: EventTypeAliasLike): IEventTypesBuilder;
     associate<T = any>(type: Constructor<T>, eventTypeOrIdentifier: EventType | EventTypeIdLike, maybeGenerationOrMaybeAlias?: GenerationLike | EventTypeAliasLike | undefined, maybeAlias?: EventTypeAliasLike): IEventTypesBuilder {
         const [generation, alias] = this.getGenerationAndAlias(maybeGenerationOrMaybeAlias, maybeAlias);
-        const eventType = eventTypeOrIdentifier instanceof EventType ?
-                            eventTypeOrIdentifier
-                            : new EventType(
-                                EventTypeId.from(eventTypeOrIdentifier),
-                                generation,
-                                alias);
-        this._associations.push([type, eventType]);
+        const eventType = eventTypeOrIdentifier instanceof EventType
+            ? eventTypeOrIdentifier
+            : new EventType(EventTypeId.from(eventTypeOrIdentifier), generation, alias);
+
+        const identifier = new EventTypeModelId(eventType);
+        this._modelBuilder.bindIdentifierToType(identifier, type);
         return this;
     }
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IEventTypesBuilder {
-        this.associate(type, getDecoratedEventType(type));
-        return this;
-    }
-
-    /**
-     * Builds an {@link IEventTypes} from the associated and registered event types.
-     * @returns {IEventTypes} The built event types.
-     */
-    build(): IEventTypes {
-        const eventTypes = new EventTypes();
-        for (const [type, eventType] of this._associations) {
-            eventTypes.associate(type, eventType);
+        if (!isDecoratedWithEventType(type)) {
+            this._buildResults.addFailure(`The event type class ${type.name} is not decorated as an event type`,`Add the @${eventTypeDecorator.name} decorator to the class`);
+            return this;
         }
-        return eventTypes;
+
+        const identifier = new EventTypeModelId(getDecoratedEventType(type));
+        this._modelBuilder.bindIdentifierToType(identifier, type);
+        return this;
     }
 
     private getGenerationAndAlias(maybeGenerationOrMaybeAlias: GenerationLike | EventTypeAliasLike | undefined, maybeAlias: EventTypeAliasLike | undefined): [Generation, EventTypeAlias | undefined] {

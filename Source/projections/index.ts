@@ -4,7 +4,6 @@
 export * from './_exports';
 
 export {
-    CannotRegisterProjectionThatIsNotAClass,
     CouldNotCreateInstanceOfProjection,
     IProjectionBuilder,
     IProjectionBuilderForReadModel,
@@ -26,6 +25,7 @@ export {
     ProjectionOptions,
     ProjectionsBuilder,
     ProjectionsBuilderCallback,
+    ProjectionsModelBuilder,
     ReadModelAlreadyDefinedForProjection,
     TypeOrEventType,
 } from './Builders/_exports';
@@ -35,13 +35,11 @@ export {
     CurrentStateType,
     FailedToGetProjection,
     FailedToGetProjectionState,
-    IProjectionAssociations,
+    IProjectionReadModelTypes,
     IProjectionStore,
-    NoProjectionAssociatedWithType,
-    NoTypeAssociatedWithProjection,
-    ProjectionAssociation,
-    ProjectionAssociations,
+    ProjectionReadModelTypes,
     ProjectionStore,
+    ScopedProjectionId,
     TypeIsNotAProjection,
 } from './Store/_exports';
 

@@ -8,7 +8,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
+import { CurrentState, IConvertProjectionsToSDK, Key } from '@dolittle/sdk.projections';
 import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
@@ -21,6 +21,7 @@ import { FailedToGetEmbedding } from './FailedToGetEmbedding';
 import { FailedToGetEmbeddingKeys } from './FailedToGetEmbeddingKeys';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
+import { IEmbeddingReadModelTypes } from './IEmbeddingReadModelTypes';
 
 /**
  * Represents an implementation of {link IEmbeddingStore}.
@@ -31,14 +32,14 @@ export class EmbeddingStore extends IEmbeddingStore {
      * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IConvertProjectionsToSDK} _converter - The converter to use to convert projections.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {IEmbeddingReadModelTypes} _readModelTypes - The projection associations.
      * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _embeddingsStoreClient: EmbeddingStoreClient,
         protected readonly _executionContext: ExecutionContext,
         protected readonly _converter: IConvertProjectionsToSDK,
-        protected readonly _projectionAssociations: IProjectionAssociations,
+        protected readonly _readModelTypes: IEmbeddingReadModelTypes,
         protected readonly _logger: Logger) {
             super();
         }
@@ -135,14 +136,14 @@ export class EmbeddingStore extends IEmbeddingStore {
     private getEmbeddingForOne<TEmbedding>(type: Constructor<any> | undefined, keyOrEmbedding: any | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
         if (embeddingOrCancellation instanceof Cancellation) {
             if (type) {
-                return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+                return this._readModelTypes.getFor(type!);
             }
             return EmbeddingId.from(keyOrEmbedding);
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
         }
         if (type) {
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+            return this._readModelTypes.getFor(type!);
         }
         return EmbeddingId.from(keyOrEmbedding);
     }
@@ -150,14 +151,14 @@ export class EmbeddingStore extends IEmbeddingStore {
     private getEmbeddingForAll<TEmbedding>(type: Constructor<TEmbedding> | undefined, typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
         if (embeddingOrCancellation instanceof Cancellation) {
             if (typeof typeOrEmbedding === 'function') {
-                return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+                return this._readModelTypes.getFor(type!);
             }
             return EmbeddingId.from(typeOrEmbedding);
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
         }
         if (type) {
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+            return this._readModelTypes.getFor(type!);
         }
         return EmbeddingId.from(typeOrEmbedding as string);
     }

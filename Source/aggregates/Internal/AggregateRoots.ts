@@ -37,7 +37,7 @@ export class AggregateRoots {
      * @param {Cancellation} cancellation - The cancellation.
      * @returns {Promise<void>} A {@link Promise} that represents the asynchronous operation.
      */
-    register(aggregateRootTypes: IAggregateRootTypes, cancellation: Cancellation): Promise<void> {
+    registerAllFrom(aggregateRootTypes: IAggregateRootTypes, cancellation: Cancellation): Promise<void> {
         return Promise.all(aggregateRootTypes.getAll().map(eventType => this.sendRequest(eventType, cancellation))) as unknown as Promise<void>;
     }
 

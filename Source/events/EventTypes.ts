@@ -1,12 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Exception } from '@dolittle/rudiments';
-import { Constructor } from '@dolittle/types';
-import { ArtifactOrId } from '@dolittle/sdk.artifacts';
+import { Guid } from '@dolittle/rudiments';
+
 import { EventType } from './EventType';
 import { EventTypeId } from './EventTypeId';
-import { EventTypeMap } from './EventTypeMap';
 import { IEventTypes } from './IEventTypes';
 
 /**
@@ -14,22 +12,14 @@ import { IEventTypes } from './IEventTypes';
  */
 export class EventTypes extends IEventTypes {
     /**
-     * Initializes a new instance of {@link EventTypes}.
-     * @param {EventTypeMap<Constructor<any>>} [associations] - Known associations.
+     * Initialises a new instance of the {@link EventTypes} class.
      */
-    constructor(associations: EventTypeMap<Constructor<any>> = new EventTypeMap()) {
-        super(associations);
+    constructor() {
+        super(EventType);
     }
 
     /** @inheritdoc */
-    protected createArtifact(artifactOrId: ArtifactOrId<EventType, EventTypeId>): EventType {
-        return artifactOrId instanceof EventType
-                ? artifactOrId
-                : new EventType(EventTypeId.from(artifactOrId));
-    }
-
-    /** @inheritdoc */
-    protected getArtifactTypeName(): string {
-        return 'EventType';
+    protected createArtifactFrom(id: string | EventTypeId | Guid): EventType {
+        return EventType.from(id);
     }
 }

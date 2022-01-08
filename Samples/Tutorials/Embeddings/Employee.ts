@@ -5,6 +5,7 @@
 
 import { CouldNotResolveUpdateToEvents, embedding, EmbeddingContext, EmbeddingProjectContext, on, resolveDeletionToEvents, resolveUpdateToEvents } from '@dolittle/sdk.embeddings';
 import { ProjectionResult } from '@dolittle/sdk.projections';
+
 import { EmployeeHired } from './EmployeeHired';
 import { EmployeeRetired } from './EmployeeRetired';
 import { EmployeeTransferred } from './EmployeeTransferred';

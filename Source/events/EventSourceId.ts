@@ -5,6 +5,11 @@ import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 
 /**
+ * Defines the types that can be converted into a {@link EventSourceId}.
+ */
+export type EventSourceIdLike = Guid | string | EventSourceId;
+
+/**
  * Represents the unique identifier of an event source.
  */
 export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.EventSourceId'> {
@@ -26,10 +31,10 @@ export class EventSourceId extends ConceptAs<string, '@dolittle/sdk.events.Event
 
     /**
      * Creates an {@link EventSourceId} from a {@link Guid} or a {@link string}.
-     * @param {EventSourceId | Guid | string} id - The event source id.
+     * @param {EventSourceIdLike} id - The event source id.
      * @returns {EventSourceId} The created event source id concept.
      */
-    static from(id: EventSourceId | Guid | string): EventSourceId {
+    static from(id: EventSourceIdLike): EventSourceId {
         if (id instanceof EventSourceId) return id;
         return new EventSourceId(id.toString());
     }

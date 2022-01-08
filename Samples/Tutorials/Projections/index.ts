@@ -5,18 +5,16 @@
 
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishCounter } from './DishCounter';
+import { setTimeout } from 'timers/promises';
+
 import { Chef } from './Chef';
+import { DishCounter } from './DishCounter';
+import { DishPrepared } from './DishPrepared';
 
 (async () => {
     const client = await DolittleClient
         .setup(builder => builder
-            .withEventTypes(eventTypes =>
-                eventTypes.register(DishPrepared))
             .withProjections(builder => {
-                builder.registerProjection(DishCounter);
-
                 builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
                     .forReadModel(Chef)
                     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
@@ -34,12 +32,12 @@ import { Chef } from './Chef';
     await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
     await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
-    setTimeout(async () => {
-        for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-            console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
-        }
+    await setTimeout(1000);
 
-        const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-        console.log(`${chef.key} has prepared ${chef.state.dishes}`);
-    }, 1000);
+    for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
+    }
+
+    const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
+    console.log(`${chef.key} has prepared ${chef.state.dishes}`);
 })();

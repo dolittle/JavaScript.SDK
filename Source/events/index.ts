@@ -6,6 +6,7 @@ export * from './_exports';
 export {
     EventTypesBuilder,
     EventTypesBuilderCallback,
+    EventTypesModelBuilder,
     IEventTypesBuilder,
 } from './Builders/_exports';
 

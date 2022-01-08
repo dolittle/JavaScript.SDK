@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
@@ -60,10 +59,10 @@ export class EmbeddingBuilderForReadModel<T> extends IEmbeddingBuilderForReadMod
     /** @inheritdoc */
     on<TEvent>(type: Constructor<TEvent>, callback: EmbeddingProjectCallback<T, TEvent>): IEmbeddingBuilderForReadModel<T>;
     on(eventType: EventType, callback: EmbeddingProjectCallback<T, any>): IEmbeddingBuilderForReadModel<T>;
-    on(eventTypeId: string | Guid | EventTypeId, callback: EmbeddingProjectCallback<T, any>): IEmbeddingBuilderForReadModel<T>;
+    on(eventTypeId: EventTypeIdLike, callback: EmbeddingProjectCallback<T, any>): IEmbeddingBuilderForReadModel<T>;
     on(eventTypeId: EventTypeIdLike, generation: GenerationLike, callback: EmbeddingProjectCallback<T, any>): IEmbeddingBuilderForReadModel<T>;
     on<TEvent = any>(
-        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeId | Guid | string,
+        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeIdLike,
         callbackOrGeneration: GenerationLike | EmbeddingProjectCallback<T, TEvent>,
         maybeCallback?: EmbeddingProjectCallback<T, TEvent>
     ): IEmbeddingBuilderForReadModel<T> {
@@ -91,7 +90,7 @@ export class EmbeddingBuilderForReadModel<T> extends IEmbeddingBuilderForReadMod
     }
 
     private getTypeOrEventTypeFrom<TEvent>(
-        typeOrEventTypeOrId: string | Constructor<TEvent> | EventType | EventTypeId | Guid,
+        typeOrEventTypeOrId: Constructor<TEvent> | EventType | EventTypeIdLike,
         callbackOrGeneration: GenerationLike | EmbeddingProjectCallback<T>) {
         if (typeof typeOrEventTypeOrId === 'function') {
             return typeOrEventTypeOrId;

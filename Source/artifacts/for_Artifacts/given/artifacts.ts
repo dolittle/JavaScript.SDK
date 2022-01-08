@@ -3,13 +3,10 @@
 
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
-import { Constructor } from '@dolittle/types';
 
 import { Artifact } from '../../Artifact';
-import { ArtifactOrId } from '../../IArtifacts';
 import { Artifacts } from '../../Artifacts';
 import { Generation } from '../../Generation';
-import { ArtifactTypeMap } from '../../ArtifactTypeMap';
 
 export class artifact_type_id extends ConceptAs<Guid, 'artifact_type_id'> {
     constructor(id: Guid) {
@@ -31,26 +28,12 @@ export class artifact_type extends Artifact<artifact_type_id> {
     }
 }
 
-export class artifact_type_map<TType> extends ArtifactTypeMap<artifact_type, artifact_type_id, TType> {
-    protected createArtifact(id: string, generation: Generation): artifact_type {
-        return new artifact_type(artifact_type_id.from(id), generation);
-    }
-
-    [Symbol.toStringTag] = 'artifact_type_map';
-
-}
-
 export class artifacts extends Artifacts<artifact_type, artifact_type_id> {
-    protected getArtifactTypeName(): string {
-        return 'artifacts';
+    constructor() {
+        super(artifact_type);
     }
 
-    constructor(map: artifact_type_map<Constructor<any>> = new artifact_type_map()) {
-        super(map);
-    }
-    protected createArtifact(artifactOrId: ArtifactOrId<artifact_type, artifact_type_id>): artifact_type {
-        return artifactOrId instanceof artifact_type
-                ? artifactOrId
-                : new artifact_type(artifact_type_id.from(artifactOrId));
+    protected createArtifactFrom(id: string | Guid | artifact_type_id): artifact_type {
+        return id instanceof artifact_type ? id : new artifact_type(artifact_type_id.from(id));
     }
 }

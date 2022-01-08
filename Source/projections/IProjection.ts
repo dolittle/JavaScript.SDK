@@ -19,14 +19,14 @@ export abstract class IProjection<T> {
     abstract readonly projectionId: ProjectionId;
 
     /**
-     * Gets the read model type the projection is for.
+     * Gets the class of read model type if created from a class.
      */
-    abstract readonly readModelTypeOrInstance: Constructor<T> | T;
+    abstract readonly readModelType: Constructor<T> | undefined;
 
     /**
      * Gets the initial state of the projection.
      */
-    abstract readonly initialState?: T;
+    abstract readonly initialState: T;
 
     /**
      * Gets the scope the projection is in.

@@ -1,11 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-
 import { AggregateRootId } from '../AggregateRootId';
 import { AggregateRootVersion } from '../AggregateRootVersion';
-import { EventSourceId } from '../EventSourceId';
+import { EventSourceId, EventSourceIdLike } from '../EventSourceId';
 import { UncommittedAggregateEvent } from './UncommittedAggregateEvent';
 import { EventContentNeedsToBeDefined } from './EventContentNeedsToBeDefined';
 
@@ -62,13 +60,13 @@ export class UncommittedAggregateEvents implements Iterable<UncommittedAggregate
 
     /**
      * Creates uncommitted aggregate events from the provided events and metadata.
-     * @param {EventSourceId | Guid | string} eventSourceId - The event source id that the uncommitted events will be applied to.
+     * @param {EventSourceIdLike} eventSourceId - The event source id that the uncommitted events will be applied to.
      * @param {AggregateRootId} aggregateRootId - The aggregate root id that the uncommitted events will be applied to.
      * @param {AggregateRootVersion} expectedAggregateRootVersion - The previous aggregate root version that was used to produce the uncommitted events.
      * @param {UncommittedAggregateEvent[]} events - The uncommitted events to apply.
      * @returns {UncommittedAggregateEvents} Uncommitted aggregate events.
      */
-    static from(eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {
+    static from(eventSourceId: EventSourceIdLike, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, ...events: UncommittedAggregateEvent[]): UncommittedAggregateEvents {
         return new UncommittedAggregateEvents(EventSourceId.from(eventSourceId), aggregateRootId, expectedAggregateRootVersion, ...events);
     }
 

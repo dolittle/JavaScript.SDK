@@ -4,7 +4,6 @@
 export * from './_exports';
 
 export {
-    CannotRegisterEventHandlerThatIsNotAClass,
     CouldNotCreateInstanceOfEventHandler,
     EventHandlerBuilder,
     EventHandlerBuilderCallback,
@@ -17,6 +16,7 @@ export {
     EventHandlerOptions,
     EventHandlersBuilder,
     EventHandlersBuilderCallback,
+    EventHandlersModelBuilder,
     HandlesDecoratedMethod,
     handles,
     getHandlesDecoratedMethods,

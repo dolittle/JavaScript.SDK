@@ -39,7 +39,6 @@ import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
  * @template T The type of the projection read model.
  */
 export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId, ProjectionsClient, ProjectionRegistrationRequest, ProjectionRegistrationResponse, ProjectionRequest, ProjectionResponse> {
-
     /**
      * Initializes a new instance of {@link ProjectionProcessor}.
      * @param {IProjection<T>} _projection - The projection.
@@ -57,15 +56,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         const registerArguments = new ProjectionRegistrationRequest();
         registerArguments.setProjectionid(Guids.toProtobuf(this._projection.projectionId.value));
         registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
-
-        let readModelInstance;
-        if (typeof this._projection.readModelTypeOrInstance === 'function') {
-            const constructor = this._projection.readModelTypeOrInstance as Constructor<T>;
-            readModelInstance = new constructor();
-        } else {
-            readModelInstance = this._projection.readModelTypeOrInstance;
-        }
-        registerArguments.setInitialstate(JSON.stringify(readModelInstance));
+        registerArguments.setInitialstate(JSON.stringify(this._projection.initialState));
 
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
@@ -191,8 +182,8 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         }
 
         let state = JSON.parse(request.getCurrentstate()!.getState());
-        if (typeof this._projection.readModelTypeOrInstance === 'function') {
-            state = Object.assign(new (this._projection.readModelTypeOrInstance as Constructor<T>)(), state);
+        if (this._projection.readModelType !== undefined) {
+            state = Object.assign(new this._projection.readModelType(), state);
         }
 
         const nextStateOrDelete = await this._projection.on(state, event, eventType, projectionContext);

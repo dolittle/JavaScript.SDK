@@ -3,6 +3,7 @@
 
 export { AggregateRootsBuilder } from './AggregateRootsBuilder';
 export { AggregateRootsBuilderCallback } from './AggregateRootsBuilderCallback';
+export { AggregateRootsModelBuilder } from './AggregateRootsModelBuilder';
 export { Aggregates } from './Aggregates';
 export { AggregatesBuilder } from './AggregatesBuilder';
 export { IAggregates } from './IAggregates';

@@ -5,27 +5,17 @@
 
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
+
+import  './DishHandler';
 import { Kitchen } from './Kitchen';
 
 (async () => {
     const client = await DolittleClient
-        .setup(builder => builder
-            .withEventTypes(eventTypes =>
-                eventTypes.register(DishPrepared))
-            .withEventHandlers(builder =>
-                builder.registerEventHandler(DishHandler))
-            .withAggregateRoots(aggregateRoots =>
-                aggregateRoots.register(Kitchen)))
+        .setup()
         .connect();
 
-    // TODO: aggregates
-    // await client
-    //     .aggregateOf(Kitchen, 'Dolittle Tacos', _ => _.forTenant(TenantId.development))
-        // .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
-
-    console.log('Done');
+    await client.aggregates
+        .forTenant(TenantId.development)
+        .get(Kitchen, 'Dolittle Tacos')
+        .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 })();
-setInterval(function () {
-}, 1000 * 60 * 60);

@@ -3,3 +3,4 @@
 
 export * as ClientSetup from './ClientSetup/_exports';
 export * as Decorators from './Decorators/_exports';
+export * as Model from './Model/_exports';

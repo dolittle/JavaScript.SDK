@@ -4,15 +4,13 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
-import { IEventTypes } from '@dolittle/sdk.events';
-import { IProjectionAssociations } from '@dolittle/sdk.projections';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EmbeddingId } from '../EmbeddingId';
-import { EmbeddingProcessor } from '../Internal/EmbeddingProcessor';
-import { IEmbedding } from '../Internal/IEmbedding';
+import { EmbeddingModelId } from '../EmbeddingModelId';
 import { EmbeddingBuilder } from './EmbeddingBuilder';
 import { EmbeddingClassBuilder } from './EmbeddingClassBuilder';
+import { embedding as embeddingDecorator, getDecoratedEmbeddingType, isDecoratedEmbeddingType } from './embeddingDecorator';
 import { IEmbeddingBuilder } from './IEmbeddingBuilder';
 import { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
 
@@ -20,59 +18,39 @@ import { IEmbeddingsBuilder } from './IEmbeddingsBuilder';
  * Represents an implementation of {@link IEmbeddingsBuilder}.
  */
 export class EmbeddingsBuilder extends IEmbeddingsBuilder {
-    private _callbackBuilders: EmbeddingBuilder[] = [];
-    private _classBuilders: EmbeddingClassBuilder<any>[] = [];
-
     /**
-     * Initialises a new instance of {@link EmbeddingsBuilder}.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * Initialises a new instance of the {@link EmbeddingsBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding projections to identifiers.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      */
-    constructor(private readonly _projectionAssociations: IProjectionAssociations) {
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
         super();
     }
 
     /** @inheritdoc */
     createEmbedding(embeddingId: string | EmbeddingId | Guid): IEmbeddingBuilder {
-        const builder = new EmbeddingBuilder(EmbeddingId.from(embeddingId), this._projectionAssociations);
-        this._callbackBuilders.push(builder);
+        const id = EmbeddingId.from(embeddingId);
+        const builder = new EmbeddingBuilder(id, this._modelBuilder);
+        const identifier = new EmbeddingModelId(id);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
         return builder;
     }
 
     /** @inheritdoc */
-    registerEmbedding<T = any>(type: Constructor<T>): IEmbeddingsBuilder;
-    registerEmbedding<T = any>(instance: T): IEmbeddingsBuilder;
-    registerEmbedding<T = any>(typeOrInstance: Constructor<T> | T): EmbeddingsBuilder {
-        this._classBuilders.push(new EmbeddingClassBuilder<T>(typeOrInstance));
-        this._projectionAssociations.associate<T>(typeOrInstance);
+    registerEmbedding<T>(type: Constructor<T>): IEmbeddingsBuilder {
+        if (!isDecoratedEmbeddingType(type)) {
+            this._buildResults.addFailure(`The embeddings class ${type.name} is not decorated as an embeddings`,`Add the @${embeddingDecorator.name} decorator to the class`);
+            return this;
+        }
+
+        const embeddingType = getDecoratedEmbeddingType(type);
+        const identifier = new EmbeddingModelId(embeddingType.embeddingId);
+        const builder = new EmbeddingClassBuilder<T>(embeddingType);
+        this._modelBuilder.bindIdentifierToType(identifier, type);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
         return this;
-    }
-
-    /**
-     * Builds all the embeddings created with the builder.
-     * @param {IEventTypes} eventTypes - All registered event types.
-     * @param {IClientBuildResults} results - For keeping track of build results.
-     * @returns {EmbeddingProcessor[]} The built embedding processors.
-     */
-    build(
-        eventTypes: IEventTypes,
-        results: IClientBuildResults
-    ): EmbeddingProcessor<any>[] {
-        const embeddings: IEmbedding<any>[] = [];
-
-        for (const embeddingBuilder of this._callbackBuilders) {
-            const embedding = embeddingBuilder.build(eventTypes, results);
-            if (embedding !== undefined) {
-                embeddings.push(embedding);
-            }
-        }
-        for (const embeddingBuilder of this._classBuilders) {
-            const embedding = embeddingBuilder.build(eventTypes, results);
-            if (embedding !== undefined) {
-                embeddings.push(embedding);
-            }
-        }
-
-        return embeddings.map(embedding =>
-            new EmbeddingProcessor(embedding, eventTypes));
     }
 }

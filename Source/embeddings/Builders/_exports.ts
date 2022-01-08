@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { CannotRegisterEmbeddingThatIsNotAClass } from './CannotRegisterEmbeddingThatIsNotAClass';
 export { DeletionDecoratedMethod } from './DeletionDecoratedMethod';
 export { EmbeddingAlreadyHasADeletionDecorator } from './EmbeddingAlreadyHasADeletionDecorator';
 export { EmbeddingAlreadyHasADeletionMethod } from './EmbeddingAlreadyHasADeletionMethod';
@@ -16,6 +15,7 @@ export { EmbeddingClassUpdateMethod } from './EmbeddingClassUpdateMethod';
 export { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
 export { EmbeddingsBuilder } from './EmbeddingsBuilder';
 export { EmbeddingsBuilderCallback } from './EmbeddingsBuilderCallback';
+export { EmbeddingsModelBuilder } from './EmbeddingsModelBuilder';
 export { IEmbeddingBuilder } from './IEmbeddingBuilder';
 export { IEmbeddingBuilderForReadModel } from './IEmbeddingBuilderForReadModel';
 export { IEmbeddingsBuilder } from './IEmbeddingsBuilder';

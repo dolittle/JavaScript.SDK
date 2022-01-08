@@ -7,7 +7,7 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
+import { CurrentState, IConvertProjectionsToSDK, Key } from '@dolittle/sdk.projections';
 import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
@@ -16,6 +16,7 @@ import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@d
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
 
+import { IEmbeddingReadModelTypes } from './Store/IEmbeddingReadModelTypes';
 import { EmbeddingId } from './EmbeddingId';
 import { IEmbedding } from './IEmbedding';
 import { FailedToDelete } from './FailedToDelete';
@@ -26,24 +27,23 @@ import { FailedToUpdate } from './FailedToUpdate';
  * Represents an implementation of {@link IEmbedding}.
  */
 export class Embedding extends IEmbedding {
-
     /**
      * Initialises a new instance of the {@link Embedding} class.
      * @param {EmbeddingStoreClient} storeClient - The embedding store client.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IConvertProjectionsToSDK} _converter - The converter to use to convert projections.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {IEmbeddingReadModelTypes} _readModelTypes - The projection associations.
      * @param {EmbeddingsClient} _embeddingsClient - The embeddings client.
      * @param {Logger} _logger - The logger.
      */
     constructor(
         storeClient: EmbeddingStoreClient,
-        protected readonly _executionContext: ExecutionContext,
-        protected readonly _converter: IConvertProjectionsToSDK,
-        protected readonly _projectionAssociations: IProjectionAssociations,
+        _executionContext: ExecutionContext,
+        _converter: IConvertProjectionsToSDK,
+        _readModelTypes: IEmbeddingReadModelTypes,
         private readonly _embeddingsClient: EmbeddingsClient,
-        protected readonly _logger: Logger) {
-        super(storeClient, _executionContext, _converter, _projectionAssociations, _logger);
+        _logger: Logger) {
+        super(storeClient, _executionContext, _converter, _readModelTypes, _logger);
     }
 
     /** @inheritdoc */
@@ -141,7 +141,7 @@ export class Embedding extends IEmbedding {
             if (this.isEmbeddingId(stateOrEmbedding)) {
                 return EmbeddingId.from(stateOrEmbedding);
             }
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(maybeType!).identifier.value);
+            return this._readModelTypes.getFor(maybeType!);
         }
     }
 
@@ -149,7 +149,7 @@ export class Embedding extends IEmbedding {
         maybeType: Constructor<any> | Key | string,
         keyOrEmbedding: Key | EmbeddingId | Guid | string) {
         if (typeof maybeType === 'function') {
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(maybeType).identifier.value);
+            return this._readModelTypes.getFor(maybeType);
         }
         return EmbeddingId.from(keyOrEmbedding.toString());
     }

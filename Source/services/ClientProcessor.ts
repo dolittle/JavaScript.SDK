@@ -1,11 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import * as grpc from '@grpc/grpc-js';
-import { Observable } from 'rxjs';
-import { repeat } from 'rxjs/operators';
+import { concat, Observable, throwError } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Logger } from 'winston';
-
+import * as grpc from '@grpc/grpc-js';
 import { ConceptAs } from '@dolittle/concepts';
 import { Guid } from '@dolittle/rudiments';
 
@@ -15,8 +14,10 @@ import { Failures } from '@dolittle/sdk.protobuf';
 import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resilience';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+
 import { IReverseCallClient } from './IReverseCallClient';
 import { RegistrationFailed } from './RegistrationFailed';
+import { ProcessorShouldNeverComplete } from './ProcessorShouldNeverComplete';
 
 /**
  * Defines a system for registering a processor that handles request from the Runtime.
@@ -61,30 +62,34 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
             logger,
             cancellation);
 
-        return new Observable<void>(subscriber => {
-            logger.debug(`Registering ${this._kind} ${this._identifier} with the Runtime.`);
-            reverseCallClient.subscribe({
-                next: (message: TRegisterResponse) => {
-                    const failure = this.getFailureFromRegisterResponse(message);
-                    if (failure) {
-                        subscriber.error(new RegistrationFailed(this._kind, this._identifier.value, Failures.toSDK(failure)));
-                    } else {
-                        logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
-                    }
-                },
-                error: (error: Error) => {
-                    subscriber.error(error);
+        return reverseCallClient.pipe(
+            map((registerResponse) => {
+                const pbFailure = this.getFailureFromRegisterResponse(registerResponse);
+                if (pbFailure !== undefined) {
+                    const failure = Failures.toSDK(pbFailure);
+
+                    logger.error(`${this._kind} ${this._identifier} failed during registration. ${failure.reason}`);
+
+                    throw new RegistrationFailed(this._kind, this._identifier.value, failure);
+                } else {
+                    logger.info(`${this._kind} ${this._identifier} registered with the Runtime, start handling requests.`);
+                }
+            }),
+            tap({
+                error: (error) => {
+                    if (error instanceof RegistrationFailed) return;
+
+                    logger.error(`${this._kind} ${this._identifier} failed during processing of requests. ${error.message}`);
                 },
                 complete: () => {
                     logger.debug(`${this._kind} ${this._identifier} handling of requests completed.`);
-                    subscriber.complete();
-                },
-            });
-        });
+                }
+            })
+        );
     }
 
     /**
-     * Registers a processor with a policy.
+     * Registers a processor with a policy that specifies which and how to retry (reconnect) on errors.
      * @param {RetryPolicy} policy - The policy to register with.
      * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
@@ -95,12 +100,13 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
     registerWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
-        return retryWithPolicy(this.register(client, executionContext, services, logger, pingInterval, cancellation), policy, cancellation);
+        const registration = this.register(client, executionContext, services, logger, pingInterval, cancellation);
+        return retryWithPolicy(registration, policy, cancellation);
     }
 
     /**
-     * Registers a processor forever with a policy. Even if the registration completes, the repeat() call
-     * will try to re-register.
+     * Registers a processor forever with a policy that specifies which and how to retry (reconnect) on errors.
+     * If the processor completes an error is thrown that will be handed over to the policy to deal with as any other errors.
      * @param {RetryPolicy} policy - The policy to register with.
      * @param {TClient} client - The client to use to initiate the reverse call client.
      * @param {ExecutionContext} executionContext - The base execution context for the processor.
@@ -111,7 +117,9 @@ export abstract class ClientProcessor<TIdentifier extends ConceptAs<Guid, string
      * @returns {Observable} Repressenting the connection to the Runtime.
      */
     registerForeverWithPolicy(policy: RetryPolicy, client: TClient, executionContext: ExecutionContext, services: ITenantServiceProviders, logger: Logger, pingInterval: number, cancellation: Cancellation): Observable<void> {
-        return this.registerWithPolicy(policy, client, executionContext, services, logger, pingInterval, cancellation).pipe(repeat());
+        const registration = this.register(client, executionContext, services, logger, pingInterval, cancellation);
+        const registrationThatFailsOnComplete = concat(registration, throwError(new ProcessorShouldNeverComplete()));
+        return retryWithPolicy(registrationThatFailsOnComplete, policy, cancellation);
     }
 
     /**

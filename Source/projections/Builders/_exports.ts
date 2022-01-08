@@ -1,7 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export { CannotRegisterProjectionThatIsNotAClass } from './CannotRegisterProjectionThatIsNotAClass';
 export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
 export { IProjectionBuilder } from './IProjectionBuilder';
 export { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
@@ -20,5 +19,6 @@ export { projection, isDecoratedProjectionType, getDecoratedProjectionType } fro
 export { ProjectionOptions } from './ProjectionOptions';
 export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';
+export { ProjectionsModelBuilder } from './ProjectionsModelBuilder';
 export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
 export { TypeOrEventType } from './TypeOrEventType';

@@ -6,7 +6,7 @@ import { Constructor } from '@dolittle/types';
 
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Generation, GenerationLike } from '@dolittle/sdk.artifacts';
-import { EventType, EventTypeId, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
+import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap, IEventTypes } from '@dolittle/sdk.events';
 
 import { EventHandlerId } from '../EventHandlerId';
 import { EventHandlerSignature } from '../EventHandlerSignature';
@@ -33,9 +33,9 @@ export class EventHandlerMethodsBuilder extends IEventHandlerMethodsBuilder {
     /** @inheritdoc */
     handle<T>(type: Constructor<T>, method: EventHandlerSignature<T>): IEventHandlerMethodsBuilder;
     handle(eventType: EventType, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
-    handle(eventTypeId: string | EventTypeId | Guid, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
-    handle(eventTypeId: string | EventTypeId | Guid, generation: GenerationLike, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
-    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeId | Guid | string, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>): IEventHandlerMethodsBuilder {
+    handle(eventTypeId: EventTypeIdLike, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
+    handle(eventTypeId: EventTypeIdLike, generation: GenerationLike, method: EventHandlerSignature<any>): IEventHandlerMethodsBuilder;
+    handle<T = any>(typeOrEventTypeOrId: Constructor<T> | EventType | EventTypeIdLike, methodOrGeneration: EventHandlerSignature<T> | GenerationLike, maybeMethod?: EventHandlerSignature<T>): IEventHandlerMethodsBuilder {
         const method = maybeMethod || methodOrGeneration as EventHandlerSignature<T>;
 
         if (typeOrEventTypeOrId instanceof EventType) {

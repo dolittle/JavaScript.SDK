@@ -1,11 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Constructor } from '@dolittle/types';
-import { ArtifactOrId } from '@dolittle/sdk.artifacts';
+import { Guid } from '@dolittle/rudiments';
+
 import { AggregateRootId } from '@dolittle/sdk.events';
+
 import { AggregateRootType } from './AggregateRootType';
-import { AggregateRootTypeMap } from './AggregateRootTypeMap';
 import { IAggregateRootTypes } from './IAggregateRootTypes';
 
 /**
@@ -13,22 +13,14 @@ import { IAggregateRootTypes } from './IAggregateRootTypes';
  */
 export class AggregateRootTypes extends IAggregateRootTypes {
     /**
-     * Initializes a new instance of {@link AggregateRootType}.
-     * @param {AggregateRootTypeMap<Constructor<any>>} [associations] - Known associations.
+     * Initialises a new instance of the {@link AggregateRootTypes} class.
      */
-    constructor(associations: AggregateRootTypeMap<Constructor<any>> = new AggregateRootTypeMap()) {
-        super(associations);
+    constructor() {
+        super(AggregateRootType);
     }
 
     /** @inheritdoc */
-    protected createArtifact(artifactOrId: ArtifactOrId<AggregateRootType, AggregateRootId>): AggregateRootType {
-        return artifactOrId instanceof AggregateRootType
-                ? artifactOrId
-                : new AggregateRootType(AggregateRootId.from(artifactOrId));
-    }
-
-    /** @inheritdoc */
-    protected getArtifactTypeName(): string {
-        return 'AggregateRootType';
+    protected createArtifactFrom(id: string | AggregateRootId | Guid): AggregateRootType {
+        return AggregateRootType.from(id);
     }
 }

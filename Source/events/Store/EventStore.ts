@@ -3,10 +3,9 @@
 
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
-import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { Artifacts, ExecutionContexts, Guids, Failures } from '@dolittle/sdk.protobuf';
+import { ExecutionContexts, Guids, Failures } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
@@ -19,9 +18,9 @@ import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dol
 
 import { AggregateRootId } from '../AggregateRootId';
 import { AggregateRootVersion } from '../AggregateRootVersion';
-import { EventSourceId } from '../EventSourceId';
+import { EventSourceId, EventSourceIdLike } from '../EventSourceId';
 import { EventType } from '../EventType';
-import { EventTypeId } from '../EventTypeId';
+import { EventTypeId, EventTypeIdLike } from '../EventTypeId';
 import { IEventTypes } from '../IEventTypes';
 import { CommitForAggregateBuilder } from './Builders/CommitForAggregateBuilder';
 import { CommitAggregateEventsResult } from './CommitAggregateEventsResult';
@@ -55,31 +54,30 @@ export class EventStore extends IEventStore {
     }
 
     /** @inheritdoc */
-    commit(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult>;
+    commit(event: any, eventSourceId: EventSourceIdLike, eventType?: EventType | EventTypeIdLike, cancellation?: Cancellation): Promise<CommitEventsResult>;
     commit(eventOrEvents: UncommittedEvent | UncommittedEvent[], cancellation?: Cancellation): Promise<CommitEventsResult>;
-    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commit(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceIdLike | Cancellation, eventType?: EventType | EventTypeIdLike, cancellation?: Cancellation): Promise<CommitEventsResult> {
         if (this.isUncommittedEventOrEvents(eventOrEvents)) {
             return this.commitInternal(this.asArray(eventOrEvents), eventSourceIdOrCancellation as Cancellation);
         }
-        const eventSourceId = eventSourceIdOrCancellation as EventSourceId | Guid | string;
+        const eventSourceId = eventSourceIdOrCancellation as EventSourceIdLike;
         return this.commitInternal([this.toUncommittedEvent(eventOrEvents, eventSourceId, eventType, false)], cancellation);
     }
 
     /** @inheritdoc */
-    commitPublic(event: any, eventSourceId: EventSourceId | Guid | string, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitEventsResult> {
+    commitPublic(event: any, eventSourceId: EventSourceIdLike, eventType?: EventType | EventTypeIdLike, cancellation?: Cancellation): Promise<CommitEventsResult> {
         const events: UncommittedEvent[] = [this.toUncommittedEvent(event, eventSourceId, eventType, true)];
         return this.commitInternal(events, cancellation);
     }
 
     /** @inheritdoc */
-    /** @inheritdoc */
-    commitForAggregate(event: any, eventSourceId: EventSourceId | Guid | string, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
+    commitForAggregate(event: any, eventSourceId: EventSourceIdLike, aggregateRootId: AggregateRootId, expectedAggregateRootVersion: AggregateRootVersion, eventType?: EventType | EventTypeIdLike, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
     commitForAggregate(events: UncommittedAggregateEvents, cancellation?: Cancellation): Promise<CommitAggregateEventsResult>;
-    commitForAggregate(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceId | Guid | string | Cancellation, aggregateRootId?: AggregateRootId, expectedAggregateRootVersion?: AggregateRootVersion, eventType?: EventType | EventTypeId | Guid | string, cancellation?: Cancellation): Promise<CommitAggregateEventsResult> {
+    commitForAggregate(eventOrEvents: any, eventSourceIdOrCancellation?: EventSourceIdLike | Cancellation, aggregateRootId?: AggregateRootId, expectedAggregateRootVersion?: AggregateRootVersion, eventType?: EventType | EventTypeIdLike, cancellation?: Cancellation): Promise<CommitAggregateEventsResult> {
         if (this.isUncommittedAggregateEvents(eventOrEvents)) {
             return this.commitAggregateInternal(eventOrEvents, eventSourceIdOrCancellation as Cancellation);
         }
-        const eventSourceId = eventSourceIdOrCancellation as EventSourceId | Guid | string;
+        const eventSourceId = eventSourceIdOrCancellation as EventSourceIdLike;
         return this.commitAggregateInternal(
             UncommittedAggregateEvents.from(
                 eventSourceId,
@@ -185,7 +183,7 @@ export class EventStore extends IEventStore {
         return new CommittedAggregateEvents(eventSourceId, aggregateRootId, ...convertedEvents);
     }
 
-    private toUncommittedEvent(content: any, eventSourceId: EventSourceId | Guid | string, eventTypeOrId?: EventType | EventTypeId | Guid | string, isPublic = false): UncommittedEvent {
+    private toUncommittedEvent(content: any, eventSourceId: EventSourceIdLike, eventTypeOrId?: EventType | EventTypeIdLike, isPublic = false): UncommittedEvent {
         let eventType: EventType | EventTypeId | undefined;
         if (eventTypeOrId !== undefined) {
             if (eventTypeOrId instanceof EventType) eventType = eventTypeOrId;

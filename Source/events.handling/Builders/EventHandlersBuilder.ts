@@ -4,30 +4,37 @@
 import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { IClientBuildResults } from '@dolittle/sdk.common';
-import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
-import { IEventTypes } from '@dolittle/sdk.events';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EventHandlerId } from '../EventHandlerId';
-import { IEventHandler } from '../IEventHandler';
-import { EventHandlerProcessor } from '../Internal/EventHandlerProcessor';
 import { EventHandlerBuilder } from './EventHandlerBuilder';
 import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
+import { eventHandler as eventHandlerDecorator, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 import { IEventHandlersBuilder } from './IEventHandlersBuilder';
+import { EventHandlerModelId } from '../EventHandlerModelId';
 
 /**
  * Represents an implementation of {@link IEventHandlersBuilder}.
  */
 export class EventHandlersBuilder extends IEventHandlersBuilder {
-    private _callbackBuilders: EventHandlerBuilder[] = [];
-    private _classBuilders: EventHandlerClassBuilder<any>[] = [];
+    /**
+     * Initialises a new instance of the {@link EventHandlersBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding event handlers to identifiers.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
+        super();
+    }
 
     /** @inheritdoc */
     createEventHandler(eventHandlerId: string | EventHandlerId | Guid, callback: EventHandlerBuilderCallback): IEventHandlersBuilder {
-        const builder = new EventHandlerBuilder(EventHandlerId.from(eventHandlerId));
+        const identifier = EventHandlerId.from(eventHandlerId);
+        const builder = new EventHandlerBuilder(identifier, this._modelBuilder);
         callback(builder);
-        this._callbackBuilders.push(builder);
         return this;
     }
 
@@ -35,39 +42,23 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
     registerEventHandler<T = any>(type: Constructor<T>): IEventHandlersBuilder;
     registerEventHandler<T = any>(instance: T): IEventHandlersBuilder;
     registerEventHandler<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
-        this._classBuilders.push(new EventHandlerClassBuilder(typeOrInstance));
+        const type = typeOrInstance instanceof Function ? typeOrInstance : Object.getPrototypeOf(typeOrInstance).constructor;
+        const instance = typeOrInstance instanceof Function ? undefined : typeOrInstance;
+        if (type === undefined) {
+            this._buildResults.addFailure(`The event handler instance ${typeOrInstance} is not a class, it cannot be used as an event handler`);
+            return this;
+        }
+
+        if (!isDecoratedEventHandlerType(type)) {
+            this._buildResults.addFailure(`The event handler class ${type.name} is not decorated as an event handler`,`Add the @${eventHandlerDecorator.name} decorator to the class`);
+            return this;
+        }
+
+        const eventHandlerType = getDecoratedEventHandlerType(type);
+        const identifier = new EventHandlerModelId(eventHandlerType.eventHandlerId, eventHandlerType.scopeId);
+        const builder = new EventHandlerClassBuilder(eventHandlerType, instance);
+        this._modelBuilder.bindIdentifierToType(identifier, type);
+        this._modelBuilder.bindIdentifierToProcessorBuilder(identifier, builder);
         return this;
-    }
-
-    /**
-     * Builds all the event handlers.
-     * @param {IEventTypes} eventTypes - All the registered event types.
-     * @param {IServiceProviderBuilder} bindings - For registering the bindings for the event handler classes.
-     * @param {IClientBuildResults} results - For keeping track of build results.
-     * @returns {EventHandlerProcessor[]} The built event handlers.
-     */
-    build(
-        eventTypes: IEventTypes,
-        bindings: IServiceProviderBuilder,
-        results: IClientBuildResults
-    ): EventHandlerProcessor[] {
-        const eventHandlers: IEventHandler[] = [];
-
-        for (const eventHandlerBuilder of this._callbackBuilders) {
-            const eventHandler = eventHandlerBuilder.build(eventTypes, results);
-            if (eventHandler !== undefined) {
-                eventHandlers.push(eventHandler);
-            }
-        }
-
-        for (const eventHandlerBuilder of this._classBuilders) {
-            const eventHandler = eventHandlerBuilder.build(eventTypes, bindings, results);
-            if (eventHandler !== undefined) {
-                eventHandlers.push(eventHandler);
-            }
-        }
-
-        return eventHandlers.map(handler =>
-            new EventHandlerProcessor(handler, eventTypes));
     }
 }

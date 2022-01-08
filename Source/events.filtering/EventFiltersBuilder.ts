@@ -3,7 +3,7 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { IEventTypes } from '@dolittle/sdk.events';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { FilterId } from './FilterId';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
@@ -11,50 +11,36 @@ import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
 import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
 import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
 import { IEventFiltersBuilder } from './IEventFiltersBuilder';
-import { IFilterProcessor } from './IFilterProcessor';
 
 /**
  * Represents an implementation of {@link IEventFiltersBuilder}.
  */
 export class EventFiltersBuilder extends IEventFiltersBuilder {
-    private _privateFilterBuilders: PrivateEventFilterBuilder[]  = [];
-    private _publicFilterBuilders: PublicEventFilterBuilder[]  = [];
+    /**
+     * Initialises a new instance of the {@link EventFiltersBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding event filters to identifiers.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
+        super();
+    }
 
     /** @inheritdoc */
     createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
-        const builder = new PrivateEventFilterBuilder(FilterId.from(filterId));
+        const identifier = FilterId.from(filterId);
+        const builder = new PrivateEventFilterBuilder(identifier, this._modelBuilder);
         callback(builder);
-        this._privateFilterBuilders.push(builder);
         return this;
     }
 
     /** @inheritdoc */
     createPublicFilter(filterId: string | FilterId | Guid, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder {
-        const builder = new PublicEventFilterBuilder(FilterId.from(filterId));
+        const identifier = FilterId.from(filterId);
+        const builder = new PublicEventFilterBuilder(identifier, this._modelBuilder);
         callback(builder);
-        this._publicFilterBuilders.push(builder);
         return this;
-    }
-
-    /**
-     * Builds all the event filters.
-     * @param {IEventTypes} eventTypes - For event types resolution.
-     * @returns {IFilterProcessor[]} The built filters.
-     */
-    build(
-        eventTypes: IEventTypes
-    ): IFilterProcessor[] {
-        const processors: IFilterProcessor[] = [];
-
-        for (const privateFilterBuilder of this._privateFilterBuilders) {
-            const filterProcessor = privateFilterBuilder.build(eventTypes);
-            processors.push(filterProcessor);
-        }
-        for (const publicFilterBuilder of this._publicFilterBuilders) {
-            const filterProcessor = publicFilterBuilder.build(eventTypes);
-            processors.push(filterProcessor);
-        }
-
-        return processors;
     }
 }

@@ -18,18 +18,19 @@ import { ProjectionsClient as ProjectionStoreClient } from '@dolittle/runtime.co
 import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
 import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
 
-import { AggregateRootsBuilder, AggregatesBuilder, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
+import { AggregatesBuilder, IAggregateRootTypes, IAggregates, IAggregatesBuilder, Internal as AggregatesInternal } from '@dolittle/sdk.aggregates';
 import { ClientSetup } from '@dolittle/sdk.common';
 import { IServiceProviderBuilder, ITenantServiceProviders, TenantServiceBindingCallback, TenantServiceProviders } from '@dolittle/sdk.dependencyinversion';
-import { Embeddings, IEmbedding, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
+import { Embeddings, IEmbedding, IEmbeddingReadModelTypes, IEmbeddings, Internal as EmbeddingsInternal } from '@dolittle/sdk.embeddings';
 import { EventHorizons, IEventHorizons, SubscriptionCallbacks, TenantWithSubscriptions } from '@dolittle/sdk.eventhorizon';
 import { EventStoreBuilder, IEventStore, IEventStoreBuilder, IEventTypes, Internal as EventTypesInternal } from '@dolittle/sdk.events';
 import { Filters, IFilterProcessor } from '@dolittle/sdk.events.filtering';
 import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk.events.handling';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { IProjectionStoreBuilder, ProjectionAssociations, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore } from '@dolittle/sdk.projections';
+import { IProjectionStoreBuilder, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore, IProjectionReadModelTypes } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
 import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 import { Tenant } from '@dolittle/sdk.tenancy';
 
 import { ConfigurationBuilder } from './Builders/ConfigurationBuilder';
@@ -37,12 +38,11 @@ import { ConnectCallback } from './Builders/ConnectCallback';
 import { SetupBuilder } from './Builders/SetupBuilder';
 import { SetupCallback } from './Builders/SetupCallback';
 import { ConnectConfiguration } from './Internal/ConnectConfiguration';
+import { RuntimeConnector } from './Internal/RuntimeConnector';
 import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittleClientMultipleTimes';
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
-import { RuntimeConnector } from './Internal/RuntimeConnector';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -66,12 +66,13 @@ export class DolittleClient extends IDolittleClient {
      * @param {IServiceProviderBuilder} _serviceProviderBuilder - The service provider builder with bound services from the setup.
      * @param {ClientSetup.ClientBuildResults} _setupResults - The results from building the client artifacts.
      * @param {IEventTypes} eventTypes - The built event types.
-     * @param {AggregateRootsBuilder} _aggregateRootsBuilder - The {@link AggregateRootsBuilder}.
+     * @param {IAggregateRootTypes} _aggregateRootTypes - The built aggregate root types.
      * @param {IFilterProcessor[]} _eventFilters - The built event filters.
      * @param {EventsHandlingInternal.EventHandlerProcessor[]} _eventHandlers - The built event handlers.
-     * @param {ProjectionAssociations} _projectionsAssociations - The {@link ProjectionAssociations}.
      * @param {ProjectionsInternal.ProjectionProcessor<any>[]} _projections - The built projections.
+     * @param {IProjectionReadModelTypes} _projectionReadModelTypes - The built projection read model types.
      * @param {EmbeddingsInternal.EmbeddingProcessor<any>[]} _embeddings - The built embeddings.
+     * @param {IEmbeddingReadModelTypes} _embeddingReadModelTypes - The built embedding read model types.
      * @param {TenantWithSubscriptions[]} _subscriptions - The built event horizon subscriptions.
      * @param {SubscriptionCallbacks} _subscriptionCallbacks - The built event horizon subscription callbacks.
      */
@@ -79,12 +80,13 @@ export class DolittleClient extends IDolittleClient {
         private readonly _serviceProviderBuilder: IServiceProviderBuilder,
         private readonly _setupResults: ClientSetup.ClientBuildResults,
         readonly eventTypes: IEventTypes,
-        private readonly _aggregateRootsBuilder: AggregateRootsBuilder,
+        private readonly _aggregateRootTypes: IAggregateRootTypes,
         private readonly _eventFilters: IFilterProcessor[],
         private readonly _eventHandlers: EventsHandlingInternal.EventHandlerProcessor[],
-        private readonly _projectionsAssociations: ProjectionAssociations,
         private readonly _projections: ProjectionsInternal.ProjectionProcessor<any>[],
+        private readonly _projectionReadModelTypes: IProjectionReadModelTypes,
         private readonly _embeddings: EmbeddingsInternal.EmbeddingProcessor<any>[],
+        private readonly _embeddingReadModelTypes: IEmbeddingReadModelTypes,
         private readonly _subscriptions: TenantWithSubscriptions[],
         private readonly _subscriptionCallbacks: SubscriptionCallbacks,
         ) {
@@ -267,21 +269,22 @@ export class DolittleClient extends IDolittleClient {
             logger);
 
         this._aggregates = new AggregatesBuilder(
-            this._eventStore,
+            this._aggregateRootTypes,
             this.eventTypes,
+            this._eventStore,
             logger);
 
         this._projectionStore = new ProjectionStoreBuilder(
             projectionStoreClient,
             executionContext,
-            this._projectionsAssociations,
+            this._projectionReadModelTypes,
             logger);
 
         this._embeddingStore = new Embeddings(
             embeddingStoreClient,
             embeddingsClient,
             executionContext,
-            this._projectionsAssociations,
+            this._embeddingReadModelTypes,
             logger);
 
         this._resources = new ResourcesBuilder(
@@ -307,9 +310,7 @@ export class DolittleClient extends IDolittleClient {
             aggregateRootsClient,
             executionContext,
             logger);
-        this._aggregateRootsBuilder.buildAndRegister(
-            aggregateRoots,
-            cancellation);
+        aggregateRoots.registerAllFrom(this._aggregateRootTypes, cancellation);
     }
 
     private bindServices(

@@ -43,8 +43,8 @@ export function isDecoratedEventHandlerType(type: Constructor<any>): boolean {
 /**
  * Gets the {@link EventHandlerDecoratedType} of the specified class.
  * @param {Constructor<any>} type - The class to get the decorated event handler type for.
- * @returns {EventHandlerDecoratedType | undefined} The decorated event handler type if decorated.
+ * @returns {EventHandlerDecoratedType} The decorated event handler type.
  */
-export function getDecoratedEventHandlerType(type: Constructor<any>): EventHandlerDecoratedType | undefined {
-    return getMetadata(type);
+export function getDecoratedEventHandlerType(type: Constructor<any>): EventHandlerDecoratedType {
+    return getMetadata(type, true, 'Classes used as event handlers must be decorated');
 }

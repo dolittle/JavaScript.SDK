@@ -22,7 +22,7 @@ import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverte
 import { CurrentState } from './CurrentState';
 import { FailedToGetProjection } from './FailedToGetProjection';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
-import { IProjectionAssociations } from './IProjectionAssociations';
+import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { IProjectionStore } from './IProjectionStore';
 
 /**
@@ -36,13 +36,13 @@ export class ProjectionStore extends IProjectionStore {
      * Initialises a new instance of the {@link ProjectionStore} class.
      * @param {ProjectionsClient} _projectionsClient - The projections client to use to get projection states.
      * @param {ExecutionContext} _executionContext - The execution context of the client.
-     * @param {IProjectionAssociations} _projectionAssociations - All the types associated with projections.
+     * @param {IProjectionReadModelTypes} _readModelTypes - All the types associated with projections.
      * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
-        private readonly _projectionAssociations: IProjectionAssociations,
+        private readonly _readModelTypes: IProjectionReadModelTypes,
         private readonly _logger: Logger) {
         super();
     }
@@ -53,13 +53,13 @@ export class ProjectionStore extends IProjectionStore {
     get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
     get(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
     get(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
-    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeProjectionOrCancellationOrScope?: ProjectionId | Cancellation | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
+    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
         const type = typeof typeOrKey === 'function'
             ? typeOrKey as Constructor<TProjection>
             : undefined;
         const key = this.getKeyFrom(typeOrKey, keyOrProjection);
-        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeProjectionOrCancellationOrScope, maybeCancellationOrScope);
-        const cancellation = this.getCancellationFrom(maybeProjectionOrCancellationOrScope, maybeCancellationOrScope, maybeCancellation);
+        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope);
+        const cancellation = this.getCancellationFrom(maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
 
         this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
 
@@ -123,8 +123,8 @@ export class ProjectionStore extends IProjectionStore {
             }
             return [ProjectionId.from(maybeProjectionOrCancellationOrScope), ScopeId.default];
         }
-        const projection = this._projectionAssociations.getFor<TProjection>(type!);
-        return [projection.identifier, projection.scopeId];
+        const projection = this._readModelTypes.getFor(type!);
+        return [projection.projectionId, projection.scopeId];
     }
 
     private getProjectionAndScopeForAll<TProjection>(type: Constructor<TProjection> | undefined, typeOrProjection: Constructor<TProjection> | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string): [ProjectionId, ScopeId] {
@@ -139,8 +139,8 @@ export class ProjectionStore extends IProjectionStore {
             }
             return [ProjectionId.from(maybeCancellationOrProjectionOrScope), ScopeId.default];
         }
-        const projection = this._projectionAssociations.getFor<TProjection>(type!);
-        return [projection.identifier, projection.scopeId];
+        const projection = this._readModelTypes.getFor(type!);
+        return [projection.projectionId, projection.scopeId];
     }
 
     private getCancellationFrom(maybeProjectionOrCancellationOrScope?: ProjectionId | Cancellation | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Cancellation {

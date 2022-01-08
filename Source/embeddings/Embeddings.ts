@@ -5,11 +5,12 @@ import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
-import { IProjectionAssociations, ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
+import { ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
 
 import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
 import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
 
+import { IEmbeddingReadModelTypes } from './Store/IEmbeddingReadModelTypes';
 import { IEmbedding } from './IEmbedding';
 import { IEmbeddings } from './IEmbeddings';
 import { Embedding } from './Embedding';
@@ -23,14 +24,14 @@ export class Embeddings extends IEmbeddings {
      * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
      * @param {EmbeddingsClient} _embeddingsClient - The embeddings client.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param {IProjectionAssociations} _embeddingAssociations - The embedding associations.
+     * @param {IEmbeddingReadModelTypes} _readModelTypes - The embedding associations.
      * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _embeddingsStoreClient: EmbeddingStoreClient,
         private readonly _embeddingsClient: EmbeddingsClient,
         private readonly _executionContext: ExecutionContext,
-        private readonly _embeddingAssociations: IProjectionAssociations,
+        private readonly _readModelTypes: IEmbeddingReadModelTypes,
         private readonly _logger: Logger) {
             super();
     }
@@ -45,7 +46,7 @@ export class Embeddings extends IEmbeddings {
             this._embeddingsStoreClient,
             executionContext,
             new ProjectionsToSDKConverter(),
-            this._embeddingAssociations,
+            this._readModelTypes,
             this._embeddingsClient,
             this._logger);
     }

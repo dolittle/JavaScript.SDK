@@ -3,31 +3,37 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { Cancellation } from '@dolittle/sdk.resilience';
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
-import { AggregateRoots } from '../Internal/AggregateRoots';
-import { getDecoratedAggregateRootType } from '../aggregateRootDecorator';
-import { AggregateRootTypes } from '../AggregateRootTypes';
+import { aggregateRoot as aggregateRootDecorator, isDecoratedAggregateRootType, getDecoratedAggregateRootType } from '../aggregateRootDecorator';
 import { IAggregateRootsBuilder } from './IAggregateRootsBuilder';
+import { AggregateRootModelId } from '../AggregateRootModelId';
 
 /**
  * Represents a builder for registering instances of {@link AggregateRootType} from implementations of {@link AggregateRoot}.
  */
 export class AggregateRootsBuilder extends IAggregateRootsBuilder {
-    private readonly _aggregateRootTypes = new AggregateRootTypes();
+    /**
+     * Initialises a new instance of the {@link AggregateRootsBuilder} class.
+     * @param {IModelBuilder} _modelBuilder - For binding aggregate root types to identifiers.
+     * @param {IClientBuildResults} _buildResults - For keeping track of build results.
+     */
+    constructor(
+        private readonly _modelBuilder: IModelBuilder,
+        private readonly _buildResults: IClientBuildResults
+    ) {
+        super();
+    }
 
     /** @inheritdoc */
     register<T = any>(type: Constructor<T>): IAggregateRootsBuilder {
-        this._aggregateRootTypes.associate(type, getDecoratedAggregateRootType(type));
-        return this;
-    }
+        if (!isDecoratedAggregateRootType(type)) {
+            this._buildResults.addFailure(`The aggregate root class ${type.name} is not decorated as an aggregate root`,`Add the @${aggregateRootDecorator.name} decorator to the class`);
+            return this;
+        }
 
-    /**
-     * Builds the aggregate roots by registering them with the Runtime.
-     * @param {AggregateRoots} aggregateRoots - The aggregate roots client.
-     * @param {Cancellation} cancellation - The cancellation.
-     */
-    buildAndRegister(aggregateRoots: AggregateRoots, cancellation: Cancellation) {
-        aggregateRoots.register(this._aggregateRootTypes, cancellation);
+        const identifier = new AggregateRootModelId(getDecoratedAggregateRootType(type));
+        this._modelBuilder.bindIdentifierToType(identifier, type);
+        return this;
     }
 }

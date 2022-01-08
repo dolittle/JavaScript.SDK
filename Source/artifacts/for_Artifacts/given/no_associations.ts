@@ -4,5 +4,7 @@
 import { artifacts } from './artifacts';
 
 export default {
-    artifacts: new artifacts()
+    get artifacts() {
+        return new artifacts();
+    }
 };

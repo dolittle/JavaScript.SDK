@@ -8,7 +8,7 @@ import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
 
-import { IProjectionAssociations } from '../IProjectionAssociations';
+import { IProjectionReadModelTypes } from '../IProjectionReadModelTypes';
 import { IProjectionStore } from '../IProjectionStore';
 import { ProjectionStore } from '../ProjectionStore';
 import { IProjectionStoreBuilder } from './IProjectionStoreBuilder';
@@ -22,13 +22,13 @@ export class ProjectionStoreBuilder extends IProjectionStoreBuilder {
      * Initializes a new instance of {@link ProjectionStoreBuilder}.
      * @param {ProjectionsClient} _projectionsClient - The client for the projections.
      * @param {ExecutionContext} _executionContext - The execution context.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {IProjectionReadModelTypes} _readModelTypes - The projection associations.
      * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
-        private readonly _projectionAssociations: IProjectionAssociations,
+        private readonly _readModelTypes: IProjectionReadModelTypes,
         private readonly _logger: Logger) {
             super();
     }
@@ -42,7 +42,7 @@ export class ProjectionStoreBuilder extends IProjectionStoreBuilder {
         return new ProjectionStore(
             this._projectionsClient,
             executionContext,
-            this._projectionAssociations,
+            this._readModelTypes,
             this._logger);
     }
 }
