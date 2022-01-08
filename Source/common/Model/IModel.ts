@@ -3,22 +3,57 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { AnyIdentifier, Identifier } from './Identifier';
+import { AnyIdentifier } from './Identifier';
 import { ProcessorBuilder } from './ProcessorBuilder';
 
-type Binding = {
+/**
+ * Represents the binding of an identifier to either a type, a processor builder or both.
+ */
+export type Binding = {
+    /**
+     * The identifier that is bound.
+     */
     identifier: AnyIdentifier;
+
+    /**
+     * The optional type that the identifier is bound to.
+     */
     type?: Constructor<any>;
+
+    /**
+     * The optional processor builder that the identifier is bound to.
+     */
     processorBuilder?: ProcessorBuilder;
 };
 
-type TypeBinding<T> = {
+/**
+ * Represents a binding for a specific type of identifier to a type.
+ * @template T The type of the identifier.
+ */
+export type TypeBinding<T> = {
+    /**
+     * The identifier that is bound.
+     */
     identifier: T;
+
+    /**
+     * The type that the identifier is bound to.
+     */
     type: Constructor<any>;
 };
 
-type ProcessorBuilderBinding<T> = {
+/**
+ * Represents a binding for an identifier to a processor builder.
+ */
+export type ProcessorBuilderBinding<T> = {
+    /**
+     * The identifier that is bound.
+     */
     identifier: AnyIdentifier;
+
+    /**
+     * The processor builder that the identifier is bound to.
+     */
     processorBuilder: T;
 };
 

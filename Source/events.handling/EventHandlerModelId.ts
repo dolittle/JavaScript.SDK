@@ -25,6 +25,9 @@ export class EventHandlerModelId extends ModelIdentifier<EventHandlerId, '@dolit
     get scope(): ScopeId {
         return this.__extras.scope;
     }
+
+    /** @inheritdoc */
+    protected [Symbol.toStringTag] = 'EventHandler';
 }
 
 /**

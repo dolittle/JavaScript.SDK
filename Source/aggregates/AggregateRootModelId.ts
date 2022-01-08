@@ -24,6 +24,14 @@ export class AggregateRootModelId extends ModelIdentifier<AggregateRootId, '@dol
     get aggregateRootType(): AggregateRootType {
         return this.__extras.aggregateRootType;
     }
+
+    /** @inheritdoc */
+    protected [Symbol.toStringTag] = 'AggregateRoot';
+
+    /** @inheritdoc */
+    protected toStringExtras(extras: { aggregateRootType: AggregateRootType }): object {
+        return { generation: this.aggregateRootType.generation };
+    }
 }
 
 /**

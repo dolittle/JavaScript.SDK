@@ -25,6 +25,9 @@ export class ProjectionModelId extends ModelIdentifier<ProjectionId, '@dolittle/
     get scope(): ScopeId {
         return this.__extras.scope;
     }
+
+    /** @inheritdoc */
+    protected [Symbol.toStringTag] = 'Projection';
 }
 
 /**

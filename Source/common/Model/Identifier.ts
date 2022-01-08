@@ -18,7 +18,7 @@ type ExtraPredicates<E extends Extras> = E extends void
  * @template I The type of the globally unique id of the identifier.
  * @template E The type of the extra data of the identifier.
  */
-export class Identifier<I extends ConceptAs<Guid, string>, U extends string, E extends Extras = void> implements IEquatable {
+export abstract class Identifier<I extends ConceptAs<Guid, string>, U extends string, E extends Extras = void> implements IEquatable {
     /**
      * Initialises a new instance of the {@link Identifier} class.
      * @param {I} id - The globally unique id for the identifier.
@@ -37,10 +37,66 @@ export class Identifier<I extends ConceptAs<Guid, string>, U extends string, E e
         if (typeof other !== 'object' || other === null) return false;
         if (this.type !== other.type) return false;
         if (!this.id.equals(other.id)) return false;
-        if (typeof this.__extras === 'object') {
-            for (const [property, value] of Object.entries(this.__extras)) {
-                if (!value.equals(other.__extras[property])) return false;
-            }
+        if (!this.extrasEquals(other)) return false;
+
+        return true;
+    }
+
+    /**
+     * Determines whether or not this identifier can coexist with another identifier.
+     * By default identifiers with a similar id cannot coexist, but subtypes can implement custom logic.
+     * @param {AnyIdentifier} identifier - The other identifier to check if can coexist with.
+     * @returns {boolean} True if this identifier can coexist with the other identifier, false if not.
+     */
+    canCoexistWith(identifier: AnyIdentifier): boolean {
+        return false;
+    }
+
+    /** @inheritdoc */
+    toString(): string {
+        return `${this[Symbol.toStringTag]}(${this.id.value.toString()}${this.createExtraToString()})`;
+    }
+
+    /** @inheritdoc */
+    protected abstract [Symbol.toStringTag]: string;
+
+    /**
+     * Selects properties from the extra data to include while computing {@link Identifier.toString}.
+     * @param {Extras} extras - The extra data of the identifier.
+     * @returns {object | undefined} An object with the properties to include, or undefined.
+     */
+    protected toStringExtras(extras: E): object | undefined | void {
+        return extras;
+    }
+
+    private createExtraToString(): string {
+        if (this.__extras === undefined) return '';
+
+        const extraToStringData = this.toStringExtras(this.__extras);
+        if (extraToStringData === undefined) return '';
+
+        let extrasToString = '';
+        for (const [property, value] of Object.entries(extraToStringData)) {
+            extrasToString += `, ${property}: ${value}`;
+        }
+        return extrasToString;
+    }
+
+    private extrasEquals(other: any): boolean {
+        const { __extras: thisExtras } = this;
+        const { __extras: otherExtras } = other;
+
+        if (thisExtras === undefined || otherExtras === undefined) return thisExtras === otherExtras;
+        if (typeof thisExtras !== 'object' || thisExtras === null) return false;
+        if (typeof otherExtras !== 'object' || otherExtras === null) return false;
+
+        for (const [property, value] of Object.entries(thisExtras)) {
+            if (typeof value.equals !== 'function' || value.equals.length !== 1) return false;
+            if (!value.equals(otherExtras[property])) return false;
+        }
+        for (const [property, value] of Object.entries(otherExtras) as [string, any][]) {
+            if (typeof value.equals !== 'function' || value.equals.length !== 1) return false;
+            if (!value.equals(thisExtras[property])) return false;
         }
 
         return true;
@@ -91,7 +147,7 @@ export const createIsIdentifier: CreateIsIdentifier = <T extends Identifier<I, U
     return (object): object is T => {
         if (typeof object !== 'object' || object === null) return false;
 
-        const { type, id, __extras, equals } = object;
+        const { type, id, __extras, equals, toString } = object;
         if (!isId(id)) return false;
         if (typeof type !== 'string' || type !== identifierType) return false;
         if (isExtras !== undefined) {
@@ -100,6 +156,9 @@ export const createIsIdentifier: CreateIsIdentifier = <T extends Identifier<I, U
             }
         }
         if (typeof equals !== 'function' || equals.length !== 1) return false;
+        if (typeof toString !== 'function' || toString.length !== 0) return false;
+
+        if (typeof object[Symbol.toStringTag] !== 'string') return false;
 
         return true;
     };

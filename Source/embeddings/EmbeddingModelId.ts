@@ -16,6 +16,9 @@ export class EmbeddingModelId extends ModelIdentifier<EmbeddingId, '@dolittle/sd
     constructor(id: EmbeddingId) {
         super(id, '@dolittle/sdk.embeddings.EmbeddingId');
     }
+
+    /** @inheritdoc */
+    protected [Symbol.toStringTag] = 'Embedding';
 }
 
 /**

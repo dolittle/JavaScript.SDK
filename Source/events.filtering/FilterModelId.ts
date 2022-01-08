@@ -18,6 +18,9 @@ export class FilterModelId extends ModelIdentifier<FilterId, '@dolittle/sdk.even
     constructor(id: FilterId, scope: ScopeId) {
         super(id, '@dolittle/sdk.events.filtering.FilterModelId', { scope });
     }
+
+    /** @inheritdoc */
+    protected [Symbol.toStringTag] = 'Filter';
 }
 
 /**
