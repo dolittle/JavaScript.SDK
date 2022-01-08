@@ -19,6 +19,11 @@ export class ModuleTraverser extends ICanTraverseModules {
         'JavaScript.SDK/Source',
     ];
 
+    /**
+     * The maximum depth to recurse exported objects.
+     */
+    static readonly maxExportsRecurseDepth: number = 10;
+
     /** @inheritdoc */
     forEachClass(callback: ClassCallback): void {
         this.traverseLoadedModulesFromMain((object) => {
@@ -66,15 +71,17 @@ export class ModuleTraverser extends ICanTraverseModules {
     }
 
     private traverseExportsRecursively(object: any, stack: any[], callback: ObjectCallback): void {
-        if (object === undefined || stack.includes(object)) {
+        if (object === undefined || object === null || stack.includes(object)) {
             return;
         }
 
         callback(object);
 
+        if (stack.length > ModuleTraverser.maxExportsRecurseDepth) return;
+
         stack.push(object);
-        for (const property in object) {
-            this.traverseExportsRecursively(object[property], stack, callback);
+        for (const property of Object.values(object)) {
+            this.traverseExportsRecursively(property, stack, callback);
         }
         stack.pop();
     }

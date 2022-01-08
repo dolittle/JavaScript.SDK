@@ -60,13 +60,13 @@ export class ModelBuilder extends IModelBuilder {
             this._typesByIdentifier,
             (left, right) => left === right,
             (identifier, type, duplicates) => {
-                buildResults.addInformation(`Type binding from ${identifier.constructor.name} to ${type.name} appeared ${duplicates} time`);
+                buildResults.addInformation(`Type binding from ${identifier.constructor.name} to ${type.name} appeared ${duplicates} times`);
             });
         const deduplicatedProcessorBuilders = this.deduplicateBindings(
             this._processorBuildersByIdentifier,
             (left, right) => left.equals(right),
             (identifier, processorBuilder, duplicates) => {
-                buildResults.addInformation(`Processor binding from ${identifier.constructor.name} to ${processorBuilder.constructor.name} appeared ${duplicates} time`);
+                buildResults.addInformation(`Processor binding from ${identifier.constructor.name} to ${processorBuilder.constructor.name} appeared ${duplicates} times`);
             });
 
         const validTypeBindings: [AnyIdentifier, Constructor<any>][] = [];
