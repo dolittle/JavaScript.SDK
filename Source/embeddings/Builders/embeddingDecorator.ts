@@ -5,8 +5,6 @@ import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
 import { Decorators } from '@dolittle/sdk.common';
-import { ScopeId } from '@dolittle/sdk.events';
-import { projection } from '@dolittle/sdk.projections';
 
 import { EmbeddingId } from '../EmbeddingId';
 import { EmbeddingDecoratedType } from './EmbeddingDecoratedType';
@@ -20,9 +18,7 @@ const [decorator, getMetadata] = Decorators.createMetadataDecorator<EmbeddingDec
  */
 export function embedding(id: EmbeddingId | Guid | string): Decorators.Decorator {
     const embeddingId = EmbeddingId.from(id);
-    const projectionDecorator = projection(embeddingId.value, { inScope: ScopeId.default });
     return decorator((target, type) => {
-        projectionDecorator(type);
         return new EmbeddingDecoratedType(embeddingId, type);
     });
 }
