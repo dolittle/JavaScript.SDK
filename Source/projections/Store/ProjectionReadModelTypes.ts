@@ -48,8 +48,8 @@ export class ProjectionReadModelTypes extends TypeMap<ScopedProjectionId, [strin
     /** @inheritdoc */
     associate(type: Constructor<any>, projection: ScopedProjectionId | ProjectionId, scope?: ScopeId): void {
         if (scope !== undefined) {
-            super.associate(type, new ScopedProjectionId(projection as ProjectionId, scope));
+            return super.associate(type, new ScopedProjectionId(projection as ProjectionId, scope));
         }
-        super.associate(type, projection as ScopedProjectionId);
+        return super.associate(type, projection as ScopedProjectionId);
     }
 }
