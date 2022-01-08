@@ -2,8 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Generation } from '@dolittle/sdk.artifacts';
-import { createIsModelIdentifier, ModelIdentifier } from '@dolittle/sdk.common';
-import { AnyIdentifier } from '@dolittle/sdk.common/Model/Identifier';
+import { createIsModelIdentifier, ModelIdentifier, AnyModelIdentifier } from '@dolittle/sdk.common';
 
 import { EventType, isEventType } from './EventType';
 import { EventTypeId, isEventTypeId } from './EventTypeId';
@@ -12,7 +11,6 @@ import { EventTypeId, isEventTypeId } from './EventTypeId';
  * Represents the identifier of an event type in an application model.
  */
 export class EventTypeModelId extends ModelIdentifier<EventTypeId, '@dolittle/sdk.events.EventTypeModelId', { eventType: EventType }> {
-    protected [Symbol.toStringTag]: string;
     /**
      * Initialises a new instance of the {@link EventTypeModelId} class.
      * @param {EventType} eventType - The event type.
@@ -36,7 +34,7 @@ export class EventTypeModelId extends ModelIdentifier<EventTypeId, '@dolittle/sd
     }
 
     /** @inheritdoc */
-    canCoexistWith(identifier: AnyIdentifier): boolean {
+    canCoexistWith(identifier: AnyModelIdentifier): boolean {
         if (!isEventTypeModelId(identifier)) return false;
 
         return this.id.equals(identifier.id) && !this.generation.equals(identifier.generation);

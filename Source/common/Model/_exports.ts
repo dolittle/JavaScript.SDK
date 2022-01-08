@@ -3,7 +3,7 @@
 
 export { CannotUnbindIdentifierFromProcessorBuilderThatIsNotBound } from './CannotUnbindIdentifierFromProcessorBuilderThatIsNotBound';
 export { CannotUnbindIdentifierFromTypeThatIsNotBound } from './CannotUnbindIdentifierFromTypeThatIsNotBound';
-export { Identifier, createIsIdentifier } from './Identifier';
+export { Identifier, createIsIdentifier, AnyIdentifier } from './Identifier';
 export { IModel } from './IModel';
 export { IModelBuilder } from './IModelBuilder';
 export { ModelBuilder } from './ModelBuilder';
