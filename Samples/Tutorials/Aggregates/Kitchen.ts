@@ -5,6 +5,7 @@
 
 import { aggregateRoot, AggregateRoot, on } from '@dolittle/sdk.aggregates';
 import { EventSourceId } from '@dolittle/sdk.events';
+
 import { DishPrepared } from './DishPrepared';
 
 @aggregateRoot('01ad9a9f-711f-47a8-8549-43320f782a1e')
