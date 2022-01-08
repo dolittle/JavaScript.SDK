@@ -5,8 +5,9 @@
 
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
+
 import './DishHandler';
+import { DishPrepared } from './DishPrepared';
 
 (async () => {
     const client = await DolittleClient
