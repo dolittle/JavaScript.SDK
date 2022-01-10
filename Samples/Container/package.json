@@ -16,8 +16,9 @@
         "@dolittle/sdk.artifacts": "21.0.0-gimli.12",
         "@dolittle/sdk.events": "21.0.0-gimli.12",
         "@dolittle/sdk.events.handling": "21.0.0-gimli.12",
+        "inversify": "^6.0.1",
         "reflect-metadata": "^0.1.13",
-        "typedi": "0.8.0"
+        "winston": "^3.3.4"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
