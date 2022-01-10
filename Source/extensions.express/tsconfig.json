@@ -5,7 +5,7 @@
         "outDir": "Distribution",
         "composite": true
     },
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts", "**/*.d.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
         { "path": "../sdk" },
