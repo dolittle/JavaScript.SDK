@@ -9,18 +9,19 @@ services:
       driver: none
  
   consumer-runtime:
-    image: dolittle/runtime:latest
+    image: dolittle/runtime:7.4.0-gimli.4
     volumes:
+      - ./consumer-platform.json:/app/.dolittle/platform.json
       - ./consumer-resources.json:/app/.dolittle/resources.json
-      - ./consumer-endpoints.json:/app/.dolittle/endpoints.json
       - ./consumer-microservices.json:/app/.dolittle/microservices.json
     ports:
-      - 50054:50054
-      - 50055:50055
+      - 50054:50052
+      - 50055:50053
 
   producer-runtime:
-    image: dolittle/runtime:latest
+    image: dolittle/runtime:7.4.0-gimli.4
     volumes:
+      - ./producer-platform.json:/app/.dolittle/platform.json
       - ./producer-resources.json:/app/.dolittle/resources.json
       - ./producer-event-horizon-consents.json:/app/.dolittle/event-horizon-consents.json
     ports:
