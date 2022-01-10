@@ -8,7 +8,6 @@
     "Samples/Tutorials/Projections",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
-    "Samples/Advanced",
     "Samples/Container"
   ],
   "scripts": {
