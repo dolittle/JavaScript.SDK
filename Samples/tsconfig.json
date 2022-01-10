@@ -3,6 +3,7 @@
     "include": [],
     "references": [
         { "path": "./Container"},
+        { "path": "./Express"},
         { "path": "./Tutorials/Aggregates" },
         { "path": "./Tutorials/Embeddings" },
         { "path": "./Tutorials/EventHorizon/Consumer" },

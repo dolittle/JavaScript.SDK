@@ -8,7 +8,8 @@
     "Samples/Tutorials/Projections",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
-    "Samples/Container"
+    "Samples/Container",
+    "Samples/Express"
   ],
   "scripts": {
     "prebuild": "yarn clean && yarn copy-readme",

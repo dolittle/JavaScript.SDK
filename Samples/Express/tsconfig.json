@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "sourceRoot": "../",
+        "inlineSourceMap": true,
+        "sourceMap": false,
+        "outDir": "Distribution"
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../../Source/sdk" }
+    ]
+}
