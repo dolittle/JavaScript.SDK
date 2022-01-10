@@ -45,9 +45,9 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0-gimli.0",
-        "@dolittle/contracts": "6.4.0-gimli.2",
+        "@dolittle/contracts": "6.4.0-gimli.3",
         "@dolittle/rudiments": "6.0.0-gimli.0",
-        "@dolittle/runtime.contracts": "6.4.0-gimli.2",
+        "@dolittle/runtime.contracts": "6.4.0-gimli.3",
         "@dolittle/sdk.common": "21.0.0-gimli.14",
         "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.14",
         "@dolittle/sdk.events": "21.0.0-gimli.14",
