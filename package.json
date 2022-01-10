@@ -9,7 +9,7 @@
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
     "Samples/Container",
-    "Samples/Express"
+    "Samples/ExpressJS"
   ],
   "scripts": {
     "prebuild": "yarn clean && yarn copy-readme",
