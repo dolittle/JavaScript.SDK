@@ -80,8 +80,10 @@ export class ModuleTraverser extends ICanTraverseModules {
         if (stack.length > ModuleTraverser.maxExportsRecurseDepth) return;
 
         stack.push(object);
-        for (const property of Object.values(object)) {
-            this.traverseExportsRecursively(property, stack, callback);
+        for (const descriptor of Object.values(Object.getOwnPropertyDescriptors(object))) {
+            if (descriptor.enumerable) {
+                this.traverseExportsRecursively(descriptor.value, stack, callback);
+            }
         }
         stack.pop();
     }
