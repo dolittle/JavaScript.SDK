@@ -3,8 +3,9 @@
 
 import { Logger } from 'winston';
 import { from, Notification, Observable, timer } from 'rxjs';
-import { concatMap, delayWhen, dematerialize, map } from 'rxjs/operators';
+import { concatMap, delayWhen, dematerialize, map, timestamp } from 'rxjs/operators';
 import { status as GrpcStatus } from '@grpc/grpc-js';
+import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
 
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
 import { Failures, Guids, Versions } from '@dolittle/sdk.protobuf';
@@ -73,7 +74,6 @@ export class RuntimeConnector extends ICanConnectToARuntime {
                 if (response.hasFailure()) {
                     const failure = Failures.toSDK(response.getFailure()!);
                     throw new RuntimeHandshakeFailed(failure.reason);
-                    // TODO: Handle incompatible versions failure ID
                 }
 
                 return this.createExecutionContextFrom(response);
@@ -119,12 +119,16 @@ export class RuntimeConnector extends ICanConnectToARuntime {
     private createHandshakeRequest(attempt: number, millisecondsSinceStart: number): HandshakeRequest {
         const handshakeRequest = new HandshakeRequest();
 
-        handshakeRequest.setSdk('JS.SDK');
+        handshakeRequest.setSdkidentifier('JavaScript');
         handshakeRequest.setHeadversion(Versions.toProtobuf(this._headVersion));
         handshakeRequest.setSdkversion(Versions.toProtobuf(VersionInfo.currentVersion));
         handshakeRequest.setContractsversion(ContractsVersionInfo.getCurrentVersion());
 
-        // TODO: Add attempt and time since start to request
+        const timeSpent = new Duration();
+        timeSpent.setSeconds(Math.trunc(millisecondsSinceStart/1e3));
+        timeSpent.setNanos((millisecondsSinceStart % 1e3) * 1e6);
+        handshakeRequest.setAttempt(attempt);
+        handshakeRequest.setTimespent(timeSpent);
 
         return handshakeRequest;
     }
@@ -137,7 +141,7 @@ export class RuntimeConnector extends ICanConnectToARuntime {
         this._logger.debug(`Received initial booting configuration from Runtime running version ${runtimeVersion} using Contracts version ${contractsVersion}`);
 
         const microserviceId = MicroserviceId.from(Guids.toSDK(response.getMicroserviceid()));
-        const environment = Environment.from(response.getEnvironment());
+        const environment = Environment.from(response.getEnvironmentname());
 
         return new ExecutionContext(
             microserviceId,
@@ -152,6 +156,6 @@ export class RuntimeConnector extends ICanConnectToARuntime {
         if (!response.hasRuntimeversion()) throw new RuntimeHandshakeMissingInformation('Runtime version');
         if (!response.hasContractsversion()) throw new RuntimeHandshakeMissingInformation('Contracts version');
         if (!response.hasMicroserviceid()) throw new RuntimeHandshakeMissingInformation('microservice ID');
-        if (response.getEnvironment() === '') throw new RuntimeHandshakeMissingInformation('environment');
+        if (response.getEnvironmentname() === '') throw new RuntimeHandshakeMissingInformation('environment');
     }
 }
