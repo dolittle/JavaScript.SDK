@@ -5,6 +5,8 @@ export * as Requests from './Requests/_exports';
 
 export { ClientMustBeConnected } from './ClientMustBeConnected';
 export { dolittle } from './dolittle';
-export { Environment } from './Environment';
-export { IEnvironment } from './IEnvironment';
-export { Middleware } from './Middleware';
+export { Environment } from './Environment';
+export { IEnvironment } from './IEnvironment';
+export { inject } from './inject';
+export { InjectNotCalledWithHandler } from './InjectNotCalledWithHandler';
+export { Middleware } from './Middleware';
