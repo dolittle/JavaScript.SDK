@@ -5,7 +5,9 @@
 
 import createApplication, { static as serveStatic } from 'express';
 import { json } from 'body-parser';
-import { dolittle } from '@dolittle/sdk.extensions.express';
+import { Logger } from 'winston';
+import { dolittle, inject } from '@dolittle/sdk.extensions.express';
+import { IProjectionStore } from '@dolittle/sdk.projections';
 
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
@@ -24,15 +26,18 @@ application.post('/prepare', (req, res, next) => {
             .catch(next);
 });
 
-application.get('/counters', (req, res, next) => {
-    req.dolittle.logger.info('Received request for DishCounter');
-    req.dolittle.projections
-        .getAll(DishCounter)
-            .then(result => Array.from(result.values()))
-            .then(results => results.map(({ key, state }) => ({ dish: key.value, ...state })))
-            .then(result => res.json(result))
-            .catch(next);
-});
+application.get(
+    '/counters',
+    inject(IProjectionStore, 'Logger')(
+        (req, res, next, projections, logger: Logger) => {
+            logger.info('Received reqest to get DishCounter projection');
+            projections.getAll(DishCounter)
+                .then(result => Array.from(result.values()))
+                .then(results => results.map(({ key, state }) => ({ dish: key.value, ...state })))
+                .then(result => res.json(result))
+                .catch(next);
+        }
+    ));
 
 application.use('/', serveStatic('public'));
 
