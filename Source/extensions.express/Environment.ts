@@ -12,7 +12,8 @@ export class Environment extends IEnvironment {
      */
     constructor() {
         super();
-        this.isDevelopment = true;
+
+        this.isDevelopment = process.env.NODE_ENV === 'development';
     }
 
     /** @inheritdoc */
