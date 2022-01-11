@@ -3,55 +3,38 @@
 
 // Sample code for the tutorial at https://dolittle.io/docs/tutorials/projections/
 
-// import { DolittleClient } from '@dolittle/sdk';
-// import { TenantId } from '@dolittle/sdk.execution';
-// import { setTimeout } from 'timers/promises';
-
-// import { Chef } from './Chef';
-// import { DishCounter } from './DishCounter';
-// import { DishPrepared } from './DishPrepared';
-
-// (async () => {
-//     const client = await DolittleClient
-//         .setup(builder => builder
-//             .withProjections(builder => {
-//                 builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
-//                     .forReadModel(Chef)
-//                     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
-//                         chef.name = event.Chef;
-//                         if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
-//                         return chef;
-//                     });
-//             }))
-//         .connect();
-
-//     const eventStore = client.eventStore.forTenant(TenantId.development);
-
-//     await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
-//     await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
-//     await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
-//     await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
-
-//     await setTimeout(1000);
-
-//     for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-//         console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
-//     }
-
-//     const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-//     console.log(`${chef.key} has prepared ${chef.state.dishes}`);
-// })();
-
-import createApplication, { Request } from 'express';
+import createApplication, { static as serveStatic } from 'express';
+import { json } from 'body-parser';
 import { dolittle } from '@dolittle/sdk.extensions.express';
+
+import { DishCounter } from './DishCounter';
+import { DishPrepared } from './DishPrepared';
 
 const application = createApplication();
 
 application.use(dolittle());
+application.use(json());
 
-application.get('/', (req, res) => {
-    res.send('Hello World!');
+application.post('/prepare', (req, res, next) => {
+    const { chef, dish } = req.body;
+    req.dolittle.logger.info(`Received request to prepare dish ${dish} by chef ${chef}`);
+    req.dolittle.eventStore
+        .commit(new DishPrepared(dish, chef), 'Dolittle Tacos')
+            .then(result => res.json(result))
+            .catch(next);
 });
+
+application.get('/counters', (req, res, next) => {
+    req.dolittle.logger.info('Received request for DishCounter');
+    req.dolittle.projections
+        .getAll(DishCounter)
+            .then(result => Array.from(result.values()))
+            .then(results => results.map(({ key, state }) => ({ dish: key.value, ...state })))
+            .then(result => res.json(result))
+            .catch(next);
+});
+
+application.use('/', serveStatic('public'));
 
 const port = 8080;
 application.listen(port, () => {

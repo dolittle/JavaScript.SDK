@@ -17,6 +17,7 @@
         "@dolittle/sdk.events": "21.0.0-gimli.15",
         "@dolittle/sdk.events.handling": "21.0.0-gimli.15",
         "@dolittle/sdk.extensions.express": "21.0.0-gimli.15",
+        "body-parser": "^1.19.1",
         "express": "^4.17.2"
     },
     "devDependencies": {
