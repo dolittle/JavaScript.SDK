@@ -61,6 +61,8 @@ export class DolittleClient extends IDolittleClient {
     private _services?: TenantServiceProviders;
     private _eventHorizons?: IEventHorizons;
 
+    private _logger?: Logger;
+
     /**
      * Initialises a new instance of the {@link DolittleClient} class.
      * @param {IServiceProviderBuilder} _serviceProviderBuilder - The service provider builder with bound services from the setup.
@@ -139,6 +141,11 @@ export class DolittleClient extends IDolittleClient {
     }
 
     /** @inheritdoc */
+    get logger(): Logger {
+        return this.throwIfNotConnectedOrUndefined(this._logger, 'logger');
+    }
+
+    /** @inheritdoc */
     connect(configuration: DolittleClientConfiguration, cancellation?: Cancellation): Promise<IDolittleClient>;
     connect(callback: ConnectCallback, cancellation?: Cancellation): Promise<IDolittleClient>;
     connect(cancellation?: Cancellation): Promise<IDolittleClient>;
@@ -195,9 +202,9 @@ export class DolittleClient extends IDolittleClient {
         try {
             this._cancellationSource = new CancellationSource();
 
-            const logger = configuration.logger;
+            this._logger = configuration.logger;
 
-            this._setupResults.writeTo(logger);
+            this._setupResults.writeTo(this._logger);
 
             const clients = this.createGrpcClients(configuration.runtimeHost, configuration.runtimePort);
 
@@ -205,7 +212,7 @@ export class DolittleClient extends IDolittleClient {
                 clients.handshake,
                 clients.tenants,
                 configuration.version,
-                logger);
+                this._logger);
 
             const connectionResult = await connector.connect(cancellation);
             this._tenants = connectionResult.tenants;
@@ -217,18 +224,18 @@ export class DolittleClient extends IDolittleClient {
                 clients.embeddings,
                 clients.resources,
                 connectionResult.executionContext,
-                logger);
+                this._logger);
 
             this.registerTypes(
                 clients.eventTypes,
                 clients.aggregateRoots,
                 connectionResult.executionContext,
-                logger,
+                this._logger,
                 this._cancellationSource.cancellation);
 
             this.bindServices(
                 configuration.tenantServiceBindingCallbacks,
-                logger);
+                this._logger);
 
             this._services = new TenantServiceProviders(
                 configuration.serviceProvider,
@@ -243,7 +250,7 @@ export class DolittleClient extends IDolittleClient {
                 clients.eventHorizons,
                 connectionResult.executionContext,
                 this._services,
-                logger,
+                this._logger,
                 configuration.pingInterval,
                 this._cancellationSource.cancellation);
 

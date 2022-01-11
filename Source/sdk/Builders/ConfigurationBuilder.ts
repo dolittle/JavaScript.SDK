@@ -1,13 +1,14 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger, DefaulLevels, createLogger, format, transports } from 'winston';
+import { Logger, DefaulLevels } from 'winston';
 
 import { createRootServiceProvider, DefaultServiceProvider, IServiceProvider, KnownServiceProviders, TenantServiceBindingCallback } from '@dolittle/sdk.dependencyinversion';
 import { Version } from '@dolittle/sdk.execution';
 
 import { DolittleClientConfiguration } from '../DolittleClientConfiguration';
 import { ConnectConfiguration } from '../Internal/ConnectConfiguration';
+import { createDefaultLogger } from './createDefaultLogger';
 import { IConfigurationBuilder } from './IConfigurationBuilder';
 import { InvalidRuntimeAddressConfiguration } from './InvalidRuntimeAddressConfiguration';
 
@@ -34,15 +35,7 @@ export class ConfigurationBuilder extends IConfigurationBuilder {
         this._runtimeHost = 'localhost';
         this._runtimePort = 50053;
         this._pingInterval = 5;
-        this._logger = createLogger({
-            level: 'info',
-            format: format.simple(),
-            transports: [
-                new transports.Console({
-                    format: format.simple(),
-                }),
-            ],
-        });
+        this._logger = createDefaultLogger();
         this._serviceProvider = new DefaultServiceProvider();
         this._tenantServiceBindingCallbacks = [];
 
