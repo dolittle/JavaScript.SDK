@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IDolittleClient, Builders, DolittleClient } from '@dolittle/sdk';
 import { RequestHandler } from 'express';
 import { setTimeout } from 'timers';
 
+import { IDolittleClient, Builders, DolittleClient } from '@dolittle/sdk';
+
+import { Environment } from './Environment';
 import { Middleware } from './Middleware';
 
 type CreateMiddleware = {
@@ -47,7 +49,8 @@ export const dolittle: CreateMiddleware = (
     maybeClientOrSetup?: IDolittleClient | Builders.SetupCallback,
     maybeConnect?: Builders.ConnectCallback): RequestHandler => {
 
-    const middleware = new Middleware();
+    const environment = new Environment();
+    const middleware = new Middleware(environment);
 
     if (typeof maybeClientOrSetup === 'function' || maybeClientOrSetup === undefined) {
         connectAndSetClient(middleware, maybeClientOrSetup, maybeConnect);
