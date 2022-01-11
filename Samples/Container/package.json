@@ -1,7 +1,7 @@
 {
     "name": "container",
     "private": true,
-    "version": "21.0.0-gimli.15",
+    "version": "21.0.0-gimli.16",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "21.0.0-gimli.15",
-        "@dolittle/sdk.artifacts": "21.0.0-gimli.15",
-        "@dolittle/sdk.events": "21.0.0-gimli.15",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.15",
+        "@dolittle/sdk": "21.0.0-gimli.16",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.16",
+        "@dolittle/sdk.events": "21.0.0-gimli.16",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.16",
         "inversify": "^6.0.1",
         "reflect-metadata": "^0.1.13",
         "winston": "^3.3.4"
