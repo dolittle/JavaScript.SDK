@@ -8,7 +8,8 @@
     "Samples/Tutorials/Projections",
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
-    "Samples/Container"
+    "Samples/Container",
+    "Samples/ExpressJS"
   ],
   "scripts": {
     "prebuild": "yarn clean && yarn copy-readme",
@@ -26,6 +27,7 @@
     "@dolittle/typescript.build": "6.0.2",
     "@dolittle/typescript.testing": "6.0.2",
     "@types/node": "16.11.6",
+    "express": "4.17.2",
     "glob": "7.2.0",
     "module-alias": "2.2.2",
     "rimraf": "3.0.2",

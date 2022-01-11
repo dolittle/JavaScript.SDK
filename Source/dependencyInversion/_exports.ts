@@ -16,7 +16,7 @@ export { ITenantServiceProviders } from './ITenantServiceProviders';
 export { KnownServiceProviders } from './KnownServiceProviders';
 export { ServiceBindingCallback } from './ServiceBindingCallback';
 export { ServiceFactory } from './ServiceFactory';
-export { ServiceIdentifier } from './ServiceIdentifier';
+export { ServiceIdentifier, Newable, Abstract } from './ServiceIdentifier';
 export { ServiceProviderBuilder } from './ServiceProviderBuilder';
 export { SingleInjectionServiceMustBeSpecifiedForConstructorArgument } from './SingleInjectionServiceMustBeSpecifiedForConstructorArgument';
 export { TenantServiceBindingCallback } from './TenantServiceBindingCallback';

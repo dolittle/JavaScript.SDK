@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to the Dolittle Tacos kitchen management system.</title>
+        <style>
+            p#error {
+                color: red;
+                display: none;
+            }
+            thead {
+                font-weight: bold;
+            }
+            tbody tr td:nth-child(2) {
+                text-align: right;
+            }
+        </style>
+        <script>
+            function stringIsEmpty(value) {
+                return value === undefined || value === null || value.trim().length === 0;
+            }
+
+            function updateCounterTable() {
+                const table = document.querySelector('tbody#counters');
+                fetch('/counters')
+                    .then(response => response.json())
+                    .then(counters => {
+                        console.log('Fetched projection result', counters);
+                        table.replaceChildren();
+                        for (const { dish, numberOfTimesPrepared } of counters) {
+                            const row = document.createElement('tr');
+                            row.appendChild(document.createElement('td')).innerText = dish;
+                            row.appendChild(document.createElement('td')).innerText = numberOfTimesPrepared;
+                            table.appendChild(row);
+                        }
+                    });
+            }
+
+            function prepareDishFromFrom(event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const warning = form.querySelector('p#error');
+
+                const chef = form.querySelector('input#chef').value;
+                const dish = form.querySelector('input#dish').value;
+
+                if (stringIsEmpty(chef) || stringIsEmpty(dish)) {
+                    warning.style.display = 'initial';
+                    return;
+                }
+
+                warning.style.display = 'none';
+
+                const body = JSON.stringify({ chef, dish });
+                fetch('/prepare', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log('Commit event result', result);
+                        setTimeout(updateCounterTable, 250);
+                    })
+                    .catch(error => console.error(error));
+            }
+        </script>
+    </head>
+    <body onload="updateCounterTable()">
+        <h1>Welcome to the Dolittle Tacos kitchen management system.</h1>
+
+        <h2>Register a prepared dish:</h2>
+        <form onsubmit="prepareDishFromFrom(event)">
+            <p>
+                <input type="text" id="chef" name="chef" placeholder="Chef">
+                <input type="text" id="dish" name="dish" placeholder="Dish">
+                <input type="submit" value="Prepare">
+            </p>
+            <p id="error">Both 'Chef' and 'Dish' must be specified</p>
+        </form>
+
+        <h2>Previously prepared dishes:</h2>
+        <table>
+            <thead>
+                <td>Dish:</td>
+                <td>Number of times prepared:</td>
+            </thead>
+            <tbody id="counters">
+            </tbody>
+        </table>
+    </body>
+</html>

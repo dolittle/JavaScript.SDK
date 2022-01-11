@@ -1,6 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
 import { IAggregatesBuilder } from '@dolittle/sdk.aggregates';
 import { IEventHorizons } from '@dolittle/sdk.eventhorizon';
 import { IEventTypes, IEventStoreBuilder } from '@dolittle/sdk.events';
@@ -67,6 +69,11 @@ export abstract class IDolittleClient {
      * Gets the {@link IEventHorizons}.
      */
     abstract get eventHorizons(): IEventHorizons;
+
+    /**
+     * Gets the {@link Logger} that the client uses for logging.
+     */
+    abstract get logger(): Logger;
 
     /**
      * Connects the {@link IDolittleClient}.

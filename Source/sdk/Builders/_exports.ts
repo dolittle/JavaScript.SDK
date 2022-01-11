@@ -3,6 +3,7 @@
 
 export { ConfigurationBuilder } from './ConfigurationBuilder';
 export { ConnectCallback } from './ConnectCallback';
+export { createDefaultLogger } from './createDefaultLogger';
 export { IConfigurationBuilder } from './IConfigurationBuilder';
 export { InvalidRuntimeAddressConfiguration } from './InvalidRuntimeAddressConfiguration';
 export { ISetupBuilder } from './ISetupBuilder';

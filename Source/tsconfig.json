@@ -13,6 +13,7 @@
         { "path": "./events.handling" },
         { "path": "./events.processing" },
         { "path": "./execution" },
+        { "path": "./extensions.express" },
         { "path": "./projections" },
         { "path": "./protobuf" },
         { "path": "./resilience" },
