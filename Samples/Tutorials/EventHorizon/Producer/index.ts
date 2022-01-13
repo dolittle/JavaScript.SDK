@@ -15,12 +15,13 @@ import { DishPrepared } from './DishPrepared';
     const client = await DolittleClient
         .setup(_ => _
             .withFilters(_ => _
-                .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', _ => _
+                .createPublic('2c087657-b318-40b1-ae92-a400de44e507')
                     .handle((event: any, context: EventContext) => {
                         client.logger.info(`Filtering event ${JSON.stringify(event)} to public stream`);
                         return new PartitionedFilterResult(true, 'Dolittle Tacos');
                     })
-                )))
+            )
+        )
         .connect();
 
     const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
