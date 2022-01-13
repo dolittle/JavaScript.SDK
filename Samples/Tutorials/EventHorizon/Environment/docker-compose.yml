@@ -9,7 +9,7 @@ services:
       driver: none
  
   consumer-runtime:
-    image: dolittle/runtime:7.4.0-gimli.4
+    image: dolittle/runtime:latest
     volumes:
       - ./consumer-platform.json:/app/.dolittle/platform.json
       - ./consumer-resources.json:/app/.dolittle/resources.json
@@ -19,7 +19,7 @@ services:
       - 50055:50053
 
   producer-runtime:
-    image: dolittle/runtime:7.4.0-gimli.4
+    image: dolittle/runtime:latest
     volumes:
       - ./producer-platform.json:/app/.dolittle/platform.json
       - ./producer-resources.json:/app/.dolittle/resources.json

@@ -24,9 +24,9 @@ import { DishPrepared } from './DishPrepared';
                     _.inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
                         .partitioned()
                         .handle(DishPrepared, (event, context) => {
-                            console.log(`Handled event ${JSON.stringify(event)} from public stream`);
+                            client.logger.info(`Handled event ${JSON.stringify(event)} from public stream`);
                          }))))
-        .connect(configuration => configuration
+        .connect(_ => _
             .withRuntimeOn('localhost', 50055)
         );
 })();
