@@ -31,7 +31,7 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
     }
 
     /** @inheritdoc */
-    createEmbedding(embeddingId: string | EmbeddingId | Guid): IEmbeddingBuilder {
+    create(embeddingId: string | EmbeddingId | Guid): IEmbeddingBuilder {
         const id = EmbeddingId.from(embeddingId);
         const builder = new EmbeddingBuilder(id, this._modelBuilder);
         const identifier = new EmbeddingModelId(id);
@@ -40,7 +40,7 @@ export class EmbeddingsBuilder extends IEmbeddingsBuilder {
     }
 
     /** @inheritdoc */
-    registerEmbedding<T>(type: Constructor<T>): IEmbeddingsBuilder {
+    register<T>(type: Constructor<T>): IEmbeddingsBuilder {
         if (!isDecoratedEmbeddingType(type)) {
             this._buildResults.addFailure(`The embeddings class ${type.name} is not decorated as an embeddings`,`Add the @${embeddingDecorator.name} decorator to the class`);
             return this;

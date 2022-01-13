@@ -31,13 +31,13 @@ export class ProjectionsBuilder extends IProjectionsBuilder {
     }
 
     /** @inheritdoc */
-    createProjection(projectionId: string | ProjectionId | Guid): IProjectionBuilder {
+    create(projectionId: string | ProjectionId | Guid): IProjectionBuilder {
         const identifier = ProjectionId.from(projectionId);
         return new ProjectionBuilder(identifier, this._modelBuilder);
     }
 
     /** @inheritdoc */
-    registerProjection<T = any>(type: Constructor<T>): IProjectionsBuilder {
+    register<T = any>(type: Constructor<T>): IProjectionsBuilder {
         if (!isDecoratedProjectionType(type)) {
             this._buildResults.addFailure(`The projection class ${type.name} is not decorated as an projection`,`Add the @${projectionDecorator.name} decorator to the class`);
             return this;

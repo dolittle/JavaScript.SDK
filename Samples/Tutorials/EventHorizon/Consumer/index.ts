@@ -20,12 +20,14 @@ import { DishPrepared } from './DishPrepared';
                         .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'));
             })
             .withEventHandlers(_ => _
-                .createEventHandler('6c3d358f-3ecc-4c92-a91e-5fc34cacf27e', _ =>
-                    _.inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
-                        .partitioned()
-                        .handle(DishPrepared, (event, context) => {
-                            client.logger.info(`Handled event ${JSON.stringify(event)} from public stream`);
-                         }))))
+                .create('6c3d358f-3ecc-4c92-a91e-5fc34cacf27e')
+                    .inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
+                    .partitioned()
+                    .handle(DishPrepared, (event, context) => {
+                        client.logger.info(`Handled event ${JSON.stringify(event)} from public stream`);
+                     })
+            )
+        )
         .connect(_ => _
             .withRuntimeOn('localhost', 50055)
         );

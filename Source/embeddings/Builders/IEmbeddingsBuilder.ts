@@ -14,14 +14,14 @@ export abstract class IEmbeddingsBuilder {
     /**
      * Start building an embedding.
      * @param {EmbeddingId | Guid | string} embeddingId - The unique identifier of the embedding.
-     * @returns {IEmbeddingBuilder} The builder for continuation.
+     * @returns {IEmbeddingBuilder} The builder for building the embeddings.
      */
-    abstract createEmbedding(embeddingId: EmbeddingId | Guid | string): IEmbeddingBuilder;
+    abstract create(embeddingId: EmbeddingId | Guid | string): IEmbeddingBuilder;
 
     /**
      * Register a type as an embedding.
      * @param type - The type to register as a embedding.
      * @returns {IEmbeddingsBuilder} The builder for continuation.
      */
-     abstract registerEmbedding<T>(type: Constructor<T>): IEmbeddingsBuilder;
+     abstract register<T>(type: Constructor<T>): IEmbeddingsBuilder;
 }

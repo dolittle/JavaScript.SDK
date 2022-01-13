@@ -6,7 +6,6 @@ export * from './_exports';
 export {
     CouldNotCreateInstanceOfEventHandler,
     EventHandlerBuilder,
-    EventHandlerBuilderCallback,
     EventHandlerClassBuilder,
     EventHandlerDecoratedType,
     eventHandler,
