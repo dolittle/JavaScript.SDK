@@ -4,7 +4,7 @@
 // Sample code for the tutorial at https://dolittle.io/tutorials/event-horizon/
 
 import { DolittleClient } from '@dolittle/sdk';
-import { EventContext, PartitionId } from '@dolittle/sdk.events';
+import { EventContext } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { TenantId } from '@dolittle/sdk.execution';
 
@@ -17,7 +17,7 @@ import { DishPrepared } from './DishPrepared';
             .withFilters(_ => _
                 .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', _ => _
                     .handle((event: any, context: EventContext) => {
-                        console.log(`Filtering event ${JSON.stringify(event)} to public stream`);
+                        client.logger.info(`Filtering event ${JSON.stringify(event)} to public stream`);
                         return new PartitionedFilterResult(true, 'Dolittle Tacos');
                     })
                 )))
