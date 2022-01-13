@@ -1,7 +1,7 @@
 {
     "name": "embeddings",
     "private": true,
-    "version": "21.0.0-gimli.16",
+    "version": "21.0.0-gimli.17",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "21.0.0-gimli.16",
-        "@dolittle/sdk.artifacts": "21.0.0-gimli.16",
-        "@dolittle/sdk.events": "21.0.0-gimli.16",
-        "@dolittle/sdk.events.handling": "21.0.0-gimli.16"
+        "@dolittle/sdk": "21.0.0-gimli.17",
+        "@dolittle/sdk.artifacts": "21.0.0-gimli.17",
+        "@dolittle/sdk.events": "21.0.0-gimli.17",
+        "@dolittle/sdk.events.handling": "21.0.0-gimli.17"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
