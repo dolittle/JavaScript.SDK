@@ -3,7 +3,6 @@
 
 export { CouldNotCreateInstanceOfEventHandler } from './CouldNotCreateInstanceOfEventHandler';
 export { EventHandlerBuilder } from './EventHandlerBuilder';
-export { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 export { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 export { EventHandlerDecoratedType } from './EventHandlerDecoratedType';
 export { eventHandler, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';

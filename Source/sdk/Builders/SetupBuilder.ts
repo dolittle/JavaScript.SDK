@@ -152,15 +152,15 @@ export class SetupBuilder extends ISetupBuilder {
             }
 
             if (isDecoratedEventHandlerType(type)) {
-                this._eventHandlersBuilder.registerEventHandler(type);
+                this._eventHandlersBuilder.register(type);
             }
 
             if (isDecoratedProjectionType(type)) {
-                this._projectionsBuilder.registerProjection(type);
+                this._projectionsBuilder.register(type);
             }
 
             if (isDecoratedEmbeddingType(type)) {
-                this._embeddingsBuilder.registerEmbedding(type);
+                this._embeddingsBuilder.register(type);
             }
         });
     }

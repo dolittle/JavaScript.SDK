@@ -8,11 +8,11 @@ import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 
 import { EventHandlerId } from '../EventHandlerId';
 import { EventHandlerBuilder } from './EventHandlerBuilder';
-import { EventHandlerBuilderCallback } from './EventHandlerBuilderCallback';
 import { EventHandlerClassBuilder } from './EventHandlerClassBuilder';
 import { eventHandler as eventHandlerDecorator, isDecoratedEventHandlerType, getDecoratedEventHandlerType } from './eventHandlerDecorator';
 import { IEventHandlersBuilder } from './IEventHandlersBuilder';
 import { EventHandlerModelId } from '../EventHandlerModelId';
+import { IEventHandlerBuilder } from './IEventHandlerBuilder';
 
 /**
  * Represents an implementation of {@link IEventHandlersBuilder}.
@@ -31,17 +31,15 @@ export class EventHandlersBuilder extends IEventHandlersBuilder {
     }
 
     /** @inheritdoc */
-    createEventHandler(eventHandlerId: string | EventHandlerId | Guid, callback: EventHandlerBuilderCallback): IEventHandlersBuilder {
+    create(eventHandlerId: string | EventHandlerId | Guid): IEventHandlerBuilder {
         const identifier = EventHandlerId.from(eventHandlerId);
-        const builder = new EventHandlerBuilder(identifier, this._modelBuilder);
-        callback(builder);
-        return this;
+        return new EventHandlerBuilder(identifier, this._modelBuilder);
     }
 
     /** @inheritdoc */
-    registerEventHandler<T = any>(type: Constructor<T>): IEventHandlersBuilder;
-    registerEventHandler<T = any>(instance: T): IEventHandlersBuilder;
-    registerEventHandler<T = any>(typeOrInstance: Constructor<T> | T): EventHandlersBuilder {
+    register<T = any>(type: Constructor<T>): IEventHandlersBuilder;
+    register<T = any>(instance: T): IEventHandlersBuilder;
+    register<T = any>(typeOrInstance: Constructor<T> | T): IEventHandlersBuilder {
         const type = typeOrInstance instanceof Function ? typeOrInstance : Object.getPrototypeOf(typeOrInstance).constructor;
         const instance = typeOrInstance instanceof Function ? undefined : typeOrInstance;
         if (type === undefined) {

@@ -14,13 +14,14 @@ export abstract class IProjectionsBuilder {
     /**
      * Start building a projection.
      * @param {ProjectionId | Guid | string} projectionId - The unique identifier of the projection.
-     * @returns {IProjectionsBuilder} The projections builder for continuation.
+     * @returns {IProjectionBuilder} The builder for building the projection.
      */
-    abstract createProjection(projectionId: ProjectionId | Guid | string): IProjectionBuilder;
+    abstract create(projectionId: ProjectionId | Guid | string): IProjectionBuilder;
 
     /**
      * Register a type as a projection.
      * @param type - The type to register as a projection.
+     * @returns {IProjectionsBuilder} The projections builder for continuation.
      */
-    abstract registerProjection<T = any>(type: Constructor<T>): IProjectionsBuilder;
+    abstract register<T = any>(type: Constructor<T>): IProjectionsBuilder;
 }

@@ -21,7 +21,5 @@ export { PartitionedEventFilterBuilder } from './PartitionedEventFilterBuilder';
 export { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 export { PartitionedFilterResult } from './PartitionedFilterResult';
 export { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
-export { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
 export { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
-export { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
 export { UnpartitionedEventFilterBuilder } from './UnpartitionedEventFilterBuilder';

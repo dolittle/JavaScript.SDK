@@ -8,9 +8,9 @@ import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 import { FilterId } from './FilterId';
 import { PublicEventFilterBuilder } from './PublicEventFilterBuilder';
 import { PrivateEventFilterBuilder } from './PrivateEventFilterBuilder';
-import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
-import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
 import { IEventFiltersBuilder } from './IEventFiltersBuilder';
+import { IPrivateEventFilterBuilder } from './IPrivateEventFilterBuilder';
+import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
 
 /**
  * Represents an implementation of {@link IEventFiltersBuilder}.
@@ -29,18 +29,14 @@ export class EventFiltersBuilder extends IEventFiltersBuilder {
     }
 
     /** @inheritdoc */
-    createPrivateFilter(filterId: string | FilterId | Guid, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder {
+    createPrivate(filterId: string | FilterId | Guid): IPrivateEventFilterBuilder {
         const identifier = FilterId.from(filterId);
-        const builder = new PrivateEventFilterBuilder(identifier, this._modelBuilder);
-        callback(builder);
-        return this;
+        return new PrivateEventFilterBuilder(identifier, this._modelBuilder);
     }
 
     /** @inheritdoc */
-    createPublicFilter(filterId: string | FilterId | Guid, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder {
+    createPublic(filterId: string | FilterId | Guid): IPublicEventFilterBuilder {
         const identifier = FilterId.from(filterId);
-        const builder = new PublicEventFilterBuilder(identifier, this._modelBuilder);
-        callback(builder);
-        return this;
+        return new PublicEventFilterBuilder(identifier, this._modelBuilder);
     }
 }

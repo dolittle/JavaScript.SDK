@@ -4,8 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 
 import { FilterId } from './FilterId';
-import { PrivateEventFilterBuilderCallback } from './PrivateEventFilterBuilderCallback';
-import { PublicEventFilterBuilderCallback } from './PublicEventFilterBuilderCallback';
+import { IPrivateEventFilterBuilder } from './IPrivateEventFilterBuilder';
+import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
 
 /**
  * Defines a builder for building event filters.
@@ -14,16 +14,14 @@ export abstract class IEventFiltersBuilder {
     /**
      * Start building for a private filter.
      * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PrivateEventFilterBuilderCallback} callback - Callback for building the event filter.
-     * @returns {IEventFiltersBuilder} Continuation of the builder.
+     * @returns {IPrivateEventFilterBuilder} The builder for building the private filter.
      */
-    abstract createPrivateFilter(filterId: FilterId | Guid | string, callback: PrivateEventFilterBuilderCallback): IEventFiltersBuilder;
+    abstract createPrivate(filterId: FilterId | Guid | string): IPrivateEventFilterBuilder;
 
     /**
      * Start building for a public filter.
      * @param {FilterId | Guid | string} filterId - The identifier of the filter.
-     * @param {PublicEventFilterBuilderCallback} callback - Callback for building the event filter.
-     * @returns {IEventFiltersBuilder} Continuation of the builder.
+     * @returns {IPublicEventFilterBuilder} The builder for building the public filter.
      */
-    abstract createPublicFilter(filterId: FilterId | Guid | string, callback: PublicEventFilterBuilderCallback): IEventFiltersBuilder;
+    abstract createPublic(filterId: FilterId | Guid | string): IPublicEventFilterBuilder;
 }
