@@ -117,7 +117,7 @@ export class SetupBuilder extends ISetupBuilder {
         const model = this._modelBuilder.build(this._buildResults);
 
         const eventTypes = new EventTypesModelBuilder(model).build();
-        const aggregateRootTypes = new AggregateRootsModelBuilder(model).build();
+        const aggregateRootTypes = new AggregateRootsModelBuilder(model, bindings).build();
 
         const filters = new EventFiltersModelBuilder(model, this._buildResults, eventTypes).build();
         const eventHandlers = new EventHandlersModelBuilder(model, this._buildResults, eventTypes, bindings).build();
