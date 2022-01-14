@@ -69,13 +69,32 @@ export class ModelBuilder extends IModelBuilder {
                 buildResults.addInformation(`Processor binding from ${identifier.constructor.name} to ${processorBuilder.constructor.name} appeared ${duplicates} times`);
             });
 
+        const singlyBoundTypes = this.singlyBoundValues(
+            deduplicatedTypes,
+            (left, right) => left === right,
+            (type, identifiers) => {
+                buildResults.addFailure(`Type ${type.name} is bound to multiple identifiers:`);
+                for (const identifier of identifiers) {
+                    buildResults.addFailure(`\t ${identifier}. This binding will be ignored`);
+                }
+            });
+        const singlyProcessorBuilders = this.singlyBoundValues(
+            deduplicatedProcessorBuilders,
+            (left, right) => left.equals(right),
+            (processorBuilder, identifiers) => {
+                buildResults.addFailure(`Type ${processorBuilder.constructor.name} is bound to multiple identifiers:`);
+                for (const identifier of identifiers) {
+                    buildResults.addFailure(`\t ${identifier}. This binding will be ignored`);
+                }
+            });
+
         const validTypeBindings: [AnyIdentifier, Constructor<any>][] = [];
         const validProcessorBuilderBindings: [AnyIdentifier, ProcessorBuilder][] = [];
 
-        const ids = Array.from(new Set([...deduplicatedTypes.keys(), ...deduplicatedProcessorBuilders.keys()]));
+        const ids = new Set([...singlyBoundTypes.keys(), ...singlyProcessorBuilders.keys()]);
         for (const id of ids) {
             const [coexistentTypes, conflictingTypes] = this.splitCoexistingAndConflictingBindings(
-                deduplicatedTypes,
+                singlyBoundTypes,
                 id,
                 (left, right) => left === right);
             const [coexistentProcessorBuilders, conflictingProcessorBuilders] = this.splitCoexistingAndConflictingBindings(
@@ -168,6 +187,33 @@ export class ModelBuilder extends IModelBuilder {
         }
 
         return filteredMap;
+    }
+
+    private singlyBoundValues<V>(map: IdentifierMap<V>, comparer: (left: V, right: V) => boolean, callback: (value: V, identifiers: AnyIdentifier[]) => void): IdentifierMap<V> {
+        const groupedValues: [V, AnyIdentifier[]][] = [];
+
+        const allValues = Array.from(map.values()).flat();
+        grouping: for (const [identifier, value] of allValues) {
+            for (const [groupedValue, groupedIdentifiers] of groupedValues) {
+                if (comparer(value, groupedValue)) {
+                    groupedIdentifiers.push(identifier);
+                    continue grouping;
+                }
+            }
+            groupedValues.push([value, [identifier]]);
+        }
+
+        const singlyBoundMap: IdentifierMap<V> = new Map();
+        for (const [value, identifiers] of groupedValues) {
+            if (identifiers.length === 1) {
+                const identifier = identifiers[0];
+                singlyBoundMap.set(identifier.id.value.toString(), [[identifier, value]]);
+            } else {
+                callback(value, identifiers);
+            }
+        }
+
+        return singlyBoundMap;
     }
 
     private splitCoexistingAndConflictingBindings<V>(map: IdentifierMap<V>, key: string, comparer: (left: V, right: V) => boolean): [[AnyIdentifier, V][], [AnyIdentifier, V][]] {
