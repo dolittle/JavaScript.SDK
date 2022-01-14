@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.services",
-    "version": "21.0.0-gimli.18",
+    "version": "21.0.0-gimli.19",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -48,11 +48,11 @@
         "@dolittle/concepts": "6.0.0-gimli.0",
         "@dolittle/contracts": "6.4.0-gimli.3",
         "@dolittle/rudiments": "6.0.0-gimli.0",
-        "@dolittle/sdk.common": "21.0.0-gimli.18",
-        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.18",
-        "@dolittle/sdk.execution": "21.0.0-gimli.18",
-        "@dolittle/sdk.protobuf": "21.0.0-gimli.18",
-        "@dolittle/sdk.resilience": "21.0.0-gimli.18",
+        "@dolittle/sdk.common": "21.0.0-gimli.19",
+        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.19",
+        "@dolittle/sdk.execution": "21.0.0-gimli.19",
+        "@dolittle/sdk.protobuf": "21.0.0-gimli.19",
+        "@dolittle/sdk.resilience": "21.0.0-gimli.19",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }

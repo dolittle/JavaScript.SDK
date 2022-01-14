@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.extensions.express",
-    "version": "21.0.0-gimli.18",
+    "version": "21.0.0-gimli.19",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -46,14 +46,14 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "6.0.0-gimli.0",
-        "@dolittle/sdk": "21.0.0-gimli.18",
-        "@dolittle/sdk.aggregates": "21.0.0-gimli.18",
-        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.18",
-        "@dolittle/sdk.embeddings": "21.0.0-gimli.18",
-        "@dolittle/sdk.events": "21.0.0-gimli.18",
-        "@dolittle/sdk.execution": "21.0.0-gimli.18",
-        "@dolittle/sdk.projections": "21.0.0-gimli.18",
-        "@dolittle/sdk.resources": "21.0.0-gimli.18",
+        "@dolittle/sdk": "21.0.0-gimli.19",
+        "@dolittle/sdk.aggregates": "21.0.0-gimli.19",
+        "@dolittle/sdk.dependencyinversion": "21.0.0-gimli.19",
+        "@dolittle/sdk.embeddings": "21.0.0-gimli.19",
+        "@dolittle/sdk.events": "21.0.0-gimli.19",
+        "@dolittle/sdk.execution": "21.0.0-gimli.19",
+        "@dolittle/sdk.projections": "21.0.0-gimli.19",
+        "@dolittle/sdk.resources": "21.0.0-gimli.19",
         "winston": "3.3.2"
     },
     "devDependencies": {
