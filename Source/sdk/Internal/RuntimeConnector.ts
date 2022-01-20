@@ -113,7 +113,7 @@ export class RuntimeConnector extends ICanConnectToARuntime {
             delayWhen((error, attempt) => {
                 const delay = Math.min(this._initialRetryDelay * (attempt + 1), this._maxRetryDelay);
 
-                this._logger.warn(`Connection to Runtime failed, will retry in ${delay} seconds. Reason: ${error.message}`);
+                this._logger.debug(`Connection to Runtime failed, will retry in ${delay} seconds. Reason: ${error.message}`);
 
                 return timer(delay * 1e3);
             }),
