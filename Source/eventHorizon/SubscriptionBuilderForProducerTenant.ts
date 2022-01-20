@@ -1,22 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Observable } from 'rxjs';
 import { Guid } from '@dolittle/rudiments';
 
 import { StreamId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
-import { Subscription } from './Subscription';
+import { ISubscriptionBuilderForProducerTenant } from './ISubscriptionBuilderForProducerTenant';
+import { ISubscriptionBuilderForProducerStream } from './ISubscriptionBuilderForProducerStream';
+import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerStream } from './SubscriptionBuilderForProducerStream';
-import { Observable } from 'rxjs';
 import { SubscriptionCallbackArguments} from './SubscriptionCallbacks';
 
 /**
- * Represents the builder for building subscriptions on a tenant.
+ * Represents an implementation of {@link ISubscriptionBuilderForProducerTenant}.
  */
-export class SubscriptionBuilderForProducerTenant {
+export class SubscriptionBuilderForProducerTenant extends ISubscriptionBuilderForProducerTenant {
     private _producerStreamId?: StreamId;
     private _builder?: SubscriptionBuilderForProducerStream;
 
@@ -27,15 +29,13 @@ export class SubscriptionBuilderForProducerTenant {
      */
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
-        private readonly _producerTenantId: TenantId) {
+        private readonly _producerTenantId: TenantId
+    ) {
+        super();
     }
 
-    /**
-     * Sets the producer stream to subscribe to events from.
-     * @param {StreamId | Guid | string} streamId - Stream to subscribe to events from.
-     * @returns {SubscriptionBuilderForProducerStream} The builder for creating event horizon subscriptions.
-     */
-    fromProducerStream(streamId: StreamId | Guid | string): SubscriptionBuilderForProducerStream {
+    /** @inheritdoc */
+    fromProducerStream(streamId: StreamId | Guid | string): ISubscriptionBuilderForProducerStream {
         this.throwIfProducerStreamIsAlreadyDefined();
         this._producerStreamId = StreamId.from(streamId);
         this._builder = new SubscriptionBuilderForProducerStream(

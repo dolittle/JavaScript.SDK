@@ -5,50 +5,38 @@
 
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { Employee } from './Employee';
-import { EmployeeHired } from './EmployeeHired';
-import { EmployeeRetired } from './EmployeeRetired';
-import { EmployeeTransferred } from './EmployeeTransferred';
+import { setTimeout } from 'timers/promises';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes => {
-        eventTypes.register(EmployeeHired);
-        eventTypes.register(EmployeeTransferred);
-        eventTypes.register(EmployeeRetired);
-    })
-    .withEmbeddings(builder => {
-        builder.register(Employee);
-    })
-    .build();
+import { Employee } from './Employee';
 
 (async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-    // wait for the registration to complete
-    setTimeout(async () => {
-        // mock of the state from the external HR system
-        const updatedEmployee = new Employee(
-            'Mr. Taco',
-            'Street Food Taco Truck');
+    await setTimeout(2000);
 
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .update(Employee, updatedEmployee.name, updatedEmployee);
-        console.log(`Updated ${updatedEmployee.name}`);
+    const updatedEmployee = new Employee(
+        'Mr. Taco',
+        'Street Food Taco Truck');
 
-        const mrTaco = await client.embeddings
-            .forTenant(TenantId.development)
-            .get(Employee, 'Mr. Taco');
-        console.log(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .update(Employee, updatedEmployee.name, updatedEmployee);
+    client.logger.info(`Updated ${updatedEmployee.name}`);
 
-        const allEmployeeNames = await client.embeddings
-            .forTenant(TenantId.development)
-            .getKeys(Employee);
-        console.log(`All current employees are ${allEmployeeNames}`);
+    const mrTaco = await client.embeddings
+        .forTenant(TenantId.development)
+        .get(Employee, 'Mr. Taco');
+    client.logger.info(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
 
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .delete(Employee, updatedEmployee.name);
-        console.log(`Deleted ${updatedEmployee.name}`);
-    }, 1000);
+    const allEmployeeNames = await client.embeddings
+        .forTenant(TenantId.development)
+        .getKeys(Employee);
+    client.logger.info(`All current employees are ${allEmployeeNames}`);
+
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .delete(Employee, updatedEmployee.name);
+    client.logger.info(`Deleted ${updatedEmployee.name}`);
 })();

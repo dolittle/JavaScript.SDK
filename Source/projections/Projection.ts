@@ -17,7 +17,8 @@ import { ProjectionId } from './ProjectionId';
  * @template T The type of the projection read model.
  */
 export class Projection<T> extends IProjection<T> {
-    initialState?: T | undefined;
+    readonly readModelType: Constructor<T> | undefined;
+    readonly initialState: T;
 
     /** @inheritdoc */
     readonly events: Iterable<EventSelector>;
@@ -33,8 +34,17 @@ export class Projection<T> extends IProjection<T> {
         readonly projectionId: ProjectionId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
         readonly scopeId: ScopeId,
-        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>) {
+        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>
+    ) {
         super();
+
+        if (readModelTypeOrInstance instanceof Function) {
+            this.readModelType = readModelTypeOrInstance;
+            this.initialState = new readModelTypeOrInstance();
+        } else {
+            this.initialState = readModelTypeOrInstance;
+        }
+
         const eventSelectors: EventSelector[] = [];
         for (const [eventType, [, keySelector]] of this._eventMap.entries()) {
             eventSelectors.push(new EventSelector(eventType, keySelector));

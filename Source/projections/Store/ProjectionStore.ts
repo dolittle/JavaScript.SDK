@@ -1,24 +1,28 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { map } from 'rxjs/operators';
+import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
-import { map } from 'rxjs/operators';
-import { Logger } from 'winston';
-import { Key, ProjectionId } from '..';
+
+import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+
+import { Key } from '../Key';
+import { ProjectionId } from '../ProjectionId';
 import { IConvertProjectionsToSDK } from './Converters/IConvertProjectionsToSDK';
 import { ProjectionsToSDKConverter } from './Converters/ProjectionsToSDKConverter';
 import { CurrentState } from './CurrentState';
 import { FailedToGetProjection } from './FailedToGetProjection';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
-import { IProjectionAssociations } from './IProjectionAssociations';
+import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { IProjectionStore } from './IProjectionStore';
 
 /**
@@ -32,13 +36,13 @@ export class ProjectionStore extends IProjectionStore {
      * Initialises a new instance of the {@link ProjectionStore} class.
      * @param {ProjectionsClient} _projectionsClient - The projections client to use to get projection states.
      * @param {ExecutionContext} _executionContext - The execution context of the client.
-     * @param {IProjectionAssociations} _projectionAssociations - All the types associated with projections.
+     * @param {IProjectionReadModelTypes} _readModelTypes - All the types associated with projections.
      * @param {Logger} _logger - The logger to use for logging.
      */
     constructor(
         private readonly _projectionsClient: ProjectionsClient,
         private readonly _executionContext: ExecutionContext,
-        private readonly _projectionAssociations: IProjectionAssociations,
+        private readonly _readModelTypes: IProjectionReadModelTypes,
         private readonly _logger: Logger) {
         super();
     }
@@ -49,21 +53,21 @@ export class ProjectionStore extends IProjectionStore {
     get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
     get(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
     get(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
-    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeProjectionOrCancellationOrScope?: ProjectionId | Cancellation | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
+    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
         const type = typeof typeOrKey === 'function'
             ? typeOrKey as Constructor<TProjection>
             : undefined;
         const key = this.getKeyFrom(typeOrKey, keyOrProjection);
-        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeProjectionOrCancellationOrScope, maybeCancellationOrScope);
-        const cancellation = this.getCancellationFrom(maybeProjectionOrCancellationOrScope, maybeCancellationOrScope, maybeCancellation);
+        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope);
+        const cancellation = this.getCancellationFrom(maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
 
         this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setProjectionid(Guids.toProtobuf(projection.value));
+        request.setScopeid(Guids.toProtobuf(scope.value));
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,9 +93,9 @@ export class ProjectionStore extends IProjectionStore {
         this._logger.debug(`Getting all states from projection ${projection} in scope ${scope}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setProjectionid(guids.toProtobuf(projection.value));
-        request.setScopeid(guids.toProtobuf(scope.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setProjectionid(Guids.toProtobuf(projection.value));
+        request.setScopeid(Guids.toProtobuf(scope.value));
 
         return reactiveUnary(this._projectionsClient, this._projectionsClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -119,8 +123,8 @@ export class ProjectionStore extends IProjectionStore {
             }
             return [ProjectionId.from(maybeProjectionOrCancellationOrScope), ScopeId.default];
         }
-        const projection = this._projectionAssociations.getFor<TProjection>(type!);
-        return [projection.identifier, projection.scopeId];
+        const projection = this._readModelTypes.getFor(type!);
+        return [projection.projectionId, projection.scopeId];
     }
 
     private getProjectionAndScopeForAll<TProjection>(type: Constructor<TProjection> | undefined, typeOrProjection: Constructor<TProjection> | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string): [ProjectionId, ScopeId] {
@@ -135,8 +139,8 @@ export class ProjectionStore extends IProjectionStore {
             }
             return [ProjectionId.from(maybeCancellationOrProjectionOrScope), ScopeId.default];
         }
-        const projection = this._projectionAssociations.getFor<TProjection>(type!);
-        return [projection.identifier, projection.scopeId];
+        const projection = this._readModelTypes.getFor(type!);
+        return [projection.projectionId, projection.scopeId];
     }
 
     private getCancellationFrom(maybeProjectionOrCancellationOrScope?: ProjectionId | Cancellation | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Cancellation {
@@ -152,7 +156,7 @@ export class ProjectionStore extends IProjectionStore {
 
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse, projection: ProjectionId, scope: ScopeId, key?: Key) {
         if (response.hasFailure()) {
-            throw new FailedToGetProjection(projection, scope, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetProjection(projection, scope, key, Failures.toSDK(response.getFailure()!));
         }
     }
 

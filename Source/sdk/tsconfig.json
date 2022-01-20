@@ -10,14 +10,16 @@
     "references": [
         { "path": "../aggregates" },
         { "path": "../common" },
-        { "path": "../eventHorizon" },
+        { "path": "../dependencyInversion" },
         { "path": "../embeddings" },
+        { "path": "../eventHorizon" },
         { "path": "../events" },
         { "path": "../events.filtering" },
         { "path": "../events.handling" },
         { "path": "../execution" },
         { "path": "../projections" },
         { "path": "../resilience" },
+        { "path": "../resources" },
         { "path": "../tenancy" },
     ]
 }

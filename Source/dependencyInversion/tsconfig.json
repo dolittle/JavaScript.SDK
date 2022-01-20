@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "sourceRoot": "../",
+        "outDir": "Distribution",
+        "composite": true
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../common" },
+        { "path": "../execution" },
+    ]
+}

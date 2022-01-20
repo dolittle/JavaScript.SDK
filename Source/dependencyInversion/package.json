@@ -1,0 +1,57 @@
+{
+    "name": "@dolittle/sdk.dependencyinversion",
+    "version": "21.0.0-gimli.21",
+    "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
+    "keywords": [
+        "Dolittle",
+        "Events",
+        "Event Sourcing",
+        "Domain Driven Design",
+        "Event Driven Architecture",
+        "Line of Business",
+        "ES",
+        "DDD",
+        "EDA",
+        "LOB"
+    ],
+    "author": "all contributors",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dolittle/Javascript.SDK.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dolittle/Javascript.SDK/issues"
+    },
+    "homepage": "https://github.com/dolittle/Javascript.SDK#readme",
+    "files": [
+        "Distribution",
+        "**/*.ts"
+    ],
+    "main": "Distribution/index.js",
+    "types": "Distribution/index.d.ts",
+    "scripts": {
+        "prebuild": "yarn clean && yarn copy-readme",
+        "postbuild": "yarn lint",
+        "build": "tsc -b",
+        "clean": "tsc -b --clean",
+        "copy-readme": "node ../../Assets/copy-readme.js .",
+        "test": "mocha",
+        "lint": "eslint --quiet --ext .ts ./",
+        "lint:fix": "eslint --quiet --ext .ts ./ --fix"
+    },
+    "dependencies": {
+        "@dolittle/sdk.common": "21.0.0-gimli.21",
+        "@dolittle/sdk.execution": "21.0.0-gimli.21",
+        "@dolittle/types": "6.0.0-gimli.0",
+        "inversify": "6.0.1",
+        "winston": "3.3.2"
+    },
+    "devDependencies": {
+        "tsyringe": "4.6.0",
+        "typedi": "0.10.0"
+    }
+}

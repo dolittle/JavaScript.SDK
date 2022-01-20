@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { ConceptAs } from '@dolittle/concepts';
+import { Guid } from '@dolittle/rudiments';
+import { ConceptAs, createIsConceptAsGuid } from '@dolittle/concepts';
 
 /**
  * Represents the unique identifier of a scope.
@@ -34,3 +34,10 @@ export class ScopeId extends ConceptAs<Guid, '@dolittle/sdk.events.ScopeId'> {
         return new ScopeId(Guid.as(id));
     }
 };
+
+/**
+ * Checks whether or not an object is an instance of {@link ScopeId}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link ScopeId}, false if not.
+ */
+export const isScopeId = createIsConceptAsGuid(ScopeId, '@dolittle/sdk.events.ScopeId');

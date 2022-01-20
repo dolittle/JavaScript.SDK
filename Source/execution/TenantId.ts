@@ -7,7 +7,7 @@ import { ConceptAs } from '@dolittle/concepts';
 /**
  * Defines the types that can be converted to a {@link TenantId}.
  */
-export type TenantIdLike = string | Guid | TenantId;
+export type TenantIdLike = string | Guid | TenantId;
 
 /**
  * Represents the unique identifier of a tenant.

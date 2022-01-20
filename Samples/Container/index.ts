@@ -3,24 +3,29 @@
 
 import 'reflect-metadata';
 import { DolittleClient } from '@dolittle/sdk';
-import { Container } from 'typedi';
+import { TenantId } from '@dolittle/sdk.execution';
+import { Container } from 'inversify';
 
+import './MyEventHandler';
 import { MyEvent } from './MyEvent';
-import { MyEventHandler } from './MyEventHandler';
+import { MyService } from './MyService';
+import { MyTenantScopedService } from './MyTenantScopedService';
 
-const client = DolittleClient
-    .forMicroservice('7a6155dd-9109-4488-8f6f-c57fe4b65bfb')
-    .withContainer(Container)
-    .withEventTypes(eventTypes =>
-        eventTypes.register(MyEvent))
-    .withEventHandlers(eventHandlers =>
-        eventHandlers.register(MyEventHandler))
-    .build();
+(async () => {
+    const container = new Container();
+    container.bind(MyService).toSelf();
 
-const event = new MyEvent();
-event.anInteger = 42;
-event.aString = 'Forty two';
-client
-    .eventStore
-    .forTenant('900893e7-c4cc-4873-8032-884e965e4b97')
-    .commit(event, 'd8cb7301-4bec-4451-a72b-2db53c6dc05d');
+    const client = await DolittleClient
+        .setup()
+        .connect(_ => _
+            .withServiceProvider(container)
+            .withTenantServices((services, tenant) => {
+                services.bind(MyTenantScopedService).toType(MyTenantScopedService);
+            })
+        );
+
+    await client
+        .eventStore
+        .forTenant(TenantId.development)
+        .commit(new MyEvent(42, 'Forty Two'), 'Event Source');
+})();

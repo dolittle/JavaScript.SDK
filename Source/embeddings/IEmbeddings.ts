@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IEmbeddingStore } from '@dolittle/sdk.embeddings';
 import { TenantIdLike } from '@dolittle/sdk.execution';
+
 import { IEmbedding } from './IEmbedding';
 
 /**
@@ -10,9 +10,9 @@ import { IEmbedding } from './IEmbedding';
  */
 export abstract class IEmbeddings {
     /**
-     * Build an {@link IEmbeddingStore} for the given tenant.
-     * @param { TenantIdLike } tenantId - The tenant id.
-     * @returns {IEmbeddingStore} The embedding store.
+     * Build an {@link IEmbedding} for the given tenant.
+     * @param {TenantIdLike} tenantId - The tenant id.
+     * @returns {IEmbedding} The embedding.
      */
     abstract forTenant(tenantId: TenantIdLike): IEmbedding;
 }

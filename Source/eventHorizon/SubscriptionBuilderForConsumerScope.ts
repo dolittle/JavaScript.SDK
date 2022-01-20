@@ -1,18 +1,20 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
-import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { Subscription } from './Subscription';
+import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
+import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
+
+import { ISubscriptionBuilderForConsumerScope } from './ISubscriptionBuilderForConsumerScope';
+import { Subscription } from './Subscription';
 import { SubscriptionCallbackArguments, SubscriptionCallbacks, SubscriptionCompleted, SubscriptionFailed, SubscriptionSucceeded } from './SubscriptionCallbacks';
 
 /**
- * Represents the builder for building subscriptions on a tenant.
+ * Represents an implementation of {@link ISubscriptionBuilderForConsumerScope}.
  */
-export class SubscriptionBuilderForConsumerScope {
+export class SubscriptionBuilderForConsumerScope extends ISubscriptionBuilderForConsumerScope {
     private readonly _callbacks: ((subscriptionCallback: SubscriptionCallbacks) => void)[] = [];
 
     /**
@@ -28,38 +30,25 @@ export class SubscriptionBuilderForConsumerScope {
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
         private readonly _producerPartitionId: PartitionId,
-        private readonly _consumerScopeId: ScopeId) {
+        private readonly _consumerScopeId: ScopeId
+    ) {
+        super();
     }
 
-    /**
-     * Sets the {@link SubscriptionCompleted} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionCompleted} completed - The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
-     * @summary The callback will be called on each subscription.
-     */
-    onCompleted(completed: SubscriptionCompleted): SubscriptionBuilderForConsumerScope {
+    /** @inheritdoc */
+    onCompleted(completed: SubscriptionCompleted): ISubscriptionBuilderForConsumerScope {
         this._callbacks.push(subscriptionCallbacks => subscriptionCallbacks.onCompleted(completed));
         return this;
     }
 
-    /**
-     * Sets the {@link SubscriptionSucceeded} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionSucceeded} succeeded - The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
-     * @summary The callback will be called on each subscription.
-     */
-    onSuccess(succeeded: SubscriptionSucceeded): SubscriptionBuilderForConsumerScope {
+    /** @inheritdoc */
+    onSuccess(succeeded: SubscriptionSucceeded): ISubscriptionBuilderForConsumerScope {
         this._callbacks.push(subscriptionCallbacks => subscriptionCallbacks.onSucceeded(succeeded));
         return this;
     }
 
-    /**
-     * Sets the {@link SubscriptionFailed} callback for all subscriptions on the event horizon.
-     * @param {SubscriptionFailed} failed - The callback method.
-     * @returns {SubscriptionBuilderForConsumerScope} The builder for continuation.
-     * @summary The callback will be called on each subscription.
-     */
-    onFailure(failed: SubscriptionFailed): SubscriptionBuilderForConsumerScope {
+    /** @inheritdoc */
+    onFailure(failed: SubscriptionFailed): ISubscriptionBuilderForConsumerScope {
         this._callbacks.push(subscriptionCallbacks => subscriptionCallbacks.onFailed(failed));
         return this;
     }

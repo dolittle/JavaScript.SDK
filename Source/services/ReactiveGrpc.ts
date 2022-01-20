@@ -1,12 +1,15 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Cancellation } from '@dolittle/sdk.resilience';
 import * as grpc from '@grpc/grpc-js';
 import { Observable, Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { CouldNotConnectToRuntime } from './CouldNotConnectToRuntime';
 import { ClientStreamMethod, DuplexMethod, ServerStreamMethod, UnaryMethod } from './GrpcMethods';
+import { isGrpcError } from './GrpcError';
 
 /**
  * Performs a unary call.
@@ -23,7 +26,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
     const metadata = new grpc.Metadata();
     const call = method.call(client, argument, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
-            subject.error(getErrorFromGrpc(error, client.getChannel().getTarget()));
+            subject.error(getErrorFrom(error, client.getChannel().getTarget()));
         } else {
             subject.next(message);
             subject.complete();
@@ -37,7 +40,7 @@ export function reactiveUnary<TArgument, TResponse>(client: grpc.Client, method:
  * Performs a client streaming call.
  * @param {grpc.Client} client - The Runtime client.
  * @param {ClientStreamMethod<TRequest, TResponse>} method - The method to call.
- * @param {Observable<TRequest>} requests - The requests to send to the server.
+ * @param {Observable<TRequest>} requests - The requests to send to the server.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The response from the server.
  * @template TRequest - The type of the argument.
@@ -48,7 +51,7 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
     const metadata = new grpc.Metadata();
     const stream = method.call(client, metadata, {}, (error: grpc.ServiceError | null, message?: TResponse) => {
         if (error) {
-            subject.error(getErrorFromGrpc(error, client.getChannel().getTarget()));
+            subject.error(getErrorFrom(error, client.getChannel().getTarget()));
         } else {
             subject.next(message);
             subject.complete();
@@ -81,7 +84,7 @@ export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, 
  * Performs a duplex streaming call between the client and the Runtime.
  * @param {grpc.Client} client - The Runtime client.
  * @param {DuplexMethod<TRequest, TResponse>} method - The method to call.
- * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
+ * @param {Observable<TRequest>} requests - The requests to send to the Runtime.
  * @param {Cancellation} cancellation - Used to cancel the call.
  * @returns {Observable<TResponse>} The responses from the Runtime and errors from the requests.
  * @template TRequest - The type of the argument.
@@ -131,10 +134,7 @@ function handleClientRequests<TRequest, TResponse>(stream: grpc.ClientWritableSt
         },
         error: (error: any) => {
             stream.cancel();
-            if (isGrpcError(error)) {
-                error = getErrorFromGrpc(error, address);
-            }
-            subject.error(error);
+            subject.error(getErrorFrom(error, address));
         }
     });
 }
@@ -156,14 +156,9 @@ function handleServerResponses<TResponse>(stream: grpc.ClientReadableStream<TRes
     });
 }
 
-function getErrorFromGrpc(error: grpc.ServiceError, address: string) {
-    if (error.code === grpc.status.UNAVAILABLE) {
+function getErrorFrom(error: any, address: string): any {
+    if (isGrpcError(error) && error.code === grpc.status.UNAVAILABLE) {
         return new CouldNotConnectToRuntime(address);
-    } else {
-        return error;
     }
-}
-
-function isGrpcError(error: any): error is grpc.ServiceError {
-    return error.code !== undefined;
+    return error;
 }

@@ -15,7 +15,7 @@ export class AggregateRootVersion extends ConceptAs<number, '@dolittle/sdk.aggre
 
     /**
      * Initializes an instance of {@link AggregateRootVersion}.
-     * @param {number} value - The version number.
+     * @param {number} value - The version number.
      */
     constructor(value: number) {
         super(value, '@dolittle/sdk.aggregates.AggregateRoot');
@@ -31,7 +31,7 @@ export class AggregateRootVersion extends ConceptAs<number, '@dolittle/sdk.aggre
 
     /**.
      * Creates an {@link AggregateRootVersion} from a {@link number}.
-     * @param {number | AggregateRootVersion} value - The version to create from
+     * @param {number | AggregateRootVersion} value - The version to create from
      * @returns {AggregateRootVersion} The created aggregate root version concept.
      */
     static from(value: number | AggregateRootVersion): AggregateRootVersion {

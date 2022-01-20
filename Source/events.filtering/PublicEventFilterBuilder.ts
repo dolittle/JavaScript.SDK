@@ -1,60 +1,56 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
+import { IEquatable } from '@dolittle/rudiments';
 
+import { IClientBuildResults, IModelBuilder } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
-import { FilterId } from './FilterId';
-import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
-import { IFilterProcessor } from './IFilterProcessor';
-import * as internal from './Internal';
-import { MissingFilterCallback } from './MissingFilterCallback';
+import { PublicEventFilterProcessor } from './Internal/PublicEventFilterProcessor';
+import { FilterId } from './FilterId';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import { IPublicEventFilterBuilder } from './IPublicEventFilterBuilder';
+import { FilterModelId } from './FilterModelId';
 
 /**
- * Represents the builder for building public event filters.
+ * Represents an implementation of {@link IPublicEventFilterBuilder}.
  */
-export class PublicEventFilterBuilder {
+export class PublicEventFilterBuilder extends IPublicEventFilterBuilder implements IEquatable {
     private _callback?: PartitionedFilterEventCallback;
 
     /**
      * Initializes a new instance of {@link PublicEventFilterBuilder}.
      * @param {FilterId} _filterId - Identifier of the filter.
+     * @param {IModelBuilder} _modelBuilder - For binding the event filter to its identifier.
      */
-    constructor(private _filterId: FilterId) {}
+    constructor(private readonly _filterId: FilterId, private readonly _modelBuilder: IModelBuilder) {
+        super();
+        this._modelBuilder.bindIdentifierToProcessorBuilder(new FilterModelId(_filterId, ScopeId.default), this);
+    }
 
-    /**
-     * Defines a callback for the filter.
-     * @param {PartitionedFilterEventCallback} callback - The callback that will be called for each event.
-     */
+    /** @inheritdoc */
     handle(callback: PartitionedFilterEventCallback) {
         this._callback = callback;
     }
 
-    /**
-     * Build an instance of a {@link IFilterProcessor}.
-     * @param {FiltersClient} client - The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext - Execution context.
-     * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {Logger} logger - Logger for logging.
-     * @returns {IFilterProcessor} The built filter processor.
-     */
-    build(
-        client: FiltersClient,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger): IFilterProcessor {
-
-        this.throwIfCallbackIsMissing(this._filterId);
-        return new internal.PublicEventFilterProcessor(this._filterId, this._callback!, client, executionContext, eventTypes, logger);
+    /** @inheritdoc */
+    equals(other: any): boolean {
+        return this === other;
     }
 
-    private throwIfCallbackIsMissing(filterId: FilterId) {
-        if (!this._callback) {
-            throw new MissingFilterCallback(filterId, ScopeId.default);
+    /**
+     * Build an instance of a {@link IFilterProcessor}.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {IClientBuildResults} results - For keeping track of build results.
+     * @returns {IFilterProcessor | undefined} The built filter processor if successful.
+     */
+    build(eventTypes: IEventTypes, results: IClientBuildResults): IFilterProcessor | undefined {
+        if (typeof this._callback !== 'function') {
+            results.addFailure(`Filter callback is not configured for public filter '${this._filterId}'`, 'Call handle() on the builder to complete the filter configuration');
+            return;
         }
+
+        return new PublicEventFilterProcessor(this._filterId, this._callback!, eventTypes);
     }
 }

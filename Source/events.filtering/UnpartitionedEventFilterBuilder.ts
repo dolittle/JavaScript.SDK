@@ -1,30 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
-import { FilterId } from './FilterId';
-import { FilterEventCallback } from './FilterEventCallback';
-import { IFilterProcessor } from './IFilterProcessor';
-import { MissingFilterCallback } from './MissingFilterCallback';
-import * as internal from './Internal';
+import { EventFilterProcessor } from './Internal/EventFilterProcessor';
+import { FilterId } from './FilterId';
+import { FilterEventCallback } from './FilterEventCallback';
+import { IFilterProcessor } from './IFilterProcessor';
+import { IUnpartitionedEventFilterBuilder } from './IUnpartitionedEventFilterBuilder';
 
 /**
- * Represents the builder for building public event filters.
+ * Represents an implementation of {@link IUnpartitionedEventFilterBuilder}.
  */
-export class UnpartitionedEventFilterBuilder {
+export class UnpartitionedEventFilterBuilder extends IUnpartitionedEventFilterBuilder {
     private _callback?: FilterEventCallback;
 
-    /**
-     * Defines a callback for the filter.
-     * @param {FilterEventCallback} callback - The callback that will be called for each event.
-     */
-    handle(callback: FilterEventCallback) {
+    /** @inheritdoc */
+    handle(callback: FilterEventCallback): void {
         this._callback = callback;
     }
 
@@ -32,27 +25,16 @@ export class UnpartitionedEventFilterBuilder {
      * Build an instance of a {@link IFilterProcessor}.
      * @param {FilterId} filterId - Unique identifier for the filter.
      * @param {ScopeId} scopeId - The scope of the filter.
-     * @param {FiltersClient} client - The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext - Execution context.
-     * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {Logger} logger - Logger for logging.
-     * @returns {IFilterProcessor} The built filter processor.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {IClientBuildResults} results - For keeping track of build results.
+     * @returns {IFilterProcessor | undefined} The built filter processor if successful.
      */
-    build(
-        filterId: FilterId,
-        scopeId: ScopeId,
-        client: FiltersClient,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger): IFilterProcessor {
-
-        this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new internal.EventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, eventTypes, logger);
-    }
-
-    private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {
-        if (!this._callback) {
-            throw new MissingFilterCallback(filterId, scopeId);
+    build(filterId: FilterId, scopeId: ScopeId, eventTypes: IEventTypes, results: IClientBuildResults): IFilterProcessor | undefined {
+        if (typeof this._callback !== 'function') {
+            results.addFailure(`Filter callback is not configured for unpartitioned private filter '${filterId}' in scope '${scopeId}'`, 'Call handle() on the builder to complete the filter configuration');
+            return;
         }
+
+        return new EventFilterProcessor(filterId, scopeId, this._callback!, eventTypes);
     }
 }

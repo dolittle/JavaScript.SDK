@@ -2,10 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Subject } from 'rxjs';
+
 import { Cancellation } from './Cancellation';
 
 /**
- * Represents the source of a {@link Cancellation}.
+ * Represents a source of a {@link Cancellation}.
  */
 export class CancellationSource {
     private readonly _subject: Subject<void>;
@@ -23,21 +24,21 @@ export class CancellationSource {
     }
 
     /**
-     * Cancel it.
+     * Cancel the {@link Cancellation} of the {@link CancellationSource}.
      */
     cancel(): void {
         this._subject.complete();
     }
 
     /**
-     * Gets the cancellation subject.
+     * Gets the {@link Cancellation} for the {@link CancellationSource}.
      */
     readonly cancellation: Cancellation;
 
     /**
-     * Get whether or not the {@link CancellationSource} is cancelled.
+     * Gets a value indicating wheter or not the {@link CancellationSource} is cancelled.
      */
     get cancelled(): boolean {
-        return this._subject.isStopped;
+        return this.cancellation.cancelled;
     }
 }

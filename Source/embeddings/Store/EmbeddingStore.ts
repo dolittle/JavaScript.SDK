@@ -1,21 +1,27 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { CurrentState, IConvertProjectionsToSDK, IProjectionAssociations, Key } from '@dolittle/sdk.projections';
-import { callContexts, failures, guids } from '@dolittle/sdk.protobuf';
-import { Cancellation } from '@dolittle/sdk.resilience';
-import { reactiveUnary } from '@dolittle/sdk.services';
-import { Constructor } from '@dolittle/types';
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston';
-import { EmbeddingId, FailedToGetEmbeddingKeys } from '..';
+
+import { Guid } from '@dolittle/rudiments';
+import { Constructor } from '@dolittle/types';
+
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { CurrentState, IConvertProjectionsToSDK, Key } from '@dolittle/sdk.projections';
+import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+import { reactiveUnary } from '@dolittle/sdk.services';
+
+import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
+
+import { EmbeddingId } from '../EmbeddingId';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
+import { FailedToGetEmbeddingKeys } from './FailedToGetEmbeddingKeys';
 import { FailedToGetEmbeddingState } from './FailedToGetEmbeddingState';
 import { IEmbeddingStore } from './IEmbeddingStore';
+import { IEmbeddingReadModelTypes } from './IEmbeddingReadModelTypes';
 
 /**
  * Represents an implementation of {link IEmbeddingStore}.
@@ -26,14 +32,14 @@ export class EmbeddingStore extends IEmbeddingStore {
      * @param {EmbeddingStoreClient} _embeddingsStoreClient - The embedding store client.
      * @param {ExecutionContext} _executionContext - The execution context.
      * @param {IConvertProjectionsToSDK} _converter - The converter to use to convert projections.
-     * @param {IProjectionAssociations} _projectionAssociations - The projection associations.
+     * @param {IEmbeddingReadModelTypes} _readModelTypes - The projection associations.
      * @param {Logger} _logger - The logger.
      */
     constructor(
         private readonly _embeddingsStoreClient: EmbeddingStoreClient,
         protected readonly _executionContext: ExecutionContext,
         protected readonly _converter: IConvertProjectionsToSDK,
-        protected readonly _projectionAssociations: IProjectionAssociations,
+        protected readonly _readModelTypes: IEmbeddingReadModelTypes,
         protected readonly _logger: Logger) {
             super();
         }
@@ -59,9 +65,9 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting one state from embedding ${embedding} with key ${key}`);
 
         const request = new GetOneRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
         request.setKey(key.value);
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getOne, request, cancellation)
             .pipe(map(response => {
@@ -89,8 +95,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all states from embedding ${embedding}`);
 
         const request = new GetAllRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getAll, request, cancellation)
             .pipe(map(response => {
@@ -117,8 +123,8 @@ export class EmbeddingStore extends IEmbeddingStore {
         this._logger.debug(`Getting all keys for embedding ${embedding}`);
 
         const request = new GetKeysRequest();
-        request.setCallcontext(callContexts.toProtobuf(this._executionContext));
-        request.setEmbeddingid(guids.toProtobuf(embedding.value));
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setEmbeddingid(Guids.toProtobuf(embedding.value));
 
         return reactiveUnary(this._embeddingsStoreClient, this._embeddingsStoreClient.getKeys, request, cancellation)
             .pipe(map(response => {
@@ -130,14 +136,14 @@ export class EmbeddingStore extends IEmbeddingStore {
     private getEmbeddingForOne<TEmbedding>(type: Constructor<any> | undefined, keyOrEmbedding: any | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
         if (embeddingOrCancellation instanceof Cancellation) {
             if (type) {
-                return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+                return this._readModelTypes.getFor(type!);
             }
             return EmbeddingId.from(keyOrEmbedding);
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
         }
         if (type) {
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+            return this._readModelTypes.getFor(type!);
         }
         return EmbeddingId.from(keyOrEmbedding);
     }
@@ -145,14 +151,14 @@ export class EmbeddingStore extends IEmbeddingStore {
     private getEmbeddingForAll<TEmbedding>(type: Constructor<TEmbedding> | undefined, typeOrEmbedding: Constructor<TEmbedding> | string | EmbeddingId | Guid, embeddingOrCancellation?: string | EmbeddingId | Guid | Cancellation) {
         if (embeddingOrCancellation instanceof Cancellation) {
             if (typeof typeOrEmbedding === 'function') {
-                return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+                return this._readModelTypes.getFor(type!);
             }
             return EmbeddingId.from(typeOrEmbedding);
         } else if (embeddingOrCancellation) {
             return EmbeddingId.from(embeddingOrCancellation);
         }
         if (type) {
-            return EmbeddingId.from(this._projectionAssociations.getFor<TEmbedding>(type!).identifier.value);
+            return this._readModelTypes.getFor(type!);
         }
         return EmbeddingId.from(typeOrEmbedding as string);
     }
@@ -166,9 +172,9 @@ export class EmbeddingStore extends IEmbeddingStore {
     private throwIfHasFailure(response: GetOneResponse | GetAllResponse | GetKeysResponse, embedding: EmbeddingId, key?: Key) {
         if (response.hasFailure()) {
             if (response instanceof GetKeysResponse) {
-                throw new FailedToGetEmbeddingKeys(embedding, failures.toSDK(response.getFailure())!);
+                throw new FailedToGetEmbeddingKeys(embedding, Failures.toSDK(response.getFailure()!));
             }
-            throw new FailedToGetEmbedding(embedding, key, failures.toSDK(response.getFailure())!);
+            throw new FailedToGetEmbedding(embedding, key, Failures.toSDK(response.getFailure()!));
         }
     }
 

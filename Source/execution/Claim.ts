@@ -11,7 +11,7 @@ export class Claim {
 
     /**
      * Creates an instance of claim.
-     * @param {string} key - Key of the claim.
+     * @param {string} key - Key of the claim.
      * @param {string} value - Value on the claim.
      * @param {string} valueType - Type of value.
      */

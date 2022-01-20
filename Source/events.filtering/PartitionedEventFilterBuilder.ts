@@ -1,57 +1,40 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Logger } from 'winston';
-
+import { IClientBuildResults } from '@dolittle/sdk.common';
 import { IEventTypes, ScopeId } from '@dolittle/sdk.events';
-import { ExecutionContext } from '@dolittle/sdk.execution';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-
-import { FilterId } from './FilterId';
-import * as internal from './Internal';
-import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
-import { IFilterProcessor } from './IFilterProcessor';
-import { MissingFilterCallback } from './MissingFilterCallback';
+import { PartitionedEventFilterProcessor } from './Internal/PartitionedEventFilterProcessor';
+import { FilterId } from './FilterId';
+import { IFilterProcessor } from './IFilterProcessor';
+import { IPartitionedEventFilterBuilder } from './IPartitionedEventFilterBuilder';
+import { PartitionedFilterEventCallback } from './PartitionedFilterEventCallback';
 
 /**
- * Represents builder for building a partitioned event filter.
+ * Represents an implementation of {@link IPartitionedEventFilterBuilder}.
  */
-export class PartitionedEventFilterBuilder {
+export class PartitionedEventFilterBuilder extends IPartitionedEventFilterBuilder {
     private _callback?: PartitionedFilterEventCallback;
 
-    /**
-     * Configured the handle callback.
-     * @param {PartitionedFilterEventCallback} callback - The callback that will be called for each event.
-     */
-    handle(callback: PartitionedFilterEventCallback) {
+    /** @inheritdoc */
+    handle(callback: PartitionedFilterEventCallback): void {
         this._callback = callback;
     }
 
     /**
-     * Builds partitioned event filter builder.
+     * Build an instance of a {@link IFilterProcessor}.
      * @param {FilterId} filterId - Unique identifier for the filter.
-     * @param {ScopeId} scopeId - The identifier of the scope the filter runs on.
-     * @param {FiltersClient} client - The client for working with the filters in the runtime.
-     * @param {ExecutionContext} executionContext - Execution context.
-     * @param {IEventTypes} eventTypes - Event types for identifying event types.
-     * @param {Logger} logger - Logger for logging.
-     * @returns {IFilterProcessor} The built filter processor.
+     * @param {ScopeId} scopeId - The scope of the filter.
+     * @param {IEventTypes} eventTypes - For event types resolution.
+     * @param {IClientBuildResults} results - For keeping track of build results.
+     * @returns {IFilterProcessor | undefined} The built filter processor if successful.
      */
-    build(
-        filterId: FilterId,
-        scopeId: ScopeId,
-        client: FiltersClient,
-        executionContext: ExecutionContext,
-        eventTypes: IEventTypes,
-        logger: Logger): IFilterProcessor {
-        this.throwIfCallbackIsMissing(filterId, scopeId);
-        return new internal.PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, client, executionContext, eventTypes, logger);
-    }
-
-    private throwIfCallbackIsMissing(filterId: FilterId, scopeId: ScopeId) {
-        if (!this._callback) {
-            throw new MissingFilterCallback(filterId, scopeId);
+    build(filterId: FilterId, scopeId: ScopeId, eventTypes: IEventTypes, results: IClientBuildResults): IFilterProcessor | undefined {
+        if (typeof this._callback !== 'function') {
+            results.addFailure(`Filter callback is not configured for partitioned private filter '${filterId}' in scope '${scopeId}'`, 'Call handle() on the builder to complete the filter configuration');
+            return;
         }
+
+        return new PartitionedEventFilterProcessor(filterId, scopeId, this._callback!, eventTypes);
     }
 }

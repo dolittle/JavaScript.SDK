@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
-import { ConceptAs } from '@dolittle/concepts';
+import { Guid } from '@dolittle/rudiments';
+import { ConceptAs, createIsConceptAsGuid } from '@dolittle/concepts';
 
 /**
  * Represents the unique identifier for a Filter.
@@ -26,3 +26,10 @@ export class FilterId extends ConceptAs<Guid, '@dolittle/sdk.events.filtering.Fi
         return new FilterId(Guid.as(id));
     }
 }
+
+/**
+ * Checks whether or not an object is an instance of {@link FilterId}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link FilterId}, false if not.
+ */
+export const isFilterId = createIsConceptAsGuid(FilterId, '@dolittle/sdk.events.filtering.FilterId');

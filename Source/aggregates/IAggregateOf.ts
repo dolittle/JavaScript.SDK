@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventSourceId } from '@dolittle/sdk.events';
+import { EventSourceIdLike } from '@dolittle/sdk.events';
 import { AggregateRoot } from './AggregateRoot';
 import { IAggregateRootOperations } from './IAggregateRootOperations';
 
@@ -19,8 +19,8 @@ export abstract class IAggregateOf<TAggregate extends AggregateRoot> {
 
     /**
      * Gets an {@link AggregateRoot} with a given {@link EventSourceId}.
-     * @param {EventSourceId} eventSourceId - {@link EventSourceId} Of the {@link AggregateRoot}.
+     * @param {EventSourceIdLike} eventSourceId - {@link EventSourceId} Of the {@link AggregateRoot}.
      * @returns {IAggregateRootOperations<TAggregate>}
      */
-    abstract get(eventSourceId: EventSourceId): IAggregateRootOperations<TAggregate>;
+    abstract get(eventSourceId: EventSourceIdLike): IAggregateRootOperations<TAggregate>;
 }

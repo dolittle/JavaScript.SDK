@@ -1,21 +1,17 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType, EventTypeMap } from '@dolittle/sdk.events';
-import {
-    DeleteReadModelInstance,
-    MissingOnMethodForType,
-    ProjectionId
-} from '@dolittle/sdk.projections';
 import { Constructor } from '@dolittle/types';
-import {
-    EmbeddingUpdateCallback,
-    EmbeddingContext,
-    EmbeddingDeleteCallback,
-    EmbeddingId,
-    EmbeddingProjectCallback,
-    EmbeddingProjectContext
-} from '..';
+
+import { EventType, EventTypeMap } from '@dolittle/sdk.events';
+import { DeleteReadModelInstance, MissingOnMethodForType, ProjectionId } from '@dolittle/sdk.projections';
+
+import { EmbeddingId } from '../EmbeddingId';
+import { EmbeddingDeleteCallback } from '../EmbeddingDeleteCallback';
+import { EmbeddingContext } from '../EmbeddingContext';
+import { EmbeddingProjectCallback } from '../EmbeddingProjectCallback';
+import { EmbeddingProjectContext } from '../EmbeddingProjectContext';
+import { EmbeddingUpdateCallback } from '../EmbeddingUpdateCallback';
 import { EmbeddingDeleteMethodFailed } from './EmbeddingDeleteMethodFailed';
 import { EmbeddingUpdateMethodFailed } from './EmbeddingUpdateMethodFailed';
 import { IEmbedding } from './IEmbedding';

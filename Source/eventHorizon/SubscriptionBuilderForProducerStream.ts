@@ -1,22 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Observable } from 'rxjs';
 import { Guid } from '@dolittle/rudiments';
 
 import { StreamId, PartitionId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
-import { Subscription } from './Subscription';
+import { ISubscriptionBuilderForProducerStream } from './ISubscriptionBuilderForProducerStream';
+import { ISubscriptionBuilderForProducerPartition } from './ISubscriptionBuilderForProducerPartition';
+import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForProducerPartition } from './SubscriptionBuilderForProducerPartition';
-import { Observable } from 'rxjs';
 import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
 
 /**
- * Represents the builder for building subscriptions on a tenant.
+ * Represents an implementation of {@link ISubscriptionBuilderForProducerStream}.
  */
-export class SubscriptionBuilderForProducerStream {
+export class SubscriptionBuilderForProducerStream extends ISubscriptionBuilderForProducerStream {
     private _producerPartitionId?: PartitionId;
     private _builder?: SubscriptionBuilderForProducerPartition;
 
@@ -29,15 +31,13 @@ export class SubscriptionBuilderForProducerStream {
     constructor(
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
-        private readonly _producerStreamId: StreamId) {
+        private readonly _producerStreamId: StreamId
+    ) {
+        super();
     }
 
-    /**
-     * Sets the producer stream to subscribe to events from.
-     * @param {PartitionId | Guid | string} partitionId - Stream partition to subscribe to events from.
-     * @returns {SubscriptionBuilderForProducerPartition} The builder for creating event horizon subscriptions.
-     */
-    fromProducerPartition(partitionId: PartitionId | Guid | string): SubscriptionBuilderForProducerPartition {
+    /** @inheritdoc */
+    fromProducerPartition(partitionId: PartitionId | Guid | string): ISubscriptionBuilderForProducerPartition {
         this.throwIfProducerPartitionIsAlreadyDefined();
         this._producerPartitionId = PartitionId.from(partitionId);
         this._builder = new SubscriptionBuilderForProducerPartition(

@@ -4,36 +4,36 @@
 import { Logger } from 'winston';
 import { DateTime } from 'luxon';
 
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, IEventTypes, EventSourceId, EventType } from '@dolittle/sdk.events';
-import { MissingEventInformation, internal } from '@dolittle/sdk.events.processing';
+import { Internal, MissingEventInformation } from '@dolittle/sdk.events.processing';
+import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { ExecutionContext } from '@dolittle/sdk.execution';
-import { guids, artifacts } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
+import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
 import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
 import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 
-import { FilterId } from '..';
+import { FilterId } from '../FilterId';
 
 /**
- * Represents an implementation of {@link internal.EventProcessor} that filters events to a stream.
+ * Represents an implementation of {@link Internal.EventProcessor} that filters events to a stream.
  */
-export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends internal.EventProcessor<FilterId, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
+export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extends Internal.EventProcessor<FilterId, FiltersClient, TRegisterArguments, FilterRegistrationResponse, FilterEventRequest, TResponse> {
 
     /**
      * Initialises a new instance of the {@link FilterEventProcessor} class.
      * @param {string} kind - The kind of the filter.
      * @param {FilterId} filterId - The unique identifier of the filter.
      * @param {IEventTypes} _eventTypes - All registered event types.
-     * @param {Logger} logger - The logger to use for logging.
      */
     constructor(
         kind: string,
         filterId: FilterId,
-        private _eventTypes: IEventTypes,
-        logger: Logger
+        private _eventTypes: IEventTypes
     ) {
-        super(kind, filterId, logger);
+        super(kind, filterId);
     }
 
     /** @inheritdoc */
@@ -42,12 +42,12 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
     }
 
     /** @inheritdoc */
-    protected getRetryProcessingStateFromRequest(request: FilterEventRequest): RetryProcessingState | undefined {
+    protected getRetryProcessingStateFromRequest(request: FilterEventRequest): RetryProcessingState | undefined {
         return request.getRetryprocessingstate();
     }
 
     /** @inheritdoc */
-    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext): Promise<TResponse> {
+    protected async handle(request: FilterEventRequest, executionContext: ExecutionContext, services: IServiceProvider, logger: Logger): Promise<TResponse> {
         if (!request.getEvent()) {
             throw new MissingEventInformation('no event in FilterEventRequest');
         }
@@ -73,18 +73,19 @@ export abstract class FilterEventProcessor<TRegisterArguments, TResponse> extend
             pbSequenceNumber,
             EventSourceId.from(pbEventSourceId),
             DateTime.fromJSDate(pbOccurred.toDate()),
+            ExecutionContexts.toSDK(pbExecutionContext),
             executionContext);
 
         let event = JSON.parse(pbEvent.getContent());
 
-        const eventTypeArtifact = artifacts.toSDK(pbEventType, EventType.from);
+        const eventTypeArtifact = Artifacts.toSDK(pbEventType, EventType.from);
         if (this._eventTypes.hasTypeFor(eventTypeArtifact)) {
             const eventType = this._eventTypes.getTypeFor(eventTypeArtifact);
             event = Object.assign(new eventType(), event);
         }
 
-        return this.filter(event, eventContext);
+        return this.filter(event, eventContext, services, logger);
     }
 
-    protected abstract filter(event: any, context: EventContext): Promise<TResponse>;
+    protected abstract filter(event: any, context: EventContext, services: IServiceProvider, logger: Logger): Promise<TResponse>;
 }

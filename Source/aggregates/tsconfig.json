@@ -8,6 +8,11 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        { "path": "../events" }
+        { "path": "../artifacts" },
+        { "path": "../events" },
+        { "path": "../execution" },
+        { "path": "../protobuf" },
+        { "path": "../resilience" },
+        { "path": "../services" },
     ]
 }

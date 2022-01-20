@@ -6,7 +6,7 @@ import { ConceptAs } from '@dolittle/concepts';
 /**
  * Defines the types that can be converted to an {@link EventHandlerAlias}.
  */
-export type EventHandlerAliasLike = string | EventHandlerAlias;
+export type EventHandlerAliasLike = string | EventHandlerAlias;
 
 /**
  * Represents the alias for a EventHandler.

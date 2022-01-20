@@ -13,7 +13,7 @@ export class FailedToDelete extends Exception {
     /**
      * Initialises an instance of {@link FailedToDelete}.
      * @param {EmbeddingId} embedding - The embedding identifier.
-     * @param {Key | undefined} key - The optional key.
+     * @param {Key | undefined} key - The optional key.
      * @param {Failure} failure - The failure.
      */
     constructor(embedding: EmbeddingId, key: Key | undefined, failure: Failure) {

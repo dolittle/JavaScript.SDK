@@ -8,7 +8,10 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        { "path": "../protobuf" },
-        { "path": "../services" }
+        { "path": "../common" },
+        { "path": "../dependencyInversion" },
+        { "path": "../execution" },
+        { "path": "../resilience" },
+        { "path": "../services" },
     ]
 }

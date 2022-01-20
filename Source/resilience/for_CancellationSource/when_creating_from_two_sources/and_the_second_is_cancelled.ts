@@ -1,23 +1,26 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { describeThis } from '@dolittle/typescript.testing';
 import { Subject } from 'rxjs';
-import { Cancellation, CancellationSource } from '../../index';
+import { describeThis } from '@dolittle/typescript.testing';
+
+import { Cancellation } from '../../Cancellation';
+import { CancellationSource } from '../../CancellationSource';
 
 describeThis(__filename, () => {
     const first = new Subject<void>();
     const second = new Subject<void>();
 
-    const source = new CancellationSource(first, second);
+    const source = new CancellationSource(new Cancellation(first), new Cancellation(second));
     const cancellation = source.cancellation;
 
-    let cancelled = false;
+    let complete = false;
     cancellation.subscribe({
-        complete: () => cancelled = true,
+        complete: () => complete = true,
     });
 
     second.complete();
 
-    it('should be cancelled', () => cancelled.should.be.true);
+    it('should be cancelled', () => cancellation.cancelled.should.be.true);
+    it('should complete', () => complete.should.be.true);
 });

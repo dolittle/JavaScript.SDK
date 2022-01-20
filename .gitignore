@@ -64,3 +64,4 @@ package-lock.json
 Samples/**/data
 Source/**/Distribution
 Samples/**/Distribution
+Source/**/README.md

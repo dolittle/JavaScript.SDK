@@ -4,9 +4,9 @@
 import { Subject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TenantId } from '@dolittle/sdk.execution';
-import { CallbackShouldBeFunction } from './CallbackShouldBeFunction';
-import { Subscription } from './Subscription';
-import { SubscriptionResponse } from './SubscriptionResponse';
+import { CallbackShouldBeFunction } from './CallbackShouldBeFunction';
+import { Subscription } from './Subscription';
+import { SubscriptionResponse } from './SubscriptionResponse';
 
 /**
  * Callback that gets called when a subscription has been completed.
@@ -95,7 +95,7 @@ export class SubscriptionCallbacks {
     /**
      * Pushes the next response.
      * @param {TenantId} consumerTenant - The consumer tenant the response is for.
-     * @param {Subscription} subscription - The actual subscription that was subscribing.
+     * @param {Subscription} subscription - The actual subscription that was subscribing.
      * @param {SubscriptionResponse} response - The response from the subscription attempt.
      */
     next(consumerTenant: TenantId, subscription: Subscription, response: SubscriptionResponse): void {

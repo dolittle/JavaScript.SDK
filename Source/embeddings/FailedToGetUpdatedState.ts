@@ -12,7 +12,7 @@ export class FailedToGetUpdatedState extends Exception {
     /**
      * Initialises an instance of {@link FailedToGetUpdatedState}.
      * @param {EmbeddingId} embedding - The embedding identifier.
-     * @param {Key | undefined} key - The optional key.
+     * @param {Key | undefined} key - The optional key.
      */
     constructor(embedding: EmbeddingId, key: Key | undefined) {
         super(`Failed to get updated embedding state for embedding ${embedding} ${key ? `with key ${key} `: ''}`);

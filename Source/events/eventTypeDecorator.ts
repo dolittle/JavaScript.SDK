@@ -1,29 +1,47 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Guid } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
+
 import { Generation } from '@dolittle/sdk.artifacts';
+import { Decorators } from '@dolittle/sdk.common';
+
+import { EventType } from './EventType';
 import { EventTypeAlias } from './EventTypeAlias';
 import { EventTypeId, EventTypeIdLike } from './EventTypeId';
 import { EventTypeOptions } from './EventTypeOptions';
-import { EventTypesFromDecorators } from './EventTypesFromDecorators';
+
+const [decorator, getMetadata] = Decorators.createMetadataDecorator<EventType>('event-type', 'eventType', Decorators.DecoratorTarget.Class);
 
 /**
- * Decorator for associating an event with an artifact.
- * @param {EventTypeId | Guid | string} identifier - The id to associate with this type.
- * @param {EventTypeOptions} [options={}] - Options to give to the EventHandler.
- * @returns {(any) => void} The decorator to apply.
+ * Decorator for associating a class with an event type.
+ * @param {EventTypeIdLike} identifier - The event type to associate with this class.
+ * @param {EventTypeOptions} [options={}] - Options to give to the event type.
+ * @returns {Decorators.Decorator} The decorator.
  */
-export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}) {
-    return function (target: any) {
-        const constructor: Constructor<any> = target.prototype.constructor;
-        const alias = options.alias !== undefined ? options.alias : constructor.name;
-        EventTypesFromDecorators
-            .associate(
-                constructor,
-                EventTypeId.from(identifier),
-                options.generation ? Generation.from(options.generation) : Generation.first,
-                EventTypeAlias.from(alias));
-    };
+export function eventType(identifier: EventTypeIdLike, options: EventTypeOptions = {}): Decorators.Decorator {
+    return decorator((target, type) => {
+        return new EventType(
+            EventTypeId.from(identifier),
+            options.generation ? Generation.from(options.generation) : Generation.first,
+            EventTypeAlias.from(options.alias ?? type.name));
+    });
+}
+
+/**
+ * Checks whether the specified class is decorated with an event type.
+ * @param {Constructor<any>} type - The class to check the decorated event type for.
+ * @returns {boolean} True if the decorator is applied, false if not.
+ */
+export function isDecoratedWithEventType(type: Constructor<any>): boolean {
+    return getMetadata(type, false, false) !== undefined;
+}
+
+/**
+ * Gets the decorated event type of the specified class.
+ * @param {Constructor<any>} type - The class to get the decorated event type for.
+ * @returns {EventType} The decorated event type.
+ */
+export function getDecoratedEventType(type: Constructor<any>): EventType {
+    return getMetadata(type, true, 'Classes used as events must be decorated');
 }

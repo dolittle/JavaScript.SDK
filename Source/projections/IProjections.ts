@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { ProjectionProcessor } from './Internal';
+
+import { ProjectionProcessor } from './Internal/ProjectionProcessor';
 
 /**
  * Defines the system for projections.

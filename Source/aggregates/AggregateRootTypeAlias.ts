@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, createIsConceptAsString } from '@dolittle/concepts';
 
 /**
  * Defines types that can be converted to a {@link AggregateRootTypeAlias}.
@@ -29,3 +29,10 @@ export class AggregateRootTypeAlias extends ConceptAs<string, '@dolittle/sdk.agg
         return new AggregateRootTypeAlias(alias);
     }
 };
+
+/**
+ * Checks whether or not an object is an instance of {@link AggregateRootTypeAlias}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link AggregateRootTypeAlias}, false if not.
+ */
+export const isAggregateRootTypeAlias = createIsConceptAsString(AggregateRootTypeAlias, '@dolittle/sdk.aggregates.AggregateRootTypeAlias');

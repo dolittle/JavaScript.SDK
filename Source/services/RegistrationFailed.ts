@@ -15,7 +15,7 @@ export class RegistrationFailed extends Exception {
      * @param {Guid | string} identifier - The identifier that could not be registered.
      * @param {Failure} failure - The failure describing why the regsitration failed.
      */
-    constructor(kind: string, identifier: Guid | string, failure: Failure) {
+    constructor(kind: string, identifier: Guid | string, failure: Failure) {
         super(`Failure occurred during registration of ${kind} ${identifier}. ${failure.reason}`);
     }
 }

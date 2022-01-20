@@ -1,22 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Observable } from 'rxjs';
 import { Guid } from '@dolittle/rudiments';
 
 import { StreamId, PartitionId, ScopeId } from '@dolittle/sdk.events';
 import { MicroserviceId, TenantId } from '@dolittle/sdk.execution';
 
-import { Subscription } from './Subscription';
+import { ISubscriptionBuilderForProducerPartition } from './ISubscriptionBuilderForProducerPartition';
+import { ISubscriptionBuilderForConsumerScope } from './ISubscriptionBuilderForConsumerScope';
+import { Subscription } from './Subscription';
 import { SubscriptionBuilderMethodAlreadyCalled } from './SubscriptionBuilderMethodAlreadyCalled';
 import { SubscriptionDefinitionIncomplete } from './SubscriptionDefinitionIncomplete';
 import { SubscriptionBuilderForConsumerScope } from './SubscriptionBuilderForConsumerScope';
 import { SubscriptionCallbackArguments } from './SubscriptionCallbacks';
-import { Observable } from 'rxjs';
 
 /**
- * Represents the builder for building subscriptions on a tenant.
+ * Represents an implementation of {@link ISubscriptionBuilderForProducerPartition}.
  */
-export class SubscriptionBuilderForProducerPartition {
+export class SubscriptionBuilderForProducerPartition extends ISubscriptionBuilderForProducerPartition {
     private _consumerScopeId?: ScopeId;
     private _builder?: SubscriptionBuilderForConsumerScope;
 
@@ -31,15 +33,13 @@ export class SubscriptionBuilderForProducerPartition {
         private readonly _producerMicroserviceId: MicroserviceId,
         private readonly _producerTenantId: TenantId,
         private readonly _producerStreamId: StreamId,
-        private readonly _producerPartitionId: PartitionId) {
+        private readonly _producerPartitionId: PartitionId
+    ) {
+        super();
     }
 
-    /**
-     * Sets the producer stream to subscribe to events from.
-     * @param {ScopeId | Guid | string} scopeId - Stream to subscribe to events from.
-     * @returns {SubscriptionBuilderForConsumerScope} The builder for creating event horizon subscriptions.
-     */
-    toScope(scopeId: ScopeId | Guid | string): SubscriptionBuilderForConsumerScope {
+    /** @inheritdoc */
+    toScope(scopeId: ScopeId | Guid | string): ISubscriptionBuilderForConsumerScope {
         this.throwIfConsumerScopeIsAlreadyDefined();
         this._consumerScopeId = ScopeId.from(scopeId);
         this._builder = new SubscriptionBuilderForConsumerScope(

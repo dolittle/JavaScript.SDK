@@ -2,13 +2,13 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./Advanced"},
         { "path": "./Container"},
+        { "path": "./ExpressJS"},
         { "path": "./Tutorials/Aggregates" },
         { "path": "./Tutorials/Embeddings" },
-        { "path": "./Tutorials/GettingStarted" },
-        { "path": "./Tutorials/Projections" },
         { "path": "./Tutorials/EventHorizon/Consumer" },
         { "path": "./Tutorials/EventHorizon/Producer" },
+        { "path": "./Tutorials/GettingStarted" },
+        { "path": "./Tutorials/Projections" },
     ]
 }

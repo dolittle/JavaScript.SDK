@@ -1,13 +1,13 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConceptAs } from '@dolittle/concepts';
+import { ConceptAs, createIsConceptAsNumber } from '@dolittle/concepts';
 import { GenerationMustBePositiveInteger } from './GenerationMustBePositiveInteger';
 
 /**
  * Defines the types that can be converted into a {@link Generation}.
  */
-export type GenerationLike = Generation | number;
+export type GenerationLike = Generation | number;
 
 /**
  * Represents the generation of an Artifact.
@@ -16,7 +16,7 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
 
     /**
      * Initialises a new instance of the {@link Generation} class.
-     * @param {number} generation - The generation.
+     * @param {number} generation - The generation.
      */
     constructor(generation: number) {
         if (!Number.isSafeInteger(generation) || generation < 0) throw new GenerationMustBePositiveInteger();
@@ -38,3 +38,10 @@ export class Generation extends ConceptAs<number, '@dolittle/sdk.artifacts.Gener
         return new Generation(generation);
     }
 }
+
+/**
+ * Checks whether or not an object is an instance of {@link Generation}.
+ * @param {any} object - The object to check.
+ * @returns {boolean} True if the object is an {@link Generation}, false if not.
+ */
+export const isGeneration = createIsConceptAsNumber(Generation, '@dolittle/sdk.artifacts.Generation');

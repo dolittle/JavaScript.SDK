@@ -1,7 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+
+import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventType, ScopeId } from '@dolittle/sdk.events';
+
 import { EventHandlerAlias } from './EventHandlerAlias';
 import { EventHandlerId } from './EventHandlerId';
 
@@ -44,6 +48,8 @@ export abstract class IEventHandler {
      * @param {*} event - Event to handle.
      * @param {EventType} eventType - The event type.
      * @param {EventContext} context - The context in which the event is in.
+     * @param {IServiceProvider} services - The service provider to use for resolving services while handling the current request.
+     * @param {Logger} logger - The logger to use for logging.
      */
-    abstract handle(event: any, eventType: EventType, context: EventContext): Promise<void>;
+    abstract handle(event: any, eventType: EventType, context: EventContext, services: IServiceProvider, logger: Logger): Promise<void>;
 }

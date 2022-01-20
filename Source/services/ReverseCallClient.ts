@@ -1,16 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Logger } from 'winston';
+import { concat, merge, Observable, partition, Subject, Subscriber, TeardownLogic, TimeoutError } from 'rxjs';
+import { filter, map, timeout } from 'rxjs/operators';
+import { Guid } from '@dolittle/rudiments';
+
+import { ExecutionContext } from '@dolittle/sdk.execution';
+import { ExecutionContexts, Guids } from '@dolittle/sdk.protobuf';
+import { Cancellation } from '@dolittle/sdk.resilience';
+
 import { Ping, Pong } from '@dolittle/contracts/Services/Ping_pb';
 import { ReverseCallArgumentsContext, ReverseCallRequestContext, ReverseCallResponseContext } from '@dolittle/contracts/Services/ReverseCallContext_pb';
-import { Guid } from '@dolittle/rudiments';
-import { ExecutionContext } from '@dolittle/sdk.execution';
-import { executionContexts, guids } from '@dolittle/sdk.protobuf';
-import { Cancellation } from '@dolittle/sdk.resilience';
 import { Duration } from 'google-protobuf/google/protobuf/duration_pb';
-import { CompletionObserver, concat, ErrorObserver, merge, NextObserver, Observable, partition, Subject, Subscriber, TimeoutError, Unsubscribable } from 'rxjs';
-import { filter, map, timeout } from 'rxjs/operators';
-import { Logger } from 'winston';
+
 import { DidNotReceiveConnectResponse } from './DidNotReceiveConnectResponse';
 import { IReverseCallClient, ReverseCallCallback } from './IReverseCallClient';
 import { PingTimeout } from './PingTimeout';
@@ -25,8 +28,6 @@ import { PingTimeout } from './PingTimeout';
  * @template TResponse The type of the response messages.
  */
 export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments, TConnectResponse, TRequest, TResponse> extends IReverseCallClient<TConnectResponse> {
-    private _observable: Observable<TConnectResponse>;
-
     /**
      * Creates a new instance of the {@link ReverseCallClient} class.
      * @param {(Observable, Cancellation) => Observable<TServerMessage>} _establishConnection - The callback to use to establish a new connection.
@@ -64,29 +65,18 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         private _pingInterval: number,
         private _callback: ReverseCallCallback<TRequest, TResponse>,
         private _cancellation: Cancellation,
-        private _logger: Logger) {
-        super();
-        this._observable = this.create();
-    }
-
-    /** @inheritdoc */
-    subscribe(observer?: NextObserver<TConnectResponse> | ErrorObserver<TConnectResponse> | CompletionObserver<TConnectResponse> | undefined): Unsubscribable;
-    subscribe(next: null | undefined, error: null | undefined, complete: () => void): Unsubscribable;
-    subscribe(next: null | undefined, error: (error: any) => void, complete?: (() => void) | undefined): Unsubscribable;
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
-    subscribe(next: (value: TConnectResponse) => void, error: null | undefined, complete: () => void): Unsubscribable;
-    subscribe(next?: ((value: TConnectResponse) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined): Unsubscribable;
-    subscribe(next?: any, error?: any, complete?: any) {
-        return this._observable.subscribe(next, error, complete);
+        private _logger: Logger
+    ) {
+        super((subscriber) => this.start(subscriber));
     }
 
     /**
-     * Creates an Observable and sets up the connection, pinging and response handling from the set/get methods.
-     * @returns {Observable} The Observable, which pushes the connection response from the server if succesfull.
+     * Sets up the connection, pinging and response handling from the set/get methods.
+     * @param {Subscriber<TConnectResponse>} subscriber - The subscriber that started the reverse call.
      */
-    private create(): Observable<TConnectResponse> {
+    private start(subscriber: Subscriber<TConnectResponse>): TeardownLogic {
         const callContext = new ReverseCallArgumentsContext();
-        callContext.setHeadid(guids.toProtobuf(Guid.create()));
+        callContext.setHeadid(Guids.toProtobuf(Guid.create()));
 
         const pingInterval = new Duration();
         const pingSeconds = Math.trunc(this._pingInterval);
@@ -94,50 +84,46 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
         pingInterval.setSeconds(pingSeconds);
         pingInterval.setNanos(pingNanos);
         callContext.setPinginterval(pingInterval);
-
-        const executionContext = executionContexts.toProtobuf(this._executionContext);
-        callContext.setExecutioncontext(executionContext);
+        callContext.setExecutioncontext(ExecutionContexts.toProtobuf(this._executionContext));
 
         this._setArgumentsContext(this._connectArguments, callContext);
 
         const clientMessage = new this._messageConstructor();
         this._setConnectArguments(clientMessage, this._connectArguments);
 
-        return new Observable<TConnectResponse>(subscriber => {
-            const clientToServerMessages = new Subject<TClientMessage>();
-            const serverToClientMessages = this._establishConnection(clientToServerMessages, this._cancellation);
+        const clientToServerMessages = new Subject<TClientMessage>();
+        const serverToClientMessages = this._establishConnection(clientToServerMessages, this._cancellation);
 
-            const [pings, requests] = partition(
-                serverToClientMessages.pipe(
-                    filter(this.isPingOrRequests, this),
-                    timeout(this._pingInterval * 3e3)
-                ),
-                this.isPingMessage,
-                this);
+        const [pings, requests] = partition(
+            serverToClientMessages.pipe(
+                filter(this.isPingOrRequests, this),
+                timeout(this._pingInterval * 3e3)
+            ),
+            this.isPingMessage,
+            this);
 
-            const pongs = pings.pipe(map((message: TServerMessage) => {
-                const responseMessage = new this._messageConstructor();
-                const pong = new Pong();
-                this._setMessagePong(responseMessage, pong);
-                return responseMessage;
-            }));
+        const pongs = pings.pipe(map((message: TServerMessage) => {
+            const responseMessage = new this._messageConstructor();
+            const pong = new Pong();
+            this._setMessagePong(responseMessage, pong);
+            return responseMessage;
+        }));
 
-            const responses = new Subject<TClientMessage>();
-            requests
-                .pipe(filter(this.isValidMessage, this))
-                .subscribe(this.handleServerRequests(responses));
+        const responses = new Subject<TClientMessage>();
+        requests
+            .pipe(filter(this.isValidMessage, this))
+            .subscribe(this.handleServerRequests(responses));
 
-            // write pongs and responses to the Runtime
-            merge(pongs, responses).subscribe(clientToServerMessages);
+        // write pongs and responses to the Runtime
+        merge(pongs, responses).subscribe(clientToServerMessages);
 
-            const connectResponse = serverToClientMessages.pipe(filter(this.isConnectResponse, this));
-            const errorsAndCompletion = serverToClientMessages.pipe(filter(() => false));
+        const connectResponse = serverToClientMessages.pipe(filter(this.isConnectResponse, this));
+        const errorsAndCompletion = serverToClientMessages.pipe(filter(() => false));
 
-            concat(connectResponse, errorsAndCompletion)
-                .subscribe(this.handleConnectionResponse(subscriber));
-            // send the connection request
-            clientToServerMessages.next(clientMessage);
-        });
+        concat(connectResponse, errorsAndCompletion)
+            .subscribe(this.handleConnectionResponse(subscriber));
+        // send the connection request
+        clientToServerMessages.next(clientMessage);
     }
 
     private isPingOrRequests(message: TServerMessage): boolean {
@@ -179,7 +165,7 @@ export class ReverseCallClient<TClientMessage, TServerMessage, TConnectArguments
                 try {
                     const request = this._getMessageRequest(message)!;
                     const context = this._getRequestContext(request)!;
-                    const requestContext = executionContexts.toSDK(context.getExecutioncontext()!);
+                    const requestContext = ExecutionContexts.toSDK(context.getExecutioncontext()!);
                     const executionContext = this._executionContext
                         .forTenant(requestContext.tenantId.value)
                         .forClaims(requestContext.claims);
