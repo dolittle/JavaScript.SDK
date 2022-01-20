@@ -10,16 +10,21 @@ import { VersionInfo } from './VersionInfo';
 export class RuntimeVersionNotCompatible extends Error {
     /**
      * Initialises a new instance of the {@link RuntimeVersionNotCompatible} class.
+     * @param {string} runtimeHost - The Dolittle Runtime host address.
+     * @param {string} runtimePort - The Dolittle Runtime address port.
      * @param {string} fix - The message that describes how to fix the issue.
      */
-    constructor(fix: string) {
-        super(`This version of the SDK (${VersionInfo.currentVersion}) is not compatible with the Dolittle Runtime you are connecting to. ${fix}.`);
+    constructor(runtimeHost: string, runtimePort: number, fix: string) {
+        super(`This version of the SDK (${VersionInfo.currentVersion}) is not compatible with the Dolittle Runtime you are connecting to ${runtimeHost}:${runtimePort}. ${fix}.`);
     }
 
     /**
      * The exception to throw when the Runtime returns an unimplemented exception during the handshake.
+     * @param {string} runtimeHost - The Dolittle Runtime host address.
+     * @param {string} runtimePort - The Dolittle Runtime address port.
+     * @returns {RuntimeVersionNotCompatible} The {@link RuntimeVersionNotCompatible}.
      */
-    static get unimplemented(): RuntimeVersionNotCompatible {
-        return new RuntimeVersionNotCompatible('Please upgrade the Runtime to version 7.4.0 or later');
+    static unimplemented(runtimeHost: string, runtimePort: number): RuntimeVersionNotCompatible {
+        return new RuntimeVersionNotCompatible(runtimeHost, runtimePort, 'Please upgrade the Runtime to version 7.4.0 or later');
     }
 }
