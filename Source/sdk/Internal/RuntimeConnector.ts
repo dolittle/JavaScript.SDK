@@ -34,12 +34,16 @@ export class RuntimeConnector extends ICanConnectToARuntime {
 
     /**
      * Initialises a new instance of the {@link RuntimeConnector} class.
+     * @param {string} _runtimeHost - The Dolittle Runtime host address.
+     * @param {string} _runtimePort - The Dolittle Runtime address port.
      * @param {HandshakeClient} _handshakeClient - The client to use to perform the handshake.
      * @param {TenantsClient} _tenantsClient - The client to use for fetching the configured tenants.
      * @param {Version} _headVersion - The version of the head to use in the handshake.
      * @param {Logger} _logger - To use for logging.
      */
     constructor(
+        private readonly _runtimeHost: string,
+        private readonly _runtimePort: number,
         private readonly _handshakeClient: HandshakeClient,
         private readonly _tenantsClient: TenantsClient,
         private readonly _headVersion: Version,
@@ -98,7 +102,7 @@ export class RuntimeConnector extends ICanConnectToARuntime {
         return (errors) => errors.pipe(
             map((error) => {
                 if (isGrpcError(error) && error.code === GrpcStatus.UNIMPLEMENTED) {
-                    return Notification.createError<Error>(RuntimeVersionNotCompatible.unimplemented);
+                    return Notification.createError<Error>(RuntimeVersionNotCompatible.unimplemented(this._runtimeHost, this._runtimePort));
                 } else if (error instanceof RuntimeVersionNotCompatible) {
                     return Notification.createError<Error>(error);
                 }
@@ -109,7 +113,7 @@ export class RuntimeConnector extends ICanConnectToARuntime {
             delayWhen((error, attempt) => {
                 const delay = Math.min(this._initialRetryDelay * (attempt + 1), this._maxRetryDelay);
 
-                this._logger.warn(`Connection to Runtime failed, will retry in ${delay} seconds. Reason: ${error.message}`);
+                this._logger.debug(`Connection to Runtime failed, will retry in ${delay} seconds. Reason: ${error.message}`);
 
                 return timer(delay * 1e3);
             }),

@@ -209,6 +209,8 @@ export class DolittleClient extends IDolittleClient {
             const clients = this.createGrpcClients(configuration.runtimeHost, configuration.runtimePort);
 
             const connector = new RuntimeConnector(
+                configuration.runtimeHost,
+                configuration.runtimePort,
                 clients.handshake,
                 clients.tenants,
                 configuration.version,
