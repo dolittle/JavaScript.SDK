@@ -45,7 +45,7 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/runtime.contracts": "6.4.0-gimli.3",
+        "@dolittle/runtime.contracts": "6.4.0",
         "@dolittle/sdk.aggregates": "21.0.0-gimli.20",
         "@dolittle/sdk.artifacts": "21.0.0-gimli.20",
         "@dolittle/sdk.common": "21.0.0-gimli.20",
