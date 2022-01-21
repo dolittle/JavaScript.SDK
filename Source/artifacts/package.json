@@ -47,7 +47,7 @@
         "@dolittle/concepts": "6.0.0-gimli.0",
         "@dolittle/rudiments": "6.0.0-gimli.0",
         "@dolittle/types": "6.0.0-gimli.0",
-        "@dolittle/runtime.contracts": "6.4.0"
+        "@dolittle/runtime.contracts": "6.5.0"
     },
     "devDependencies": {
         "@types/is-natural-number": "^4.0.0"
