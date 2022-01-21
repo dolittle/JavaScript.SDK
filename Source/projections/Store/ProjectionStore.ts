@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { map } from 'rxjs/operators';
+import { map, reduce } from 'rxjs/operators';
 import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 
@@ -9,7 +9,7 @@ import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
-import { reactiveUnary } from '@dolittle/sdk.services';
+import { reactiveServerStream, reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
 
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
@@ -97,11 +97,22 @@ export class ProjectionStore extends IProjectionStore {
         request.setProjectionid(Guids.toProtobuf(projection.value));
         request.setScopeid(Guids.toProtobuf(scope.value));
 
-        return reactiveUnary(this._projectionsClient, this._projectionsClient.getAll, request, cancellation)
-            .pipe(map(response => {
-                this.throwIfHasFailure(response, projection, scope);
-                return this._converter.convertAll<TProjection>(type, response.getStatesList());
-            })).toPromise();
+        return reactiveServerStream(this._projectionsClient, this._projectionsClient.getAllInBatches, request, cancellation)
+            .pipe(
+                map(response => {
+                    this.throwIfHasFailure(response, projection, scope);
+                    return this._converter.convertAll<TProjection>(type, response.getStatesList());
+                }),
+                reduce((all, batch, index) => {
+                    this._logger.debug(`Received batch ${index} with ${batch.size} states from projection ${projection} in scope ${scope}`);
+
+                    for (const [key, state] of batch) {
+                        all.set(key, state);
+                    }
+
+                    return all;
+                }, new Map<Key, CurrentState<TProjection>>())
+            ).toPromise();
     }
 
     private getKeyFrom<TProjection>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string): Key {
