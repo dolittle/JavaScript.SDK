@@ -5,6 +5,7 @@ import { map, reduce } from 'rxjs/operators';
 import { Logger } from 'winston';
 import { Guid } from '@dolittle/rudiments';
 
+import { ComplexValueMap } from '@dolittle/sdk.artifacts';
 import { ScopeId } from '@dolittle/sdk.events';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
@@ -111,7 +112,7 @@ export class ProjectionStore extends IProjectionStore {
                     }
 
                     return all;
-                }, new Map<Key, CurrentState<TProjection>>())
+                }, new ComplexValueMap<Key, CurrentState<TProjection>, [string]>(Key, key => [key.value], 1))
             ).toPromise();
     }
 
