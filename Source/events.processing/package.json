@@ -53,6 +53,7 @@
         "@dolittle/sdk.execution": "21.0.0",
         "@dolittle/sdk.resilience": "21.0.0",
         "@dolittle/sdk.services": "21.0.0",
+        "@grpc/grpc-js": "1.2.12",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
