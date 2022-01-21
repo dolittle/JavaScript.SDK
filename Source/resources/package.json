@@ -44,9 +44,9 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/concepts": "6.0.0-gimli.0",
+        "@dolittle/concepts": "6.0.0",
         "@dolittle/contracts": "6.5.0",
-        "@dolittle/rudiments": "6.0.0-gimli.0",
+        "@dolittle/rudiments": "6.0.0",
         "@dolittle/runtime.contracts": "6.5.0",
         "@dolittle/sdk.execution": "21.0.0",
         "@dolittle/sdk.protobuf": "21.0.0",
