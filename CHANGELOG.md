@@ -7,16 +7,16 @@ Major improvements to the Dolittle Client, in how it connects to the Runtime, co
 
 - Support for Dependency Injection using Inversify internally, with support for TypeDi and TSyinge, also supporting tenant-specific bindings.
 - The DolittleClient and tenant specific resources (IEventStore, IAggregates, IProjections, ...) are bound in the service provider used and exposed by the client. They can be used in for example Event Handlers, or with the ExpressJS integration in request handlers.
-- Express integration through .use(dolittle()) on 'express' , starts the DolittleClient and sets it up with default configurations if not explicitly provided, starts a middleware that makes the DolittleClient resources available on the request based on the 'Tenant-ID' header (provided by the platform). See the ExpressJS sample.
+- Express integration through .use(dolittle()) on `express` , starts the DolittleClient and sets it up with default configurations if not explicitly provided, starts a middleware that makes the DolittleClient resources available on the request based on the `Tenant-ID` header (provided by the platform). See the ExpressJS sample.
 - By default auto discover all aggregate roots, event types, event handlers, projections and embeddings 
 - When starting up a DolittleClien, it now performs an initial handshake with the configured Runtime to determine that the version of the SDK and the Runtime are compatible, and retrieves the MicroserviceId to configure its executions context (provided by the platform).
 
 ### Changed
 
-- Building a DolittleClient is two steps, namely '.setup()' and '.connect()', to make integrations easier. 
-- The configured Tenants are retrieved during the first connection to the Runtime, so the '.tenants' on the DolittleClient Is no longer an asynchronous call.
-- The builder APIs exposed in the '.setup(...)' call have been changed so they are all called '.register()' or '.create()' and removed the '.build()' methods
- - The 'aggregateOf()' methods on the client have been changed to an 'Aggregates' property that behaves like the other tenant specific resources.
+- Building a DolittleClient is two steps, namely `.setup()` and `.connect()`, to make integrations easier. 
+- The configured Tenants are retrieved during the first connection to the Runtime, so the `.tenants` on the DolittleClient Is no longer an asynchronous call.
+- The builder APIs exposed in the `.setup(...)` call have been changed so they are all called `.register()` or `.create()` and removed the `.build()` methods
+ - The `aggregateOf()` methods on the client have been changed to an `Aggregates` property that behaves like the other tenant specific resources.
 
 ### Fixed
 
@@ -24,7 +24,7 @@ Major improvements to the Dolittle Client, in how it connects to the Runtime, co
 
 ### Removed
 
-- '.build()' methods no longer exposed on the builder API
+- `.build()` methods no longer exposed on the builder API
 
 
 # [20.0.0] - 2021-11-18 [PR: #73](https://github.com/dolittle/JavaScript.SDK/pull/73)
