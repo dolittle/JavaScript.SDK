@@ -12,5 +12,6 @@ export { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 export { IProjectionStore } from './IProjectionStore';
 export { ProjectionReadModelTypes } from './ProjectionReadModelTypes';
 export { ProjectionStore } from './ProjectionStore';
+export { ReceivedDuplicateProjectionKeys } from './ReceivedDuplicateProjectionKeys';
 export { ScopedProjectionId } from './ScopedProjectionId';
 export { TypeIsNotAProjection } from './TypeIsNotAProjection';

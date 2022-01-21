@@ -25,6 +25,7 @@ import { FailedToGetProjection } from './FailedToGetProjection';
 import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { IProjectionStore } from './IProjectionStore';
+import { ReceivedDuplicateProjectionKeys } from './ReceivedDuplicateProjectionKeys';
 
 /**
  * Represents an implementation of {@link IProjectionStore}.
@@ -108,6 +109,10 @@ export class ProjectionStore extends IProjectionStore {
                     this._logger.debug(`Received batch ${index} with ${batch.size} states from projection ${projection} in scope ${scope}`);
 
                     for (const [key, state] of batch) {
+                        if (all.has(key)) {
+                            throw new ReceivedDuplicateProjectionKeys(projection, scope, key);
+                        }
+
                         all.set(key, state);
                     }
 
