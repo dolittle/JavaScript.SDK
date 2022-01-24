@@ -45,14 +45,15 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/concepts": "6.0.0-gimli.0",
-        "@dolittle/contracts": "6.4.0",
-        "@dolittle/rudiments": "6.0.0-gimli.0",
+        "@dolittle/concepts": "6.0.0",
+        "@dolittle/contracts": "6.5.0",
+        "@dolittle/rudiments": "6.0.0",
         "@dolittle/sdk.common": "21.0.0",
         "@dolittle/sdk.dependencyinversion": "21.0.0",
         "@dolittle/sdk.execution": "21.0.0",
         "@dolittle/sdk.protobuf": "21.0.0",
         "@dolittle/sdk.resilience": "21.0.0",
+        "@grpc/grpc-js": "1.2.12",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }

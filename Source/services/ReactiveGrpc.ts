@@ -74,7 +74,8 @@ export function reactiveClientStream<TRequest, TResponse>(client: grpc.Client, m
  */
 export function reactiveServerStream<TArgument, TResponse>(client: grpc.Client, method: ServerStreamMethod<TArgument, TResponse>, argument: TArgument, cancellation: Cancellation): Observable<TResponse> {
     const subject = new Subject<TResponse>();
-    const stream = method.call(client, argument, null, null);
+    const metadata = new grpc.Metadata();
+    const stream = method.call(client, argument, metadata, {});
     handleCancellation(stream, cancellation);
     handleServerResponses(stream, subject);
     return subject;

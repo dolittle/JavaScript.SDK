@@ -16,9 +16,9 @@ export type ClientStreamMethod<TRequest, TResponse> = (metadata: grpc.Metadata, 
 /**
  * Represents a server streaming gRPC method.
  */
-export type ServerStreamMethod<TArgument, TResponse> = (argument: TArgument, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null) => grpc.ClientReadableStream<TResponse>;
+export type ServerStreamMethod<TArgument, TResponse> = (argument: TArgument, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>) => grpc.ClientReadableStream<TResponse>;
 
 /**
  * Represents a duplex streaming gRPC method.
  */
-export type DuplexMethod<TRequest, TResponse> = (metadata: grpc.Metadata, options?: Partial<grpc.CallOptions>) => grpc.ClientDuplexStream<TRequest, TResponse>;
+export type DuplexMethod<TRequest, TResponse> = (metadata: grpc.Metadata, options: Partial<grpc.CallOptions>) => grpc.ClientDuplexStream<TRequest, TResponse>;

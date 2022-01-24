@@ -39,6 +39,7 @@ export {
     IProjectionStore,
     ProjectionReadModelTypes,
     ProjectionStore,
+    ReceivedDuplicateProjectionKeys,
     ScopedProjectionId,
     TypeIsNotAProjection,
 } from './Store/_exports';

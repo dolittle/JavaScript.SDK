@@ -44,15 +44,15 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/concepts": "6.0.0-gimli.0",
-        "@dolittle/rudiments": "6.0.0-gimli.0",
+        "@dolittle/concepts": "6.0.0",
+        "@dolittle/rudiments": "6.0.0",
         "@dolittle/sdk.artifacts": "21.0.0",
         "@dolittle/sdk.events": "21.0.0",
         "@dolittle/sdk.execution": "21.0.0",
         "@dolittle/sdk.protobuf": "21.0.0",
         "@dolittle/sdk.resilience": "21.0.0",
         "@dolittle/sdk.services": "21.0.0",
-        "@dolittle/types": "6.0.0-gimli.0",
+        "@dolittle/types": "6.0.0",
         "winston": "3.3.2"
     },
     "devDependencies": {}
