@@ -1,3 +1,13 @@
+# [21.0.1] - 2022-1-24 [PR: #111](https://github.com/dolittle/JavaScript.SDK/pull/111)
+## Summary
+
+Uses the new batch streaming method to get all Projection states from the Runtime. This fixes an issue where a large amount of Projection states caused the gRPC client in the SDK to throw an exception because the response message was too big. Also fixed some gRPC method internals that we haven't used before (server streaming calls), and fixed the references to JavaScript.Fundamentals pre-release packages.
+
+### Fixed
+
+- The `IProjectionStore.getAll` method now uses the new gRPC method that streams results back in batches to fix the issue of too large gRPC messages when a large amount of projection read models have been created.
+
+
 # [21.0.0] - 2022-1-20 [PR: #88](https://github.com/dolittle/JavaScript.SDK/pull/88)
 ## Summary
 
