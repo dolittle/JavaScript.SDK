@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events.processing",
-    "version": "21.0.0",
+    "version": "21.0.1",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -48,11 +48,11 @@
         "@dolittle/contracts": "6.5.0",
         "@dolittle/rudiments": "6.0.0",
         "@dolittle/runtime.contracts": "6.5.0",
-        "@dolittle/sdk.common": "21.0.0",
-        "@dolittle/sdk.dependencyinversion": "21.0.0",
-        "@dolittle/sdk.execution": "21.0.0",
-        "@dolittle/sdk.resilience": "21.0.0",
-        "@dolittle/sdk.services": "21.0.0",
+        "@dolittle/sdk.common": "21.0.1",
+        "@dolittle/sdk.dependencyinversion": "21.0.1",
+        "@dolittle/sdk.execution": "21.0.1",
+        "@dolittle/sdk.resilience": "21.0.1",
+        "@dolittle/sdk.services": "21.0.1",
         "@grpc/grpc-js": "1.2.12",
         "rxjs": "6.6.0",
         "winston": "3.3.2"

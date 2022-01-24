@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-consumer",
     "private": true,
-    "version": "21.0.0",
+    "version": "21.0.1",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "21.0.0",
-        "@dolittle/sdk.artifacts": "21.0.0",
-        "@dolittle/sdk.eventhorizon": "21.0.0",
-        "@dolittle/sdk.events": "21.0.0",
-        "@dolittle/sdk.events.handling": "21.0.0"
+        "@dolittle/sdk": "21.0.1",
+        "@dolittle/sdk.artifacts": "21.0.1",
+        "@dolittle/sdk.eventhorizon": "21.0.1",
+        "@dolittle/sdk.events": "21.0.1",
+        "@dolittle/sdk.events.handling": "21.0.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
