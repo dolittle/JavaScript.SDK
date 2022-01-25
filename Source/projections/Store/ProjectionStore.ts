@@ -26,6 +26,8 @@ import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { IProjectionStore } from './IProjectionStore';
 import { ReceivedDuplicateProjectionKeys } from './ReceivedDuplicateProjectionKeys';
+import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { WrongKeyReceivedFromRuntime } from './WrongKeyReceivedFromRuntime';
 
 /**
  * Represents an implementation of {@link IProjectionStore}.
@@ -50,42 +52,22 @@ export class ProjectionStore extends IProjectionStore {
     }
 
     /** @inheritdoc */
-    get<TProjection>(type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
-    get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
-    get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
-    get(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
-    get(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
-    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
-        const type = typeof typeOrKey === 'function'
-            ? typeOrKey as Constructor<TProjection>
-            : undefined;
-        const key = this.getKeyFrom(typeOrKey, keyOrProjection);
-        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope);
-        const cancellation = this.getCancellationFrom(maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
-
-        this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
-
-        const request = new GetOneRequest();
-        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
-        request.setKey(key.value);
-        request.setProjectionid(Guids.toProtobuf(projection.value));
-        request.setScopeid(Guids.toProtobuf(scope.value));
-
-        return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
-            .pipe(map(response => {
-                this.throwIfHasFailure(response, projection, scope, key);
-                this.throwIfNoState(response, projection, scope, key);
-                return this._converter.convert<TProjection>(type, response.getState()!);
-            })).toPromise();
+    get<TProjection>(type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<TProjection>;
+    get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<TProjection>;
+    get<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId, cancellation?: Cancellation): Promise<TProjection>;
+    get(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<any>;
+    get(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<any>;
+    get<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<TProjection> {
+        return this.getStateInternal(typeOrKey, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation).then(_ => _.state);
     }
 
     /** @inheritdoc */
-    getAll<TProjection>(type: Constructor<TProjection>, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
-    getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
-    getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>>;
-    getAll(projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<any>>>;
-    getAll(projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<Map<Key, CurrentState<any>>>;
-    getAll<TProjection = any>(typeOrProjection: Constructor<TProjection> | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<Map<Key, CurrentState<TProjection>>> {
+    getAll<TProjection>(type: Constructor<TProjection>, cancellation?: Cancellation): Promise<TProjection[]>;
+    getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<TProjection[]>;
+    getAll<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<TProjection[]>;
+    getAll(projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<any[]>;
+    getAll(projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<any[]>;
+    getAll<TProjection = any>(typeOrProjection: Constructor<TProjection> | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<TProjection[]> {
         const type = typeof typeOrProjection === 'function'
             ? typeOrProjection as Constructor<TProjection>
             : undefined;
@@ -117,8 +99,44 @@ export class ProjectionStore extends IProjectionStore {
                     }
 
                     return all;
-                }, new ComplexValueMap<Key, CurrentState<TProjection>, [string]>(Key, key => [key.value], 1))
+                }, new ComplexValueMap<Key, CurrentState<TProjection>, [string]>(Key, key => [key.value], 1)),
+                map(map => Array.from(map.values()).map(_ => _.state)),
             ).toPromise();
+    }
+
+    /** @inheritdoc */
+    getState<TProjection>(type: Constructor<TProjection>, key: Key | any, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    getState<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    getState<TProjection>(type: Constructor<TProjection>, key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId, cancellation?: Cancellation): Promise<CurrentState<TProjection>>;
+    getState(key: Key | any, projection: ProjectionId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    getState(key: Key | any, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string, cancellation?: Cancellation): Promise<CurrentState<any>>;
+    getState<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
+        return this.getStateInternal(typeOrKey, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
+    }
+
+    private getStateInternal<TProjection = any>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string, maybeCancellationOrProjectionOrScope?: Cancellation | ProjectionId | ScopeId | Guid | string, maybeCancellationOrScope?: Cancellation | ScopeId | Guid | string, maybeCancellation?: Cancellation): Promise<CurrentState<TProjection>> {
+        const type = typeof typeOrKey === 'function'
+            ? typeOrKey as Constructor<TProjection>
+            : undefined;
+        const key = this.getKeyFrom(typeOrKey, keyOrProjection);
+        const [projection, scope] = this.getProjectionAndScopeForOne(type, keyOrProjection, maybeCancellationOrProjectionOrScope, maybeCancellationOrScope);
+        const cancellation = this.getCancellationFrom(maybeCancellationOrProjectionOrScope, maybeCancellationOrScope, maybeCancellation);
+
+        this._logger.debug(`Getting one state from projection ${projection} in scope ${scope} with key ${key}`);
+
+        const request = new GetOneRequest();
+        request.setCallcontext(ExecutionContexts.toCallContext(this._executionContext));
+        request.setKey(key.value);
+        request.setProjectionid(Guids.toProtobuf(projection.value));
+        request.setScopeid(Guids.toProtobuf(scope.value));
+
+        return reactiveUnary(this._projectionsClient, this._projectionsClient.getOne, request, cancellation)
+            .pipe(map(response => {
+                this.throwIfHasFailure(response, projection, scope, key);
+                this.throwIfNoState(response, projection, scope, key);
+                this.throwIfWrongKeyReceived(response.getState()!, projection, scope, key);
+                return this._converter.convert<TProjection>(type, response.getState()!);
+            })).toPromise();
     }
 
     private getKeyFrom<TProjection>(typeOrKey: Constructor<TProjection> | Key | any, keyOrProjection: Key | any | ProjectionId | Guid | string): Key {
@@ -180,6 +198,12 @@ export class ProjectionStore extends IProjectionStore {
     private throwIfNoState(response: GetOneResponse, projection: ProjectionId, scope: ScopeId, key: Key) {
         if (!response.hasState()) {
             throw new FailedToGetProjectionState(projection, scope, key);
+        }
+    }
+
+    private throwIfWrongKeyReceived(state: ProjectionCurrentState, projection: ProjectionId, scope: ScopeId, key: Key) {
+        if (state.getKey() !== key.value) {
+            throw new WrongKeyReceivedFromRuntime(projection, scope, key, state.getKey());
         }
     }
 }

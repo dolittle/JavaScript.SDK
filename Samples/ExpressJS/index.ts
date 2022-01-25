@@ -32,8 +32,6 @@ application.get(
         (req, res, next, projections, logger: Logger) => {
             logger.info('Received reqest to get DishCounter projection');
             projections.getAll(DishCounter)
-                .then(result => Array.from(result.values()))
-                .then(results => results.map(({ key, state }) => ({ dish: key.value, ...state })))
                 .then(result => res.json(result))
                 .catch(next);
         }
