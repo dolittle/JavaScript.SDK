@@ -39,6 +39,6 @@ import { DishPrepared } from './DishPrepared';
         client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times`);
     }
 
-    const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
+    const chef = await client.projections.forTenant(TenantId.development).get(Chef, 'Mrs. Tex Mex');
     client.logger.info(`${chef.name} has prepared ${chef.dishes.join(', ')}`);
 })();
