@@ -24,8 +24,6 @@ describeThis(__filename, () => {
         given.a_logger);
 
     const result = projection_store.getAll('ab3be0d3-e550-4ac0-8646-87f376d3d1b0', '6f428480-4cb6-4454-b52d-dd453f6e8a98', Cancellation.default);
-    const keys = result.then(_ => Array.from(_.keys()));
-    const entries = result.then(_ => Array.from(_.entries()));
 
     const first_state = new ProjectionCurrentState();
     first_state.setKey('first key');
@@ -49,21 +47,9 @@ describeThis(__filename, () => {
     server_stream.emit('data', second_batch);
     server_stream.emit('end');
 
-    it('should return all 3 keys', () => keys.should.eventually.have.deep.members([
-        Key.from('first key'),
-        Key.from('second key'),
-        Key.from('third key'),
-    ]));
-    it('should return the first state for the first key', () => entries.should.eventually.deep.include([
-        Key.from('first key'),
-        new CurrentState(CurrentStateType.CreatedFromInitialState, { first: 'state' }, Key.from('first key')),
-    ]));
-    it('should return the second state for the second key', () => entries.should.eventually.deep.include([
-        Key.from('second key'),
-        new CurrentState(CurrentStateType.CreatedFromInitialState, { second: 'state' }, Key.from('second key')),
-    ]));
-    it('should return the third state for the third key', () => entries.should.eventually.deep.include([
-        Key.from('third key'),
-        new CurrentState(CurrentStateType.CreatedFromInitialState, { third: 'state' }, Key.from('third key')),
+    it('should return all 3 states', () => result.should.eventually.have.deep.members([
+        { first: 'state' },
+        { second: 'state' },
+        { third: 'state' },
     ]));
 });
