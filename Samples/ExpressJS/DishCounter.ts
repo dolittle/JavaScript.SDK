@@ -9,12 +9,12 @@ import { DishPrepared } from './DishPrepared';
 
 @projection('98f9db66-b6ca-4e5f-9fc3-638626c9ecfa')
 export class DishCounter {
-    dish: string = 'Unknown';
+    name: string = 'Unknown';
     numberOfTimesPrepared: number = 0;
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))
     on(event: DishPrepared, projectionContext: ProjectionContext) {
-        this.dish = event.Dish;
+        this.name = event.Dish;
         this.numberOfTimesPrepared ++;
     }
 }

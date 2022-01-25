@@ -35,8 +35,8 @@ import { DishPrepared } from './DishPrepared';
 
     await setTimeout(1000);
 
-    for (const { dish, numberOfTimesPrepared } of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-        client.logger.info(`The kitchen has prepared ${dish} ${numberOfTimesPrepared} times`);
+    for (const { name, numberOfTimesPrepared } of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times`);
     }
 
     const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
