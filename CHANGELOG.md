@@ -1,3 +1,18 @@
+# [22.0.0] - 2022-1-25 [PR: #112](https://github.com/dolittle/JavaScript.SDK/pull/112)
+## Summary
+
+Simplifies the `IProjectionStore` apis by removing the `CurrentState<>` wrapper around the returned types from `get(...)` and `getAll(...)` methods, and returns an array instead of a `Map` when getting multiple read models. And introduces a new `getState(...)` method that has the wrapped types for when it is interesting.
+
+### Added
+
+- `IProjectionStore.getState(...)` method that keeps the syntax of the previous `.get(...)` method.
+
+### Changed
+
+- `IProjectionStore.get(...)` returns the specified type or `any` instead of wrapping with `CurrentState<>`
+- `IProjectionStore.getAll(...)` returns an array of the specified type or `any` instead of a `Map` of keys to `CurrentState<>`.
+
+
 # [21.0.1] - 2022-1-24 [PR: #111](https://github.com/dolittle/JavaScript.SDK/pull/111)
 ## Summary
 
