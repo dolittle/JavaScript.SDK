@@ -40,5 +40,5 @@ import { DishPrepared } from './DishPrepared';
     }
 
     const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-    client.logger.info(`${chef.name} has prepared ${chef.dishes}`);
+    client.logger.info(`${chef.name} has prepared ${chef.dishes.join(', ')}`);
 })();
