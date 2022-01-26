@@ -121,7 +121,7 @@ export class SetupBuilder extends ISetupBuilder {
 
         const filters = new EventFiltersModelBuilder(model, this._buildResults, eventTypes).build();
         const eventHandlers = new EventHandlersModelBuilder(model, this._buildResults, eventTypes, bindings).build();
-        const [projections, projectionReadModelTypes] = new ProjectionsModelBuilder(model, this._buildResults, eventTypes).build();
+        const [projections, projectionReadModelTypes] = new ProjectionsModelBuilder(model, this._buildResults, eventTypes, bindings).build();
         const [embeddings, embeddingReadModelTypes] = new EmbeddingsModelBuilder(model, this._buildResults, eventTypes).build();
 
         const [subscriptions, subscriptionCallbacks] = this._subscriptionsBuilder.build();

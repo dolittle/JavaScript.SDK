@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
+import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { IEventTypes } from '@dolittle/sdk.events';
 
 import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
@@ -10,6 +11,7 @@ import { ProjectionReadModelTypes } from '../Store/ProjectionReadModelTypes';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { isProjectionModelId } from '../ProjectionModelId';
+import { IProjectionStore } from '../Store/IProjectionStore';
 
 /**
  * Represents a builder that can build {@link ProjectionProcessor} from an {@link IModel}.
@@ -20,11 +22,13 @@ export class ProjectionsModelBuilder {
      * @param {IModel} _model - The built application model.
      * @param {IClientBuildResults} _buildResults - For keeping track of build results.
      * @param {IEventTypes} _eventTypes - For event types resolution.
+     * @param {IServiceProviderBuilder} _bindings - For registering the bindings for {@link IProjectionOf} types.
      */
     constructor(
         private readonly _model: IModel,
         private readonly _buildResults: IClientBuildResults,
         private readonly _eventTypes: IEventTypes,
+        private readonly _bindings: IServiceProviderBuilder
     ) {}
 
     /**
@@ -46,8 +50,10 @@ export class ProjectionsModelBuilder {
         const readModelTypes = new ProjectionReadModelTypes();
         for (const { identifier, type } of identifiers) {
             readModelTypes.associate(type, identifier.id, identifier.scope);
+            this._bindings.addTenantServices(binder => {
+                binder.bind(`IProjectionOf<${type.name}>`).toFactory(services => services.get(IProjectionStore).of(type, identifier.id, identifier.scope));
+            });
         }
-
         return [processors, readModelTypes];
     }
 }
