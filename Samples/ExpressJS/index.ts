@@ -7,7 +7,7 @@ import createApplication, { static as serveStatic } from 'express';
 import { json } from 'body-parser';
 import { Logger } from 'winston';
 import { dolittle, inject } from '@dolittle/sdk.extensions.express';
-import { IProjectionStore } from '@dolittle/sdk.projections';
+import { IProjectionOf } from '@dolittle/sdk.projections';
 
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
@@ -28,10 +28,10 @@ application.post('/prepare', (req, res, next) => {
 
 application.get(
     '/counters',
-    inject(IProjectionStore, 'Logger')(
-        (req, res, next, projections, logger: Logger) => {
+    inject(`IProjectionOf<${DishCounter.name}>`, 'Logger')(
+        (req, res, next, projections: IProjectionOf<DishCounter>, logger: Logger) => {
             logger.info('Received reqest to get DishCounter projection');
-            projections.getAll(DishCounter)
+            projections.getAll()
                 .then(result => res.json(result))
                 .catch(next);
         }
