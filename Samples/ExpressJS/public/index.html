@@ -26,9 +26,9 @@
                     .then(counters => {
                         console.log('Fetched projection result', counters);
                         table.replaceChildren();
-                        for (const { dish, numberOfTimesPrepared } of counters) {
+                        for (const { name, numberOfTimesPrepared } of counters) {
                             const row = document.createElement('tr');
-                            row.appendChild(document.createElement('td')).innerText = dish;
+                            row.appendChild(document.createElement('td')).innerText = name;
                             row.appendChild(document.createElement('td')).innerText = numberOfTimesPrepared;
                             table.appendChild(row);
                         }
