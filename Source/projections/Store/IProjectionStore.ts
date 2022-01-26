@@ -10,11 +10,35 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Key } from '../Key';
 import { ProjectionId } from '../ProjectionId';
 import { CurrentState } from './CurrentState';
+import { IProjectionOf } from './IProjectionOf';
 
 /**
  * Defines the API surface for getting projections.
  */
 export abstract class IProjectionStore {
+
+    /**
+     * Gets the {@link IProjectionOf} the projection read model type.
+     * @param {Constructor<TProjection>} type - The type of the projection.
+     * @template TProjection The type of the projection read model.
+     */
+    abstract of<TProjection>(type: Constructor<TProjection>): IProjectionOf<TProjection>;
+    /**
+     * Gets the {@link IProjectionOf} the projection read model type.
+     * @param {Constructor<TProjection>} type - The type of the projection.
+     * @param {ProjectionId | Guid | string} projection - The id of the projection.
+     * @template TProjection The type of the projection read model.
+     */
+    abstract of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string): IProjectionOf<TProjection>;
+    /**
+     * Gets the {@link IProjectionOf} the projection read model type.
+     * @param {Constructor<TProjection>} type - The type of the projection.
+     * @param {ProjectionId | Guid | string} projection - The id of the projection.
+     * @param {ScopeId | Guid | string} scope - The scope the projection in.
+     * @template TProjection The type of the projection read model.
+     */
+    abstract of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string): IProjectionOf<TProjection>;
+
     /**
      * Gets a projection read model by key for a projection associated with a type.
      * @param {Constructor<TProjection>} type - The type of the projection.
