@@ -7,4 +7,5 @@ export {
     ITypeMap,
     TypeMap,
     ComplexValueMap,
+    TypeNotAssociatedWithKey
 } from './Mappings/_exports';

@@ -4,6 +4,7 @@
 import { describeThis } from '@dolittle/typescript.testing';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
+import { ScopeId } from '@dolittle/sdk.events';
 
 import { GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
 import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
@@ -14,7 +15,6 @@ import { ReceivedDuplicateProjectionKeys } from '../../../ReceivedDuplicateProje
 import { a_projection_type } from '../../given/a_projection_type';
 import { ScopedProjectionId } from '../../../ScopedProjectionId';
 import { ProjectionId } from '../../../../ProjectionId';
-import { ScopeId } from '@dolittle/sdk.events';
 
 describeThis(__filename, () => {
     const [projections_client, server_stream] = given.projections_client_and_get_all_stream;

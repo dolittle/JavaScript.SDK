@@ -28,12 +28,14 @@ import { IProjectionStore } from './IProjectionStore';
 import { ReceivedDuplicateProjectionKeys } from './ReceivedDuplicateProjectionKeys';
 import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
 import { WrongKeyReceivedFromRuntime } from './WrongKeyReceivedFromRuntime';
+import { IProjectionOf } from './IProjectionOf';
+import { ProjectionOf } from './ProjectionOf';
+import { ScopedProjectionId } from './ScopedProjectionId';
 
 /**
  * Represents an implementation of {@link IProjectionStore}.
  */
 export class ProjectionStore extends IProjectionStore {
-
     private _converter: IConvertProjectionsToSDK = new ProjectionsToSDKConverter();
 
     /**
@@ -49,6 +51,19 @@ export class ProjectionStore extends IProjectionStore {
         private readonly _readModelTypes: IProjectionReadModelTypes,
         private readonly _logger: Logger) {
         super();
+    }
+
+    /** @inheritdoc */
+    of<TProjection>(type: Constructor<TProjection>): IProjectionOf<TProjection>;
+    of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string): IProjectionOf<TProjection>;
+    of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string): IProjectionOf<TProjection>;
+    of<TProjection>(type: Constructor<TProjection>, maybeProjection?: ProjectionId | Guid | string, maybeScope?: ScopeId | Guid | string): IProjectionOf<TProjection> {
+        if (maybeProjection === undefined) {
+            return new ProjectionOf(type, this, this._readModelTypes.getFor(type));
+        }
+
+        const scopeId = maybeScope ?? ScopeId.default;
+        return new ProjectionOf(type, this, new ScopedProjectionId(ProjectionId.from(maybeProjection), ScopeId.from(scopeId)));
     }
 
     /** @inheritdoc */
