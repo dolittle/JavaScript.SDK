@@ -1,3 +1,17 @@
+# [22.1.0] - 2022-1-28 [PR: #113](https://github.com/dolittle/JavaScript.SDK/pull/113)
+## Summary
+
+Adds the possibility to take upon a specific projection read model as a dependency and use that to get the projection states for that read model type.
+
+### Added
+
+- `IProjectionOf<TReadModel>` that acts as a minimal `IProjectionStore` for a particular projection type.
+- `IProjectionStore.of<TReadModel>(...)` method with overloads for sending in `ProjectionId` and `ScopeId` to create instances of `IProjectionOf<TReadModel>`
+- `IProjectionOf<TReadModel>` is registered in the tenant scoped service providers for all types with the `[Projection]` attribute, or projections created in the `.WithProjections(...)` builder. So they can be injected in controllers etc.
+- `IProjectionOf.for(type)` that returns a service identifier that can be used in `@inject(...)` decorators.
+- `IAggregateOf.for(type)` that returns a service identifier that can be used in `@inject(...)` decorators.
+
+
 # [22.0.0] - 2022-1-25 [PR: #112](https://github.com/dolittle/JavaScript.SDK/pull/112)
 ## Summary
 
