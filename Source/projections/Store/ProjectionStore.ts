@@ -58,14 +58,12 @@ export class ProjectionStore extends IProjectionStore {
     of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string): IProjectionOf<TProjection>;
     of<TProjection>(type: Constructor<TProjection>, projection: ProjectionId | Guid | string, scope: ScopeId | Guid | string): IProjectionOf<TProjection>;
     of<TProjection>(type: Constructor<TProjection>, maybeProjection?: ProjectionId | Guid | string, maybeScope?: ScopeId | Guid | string): IProjectionOf<TProjection> {
-        if (!maybeProjection) {
+        if (maybeProjection === undefined) {
             return new ProjectionOf(type, this, this._readModelTypes.getFor(type));
         }
-        let scopeId = ScopeId.default;
-        if (maybeScope) {
-            scopeId = ScopeId.from(maybeScope);
-        }
-        return new ProjectionOf(type, this, new ScopedProjectionId(ProjectionId.from(maybeProjection), scopeId));
+
+        const scopeId = maybeScope ?? ScopeId.default;
+        return new ProjectionOf(type, this, new ScopedProjectionId(ProjectionId.from(maybeProjection), ScopeId.from(scopeId)));
     }
 
     /** @inheritdoc */

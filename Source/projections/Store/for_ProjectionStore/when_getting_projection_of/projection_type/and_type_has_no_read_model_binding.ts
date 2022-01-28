@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { describeThis } from '@dolittle/typescript.testing';
-import { ProjectionStore } from '../../../ProjectionStore';
+
+import { TypeNotAssociatedWithKey } from '@dolittle/sdk.artifacts';
+
 import given from '../../given';
 import { a_projection_type } from '../../given/a_projection_type';
-import { expect } from 'chai';
-import { TypeNotAssociatedWithKey } from '@dolittle/sdk.artifacts';
+import { ProjectionStore } from '../../../ProjectionStore';
 
 describeThis(__filename, () => {
     let result: any;
@@ -24,5 +25,5 @@ describeThis(__filename, () => {
         result = error;
     }
 
-    it('should fail because no projection read model exists', () => result.should.be.instanceof(TypeNotAssociatedWithKey));
+    it('should fail because no projection is associated with the type', () => result.should.be.instanceof(TypeNotAssociatedWithKey));
 });

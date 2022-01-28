@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { describeThis } from '@dolittle/typescript.testing';
+import { Guid } from '@dolittle/rudiments';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
+import { Guids } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
@@ -11,8 +13,6 @@ import { GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb
 import given from '../../given';
 import { ProjectionStore } from '../../../ProjectionStore';
 import { FailedToGetProjection } from '../../../FailedToGetProjection';
-import { Guids } from '@dolittle/sdk.protobuf';
-import { Guid } from '@dolittle/rudiments';
 
 describeThis(__filename, () => {
     const [projections_client, server_stream] = given.projections_client_and_get_all_stream;

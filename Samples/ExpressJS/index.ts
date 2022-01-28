@@ -28,10 +28,10 @@ application.post('/prepare', (req, res, next) => {
 
 application.get(
     '/counters',
-    inject(`IProjectionOf<${DishCounter.name}>`, 'Logger')(
-        (req, res, next, projections: IProjectionOf<DishCounter>, logger: Logger) => {
-            logger.info('Received reqest to get DishCounter projection');
-            projections.getAll()
+    inject(IProjectionOf.for(DishCounter), 'Logger')(
+        (req, res, next, dishCounter, logger: Logger) => {
+            logger.info('Received request to get DishCounter projection');
+            dishCounter.getAll()
                 .then(result => res.json(result))
                 .catch(next);
         }
