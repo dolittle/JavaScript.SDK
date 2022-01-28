@@ -12,6 +12,7 @@ import { ProjectionBuilder } from './ProjectionBuilder';
 import { ProjectionClassBuilder } from './ProjectionClassBuilder';
 import { isProjectionModelId } from '../ProjectionModelId';
 import { IProjectionStore } from '../Store/IProjectionStore';
+import { IProjectionOf } from '../Store/IProjectionOf';
 
 /**
  * Represents a builder that can build {@link ProjectionProcessor} from an {@link IModel}.
@@ -51,7 +52,7 @@ export class ProjectionsModelBuilder {
         for (const { identifier, type } of identifiers) {
             readModelTypes.associate(type, identifier.id, identifier.scope);
             this._bindings.addTenantServices(binder => {
-                binder.bind(`IProjectionOf<${type.name}>`).toFactory(services => services.get(IProjectionStore).of(type, identifier.id, identifier.scope));
+                binder.bind(IProjectionOf.for(type)).toFactory(services => services.get(IProjectionStore).of(type, identifier.id, identifier.scope));
             });
         }
         return [processors, readModelTypes];

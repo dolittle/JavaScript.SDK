@@ -35,7 +35,7 @@ export class AggregateRootsModelBuilder {
             aggregateRootTypes.associate(type, identifier.aggregateRootType);
 
             this._bindings.addTenantServices(binder => {
-                binder.bind(`IAggregateOf<${type.name}>`).toFactory(services => services.get(IAggregates).of(type));
+                binder.bind(IAggregateOf.for(type)).toFactory(services => services.get(IAggregates).of(type));
             });
         }
         return aggregateRootTypes;
