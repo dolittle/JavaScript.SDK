@@ -333,19 +333,19 @@ export class DolittleClient extends IDolittleClient {
 
         this._serviceProviderBuilder.addTenantServices((bindings, tenant) => {
             bindings.bind(IEventStore).toFactory(() => this._eventStore!.forTenant(tenant));
-            bindings.bind('IEventStore').toFactory(() => this._eventStore!.forTenant(tenant));
+            bindings.bind(IEventStore.name).toFactory(() => this._eventStore!.forTenant(tenant));
 
             bindings.bind(IAggregates).toFactory(() => this._aggregates!.forTenant(tenant));
-            bindings.bind('IAggregates').toFactory(() => this._aggregates!.forTenant(tenant));
+            bindings.bind(IAggregates.name).toFactory(() => this._aggregates!.forTenant(tenant));
 
             bindings.bind(IProjectionStore).toFactory(() => this._projectionStore!.forTenant(tenant));
-            bindings.bind('IProjectionStore').toFactory(() => this._projectionStore!.forTenant(tenant));
+            bindings.bind(IProjectionStore.name).toFactory(() => this._projectionStore!.forTenant(tenant));
 
             bindings.bind(IEmbedding).toFactory(() => this._embeddingStore!.forTenant(tenant));
-            bindings.bind('IEmbedding').toFactory(() => this._embeddingStore!.forTenant(tenant));
+            bindings.bind(IEmbedding.name).toFactory(() => this._embeddingStore!.forTenant(tenant));
 
             bindings.bind(IResources).toFactory(() => this._resources!.forTenant(tenant));
-            bindings.bind('IResources').toFactory(() => this._resources!.forTenant(tenant));
+            bindings.bind(IResources.name).toFactory(() => this._resources!.forTenant(tenant));
         });
 
         for (const callback of configuredCallbacks) {
