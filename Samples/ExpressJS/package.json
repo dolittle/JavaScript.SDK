@@ -1,7 +1,7 @@
 {
     "name": "expressjs",
     "private": true,
-    "version": "22.1.0",
+    "version": "22.2.0-sam.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "22.1.0",
-        "@dolittle/sdk.artifacts": "22.1.0",
-        "@dolittle/sdk.events": "22.1.0",
-        "@dolittle/sdk.events.handling": "22.1.0",
-        "@dolittle/sdk.extensions.express": "22.1.0",
+        "@dolittle/sdk": "22.2.0-sam.0",
+        "@dolittle/sdk.artifacts": "22.2.0-sam.0",
+        "@dolittle/sdk.events": "22.2.0-sam.0",
+        "@dolittle/sdk.events.handling": "22.2.0-sam.0",
+        "@dolittle/sdk.extensions.express": "22.2.0-sam.0",
         "body-parser": "^1.19.1",
         "express": "^4.17.2",
         "winston": "^3.4.0"
