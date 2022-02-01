@@ -35,13 +35,13 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
     }
 
     /** @inheritdoc */
-    collection(collectionName: CollectionNameLike): ICopyToMongoDBBuilder<T> {
+    toCollection(collectionName: CollectionNameLike): ICopyToMongoDBBuilder<T> {
         this._collectionName = CollectionName.from(collectionName);
         return this;
     }
 
     /** @inheritdoc */
-    convert(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T> {
+    withConversion(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T> {
         this._conversions.set(ProjectionField.from(field), to);
         return this;
     }
@@ -51,10 +51,10 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
      * @param {IClientBuildResults} results - For keeping track of build results.
      * @returns {MongoDBCopies} The built {@link MongoDBCopies} specification.
      */
-    build(results: IClientBuildResults): MongoDBCopies {
+    build(results: IClientBuildResults): MongoDBCopies | undefined {
         if (this._collectionName === undefined) {
             results.addFailure(`The MongoDB collection name cannot be inferred for projection ${this._projectionId}`, 'Please specify the collection name explicitly');
-            return MongoDBCopies.default;
+            return undefined;
         }
 
         return new MongoDBCopies(true, this._collectionName, this._conversions);

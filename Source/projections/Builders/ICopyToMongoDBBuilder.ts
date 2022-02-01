@@ -15,7 +15,7 @@ export abstract class ICopyToMongoDBBuilder<T> {
      * @param {CollectionNameLike} collectionName - The collection name.
      * @returns {ICopyToMongoDBBuilder<T>} - The builder for continuation.
      */
-    abstract collection(collectionName: CollectionNameLike): ICopyToMongoDBBuilder<T>;
+    abstract toCollection(collectionName: CollectionNameLike): ICopyToMongoDBBuilder<T>;
 
     /**
      * Configures a conversion for a field on the readmodel.
@@ -23,5 +23,5 @@ export abstract class ICopyToMongoDBBuilder<T> {
      * @param {Conversion} to - The conversion to apply.
      * @returns {ICopyToMongoDBBuilder<T>} - The builder for continuation.
      */
-    abstract convert(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T>;
+    abstract withConversion(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T>;
 }

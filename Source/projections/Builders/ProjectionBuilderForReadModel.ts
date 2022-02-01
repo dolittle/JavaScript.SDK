@@ -112,6 +112,10 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         }
 
         const copies = this.buildCopies(results);
+        if (copies === undefined) {
+            results.addFailure(`Failed to register projection ${this._projectionId}. Copies specification is not valid`);
+            return undefined;
+        }
 
         return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events, copies);
     }
@@ -158,13 +162,19 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         return eventType;
     }
 
-    private buildCopies(results: IClientBuildResults): ProjectionCopies {
+    private buildCopies(results: IClientBuildResults): ProjectionCopies | undefined {
+        const mongoDBCopies = this.buildMongoDBCopies(results);
+
+        if (mongoDBCopies === undefined) {
+            return undefined;
+        }
+
         return new ProjectionCopies(
-            this.buildMongoDBCopies(results),
+            mongoDBCopies,
         );
     }
 
-    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies {
+    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies | undefined {
         if (this._copyToMongoDBCallback === undefined) {
             return MongoDBCopies.default;
         }
