@@ -3,7 +3,6 @@
 
 import { DateTime } from 'luxon';
 import { Logger } from 'winston';
-import { Constructor } from '@dolittle/types';
 
 import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
@@ -17,7 +16,7 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import {
-    EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
+    EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionCopies, ProjectionCopyToMongoDB, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
     ProjectionRegistrationResponse, ProjectionReplaceResponse, ProjectionRequest,
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
@@ -33,6 +32,8 @@ import { PartitionIdKeySelector } from '../PartitionIdKeySelector';
 import { ProjectionContext } from '../ProjectionContext';
 import { ProjectionId } from '../ProjectionId';
 import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
+import { Conversion } from '../Copies/MongoDB/Conversion';
+import { UnknownMongoDBConversion } from '../Copies/MongoDB/UnknownMongoDBConversion';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
@@ -57,6 +58,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         registerArguments.setProjectionid(Guids.toProtobuf(this._projection.projectionId.value));
         registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
         registerArguments.setInitialstate(JSON.stringify(this._projection.initialState));
+        registerArguments.setCopies(this.createCopiesSpecification());
 
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
@@ -81,6 +83,31 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         } else {
             throw new UnknownKeySelectorType(selector);
         }
+    }
+
+    private createCopiesSpecification(): ProjectionCopies {
+        const copies = new ProjectionCopies();
+
+        if (this._projection.copies.mongoDB.shouldCopyToMongoDB) {
+            const mongoDB = new ProjectionCopyToMongoDB();
+            mongoDB.setCollection(this._projection.copies.mongoDB.collectionName.value);
+            for (const [field, conversion] of this._projection.copies.mongoDB.conversions) {
+                const pbConversion =
+                    conversion === Conversion.DateTime ? ProjectionCopyToMongoDB.BSONType.DATE :
+                    conversion === Conversion.Timestamp ? ProjectionCopyToMongoDB.BSONType.TIMESTAMP :
+                    conversion === Conversion.Binary ? ProjectionCopyToMongoDB.BSONType.BINARY :
+                    undefined;
+
+                if (pbConversion === undefined) {
+                    throw new UnknownMongoDBConversion(conversion);
+                }
+
+                mongoDB.getConversionsMap().set(field.value, pbConversion);
+            }
+            copies.setMongodb(mongoDB);
+        }
+
+        return copies;
     }
 
     /** @inheritdoc */

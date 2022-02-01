@@ -3,3 +3,5 @@
 
 export { CollectionName, CollectionNameLike, isCollectionName } from './CollectionName';
 export { Conversion } from './Conversion';
+export { MongoDBCopies } from './MongoDBCopies';
+export { UnknownMongoDBConversion } from './UnknownMongoDBConversion';

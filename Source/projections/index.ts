@@ -34,6 +34,7 @@ export {
     ProjectionField,
     ProjectionFieldLike,
     isProjectionField,
+    ProjectionCopies,
 } from './Copies/_exports';
 
 export {
@@ -41,6 +42,8 @@ export {
     CollectionNameLike as MongoDBCollectionNameLike,
     isCollectionName as isMongoDBCollectionName,
     Conversion as MongoDBConversion,
+    MongoDBCopies,
+    UnknownMongoDBConversion,
 } from './Copies/MongoDB/_exports';
 
 export {
