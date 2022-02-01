@@ -46,7 +46,7 @@
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/runtime.contracts": "6.5.0",
+        "@dolittle/runtime.contracts": "6.6.0-sam.0",
         "@dolittle/sdk.events": "22.1.0",
         "@dolittle/sdk.execution": "22.1.0",
         "@dolittle/sdk.protobuf": "22.1.0",

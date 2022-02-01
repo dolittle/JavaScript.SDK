@@ -6,6 +6,7 @@
 export class Chef {
     constructor(
         public name: string = '',
-        public dishes: string[] = []
+        public dishes: string[] = [],
+        public lastPreparedDish: Date = new Date(0),
     ) { }
 }

@@ -3,6 +3,8 @@
 
 import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+
+import { ProjectionCopies } from './Copies/ProjectionCopies';
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { IProjection } from './IProjection';
@@ -29,12 +31,14 @@ export class Projection<T> extends IProjection<T> {
      * @param {Constructor<T>|T} readModelTypeOrInstance - The read model type or instance produced by the projection.
      * @param {ScopeId} scopeId - The identifier of the scope the projection is in.
      * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} _eventMap - The events with respective callbacks and keyselectors used by the projection.
+     * @param {ProjectionCopies} copies - The read model copies specification for the projection.
      */
     constructor(
         readonly projectionId: ProjectionId,
         readonly readModelTypeOrInstance: Constructor<T> | T,
         readonly scopeId: ScopeId,
-        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>
+        private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>,
+        readonly copies: ProjectionCopies,
     ) {
         super();
 

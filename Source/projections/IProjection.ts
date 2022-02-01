@@ -1,8 +1,11 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventType, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
+
+import { EventType, ScopeId } from '@dolittle/sdk.events';
+
+import { ProjectionCopies } from './Copies/ProjectionCopies';
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
@@ -37,6 +40,11 @@ export abstract class IProjection<T> {
      * Gets the events used by the projection.
      */
     abstract readonly events: Iterable<EventSelector>;
+
+    /**
+     * Gets the specification of read model copies to produce for the projection.
+     */
+    abstract readonly copies: ProjectionCopies;
 
     /**
      * Handle an event and update a readmodel.

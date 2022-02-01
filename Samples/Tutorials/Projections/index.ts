@@ -5,6 +5,7 @@
 
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
+import { MongoDBConversion } from '@dolittle/sdk.projections';
 import { setTimeout } from 'timers/promises';
 
 import { Chef } from './Chef';
@@ -17,8 +18,12 @@ import { DishPrepared } from './DishPrepared';
             .withProjections(_ => _
                 .create('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
                     .forReadModel(Chef)
+                    .copyToMongoDB(_ => _
+                        .withConversion('lastPreparedDish', MongoDBConversion.DateTime)
+                    )
                     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
                         chef.name = event.Chef;
+                        chef.lastPreparedDish = new Date();
                         if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
                         return chef;
                     })

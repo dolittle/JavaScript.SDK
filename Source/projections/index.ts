@@ -4,6 +4,8 @@
 export * from './_exports';
 
 export {
+    CopyToMongoDBBuilder,
+    CopyToMongoDBCallback,
     CouldNotCreateInstanceOfProjection,
     IProjectionBuilder,
     IProjectionBuilderForReadModel,
@@ -27,8 +29,25 @@ export {
     ProjectionsBuilderCallback,
     ProjectionsModelBuilder,
     ReadModelAlreadyDefinedForProjection,
+    ReadModelField,
     TypeOrEventType,
 } from './Builders/_exports';
+
+export {
+    ProjectionField,
+    ProjectionFieldLike,
+    isProjectionField,
+    ProjectionCopies,
+} from './Copies/_exports';
+
+export {
+    CollectionName as MongoDBCollectionName,
+    CollectionNameLike as MongoDBCollectionNameLike,
+    isCollectionName as isMongoDBCollectionName,
+    Conversion as MongoDBConversion,
+    MongoDBCopies,
+    UnknownMongoDBConversion,
+} from './Copies/MongoDB/_exports';
 
 export {
     CurrentState,
