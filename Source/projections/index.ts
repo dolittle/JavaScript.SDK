@@ -32,6 +32,10 @@ export {
 } from './Builders/_exports';
 
 export {
+    copyProjectionToMongoDB,
+    isDecoratedCopyProjectionToMongoDB,
+    getDecoratedCopyProjectionToMongoDB,
+    CopyProjectionToMongoDBDecoratedType,
     CopyToMongoDBBuilder,
     CopyToMongoDBCallback,
     ICopyToMongoDBBuilder,
