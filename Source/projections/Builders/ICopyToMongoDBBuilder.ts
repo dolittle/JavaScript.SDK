@@ -24,10 +24,4 @@ export abstract class ICopyToMongoDBBuilder<T> {
      * @returns {ICopyToMongoDBBuilder<T>} - The builder for continuation.
      */
     abstract convert(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T>;
-
-    /**
-     * Disables the use of default conversions specified with decorators on the read model.
-     * @returns {ICopyToMongoDBBuilder<T>} - The builder for continuation.
-     */
-    abstract withoutDefaultConversions(): ICopyToMongoDBBuilder<T>;
 }

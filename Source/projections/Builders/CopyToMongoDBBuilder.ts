@@ -46,12 +46,6 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
         return this;
     }
 
-    /** @inheritdoc */
-    withoutDefaultConversions(): ICopyToMongoDBBuilder<T> {
-        // TODO: Implement discovery of conversions from decorators.
-        return this;
-    }
-
     /**
      * Builds the {@link MongoDBCopies} specification configured by this builder.
      * @param {IClientBuildResults} results - For keeping track of build results.
