@@ -13,13 +13,13 @@ import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { ProjectionId } from '../ProjectionId';
+import { ProjectionModelId } from '../ProjectionModelId';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
-import { ProjectionModelId } from '../ProjectionModelId';
-import { ProjectionBuilder } from '..';
+import { ProjectionBuilder } from './ProjectionBuilder';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
