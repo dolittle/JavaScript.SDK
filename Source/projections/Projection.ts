@@ -3,7 +3,8 @@
 
 import { EventType, EventTypeMap, ScopeId } from '@dolittle/sdk.events';
 import { Constructor } from '@dolittle/types';
-import { ProjectionCopies } from '.';
+
+import { ProjectionCopies } from './Copies/ProjectionCopies';
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { IProjection } from './IProjection';
