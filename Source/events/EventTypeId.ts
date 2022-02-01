@@ -20,13 +20,14 @@ export class EventTypeId extends ConceptAs<Guid, '@dolittle/sdk.events.EventType
     constructor(id: Guid) {
         super(id, '@dolittle/sdk.events.EventTypeId');
     }
+
     /**
      * Creates an {@link EventTypeId} from a {@link Guid} or a {@link string}.
-     * @param {Guid | string} id - The event type id.
-     * @returns {EventTypeId} The create event type id concept.
+     * @param {EventTypeIdLike} id - The event type id.
+     * @returns {EventTypeId} The created event type id concept.
      */
     static from(id: EventTypeIdLike): EventTypeId {
-        if (id instanceof EventTypeId) return id;
+        if (isEventTypeId(id)) return id;
         return new EventTypeId(Guid.as(id));
     }
 };

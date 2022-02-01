@@ -1,7 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export { CopyToMongoDBCallback } from './CopyToMongoDBCallback';
 export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
+export { ICopyToMongoDBBuilder } from './ICopyToMongoDBBuilder';
 export { IProjectionBuilder } from './IProjectionBuilder';
 export { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 export { IProjectionsBuilder } from './IProjectionsBuilder';

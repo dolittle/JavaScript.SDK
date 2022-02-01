@@ -20,6 +20,7 @@ import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 import { ProjectionBuilder } from './ProjectionBuilder';
+import { CopyToMongoDBCallback } from './CopyToMongoDBCallback';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
@@ -78,6 +79,11 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         this._modelBuilder.unbindIdentifierFromProcessorBuilder(this._modelId, this._parentBuilder);
         this._scopeId = ScopeId.from(scopeId);
         this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this._parentBuilder);
+        return this;
+    }
+
+    /** @inheritdoc */
+    copyToMongoDB(callback?: CopyToMongoDBCallback<T>): IProjectionBuilderForReadModel<T> {
         return this;
     }
 

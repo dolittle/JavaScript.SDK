@@ -31,6 +31,19 @@ export {
 } from './Builders/_exports';
 
 export {
+    ProjectionField,
+    ProjectionFieldLike,
+    isProjectionField,
+} from './Copies/_exports';
+
+export {
+    CollectionName as MongoDBCollectionName,
+    CollectionNameLike as MongoDBCollectionNameLike,
+    isCollectionName as isMongoDBCollectionName,
+    Conversion as MongoDBConversion,
+} from './Copies/MongoDB/_exports';
+
+export {
     CurrentState,
     CurrentStateType,
     FailedToGetProjection,
