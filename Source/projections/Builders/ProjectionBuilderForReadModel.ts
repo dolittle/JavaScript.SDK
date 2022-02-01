@@ -14,16 +14,16 @@ import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { ProjectionId } from '../ProjectionId';
 import { ProjectionModelId } from '../ProjectionModelId';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
+import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
+import { CopyToMongoDBCallback } from './Copies/CopyToMongoDBCallback';
+import { CopyToMongoDBBuilder } from './Copies/CopyToMongoDBBuilder';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 import { ProjectionBuilder } from './ProjectionBuilder';
-import { CopyToMongoDBCallback } from './CopyToMongoDBCallback';
-import { ProjectionCopies } from '../Copies/ProjectionCopies';
-import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
-import { CopyToMongoDBBuilder } from './CopyToMongoDBBuilder';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
