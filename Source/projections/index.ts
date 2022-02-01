@@ -4,6 +4,8 @@
 export * from './_exports';
 
 export {
+    CopyToMongoDBBuilder,
+    CopyToMongoDBCallback,
     CouldNotCreateInstanceOfProjection,
     IProjectionBuilder,
     IProjectionBuilderForReadModel,
@@ -27,6 +29,7 @@ export {
     ProjectionsBuilderCallback,
     ProjectionsModelBuilder,
     ReadModelAlreadyDefinedForProjection,
+    ReadModelField,
     TypeOrEventType,
 } from './Builders/_exports';
 

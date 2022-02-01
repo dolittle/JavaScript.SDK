@@ -3,17 +3,7 @@
 
 import { CollectionNameLike } from '../Copies/MongoDB/CollectionName';
 import { Conversion } from '../Copies/MongoDB/Conversion';
-
-type RecursiveReadModelField<T, P extends string> =
-    T extends (infer U)[] ? RecursiveReadModelField<U, P> :
-    T extends object ? P | `${P}.${ReadModelField<T>}` :
-    P;
-
-type ReadModelField<T> = ({
-    [TKey in keyof T & string]:
-        T[TKey] extends Function ? never :
-        RecursiveReadModelField<T[TKey], `${TKey}`>;
-})[ keyof T & string];
+import { ReadModelField } from './ReadModelField';
 
 /**
  * Defines a builder for configuring read model copies to a MongoDB collection.
