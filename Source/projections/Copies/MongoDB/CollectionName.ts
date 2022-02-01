@@ -21,6 +21,13 @@ export class CollectionName extends ConceptAs<string, '@dolittle/sdk.projections
     }
 
     /**
+     * Gets the not set collection name.
+     */
+    static get notSet(): CollectionName {
+        return CollectionName.from('Not Set');
+    }
+
+    /**
      * Creates a {@link CollectionName} from a {@link string}.
      * @param {CollectionNameLike} name - The name of the collection.
      * @returns {CollectionName} The created collection name concept.

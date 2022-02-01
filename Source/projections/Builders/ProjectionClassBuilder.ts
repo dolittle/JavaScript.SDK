@@ -16,6 +16,7 @@ import { ProjectionCallback } from '../ProjectionCallback';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { getOnDecoratedMethods } from './onDecorator';
 import { ProjectionDecoratedType } from './ProjectionDecoratedType';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
 
 /**
  * Represents a builder for building a projection from a class.
@@ -54,7 +55,9 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             results.addFailure(`Could not create projection ${this.type.type.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
             return;
         }
-        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events);
+        const copies = ProjectionCopies.default;
+        //TODO: Create copies.
+        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies);
     }
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {

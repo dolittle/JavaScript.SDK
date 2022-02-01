@@ -14,4 +14,11 @@ export class ProjectionCopies {
     constructor(
         readonly mongoDB: MongoDBCopies,
     ) {}
+
+    /**
+     * Gets the default {@link ProjectionCopies} specification, where no read model copies will be produced.
+     */
+    static get default(): ProjectionCopies {
+        return new ProjectionCopies(MongoDBCopies.default);
+    }
 }

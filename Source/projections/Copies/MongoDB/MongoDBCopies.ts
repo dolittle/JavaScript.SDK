@@ -20,4 +20,11 @@ export class MongoDBCopies {
         readonly collectionName: CollectionName,
         readonly conversions: ReadonlyMap<ProjectionField, Conversion>,
     ) {}
+
+    /**
+     * Gets the default {@link MongoDBCopies} specification, where no read model copies will be produced in MongoDB.
+     */
+    static get default(): MongoDBCopies {
+        return new MongoDBCopies(false, CollectionName.notSet, new Map());
+    }
 }

@@ -21,6 +21,7 @@ import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 import { ProjectionBuilder } from './ProjectionBuilder';
 import { CopyToMongoDBCallback } from './CopyToMongoDBCallback';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
@@ -105,7 +106,9 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             results.addFailure(`Failed to register projection ${this._projectionId}. Could not build projection`, 'Maybe it tries to handle the same type of event twice?');
             return;
         }
-        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);
+        const copies = ProjectionCopies.default;
+        //TODO: Create copies.
+        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events, copies);
     }
 
     private tryAddOnMethods(
