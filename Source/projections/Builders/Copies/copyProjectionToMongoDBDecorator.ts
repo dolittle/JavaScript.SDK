@@ -7,7 +7,7 @@ import { CollectionName, CollectionNameLike } from '../../Copies/MongoDB/Collect
 
 import { CopyProjectionToMongoDBDecoratedType } from './CopyProjectionToMongoDBDecoratedType';
 
-const [decorator, getMetadata] = Decorators.createMetadataDecorator<CopyProjectionToMongoDBDecoratedType>('copy-projection-to-mongodb', 'copyProjectionToMongoDB', Decorators.DecoratorTarget.Class);
+const [decorator, getMetadata] = Decorators.createMetadataDecorator<CopyProjectionToMongoDBDecoratedType>('projection-copy-to-mongodb', 'copyProjectionToMongoDB', Decorators.DecoratorTarget.Class);
 
 /**
  * Decorator to mark a Projection class to copy the read models to a MongoDB collection.
