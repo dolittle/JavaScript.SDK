@@ -1,7 +1,7 @@
 {
     "name": "projections",
     "private": true,
-    "version": "22.2.0-sam.0",
+    "version": "22.2.0-sam.1",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "22.2.0-sam.0",
-        "@dolittle/sdk.artifacts": "22.2.0-sam.0",
-        "@dolittle/sdk.events": "22.2.0-sam.0",
-        "@dolittle/sdk.events.handling": "22.2.0-sam.0"
+        "@dolittle/sdk": "22.2.0-sam.1",
+        "@dolittle/sdk.artifacts": "22.2.0-sam.1",
+        "@dolittle/sdk.events": "22.2.0-sam.1",
+        "@dolittle/sdk.events.handling": "22.2.0-sam.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
