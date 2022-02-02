@@ -4,7 +4,7 @@
 import { Guid, IEquatable } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { Generation } from '@dolittle/sdk.artifacts';
+import { ComplexValueMap, Generation } from '@dolittle/sdk.artifacts';
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 
@@ -13,10 +13,15 @@ import { IProjection } from '../IProjection';
 import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
+import { ProjectionField } from '../Copies/ProjectionField';
+import { Conversion } from '../Copies/MongoDB/Conversion';
+import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
+import { getConvertToMongoDBDecoratedProperties } from './Copies/convertToMongoDBDecorator';
+import { getDecoratedCopyProjectionToMongoDB, isDecoratedCopyProjectionToMongoDB } from './Copies/copyProjectionToMongoDBDecorator';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { getOnDecoratedMethods } from './onDecorator';
 import { ProjectionDecoratedType } from './ProjectionDecoratedType';
-import { ProjectionCopies } from '../Copies/ProjectionCopies';
 
 /**
  * Represents a builder for building a projection from a class.
@@ -55,8 +60,9 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             results.addFailure(`Could not create projection ${this.type.type.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
             return;
         }
-        const copies = ProjectionCopies.default;
-        //TODO: Create copies.
+
+        const copies = this.buildCopies(results);
+
         return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies);
     }
 
@@ -115,5 +121,28 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             }
             return instance;
         };
+    }
+
+    private buildCopies(results: IClientBuildResults): ProjectionCopies {
+        return new ProjectionCopies(
+            this.buildMongoDBCopies(results),
+        );
+    }
+
+    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies {
+        if (!isDecoratedCopyProjectionToMongoDB(this.type.type)) {
+            return MongoDBCopies.default;
+        }
+
+        const decoratedType = getDecoratedCopyProjectionToMongoDB(this.type.type);
+        const collection = decoratedType.collection;
+
+        const decoratedProperties = getConvertToMongoDBDecoratedProperties(this.type.type);
+        const conversions: Map<ProjectionField, Conversion> = new ComplexValueMap(ProjectionField, field => [field.value], 1);
+        for (const decoratedProperty of decoratedProperties) {
+            conversions.set(decoratedProperty.field, decoratedProperty.conversion);
+        }
+
+        return new MongoDBCopies(true, collection, conversions);
     }
 }

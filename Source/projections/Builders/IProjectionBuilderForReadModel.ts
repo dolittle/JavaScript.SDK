@@ -8,8 +8,8 @@ import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeIdLike, ScopeId } from '@dolittle/sdk.events';
 
 import { ProjectionCallback } from '../ProjectionCallback';
+import { CopyToMongoDBCallback } from './Copies/CopyToMongoDBCallback';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
-import { CopyToMongoDBCallback } from './CopyToMongoDBCallback';
 
 /**
  * Defines a builder for building a projection for a read model from method callbacks.

@@ -5,13 +5,13 @@ import { ComplexValueMap } from '@dolittle/sdk.artifacts';
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionField } from '../Copies/ProjectionField';
-import { CollectionName, CollectionNameLike } from '../Copies/MongoDB/CollectionName';
-import { Conversion } from '../Copies/MongoDB/Conversion';
-import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
-import { ProjectionId } from '../ProjectionId';
+import { ProjectionField } from '../../Copies/ProjectionField';
+import { CollectionName, CollectionNameLike } from '../../Copies/MongoDB/CollectionName';
+import { Conversion } from '../../Copies/MongoDB/Conversion';
+import { MongoDBCopies } from '../../Copies/MongoDB/MongoDBCopies';
+import { ProjectionId } from '../../ProjectionId';
+import { ReadModelField } from './../ReadModelField';
 import { ICopyToMongoDBBuilder } from './ICopyToMongoDBBuilder';
-import { ReadModelField } from './ReadModelField';
 
 /**
  * Represents an implementation of {@link ICopyToMongoDBBuilder}.

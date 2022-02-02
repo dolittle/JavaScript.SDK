@@ -1,9 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CollectionNameLike } from '../Copies/MongoDB/CollectionName';
-import { Conversion } from '../Copies/MongoDB/Conversion';
-import { ReadModelField } from './ReadModelField';
+import { CollectionNameLike } from '../../Copies/MongoDB/CollectionName';
+import { Conversion } from '../../Copies/MongoDB/Conversion';
+import { ReadModelField } from './../ReadModelField';
 
 /**
  * Defines a builder for configuring read model copies to a MongoDB collection.
