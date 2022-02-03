@@ -21,7 +21,8 @@ declare module 'mongodb' {
     }
 }
 
-const originalCollectionMethod = Db.prototype.collection;
+type OriginalCollectionSignature = (name: string, options?: CollectionOptions) => Collection;
+const originalCollectionMethod: OriginalCollectionSignature = Db.prototype.collection;
 
 Db.prototype.collection = function<TSchema extends Document>(typeOrName: Constructor<TSchema> | string, options?: CollectionOptions): Collection<TSchema> {
     let collectionName = typeof typeOrName === 'string' ? typeOrName : typeOrName.name;
@@ -31,5 +32,5 @@ Db.prototype.collection = function<TSchema extends Document>(typeOrName: Constru
         collectionName = decorator.collection.value;
     }
 
-    return originalCollectionMethod(collectionName, options);
+    return originalCollectionMethod.call(this, collectionName, options) as any;
 };
