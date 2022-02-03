@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.resilience",
-    "version": "22.2.0-sam.1",
+    "version": "22.2.0-sam.2",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
