@@ -11,6 +11,7 @@
         { "path": "../execution" },
         { "path": "../resilience" },
         { "path": "../services" },
+        { "path": "../projections" },
         { "path": "../protobuf" },
     ]
 }
