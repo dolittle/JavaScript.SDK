@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/types';
-import { ProjectionField } from '../../Copies/ProjectionField';
+import { ProjectionProperty } from '../../Copies/ProjectionProperty';
 import { Conversion } from '../../Copies/MongoDB/Conversion';
 
 /**
@@ -11,12 +11,12 @@ import { Conversion } from '../../Copies/MongoDB/Conversion';
 export class MongoDBConversionDecoratedProperty {
     /**
      * Initialises a new instance of the {@link MongoDBConversionDecoratedProperty} class.
-     * @param {ProjectionField} field - The projection field to be converted.
+     * @param {ProjectionProperty} property - The projection property to be converted.
      * @param {Conversion} conversion - The conversion to apply.
      * @param {Constructor<any>} type - The decorated type.
      */
     constructor(
-        readonly field: ProjectionField,
+        readonly property: ProjectionProperty,
         readonly conversion: Conversion,
         readonly type: Constructor<any>
     ) { }
