@@ -3,7 +3,7 @@
 
 // Sample code for the tutorial at https://dolittle.io/tutorials/projections/typescript/
 
-import { ProjectionContext, projection, on, copyProjectionToMongoDB, convertToMongoDB, MongoDBConversion } from '@dolittle/sdk.projections';
+import { ProjectionContext, projection, on, copyProjectionToMongoDB } from '@dolittle/sdk.projections';
 
 import { DishPrepared } from './DishPrepared';
 
@@ -12,7 +12,6 @@ import { DishPrepared } from './DishPrepared';
 export class DishCounter {
 
     name: string = 'Unknown';
-    @convertToMongoDB(MongoDBConversion.Binary)
     numberOfTimesPrepared: number = 0;
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))

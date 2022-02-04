@@ -19,7 +19,7 @@ import { DishPrepared } from './DishPrepared';
                 .create('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
                     .forReadModel(Chef)
                     .copyToMongoDB(_ => _
-                        .withConversion('lastPreparedDish', MongoDBConversion.DateTime)
+                        .withConversion('lastPreparedDish', MongoDBConversion.Date)
                     )
                     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
                         chef.name = event.Chef;
