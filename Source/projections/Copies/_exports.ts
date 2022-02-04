@@ -3,5 +3,5 @@
 
 export * as MongoDB from './MongoDB/_exports';
 
-export { ProjectionField, ProjectionFieldLike, isProjectionField } from './ProjectionField';
+export { ProjectionProperty, ProjectionPropertyLike , isProjectionProperty } from './ProjectionProperty';
 export { ProjectionCopies } from './ProjectionCopies';

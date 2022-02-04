@@ -3,6 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { Logger } from 'winston';
+import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
 
 import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
@@ -34,6 +35,7 @@ import { ProjectionId } from '../ProjectionId';
 import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 import { Conversion } from '../Copies/MongoDB/Conversion';
 import { UnknownMongoDBConversion } from '../Copies/MongoDB/UnknownMongoDBConversion';
+import { PropertyConversion } from '../Copies/MongoDB/PropertyConversion';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
@@ -91,23 +93,38 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         if (this._projection.copies.mongoDB.shouldCopyToMongoDB) {
             const mongoDB = new ProjectionCopyToMongoDB();
             mongoDB.setCollection(this._projection.copies.mongoDB.collectionName.value);
-            for (const [field, conversion] of this._projection.copies.mongoDB.conversions) {
-                const pbConversion =
-                    conversion === Conversion.DateTime ? ProjectionCopyToMongoDB.BSONType.DATE :
-                    conversion === Conversion.Timestamp ? ProjectionCopyToMongoDB.BSONType.TIMESTAMP :
-                    conversion === Conversion.Binary ? ProjectionCopyToMongoDB.BSONType.BINARY :
-                    undefined;
-
-                if (pbConversion === undefined) {
-                    throw new UnknownMongoDBConversion(conversion);
-                }
-
-                mongoDB.getConversionsMap().set(field.value, pbConversion);
-            }
+            mongoDB.setConversionsList(this.createMongoDBPropertyConversions(this._projection.copies.mongoDB.conversions));
             copies.setMongodb(mongoDB);
         }
 
         return copies;
+    }
+
+    private createMongoDBPropertyConversions(conversions: PropertyConversion[]): ProjectionCopyToMongoDB.PropertyConversion[] {
+        return conversions.map(conversion => {
+            const pbConversion = new ProjectionCopyToMongoDB.PropertyConversion();
+
+            pbConversion.setPropertyname(conversion.property.value);
+
+            const pbConversionType =
+                conversion.convertTo === Conversion.None ? ProjectionCopyToMongoDB.BSONType.NONE :
+                conversion.convertTo === Conversion.Date ? ProjectionCopyToMongoDB.BSONType.DATE :
+                conversion.convertTo === Conversion.Guid ? ProjectionCopyToMongoDB.BSONType.GUID :
+                undefined;
+            if (pbConversionType === undefined) {
+                throw new UnknownMongoDBConversion(conversion.convertTo);
+            }
+            pbConversion.setConvertto(pbConversionType);
+
+            if (conversion.shouldRename) {
+                const renameTo = new StringValue();
+                renameTo.setValue(conversion.renameTo.value);
+                pbConversion.setRenameto(renameTo);
+            }
+
+            pbConversion.setChildrenList(this.createMongoDBPropertyConversions(conversion.children));
+            return pbConversion;
+        });
     }
 
     /** @inheritdoc */

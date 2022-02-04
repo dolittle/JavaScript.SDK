@@ -45,9 +45,9 @@ export {
 } from './Builders/Copies/_exports';
 
 export {
-    ProjectionField,
-    ProjectionFieldLike,
-    isProjectionField,
+    ProjectionProperty,
+    ProjectionPropertyLike,
+    isProjectionProperty,
     ProjectionCopies,
 } from './Copies/_exports';
 
@@ -57,6 +57,7 @@ export {
     isCollectionName as isMongoDBCollectionName,
     Conversion as MongoDBConversion,
     MongoDBCopies,
+    PropertyConversion,
     UnknownMongoDBConversion,
 } from './Copies/MongoDB/_exports';
 
