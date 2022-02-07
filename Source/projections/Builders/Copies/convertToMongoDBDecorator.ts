@@ -4,7 +4,7 @@
 import { Decorators } from '@dolittle/sdk.common';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionField } from '../../Copies/ProjectionField';
+import { ProjectionProperty } from '../../Copies/ProjectionProperty';
 import { Conversion } from '../../Copies/MongoDB/Conversion';
 import { MongoDBConversionDecoratedProperty } from './MongoDBConversionDecoratedProperty';
 
@@ -20,7 +20,7 @@ export function convertToMongoDB(conversion: Conversion): Decorators.Decorator {
         const properties = mongoDBConversionDecoratedProperties || [];
 
         properties.push(new MongoDBConversionDecoratedProperty(
-            ProjectionField.from(propertyKey as string),
+            ProjectionProperty.from(propertyKey as string),
             conversion,
             type));
 

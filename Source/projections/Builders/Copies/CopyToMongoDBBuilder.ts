@@ -1,17 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComplexValueMap } from '@dolittle/sdk.artifacts';
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionField } from '../../Copies/ProjectionField';
+import { ProjectionProperty } from '../../Copies/ProjectionProperty';
 import { CollectionName, CollectionNameLike } from '../../Copies/MongoDB/CollectionName';
 import { Conversion } from '../../Copies/MongoDB/Conversion';
 import { MongoDBCopies } from '../../Copies/MongoDB/MongoDBCopies';
+import { PropertyConversion } from '../../Copies/MongoDB/PropertyConversion';
 import { ProjectionId } from '../../ProjectionId';
 import { ReadModelField } from './../ReadModelField';
 import { ICopyToMongoDBBuilder } from './ICopyToMongoDBBuilder';
+
+type BuilderConversion = { property: string, convertTo: Conversion, children: BuilderConversion[] };
 
 /**
  * Represents an implementation of {@link ICopyToMongoDBBuilder}.
@@ -19,7 +21,7 @@ import { ICopyToMongoDBBuilder } from './ICopyToMongoDBBuilder';
  */
 export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
     private _collectionName?: CollectionName;
-    private readonly _conversions: Map<ProjectionField, Conversion> = new ComplexValueMap(ProjectionField, field => [field.value], 1);
+    private readonly _conversions: Map<string, Conversion> = new Map();
 
     /**
      * Initialises a new instance of the {@link CopyToMongoDBBuilder} class.
@@ -42,7 +44,7 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
 
     /** @inheritdoc */
     withConversion(field: ReadModelField<T>, to: Conversion): ICopyToMongoDBBuilder<T> {
-        this._conversions.set(ProjectionField.from(field), to);
+        this._conversions.set(field, to);
         return this;
     }
 
@@ -57,12 +59,59 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
             return undefined;
         }
 
-        return new MongoDBCopies(true, this._collectionName, this._conversions);
+        return new MongoDBCopies(true, this._collectionName, this.buildPropertyConversions());
     }
 
     private inferCollectionNameFromType() {
         if (this._readModelTypeOrInstance instanceof Function) {
             this._collectionName = CollectionName.from(this._readModelTypeOrInstance.name);
         }
+    }
+
+    private buildPropertyConversions(): PropertyConversion[] {
+        const conversions: BuilderConversion[] = [];
+
+        for (const [field, conversionType] of this._conversions) {
+            const properties = field.split('.');
+            const conversion = this.makeConversionWithParents(conversions, properties);
+            conversion.convertTo = conversionType;
+        }
+
+        return this.convertPropertyConversions(conversions);
+    }
+
+    private makeConversionWithParents(conversions: BuilderConversion[], properties: string[]): BuilderConversion {
+        const current = properties[0];
+        const remainder = properties.slice(1);
+
+        for (const conversion of conversions) {
+            if (conversion.property === current) {
+                if (remainder.length > 0) {
+                    return this.makeConversionWithParents(conversion.children, remainder);
+                }
+
+                return conversion;
+            }
+        }
+
+        const conversion = { property: current, convertTo: Conversion.None, children: [] };
+        conversions.push(conversion);
+        if (remainder.length > 0) {
+            return this.makeConversionWithParents(conversion.children, remainder);
+        }
+
+        return conversion;
+    }
+
+    private convertPropertyConversions(conversions: BuilderConversion[]): PropertyConversion[] {
+        return conversions.map(conversion =>
+            new PropertyConversion(
+                ProjectionProperty.from(conversion.property),
+                conversion.convertTo,
+                false,
+                ProjectionProperty.from(''),
+                this.convertPropertyConversions(conversion.children)
+            )
+        );
     }
 }

@@ -6,17 +6,17 @@
  */
 export enum Conversion {
     /**
-     * Converts the field into a BSON DateTime.
+     * Applies no conversion.
      */
-    DateTime = 1,
+    None = 0,
 
     /**
-     * Converts the field into a BSON Timestamp.
+     * Converts the field into a BSON Date.
      */
-    Timestamp = 2,
+    Date = 1,
 
     /**
-     * Converts the field into a BSON Binary.
+     * Converts the field into a BSON Binary Guid.
      */
-    Binary = 3,
+    Guid = 2,
 }

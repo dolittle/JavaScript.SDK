@@ -4,7 +4,7 @@
 import { Guid, IEquatable } from '@dolittle/rudiments';
 import { Constructor } from '@dolittle/types';
 
-import { ComplexValueMap, Generation } from '@dolittle/sdk.artifacts';
+import { Generation } from '@dolittle/sdk.artifacts';
 import { IClientBuildResults } from '@dolittle/sdk.common';
 import { EventType, EventTypeId, EventTypeIdLike, EventTypeMap,  IEventTypes } from '@dolittle/sdk.events';
 
@@ -13,12 +13,12 @@ import { IProjection } from '../IProjection';
 import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
-import { ProjectionCopies } from '../Copies/ProjectionCopies';
-import { ProjectionField } from '../Copies/ProjectionField';
-import { Conversion } from '../Copies/MongoDB/Conversion';
-import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
 import { getConvertToMongoDBDecoratedProperties } from './Copies/convertToMongoDBDecorator';
 import { getDecoratedCopyProjectionToMongoDB, isDecoratedCopyProjectionToMongoDB } from './Copies/copyProjectionToMongoDBDecorator';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
+import { ProjectionProperty } from '../Copies/ProjectionProperty';
+import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
+import { PropertyConversion } from '../Copies/MongoDB/PropertyConversion';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { getOnDecoratedMethods } from './onDecorator';
 import { ProjectionDecoratedType } from './ProjectionDecoratedType';
@@ -138,10 +138,15 @@ export class ProjectionClassBuilder<T> implements IEquatable {
         const collection = decoratedType.collection;
 
         const decoratedProperties = getConvertToMongoDBDecoratedProperties(this.type.type);
-        const conversions: Map<ProjectionField, Conversion> = new ComplexValueMap(ProjectionField, field => [field.value], 1);
-        for (const decoratedProperty of decoratedProperties) {
-            conversions.set(decoratedProperty.field, decoratedProperty.conversion);
-        }
+        const conversions = decoratedProperties.map(property =>
+            new PropertyConversion(
+                property.property,
+                property.conversion,
+                false,
+                ProjectionProperty.from(''),
+                []
+            )
+        );
 
         return new MongoDBCopies(true, collection, conversions);
     }
