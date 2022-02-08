@@ -3,6 +3,8 @@
 
 import { ConceptAs, createIsConceptAsString } from '@dolittle/concepts';
 
+import { InvalidCollectionName } from './InvalidCollectionName';
+
 /**
  * Defines the types that can be converted into a {@link CollectionName}.
  */
@@ -18,6 +20,34 @@ export class CollectionName extends ConceptAs<string, '@dolittle/sdk.projections
      */
     constructor(name: string) {
         super(name, '@dolittle/sdk.projections.Copies.MongoDB.CollectionName');
+    }
+
+    /**
+     * Checks if the collection name is considered a valid MongoDB collection name.
+     * @returns {[true] | [false, Error]} A value indicating whether or not the collection name is valid, and potentially an error describing why not.
+     */
+    isValid(): [true] | [false, Error] {
+        if (this.value === undefined || this.value === null || this.value.trim().length < 1) {
+            return [false, new InvalidCollectionName(this, 'must not be null or empty')];
+        }
+
+        if (new TextEncoder().encode(this.value).length >= 120) {
+            return [false, new InvalidCollectionName(this, 'must be at most 120 bytes long')];
+        }
+
+        if (this.value.includes('$')) {
+            return [false, new InvalidCollectionName(this, 'cannot contain the character "$"')];
+        }
+
+        if (this.value.includes('\0')) {
+            return [false, new InvalidCollectionName(this, 'cannot contain the null character')];
+        }
+
+        if (this.value.startsWith('system.')) {
+            return [false, new InvalidCollectionName(this, 'cannot start with "system."')];
+        }
+
+        return [true];
     }
 
     /**

@@ -56,6 +56,7 @@ export {
     CollectionNameLike as MongoDBCollectionNameLike,
     isCollectionName as isMongoDBCollectionName,
     Conversion as MongoDBConversion,
+    InvalidCollectionName,
     MongoDBCopies,
     PropertyConversion,
     UnknownMongoDBConversion,
