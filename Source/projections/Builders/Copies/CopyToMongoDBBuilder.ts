@@ -59,6 +59,12 @@ export class CopyToMongoDBBuilder<T> extends ICopyToMongoDBBuilder<T> {
             return undefined;
         }
 
+        const [collectionNameIsValid, collectionNameValidationError] = this._collectionName.isValid();
+        if (!collectionNameIsValid) {
+            results.addFailure(`Cannot create MongoDB read model copies. ${collectionNameValidationError?.message}`);
+            return undefined;
+        }
+
         return new MongoDBCopies(true, this._collectionName, this.buildPropertyConversions());
     }
 
