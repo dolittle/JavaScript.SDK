@@ -43,6 +43,7 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
+import { ResourcesFetcher } from '@dolittle/sdk.resources/Distribution/Internal/ResourcesFetcher';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -57,7 +58,7 @@ export class DolittleClient extends IDolittleClient {
     private _projectionStore?: ProjectionStoreBuilder;
     private _embeddingStore?: Embeddings;
     private _tenants: readonly Tenant[] = [];
-    private _resources?: ResourcesBuilder;
+    private _resources?: IResourcesBuilder;
     private _services?: TenantServiceProviders;
     private _eventHorizons?: IEventHorizons;
 
@@ -219,14 +220,16 @@ export class DolittleClient extends IDolittleClient {
             const connectionResult = await connector.connect(cancellation);
             this._tenants = connectionResult.tenants;
 
-            this.buildClientServices(
+            await this.buildClientServices(
                 clients.eventStore,
                 clients.projectionStore,
                 clients.embeddingStore,
                 clients.embeddings,
                 clients.resources,
                 connectionResult.executionContext,
-                this._logger);
+                connectionResult.tenants,
+                this._logger,
+                this._cancellationSource.cancellation);
 
             this.registerTypes(
                 clients.eventTypes,
@@ -262,15 +265,17 @@ export class DolittleClient extends IDolittleClient {
         }
     }
 
-    private buildClientServices(
+    private async buildClientServices(
         eventStoreClient: EventStoreClient,
         projectionStoreClient: ProjectionStoreClient,
         embeddingStoreClient: EmbeddingStoreClient,
         embeddingsClient: EmbeddingsClient,
         resourcesClient: ResourcesClient,
         executionContext: ExecutionContext,
-        logger: Logger
-    ) {
+        tenants: readonly Tenant[],
+        logger: Logger,
+        cancellation: Cancellation,
+    ): Promise<void> {
         this._eventStore = new EventStoreBuilder(
             eventStoreClient,
             this.eventTypes,
@@ -296,10 +301,14 @@ export class DolittleClient extends IDolittleClient {
             this._embeddingReadModelTypes,
             logger);
 
-        this._resources = new ResourcesBuilder(
+        this._resources = await new ResourcesFetcher(
             resourcesClient,
             executionContext,
-            logger);
+            logger,
+        ).fetchResourcesFor(
+            tenants,
+            cancellation,
+        );
     }
 
     private registerTypes(

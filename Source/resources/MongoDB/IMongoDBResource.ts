@@ -3,17 +3,12 @@
 
 import { Db } from 'mongodb';
 
-import { Cancellation } from '@dolittle/sdk.resilience';
-
-import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
-
-import { Resource } from '../Resource';
 import { DatabaseSettingsCallback } from './DatabaseSettingsCallback';
 
 /**
- * Represents an implementation of {@link Resource} for MongoDB.
+ * Defines a MongoDB resource.
  */
-export abstract class IMongoDBResource extends Resource<GetRequest, GetMongoDBResponse> {
+export abstract class IMongoDBResource {
     /**
      * Gets the MongoDB database.
      * @returns {Db} The MongoDB database.

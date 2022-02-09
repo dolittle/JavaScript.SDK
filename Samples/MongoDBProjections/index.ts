@@ -11,29 +11,37 @@ import { DateTime } from 'luxon';
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
 
+import { MongoClient } from 'mongodb';
+
 (async () => {
-    const client = await DolittleClient
-        .setup()
-        .connect();
+    const client = new MongoClient('mongodb://localhost:27017');
+    const collection = client.db('hello').collection('hello');
 
-    const eventStore = client.eventStore.forTenant(TenantId.development);
+    const result = await collection.insertOne({ some: 'data' });
+    console.log(result);
 
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
-    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
-    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
+    //const client = await DolittleClient
+    //    .setup()
+    //    .connect();
 
-    await setTimeout(1000);
+    //const eventStore = client.eventStore.forTenant(TenantId.development);
 
-    const db = await client.resources.forTenant(TenantId.development).mongoDB.getDatabase();
-    const dishCounterCollection = db.collection(DishCounter);
+    //await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
+    //await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
+    //await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
+    //await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
-    for (const { name, numberOfTimesPrepared, lastPrepared } of await dishCounterCollection.find().toArray()) {
-        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times. The last time was ${lastPrepared}`);
-    }
+    //await setTimeout(1000);
 
-    const dishesPreparedToday = await dishCounterCollection.find({ lastPrepared: { $gte: DateTime.utc().startOf('day').toJSDate(), $lte: DateTime.utc().endOf('day').toJSDate() }}).toArray();
-    for (const { name } of await dishCounterCollection.find().toArray()) {
-        client.logger.info(`The kitchen has prepared ${name} today`);
-    }
+    //const db = await client.resources.forTenant(TenantId.development).mongoDB.getDatabase();
+    //const dishCounterCollection = db.collection(DishCounter);
+
+    //for (const { name, numberOfTimesPrepared, lastPrepared } of await dishCounterCollection.find().toArray()) {
+    //    client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times. The last time was ${lastPrepared}`);
+    //}
+
+    //const dishesPreparedToday = await dishCounterCollection.find({ lastPrepared: { $gte: DateTime.utc().startOf('day').toJSDate(), $lte: DateTime.utc().endOf('day').toJSDate() }}).toArray();
+    //for (const { name } of await dishCounterCollection.find().toArray()) {
+    //    client.logger.info(`The kitchen has prepared ${name} today`);
+    //}
 })();
