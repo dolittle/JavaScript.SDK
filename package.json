@@ -9,7 +9,8 @@
     "Samples/Tutorials/EventHorizon/Consumer",
     "Samples/Tutorials/EventHorizon/Producer",
     "Samples/Container",
-    "Samples/ExpressJS"
+    "Samples/ExpressJS",
+    "Samples/MongoDBProjections"
   ],
   "scripts": {
     "prebuild": "yarn clean && yarn copy-readme",
