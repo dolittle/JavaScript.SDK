@@ -52,6 +52,7 @@ import { ResourcesFetcher } from '@dolittle/sdk.resources/Distribution/Internal/
 export class DolittleClient extends IDolittleClient {
     private _cancellationSource: CancellationSource = new CancellationSource();
     private _connected: boolean = false;
+    private _connectedPromiseResolver!: () => void;
     private _processorTracker: ITrackProcessors = new ProcessorTracker();
 
     private _eventStore?: EventStoreBuilder;
@@ -95,12 +96,16 @@ export class DolittleClient extends IDolittleClient {
         private readonly _subscriptionCallbacks: SubscriptionCallbacks,
         ) {
             super();
+            this.connected = new Promise(resolve => this._connectedPromiseResolver = resolve);
         }
 
     /** @inheritdoc */
-    get connected(): boolean {
+    get isConnected(): boolean {
         return this._connected;
     }
+
+    /** @inheritdoc */
+    readonly connected: Promise<void>;
 
     /** @inheritdoc */
     get eventStore(): IEventStoreBuilder {
@@ -259,6 +264,8 @@ export class DolittleClient extends IDolittleClient {
                 this._logger,
                 configuration.pingInterval,
                 this._cancellationSource.cancellation);
+
+            this._connectedPromiseResolver();
 
         } catch (exception) {
             this._connected = false;
