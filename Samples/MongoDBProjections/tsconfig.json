@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.settings.json",
+    "compilerOptions": {
+        "sourceRoot": "../",
+        "inlineSourceMap": true,
+        "sourceMap": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "outDir": "Distribution"
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules", "Distribution"],
+    "references": [
+        { "path": "../../Source/sdk" }
+    ]
+}

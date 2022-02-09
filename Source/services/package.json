@@ -46,7 +46,7 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
-        "@dolittle/contracts": "6.6.0-sam.3",
+        "@dolittle/contracts": "6.6.0",
         "@dolittle/rudiments": "6.0.0",
         "@dolittle/sdk.common": "22.2.0-sam.4",
         "@dolittle/sdk.dependencyinversion": "22.2.0-sam.4",

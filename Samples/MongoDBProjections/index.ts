@@ -6,24 +6,14 @@
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { setTimeout } from 'timers/promises';
+import { DateTime } from 'luxon';
 
-import { Chef } from './Chef';
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
 
 (async () => {
     const client = await DolittleClient
-        .setup(builder => builder
-            .withProjections(_ => _
-                .create('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
-                    .forReadModel(Chef)
-                    .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
-                        chef.name = event.Chef;
-                        if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
-                        return chef;
-                    })
-            )
-        )
+        .setup()
         .connect();
 
     const eventStore = client.eventStore.forTenant(TenantId.development);
@@ -35,10 +25,15 @@ import { DishPrepared } from './DishPrepared';
 
     await setTimeout(1000);
 
-    for (const { name, numberOfTimesPrepared } of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times`);
+    const db = await client.resources.forTenant(TenantId.development).mongoDB.getDatabase();
+    const dishCounterCollection = db.collection(DishCounter);
+
+    for (const { name, numberOfTimesPrepared, lastPrepared } of await dishCounterCollection.find().toArray()) {
+        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times. The last time was ${lastPrepared}`);
     }
 
-    const chef = await client.projections.forTenant(TenantId.development).get(Chef, 'Mrs. Tex Mex');
-    client.logger.info(`${chef.name} has prepared ${chef.dishes.join(', ')}`);
+    const dishesPreparedToday = await dishCounterCollection.find({ lastPrepared: { $gte: DateTime.utc().startOf('day').toJSDate(), $lte: DateTime.utc().endOf('day').toJSDate() }}).toArray();
+    for (const { name } of await dishCounterCollection.find().toArray()) {
+        client.logger.info(`The kitchen has prepared ${name} today`);
+    }
 })();
