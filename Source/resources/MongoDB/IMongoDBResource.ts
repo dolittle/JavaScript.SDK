@@ -15,17 +15,15 @@ import { DatabaseSettingsCallback } from './DatabaseSettingsCallback';
  */
 export abstract class IMongoDBResource extends Resource<GetRequest, GetMongoDBResponse> {
     /**
-     * Gets the the MongoDB database.
-     * @param {Cancellation} cancellation - The optional {@link Cancellation}.
-     * @returns {Promise<Db>} A {@link Promise} that when resolved returns the {@link Db} MongoDB Database.
+     * Gets the MongoDB database.
+     * @returns {Db} The MongoDB database.
      */
-    abstract getDatabase(cancellation?: Cancellation): Promise<Db>;
+    abstract getDatabase(): Db;
 
     /**
-     * Gets the the MongoDB database.
-     * @param {DatabaseSettingsCallback} databaseSettingsCallback - The optional {@link DatabaseSettingsCallback}.
-     * @param {Cancellation} cancellation - The optional {@link Cancellation}.
-     * @returns {Promise<Db>} A {@link Promise} that when resolved returns the {@link Db} MongoDB Database.
+     * Gets the MongoDB database.
+     * @param {DatabaseSettingsCallback} databaseSettingsCallback - A callback to use to configure the database settings.
+     * @returns {Db} The MongoDB database.
      */
-    abstract getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db>;
+    abstract getDatabase(databaseSettingsCallback: DatabaseSettingsCallback): Db;
 }
