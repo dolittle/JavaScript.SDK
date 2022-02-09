@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import * as grpc from '@grpc/grpc-js';
+import { Db } from 'mongodb';
 import { Logger } from 'winston';
 
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
@@ -355,6 +356,8 @@ export class DolittleClient extends IDolittleClient {
 
             bindings.bind(IResources).toFactory(() => this._resources!.forTenant(tenant));
             bindings.bind(IResources.name).toFactory(() => this._resources!.forTenant(tenant));
+
+            bindings.bind(Db).toFactory(services => services.get(IResources).mongoDB.getDatabase());
         });
 
         for (const callback of configuredCallbacks) {

@@ -56,10 +56,13 @@
         "@dolittle/sdk.execution": "22.2.0",
         "@dolittle/sdk.protobuf": "22.2.0",
         "@dolittle/sdk.resilience": "22.2.0",
+        "@dolittle/sdk.resources": "22.2.0",
         "@dolittle/sdk.services": "22.2.0",
         "@dolittle/types": "6.0.0",
         "luxon": "1.24.1",
-        "@types/luxon": "1.24.1"
+        "mongodb": "4.1.4"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "@types/luxon": "1.24.1"
+    }
 }
