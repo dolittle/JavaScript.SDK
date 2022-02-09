@@ -1,6 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export * as Copies from './Copies/_exports';
+
 export { CouldNotCreateInstanceOfProjection } from './CouldNotCreateInstanceOfProjection';
 export { IProjectionBuilder } from './IProjectionBuilder';
 export { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
@@ -21,4 +23,5 @@ export { ProjectionsBuilder } from './ProjectionsBuilder';
 export { ProjectionsBuilderCallback } from './ProjectionsBuilderCallback';
 export { ProjectionsModelBuilder } from './ProjectionsModelBuilder';
 export { ReadModelAlreadyDefinedForProjection } from './ReadModelAlreadyDefinedForProjection';
+export { ReadModelField } from './ReadModelField';
 export { TypeOrEventType } from './TypeOrEventType';

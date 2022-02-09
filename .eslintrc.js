@@ -13,7 +13,7 @@ module.exports = {
         '@typescript-eslint/unified-signatures': 'off',
         'import/no-extraneous-dependencies': 'off',
         'eol-last': 'error',
-        'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
+        'no-multiple-empty-lines': ['error', {'max': 1, 'maxEOF': 0 }],
         'header/header': [
             2,
             'line',
@@ -61,7 +61,7 @@ module.exports = {
 		        'MethodDefinition[accessibility!="private"][value.type="FunctionExpression"]:not(MethodDefinition[value.type="TSEmptyBodyFunctionExpression"] + MethodDefinition[value.type="FunctionExpression"])',
             ]
         }],
-        
+
         'jsdoc/require-returns': ['error', {
             'contexts': [
                 'ArrowFunctionExpression',

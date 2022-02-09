@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-producer",
     "private": true,
-    "version": "22.1.0",
+    "version": "22.2.0-sam.5",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "22.1.0",
-        "@dolittle/sdk.artifacts": "22.1.0",
-        "@dolittle/sdk.eventhorizon": "22.1.0",
-        "@dolittle/sdk.events": "22.1.0",
-        "@dolittle/sdk.events.handling": "22.1.0"
+        "@dolittle/sdk": "22.2.0-sam.5",
+        "@dolittle/sdk.artifacts": "22.2.0-sam.5",
+        "@dolittle/sdk.eventhorizon": "22.2.0-sam.5",
+        "@dolittle/sdk.events": "22.2.0-sam.5",
+        "@dolittle/sdk.events.handling": "22.2.0-sam.5"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",

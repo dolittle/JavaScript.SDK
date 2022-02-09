@@ -27,8 +27,40 @@ export {
     ProjectionsBuilderCallback,
     ProjectionsModelBuilder,
     ReadModelAlreadyDefinedForProjection,
+    ReadModelField,
     TypeOrEventType,
 } from './Builders/_exports';
+
+export {
+    convertToMongoDB,
+    getConvertToMongoDBDecoratedProperties,
+    CopyProjectionToMongoDBDecoratedType,
+    copyProjectionToMongoDB,
+    isDecoratedCopyProjectionToMongoDB,
+    getDecoratedCopyProjectionToMongoDB,
+    CopyToMongoDBBuilder,
+    CopyToMongoDBCallback,
+    ICopyToMongoDBBuilder,
+    MongoDBConversionDecoratedProperty,
+} from './Builders/Copies/_exports';
+
+export {
+    ProjectionProperty,
+    ProjectionPropertyLike,
+    isProjectionProperty,
+    ProjectionCopies,
+} from './Copies/_exports';
+
+export {
+    CollectionName as MongoDBCollectionName,
+    CollectionNameLike as MongoDBCollectionNameLike,
+    isCollectionName as isMongoDBCollectionName,
+    Conversion as MongoDBConversion,
+    InvalidCollectionName,
+    MongoDBCopies,
+    PropertyConversion,
+    UnknownMongoDBConversion,
+} from './Copies/MongoDB/_exports';
 
 export {
     CurrentState,

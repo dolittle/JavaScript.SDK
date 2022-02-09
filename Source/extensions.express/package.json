@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.extensions.express",
-    "version": "22.1.0",
+    "version": "22.2.0-sam.5",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -46,14 +46,14 @@
     },
     "dependencies": {
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/sdk": "22.1.0",
-        "@dolittle/sdk.aggregates": "22.1.0",
-        "@dolittle/sdk.dependencyinversion": "22.1.0",
-        "@dolittle/sdk.embeddings": "22.1.0",
-        "@dolittle/sdk.events": "22.1.0",
-        "@dolittle/sdk.execution": "22.1.0",
-        "@dolittle/sdk.projections": "22.1.0",
-        "@dolittle/sdk.resources": "22.1.0",
+        "@dolittle/sdk": "22.2.0-sam.5",
+        "@dolittle/sdk.aggregates": "22.2.0-sam.5",
+        "@dolittle/sdk.dependencyinversion": "22.2.0-sam.5",
+        "@dolittle/sdk.embeddings": "22.2.0-sam.5",
+        "@dolittle/sdk.events": "22.2.0-sam.5",
+        "@dolittle/sdk.execution": "22.2.0-sam.5",
+        "@dolittle/sdk.projections": "22.2.0-sam.5",
+        "@dolittle/sdk.resources": "22.2.0-sam.5",
         "winston": "3.3.2"
     },
     "devDependencies": {

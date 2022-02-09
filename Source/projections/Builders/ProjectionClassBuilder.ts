@@ -13,6 +13,12 @@ import { IProjection } from '../IProjection';
 import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
+import { getConvertToMongoDBDecoratedProperties } from './Copies/convertToMongoDBDecorator';
+import { getDecoratedCopyProjectionToMongoDB, isDecoratedCopyProjectionToMongoDB } from './Copies/copyProjectionToMongoDBDecorator';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
+import { ProjectionProperty } from '../Copies/ProjectionProperty';
+import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
+import { PropertyConversion } from '../Copies/MongoDB/PropertyConversion';
 import { OnDecoratedProjectionMethod } from './OnDecoratedProjectionMethod';
 import { getOnDecoratedMethods } from './onDecorator';
 import { ProjectionDecoratedType } from './ProjectionDecoratedType';
@@ -54,7 +60,13 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             results.addFailure(`Could not create projection ${this.type.type.name} because it contains invalid projection methods`, 'Maybe you have multiple @on methods handling the same event type?');
             return;
         }
-        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events);
+
+        const copies = this.buildCopies(results);
+        if (copies === undefined) {
+            return undefined;
+        }
+
+        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies);
     }
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {
@@ -112,5 +124,45 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             }
             return instance;
         };
+    }
+
+    private buildCopies(results: IClientBuildResults): ProjectionCopies | undefined {
+        const mongoDBCopies = this.buildMongoDBCopies(results);
+
+        if (mongoDBCopies === undefined) {
+            return undefined;
+        }
+
+        return new ProjectionCopies(
+            mongoDBCopies,
+        );
+    }
+
+    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies | undefined {
+        if (!isDecoratedCopyProjectionToMongoDB(this.type.type)) {
+            return MongoDBCopies.default;
+        }
+
+        const decoratedType = getDecoratedCopyProjectionToMongoDB(this.type.type);
+        const collection = decoratedType.collection;
+
+        const [collectionNameIsValid, collectionNameValidationError] = collection.isValid();
+        if (!collectionNameIsValid) {
+            results.addFailure(`Cannot create MongoDB read model copies. ${collectionNameValidationError?.message}`);
+            return undefined;
+        }
+
+        const decoratedProperties = getConvertToMongoDBDecoratedProperties(this.type.type);
+        const conversions = decoratedProperties.map(property =>
+            new PropertyConversion(
+                property.property,
+                property.conversion,
+                false,
+                ProjectionProperty.from(''),
+                []
+            )
+        );
+
+        return new MongoDBCopies(true, collection, conversions);
     }
 }

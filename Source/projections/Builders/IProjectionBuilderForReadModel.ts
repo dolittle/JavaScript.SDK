@@ -8,6 +8,7 @@ import { Generation } from '@dolittle/sdk.artifacts';
 import { EventType, EventTypeIdLike, ScopeId } from '@dolittle/sdk.events';
 
 import { ProjectionCallback } from '../ProjectionCallback';
+import { CopyToMongoDBCallback } from './Copies/CopyToMongoDBCallback';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 
 /**
@@ -59,4 +60,11 @@ export abstract class IProjectionBuilderForReadModel<T> {
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     abstract inScope(scopeId: ScopeId | Guid | string): IProjectionBuilderForReadModel<T>;
+
+    /**
+     * Configures the projection to write copies of read models to a MongoDB collection.
+     * @param {CopyToMongoDBCallback} [callback] - An optional callback to use to configure the read model copies.
+     * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
+     */
+    abstract copyToMongoDB(callback?: CopyToMongoDBCallback<T>): IProjectionBuilderForReadModel<T>;
 }

@@ -13,20 +13,25 @@ import { KeySelector } from '../KeySelector';
 import { Projection } from '../Projection';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { ProjectionId } from '../ProjectionId';
+import { ProjectionModelId } from '../ProjectionModelId';
+import { ProjectionCopies } from '../Copies/ProjectionCopies';
+import { MongoDBCopies } from '../Copies/MongoDB/MongoDBCopies';
+import { CopyToMongoDBCallback } from './Copies/CopyToMongoDBCallback';
+import { CopyToMongoDBBuilder } from './Copies/CopyToMongoDBBuilder';
 import { IProjectionBuilderForReadModel } from './IProjectionBuilderForReadModel';
 import { KeySelectorBuilder } from './KeySelectorBuilder';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
-import { ProjectionModelId } from '../ProjectionModelId';
-import { ProjectionBuilder } from '..';
+import { ProjectionBuilder } from './ProjectionBuilder';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
  * @template T The type of the projection read model.
  */
 export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadModel<T> {
-    private onMethods: OnMethodSpecification<T>[] = [];
+    private _onMethods: OnMethodSpecification<T>[] = [];
+    private _copyToMongoDBCallback?: CopyToMongoDBCallback<T>;
 
     /**
      * Initializes a new instance of {@link ProjectionBuilder}.
@@ -68,7 +73,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             : keySelectorCallbackOrCallback as KeySelectorBuilderCallback<TEvent>;
         const callback = maybeCallback || keySelectorCallbackOrCallback as ProjectionCallback<T>;
 
-        this.onMethods.push([typeOrEventType, keySelectorCallback, callback]);
+        this._onMethods.push([typeOrEventType, keySelectorCallback, callback]);
 
         return this;
     }
@@ -81,6 +86,12 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         return this;
     }
 
+    /** @inheritdoc */
+    copyToMongoDB(callback?: CopyToMongoDBCallback<T>): IProjectionBuilderForReadModel<T> {
+        this._copyToMongoDBCallback = callback ?? (() => {});
+        return this;
+    }
+
     /**
      * Builds the projection.
      * @param {IEventTypes} eventTypes - For event types resolution.
@@ -90,7 +101,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
     build(eventTypes: IEventTypes, results: IClientBuildResults): IProjection<T> | undefined {
 
         const events = new EventTypeMap<[ProjectionCallback<T>, KeySelector]>();
-        if (this.onMethods.length < 1) {
+        if (this._onMethods.length < 1) {
             results.addFailure(`Failed to register projection ${this._projectionId}. No on methods are configured`);
             return;
         }
@@ -99,7 +110,14 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             results.addFailure(`Failed to register projection ${this._projectionId}. Could not build projection`, 'Maybe it tries to handle the same type of event twice?');
             return;
         }
-        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events);
+
+        const copies = this.buildCopies(results);
+        if (copies === undefined) {
+            results.addFailure(`Failed to register projection ${this._projectionId}. Copies specification is not valid`);
+            return undefined;
+        }
+
+        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events, copies);
     }
 
     private tryAddOnMethods(
@@ -107,7 +125,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>): boolean {
         let allMethodsValid = true;
         const keySelectorBuilder = new KeySelectorBuilder();
-        for (const [typeOrEventTypeOrId, keySelectorBuilderCallback, method] of this.onMethods) {
+        for (const [typeOrEventTypeOrId, keySelectorBuilderCallback, method] of this._onMethods) {
             const eventType = this.getEventType(typeOrEventTypeOrId, eventTypes);
             if (events.has(eventType)) {
                 allMethodsValid = false;
@@ -142,6 +160,28 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             eventType = eventTypes.getFor(typeOrEventTypeOrId);
         }
         return eventType;
+    }
+
+    private buildCopies(results: IClientBuildResults): ProjectionCopies | undefined {
+        const mongoDBCopies = this.buildMongoDBCopies(results);
+
+        if (mongoDBCopies === undefined) {
+            return undefined;
+        }
+
+        return new ProjectionCopies(
+            mongoDBCopies,
+        );
+    }
+
+    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies | undefined {
+        if (this._copyToMongoDBCallback === undefined) {
+            return MongoDBCopies.default;
+        }
+
+        const builder = new CopyToMongoDBBuilder(this._projectionId, this._readModelTypeOrInstance);
+        this._copyToMongoDBCallback(builder);
+        return builder.build(results);
     }
 
     private get _modelId(): ProjectionModelId {

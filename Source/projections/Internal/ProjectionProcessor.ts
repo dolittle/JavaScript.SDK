@@ -3,7 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { Logger } from 'winston';
-import { Constructor } from '@dolittle/types';
+import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
 
 import { IServiceProvider } from '@dolittle/sdk.dependencyinversion';
 import { EventContext, EventSourceId, EventType, IEventTypes } from '@dolittle/sdk.events';
@@ -17,7 +17,7 @@ import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import {
-    EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
+    EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionCopies, ProjectionCopyToMongoDB, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
     ProjectionRegistrationResponse, ProjectionReplaceResponse, ProjectionRequest,
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
@@ -33,6 +33,9 @@ import { PartitionIdKeySelector } from '../PartitionIdKeySelector';
 import { ProjectionContext } from '../ProjectionContext';
 import { ProjectionId } from '../ProjectionId';
 import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
+import { Conversion } from '../Copies/MongoDB/Conversion';
+import { UnknownMongoDBConversion } from '../Copies/MongoDB/UnknownMongoDBConversion';
+import { PropertyConversion } from '../Copies/MongoDB/PropertyConversion';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
@@ -57,6 +60,7 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         registerArguments.setProjectionid(Guids.toProtobuf(this._projection.projectionId.value));
         registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
         registerArguments.setInitialstate(JSON.stringify(this._projection.initialState));
+        registerArguments.setCopies(this.createCopiesSpecification());
 
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {
@@ -81,6 +85,52 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         } else {
             throw new UnknownKeySelectorType(selector);
         }
+    }
+
+    private createCopiesSpecification(): ProjectionCopies {
+        const copies = new ProjectionCopies();
+
+        if (this._projection.copies.mongoDB.shouldCopyToMongoDB) {
+            const mongoDB = new ProjectionCopyToMongoDB();
+            mongoDB.setCollection(this._projection.copies.mongoDB.collectionName.value);
+            mongoDB.setConversionsList(this.createMongoDBPropertyConversions(this._projection.copies.mongoDB.conversions));
+            copies.setMongodb(mongoDB);
+        }
+
+        return copies;
+    }
+
+    private createMongoDBPropertyConversions(conversions: PropertyConversion[]): ProjectionCopyToMongoDB.PropertyConversion[] {
+        return conversions.map(conversion => {
+            const pbConversion = new ProjectionCopyToMongoDB.PropertyConversion();
+
+            pbConversion.setPropertyname(conversion.property.value);
+
+            const pbConversionType =
+                conversion.convertTo === Conversion.None ? ProjectionCopyToMongoDB.BSONType.NONE :
+                conversion.convertTo === Conversion.Date ? ProjectionCopyToMongoDB.BSONType.DATEASDATE :
+                conversion.convertTo === Conversion.DateAsArray ? ProjectionCopyToMongoDB.BSONType.DATEASARRAY :
+                conversion.convertTo === Conversion.DateAsDocument ? ProjectionCopyToMongoDB.BSONType.DATEASDOCUMENT :
+                conversion.convertTo === Conversion.DateAsString ? ProjectionCopyToMongoDB.BSONType.DATEASSTRING :
+                conversion.convertTo === Conversion.DateAsInt64 ? ProjectionCopyToMongoDB.BSONType.DATEASINT64 :
+                conversion.convertTo === Conversion.Guid ? ProjectionCopyToMongoDB.BSONType.GUIDASSTANDARDBINARY :
+                conversion.convertTo === Conversion.GuidAsCSharpLegacy ? ProjectionCopyToMongoDB.BSONType.GUIDASCSHARPLEGACYBINARY :
+                conversion.convertTo === Conversion.GuidAsString ? ProjectionCopyToMongoDB.BSONType.GUIDASSTRING :
+                undefined;
+            if (pbConversionType === undefined) {
+                throw new UnknownMongoDBConversion(conversion.convertTo);
+            }
+            pbConversion.setConvertto(pbConversionType);
+
+            if (conversion.shouldRename) {
+                const renameTo = new StringValue();
+                renameTo.setValue(conversion.renameTo.value);
+                pbConversion.setRenameto(renameTo);
+            }
+
+            pbConversion.setChildrenList(this.createMongoDBPropertyConversions(conversion.children));
+            return pbConversion;
+        });
     }
 
     /** @inheritdoc */
