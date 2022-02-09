@@ -1,3 +1,18 @@
+# [22.2.0] - 2022-2-9 [PR: #114](https://github.com/dolittle/JavaScript.SDK/pull/114)
+## Summary
+
+Introduces APIs to configure secondary storage for Projection read models for querying, as introduced in https://github.com/dolittle/Runtime/pull/614 (requires Runtime v7.6.0). These changes makes it easy to query Projection read models by specifying that you want copies stored in MongoDB, and then use an `IMongoCollection<>` for that Projection as any other MongoDB collection. The Projection still operates normally and can be fetched from the Projection Store. Modifications of documents in the copied collections will affect the original Projection processing, but should be avoided as it could cause unexpected behaviour. The collections are automatically created and dropped as needed by the Runtime when Projections are created or changed.
+
+There is currently no mechanism for detecting multiple projections copied to the same collection, so be aware of possible strange behaviour if you have multiple Projections with the same name.
+
+### Added
+
+- The `@copyToMongoDB(...)` decorator that enables read model copies for a Projection class to MongoDB. The default collection name is the same as the class name. The decorator accepts an argument to override the collection name.
+- The `@convertToMongoDB(conversion)` decorator to specify a BSON conversion to apply when copying the Projection read model to a MongoDB collection.
+- A `.copyToMongoDB(...)` method on the Projection builder for enabling read model copies for Projections created using the builder API. This method accepts a callback that you can use to set the collection name and conversions for the read model copies.
+- Extension method `Db.collection(readModelType, settings?)` to get a collection using the name of the read model or the collection specified in the `@copyToMongoDB(collection)` decorator.
+
+
 # [22.1.0] - 2022-1-28 [PR: #113](https://github.com/dolittle/JavaScript.SDK/pull/113)
 ## Summary
 
