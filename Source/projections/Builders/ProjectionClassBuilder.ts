@@ -62,6 +62,9 @@ export class ProjectionClassBuilder<T> implements IEquatable {
         }
 
         const copies = this.buildCopies(results);
+        if (copies === undefined) {
+            return undefined;
+        }
 
         return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies);
     }
@@ -123,19 +126,31 @@ export class ProjectionClassBuilder<T> implements IEquatable {
         };
     }
 
-    private buildCopies(results: IClientBuildResults): ProjectionCopies {
+    private buildCopies(results: IClientBuildResults): ProjectionCopies | undefined {
+        const mongoDBCopies = this.buildMongoDBCopies(results);
+
+        if (mongoDBCopies === undefined) {
+            return undefined;
+        }
+
         return new ProjectionCopies(
-            this.buildMongoDBCopies(results),
+            mongoDBCopies,
         );
     }
 
-    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies {
+    private buildMongoDBCopies(results: IClientBuildResults): MongoDBCopies | undefined {
         if (!isDecoratedCopyProjectionToMongoDB(this.type.type)) {
             return MongoDBCopies.default;
         }
 
         const decoratedType = getDecoratedCopyProjectionToMongoDB(this.type.type);
         const collection = decoratedType.collection;
+
+        const [collectionNameIsValid, collectionNameValidationError] = collection.isValid();
+        if (!collectionNameIsValid) {
+            results.addFailure(`Cannot create MongoDB read model copies. ${collectionNameValidationError?.message}`);
+            return undefined;
+        }
 
         const decoratedProperties = getConvertToMongoDBDecoratedProperties(this.type.type);
         const conversions = decoratedProperties.map(property =>

@@ -108,8 +108,14 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
 
             const pbConversionType =
                 conversion.convertTo === Conversion.None ? ProjectionCopyToMongoDB.BSONType.NONE :
-                conversion.convertTo === Conversion.Date ? ProjectionCopyToMongoDB.BSONType.DATE :
-                conversion.convertTo === Conversion.Guid ? ProjectionCopyToMongoDB.BSONType.GUID :
+                conversion.convertTo === Conversion.Date ? ProjectionCopyToMongoDB.BSONType.DATEASDATE :
+                conversion.convertTo === Conversion.DateAsArray ? ProjectionCopyToMongoDB.BSONType.DATEASARRAY :
+                conversion.convertTo === Conversion.DateAsDocument ? ProjectionCopyToMongoDB.BSONType.DATEASDOCUMENT :
+                conversion.convertTo === Conversion.DateAsString ? ProjectionCopyToMongoDB.BSONType.DATEASSTRING :
+                conversion.convertTo === Conversion.DateAsInt64 ? ProjectionCopyToMongoDB.BSONType.DATEASINT64 :
+                conversion.convertTo === Conversion.Guid ? ProjectionCopyToMongoDB.BSONType.GUIDASSTANDARDBINARY :
+                conversion.convertTo === Conversion.GuidAsCSharpLegacy ? ProjectionCopyToMongoDB.BSONType.GUIDASCSHARPLEGACYBINARY :
+                conversion.convertTo === Conversion.GuidAsString ? ProjectionCopyToMongoDB.BSONType.GUIDASSTRING :
                 undefined;
             if (pbConversionType === undefined) {
                 throw new UnknownMongoDBConversion(conversion.convertTo);
