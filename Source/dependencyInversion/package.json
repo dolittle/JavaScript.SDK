@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.dependencyinversion",
-    "version": "22.2.0-sam.5",
+    "version": "22.2.0",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -44,8 +44,8 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/sdk.common": "22.2.0-sam.5",
-        "@dolittle/sdk.execution": "22.2.0-sam.5",
+        "@dolittle/sdk.common": "22.2.0",
+        "@dolittle/sdk.execution": "22.2.0",
         "@dolittle/types": "6.0.0",
         "inversify": "6.0.1",
         "winston": "3.3.2"
