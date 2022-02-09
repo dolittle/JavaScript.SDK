@@ -1,7 +1,7 @@
 {
     "name": "mongodb-projections",
     "private": true,
-    "version": "22.2.0-sam.4",
+    "version": "22.2.0-sam.5",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "22.2.0-sam.4",
-        "@dolittle/sdk.artifacts": "22.2.0-sam.4",
-        "@dolittle/sdk.events": "22.2.0-sam.4",
-        "@dolittle/sdk.events.handling": "22.2.0-sam.4",
+        "@dolittle/sdk": "22.2.0-sam.5",
+        "@dolittle/sdk.artifacts": "22.2.0-sam.5",
+        "@dolittle/sdk.events": "22.2.0-sam.5",
+        "@dolittle/sdk.events.handling": "22.2.0-sam.5",
         "inversify": "^6.0.1",
         "reflect-metadata": "^0.1.13",
         "winston": "^3.3.4"
