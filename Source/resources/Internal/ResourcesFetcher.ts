@@ -43,14 +43,14 @@ export class ResourcesFetcher extends IFetchResources {
     async fetchResourcesFor(tenants: readonly Tenant[], cancellation: Cancellation = Cancellation.default): Promise<IResourcesBuilder> {
         const resources: Map<TenantId, IResources> = new ComplexValueMap(TenantId, _ => [_.value.toString()], 1);
 
-        for (const tenant of tenants) {
+        await Promise.all(tenants.map(async tenant => {
             resources.set(
                 tenant.id,
                 new Resources(
                     await this._mongoDB.createFor(tenant.id, cancellation),
                 ),
             );
-        }
+        }));
 
         return new ResourcesBuilder(resources);
     }
