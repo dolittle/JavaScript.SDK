@@ -13,7 +13,7 @@ export abstract class IFetchResources {
     /**
      * Creates a {@link IResourcesBuilder} by fetching resources for the provided tenants.
      * @param {Tenant[]} tenants - The tenants to fetch resources for.
-     * @param {Cancellation} [cancellation] - An option cancellation to cancel the operation.
+     * @param {Cancellation} [cancellation] - An optional cancellation to cancel the operation.
      * @returns {Promise<IResourcesBuilder>} A {@link Promise} that, when resolved, returns the {@link IResourcesBuilder}.
      */
     abstract fetchResourcesFor(tenants: readonly Tenant[], cancellation?: Cancellation): Promise<IResourcesBuilder>;
