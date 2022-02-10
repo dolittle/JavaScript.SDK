@@ -1,3 +1,20 @@
+# [23.0.0] - 2022-2-10 [PR: #121](https://github.com/dolittle/JavaScript.SDK/pull/121)
+## Summary
+
+The Dolittle Client now fetches resources while establishing the initial connection so that we could make the resources interfaces synchronous, simplifying the usage and allowing us to bind the MongoDB types in the DI container. Collections that are created by copying Projection read models are bound in the tenant scoped DI containers. The `.connected` property on the client has been changed to a `Promise` so you can await the connection asynchronously. The old boolean property has been moved to `.isConnected`. 
+
+### Added
+
+- A new property `IDolittleClient.connected` that returns a `Promise<void>` that is resolved when the client is successfully connected to a Runtime.
+- A binding for the MongoDB `Db` type in the tenant scoped DI containers. 
+- Bindings for MongoDB `Collection<TReadModel>` types in the tenant scoped DI containers for Projections with read models copied to MongoDB. These can be resolved using the service identifier provided by the extension method `Collection.forReadModel(TReadModel)`.
+
+### Changed
+
+- The `IMongoDBResource.getDatabase()` returns an `Db` instead of a `Promise<Db>` since the configuration is retrieved while connecting to the Runtime.
+- The `IDolittleClient.connected` boolean property has been renamed to `.isConnected`.
+
+
 # [22.2.0] - 2022-2-9 [PR: #114](https://github.com/dolittle/JavaScript.SDK/pull/114)
 ## Summary
 
