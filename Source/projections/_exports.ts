@@ -7,6 +7,8 @@ export * as Store from './Store/_exports';
 
 export { DeleteReadModelInstance } from './DeleteReadModelInstance';
 export { EventPropertyKeySelector } from './EventPropertyKeySelector';
+export { EventOccurredKeySelector } from './EventOccurredKeySelector';
+export { StaticKeySelector } from './StaticKeySelector';
 export { EventSelector } from './EventSelector';
 export { EventSourceIdKeySelector } from './EventSourceIdKeySelector';
 export { IProjection } from './IProjection';
@@ -23,4 +25,5 @@ export { ProjectionModelId, isProjectionModelId } from './ProjectionModelId';
 export { ProjectionResult } from './ProjectionResult';
 export { Projections } from './Projections';
 export { PropertyNameKeySelector } from './PropertyNameKeySelector';
+export { OccurredFormat } from './OccurredFormat';
 export { UnknownKeySelectorType } from './UnknownKeySelectorType';
