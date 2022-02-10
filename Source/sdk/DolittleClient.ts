@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import * as grpc from '@grpc/grpc-js';
+import { Db } from 'mongodb';
 import { Logger } from 'winston';
 
 import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
@@ -29,7 +30,7 @@ import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore, IProjectionReadModelTypes } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
-import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { IResources, IResourcesBuilder, Internal as ResourcesInternal } from '@dolittle/sdk.resources';
 import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 import { Tenant } from '@dolittle/sdk.tenancy';
 
@@ -50,6 +51,7 @@ import { IDolittleClient } from './IDolittleClient';
 export class DolittleClient extends IDolittleClient {
     private _cancellationSource: CancellationSource = new CancellationSource();
     private _connected: boolean = false;
+    private _connectedPromiseResolver!: () => void;
     private _processorTracker: ITrackProcessors = new ProcessorTracker();
 
     private _eventStore?: EventStoreBuilder;
@@ -57,7 +59,7 @@ export class DolittleClient extends IDolittleClient {
     private _projectionStore?: ProjectionStoreBuilder;
     private _embeddingStore?: Embeddings;
     private _tenants: readonly Tenant[] = [];
-    private _resources?: ResourcesBuilder;
+    private _resources?: IResourcesBuilder;
     private _services?: TenantServiceProviders;
     private _eventHorizons?: IEventHorizons;
 
@@ -93,12 +95,16 @@ export class DolittleClient extends IDolittleClient {
         private readonly _subscriptionCallbacks: SubscriptionCallbacks,
         ) {
             super();
+            this.connected = new Promise(resolve => this._connectedPromiseResolver = resolve);
         }
 
     /** @inheritdoc */
-    get connected(): boolean {
+    get isConnected(): boolean {
         return this._connected;
     }
+
+    /** @inheritdoc */
+    readonly connected: Promise<void>;
 
     /** @inheritdoc */
     get eventStore(): IEventStoreBuilder {
@@ -219,14 +225,16 @@ export class DolittleClient extends IDolittleClient {
             const connectionResult = await connector.connect(cancellation);
             this._tenants = connectionResult.tenants;
 
-            this.buildClientServices(
+            await this.buildClientServices(
                 clients.eventStore,
                 clients.projectionStore,
                 clients.embeddingStore,
                 clients.embeddings,
                 clients.resources,
                 connectionResult.executionContext,
-                this._logger);
+                connectionResult.tenants,
+                this._logger,
+                this._cancellationSource.cancellation);
 
             this.registerTypes(
                 clients.eventTypes,
@@ -256,21 +264,25 @@ export class DolittleClient extends IDolittleClient {
                 configuration.pingInterval,
                 this._cancellationSource.cancellation);
 
+            this._connectedPromiseResolver();
+
         } catch (exception) {
             this._connected = false;
             throw exception;
         }
     }
 
-    private buildClientServices(
+    private async buildClientServices(
         eventStoreClient: EventStoreClient,
         projectionStoreClient: ProjectionStoreClient,
         embeddingStoreClient: EmbeddingStoreClient,
         embeddingsClient: EmbeddingsClient,
         resourcesClient: ResourcesClient,
         executionContext: ExecutionContext,
-        logger: Logger
-    ) {
+        tenants: readonly Tenant[],
+        logger: Logger,
+        cancellation: Cancellation,
+    ): Promise<void> {
         this._eventStore = new EventStoreBuilder(
             eventStoreClient,
             this.eventTypes,
@@ -296,10 +308,14 @@ export class DolittleClient extends IDolittleClient {
             this._embeddingReadModelTypes,
             logger);
 
-        this._resources = new ResourcesBuilder(
+        this._resources = await new ResourcesInternal.ResourcesFetcher(
             resourcesClient,
             executionContext,
-            logger);
+            logger,
+        ).fetchResourcesFor(
+            tenants,
+            cancellation,
+        );
     }
 
     private registerTypes(
@@ -346,6 +362,8 @@ export class DolittleClient extends IDolittleClient {
 
             bindings.bind(IResources).toFactory(() => this._resources!.forTenant(tenant));
             bindings.bind(IResources.name).toFactory(() => this._resources!.forTenant(tenant));
+
+            bindings.bind(Db).toFactory(services => services.get(IResources).mongoDB.getDatabase());
         });
 
         for (const callback of configuredCallbacks) {

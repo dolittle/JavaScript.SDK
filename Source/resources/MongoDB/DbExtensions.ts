@@ -1,9 +1,6 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// import { Constructor } from '@dolittle/types';
-// import { Collection, CollectionOptions, Db as mongodbDb, DbOptions, Document, MongoClient } from 'mongodb';
-
 import { Constructor } from '@dolittle/types';
 import { Collection, CollectionOptions, Db, Document } from 'mongodb';
 

@@ -1,9 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Db, Collection } from 'mongodb';
+
 import { IClientBuildResults, IModel } from '@dolittle/sdk.common';
 import { IServiceProviderBuilder } from '@dolittle/sdk.dependencyinversion';
 import { IEventTypes } from '@dolittle/sdk.events';
+import '@dolittle/sdk.resources';
 
 import { ProjectionProcessor } from '../Internal/ProjectionProcessor';
 import { IProjectionReadModelTypes } from '../Store/IProjectionReadModelTypes';
@@ -44,6 +47,12 @@ export class ProjectionsModelBuilder {
             const projection = processorBuilder.build(this._eventTypes, this._buildResults);
             if (projection !== undefined) {
                 processors.push(new ProjectionProcessor(projection, this._eventTypes));
+
+                if (projection.copies.mongoDB.shouldCopyToMongoDB && projection.readModelType !== undefined) {
+                    this._bindings.addTenantServices(binder => {
+                        binder.bind(Collection.forReadModel(projection.readModelType!)).toFactory(services => services.get(Db).collection(projection.copies.mongoDB.collectionName.value));
+                    });
+                }
             }
         }
 

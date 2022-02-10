@@ -23,7 +23,12 @@ export abstract class IDolittleClient {
     /**
      * Gets a value indicating whether the {@link IDolittleClient} is connected to the Runtime or not.
      */
-    abstract get connected(): boolean;
+    abstract get isConnected(): boolean;
+
+    /**
+     * Gets a {@link Promise} that resolves when the {@link IDolittleClient} is connected to the Runtime.
+     */
+    abstract get connected(): Promise<void>;
 
     /**
      * Gets the {@link IEventTypes}.

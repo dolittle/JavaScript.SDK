@@ -3,29 +3,22 @@
 
 import { Db } from 'mongodb';
 
-import { Cancellation } from '@dolittle/sdk.resilience';
-
-import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
-
-import { Resource } from '../Resource';
 import { DatabaseSettingsCallback } from './DatabaseSettingsCallback';
 
 /**
- * Represents an implementation of {@link Resource} for MongoDB.
+ * Defines a MongoDB resource.
  */
-export abstract class IMongoDBResource extends Resource<GetRequest, GetMongoDBResponse> {
+export abstract class IMongoDBResource {
     /**
-     * Gets the the MongoDB database.
-     * @param {Cancellation} cancellation - The optional {@link Cancellation}.
-     * @returns {Promise<Db>} A {@link Promise} that when resolved returns the {@link Db} MongoDB Database.
+     * Gets the MongoDB database.
+     * @returns {Db} The MongoDB database.
      */
-    abstract getDatabase(cancellation?: Cancellation): Promise<Db>;
+    abstract getDatabase(): Db;
 
     /**
-     * Gets the the MongoDB database.
-     * @param {DatabaseSettingsCallback} databaseSettingsCallback - The optional {@link DatabaseSettingsCallback}.
-     * @param {Cancellation} cancellation - The optional {@link Cancellation}.
-     * @returns {Promise<Db>} A {@link Promise} that when resolved returns the {@link Db} MongoDB Database.
+     * Gets the MongoDB database.
+     * @param {DatabaseSettingsCallback} databaseSettingsCallback - A callback to use to configure the database settings.
+     * @returns {Db} The MongoDB database.
      */
-    abstract getDatabase(databaseSettingsCallback?: DatabaseSettingsCallback, cancellation?: Cancellation): Promise<Db>;
+    abstract getDatabase(databaseSettingsCallback: DatabaseSettingsCallback): Db;
 }

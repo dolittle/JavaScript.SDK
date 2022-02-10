@@ -7,3 +7,4 @@ export { IMongoDBResource } from './IMongoDBResource';
 export { DatabaseSettingsCallback } from './DatabaseSettingsCallback';
 
 import './DbExtensions';
+import './CollectionExtensions';

@@ -65,6 +65,7 @@
         "@dolittle/sdk.tenancy": "22.2.0",
         "@dolittle/types": "6.0.0",
         "@grpc/grpc-js": "1.2.12",
+        "mongodb": "4.1.4",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }

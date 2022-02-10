@@ -7,6 +7,7 @@ import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { setTimeout } from 'timers/promises';
 import { DateTime } from 'luxon';
+import { Collection } from 'mongodb';
 
 import { DishCounter } from './DishCounter';
 import { DishPrepared } from './DishPrepared';
@@ -25,8 +26,7 @@ import { DishPrepared } from './DishPrepared';
 
     await setTimeout(1000);
 
-    const db = await client.resources.forTenant(TenantId.development).mongoDB.getDatabase();
-    const dishCounterCollection = db.collection(DishCounter);
+    const dishCounterCollection = client.services.forTenant(TenantId.development).get(Collection.forReadModel(DishCounter));
 
     for (const { name, numberOfTimesPrepared, lastPrepared } of await dishCounterCollection.find().toArray()) {
         client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times. The last time was ${lastPrepared}`);
