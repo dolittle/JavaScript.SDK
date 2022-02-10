@@ -30,7 +30,7 @@ import { EventHandlers, Internal as EventsHandlingInternal } from '@dolittle/sdk
 import { ExecutionContext } from '@dolittle/sdk.execution';
 import { IProjectionStoreBuilder, Projections, ProjectionStoreBuilder, Internal as ProjectionsInternal, IProjectionStore, IProjectionReadModelTypes } from '@dolittle/sdk.projections';
 import { Cancellation, CancellationSource } from '@dolittle/sdk.resilience';
-import { IResources, IResourcesBuilder, ResourcesBuilder } from '@dolittle/sdk.resources';
+import { IResources, IResourcesBuilder, Internal as ResourcesInternal } from '@dolittle/sdk.resources';
 import { ITrackProcessors, ProcessorTracker } from '@dolittle/sdk.services';
 import { Tenant } from '@dolittle/sdk.tenancy';
 
@@ -44,7 +44,6 @@ import { CannotConnectDolittleClientMultipleTimes } from './CannotConnectDolittl
 import { CannotUseUnconnectedDolittleClient } from './CannotUseUnconnectedDolittleClient';
 import { DolittleClientConfiguration } from './DolittleClientConfiguration';
 import { IDolittleClient } from './IDolittleClient';
-import { ResourcesFetcher } from '@dolittle/sdk.resources/Distribution/Internal/ResourcesFetcher';
 
 /**
  * Represents the client for working with the Dolittle Runtime.
@@ -309,7 +308,7 @@ export class DolittleClient extends IDolittleClient {
             this._embeddingReadModelTypes,
             logger);
 
-        this._resources = await new ResourcesFetcher(
+        this._resources = await new ResourcesInternal.ResourcesFetcher(
             resourcesClient,
             executionContext,
             logger,
