@@ -18,6 +18,7 @@ import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contra
 import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
 import {
     EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionCopies, ProjectionCopyToMongoDB, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
+    StaticKeySelector as ProtobufStaticKeySelector, EventOccurredKeySelector as ProtobufEventOccurredKeySelector,
     ProjectionRegistrationResponse, ProjectionReplaceResponse, ProjectionRequest,
     ProjectionResponse, ProjectionRuntimeToClientMessage
 } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
@@ -36,6 +37,8 @@ import { UnknownKeySelectorType } from '../UnknownKeySelectorType';
 import { Conversion } from '../Copies/MongoDB/Conversion';
 import { UnknownMongoDBConversion } from '../Copies/MongoDB/UnknownMongoDBConversion';
 import { PropertyConversion } from '../Copies/MongoDB/PropertyConversion';
+import { StaticKeySelector } from '../StaticKeySelector';
+import { EventOccurredKeySelector } from '../EventOccurredKeySelector';
 
 /**
  * Represents an implementation of {@link Internal.EventProcessor} for {@link Projection}.
@@ -82,6 +85,14 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
             protobufSelector.setEventsourcekeyselector(new ProtobufEventSourceIdKeySelector());
         } else if (selector instanceof PartitionIdKeySelector) {
             protobufSelector.setPartitionkeyselector(new ProtobufPartitionIdKeySelector());
+        } else if (selector instanceof StaticKeySelector) {
+            const staticKeySelector = new ProtobufStaticKeySelector();
+            staticKeySelector.setStatickey(selector.staticKey.value);
+            protobufSelector.setStatickeyselector(staticKeySelector);
+        } else if (selector instanceof EventOccurredKeySelector) {
+            const eventOccurredKeySelector = new ProtobufEventOccurredKeySelector();
+            eventOccurredKeySelector.setFormat(selector.occurredFormat.value);
+            protobufSelector.setEventoccurredkeyselector(eventOccurredKeySelector);
         } else {
             throw new UnknownKeySelectorType(selector);
         }
