@@ -10,7 +10,7 @@ export class StaticKeySelector {
     readonly staticKey: Key;
 
     /**
-     * Initializes a new instance of {@link Key}.
+     * Initializes a new instance of the {@link StaticKeySelector} class.
      * @param {Key | string} key - The static key to use as projection key.
      */
     constructor(key: Key | string) {
