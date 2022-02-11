@@ -4,7 +4,7 @@
 import { Key } from './Key';
 
 /**
- * Represents an event occurred key selector.
+ * Represents a static key selector.
  */
 export class StaticKeySelector {
     readonly staticKey: Key;
