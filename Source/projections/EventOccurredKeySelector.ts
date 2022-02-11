@@ -10,7 +10,7 @@ export class EventOccurredKeySelector {
     readonly occurredFormat: OccurredFormat;
 
     /**
-     * Initializes a new instance of {@link OccurredFormat}.
+     * Initializes a new instance of the {@link EventOccurredKeySelector} class.
      * @param {OccurredFormat | string} occurredFormat - The occurred format to use as format for getting key from event occurred metadata.
      */
     constructor(occurredFormat: OccurredFormat | string) {
