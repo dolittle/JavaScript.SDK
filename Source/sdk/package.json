@@ -45,7 +45,7 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/runtime.contracts": "6.7.0",
+        "@dolittle/runtime.contracts": "6.8.0-merry.2",
         "@dolittle/sdk.aggregates": "23.1.0",
         "@dolittle/sdk.artifacts": "23.1.0",
         "@dolittle/sdk.common": "23.1.0",
