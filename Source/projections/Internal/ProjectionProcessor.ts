@@ -64,6 +64,9 @@ export class ProjectionProcessor<T> extends Internal.EventProcessor<ProjectionId
         registerArguments.setScopeid(Guids.toProtobuf(this._projection.scopeId.value));
         registerArguments.setInitialstate(JSON.stringify(this._projection.initialState));
         registerArguments.setCopies(this.createCopiesSpecification());
+        if (this._projection.hasAlias) {
+            registerArguments.setAlias(this._projection.alias!.value);
+        }
 
         const events: ProjectionEventSelector[] = [];
         for (const eventSelector of this._projection.events) {

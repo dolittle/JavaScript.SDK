@@ -66,7 +66,7 @@ export class ProjectionClassBuilder<T> implements IEquatable {
             return undefined;
         }
 
-        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies);
+        return new Projection<T>(this.type.projectionId, this.type.type, this.type.scopeId, events, copies, this.type.alias);
     }
 
     private tryAddAllOnMethods(events: EventTypeMap<[ProjectionCallback<T>, KeySelector]>, type: Constructor<any>, eventTypes: IEventTypes): boolean {

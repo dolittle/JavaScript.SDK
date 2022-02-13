@@ -18,6 +18,7 @@ export { KeySelector } from './KeySelector';
 export { MissingOnMethodForType } from './MissingOnMethodForType';
 export { PartitionIdKeySelector } from './PartitionIdKeySelector';
 export { Projection } from './Projection';
+export { ProjectionAlias, isProjectionAlias, ProjectionAliasLike} from './ProjectionAlias';
 export { ProjectionCallback } from './ProjectionCallback';
 export { ProjectionContext } from './ProjectionContext';
 export { ProjectionId, isProjectionId } from './ProjectionId';

@@ -9,6 +9,7 @@ import { ProjectionCopies } from './Copies/ProjectionCopies';
 import { DeleteReadModelInstance } from './DeleteReadModelInstance';
 import { EventSelector } from './EventSelector';
 import { ProjectionContext } from './ProjectionContext';
+import { ProjectionAlias } from './ProjectionAlias';
 import { ProjectionId } from './ProjectionId';
 
 /**
@@ -45,6 +46,16 @@ export abstract class IProjection<T> {
      * Gets the specification of read model copies to produce for the projection.
      */
     abstract readonly copies: ProjectionCopies;
+
+    /**
+     * Gets the alias for the projection.
+     */
+    abstract readonly alias: ProjectionAlias | undefined;
+
+    /**
+     * Gets a value indicating whether this projection has an alias or not.
+     */
+    abstract readonly hasAlias: boolean;
 
     /**
      * Handle an event and update a readmodel.
