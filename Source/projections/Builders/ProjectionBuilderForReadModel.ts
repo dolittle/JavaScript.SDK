@@ -24,6 +24,7 @@ import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
 import { OnMethodSpecification } from './OnMethodSpecification';
 import { TypeOrEventType } from './TypeOrEventType';
 import { ProjectionBuilder } from './ProjectionBuilder';
+import { ProjectionAlias, ProjectionAliasLike } from '../ProjectionAlias';
 
 /**
  * Represents an implementation of {@link IProjectionBuilderForReadModel}.
@@ -31,6 +32,7 @@ import { ProjectionBuilder } from './ProjectionBuilder';
  */
 export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadModel<T> {
     private _onMethods: OnMethodSpecification<T>[] = [];
+    private _alias?: ProjectionAlias;
     private _copyToMongoDBCallback?: CopyToMongoDBCallback<T>;
 
     /**
@@ -52,6 +54,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
         this._modelBuilder.bindIdentifierToProcessorBuilder(this._modelId, this._parentBuilder);
         if (_readModelTypeOrInstance instanceof Function) {
             this._modelBuilder.bindIdentifierToType(this._modelId, _readModelTypeOrInstance);
+            this._alias = ProjectionAlias.from(_readModelTypeOrInstance.name);
         }
     }
 
@@ -87,6 +90,12 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
     }
 
     /** @inheritdoc */
+    withAlias(alias: ProjectionAliasLike): IProjectionBuilderForReadModel<T> {
+        this._alias = ProjectionAlias.from(alias);
+        return this;
+    }
+
+    /** @inheritdoc */
     copyToMongoDB(callback?: CopyToMongoDBCallback<T>): IProjectionBuilderForReadModel<T> {
         this._copyToMongoDBCallback = callback ?? (() => {});
         return this;
@@ -117,7 +126,7 @@ export class ProjectionBuilderForReadModel<T> extends IProjectionBuilderForReadM
             return undefined;
         }
 
-        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events, copies);
+        return new Projection<T>(this._projectionId, this._readModelTypeOrInstance, this._scopeId, events, copies, this._alias);
     }
 
     private tryAddOnMethods(
