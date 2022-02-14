@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.artifacts",
-    "version": "23.1.0",
+    "version": "23.2.0",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
