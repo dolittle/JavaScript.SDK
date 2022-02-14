@@ -1,3 +1,14 @@
+# [23.2.0] - 2022-2-14 [PR: #123](https://github.com/dolittle/JavaScript.SDK/pull/123)
+## Summary
+
+Adds aliases to Projections, in the same way we have for Event Handlers. They default to the name of the read model class, and can be overridden with a decorator option or a builder method.
+
+### Added
+
+- An optional `alias` property on the `@projection` decorator options.
+- A `.withAlias` method on the Projection builder API.
+
+
 # [23.1.0] - 2022-2-11 [PR: #122](https://github.com/dolittle/JavaScript.SDK/pull/122)
 ## Summary
 
