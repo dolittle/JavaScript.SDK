@@ -13,17 +13,24 @@ import { MissingOnMethodForType } from './MissingOnMethodForType';
 import { ProjectionCallback } from './ProjectionCallback';
 import { ProjectionContext } from './ProjectionContext';
 import { ProjectionId } from './ProjectionId';
+import { ProjectionAlias } from './ProjectionAlias';
 
 /**
  * Represents an implementation of {@link IProjection<T>}.
  * @template T The type of the projection read model.
  */
 export class Projection<T> extends IProjection<T> {
+    /** @inheritdoc */
     readonly readModelType: Constructor<T> | undefined;
+
+    /** @inheritdoc */
     readonly initialState: T;
 
     /** @inheritdoc */
     readonly events: Iterable<EventSelector>;
+
+    /** @inheritdoc */
+    readonly hasAlias: boolean;
 
     /**
      * Initializes a new instance of {@link Projection}.
@@ -32,6 +39,7 @@ export class Projection<T> extends IProjection<T> {
      * @param {ScopeId} scopeId - The identifier of the scope the projection is in.
      * @param {EventTypeMap<[ProjectionCallback<any>, KeySelector]>} _eventMap - The events with respective callbacks and keyselectors used by the projection.
      * @param {ProjectionCopies} copies - The read model copies specification for the projection.
+     * @param {ProjectionAlias | undefined} alias - The optional projection alias.
      */
     constructor(
         readonly projectionId: ProjectionId,
@@ -39,6 +47,7 @@ export class Projection<T> extends IProjection<T> {
         readonly scopeId: ScopeId,
         private readonly _eventMap: EventTypeMap<[ProjectionCallback<any>, KeySelector]>,
         readonly copies: ProjectionCopies,
+        readonly alias: ProjectionAlias | undefined = undefined
     ) {
         super();
 
@@ -54,6 +63,8 @@ export class Projection<T> extends IProjection<T> {
             eventSelectors.push(new EventSelector(eventType, keySelector));
         }
         this.events = eventSelectors;
+
+        this.hasAlias = alias !== undefined;
     }
 
     /** @inheritdoc */

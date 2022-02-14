@@ -10,4 +10,8 @@ import { EventHandlerAliasLike } from '../EventHandlerAlias';
 /**
  * Defines the options that can be defined in a {@link eventHandler} decorator.
  */
-export type EventHandlerOptions = { inScope?: ScopeId | Guid | string, partitioned?: boolean, alias?: EventHandlerAliasLike };
+export type EventHandlerOptions = {
+    inScope?: ScopeId | Guid | string,
+    partitioned?: boolean,
+    alias?: EventHandlerAliasLike,
+};

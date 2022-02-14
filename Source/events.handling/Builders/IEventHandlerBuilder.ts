@@ -32,7 +32,7 @@ export abstract class IEventHandlerBuilder {
     abstract inScope(scopeId: ScopeId | Guid | string): IEventHandlerBuilder;
 
     /**
-     * Defines and alias for the event handler.
+     * Defines an alias for the event handler.
      * @param {EventHandlerAliasLike} alias - The event handler alias.
      * @returns {IEventHandlerBuilder} The builder for continuation.
      */

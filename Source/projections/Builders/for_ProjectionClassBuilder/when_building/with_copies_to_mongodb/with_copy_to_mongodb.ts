@@ -12,6 +12,7 @@ import { copyProjectionToMongoDB } from '../../../Copies/copyProjectionToMongoDB
 import { on } from '../../../onDecorator';
 import { ProjectionDecoratedType } from '../../../ProjectionDecoratedType';
 import { ProjectionClassBuilder } from '../../../ProjectionClassBuilder';
+import { ProjectionAlias } from '../../../../ProjectionAlias';
 
 @copyProjectionToMongoDB()
 class Projection {
@@ -23,6 +24,7 @@ describeThis(__filename, () => {
     const decoratedType = new ProjectionDecoratedType(
         ProjectionId.from('53cad890-5b8a-4146-acce-29dc2dc8c43e'),
         ScopeId.from('28f6c232-cc11-493b-b032-398a5e651617'),
+        ProjectionAlias.from('alias'),
         Projection);
 
     const builder = new ProjectionClassBuilder(decoratedType);

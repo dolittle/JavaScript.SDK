@@ -4,8 +4,12 @@
 import { Guid } from '@dolittle/rudiments';
 import { ScopeId } from '@dolittle/sdk.events';
 import { projection } from './projectionDecorator';
+import { ProjectionAliasLike } from '../ProjectionAlias';
 
 /**
  * Defines the options that can be defined in a {@link projection} decorator.
  */
-export type ProjectionOptions = { inScope?: ScopeId | Guid | string };
+export type ProjectionOptions = {
+    inScope?: ScopeId | Guid | string,
+    alias?: ProjectionAliasLike,
+};

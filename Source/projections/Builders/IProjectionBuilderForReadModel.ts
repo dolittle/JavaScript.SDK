@@ -10,6 +10,7 @@ import { EventType, EventTypeIdLike, ScopeId } from '@dolittle/sdk.events';
 import { ProjectionCallback } from '../ProjectionCallback';
 import { CopyToMongoDBCallback } from './Copies/CopyToMongoDBCallback';
 import { KeySelectorBuilderCallback } from './KeySelectorBuilderCallback';
+import { ProjectionAliasLike } from '../ProjectionAlias';
 
 /**
  * Defines a builder for building a projection for a read model from method callbacks.
@@ -33,7 +34,7 @@ export abstract class IProjectionBuilderForReadModel<T> {
      * @param {ProjectionCallback<T>} callback - Callback to call for each event.
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
-     abstract on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
+    abstract on(eventType: EventType, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
 
     /**
      * Add an on method for handling the event.
@@ -42,7 +43,7 @@ export abstract class IProjectionBuilderForReadModel<T> {
      * @param {ProjectionCallback<T>} callback - Callback to call for each event.
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
-     abstract on(eventTypeId: EventTypeIdLike, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
+    abstract on(eventTypeId: EventTypeIdLike, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
 
     /**
      * Add an on method for handling the event.
@@ -52,7 +53,7 @@ export abstract class IProjectionBuilderForReadModel<T> {
      * @param {ProjectionCallback<T>} method - Callback to call for each event.
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
-     abstract on(eventTypeId: EventTypeIdLike, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
+    abstract on(eventTypeId: EventTypeIdLike, generation: Generation | number, keySelectorCallback: KeySelectorBuilderCallback, callback: ProjectionCallback<T>): IProjectionBuilderForReadModel<T>;
 
     /**
      * Defines the projection to operate in a specific {@link ScopeId}.
@@ -60,6 +61,13 @@ export abstract class IProjectionBuilderForReadModel<T> {
      * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
      */
     abstract inScope(scopeId: ScopeId | Guid | string): IProjectionBuilderForReadModel<T>;
+
+    /**
+     * Defines an alias for the projection.
+     * @param {ProjectionAliasLike} alias - The projection alias.
+     * @returns {IProjectionBuilderForReadModel<T>} The builder for continuation.
+     */
+    abstract withAlias(alias: ProjectionAliasLike): IProjectionBuilderForReadModel<T>;
 
     /**
      * Configures the projection to write copies of read models to a MongoDB collection.

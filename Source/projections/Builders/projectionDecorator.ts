@@ -10,6 +10,7 @@ import { ScopeId } from '@dolittle/sdk.events';
 import { ProjectionId } from '../ProjectionId';
 import { ProjectionDecoratedType } from './ProjectionDecoratedType';
 import { ProjectionOptions } from './ProjectionOptions';
+import { ProjectionAlias } from '../ProjectionAlias';
 
 const [decorator, getMetadata] = Decorators.createMetadataDecorator<ProjectionDecoratedType>('projection', 'projection', Decorators.DecoratorTarget.Class);
 
@@ -24,6 +25,7 @@ export function projection(projectionId: ProjectionId | Guid | string, options: 
         return new ProjectionDecoratedType(
             ProjectionId.from(projectionId),
             options.inScope ? ScopeId.from(options.inScope) : ScopeId.default,
+            ProjectionAlias.from(options.alias ?? type.name),
             type);
     });
 }

@@ -16,6 +16,7 @@ import { MissingEventHandlerForType } from './MissingEventHandlerForType';
  * Represents an implementation of {@link IEventHandler}.
  */
 export class EventHandler extends IEventHandler {
+    /** @inheritdoc */
     readonly hasAlias: boolean;
 
     /**

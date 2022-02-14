@@ -46,7 +46,7 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
-        "@dolittle/contracts": "6.7.0",
+        "@dolittle/contracts": "6.8.0",
         "@dolittle/rudiments": "6.0.0",
         "@dolittle/sdk.artifacts": "23.1.0",
         "@dolittle/sdk.execution": "23.1.0"
