@@ -4,7 +4,27 @@
             "servers": [
                 "mongo"
             ],
-            "database": "producer_event_store"
+            "database": "producer_event_store",
+            "maxConnectionPoolSize": 1000
+        },
+        "projections": {
+            "servers": [
+                "mongo"
+            ],
+            "database": "producer_projections",
+            "maxConnectionPoolSize": 1000
+        },
+        "embeddings": {
+            "servers": [
+                "mongo"
+            ],
+            "database": "producer_embeddings",
+            "maxConnectionPoolSize": 1000
+        },
+        "readModels": {
+            "host": "mongodb://localhost:27017",
+            "database": "producer_readmodels",
+            "useSSL": false
         }
     }
 }
