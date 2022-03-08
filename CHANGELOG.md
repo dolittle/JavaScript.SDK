@@ -1,3 +1,13 @@
+# [23.2.1] - 2022-3-8 [PR: #124](https://github.com/dolittle/JavaScript.SDK/pull/124)
+## Summary
+
+Fixes a bug that resulted in wrong retry timings when processing of events failed.
+
+### Fixed
+
+- The event processing retry time should now increment in the correct interval
+
+
 # [23.2.0] - 2022-2-14 [PR: #123](https://github.com/dolittle/JavaScript.SDK/pull/123)
 ## Summary
 
