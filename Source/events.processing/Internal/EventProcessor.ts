@@ -85,8 +85,7 @@ export abstract class EventProcessor<TIdentifier extends ConceptAs<Guid, string>
             const failure = new ProcessorFailure();
             failure.setReason(`${error}`);
             failure.setRetry(true);
-            const retryAttempt = (retryProcessingState?.getRetrycount() ?? 0) + 1;
-            const retrySeconds = Math.min(5 * retryAttempt, 60);
+            const retrySeconds = retryProcessingState === undefined ? 5 : Math.min(5 * (retryProcessingState.getRetrycount() + 2), 60);
             const retryTimeout = new Duration();
             retryTimeout.setSeconds(retrySeconds);
             failure.setRetrytimeout(retryTimeout);
