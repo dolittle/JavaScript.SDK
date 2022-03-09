@@ -45,15 +45,15 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
-        "@dolittle/contracts": "6.8.0",
+        "@dolittle/contracts": "6.8.2",
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/runtime.contracts": "6.8.0",
+        "@dolittle/runtime.contracts": "6.8.2",
         "@dolittle/sdk.common": "23.2.1",
         "@dolittle/sdk.dependencyinversion": "23.2.1",
         "@dolittle/sdk.execution": "23.2.1",
         "@dolittle/sdk.resilience": "23.2.1",
         "@dolittle/sdk.services": "23.2.1",
-        "@grpc/grpc-js": "1.2.12",
+        "@grpc/grpc-js": "1.5.7",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
