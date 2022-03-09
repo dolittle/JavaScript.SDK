@@ -1,3 +1,13 @@
+# [23.2.2] - 2022-3-9 [PR: #125](https://github.com/dolittle/JavaScript.SDK/pull/125)
+## Summary
+
+Upgrade the grpc versions
+
+### Changed
+
+- Changed the grpc and contracts versions
+
+
 # [23.2.1] - 2022-3-8 [PR: #124](https://github.com/dolittle/JavaScript.SDK/pull/124)
 ## Summary
 
