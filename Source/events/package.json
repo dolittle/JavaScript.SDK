@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.events",
-    "version": "23.2.0",
+    "version": "23.2.1",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -47,12 +47,21 @@
         "@dolittle/concepts": "6.0.0",
         "@dolittle/contracts": "6.8.1",
         "@dolittle/rudiments": "6.0.0",
+<<<<<<< HEAD
         "@dolittle/runtime.contracts": "6.8.1",
         "@dolittle/sdk.artifacts": "23.2.0",
         "@dolittle/sdk.execution": "23.2.0",
         "@dolittle/sdk.protobuf": "23.2.0",
         "@dolittle/sdk.resilience": "23.2.0",
         "@dolittle/sdk.services": "23.2.0",
+=======
+        "@dolittle/runtime.contracts": "6.8.1",
+        "@dolittle/sdk.artifacts": "23.2.1",
+        "@dolittle/sdk.execution": "23.2.1",
+        "@dolittle/sdk.protobuf": "23.2.1",
+        "@dolittle/sdk.resilience": "23.2.1",
+        "@dolittle/sdk.services": "23.2.1",
+>>>>>>> bb36dc46081a8e27d1148b66995ccafb1cd4f301
         "@dolittle/types": "6.0.0",
         "luxon": "1.24.1",
         "rxjs": "6.6.0",
