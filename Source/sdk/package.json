@@ -45,7 +45,7 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
-        "@dolittle/runtime.contracts": "6.8.2",
+        "@dolittle/contracts": "7.0.0-meriadoc.3",
         "@dolittle/sdk.aggregates": "23.2.2",
         "@dolittle/sdk.artifacts": "23.2.2",
         "@dolittle/sdk.common": "23.2.2",

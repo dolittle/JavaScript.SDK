@@ -45,9 +45,8 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
-        "@dolittle/contracts": "6.8.2",
+        "@dolittle/contracts": "7.0.0-meriadoc.3",
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/runtime.contracts": "6.8.2",
         "@dolittle/sdk.common": "23.2.2",
         "@dolittle/sdk.dependencyinversion": "23.2.2",
         "@dolittle/sdk.events": "23.2.2",
