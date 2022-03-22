@@ -15,7 +15,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/contracts/Runtime/Embeddings/Embeddings_grpc_pb';
 import {
     EmbeddingClientToRuntimeMessage,
     EmbeddingCompareRequest,
@@ -27,9 +27,9 @@ import {
     EmbeddingRequest,
     EmbeddingResponse,
     EmbeddingRuntimeToClientMessage,
-} from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
-import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
-import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+} from '@dolittle/contracts/Runtime/Embeddings/Embeddings_pb';
+import { ProjectionDeleteResponse, ProjectionReplaceResponse } from '@dolittle/contracts/Runtime/Events.Processing/Projections_pb';
+import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/contracts/Runtime/Projections/State_pb';
 
 import { EmbeddingContext } from '../EmbeddingContext';
 import { EmbeddingId } from '../EmbeddingId';

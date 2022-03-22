@@ -10,11 +10,11 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { Aggregate } from '@dolittle/runtime.contracts/Events/Aggregate_pb';
-import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/runtime.contracts/Events/Committed_pb';
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
-import { CommitAggregateEventsRequest, CommitEventsRequest, FetchForAggregateRequest } from '@dolittle/runtime.contracts/Events/EventStore_pb';
-import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+import { Aggregate } from '@dolittle/contracts/Runtime/Events/Aggregate_pb';
+import { CommittedAggregateEvents as PbCommittedAggregatedEvents } from '@dolittle/contracts/Runtime/Events/Committed_pb';
+import { EventStoreClient } from '@dolittle/contracts/Runtime/Events/EventStore_grpc_pb';
+import { CommitAggregateEventsRequest, CommitEventsRequest, FetchForAggregateRequest } from '@dolittle/contracts/Runtime/Events/EventStore_pb';
+import { UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/contracts/Runtime/Events/Uncommitted_pb';
 
 import { AggregateRootId } from '../AggregateRootId';
 import { AggregateRootVersion } from '../AggregateRootVersion';

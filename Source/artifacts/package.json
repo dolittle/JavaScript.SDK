@@ -45,7 +45,7 @@
     },
     "dependencies": {
         "@dolittle/concepts": "6.0.0",
-        "@dolittle/contracts": "7.0.0-meriadoc.3",
+        "@dolittle/contracts": "7.0.0-meriadoc.4",
         "@dolittle/rudiments": "6.0.0",
         "@dolittle/types": "6.0.0"
     },

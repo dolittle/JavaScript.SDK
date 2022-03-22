@@ -19,11 +19,11 @@ import {
     EventHandlerRuntimeToClientMessage,
     HandleEventRequest,
     EventHandlerResponse
-} from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_pb';
+} from '@dolittle/contracts/Runtime/Events.Processing/EventHandlers_pb';
 import { Artifact } from '@dolittle/contracts/Artifacts/Artifact_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { EventHandlersClient } from '@dolittle/contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
+import { RetryProcessingState, ProcessorFailure } from '@dolittle/contracts/Runtime/Events.Processing/Processors_pb';
 
 import { EventHandlerId } from '../EventHandlerId';
 import { IEventHandler } from '../IEventHandler';

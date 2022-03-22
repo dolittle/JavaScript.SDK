@@ -8,8 +8,8 @@ import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
-import { GetAllRequest, Tenant as PbTenant } from '@dolittle/runtime.contracts/Tenancy/Tenants_pb';
+import { TenantsClient } from '@dolittle/contracts/Runtime/Tenancy/Tenants_grpc_pb';
+import { GetAllRequest, Tenant as PbTenant } from '@dolittle/contracts/Runtime/Tenancy/Tenants_pb';
 
 import { FailedToGetAllTenants } from '../FailedToGetAllTenants';
 import { ITenants } from '../ITenants';

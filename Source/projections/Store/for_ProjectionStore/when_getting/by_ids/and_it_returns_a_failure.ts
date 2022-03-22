@@ -8,7 +8,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { Guids } from '@dolittle/sdk.protobuf';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+import { GetOneResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
 
 import given from '../../given';
 import { ProjectionStore } from '../../../ProjectionStore';

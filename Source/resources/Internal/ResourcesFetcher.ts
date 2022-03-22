@@ -8,7 +8,7 @@ import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { Tenant } from '@dolittle/sdk.tenancy';
 
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+import { ResourcesClient } from '@dolittle/contracts/Runtime/Resources/Resources_grpc_pb';
 
 import { MongoDBResourceCreator } from '../MongoDB/Internal/MongoDBResourceCreator';
 import { IResources } from '../IResources';

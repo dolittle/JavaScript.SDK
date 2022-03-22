@@ -5,8 +5,8 @@ import { describeThis } from '@dolittle/typescript.testing';
 
 import { Cancellation } from '@dolittle/sdk.resilience';
 
-import { GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
-import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { GetAllResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
+import { ProjectionCurrentState } from '@dolittle/contracts/Runtime/Projections/State_pb';
 
 import given from '../../given';
 import { ProjectionStore } from '../../../ProjectionStore';

@@ -13,8 +13,8 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveServerStream, reactiveUnary } from '@dolittle/sdk.services';
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+import { ProjectionsClient } from '@dolittle/contracts/Runtime/Projections/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetOneRequest, GetOneResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
 
 import { Key } from '../Key';
 import { ProjectionId } from '../ProjectionId';
@@ -26,7 +26,7 @@ import { FailedToGetProjectionState } from './FailedToGetProjectionState';
 import { IProjectionReadModelTypes } from './IProjectionReadModelTypes';
 import { IProjectionStore } from './IProjectionStore';
 import { ReceivedDuplicateProjectionKeys } from './ReceivedDuplicateProjectionKeys';
-import { ProjectionCurrentState } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { ProjectionCurrentState } from '@dolittle/contracts/Runtime/Projections/State_pb';
 import { WrongKeyReceivedFromRuntime } from './WrongKeyReceivedFromRuntime';
 import { IProjectionOf } from './IProjectionOf';
 import { ProjectionOf } from './ProjectionOf';

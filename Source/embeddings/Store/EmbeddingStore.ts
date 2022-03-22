@@ -13,8 +13,8 @@ import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
-import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/runtime.contracts/Embeddings/Store_pb';
+import { EmbeddingStoreClient } from '@dolittle/contracts/Runtime/Embeddings/Store_grpc_pb';
+import { GetAllRequest, GetAllResponse, GetKeysRequest, GetKeysResponse, GetOneRequest, GetOneResponse } from '@dolittle/contracts/Runtime/Embeddings/Store_pb';
 
 import { EmbeddingId } from '../EmbeddingId';
 import { FailedToGetEmbedding } from './FailedToGetEmbedding';
