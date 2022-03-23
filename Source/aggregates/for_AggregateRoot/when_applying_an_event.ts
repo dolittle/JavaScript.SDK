@@ -5,9 +5,8 @@ import { describeThis } from '@dolittle/typescript.testing';
 
 import { EventSourceId } from '@dolittle/sdk.events';
 
-import { AnAggregateRoot } from "./given/an_aggregate_root";
-import { event_types, EventWithOnMethod, EventWithoutOnMethod } from "./given/events";
-
+import { AnAggregateRoot } from './given/an_aggregate_root';
+import { event_types, EventWithOnMethod, EventWithoutOnMethod } from './given/events';
 
 describeThis(__filename, () => {
     let event_source: EventSourceId;

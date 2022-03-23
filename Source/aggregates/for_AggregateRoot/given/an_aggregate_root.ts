@@ -1,12 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { EventSourceId } from "@dolittle/sdk.events";
+import { EventSourceId } from '@dolittle/sdk.events';
 
-import { AggregateRoot } from "../../AggregateRoot";
-import { on } from "../../onDecorator";
+import { AggregateRoot } from '../../AggregateRoot';
+import { on } from '../../onDecorator';
 
-import { EventWithOnMethod, EventWithoutOnMethod } from "./events";
+import { EventWithOnMethod, EventWithoutOnMethod } from './events';
 
 export class AnAggregateRoot extends AggregateRoot {
     readonly onMethodEventsCalled: any[] = [];
