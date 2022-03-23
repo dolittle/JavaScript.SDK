@@ -1,7 +1,7 @@
 {
     "name": "expressjs",
     "private": true,
-    "version": "23.2.2",
+    "version": "24.0.0-meriadoc.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "23.2.2",
-        "@dolittle/sdk.artifacts": "23.2.2",
-        "@dolittle/sdk.events": "23.2.2",
-        "@dolittle/sdk.events.handling": "23.2.2",
-        "@dolittle/sdk.extensions.express": "23.2.2",
+        "@dolittle/sdk": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.artifacts": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events.handling": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.extensions.express": "24.0.0-meriadoc.0",
         "body-parser": "^1.19.1",
         "express": "^4.17.2",
         "winston": "^3.4.0"

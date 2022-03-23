@@ -1,7 +1,7 @@
 {
     "name": "eventhorizon-producer",
     "private": true,
-    "version": "23.2.2",
+    "version": "24.0.0-meriadoc.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "23.2.2",
-        "@dolittle/sdk.artifacts": "23.2.2",
-        "@dolittle/sdk.eventhorizon": "23.2.2",
-        "@dolittle/sdk.events": "23.2.2",
-        "@dolittle/sdk.events.handling": "23.2.2"
+        "@dolittle/sdk": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.artifacts": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.eventhorizon": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events.handling": "24.0.0-meriadoc.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",

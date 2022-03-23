@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.resources",
-    "version": "23.2.2",
+    "version": "24.0.0-meriadoc.0",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -47,11 +47,11 @@
         "@dolittle/concepts": "6.0.0",
         "@dolittle/contracts": "7.0.0",
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/sdk.execution": "23.2.2",
-        "@dolittle/sdk.projections": "23.2.2",
-        "@dolittle/sdk.protobuf": "23.2.2",
-        "@dolittle/sdk.resilience": "23.2.2",
-        "@dolittle/sdk.services": "23.2.2",
+        "@dolittle/sdk.execution": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.projections": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.protobuf": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.resilience": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.services": "24.0.0-meriadoc.0",
         "mongodb": "4.1.4"
     }
 }

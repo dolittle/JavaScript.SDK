@@ -1,7 +1,7 @@
 {
     "name": "kitchen",
     "private": true,
-    "version": "23.2.2",
+    "version": "24.0.0-meriadoc.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "23.2.2",
-        "@dolittle/sdk.artifacts": "23.2.2",
-        "@dolittle/sdk.events": "23.2.2",
-        "@dolittle/sdk.events.handling": "23.2.2",
+        "@dolittle/sdk": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.artifacts": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events": "24.0.0-meriadoc.0",
+        "@dolittle/sdk.events.handling": "24.0.0-meriadoc.0",
         "winston": "3.3.2"
     },
     "devDependencies": {
