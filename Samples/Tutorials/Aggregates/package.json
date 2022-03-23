@@ -1,7 +1,7 @@
 {
     "name": "samples.aggregates",
     "private": true,
-    "version": "23.2.2",
+    "version": "23.2.3",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,11 +12,11 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "23.2.2",
-        "@dolittle/sdk.aggregates": "23.2.2",
-        "@dolittle/sdk.artifacts": "23.2.2",
-        "@dolittle/sdk.events": "23.2.2",
-        "@dolittle/sdk.events.handling": "23.2.2"
+        "@dolittle/sdk": "23.2.3",
+        "@dolittle/sdk.aggregates": "23.2.3",
+        "@dolittle/sdk.artifacts": "23.2.3",
+        "@dolittle/sdk.events": "23.2.3",
+        "@dolittle/sdk.events.handling": "23.2.3"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
