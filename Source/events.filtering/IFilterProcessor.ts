@@ -3,7 +3,7 @@
 
 import { Internal } from '@dolittle/sdk.events.processing';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { FiltersClient } from '@dolittle/contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
 /**
  * Defines a {@link Internal.IEventProcessor} that filters events to a stream.

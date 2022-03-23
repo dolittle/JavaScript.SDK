@@ -10,7 +10,7 @@ import { reactiveUnary, UnaryMethod } from '@dolittle/sdk.services';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
 import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
+import { ResourcesClient } from '@dolittle/contracts/Runtime/Resources/Resources_grpc_pb';
 
 import { FailedToGetResourceForTenant } from '../FailedToGetResourceForTenant';
 import { ResourceName } from '../ResourceName';

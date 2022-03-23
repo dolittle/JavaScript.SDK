@@ -8,8 +8,8 @@ import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { AggregateRootAliasRegistrationRequest } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_pb';
-import { AggregateRootsClient } from '@dolittle/runtime.contracts/Aggregates/AggregateRoots_grpc_pb';
+import { AggregateRootAliasRegistrationRequest } from '@dolittle/contracts/Runtime/Aggregates/AggregateRoots_pb';
+import { AggregateRootsClient } from '@dolittle/contracts/Runtime/Aggregates/AggregateRoots_grpc_pb';
 
 import { AggregateRootType } from '../AggregateRootType';
 import { IAggregateRootTypes } from '../IAggregateRootTypes';

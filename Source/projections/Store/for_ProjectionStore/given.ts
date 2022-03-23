@@ -8,8 +8,8 @@ import { Logger } from 'winston';
 
 import { Claims, CorrelationId, Environment, ExecutionContext, MicroserviceId, TenantId, Version } from '@dolittle/sdk.execution';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
-import { GetAllResponse, GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+import { ProjectionsClient } from '@dolittle/contracts/Runtime/Projections/Store_grpc_pb';
+import { GetAllResponse, GetOneResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
 
 import { IProjectionReadModelTypes } from '../IProjectionReadModelTypes';
 import { ProjectionReadModelTypes } from '../ProjectionReadModelTypes';

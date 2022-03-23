@@ -9,7 +9,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, RetryCancelled, retryPipe } from '@dolittle/sdk.resilience';
 import { ITrackProcessors } from '@dolittle/sdk.services';
 
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingsClient } from '@dolittle/contracts/Runtime/Embeddings/Embeddings_grpc_pb';
 
 import { IEmbeddings } from './IEmbeddings';
 import { EmbeddingProcessor } from './EmbeddingProcessor';

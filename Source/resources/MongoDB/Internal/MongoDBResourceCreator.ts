@@ -8,8 +8,8 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { CallRequestContext } from '@dolittle/contracts/Services/CallContext_pb';
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { ResourcesClient } from '@dolittle/runtime.contracts/Resources/Resources_grpc_pb';
-import { GetMongoDBResponse, GetRequest } from '@dolittle/runtime.contracts/Resources/Resources_pb';
+import { ResourcesClient } from '@dolittle/contracts/Runtime/Resources/Resources_grpc_pb';
+import { GetMongoDBResponse, GetRequest } from '@dolittle/contracts/Runtime/Resources/Resources_pb';
 
 import { ResourceCreator } from '../../Internal/ResourceCreator';
 import { ResourceName } from '../../ResourceName';

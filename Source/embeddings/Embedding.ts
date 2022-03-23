@@ -12,9 +12,9 @@ import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/runtime.contracts/Embeddings/Embeddings_pb';
-import { EmbeddingsClient } from '@dolittle/runtime.contracts/Embeddings/Embeddings_grpc_pb';
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { DeleteRequest, DeleteResponse, UpdateRequest, UpdateResponse } from '@dolittle/contracts/Runtime/Embeddings/Embeddings_pb';
+import { EmbeddingsClient } from '@dolittle/contracts/Runtime/Embeddings/Embeddings_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/contracts/Runtime/Embeddings/Store_grpc_pb';
 
 import { IEmbeddingReadModelTypes } from './Store/IEmbeddingReadModelTypes';
 import { EmbeddingId } from './EmbeddingId';

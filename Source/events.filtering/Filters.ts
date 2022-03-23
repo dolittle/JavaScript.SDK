@@ -9,7 +9,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, RetryCancelled, retryPipe } from '@dolittle/sdk.resilience';
 import { ITrackProcessors } from '@dolittle/sdk.services';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
+import { FiltersClient } from '@dolittle/contracts/Runtime/Events.Processing/Filters_grpc_pb';
 
 import { IFilterProcessor } from './IFilterProcessor';
 import { IFilters } from './IFilters';

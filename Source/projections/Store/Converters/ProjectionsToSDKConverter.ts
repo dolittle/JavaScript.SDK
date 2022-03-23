@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/types';
 
-import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/contracts/Runtime/Projections/State_pb';
 
 import { Key } from '../../Key';
 import { CurrentState } from '../CurrentState';

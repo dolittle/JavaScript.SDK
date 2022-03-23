@@ -13,10 +13,10 @@ import { Cancellation, RetryPolicy, retryWithPolicy } from '@dolittle/sdk.resili
 import { isGrpcError, reactiveUnary } from '@dolittle/sdk.services';
 import { Internal } from '@dolittle/sdk.tenancy';
 
-import { HandshakeClient } from '@dolittle/runtime.contracts/Handshake/Handshake_grpc_pb';
-import { HandshakeRequest, HandshakeResponse } from '@dolittle/runtime.contracts/Handshake/Handshake_pb';
-import { TenantsClient } from '@dolittle/runtime.contracts/Tenancy/Tenants_grpc_pb';
-import { VersionInfo as ContractsVersionInfo } from '@dolittle/runtime.contracts/VersionInfo';
+import { HandshakeClient } from '@dolittle/contracts/Runtime/Handshake/Handshake_grpc_pb';
+import { HandshakeRequest, HandshakeResponse } from '@dolittle/contracts/Runtime/Handshake/Handshake_pb';
+import { TenantsClient } from '@dolittle/contracts/Runtime/Tenancy/Tenants_grpc_pb';
+import { VersionInfo as ContractsVersionInfo } from '@dolittle/contracts/VersionInfo';
 
 import { RuntimeHandshakeFailed } from '../RuntimeHandshakeFailed';
 import { RuntimeHandshakeMissingInformation } from '../RuntimeHandshakeMissingInformation';

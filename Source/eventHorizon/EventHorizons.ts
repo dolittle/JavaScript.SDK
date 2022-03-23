@@ -11,8 +11,8 @@ import { ExecutionContexts, Failures, Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation, retryPipe, retryWithPolicy } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { SubscriptionsClient } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_grpc_pb';
-import { Subscription as PbSubscription } from '@dolittle/runtime.contracts/EventHorizon/Subscriptions_pb';
+import { SubscriptionsClient } from '@dolittle/contracts/Runtime/EventHorizon/Subscriptions_grpc_pb';
+import { Subscription as PbSubscription } from '@dolittle/contracts/Runtime/EventHorizon/Subscriptions_pb';
 
 import { EventHorizonSubscriptionFailed } from './EventHorizonSubscriptionFailed';
 import { IEventHorizons } from './IEventHorizons';

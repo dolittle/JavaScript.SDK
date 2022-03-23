@@ -8,7 +8,7 @@ import { Guid } from '@dolittle/rudiments';
 import { ExecutionContext, TenantId } from '@dolittle/sdk.execution';
 import { ProjectionsToSDKConverter } from '@dolittle/sdk.projections';
 
-import { EmbeddingStoreClient } from '@dolittle/runtime.contracts/Embeddings/Store_grpc_pb';
+import { EmbeddingStoreClient } from '@dolittle/contracts/Runtime/Embeddings/Store_grpc_pb';
 
 import { EmbeddingStore } from '../EmbeddingStore';
 import { IEmbeddingStore } from '../IEmbeddingStore';
