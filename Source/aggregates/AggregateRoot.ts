@@ -133,7 +133,7 @@ export class AggregateRoot {
         }
         const onMethod = this.getOnMethodFor(event, eventType);
         if (onMethod) {
-            onMethod.method.call(this, event.content);
+            onMethod.method.call(this, event);
         }
     }
 
