@@ -1,3 +1,13 @@
+# [23.2.3] - 2022-3-23 [PR: #127](https://github.com/dolittle/JavaScript.SDK/pull/127)
+## Summary
+
+Fixes a bug in the AggregateRoot where an on-method would be called (while applying events) with the value of a property named `content` on the event (usually `undefined`) - not the actual event. 
+
+### Fixed
+
+- When on-methods in Aggregate Roots where called while applying events, the wrong object was passed in as the event. Which in most cases would mean they were called with `undefined`.
+
+
 # [23.2.2] - 2022-3-9 [PR: #125](https://github.com/dolittle/JavaScript.SDK/pull/125)
 ## Summary
 
