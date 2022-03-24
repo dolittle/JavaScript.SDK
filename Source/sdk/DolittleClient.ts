@@ -345,6 +345,8 @@ export class DolittleClient extends IDolittleClient {
         this._serviceProviderBuilder.addServices((bindings) => {
             bindings.bind('logger').toInstance(logger);
             bindings.bind('Logger').toInstance(logger);
+            bindings.bind(DolittleClient).toInstance(this);
+            bindings.bind(IDolittleClient).toInstance(this);
         });
 
         this._serviceProviderBuilder.addTenantServices((bindings, tenant) => {
