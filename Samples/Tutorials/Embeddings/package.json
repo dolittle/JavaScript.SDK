@@ -1,7 +1,7 @@
 {
     "name": "embeddings",
     "private": true,
-    "version": "24.0.0-meriadoc.1",
+    "version": "24.0.0",
     "main": "index.js",
     "author": "Dolittle",
     "license": "MIT",
@@ -12,10 +12,10 @@
         "build": "tsc -b ./tsconfig.json"
     },
     "dependencies": {
-        "@dolittle/sdk": "24.0.0-meriadoc.1",
-        "@dolittle/sdk.artifacts": "24.0.0-meriadoc.1",
-        "@dolittle/sdk.events": "24.0.0-meriadoc.1",
-        "@dolittle/sdk.events.handling": "24.0.0-meriadoc.1"
+        "@dolittle/sdk": "24.0.0",
+        "@dolittle/sdk.artifacts": "24.0.0",
+        "@dolittle/sdk.events": "24.0.0",
+        "@dolittle/sdk.events.handling": "24.0.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4",
