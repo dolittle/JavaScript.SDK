@@ -1,3 +1,13 @@
+# [24.0.0] - 2022-3-25 [PR: #129](https://github.com/dolittle/JavaScript.SDK/pull/129)
+## Summary
+
+Use the newest major version of the Dolittle Grpc Contracts to be compatible with version 8 of the Runtime
+
+### Changed
+
+- Use the newest major version 7 of the Dolittle Grpc Contracts
+
+
 # [23.2.3] - 2022-3-23 [PR: #127](https://github.com/dolittle/JavaScript.SDK/pull/127)
 ## Summary
 
