@@ -6,8 +6,8 @@ import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 
 import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 
-import { CommittedEvent as PbCommittedEvent, CommittedAggregateEvents as PbCommittedAggregateEvents} from '@dolittle/runtime.contracts/Events/Committed_pb';
-import { UncommittedEvent as PbUncommittedEvent, UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/runtime.contracts/Events/Uncommitted_pb';
+import { CommittedEvent as PbCommittedEvent, CommittedAggregateEvents as PbCommittedAggregateEvents} from '@dolittle/contracts/Runtime/Events/Committed_pb';
+import { UncommittedEvent as PbUncommittedEvent, UncommittedAggregateEvents as PbUncommittedAggregateEvents } from '@dolittle/contracts/Runtime/Events/Uncommitted_pb';
 
 import { AggregateRootId } from '../AggregateRootId';
 import { AggregateRootVersion } from '../AggregateRootVersion';

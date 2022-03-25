@@ -9,7 +9,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, RetryCancelled, retryPipe } from '@dolittle/sdk.resilience';
 import { ITrackProcessors } from '@dolittle/sdk.services';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { ProjectionsClient } from '@dolittle/contracts/Runtime/Events.Processing/Projections_grpc_pb';
 
 import { ProjectionProcessor } from './Internal/ProjectionProcessor';
 import { IProjections } from './IProjections';

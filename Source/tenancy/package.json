@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/sdk.tenancy",
-    "version": "23.2.3",
+    "version": "24.0.0-meriadoc.1",
     "description": "Dolittle is a decentralized, distributed, event-driven microservice platform built to harness the power of events.",
     "keywords": [
         "Dolittle",
@@ -44,11 +44,11 @@
         "lint:fix": "eslint --quiet --ext .ts ./ --fix"
     },
     "dependencies": {
+        "@dolittle/contracts": "7.0.0",
         "@dolittle/rudiments": "6.0.0",
-        "@dolittle/runtime.contracts": "6.8.2",
-        "@dolittle/sdk.execution": "23.2.3",
-        "@dolittle/sdk.protobuf": "23.2.3",
-        "@dolittle/sdk.resilience": "23.2.3",
-        "@dolittle/sdk.services": "23.2.3"
+        "@dolittle/sdk.execution": "24.0.0-meriadoc.1",
+        "@dolittle/sdk.protobuf": "24.0.0-meriadoc.1",
+        "@dolittle/sdk.resilience": "24.0.0-meriadoc.1",
+        "@dolittle/sdk.services": "24.0.0-meriadoc.1"
     }
 }

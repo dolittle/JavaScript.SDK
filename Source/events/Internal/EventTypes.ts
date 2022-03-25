@@ -8,8 +8,8 @@ import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { reactiveUnary } from '@dolittle/sdk.services';
 
-import { EventTypesClient } from '@dolittle/runtime.contracts/Events/EventTypes_grpc_pb';
-import { EventTypeRegistrationRequest } from '@dolittle/runtime.contracts/Events/EventTypes_pb';
+import { EventTypesClient } from '@dolittle/contracts/Runtime/Events/EventTypes_grpc_pb';
+import { EventTypeRegistrationRequest } from '@dolittle/contracts/Runtime/Events/EventTypes_pb';
 
 import { EventType } from '../EventType';
 import { IEventTypes } from '../IEventTypes';

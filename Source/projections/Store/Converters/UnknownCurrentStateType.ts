@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Exception } from '@dolittle/rudiments';
-import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+import { ProjectionCurrentStateType } from '@dolittle/contracts/Runtime/Projections/State_pb';
 
 /**
  * Exception that gets thrown when trying to use a {@link ProjectionCurrentStateType} that is unknown.

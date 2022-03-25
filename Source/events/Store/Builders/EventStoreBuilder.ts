@@ -6,7 +6,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 
-import { EventStoreClient } from '@dolittle/runtime.contracts/Events/EventStore_grpc_pb';
+import { EventStoreClient } from '@dolittle/contracts/Runtime/Events/EventStore_grpc_pb';
 
 import { IEventTypes } from '../../IEventTypes';
 import { EventStore } from '../EventStore';

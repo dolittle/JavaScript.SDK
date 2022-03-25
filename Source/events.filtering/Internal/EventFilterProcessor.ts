@@ -10,9 +10,9 @@ import { Guids } from '@dolittle/sdk.protobuf';
 import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, ReverseCallClient, reactiveDuplex } from '@dolittle/sdk.services';
 
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
-import { ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { FiltersClient } from '@dolittle/contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { FilterRegistrationRequest, FilterEventRequest, FilterResponse, FilterRegistrationResponse, FilterRuntimeToClientMessage, FilterClientToRuntimeMessage } from '@dolittle/contracts/Runtime/Events.Processing/Filters_pb';
+import { ProcessorFailure } from '@dolittle/contracts/Runtime/Events.Processing/Processors_pb';
 
 import { FilterEventCallback } from '../FilterEventCallback';
 import { FilterId } from '../FilterId';

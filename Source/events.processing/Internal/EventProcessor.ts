@@ -14,7 +14,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { Failure as PbFailure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { RetryProcessingState, ProcessorFailure } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { RetryProcessingState, ProcessorFailure } from '@dolittle/contracts/Runtime/Events.Processing/Processors_pb';
 
 import { IEventProcessor } from './IEventProcessor';
 

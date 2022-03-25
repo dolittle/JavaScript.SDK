@@ -9,7 +9,7 @@ import { ExecutionContext } from '@dolittle/sdk.execution';
 import { Cancellation, RetryCancelled, retryPipe } from '@dolittle/sdk.resilience';
 import { ITrackProcessors } from '@dolittle/sdk.services';
 
-import { EventHandlersClient } from '@dolittle/runtime.contracts/Events.Processing/EventHandlers_grpc_pb';
+import { EventHandlersClient } from '@dolittle/contracts/Runtime/Events.Processing/EventHandlers_grpc_pb';
 
 import { EventHandlerProcessor } from './Internal/EventHandlerProcessor';
 import { IEventHandlers } from './IEventHandlers';

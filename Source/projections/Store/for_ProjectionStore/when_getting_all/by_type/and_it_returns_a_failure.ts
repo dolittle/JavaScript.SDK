@@ -7,7 +7,7 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { ScopeId } from '@dolittle/sdk.events';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { GetAllResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+import { GetAllResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
 
 import given from '../../given';
 import { a_projection_type } from '../../given/a_projection_type';

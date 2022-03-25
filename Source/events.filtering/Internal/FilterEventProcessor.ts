@@ -11,9 +11,9 @@ import { Artifacts, ExecutionContexts } from '@dolittle/sdk.protobuf';
 import { ExecutionContext } from '@dolittle/sdk.execution';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { FiltersClient } from '@dolittle/runtime.contracts/Events.Processing/Filters_grpc_pb';
-import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/runtime.contracts/Events.Processing/Filters_pb';
-import { RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
+import { FiltersClient } from '@dolittle/contracts/Runtime/Events.Processing/Filters_grpc_pb';
+import { FilterEventRequest, FilterRegistrationResponse } from '@dolittle/contracts/Runtime/Events.Processing/Filters_pb';
+import { RetryProcessingState } from '@dolittle/contracts/Runtime/Events.Processing/Processors_pb';
 
 import { FilterId } from '../FilterId';
 

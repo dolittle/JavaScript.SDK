@@ -6,7 +6,7 @@ import { Guid } from '@dolittle/rudiments';
 
 import { ExecutionContext, TenantIdLike } from '@dolittle/sdk.execution';
 
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Projections/Store_grpc_pb';
+import { ProjectionsClient } from '@dolittle/contracts/Runtime/Projections/Store_grpc_pb';
 
 import { IProjectionReadModelTypes } from '../IProjectionReadModelTypes';
 import { IProjectionStore } from '../IProjectionStore';

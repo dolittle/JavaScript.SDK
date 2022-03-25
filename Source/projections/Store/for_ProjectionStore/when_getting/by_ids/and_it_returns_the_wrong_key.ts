@@ -6,8 +6,8 @@ import { describeThis } from '@dolittle/typescript.testing';
 import { Cancellation } from '@dolittle/sdk.resilience';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
-import { GetOneResponse } from '@dolittle/runtime.contracts/Projections/Store_pb';
+import { ProjectionCurrentState, ProjectionCurrentStateType } from '@dolittle/contracts/Runtime/Projections/State_pb';
+import { GetOneResponse } from '@dolittle/contracts/Runtime/Projections/Store_pb';
 
 import given from '../../given';
 import { ProjectionStore } from '../../../ProjectionStore';

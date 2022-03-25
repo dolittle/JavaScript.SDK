@@ -14,15 +14,15 @@ import { Cancellation } from '@dolittle/sdk.resilience';
 import { IReverseCallClient, reactiveDuplex, ReverseCallClient } from '@dolittle/sdk.services';
 
 import { Failure } from '@dolittle/contracts/Protobuf/Failure_pb';
-import { ProcessorFailure, RetryProcessingState } from '@dolittle/runtime.contracts/Events.Processing/Processors_pb';
-import { ProjectionsClient } from '@dolittle/runtime.contracts/Events.Processing/Projections_grpc_pb';
+import { ProcessorFailure, RetryProcessingState } from '@dolittle/contracts/Runtime/Events.Processing/Processors_pb';
+import { ProjectionsClient } from '@dolittle/contracts/Runtime/Events.Processing/Projections_grpc_pb';
 import {
     EventPropertyKeySelector as ProtobufEventPropertyKeySelector, EventSourceIdKeySelector as ProtobufEventSourceIdKeySelector, PartitionIdKeySelector as ProtobufPartitionIdKeySelector, ProjectionClientToRuntimeMessage, ProjectionCopies, ProjectionCopyToMongoDB, ProjectionDeleteResponse, ProjectionEventSelector, ProjectionRegistrationRequest,
     StaticKeySelector as ProtobufStaticKeySelector, EventOccurredKeySelector as ProtobufEventOccurredKeySelector,
     ProjectionRegistrationResponse, ProjectionReplaceResponse, ProjectionRequest,
     ProjectionResponse, ProjectionRuntimeToClientMessage
-} from '@dolittle/runtime.contracts/Events.Processing/Projections_pb';
-import { ProjectionCurrentStateType } from '@dolittle/runtime.contracts/Projections/State_pb';
+} from '@dolittle/contracts/Runtime/Events.Processing/Projections_pb';
+import { ProjectionCurrentStateType } from '@dolittle/contracts/Runtime/Projections/State_pb';
 
 import { DeleteReadModelInstance } from '../DeleteReadModelInstance';
 import { EventPropertyKeySelector } from '../EventPropertyKeySelector';
