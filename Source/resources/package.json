@@ -52,6 +52,6 @@
         "@dolittle/sdk.protobuf": "24.0.0",
         "@dolittle/sdk.resilience": "24.0.0",
         "@dolittle/sdk.services": "24.0.0",
-        "mongodb": "4.1.4"
+        "mongodb": "4.17.0"
     }
 }
