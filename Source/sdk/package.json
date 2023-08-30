@@ -64,7 +64,7 @@
         "@dolittle/sdk.services": "24.0.0",
         "@dolittle/sdk.tenancy": "24.0.0",
         "@dolittle/types": "6.0.0",
-        "mongodb": "4.1.4",
+        "mongodb": "4.17.0",
         "rxjs": "6.6.0",
         "winston": "3.3.2"
     }
